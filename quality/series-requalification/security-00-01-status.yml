@@ -69,76 +69,106 @@ narration_search:
     performed did not return an audio MIME asset for these pages. This is not a claim that no asset can
     exist outside the connected/searchable surfaces.
 
-prior_exact_head_evidence:
-  head: e3411f54078833aa7a9d6cf977172fa30f7acba6
-  diagnostic_run: 34795280576
-  source_build_and_focused_browser: PASS
-  prompt_visual_state_evidence: FAIL
-  prompt_visual_state_failure_count: 204
-  pixel_review: FAIL
-  pixel_findings:
-    - mobile defence-in-depth endpoint title/detail collisions in ES and EN
-    - mobile defence-in-depth gate name/scope/state collisions across control states
-    - control-vs-data remained visually tall and card-heavy despite semantic correctness
-  note: >-
-    The GitHub step summaries were not sufficient because the focused visual-state step used
-    continue-on-error. The downloaded artifact is authoritative: its report contains 204 collision
-    failures, and the mobile screenshots were manually inspected. This evidence supersedes the
-    earlier mistaken PASS entry for prompt_visual_state_evidence.
+superseded_evidence:
+  - head: e3411f54078833aa7a9d6cf977172fa30f7acba6
+    diagnostic_run: 34795280576
+    reason: >-
+      Downloaded visual-state evidence contained 204 genuine mobile collisions, so the nominal step
+      status never constituted pixel or pedagogy approval.
+  - head: f9a07c64a3e120bb48639882156d37aa54b9cec3
+    diagnostic_run: 34797118816
+    reason: >-
+      The visual source was materially improved, but two focused harness assertions were stale:
+      the browser gate waited for removed trust-badge nodes and the retrieval gate required the literal
+      English word "deviated" instead of validating the mechanism. The screenshots remain usable only
+      because the visual source bytes are unchanged in the later certified technical head.
 
 current_revision:
-  head_requested_for_requalification: f9a07c64a3e120bb48639882156d37aa54b9cec3
-  diagnostic_run: 34797118816
-  status: IN_PROGRESS
-  changes_since_prior_evidence:
-    - control-vs-data rebuilt as compact provenance-to-context-to-LLM-proposal-to-runtime-authority mechanism in ES and EN
-    - defence-in-depth rebuilt as explicit hostile path through four independent barriers in ES and EN
-  source_pass: PENDING_CURRENT_HEAD
-  build_pass: PENDING_CURRENT_HEAD
-  browser_pass: PENDING_CURRENT_HEAD
-  prompt_visual_state_evidence: PENDING_CURRENT_HEAD
-  media_probe: PENDING_CURRENT_HEAD
-  media_pass: FAIL
-  pixel_review: PENDING_CURRENT_HEAD_MANUAL
-  pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
-  global_requalification_sweep: FAIL_EXPECTED_REMAINING_SCOPE
+  technical_head: c74fedcf6a82ca26502fcf4f65126fbec4056ef6
+  diagnostic_run: 34798370110
+  diagnostic_scope: focused_security_00_01
+  workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  publication_discovery_pass: true
+  publication_contract_pass: true
+  strict_es_build_pass: true
+  strict_en_build_pass: true
+  media_probe_pass: true
+  security_browser_pass: true
+  prompt_visual_state_pass: true
+  source_pass: false
+  rendered_pass: false
+  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
+  media_pass: false
+  pixel_review: PASS_VISUAL_SET
+  pedagogy_review: PASS_VISUAL_SET
+  article_golden: false
+  technical_notes:
+    - focused Security browser gate passed in Google Chrome with real mobile tap, persistent resource/runtime listeners, poster-first playback, pause and seek
+    - Prompt Injection mechanism-state gate passed in Google Chrome for ES/EN desktop/mobile normal/reduced motion
+    - global failure is intentional because the independent source/rendered audit still records unresolved media across the requalification catalogue and raw TeX outside Security 00/01
+  manual_pixel_review:
+    evidence_artifact_id: 10330825627
+    evidence_digest: sha256:94831dd603b11f4ee661704e0133a7124493e3ee30911d6f361a80fc868862c7
+    inspected:
+      - presentation ES/EN desktop and mobile, including reduced-motion rendering
+      - control-vs-data ES/EN desktop/mobile states 1, 3 and 4
+      - retrieval barrier clean/poisoned mechanism states including final context/proposal, normal and reduced-motion samples
+      - defence-in-depth all-on and progressively disabled states ES/EN, desktop/mobile, including reduced-motion samples
+      - full-page Security presentation and Prompt Injection mobile captures for page-level hierarchy/overflow context
+    verdict: PASS_VISUAL_SET
+    note: >-
+      No remaining clipping, text collision, unreadable relationship, global horizontal overflow or locale
+      mismatch was found in the manually inspected exact-source visual evidence. Fixed site navigation can
+      appear inside Playwright locator screenshots while the tall locator is stitched; full-page evidence
+      was used to avoid misclassifying that capture artifact as an interior visual overlap.
+  manual_pedagogy_review:
+    verdict: PASS_VISUAL_SET
+    rationale:
+      - presentation map teaches one hostile path with two authorization outcomes rather than a decorative architecture diagram
+      - control-vs-data separates provenance/model influence from executable runtime authority and changes to a denied external action
+      - retrieval barrier changes ranking/top-K membership, retrieved context and downstream proposal without fabricated similarity scores
+      - defence-in-depth moves the first effective stopping boundary as independent controls are disabled and explicitly avoids multiplicative-probability claims
+    limitation: >-
+      This is the pedagogy verdict for the current visual set, not ARTICLE_GOLDEN. The audiovisual learning
+      contract remains incomplete and the entire article cannot be certified until MEDIA_PASS and all other
+      article gates are green.
 
 visuals:
   presentation_map:
     es_source: docs/snippets/seguridad-ia/00-series-mapa.html
     en_source: locales/en/snippets/seguridad-ia/00-series-mapa.html
-    current_state: TECHNICALLY_VALIDATED_ON_PRIOR_HEAD__AWAIT_CURRENT_HEAD_RECHECK
-    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
+    mechanism_states: hostile_path__broad_permissions_vs_least_privilege_authorization
+    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS
+    mobile_pixel_review: PASS
+    pedagogy_review: PASS
   prompt_injection_control_data:
     es_source: docs/snippets/seguridad-ia/01-control-vs-datos.html
     en_source: locales/en/snippets/seguridad-ia/01-control-vs-datos.html
     mechanism_states: provenance_to_context_to_model_proposal_to_runtime_authority
-    current_state: REDESIGNED_UNCERTIFIED
-    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
+    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS
+    mobile_pixel_review: PASS
+    pedagogy_review: PASS
   prompt_injection_retrieval_barrier:
     es_source: docs/snippets/seguridad-ia/01-rag-trigger-fragment.html
     en_source: locales/en/snippets/seguridad-ia/01-rag-trigger-fragment.html
     mechanism_states: clean_vs_optimized_trigger__topk_to_context_to_proposal
-    current_state: TECHNICALLY_VALIDATED_ON_PRIOR_HEAD__AWAIT_CURRENT_HEAD_RECHECK
-    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
+    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS
+    mobile_pixel_review: PASS
+    pedagogy_review: PASS
   prompt_injection_defence_in_depth:
     es_source: docs/snippets/seguridad-ia/01-defensa-en-capas.html
     en_source: locales/en/snippets/seguridad-ia/01-defensa-en-capas.html
     mechanism_states: first_effective_boundary_moves_as_independent_controls_are_disabled
-    current_state: REDESIGNED_AFTER_CONFIRMED_PIXEL_FAILURE__UNCERTIFIED
-    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
-    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
+    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS
+    mobile_pixel_review: PASS
+    pedagogy_review: PASS
 
 blockers:
   - authorized narration missing for silent ES/EN MP4s
   - captions/transcripts/key moments incomplete
-  - current-head technical requalification is still running
-  - current-head pixel review not yet completed after the two material visual redesigns
-  - current-head pedagogy review not yet completed
+  - source/rendered experience audit remains fail-closed until the audiovisual contract is complete
+  - Security 1.2 remains blocked until Security 00/1.1 achieves complete ARTICLE_GOLDEN
