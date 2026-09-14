@@ -69,66 +69,76 @@ narration_search:
     performed did not return an audio MIME asset for these pages. This is not a claim that no asset can
     exist outside the connected/searchable surfaces.
 
+prior_exact_head_evidence:
+  head: e3411f54078833aa7a9d6cf977172fa30f7acba6
+  diagnostic_run: 34795280576
+  source_build_and_focused_browser: PASS
+  prompt_visual_state_evidence: FAIL
+  prompt_visual_state_failure_count: 204
+  pixel_review: FAIL
+  pixel_findings:
+    - mobile defence-in-depth endpoint title/detail collisions in ES and EN
+    - mobile defence-in-depth gate name/scope/state collisions across control states
+    - control-vs-data remained visually tall and card-heavy despite semantic correctness
+  note: >-
+    The GitHub step summaries were not sufficient because the focused visual-state step used
+    continue-on-error. The downloaded artifact is authoritative: its report contains 204 collision
+    failures, and the mobile screenshots were manually inspected. This evidence supersedes the
+    earlier mistaken PASS entry for prompt_visual_state_evidence.
+
+current_revision:
+  head_requested_for_requalification: f9a07c64a3e120bb48639882156d37aa54b9cec3
+  diagnostic_run: 34797118816
+  status: IN_PROGRESS
+  changes_since_prior_evidence:
+    - control-vs-data rebuilt as compact provenance-to-context-to-LLM-proposal-to-runtime-authority mechanism in ES and EN
+    - defence-in-depth rebuilt as explicit hostile path through four independent barriers in ES and EN
+  source_pass: PENDING_CURRENT_HEAD
+  build_pass: PENDING_CURRENT_HEAD
+  browser_pass: PENDING_CURRENT_HEAD
+  prompt_visual_state_evidence: PENDING_CURRENT_HEAD
+  media_probe: PENDING_CURRENT_HEAD
+  media_pass: FAIL
+  pixel_review: PENDING_CURRENT_HEAD_MANUAL
+  pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
+  global_requalification_sweep: FAIL_EXPECTED_REMAINING_SCOPE
+
 visuals:
   presentation_map:
     es_source: docs/snippets/seguridad-ia/00-series-mapa.html
     en_source: locales/en/snippets/seguridad-ia/00-series-mapa.html
-    mobile_overlap_fix: IMPLEMENTED_TECHNICALLY_VALIDATED
-    normal_motion: TECHNICAL_PASS_EXACT_HEAD
-    reduced_motion: TECHNICAL_PASS_EXACT_HEAD
-    desktop_pixel_review: PENDING_MANUAL
-    mobile_pixel_review: PENDING_MANUAL
-    pedagogy_review: PENDING_MANUAL
+    current_state: TECHNICALLY_VALIDATED_ON_PRIOR_HEAD__AWAIT_CURRENT_HEAD_RECHECK
+    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
   prompt_injection_control_data:
     es_source: docs/snippets/seguridad-ia/01-control-vs-datos.html
     en_source: locales/en/snippets/seguridad-ia/01-control-vs-datos.html
-    mobile_overlap_fix: IMPLEMENTED_TECHNICALLY_VALIDATED
-    normal_motion: TECHNICAL_PASS_EXACT_HEAD
-    reduced_motion: TECHNICAL_PASS_EXACT_HEAD
-    desktop_pixel_review: PENDING_MANUAL
-    mobile_pixel_review: PENDING_MANUAL
-    pedagogy_review: PENDING_MANUAL
+    mechanism_states: provenance_to_context_to_model_proposal_to_runtime_authority
+    current_state: REDESIGNED_UNCERTIFIED
+    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
   prompt_injection_retrieval_barrier:
     es_source: docs/snippets/seguridad-ia/01-rag-trigger-fragment.html
     en_source: locales/en/snippets/seguridad-ia/01-rag-trigger-fragment.html
     mechanism_states: clean_vs_optimized_trigger__topk_to_context_to_proposal
-    normal_motion: TECHNICAL_PASS_EXACT_HEAD
-    reduced_motion: TECHNICAL_PASS_EXACT_HEAD
-    desktop_pixel_review: PENDING_MANUAL
-    mobile_pixel_review: PENDING_MANUAL
-    pedagogy_review: PENDING_MANUAL
+    current_state: TECHNICALLY_VALIDATED_ON_PRIOR_HEAD__AWAIT_CURRENT_HEAD_RECHECK
+    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
   prompt_injection_defence_in_depth:
     es_source: docs/snippets/seguridad-ia/01-defensa-en-capas.html
     en_source: locales/en/snippets/seguridad-ia/01-defensa-en-capas.html
     mechanism_states: first_effective_boundary_moves_as_independent_controls_are_disabled
-    mobile_hierarchy_fix: IMPLEMENTED_TECHNICALLY_VALIDATED
-    normal_motion: TECHNICAL_PASS_EXACT_HEAD
-    reduced_motion: TECHNICAL_PASS_EXACT_HEAD
-    desktop_pixel_review: PENDING_MANUAL
-    mobile_pixel_review: PENDING_MANUAL
-    pedagogy_review: PENDING_MANUAL
-
-gates:
-  audited_head: e3411f54078833aa7a9d6cf977172fa30f7acba6
-  diagnostic_run: 34795280576
-  source_pass: PASS_EXACT_HEAD
-  build_pass: PASS_EXACT_HEAD_ES_EN
-  browser_pass: PASS_FOCUSED_SECURITY_00_01_EXACT_HEAD
-  prompt_visual_state_evidence: PASS_EXACT_HEAD
-  media_probe: PASS_EXACT_HEAD
-  media_pass: FAIL
-  pixel_review: PENDING_MANUAL
-  pedagogy_review: PENDING_MANUAL
-  global_requalification_sweep: FAIL_EXPECTED_REMAINING_SCOPE
-  note: >-
-    The exact-head diagnostic completed all source/build/publication/ffprobe/browser steps,
-    all inventoried-page browser contexts, the focused Security 00/01 interaction/layout/playback
-    diagnostic, and the focused Prompt Injection mechanism-state evidence. The workflow remains
-    deliberately red because the global requalification scope still contains known defects. These
-    technical passes do not certify pixels or pedagogy and do not override the media blocker.
+    current_state: REDESIGNED_AFTER_CONFIRMED_PIXEL_FAILURE__UNCERTIFIED
+    desktop_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    mobile_pixel_review: PENDING_CURRENT_HEAD_MANUAL
+    pedagogy_review: PENDING_CURRENT_HEAD_MANUAL
 
 blockers:
   - authorized narration missing for silent ES/EN MP4s
   - captions/transcripts/key moments incomplete
-  - manual current-head pixel review not yet completed for all four Security 00/1.1 teaching visuals
-  - manual current-head pedagogy review not yet completed
+  - current-head technical requalification is still running
+  - current-head pixel review not yet completed after the two material visual redesigns
+  - current-head pedagogy review not yet completed
