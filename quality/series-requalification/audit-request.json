@@ -1,8 +1,8 @@
 {
-  "diagnostic_revision": 8,
+  "diagnostic_revision": 9,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "393b8d8d5d487dc8eb4a8bafd05fa41c1280bb08",
-  "reason": "Focused Security 00/1.1 requalification after replacing the oversized card-stack control-vs-data visual with a compact bilingual causal mechanism: policy/user/external provenance enters one context track, the LLM emits text plus a risky tool proposal, and a separate runtime authority boundary checks scope/destination/permission before denying the external effect. Re-run ES/EN desktop/mobile normal/reduced technical gates and capture states 1/3/4 for real manual pixel and pedagogy review. The media gate remains fail-closed because authorized narration, captions, transcript and key moments are still missing.",
+  "requested_head_parent": "24f3b59e79ed9a3867a2be2966a9dc837316ec7e",
+  "reason": "Focused Security 00/1.1 requalification after two material visual repairs: replace the oversized control-vs-data card stack with a compact provenance→context→LLM proposal→runtime authority mechanism, and rebuild defense-in-depth as an explicit hostile path through four independent barriers with robust mobile layout. Re-run ES/EN desktop/mobile normal/reduced, real tap, exact mechanism states, text-collision checks and screenshots for manual PIXEL_REVIEW/PEDAGOGY_REVIEW. Media remains fail-closed while authorized narration/captions/transcript/key moments are missing.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
