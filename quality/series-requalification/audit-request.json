@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 30,
+  "diagnostic_revision": 31,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "b499859be2ab6634fbbfcdbef27d8e4217ddedb6",
-  "reason": "Diagnostic revision 29 remained stuck in the focused Security browser diagnostic long enough to starve the later independent lifecycle, real-touch, visual-state and keyboard/focus gates. Verify the QA-only orchestration hardening that bounds that browser step to 10 minutes while preserving continue-on-error plus final outcome-based fail-closed enforcement. Re-run the corrected canonical-origin exact-preview article↔watch touch contract in the same focused integration and retain both touch reports. A browser timeout must count as SECURITY_BROWSER_OUTCOME=failure but must not prevent the independent later gates from producing evidence. Do not change site-facing content, media, thresholds or GOLDEN conditions. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; PIXEL_REVIEW/PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run.",
+  "requested_head_parent": "5327138ad866482196d821e7d22687c554bb4826",
+  "reason": "Run 30 retained a contradictory touch artifact: top-level failures was empty, but two Prompt Injection mobile contexts accumulated canonical-proxy/runtime errors after the verdict checks while context teardown was still mutating the same arrays. Verify the fail-closed harness repair that waits for returned-article resource quiescence and re-checks/snapshots runtime and proxy errors after context close, so retained evidence can never contain hidden errors behind a PASS. Re-run the exact-preview ES/EN Security 00/1.1 real-touch round trip and require zero top-level failures, zero retained runtime/proxy errors, canonical browser origin, watch_proxy_count >= 1 and article_proxy_count >= 2 in every normal/reduced context. Do not change site-facing content, media, thresholds or GOLDEN conditions. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; PIXEL_REVIEW/PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
