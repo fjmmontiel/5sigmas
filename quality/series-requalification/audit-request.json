@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 15,
+  "diagnostic_revision": 16,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "cc1131716007f9cfd8ea00b7d786ce972bf2531a",
-  "reason": "Validate the shared video watch/hub locale repair after the reinforced gate found Spanish UI and schema leakage in English output. Re-run strict ES/EN builds, the Security 00/1.1 reciprocal article-watch contract, shared Datacenters regression, focused browser interactions and video lifecycle. Preserve Spanish output while requiring native English watch/hub labels, locale-prefixed navigation, caption language metadata and VideoObject/CollectionPage inLanguage. Keep MEDIA_PASS fail-closed for the four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue and prior pixel/pedagogy verdicts are not recertified here.",
+  "requested_head_parent": "c025f14acf12e4fd8a0058879d8ce5b9e3799619",
+  "reason": "Correct the watch-locale audit after source inspection proved mkdocs.en.yml replaces the Spanish generator with hooks/video_sitemap_en.py. The previous gate was a false positive because it rendered English fixtures through hooks/video_sitemap.py. Restore the Spanish generator byte-for-byte, exercise the real ES and EN watch/hub/schema renderers independently, retain a Datacenters renderer regression fixture, and re-run strict ES/EN builds plus focused Security browser/lifecycle states. Keep MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue and prior pixel/pedagogy verdicts are not recertified here.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
