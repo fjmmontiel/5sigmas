@@ -3,6 +3,7 @@ title: AI Security — attacks and defenses
 description: "A series on how an instruction hidden in a document can influence an AI system, how that risk can persist and which controls constrain actions."
 keywords: AI security, prompt injection, LLM jailbreak, AI agents, RAG security, OWASP LLM, AI red teaming
 date: 2026-08-06
+date_modified: 2026-09-14
 tags:
   - AI
   - Security
