@@ -1,8 +1,9 @@
 {
-  "diagnostic_revision": 9,
+  "diagnostic_revision": 10,
+  "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "24f3b59e79ed9a3867a2be2966a9dc837316ec7e",
-  "reason": "Focused Security 00/1.1 requalification after two material visual repairs: replace the oversized control-vs-data card stack with a compact provenance→context→LLM proposal→runtime authority mechanism, and rebuild defense-in-depth as an explicit hostile path through four independent barriers with robust mobile layout. Re-run ES/EN desktop/mobile normal/reduced, real tap, exact mechanism states, text-collision checks and screenshots for manual PIXEL_REVIEW/PEDAGOGY_REVIEW. Media remains fail-closed while authorized narration/captions/transcript/key moments are missing.",
+  "requested_head_parent": "6469561570c5062e0d34479d205bcabf5b7c1946",
+  "reason": "Focused Security 00/1.1 diagnostic after repairing two stale technical gates exposed by run 34797118816: the browser gate now validates the redesigned control-vs-data mechanism through provenance labels, context segments, risky proposal and runtime denial instead of removed trust-badge nodes; the Prompt Injection state gate now validates the bilingual retrieval-barrier deviation semantically and requires clean/poisoned retrieval and proposal states to differ materially. Re-run only Security 00/1.1 ES/EN desktop/mobile normal/reduced, real tap, poster-first playback and state screenshots. Global catalogue remains uncertified and media remains fail-closed while authorized narration/captions/transcript/key moments are missing.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
