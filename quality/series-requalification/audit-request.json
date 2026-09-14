@@ -1,8 +1,8 @@
 {
-  "diagnostic_revision": 5,
+  "diagnostic_revision": 6,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "b157b95a2feea7d8394b5ea7a8bf996c338a9faf",
-  "reason": "Bounded Security 00/01 requalification diagnostic after correcting the generic video audit to exercise the real poster-first click/tap lifecycle and provisioning ffmpeg/ffprobe. Verify exact native ES/EN MP4 codec, duration, dimensions and audio facts plus the repaired technical browser lifecycle. Missing captions/transcript/key moments and PIXEL/PEDAGOGY reviews remain fail-closed and must not be auto-certified.",
+  "requested_head_parent": "b0acfb0e947ed8e567c3a0e025ad6d8ba583edcb",
+  "reason": "Focused Security 00/01 requalification after removing the mobile authorization-label collision, moving provenance badges into normal layout flow, and adding a codec-aware browser lifecycle diagnostic that prefers Google Chrome and distinguishes a browser-harness codec limitation from a product playback failure. Re-run ES/EN desktop/mobile normal/reduced technical evidence only; PIXEL_REVIEW and PEDAGOGY_REVIEW remain fail-closed manual gates.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
