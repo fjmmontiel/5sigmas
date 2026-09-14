@@ -87,6 +87,9 @@ narration_search:
       - narracion seguridad
       - seguridad-ia mp4
     result: NO_AUTHORIZED_SECURITY_NARRATION_FOUND
+  gmail:
+    query: 'after:2026/08/01 has:attachment {filename:wav filename:mp3 filename:m4a} {"prompt injection" seguridad 5sigmas} -in:trash -in:spam'
+    result: NO_RESULTS
   rejected_substitutes:
     - source: Google Drive VOICE_REPLACEMENT_NOTES.md
       reason: >-
@@ -94,9 +97,10 @@ narration_search:
         the user's timbre and are safe alternatives to user-voice cloning. They are not
         Francisco's authorized narration and must not be substituted into this series.
   note: >-
-    The bounded connected GitHub + Google Drive search found no exact authorized Francisco
-    narration for Security 00/01. This does not prove that no asset can exist outside
-    connected/searchable surfaces. The correct fail-closed state remains VOICE_MISSING.
+    The bounded connected GitHub + Google Drive + targeted Gmail search found no exact
+    authorized Francisco narration for Security 00/01. This does not prove that no asset
+    can exist outside connected/searchable surfaces. The correct fail-closed state remains
+    VOICE_MISSING.
 
 media_gate:
   script: scripts/validate_security_video_media.py
@@ -112,11 +116,25 @@ media_gate:
   local_assistant_validation:
     python_compile: PASS
     synthetic_self_test: PASS
-  ci_status: PENDING_FOCUSED_REEXECUTION
+  ci_status: FAIL_EXPECTED_FAIL_CLOSED
+  diagnostic_run: 34802165060
+  diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
+  evidence_artifact_id: 10331039350
+  evidence_artifact_digest: sha256:e2f6321a78bae80fdd742904717d736ef77c7e8fce9b22bc4ce56e498ffc27ed
+  real_media_result:
+    status: FAIL
+    failure_count: 4
+    failure_code: VIDEO_AUDIO_STREAM_MISSING
+    duration_drift_failures: 0
+    silent_videos:
+      - docs/series/seguridad-ia/00_presentacion_serie.mp4
+      - locales/en/series/seguridad-ia/00_presentacion_serie.mp4
+      - docs/series/seguridad-ia/01-prompt-injection.mp4
+      - locales/en/series/seguridad-ia/01-prompt-injection.mp4
   previous_probe_semantics: >-
     Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
-    success for a silent MP4. The new gate converts absence of audio into a deterministic
-    MEDIA failure and emits a machine-readable report.
+    success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
+    all four silent native Security videos while accepting the reconciled duration metadata.
 
 superseded_evidence:
   - head: e3411f54078833aa7a9d6cf977172fa30f7acba6
@@ -181,15 +199,27 @@ current_reviewed_visual_revision:
       contract remains incomplete and the entire article cannot be certified until MEDIA_PASS and all other
       article gates are green.
 
-current_unreviewed_media_gate_revision:
-  last_gate_commit: 0e63b49e4de5ca97a5b296682532f222d61bec04
-  changes_since_visual_review:
-    - added deterministic ffprobe media validator and negative fixtures
-    - wired silent-video and duration-drift failures into the existing diagnostic workflow
-    - reconciled Spanish Security presentation duration and video summary from existing ffprobe/page evidence
+current_media_gate_revision:
+  diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
+  diagnostic_run: 34802165060
+  diagnostic_scope: focused_security_00_01
+  workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  publication_discovery_pass: true
+  publication_contract_pass: true
+  strict_es_build_pass: true
+  strict_en_build_pass: true
+  security_browser_pass: true
+  prompt_visual_state_pass: true
+  media_pass: false
+  media_failure_count: 4
+  media_failure_code: VIDEO_AUDIO_STREAM_MISSING
+  duration_metadata_drift: false
+  source_pass: false
+  rendered_pass: false
+  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
   affects_visual_pixels: false
   requires_new_visual_review: false
-  requires_media_gate_execution: true
+  article_golden: false
 
 visuals:
   presentation_map:
@@ -226,7 +256,7 @@ visuals:
     pedagogy_review: PASS
 
 blockers:
-  - authorized Francisco narration missing for silent ES/EN MP4s after bounded connected GitHub + Drive search
+  - authorized Francisco narration missing for silent ES/EN MP4s after bounded connected GitHub + Drive + Gmail search
   - captions/transcripts/key moments incomplete and must not be fabricated without valid narration/media inputs
   - source/rendered experience audit remains fail-closed until the audiovisual contract is complete
   - Security 1.2 remains blocked until Security 00/1.1 achieves complete ARTICLE_GOLDEN
