@@ -27,6 +27,22 @@ jobs:
           git rev-parse HEAD
           cat quality/series-requalification/audit-request.json
 
+      - name: Resolve diagnostic scope
+        id: diagnostic_scope
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          request = json.loads(Path('quality/series-requalification/audit-request.json').read_text())
+          scope = request.get('diagnostic_scope', 'full')
+          allowed = {'full', 'focused_security_00_01'}
+          if scope not in allowed:
+              raise SystemExit(f'unsupported diagnostic_scope={scope!r}; allowed={sorted(allowed)}')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
+              handle.write(f'scope={scope}\n')
+          print(f'DIAGNOSTIC_SCOPE={scope}')
+          PY
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -113,6 +129,7 @@ jobs:
           exit 1
 
       - name: All inventoried pages, desktop/mobile, normal/reduced motion
+        if: steps.diagnostic_scope.outputs.scope == 'full'
         id: browser
         continue-on-error: true
         env:
@@ -132,6 +149,7 @@ jobs:
       - name: Enforce technical failures; never certify pixel or pedagogical quality
         if: always()
         env:
+          DIAGNOSTIC_SCOPE: ${{ steps.diagnostic_scope.outputs.scope }}
           PUBLICATION_DISCOVERY_OUTCOME: ${{ steps.publication_discovery.outcome }}
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
           PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
@@ -145,7 +163,8 @@ jobs:
           import json, os
           from pathlib import Path
 
-          print('GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=PENDING; PEDAGOGY_REVIEW=PENDING')
+          scope = os.environ.get('DIAGNOSTIC_SCOPE') or 'full'
+          print(f'GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=PENDING; PEDAGOGY_REVIEW=PENDING; DIAGNOSTIC_SCOPE={scope}')
           for name in ('report.json', 'browser-report.json'):
               path = Path('artifacts/series-experience') / name
               if path.exists():
@@ -170,17 +189,20 @@ jobs:
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
 
-          names = (
+          names = [
               'PUBLICATION_DISCOVERY_OUTCOME',
               'SOURCE_OUTCOME',
               'PUBLICATION_OUTCOME',
               'MEDIA_PROBE_OUTCOME',
               'RENDERED_OUTCOME',
-              'BROWSER_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
-          )
-          outcomes = {name: os.environ[name] for name in names}
+          ]
+          if scope == 'full':
+              names.append('BROWSER_OUTCOME')
+          else:
+              print('GLOBAL_BROWSER_SWEEP=INTENTIONALLY_SKIPPED_FOR_FOCUSED_ITERATION; this run cannot certify the global catalogue')
+          outcomes = {name: os.environ.get(name, '') for name in names}
           print('TECHNICAL_OUTCOMES', json.dumps(outcomes, sort_keys=True))
           raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
           PY
