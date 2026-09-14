@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 10,
+  "diagnostic_revision": 11,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "6469561570c5062e0d34479d205bcabf5b7c1946",
-  "reason": "Focused Security 00/1.1 diagnostic after repairing two stale technical gates exposed by run 34797118816: the browser gate now validates the redesigned control-vs-data mechanism through provenance labels, context segments, risky proposal and runtime denial instead of removed trust-badge nodes; the Prompt Injection state gate now validates the bilingual retrieval-barrier deviation semantically and requires clean/poisoned retrieval and proposal states to differ materially. Re-run only Security 00/1.1 ES/EN desktop/mobile normal/reduced, real tap, poster-first playback and state screenshots. Global catalogue remains uncertified and media remains fail-closed while authorized narration/captions/transcript/key moments are missing.",
+  "requested_head_parent": "08acf5e4ed03afbdc100f4b8ce6a6b269d9a8886",
+  "reason": "Focused Security 00/1.1 requalification after hardening the native-media gate. The previous ffprobe workflow step only printed stream metadata and could report success for a silent MP4; the new deterministic validator must fail VIDEO_AUDIO_STREAM_MISSING, reject duration metadata drift, emit a machine-readable media report, and preserve the no-generation/no-substitution Francisco voice policy. Spanish presentation duration/summary were reconciled from existing ffprobe/page evidence. Re-run only the focused Security technical/media/browser checks; global catalogue remains uncertified, VOICE_MISSING remains a blocker, and no new pixel/pedagogy review is required because these changes do not alter visual pixels.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
