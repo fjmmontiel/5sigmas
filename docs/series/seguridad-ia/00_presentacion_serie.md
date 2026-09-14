@@ -3,6 +3,7 @@ title: Seguridad en IA — ataques y defensas
 description: "Una serie sobre cómo una orden escondida en un documento puede influir en un sistema con IA, cómo puede conservarse ese riesgo y qué controles limitan las acciones."
 keywords: seguridad IA, prompt injection, jailbreak LLM, agentes IA, RAG security, OWASP LLM, red teaming IA
 date: 2026-08-06
+date_modified: 2026-09-14
 tags:
   - IA
   - Seguridad
