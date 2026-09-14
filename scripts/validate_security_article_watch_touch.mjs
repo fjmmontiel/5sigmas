@@ -8,6 +8,12 @@
  * motion, keeps runtime/resource listeners alive across both navigations, and
  * verifies article → watch → article as an actual round trip.
  *
+ * The rendered internal links intentionally use the public canonical origin
+ * (https://5sigmas.com). During branch QA, requests to that canonical origin are
+ * intercepted and fulfilled from the exact local preview bytes while the browser
+ * keeps the canonical URL. This preserves the real href/tap/navigation semantics
+ * without accidentally testing the older live deployment instead of the branch.
+ *
  * Navigation waits are armed before the tap and settle at DOMContentLoaded rather
  * than full load so lazy media cannot make a valid navigation look hung. Any
  * unexpected browser/navigation exception is converted into retained fail-closed
@@ -18,6 +24,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
+const canonicalOrigin = 'https://5sigmas.com';
 const evidenceRoot = path.resolve('artifacts/security-requalification');
 const out = path.join(evidenceRoot, 'article-watch-touch');
 await fs.mkdir(out, { recursive: true });
@@ -63,6 +70,30 @@ async function launchBrowser() {
       chromeError: String(chromeError),
     };
   }
+}
+
+async function proxyCanonicalSiteToPreview(context, proxyEvidence, proxyErrors) {
+  await context.route(`${canonicalOrigin}/**`, async route => {
+    const requestUrl = new URL(route.request().url());
+    const previewUrl = new URL(`${requestUrl.pathname}${requestUrl.search}`, base).href;
+    try {
+      const response = await route.fetch({ url: previewUrl });
+      proxyEvidence.push({
+        canonical_url: requestUrl.href,
+        preview_url: previewUrl,
+        status: response.status(),
+      });
+      await route.fulfill({ response });
+    } catch (error) {
+      proxyErrors.push({
+        canonical_url: requestUrl.href,
+        preview_url: previewUrl,
+        name: error?.name || 'Error',
+        message: String(error?.message || error),
+      });
+      await route.abort('failed');
+    }
+  });
 }
 
 function attachRuntimeListeners(page, runtime) {
@@ -125,12 +156,16 @@ try {
     for (const motion of motions) {
       const ctx = `${item.locale}/${item.kind}/mobile/${motion}`;
       const runtime = [];
+      const proxyEvidence = [];
+      const proxyErrors = [];
       const record = {
         ...item,
         motion,
         width: 390,
         engine: launched.engine,
         chrome_launch_error: launched.chromeError || null,
+        canonical_origin: canonicalOrigin,
+        canonical_origin_proxied_to_exact_preview: true,
       };
       let context = null;
       try {
@@ -140,6 +175,7 @@ try {
           hasTouch: true,
           reducedMotion: motion,
         });
+        await proxyCanonicalSiteToPreview(context, proxyEvidence, proxyErrors);
         const page = await context.newPage();
         attachRuntimeListeners(page, runtime);
 
@@ -164,8 +200,13 @@ try {
           await watchLink.scrollIntoViewIfNeeded();
           record.article_watch_box = await assertViewportBound(watchLink, 390, ctx, 'article→watch link');
           const href = await watchLink.getAttribute('href');
-          const hrefPath = href ? new URL(href, page.url()).pathname : null;
+          const resolvedHref = href ? new URL(href, page.url()) : null;
+          const hrefPath = resolvedHref?.pathname || null;
           record.article_watch_href = href;
+          record.article_watch_origin = resolvedHref?.origin || null;
+          if (resolvedHref?.origin !== canonicalOrigin) {
+            fail(`${ctx}: article→watch canonical origin drifted`, { expected: canonicalOrigin, actual: resolvedHref?.origin || null });
+          }
           if (hrefPath !== item.watch) {
             fail(`${ctx}: article→watch target drifted`, { expected: item.watch, actual: hrefPath });
           } else {
@@ -190,8 +231,13 @@ try {
             await sourceLink.scrollIntoViewIfNeeded();
             record.watch_article_box = await assertViewportBound(sourceLink, 390, ctx, 'watch→article link');
             const href = await sourceLink.getAttribute('href');
-            const hrefPath = href ? new URL(href, page.url()).pathname : null;
+            const resolvedHref = href ? new URL(href, page.url()) : null;
+            const hrefPath = resolvedHref?.pathname || null;
             record.watch_article_href = href;
+            record.watch_article_origin = resolvedHref?.origin || null;
+            if (resolvedHref?.origin !== canonicalOrigin) {
+              fail(`${ctx}: watch→article canonical origin drifted`, { expected: canonicalOrigin, actual: resolvedHref?.origin || null });
+            }
             if (hrefPath !== item.article) {
               fail(`${ctx}: watch→article target drifted`, { expected: item.article, actual: hrefPath });
             } else {
@@ -201,8 +247,12 @@ try {
         }
 
         record.final_path = new URL(page.url()).pathname;
+        record.final_origin = new URL(page.url()).origin;
         if (record.final_path !== item.article) {
           fail(`${ctx}: touch round trip did not return to article`, { expected: item.article, actual: record.final_path });
+        }
+        if (record.final_origin !== canonicalOrigin) {
+          fail(`${ctx}: touch round trip did not remain on canonical browser origin`, { expected: canonicalOrigin, actual: record.final_origin });
         }
         const geometry = await page.evaluate(() => ({
           scrollWidth: document.documentElement.scrollWidth,
@@ -211,8 +261,17 @@ try {
         if (geometry.scrollWidth > geometry.clientWidth + 1) {
           fail(`${ctx}: page overflow after touch round trip`, geometry);
         }
+        if (proxyErrors.length) fail(`${ctx}: canonical→preview proxy errors`, proxyErrors);
+        if (!proxyEvidence.some(item => new URL(item.canonical_url).pathname === item.watch)) {
+          fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { proxyEvidence });
+        }
+        if (!proxyEvidence.some(proxyItem => new URL(proxyItem.canonical_url).pathname === item.article)) {
+          fail(`${ctx}: canonical article return was not fulfilled from exact preview`, { proxyEvidence });
+        }
         if (runtime.length) fail(`${ctx}: persistent runtime/resource errors across touch round trip`, runtime);
         record.runtime = runtime;
+        record.proxy_errors = proxyErrors;
+        record.proxy_requests = proxyEvidence;
         record.geometry = geometry;
       } catch (error) {
         record.unhandled_error = {
@@ -222,6 +281,8 @@ try {
         fail(`${ctx}: unhandled touch round-trip exception`, record.unhandled_error);
       } finally {
         record.runtime ??= runtime;
+        record.proxy_errors ??= proxyErrors;
+        record.proxy_requests ??= proxyEvidence;
         evidence.push(record);
         if (context) {
           try {
@@ -243,6 +304,9 @@ try {
 const report = JSON.stringify({
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
+  canonical_origin: canonicalOrigin,
+  preview_origin: new URL(base).origin,
+  canonical_origin_proxied_to_exact_preview: true,
   failures,
   evidence,
 }, null, 2);
@@ -257,4 +321,4 @@ if (failures.length) {
   for (const item of failures) console.error(`- ${item.message}${item.detail ? ` :: ${JSON.stringify(item.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security article↔watch touch PASS using ${launched.engine}: ES/EN Security 00/1.1 × normal/reduced motion completed a real mobile tap round trip.`);
+console.log(`Security article↔watch touch PASS using ${launched.engine}: ES/EN Security 00/1.1 × normal/reduced motion completed a real mobile tap round trip against exact branch preview bytes while preserving canonical hrefs.`);
