@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 46,
+  "diagnostic_revision": 47,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "c9c764e5b6c4c9de327aaec2540d09b1dac138a6",
-  "reason": "Exact-QA the correlated Security runtime sentinel after revision 45 exposed real pre-teardown ERR_ABORTED events. Revision 46 must prove that an accepted abort is strictly a media-seek supersession on the same currentSrc with a settled seek and a later 200/206 response, while generic aborts, wrong-source events, unsettled seeks, missing later responses and non-ERR_ABORTED failures remain fatal. Site-facing bytes are unchanged; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "216b3d0a6afdc8394782a05cadb8fdb06ea6034d",
+  "reason": "Exact-QA the request-correlated Security runtime sentinel implemented after revision 46. Revision 47 must prove that ES media-seek ERR_ABORTED events are accepted only with same-source request identity plus successful same-request 200/206 headers before cancellation or a later same-source replacement response, a settled seek, readyState >= 2, no media error, advancing post-seek playback, and a verdict computed after browser-context teardown. Generic aborts, unrelated request IDs, missing response proof, wrong source, unsettled seek, media errors, non-advancing post-seek playback and non-ERR_ABORTED failures must remain fatal. Site-facing bytes are unchanged; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
