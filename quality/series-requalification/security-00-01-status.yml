@@ -1,4 +1,4 @@
-schema_version: 8
+schema_version: 9
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -9,53 +9,59 @@ scope:
 head_state:
   current_site_facing_head: e97e11422d7852ee3c24bf6a3a31d9a358739061
   legibility_gate_source_head: 734e21e934e736b34a6e297eb7611f9d9006ca48
-  diagnostic_reproduction_head: eddc57e38c7f300f326d9ed6d4d756d7df1a6565
-  diagnostic_run: 34924229925
-  diagnostic_revision: 38
-  diagnostic_status: IN_PROGRESS_EXPECTED_TO_FAIL_ON_PRE_REPAIR_PIXELS
+  current_exact_qa_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
+  current_exact_qa_run: 34924687910
+  current_exact_qa_revision: 39
+  current_exact_qa_status: IN_PROGRESS
   current_content_pixel_review: PENDING_CURRENT_EXACT_MANUAL
   current_content_pedagogy_review: PENDING_CURRENT_EXACT_MANUAL
   independent_editorial_review: false
   article_golden: false
 
-active_defect:
-  code: TEACHING_TEXT_ANCESTOR_OPACITY_CONTRAST_BLIND_SPOT
-  severity: P1
+resolved_source_defect:
+  code: SECURITY_STATE_SOURCE_CONTRADICTION_AND_ES_LOCALE_LEAK
+  severity: P2
   status: SOURCE_REPAIRED_PENDING_EXACT_QA_AND_MANUAL_PIXEL_REVIEW
   affected_visuals: [control-vs-datos, defensa-en-capas]
-  discovered_from_source:
+  facts:
     - >-
-      The prior browser contrast gate measured descendant computed foreground/background colors but did not
-      account for CSS opacity applied by an ancestor, so text inside a faded teaching panel could falsely pass.
+      ES/EN control-vs-datos still contained stale inline whole-group opacity declarations even though the existing
+      revamp-ux Security contract already forced the rendered teaching groups fully opaque and hid the verdict until
+      state 4. The source therefore contradicted the effective rendered contract and made future regressions easier.
     - >-
-      ES and EN control-vs-datos rendered mechanism/context/proposal groups at 20/25 percent opacity in early
-      states and the runtime group at 35 percent in state 3. The old verdict was also left visible at 18 percent.
-    - >-
-      ES and EN defensa-en-capas rendered an entire disabled gate at 42 percent opacity. The ES inactive status
-      additionally leaked the English token "off".
+      ES/EN defensa-en-capas used an inline opacity fade for disabled cards. ES additionally emitted the English
+      inactive token "off" inside otherwise Spanish UI.
+  diagnostic_correction: >-
+    Revision 38 strengthened the browser gate to inspect cumulative ancestor opacity and exercised the pre-cleanup
+    rendered bytes. Its contrast/text-visibility step PASSED, so the earlier hypothesis that current ctxmix pixels
+    were actually rendered at 20/25/35 percent opacity is REFUTED. Existing revamp-ux rules had already kept those
+    teaching groups opaque. Revision 38 must not be cited as a reproduced P1 pixel failure.
   gate_repair: >-
-    validate_security_contrast.mjs now contains an ancestor-opacity regression fixture, rejects inspected teaching
-    text rendered through cumulative ancestor opacity below 0.999, and exercises presentation bounded/unbounded,
-    ctxmix steps 1..4, RAG clean/poisoned and defense all-on/first-off across ES/EN, desktop/mobile and
-    normal/reduced motion while retaining runtime/resource listeners.
+    validate_security_contrast.mjs now includes an ancestor-opacity negative fixture, rejects inspected teaching text
+    rendered through cumulative ancestor opacity below 0.999, and exercises presentation bounded/unbounded, ctxmix
+    steps 1..4, RAG clean/poisoned and defense all-on/first-off across ES/EN, desktop/mobile and normal/reduced motion
+    while retaining runtime/resource listeners.
   site_repair: >-
-    ES/EN ctxmix no longer fades text-bearing mechanism groups. The final verdict is hidden until its explanatory
-    state and then shown at full opacity. ES/EN defense disabled gates preserve readable text and communicate state
-    through dashed border plus explicit state pill rather than fading the entire card. ES uses "inactivo".
+    ES/EN ctxmix source now matches the effective rendering contract: no stale text-bearing group fades, and the
+    final verdict is source-hidden until state 4. ES/EN defense disabled cards communicate state structurally without
+    fading the whole card. ES now uses "inactivo" instead of "off".
   regression_scope: >-
-    Site-facing changes are confined to the two Security 1.1 visual snippets in ES and EN; the gate change is
-    confined to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
+    Site-facing changes are confined to the two Security 1.1 visual snippets in ES and EN; the gate change is confined
+    to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
   certification_effect: >-
-    Prior same-agent PIXEL_REVIEW/PEDAGOGY_REVIEW receipts cannot certify the current content revision after this
-    newly discovered defect and the subsequent site-facing repair. Current exact manual review is fail-closed PENDING.
+    Because site-facing source bytes changed after the previous exact manual review, current PIXEL_REVIEW and
+    PEDAGOGY_REVIEW remain fail-closed PENDING until revision 39 completes and its retained pixels are inspected.
 
-exact_run_38_diagnostic:
+revision_38_diagnostic:
   run_id: 34924229925
   exact_head: eddc57e38c7f300f326d9ed6d4d756d7df1a6565
-  content_under_test: PRE_REPAIR_OPACITY_STATES
-  purpose: REPRODUCE_ANCESTOR_OPACITY_BLIND_SPOT_WITH_STRENGTHENED_GATE
-  status: IN_PROGRESS
-  completed_passes_observed:
+  content_under_test: PRE_SOURCE_CLEANUP
+  status: CANCELLED_BY_REVISION_39_CONCURRENCY
+  decisive_result: >-
+    Focused Security WCAG contrast and state text visibility completed SUCCESS against the pre-cleanup rendered bytes,
+    refuting the rendered-opacity hypothesis for ctxmix. This diagnostic is retained as gate evidence, not current
+    content certification.
+  completed_success_before_cancel:
     - negative_regression_fixtures
     - publication_discovery
     - independent_source_coverage
@@ -67,20 +73,40 @@ exact_run_38_diagnostic:
     - reciprocal_article_watch_locale_ui
     - independent_rendered_html_audit
     - focused_browser_interaction_layout_playback
-  current_step: focused_wcag_contrast_and_state_text_visibility
-  note: >-
-    This diagnostic intentionally runs the strengthened gate against pre-repair site bytes. It is not evidence for
-    the current repaired content and cannot restore PIXEL_REVIEW, PEDAGOGY_REVIEW or ARTICLE_GOLDEN.
+    - focused_wcag_contrast_and_state_text_visibility
+    - video_lifecycle_keyboard_touch_normal_reduced
+    - real_touch_article_watch_round_trip
+    - prompt_injection_visual_state_evidence
+  cancelled_step: real_keyboard_traversal_and_visible_focus
+  enforcement_outcome_before_cancel: FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+
+revision_39_current_exact_qa:
+  run_id: 34924687910
+  exact_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
+  content_under_test: CURRENT_SOURCE_CLEANUP_PLUS_STRENGTHENED_GATE
+  status: IN_PROGRESS
+  completed_success_observed:
+    - negative_regression_fixtures
+    - publication_discovery
+    - independent_source_coverage
+    - strict_es_build
+    - publication_contract
+    - security_native_media_inspection
+    - strict_en_build
+    - structured_provenance_locale_metadata
+    - reciprocal_article_watch_locale_ui
+    - independent_rendered_html_audit
+  current_step: focused_security_interaction_layout_codec_playback
+  no_editorial_pass_inferred: true
 
 previous_exact_run_37:
   run_id: 34920449262
   exact_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
   artifact_id: 10377524435
-  status: SUPERSEDED_FOR_CURRENT_PIXEL_CERTIFICATION_BY_NEW_DEFECT
+  status: RAG_REPAIR_TECHNICALLY_QUALIFIED_BUT_SITE_REVISION_SUPERSEDED
   retained_fact: >-
-    The RAG retrieval order/rank/top-K/accessibility repair remains technically exact-qualified on run 37, but the
-    later-discovered ancestor-opacity legibility defect invalidates use of run 37 as a current whole-active-set
-    pixel/pedagogy PASS.
+    RAG retrieval order/rank/top-K/accessibility was exact-qualified on run 37. It does not certify the current
+    post-cleanup whole-active-set pixels or pedagogy.
 
 media:
   status: FAIL
@@ -134,15 +160,16 @@ sources_and_locale:
   es_en_repair_mirrored: true
   es_locale_cleanup: "defense inactive state: off -> inactivo"
   note: >-
-    This repair changes visual legibility/state presentation only. No factual claim, benchmark value, unit, formula,
-    reference, caveat, code example premise or media assertion changed.
+    No factual claim, benchmark value, unit, formula, reference, caveat, code-example premise or media assertion
+    changed. Existing structured provenance remains subject to the exact revision-39 technical gate.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  repair_branch_site_head_before_manifest_reconcile: e97e11422d7852ee3c24bf6a3a31d9a358739061
+  current_exact_qa_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_for_revision_38: 1
+  actions_started_this_run: 2
+  actions_reason: REV38_DIAGNOSTIC_THEN_REV39_EXACT_SOURCE_CLEANUP_VERIFICATION
   pr_created: false
   merged: false
   deployed: false
@@ -160,8 +187,8 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   first_internal_gap: >-
-    Complete run 38 reproduction evidence, then integrate the repaired ES/EN site bytes with the strengthened
-    opacity-aware gate on one exact head and inspect the retained current pixels on desktop/mobile normal/reduced.
+    Complete revision 39 and inspect its retained current pixels for ES/EN desktop/mobile normal/reduced, including
+    ctxmix early/final states and defense disabled state. Do not inherit a previous editorial PASS across changed bytes.
   pixel_review_required: true
   pedagogy_review_required: true
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
