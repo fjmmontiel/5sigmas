@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 36,
+  "diagnostic_revision": 37,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "c08826cc7e9226f72f27b40e587b8dd73a51b92f",
-  "reason": "Requalify Security 00/1.1 after finding a real pedagogy/accessibility defect in the RAG retrieval visual: CSS moved the poisoned document from rank 4 to visual rank 1 in the optimized-trigger scenario while the visible rank badge stayed 4 and DOM/accessibility order stayed in the original clean sequence. ES/EN now derive DOM order and rank badges from one canonical per-mode order so visual sequence, text labels and accessibility reading order agree. Run strict ES/EN, provenance, article-watch, browser/playback, contrast/text-visibility, lifecycle/touch, Prompt Injection state captures and keyboard/focus on the exact revision. Manually inspect clean/poisoned ranking pixels before restoring PIXEL/PEDAGOGY PASS. SOURCE/RENDERED catalogue debt and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
+  "requested_head_parent": "37f07a1bf842fc9d71a6e6bd8d2fe63812e3bd50",
+  "reason": "Requalify Security 00/1.1 on one exact integration that contains both the final ES/EN RAG rank/selection accessibility repair (c74784f2f17c625bb9bb622395d836552a747273) and the strengthened semantic gate (d5bf731a10e467b5a492ba46720635575dcc80a1). Verify clean and poisoned DOM/accessibility order, ranks 1..4, top-K cut, selected/outside text and localized aria-label; run strict ES/EN, publication/provenance, article-watch, browser/playback, WCAG contrast/text visibility, lifecycle/touch, Prompt Injection state captures and real keyboard/focus. Retain exact screenshots for manual ES/EN x desktop/mobile x normal/reduced inspection before restoring PIXEL_REVIEW or PEDAGOGY_REVIEW. SOURCE/RENDERED catalogue debt and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
