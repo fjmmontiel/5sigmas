@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 34,
+  "diagnostic_revision": 35,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "e6978fb59f3060f23f63ae0548375aa359228cc4",
-  "reason": "Requalify the Security 00/1.1 exact head after closing a rendered-legibility blind spot. The control-vs-data visual previously dimmed entire explanatory text-bearing containers to 20-35% opacity in intermediate states while the WCAG gate only evaluated each probe's own foreground/background colors and could miss ancestor opacity. The repair keeps explanatory text fully opaque, uses structural state highlighting instead, and hides the final verdict until it is semantically active. A new browser gate exercises states 1-4 in ES/EN, desktop/mobile and normal/reduced motion, calculates cumulative ancestor opacity, rejects ghost text, and retains runtime/resource listeners throughout. Re-run all existing strict build, provenance, article-watch, playback, touch and focus gates. SOURCE/RENDERED catalogue findings and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
+  "requested_head_parent": "9b2232a92bd6893e19b4e33847c711d20139615a",
+  "reason": "Re-run Security 00/1.1 after revision 34 correctly failed the new text-visibility gate on one residual explanatory text selector (.ctxmix__runtime small) whose own opacity was 0.75 across all 32 ES/EN desktop/mobile normal/reduced state contexts. The group-opacity repair itself worked; this revision removes the remaining local fading without weakening the >=0.99 effective-opacity contract. Revision 34 logs prove the browser gate failed deterministically when its report contained 32 violations, so no threshold or enforcement change is required. Re-run all strict build, provenance, article-watch, playback, touch, contrast/text-visibility and focus gates on one exact head. SOURCE/RENDERED catalogue findings and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
