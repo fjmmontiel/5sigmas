@@ -24,6 +24,13 @@ function finalRuntimeFailures(beforeClose, afterClose) {
   return afterClose.length ? [...afterClose] : [];
 }
 
+function shouldIgnoreRequestFailure(detail, teardownStarted) {
+  // Chromium can abort active streaming requests as browser-context teardown
+  // begins. That teardown-only abort is expected. The same ERR_ABORTED before
+  // teardown is a real navigation/resource failure and must remain fatal.
+  return teardownStarted && detail.includes('ERR_ABORTED');
+}
+
 function runSelfTest() {
   const before = [];
   const after = [{ type: 'requestfailed', url: 'https://example.invalid/lazy', detail: 'synthetic teardown failure' }];
@@ -33,7 +40,16 @@ function runSelfTest() {
   if (finalRuntimeFailures([], []).length !== 0) {
     throw new Error('clean teardown fixture was rejected');
   }
-  console.log('Security runtime-listener lifetime mutation fixtures PASS: post-teardown evidence controls the verdict.');
+  if (shouldIgnoreRequestFailure('net::ERR_ABORTED', false)) {
+    throw new Error('pre-teardown ERR_ABORTED mutation escaped');
+  }
+  if (!shouldIgnoreRequestFailure('net::ERR_ABORTED', true)) {
+    throw new Error('teardown ERR_ABORTED fixture was not ignored');
+  }
+  if (shouldIgnoreRequestFailure('net::ERR_FAILED', true)) {
+    throw new Error('non-abort teardown failure was incorrectly ignored');
+  }
+  console.log('Security runtime-listener lifetime mutation fixtures PASS: post-teardown evidence controls the verdict and ERR_ABORTED is ignored only after teardown begins.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -256,6 +272,7 @@ try {
         };
         const runtime = [];
         let context = null;
+        let teardownStarted = false;
 
         try {
           context = await launched.browser.newContext({
@@ -271,9 +288,9 @@ try {
           });
           page.on('requestfailed', request => {
             const detail = request.failure()?.errorText || '';
-            // Context teardown intentionally aborts active streaming requests; all
-            // other failures remain fatal and are evaluated after close.
-            if (!detail.includes('ERR_ABORTED')) runtime.push({ type: 'requestfailed', url: request.url(), detail });
+            if (!shouldIgnoreRequestFailure(detail, teardownStarted)) {
+              runtime.push({ type: 'requestfailed', url: request.url(), detail });
+            }
           });
           page.on('response', response => {
             if (response.status() >= 400) runtime.push({ type: 'http', status: response.status(), url: response.url() });
@@ -303,6 +320,7 @@ try {
         } finally {
           if (context) {
             try {
+              teardownStarted = true;
               await context.close();
             } catch (error) {
               const detail = { name: error?.name || 'Error', message: String(error?.message || error) };
@@ -348,4 +366,4 @@ if (failures.length) {
   for (const item of failures) console.error(`- ${item.context}: ${item.reason}${item.detail ? ` :: ${JSON.stringify(item.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security runtime-listener lifetime PASS using ${launched.engine}: 16 ES/EN Security 00/1.1 desktop/mobile normal/reduced contexts exercised teaching interactions plus lazy media playback, and the verdict used the final retained runtime/resource arrays only after context teardown. PIXEL_REVIEW/PEDAGOGY_REVIEW remain editorial.`);
+console.log(`Security runtime-listener lifetime PASS using ${launched.engine}: 16 ES/EN Security 00/1.1 desktop/mobile normal/reduced contexts exercised teaching interactions plus lazy media playback, the verdict used the final retained runtime/resource arrays only after context teardown, and pre-teardown ERR_ABORTED request failures remained fatal. PIXEL_REVIEW/PEDAGOGY_REVIEW remain editorial.`);
