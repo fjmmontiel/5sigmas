@@ -1,4 +1,4 @@
-schema_version: 20
+schema_version: 21
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,12 +8,12 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 46f40bf51d2186fe8bd8b4097f433fe726565665
+  current_gate_head: 25af76b25da875260d51f1e9a81f8640c2e8fa0b
   last_exact_qa_head: 99a38612704ee2d83be84faa7f3cec20ab4df1bc
   last_exact_qa_run: 34987279088
   last_exact_qa_revision: 48
   last_exact_qa_status: COMPLETED_FAILURE_LIFECYCLE_CLASSIFIER_AND_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
-  current_gate_exact_qa: CHANGES_REQUIRED_REVISION_48_LIFECYCLE_RESIDUAL_REPAIRED_PENDING_EXACT_QA
+  current_gate_exact_qa: CHANGES_REQUIRED_REVISION_48_LIFECYCLE_AND_ARTICLE_WATCH_REPAIRS_PENDING_EXACT_QA
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_editorial_evidence_artifact: 10383286488
@@ -71,9 +71,19 @@ revision_48:
       invalid end-state, non-abort failures and late console/HTTP errors remain deterministic fail-closed mutations.
     mutation_self_test: IMPLEMENTED_NOT_EXECUTED_IN_REVISION_48_WORKFLOW
   article_watch_touch:
-    status: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_LISTENER_DEBT_REMAINS
+    status: PASS_TECHNICAL_REVISION_48_SOURCE_REPAIR_IMPLEMENTED_PENDING_EXACT_QA
     contexts: 8
     failure_count: 0
+    revision_48_source_listener_debt: true
+    repair_commit: 25af76b25da875260d51f1e9a81f8640c2e8fa0b
+    repair_status: IMPLEMENTED_PENDING_EXACT_QA
+    repair_details: >-
+      Blanket ERR_ABORTED filtering was removed. Every pageerror, console error, requestfailed and HTTP >=400 event is now
+      retained with phase/sequence/request identity through context.close(). Because this gate exercises navigation/touch but
+      no explicit media seek lifecycle, only ERR_ABORTED emitted during actual context teardown may be classified as expected;
+      navigation, article-to-watch, watch-to-article and return-settle aborts remain fatal. The retained report and final verdict
+      are computed from the same post-teardown arrays.
+    mutation_self_test: ADDED_NOT_EXECUTED_IN_REVISION_48_WORKFLOW
   prompt_visual_states:
     status: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_LISTENER_DEBT_REMAINS
     contexts: 8
@@ -103,7 +113,7 @@ revision_48:
     focused_browser_layout_playback: PASS_EXACT_QA_REVISION_48
     wcag_contrast_and_text_visibility: PASS_EXACT_QA_REVISION_48
     lifecycle_normal_reduced: FAIL_EXACT_QA_REVISION_48_ONE_CLASSIFIER_EDGE
-    real_touch_article_watch: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    real_touch_article_watch: PASS_REVISION_48_TECHNICAL_SOURCE_REPAIR_PENDING_EXACT_QA
     prompt_visual_states: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
     real_keyboard_focus: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
     runtime_listener_lifetime: PASS_EXACT_QA_REVISION_48
@@ -126,6 +136,21 @@ specialized_gate_debt:
     repair_commit: 46f40bf51d2186fe8bd8b4097f433fe726565665
     site_facing_bytes_changed: false
     thresholds_changed: false
+  - code: SECURITY_ARTICLE_WATCH_TOUCH_RUNTIME_LISTENER_FAIL_OPEN
+    severity: P1
+    status: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+    repair_commit: 25af76b25da875260d51f1e9a81f8640c2e8fa0b
+    site_facing_bytes_changed: false
+    thresholds_changed: false
+    negative_mutations_added:
+      - article_navigation_abort
+      - article_to_watch_abort
+      - watch_to_article_abort
+      - return_settle_abort
+      - non_abort_request_failure
+      - teardown_pageerror
+      - teardown_console_error
+      - teardown_http_error
   - code: SECURITY_REMAINING_SPECIALIZED_GATES_RUNTIME_LISTENER_FAIL_OPEN
     severity: P1
     status: IN_PROGRESS
@@ -133,16 +158,17 @@ specialized_gate_debt:
       Source inspection still finds specialized harnesses whose successful revision-48 step status cannot satisfy the reinforced
       runtime-listener contract because they blanket-ignore ERR_ABORTED and/or decide from runtime arrays before teardown.
     affected:
-      - scripts/validate_security_article_watch_touch.mjs
       - scripts/validate_security_prompt_visual_states.mjs
       - scripts/validate_security_keyboard_focus.mjs
       - scripts/capture_security_visuals.mjs
+    repaired_pending_exact_qa:
+      - scripts/validate_security_article_watch_touch.mjs
     already_exact_qualified_revision_48:
       - scripts/validate_security_contrast.mjs
       - scripts/validate_security_text_visibility.mjs
       - scripts/validate_security_requalification_browser.mjs
       - scripts/validate_security_runtime_listener_lifetime.mjs
-    next_gate: scripts/validate_security_article_watch_touch.mjs
+    next_gate: scripts/validate_security_prompt_visual_states.mjs
 
 historical_receipts:
   revision_46_file: quality/series-requalification/security-00-01-revision46.yml
@@ -200,17 +226,18 @@ sources_and_locale:
   structured_provenance_locale_metadata: PASS_REVISION_48
   note: >-
     No material Security claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in
-    revision 48 or the pending gate-only repair. No new Security factual validation is claimed.
+    revision 48 or the pending gate-only repairs. No new Security factual validation is claimed.
 
 release_contract_281_reconciliation:
   status: CHANGES_REQUIRED_FRESH_UNCACHED_LIVE_VERIFICATION
-  latest_comment: 5682855171
+  latest_comment: 5683127656
   article_source_state: >-
     The author-reviewed #310 source revision a5efdfce72d11b2335452eaf45000f26ae524777 and current main already cite the
     2026-09-10 GPT-Live-1 API launch separately from the earlier 2026-07-08 GPT-Live introduction. No source patch was made.
   runtime_limit: >-
-    This runtime only exposed an older cached 5sigmas article rendering and direct uncached production fetch was unavailable,
-    so production current bytes were not re-certified and ARTICLE_LIVE_VERIFIED was not renewed.
+    The latest PM receipt keeps #281 CHANGES_REQUIRED/BLOCKED until the article lane records a fresh uncached verification of
+    the actually deployed ES/EN revision or proves and repairs a deploy mismatch. This Security gate-only checkpoint does not
+    claim that production verification and does not alter the existing article/LinkedIn dependency.
   linkedin_state: BLOCKED_PENDING_FRESH_UNCACHED_LIVE_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
   seventy_two_hour_clock_restarted: false
   linkedin_write_queue_activation: false
@@ -218,19 +245,19 @@ release_contract_281_reconciliation:
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_before_this_manifest_commit: 225
+  branch_ahead_of_main_before_this_manifest_commit: 227
   branch_behind_main: 0
   draft_pr_34: OPEN_DRAFT_NONMERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_checkpoint: 1
+  actions_started_this_checkpoint: 0
   last_action_run: 34987279088
-  action_reason: EXACT_INTEGRATION_OF_BUNDLED_BROWSER_CONTRAST_TEXT_AND_VIDEO_LIFECYCLE_LISTENER_REPAIRS
+  action_reason: NONE_THIS_CHECKPOINT_GROUPING_SPECIALIZED_GATE_REPAIRS_BEFORE_NEXT_EXACT_INTEGRATION
   new_action_after_revision_48_residual_repair_or_persistence: false
   pr_created: false
   merged: false
   deployed: false
   datacenters_or_pre_datacenters_modified: false
-  linkedin_lane_touched: RECONCILIATION_COMMENT_ONLY_NO_PUBLISH_ACTION
+  linkedin_lane_touched: RECONCILIATION_READ_ONLY_NO_PUBLISH_ACTION
   release_contract_281_preserved: true
 
 next_exact_gap:
@@ -238,11 +265,11 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Do not spend another Action merely to retest the one-line lifecycle phase edge. First harmonize
-    validate_security_article_watch_touch.mjs, then prompt visual states, keyboard/focus and capture_security_visuals.mjs so
-    blanket ERR_ABORTED filtering and pre-teardown verdicts are gone. Then execute one useful bundled exact-QA that includes
-    the lifecycle V2 classifier repair and deterministic self-test. Do not inherit successful continue-on-error step status as
-    PASS when the retained report records a failure.
+    Continue the same source-level listener harmonization with validate_security_prompt_visual_states.mjs, then keyboard/focus
+    and capture_security_visuals.mjs. Remove blanket ERR_ABORTED filtering and pre-teardown verdicts without weakening visual,
+    accessibility or runtime thresholds. After those deterministic repairs are committed, execute one useful bundled exact-QA
+    that also exercises the pending lifecycle V2 classifier and article-watch-touch self-tests. Do not inherit successful
+    continue-on-error step status as PASS when retained evidence records a failure.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
