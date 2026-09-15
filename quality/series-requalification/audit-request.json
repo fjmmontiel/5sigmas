@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 49,
+  "diagnostic_revision": 50,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "377731a886aca18619fa477a9aceca428b302743",
-  "reason": "Exact-QA the bundled Security 00/01 specialized runtime-listener repairs after source harmonization. Revision 49 must exercise focused browser, contrast/text visibility, lifecycle, article-watch touch, Prompt Injection visual states, keyboard/focus and the independent listener-lifetime sentinel with listeners retained through browser-context teardown and final verdicts computed from post-teardown evidence. Prompt visual states and keyboard/focus no longer blanket-ignore interaction ERR_ABORTED; only actual teardown cancellation is classified as expected where those gates do not perform an explicit seek lifecycle. Lifecycle keeps its request-correlated seek classifier. Site-facing bytes are unchanged. The broader capture_security_visuals.mjs listener repair is committed but is not part of this focused workflow and remains pending direct execution. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "93e063fec4cb850dd5b92e25c068c511c1d629fc",
+  "reason": "Exact-QA the repaired Security 00/01 article-watch real-touch classifier after revision 49. The gate must prove the current request-correlated policy on all ES/EN mobile normal/reduced contexts without reinstating a blanket ERR_ABORTED allow-list: navigation cancellation is admissible only for the exact native media request after successful destination navigation, and watch-interaction range cancellation requires a prior 200/206 on the same Request plus a healthy exact-source player. Re-run the already-hardened focused browser, contrast/text visibility, lifecycle, Prompt Injection visual states, keyboard/focus and independent post-teardown listener sentinel on the same exact head. Site-facing bytes are unchanged. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN. The separate capture_security_visuals direct execution remains mandatory before closing specialized gate debt.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
