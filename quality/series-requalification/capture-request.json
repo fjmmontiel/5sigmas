@@ -1,10 +1,10 @@
 {
-  "capture_revision": 53,
+  "capture_revision": 54,
   "scope": "security_visual_capture_and_prompt_state_evidence",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "422e125da188d789eadceed4351138dc87248afe",
+  "requested_head_parent": "cd61094a442b47440a3e1f871a1818497595bd0e",
   "site_facing_bytes_changed": false,
-  "reason": "Exact bounded rerun after revision 52 proved capture_security_visuals PASS but exposed 34 false-positive sticky-header placement failures in normal-motion Prompt Injection evidence. The repair makes asset screenshots fit-aware, positions with synchronous scrolling rather than CSS smooth-scroll semantics, and hides only fixed/sticky site chrome inside isolated element screenshots; the actual asset motion/state remains normal or reduced as requested. Re-run both technical harnesses on unchanged site-facing bytes and retain only the two JSON reports plus four critical mobile ctxmix state-4 images. This run cannot grant PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permission to advance beyond Security 00 + 1.1.",
+  "reason": "Exact bounded QA for the pending adaptive Prompt Injection placement-inset repair from a903035c43c3d9e34b23c83186bd3f53de6cfe96. Revision 53 left only ES/EN desktop normal-motion ctxmix state 4 approximately 1.1-1.5 px above safeTop due scroll/subpixel quantization. The repair adds at most 2 px positive inset only when the asset fits and spare viewport height permits it, while preserving the existing safeTop assertion and all site-facing bytes. Re-run direct capture plus Prompt Injection states on ES/EN desktop/mobile normal/reduced; retain the bounded two JSON reports plus four critical mobile state-4 screenshots. This run cannot certify whole-article PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permit advancing beyond Security 00 + 1.1.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
