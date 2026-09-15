@@ -17,6 +17,7 @@ function expectedCtxmixVisibility(state) {
   return {
     context: state >= 2,
     proposal: state >= 3,
+    checks: state >= 4,
     verdict: state >= 4,
   };
 }
@@ -41,18 +42,20 @@ function runSelfTest() {
     if (stagingFailures(state, expected).length) throw new Error(`valid staging rejected at state ${state}`);
   }
   const mutations = [
-    { state: 1, observed: { context: true, proposal: false, verdict: false } },
-    { state: 1, observed: { context: false, proposal: true, verdict: false } },
-    { state: 2, observed: { context: true, proposal: true, verdict: false } },
-    { state: 3, observed: { context: true, proposal: true, verdict: true } },
-    { state: 4, observed: { context: true, proposal: false, verdict: true } },
+    { state: 1, observed: { context: true, proposal: false, checks: false, verdict: false } },
+    { state: 1, observed: { context: false, proposal: true, checks: false, verdict: false } },
+    { state: 2, observed: { context: true, proposal: true, checks: false, verdict: false } },
+    { state: 3, observed: { context: true, proposal: true, checks: true, verdict: false } },
+    { state: 3, observed: { context: true, proposal: true, checks: false, verdict: true } },
+    { state: 4, observed: { context: true, proposal: true, checks: false, verdict: true } },
+    { state: 4, observed: { context: true, proposal: false, checks: true, verdict: true } },
   ];
   for (const fixture of mutations) {
     if (!stagingFailures(fixture.state, fixture.observed).length) {
       throw new Error(`ctxmix staging mutation escaped at state ${fixture.state}: ${JSON.stringify(fixture.observed)}`);
     }
   }
-  console.log('Security text-visibility mutation fixtures PASS: visible text opacity and ctxmix semantic staging are enforced.');
+  console.log('Security text-visibility mutation fixtures PASS: visible text opacity and ctxmix context/proposal/check-results/verdict semantic staging are enforced.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -171,6 +174,7 @@ try {
             }
             const contextNode = inspect(root.querySelector('[data-node="context"]'));
             const proposalNode = inspect(root.querySelector('[data-node="model-proposal"]'));
+            const checksNode = inspect(root.querySelector('[data-node="authorization-check-results"]'));
             const verdictNode = inspect(root.querySelector('[data-node="execution-result"]'));
             return {
               missingRoot: false,
@@ -180,10 +184,12 @@ try {
               semanticVisibility: {
                 context: Boolean(contextNode?.visible),
                 proposal: Boolean(proposalNode?.visible),
+                checks: Boolean(checksNode?.visible),
                 verdict: Boolean(verdictNode?.visible),
               },
               contextNode,
               proposalNode,
+              checksNode,
               verdictNode,
             };
           }, { selectors: probes, threshold: MIN_EFFECTIVE_OPACITY, expectedState: state });
@@ -202,6 +208,9 @@ try {
           }
           if (state === 4) {
             const expectedVerdict = item.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
+            if (!stateResult.checksNode?.text.includes('scope') || !stateResult.checksNode?.text.includes('permission') && item.locale === 'en') {
+              failures.push({ context: label, state, reason: 'state-4-authorization-check-results-missing', checks: stateResult.checksNode });
+            }
             if (!stateResult.verdictNode?.text.includes(expectedVerdict)) {
               failures.push({ context: label, state, reason: 'state-4-verdict-missing', expectedVerdict, verdict: stateResult.verdictNode });
             }
@@ -240,4 +249,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → verdict only at semantic states 2 → 3 → 4.`);
+console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → authorization-check results + verdict only at semantic states 2 → 3 → 4.`);
