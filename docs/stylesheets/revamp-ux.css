@@ -79,7 +79,8 @@ article:has(.ctxmix) .s5-video-embed__watch {
 .md-typeset .ctxmix[data-state] .ctxmix__context,
 .md-typeset .ctxmix[data-state] .ctxmix__mechanism,
 .md-typeset .ctxmix[data-state] .ctxmix__runtime,
-.md-typeset .ctxmix[data-state] .ctxmix__proposal {
+.md-typeset .ctxmix[data-state] .ctxmix__proposal,
+.md-typeset .ctxmix[data-state] .ctxmix__runtime small {
   opacity: 1 !important;
 }
 
