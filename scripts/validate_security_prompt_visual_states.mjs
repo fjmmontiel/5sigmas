@@ -133,6 +133,27 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
     await page.waitForTimeout(40);
     check((await root.getAttribute('data-mode')) === mode, `${ctx}: ${mode} mode did not activate`);
 
+    const expectedRows = mode === 'clean'
+      ? ['runbook', 'tickets', 'wiki', 'poison']
+      : ['poison', 'runbook', 'tickets', 'wiki'];
+    const rankingSemantics = await root.locator('.ragtrace__ranking').evaluate(node => ({
+      sequence: [...node.children].map(child => child.classList.contains('ragtrace__cut') ? 'CUT' : child.dataset.doc),
+      ranks: [...node.querySelectorAll('.ragtrace__row')].map(row => ({
+        doc: row.dataset.doc,
+        rank: (row.querySelector('.ragtrace__rank')?.textContent || '').trim(),
+      })),
+    }));
+    const expectedSequence = [expectedRows[0], expectedRows[1], 'CUT', expectedRows[2], expectedRows[3]];
+    check(
+      JSON.stringify(rankingSemantics.sequence) === JSON.stringify(expectedSequence),
+      `${ctx}: ${mode} DOM/accessibility sequence does not match the intended retrieval order`,
+      { expectedSequence, actualSequence: rankingSemantics.sequence },
+    );
+    for (const [index, doc] of expectedRows.entries()) {
+      const actualRank = rankingSemantics.ranks.find(entry => entry.doc === doc)?.rank;
+      check(actualRank === String(index + 1), `${ctx}: ${mode} ${doc} visible rank badge is stale`, { expected: String(index + 1), actualRank, rankingSemantics });
+    }
+
     const poison0 = await root.locator('[data-doc="poison"]').boundingBox();
     const cut0 = await root.locator('.ragtrace__cut').boundingBox();
     if (mode === 'clean') check(Boolean(poison0 && cut0 && poison0.y > cut0.y), `${ctx}: clean poisoned document should remain below top-K cut`, { poison0, cut0 });
@@ -161,7 +182,7 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
       check(Boolean(cleanRetrieved) && retrieved !== cleanRetrieved, `${ctx}: poisoned retrieval did not materially differ from clean retrieval`, { cleanRetrieved, retrieved });
     }
     await capture(root, `${stem}-ragtrace-${mode}-step-3.png`);
-    modeEvidence.push({ mode, retrieved, proposal });
+    modeEvidence.push({ mode, expectedRows, rankingSemantics, retrieved, proposal });
   }
   if (motion === 'reduce') await assertReducedMotion(root, ctx);
   record.ragtrace = modeEvidence;
