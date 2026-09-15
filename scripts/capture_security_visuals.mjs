@@ -130,8 +130,8 @@ async function checkCtxmix(page, root, route, mode, motion) {
   }
 
   const expectedTitle = route.locale === 'es'
-    ? 'El texto puede influir; la autorización decide si se ejecuta'
-    : 'Text can influence; authorization decides whether it executes';
+    ? 'El modelo propone; el runtime decide qué puede ejecutarse'
+    : 'The model proposes; the runtime decides what may execute';
   if (!(await root.innerText()).includes(expectedTitle)) fail(`${context}: ctxmix localized title missing`);
 
   const buttons = root.locator('[data-state-btn]');
