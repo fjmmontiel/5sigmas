@@ -1,4 +1,4 @@
-schema_version: 14
+schema_version: 15
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,17 +8,100 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 8cd63ee5c6cc7f073b27879735227758439db382
-  last_exact_qa_head: d284f9079cdb7ff0d82fc3b706a7892b2278ce5b
-  last_exact_qa_run: 34934096540
-  last_exact_qa_revision: 43
+  current_gate_head: d8924c5e66b2481d0ffdcd0ee8c99991cb3083d8
+  last_exact_qa_head: 582e0b21c27365fee4fef51c62c93fa36387fd17
+  last_exact_qa_run: 34945840966
+  last_exact_qa_revision: 44
   last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
-  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_editorial_evidence_artifact: 10383286488
-  current_gate_exact_qa: PASS_REVISION_43
+  current_gate_exact_qa: PASS_REVISION_44_LISTENER_LIFETIME
   independent_editorial_review: false
   article_golden: false
+
+resolved_defects_revision_44:
+  - code: SECURITY_RUNTIME_LISTENER_VERDICT_BEFORE_TEARDOWN
+    severity: P1
+    status: REPAIRED_EXACT_QA_PASS
+    discovery: >-
+      Several focused Security browser gates retained pageerror/console/requestfailed/HTTP listeners during their
+      interactions, but evaluated the collected runtime arrays before browser-context teardown. A late lazy-media,
+      navigation or teardown-time resource error could therefore be appended after a gate had already decided PASS,
+      leaving the final retained evidence stronger or weaker than the verdict.
+    repair: >-
+      Added an independent conjunctive runtime-listener lifetime gate for Security 00 + 1.1. It installs runtime/resource
+      listeners before navigation, scrolls the whole page to trigger lazy resources, exercises the presentation trajectory
+      or Prompt Injection mechanisms, performs inline poster -> play -> pause -> seek, closes the context, and only then
+      computes the verdict from the final retained arrays. Its deterministic self-test injects a synthetic post-teardown
+      failure and proves that the mutation is rejected. The workflow now requires this gate without changing thresholds.
+    site_facing_bytes_changed: false
+    exact_qa: PASS_REVISION_44
+    exact_run: 34945840966
+    exact_artifact: 10387727554
+    observed_contexts: 16
+    expected_contexts: 16
+    dimensions: ES_EN_X_PRESENTATION_PROMPT_X_DESKTOP_1440_MOBILE_390_X_NORMAL_REDUCED
+    verdict_basis: POST_CONTEXT_TEARDOWN
+    runtime_errors_before_teardown: 0
+    runtime_errors_after_teardown: 0
+    teardown_appended_runtime_errors: 0
+    regression_scope: QA_HARNESS_ONLY_SECURITY_00_01
+
+revision_44:
+  exact_head: 582e0b21c27365fee4fef51c62c93fa36387fd17
+  run_id: 34945840966
+  artifact_id: 10387727554
+  artifact_retention_days: 1
+  artifact_expires_at: '2026-09-16T08:25:00Z'
+  status: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+  site_facing_bytes_changed_from_revision_43: false
+  technical_active_set:
+    negative_regression_fixtures: PASS
+    public_series_discovery_regression: PASS
+    independent_source_coverage_audit_executed: PASS_FAIL_CLOSED_GLOBAL_DEBT
+    strict_es_build: PASS
+    publication_contract: PASS
+    security_native_media_probe_executed_fail_closed: PASS
+    strict_en_build: PASS
+    structured_provenance_locale_metadata: PASS
+    reciprocal_article_watch_locale_ui: PASS
+    rendered_html_audit_executed: PASS_FAIL_CLOSED_GLOBAL_DEBT
+    focused_browser_layout_playback: PASS
+    wcag_contrast_and_text_visibility: PASS
+    lifecycle_normal_reduced: PASS
+    real_touch_article_watch: PASS
+    prompt_visual_states: PASS_ALL_STATES_1_2_3_4_DURABLY_CAPTURED
+    localized_authorization_label_negative_mutations: PASS
+    real_keyboard_focus: PASS
+    runtime_listener_lifetime: PASS_POST_CONTEXT_TEARDOWN_16_OF_16
+    runtime_listener_negative_mutation: PASS_LATE_EVENT_REJECTED
+    global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
+    conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
+  artifact_inspection:
+    runtime_listener_report_failures: 0
+    runtime_listener_contexts: 16
+    runtime_listener_final_arrays_checked_after_context_close: true
+    focused_browser_failures: 0
+    contrast_failures: 0
+    text_visibility_failures: 0
+    video_lifecycle_failures: 0
+    article_watch_touch_failures: 0
+    prompt_state_failures: 0
+    keyboard_focus_failures: 0
+    media_status: FAIL
+    media_blocker_count: 16
+  editorial_review:
+    new_manual_review_performed_this_revision: false
+    reason: SITE_FACING_BYTES_UNCHANGED_FROM_REVISION_43
+    reviewer_independence: SAME_AGENT
+    pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+    pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+    prior_review_artifact: 10383286488
+    note: >-
+      Revision 44 changes only QA harness/workflow/audit-request bytes. No new PIXEL_REVIEW or PEDAGOGY_REVIEW is claimed;
+      the revision-43 same-agent review remains applicable to the unchanged site-facing revision and is not independent
+      certification or ARTICLE_GOLDEN.
 
 resolved_defects_revision_43:
   - code: SECURITY_CTXMIX_STATE2_PIXEL_EVIDENCE_MISSING
@@ -108,9 +191,6 @@ previous_revision_42:
   exact_head: 2ae733eea711bb59289711b5b74ac94340d46e86
   status: HISTORICAL_SUPERSEDED_BY_REVISION_43
   technical_outcome: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
-  superseded_reason: >-
-    Revision 42 lacked durable ctxmix state-2 pixels and predates exact integration of the complete localized
-    authorization-result label mutation gate.
   article_golden: false
 
 previous_revision_41:
@@ -156,17 +236,21 @@ sources_and_locale:
   material_claims_changed_in_this_repair: false
   primary_source_research_required_by_this_repair: false
   es_en_site_repair_mirrored: true
-  note: gate/evidence-harness work only; no factual claim, benchmark, unit, formula, reference or caveat changed
+  note: >-
+    Revision 44 changes QA harness/workflow evidence only; no factual claim, benchmark, unit, formula, reference, caveat,
+    locale copy or site-facing visual changed. Existing primary-source validation therefore remains the applicable content
+    evidence; structured provenance and ES/EN locale contracts were rerun successfully on the exact QA head.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_at_revision_43: 200
-  branch_behind_main_at_revision_43: 0
+  branch_ahead_of_main_at_revision_44: 204
+  branch_behind_main_at_revision_44: 0
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_automation_checkpoint: 0
-  existing_action_observed: 34934096540
-  existing_action_reason: REVISION_43_EXACT_INTEGRATION_STARTED_BEFORE_THIS_CHECKPOINT_AND_CONSUMED_AS_USEFUL_MILESTONE
+  actions_started_this_automation_checkpoint: 1
+  action_run: 34945840966
+  action_reason: REVISION_44_EXACT_INTEGRATION_FOR_SHARED_POST_TEARDOWN_RUNTIME_LISTENER_GATE
+  action_artifact_retention_days: 1
   new_action_for_manifest_reconciliation: false
   pr_created: false
   merged: false
@@ -178,8 +262,8 @@ concurrency_and_release:
   linkedin_not_before: '2026-09-15T14:17:28+02:00'
 
 history:
-  previous_durable_checkpoint_comment: 5675352898
-  current_checkpoint_comment: 5675576427
+  previous_durable_checkpoint_comment: 5675576427
+  current_checkpoint_comment: PENDING_REVISION_44_PERSISTENCE
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
@@ -187,9 +271,9 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Revision 43 closes the state-2 pixel evidence gap and localized authorization-label mutation gate. Keep the active set
-    on Security 00 + 1.1 and continue deterministic independent review/fixes that do not depend on external media input;
-    do not advance to 02-jailbreaks and do not treat same-agent editorial PASS as independent certification.
+    Revision 44 closes the remaining shared listener/verdict-lifetime race for the active set without changing site-facing
+    bytes. Keep Security 00 + 1.1 active and continue deterministic independent review/fixes that do not depend on external
+    media input; do not advance to 02-jailbreaks and do not treat same-agent editorial PASS as independent certification.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
