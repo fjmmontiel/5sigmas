@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 45,
+  "diagnostic_revision": 46,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "308731cb08413142fea01b1b458acd09aac5338b",
-  "reason": "Close a residual fail-open request-failure classification bug in the revision-44 post-teardown Security gate. ERR_ABORTED was ignored unconditionally, so a real abort during navigation, teaching interactions, lazy-resource loading or media playback before teardown could escape despite listeners remaining attached. Revision 45 makes ERR_ABORTED ignorable only after context teardown begins, adds deterministic mutations proving pre-teardown ERR_ABORTED is fatal while teardown-only aborts are tolerated, and reruns the exact ES/EN Security 00/1.1 desktop/mobile normal/reduced interaction+media matrix. Site-facing bytes remain unchanged from b44a3e9d; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "c9c764e5b6c4c9de327aaec2540d09b1dac138a6",
+  "reason": "Exact-QA the correlated Security runtime sentinel after revision 45 exposed real pre-teardown ERR_ABORTED events. Revision 46 must prove that an accepted abort is strictly a media-seek supersession on the same currentSrc with a settled seek and a later 200/206 response, while generic aborts, wrong-source events, unsettled seeks, missing later responses and non-ERR_ABORTED failures remain fatal. Site-facing bytes are unchanged; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
