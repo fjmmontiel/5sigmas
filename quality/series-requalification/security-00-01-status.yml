@@ -1,152 +1,34 @@
-schema_version: 23
-scope:
+schema_version: 24
+program: 5sigmas_GOLDEN_requalification
+owner_priority_date: 2026-09-13
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+
+active_scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
-  locales: [es, en]
-  status: REQUALIFICATION_QA
+  state: REQUALIFICATION_QA
   article_golden: false
+  next_article_blocked: 02-jailbreaks
+  site_facing_bytes_changed_since_revision_50: false
 
-head_state:
-  current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
-  last_exact_qa_head: 166f91cdd8de87b779fda7e52d823b88ff987cc7
-  last_exact_qa_run: 35006430159
-  last_exact_qa_revision: 50
-  last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT_SPECIALIZED_GATES_PASS
-  current_gate_exact_qa: SPECIALIZED_TECHNICAL_GATES_PASS_CAPTURE_VISUALS_PENDING_DIRECT_EXECUTION
-  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
-  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
-  current_editorial_evidence_artifact: 10383286488
-  independent_editorial_review: false
-  article_golden: false
-
-revision_50:
-  receipt_file: quality/series-requalification/security-00-01-revision50.yml
-  exact_head: 166f91cdd8de87b779fda7e52d823b88ff987cc7
-  run_id: 35006430159
-  artifact_id: 10412346090
-  artifact_files: 171
-  artifact_bytes: 44470688
-  artifact_retention_days: 1
-  status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT_SPECIALIZED_GATES_PASS
-  site_facing_bytes_changed: false
-  technical_active_set:
-    negative_regression_fixtures: PASS_26_OF_26
-    public_series_discovery_regression: PASS_5_OF_5
-    independent_source_coverage_audit: FAIL_CLOSED_GLOBAL_DEBT
-    strict_es_build: PASS
-    publication_contract: PASS_13_SERIES_67_CHAPTERS_75_PAGES
-    security_native_media_probe: FAIL_CLOSED_16_ACTIVE_MEDIA_BLOCKERS
-    strict_en_build: PASS
-    structured_provenance_locale_metadata: PASS
-    reciprocal_article_watch_locale_ui: PASS
-    rendered_html_audit: FAIL_CLOSED_GLOBAL_DEBT
-    focused_browser_layout_playback: PASS
-    wcag_contrast: PASS_128_STATE_CONTEXT_RECORDS_MIN_4_5
-    text_visibility: PASS_8_CONTEXTS_X_4_STATES
-    lifecycle_normal_reduced: PASS
-    real_touch_article_watch: PASS_ES_EN_00_01_NORMAL_REDUCED_REAL_MOBILE_TAP
-    prompt_visual_states: PASS_TECHNICAL
-    real_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
-    runtime_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
-    global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
-    conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
-  touch_classifier_repair:
-    repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
-    exact_qa: PASS
-    failure_count: 0
-    policy: >-
-      Navigation cancellation is admissible only for the exact native media request after successful destination navigation;
-      watch-interaction range cancellation requires a prior 200/206 on the same Request plus a healthy exact-source player.
-      Generic aborts and uncorrelated failures remain fatal.
-  editorial_review:
-    new_manual_review_performed_this_revision: false
-    reason: SITE_FACING_BYTES_UNCHANGED_FROM_REVISION_43
-    reviewer_independence: SAME_AGENT
-    pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
-    pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
-    prior_review_artifact: 10383286488
-
-specialized_gate_debt:
-  - code: SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN
-    severity: P1
-    status: REPAIR_IMPLEMENTED_PENDING_DIRECT_EXECUTION
-    repair_commit: 377731a886aca18619fa477a9aceca428b302743
-    site_facing_bytes_changed: false
-    thresholds_changed: false
-    repair: LISTENERS_THROUGH_CONTEXT_TEARDOWN_POST_TEARDOWN_VERDICT_NO_INTERACTION_ABORT_ALLOWLIST
-  - code: FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE
-    severity: P2_COST
-    status: OPEN
-    evidence: REVISION_50_UPLOADED_171_FILES_44470688_BYTES
-    required_fix: BOUND_FUTURE_FOCUSED_ARTIFACTS_TO_MINIMAL_NEEDED_EVIDENCE_BEFORE_NEXT_CI
-
-specialized_gate_closed_in_revision_50:
-  article_watch_touch:
-    repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
-    exact_qa: PASS
-    real_touch: true
-    listener_lifetime: THROUGH_CONTEXT_TEARDOWN
-  keyboard_focus:
-    exact_qa: PASS
-  prompt_visual_states:
-    exact_qa: PASS
-  video_lifecycle:
-    exact_qa: PASS
-    request_correlated_media_policy: true
-  contrast:
-    exact_qa: PASS
-  text_visibility:
-    exact_qa: PASS
-  focused_browser:
-    exact_qa: PASS
-  runtime_listener_lifetime:
-    exact_qa: PASS_16_OF_16
-    verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
-
-historical_receipts:
-  revision_50_file: quality/series-requalification/security-00-01-revision50.yml
-  revision_49_file: quality/series-requalification/security-00-01-revision49.yml
-  revision_47_file: quality/series-requalification/security-00-01-revision47.yml
-  revision_46_file: quality/series-requalification/security-00-01-revision46.yml
-  revision_48_run: 34987279088
-  revision_47_run: 34961682456
-  revision_46_run: 34958785679
-  revision_45_run: 34956668683
-  revision_44_run: 34945840966
-  revision_43_run: 34934096540
-  revision_43_editorial_artifact: 10383286488
-  preserved_in_git_history_and_issue_305: true
-
-media:
-  status: FAIL
-  narration_status: VOICE_MISSING
-  voice_policy: AUTHORIZED_EXISTING_NARRATION_ONLY
-  exact_blocker_count: 16
-  blockers:
-    VIDEO_AUDIO_STREAM_MISSING: 4
-    VIDEO_CAPTIONS_MISSING: 4
-    VIDEO_TRANSCRIPT_MISSING: 4
-    VIDEO_CHAPTERS_MISSING: 4
-  locale_identity: PASS_DISTINCT_ES_EN_MEDIA
-  media_probe_summary: H264_1920x1080_YUV420P_DISTINCT_ES_EN_SILENT
-  forbidden_substitutions:
-    - generated_or_cloned_Francisco_voice
-    - alternate_voice_as_fallback
-    - fabricated_captions_transcript_or_key_moment_timing
-
-catalogue_requalification:
+catalogue:
   target_series: 7
-  routes_per_locale: 42
-  locale_pages: 84
-  publication_discovery:
-    public_series: 13
-    presentation_series: 8
-    chapter_first_series: 5
-    public_chapters: 67
-    public_pages: 75
-    errors: 0
-  current_open_counts:
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  public_series_discovered: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  discovery_requires_presentation: false
+
+global_gate_state:
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  MEDIA_PASS: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+  open_debt:
     RAW_TEX_RENDERED: 28
     VIDEO_DECLARATION_MISSING: 60
     VIDEO_NOT_RENDERED: 60
@@ -156,54 +38,138 @@ catalogue_requalification:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
 
-sources_and_locale:
-  material_claims_changed_in_revision_50: false
-  primary_source_research_required_by_gate_only_change: false
-  strict_es_en: PASS_REVISION_50
-  structured_provenance_locale_metadata: PASS_REVISION_50
-  note: >-
-    No material Security claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in
-    revision 50. No new factual validation beyond rerunning the structured provenance/locale contracts is claimed.
+last_full_exact_qa:
+  revision: 50
+  run_id: 35006430159
+  note: Full focused exact-QA before the later direct-capture-only milestones; SOURCE, RENDERED and MEDIA remained fail-closed.
 
-release_contract_281_reconciliation:
-  status: CHANGES_REQUIRED_FRESH_UNCACHED_LIVE_VERIFICATION
-  latest_comment: 5683127656
-  source_revision: a5efdfce72d11b2335452eaf45000f26ae524777
-  runtime_limit: >-
-    No fresh uncached production verification was established in this Security checkpoint. Cached web surfaces are not used as
-    current-production evidence. #281 remains BLOCKED until the article lane verifies the actually deployed ES/EN revision or
-    proves and repairs a deploy mismatch.
-  linkedin_state: BLOCKED_PENDING_FRESH_UNCACHED_LIVE_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
-  seventy_two_hour_clock_restarted: false
-  linkedin_write_queue_activation: false
-  preserve_issue_279: true
+specialized_capture_milestones:
+  revision_52:
+    run_id: 35013466724
+    exact_head: a47b5d3ebbdb4f515932af41aa60f8b9592f83e1
+    direct_capture_security_visuals: PASS
+    contexts: 56
+    post_context_teardown: 56
+    runtime_unexpected: 0
+    prompt_state_outcome: FAIL_34_PLACEMENT_CHECKS
+    finding: >-
+      Direct capture closed the remaining capture_security_visuals listener-lifetime gap. The prompt harness exposed a bad placement
+      rule: tall mobile assets could not physically fit below sticky chrome and CSS smooth scrolling raced the measurement.
+    artifact:
+      id: 10415215920
+      files: 6
+      bytes: 684569
+      retention_days: 1
+  revision_53:
+    run_id: 35015072623
+    exact_head: 05c0f51bee3580a12caff263c2422cf446e4e38b
+    overall: FAIL_CLOSED
+    strict_es: PASS
+    strict_en: PASS
+    range_preview_self_test: PASS
+    direct_capture_security_visuals: PASS
+    direct_capture_contexts: 56
+    direct_capture_post_context_teardown: 56
+    direct_capture_runtime_unexpected: 0
+    prompt_contexts: 8
+    prompt_post_context_teardown: 8
+    prompt_runtime_unexpected: 0
+    prompt_failure_count: 2
+    prompt_failures: [es_desktop_normal_ctxmix_state4_subpixel_placement, en_desktop_normal_ctxmix_state4_subpixel_placement]
+    finding: >-
+      Revision 53 closed every mobile placement failure. Only two normal-motion desktop state-4 measurements remained roughly
+      1.1-1.5 px above safeTop due browser scroll/subpixel quantization; isolated screenshot chrome was already hidden and the
+      direct visual capture passed, so this is a harness placement false positive, not a newly observed site-facing defect.
+    artifact:
+      id: 10414979391
+      files: 6
+      bytes: 686865
+      retention_days: 1
 
-concurrency_and_release:
-  main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  draft_pr_34: OPEN_DRAFT_NONMERGEABLE_DO_NOT_MERGE_BLINDLY
-  draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_checkpoint: 1
-  last_action_run: 35006430159
-  action_reason: EXACT_QA_REPAIRED_ARTICLE_WATCH_TOUCH_CLASSIFIER_AND_BUNDLED_SPECIALIZED_GATES
-  additional_action_after_revision_50: false
-  pr_created: false
+specialized_debt:
+  SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN:
+    state: CLOSED_BY_REVISION_52_AND_RECONFIRMED_REVISION_53
+    evidence: DIRECT_CAPTURE_56_CONTEXTS_POST_TEARDOWN_ZERO_RUNTIME_FAILURES
+  FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE:
+    state: CLOSED_BY_BOUNDED_REVISION_52_AND_53
+    previous_revision_50: 171_FILES_44470688_BYTES
+    current_bound: 6_FILES_LT_0_7MB_RETENTION_1_DAY
+  PROMPT_STATE_STICKY_HEADER_CAPTURE:
+    state: IMPLEMENTED_PENDING_EXACT_QA
+    latest_repair_commit: a903035c43c3d9e34b23c83186bd3f53de6cfe96
+    thresholds_lowered: false
+    repair: >-
+      Fit-aware captures hide only fixed/sticky site chrome for isolated asset pixels and use synchronous scrolling. The latest
+      code adds an adaptive positive placement inset up to 2 px when spare viewport height allows it, absorbing scroll
+      quantization while leaving the existing safeTop assertion unchanged.
+
+manual_review:
+  revision_53_targeted_pixel_inspection:
+    performed: true
+    scope: FOUR_RETAINED_MOBILE_CTXMIX_STATE4_IMAGES_ONLY
+    locales: [es, en]
+    motion: [normal, reduced]
+    sticky_header_occlusion: PASS_NOT_PRESENT
+    labels_legible_in_retained_images: true
+    causal_mechanism_visible: true
+    whole_article_pixel_review: NOT_PERFORMED
+    whole_article_pedagogy_review: NOT_PERFORMED
+    independent_reviewer: false
+  whole_active_set_last_review:
+    revision: 43
+    PIXEL_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    PEDAGOGY_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    independent_reviewer: false
+    note: Historical applicable review only; does not grant ARTICLE_GOLDEN.
+
+media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  native_es_en_mp4_distinct: true
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+sources_and_locales:
+  material_claims_changed_since_revision_50: false
+  factual_research_reopened_this_revision: false
+  latest_specialized_strict_es: PASS_REVISION_53
+  latest_specialized_strict_en: PASS_REVISION_53
+  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual was changed by revisions 52-53 or the pending placement repair.
+
+concurrency_release:
+  main_at_last_read: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
+  repair_branch: quality/post-datacenters-requalification
+  draft_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
+  draft_323: OPEN_DRAFT_ORTHOGONAL
+  pr_created_by_requalification: false
   merged: false
   deployed: false
   datacenters_or_pre_datacenters_modified: false
-  linkedin_lane_touched: RECONCILIATION_READ_ONLY_NO_PUBLISH_ACTION
-  release_contract_281_preserved: true
 
-next_exact_gap:
-  stay_on_series: seguridad-ia
-  stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
-  do_not_start: 02-jailbreaks
-  immediate_next: >-
-    Directly execute capture_security_visuals on the stable unchanged site-facing bytes and close its listener-lifetime repair
-    with evidence. Before any subsequent focused CI, bound artifact upload scope so technical iterations do not ship tens of
-    megabytes of screenshots unnecessarily. Keep source/rendered/media debt fail-closed and do not reinterpret technical PASS
-    as new PIXEL_REVIEW/PEDAGOGY_REVIEW.
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+last_action:
+  run_id: 35015072623
+  revision: 53
+  reason: BOUNDED_EXACT_RETEST_AFTER_REVISION_52_CAPTURE_PLACEMENT_FINDINGS
+  additional_action_after_pending_repair: false
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: EXACT_QA_ADAPTIVE_PLACEMENT_INSET_REPAIR
+  do_not_advance_to: 02-jailbreaks
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
-  dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
-  article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until specialized gate and cost debt is closed, authorized audio/captions/transcript/key moments
-    are complete, and the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
+  dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  golden_forbidden_until_all_conjunctive_gates_pass: true
