@@ -1,4 +1,4 @@
-schema_version: 13
+schema_version: 14
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,76 +8,78 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 24408773a3d129a14b7a9eb5bad1ec59dafaa065
-  last_exact_qa_head: 2ae733eea711bb59289711b5b74ac94340d46e86
-  last_exact_qa_run: 34932838934
-  last_exact_qa_revision: 42
+  current_gate_head: 8cd63ee5c6cc7f073b27879735227758439db382
+  last_exact_qa_head: d284f9079cdb7ff0d82fc3b706a7892b2278ce5b
+  last_exact_qa_run: 34934096540
+  last_exact_qa_revision: 43
   last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
-  current_content_pixel_review: PENDING_STATE_2_PIXEL_EVIDENCE
-  current_content_pedagogy_review: PENDING_STATE_2_PIXEL_EVIDENCE
-  current_editorial_evidence_artifact: 10382336736
-  current_gate_exact_qa: PENDING_NEXT_USEFUL_INTEGRATION
+  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_editorial_evidence_artifact: 10383286488
+  current_gate_exact_qa: PASS_REVISION_43
   independent_editorial_review: false
   article_golden: false
 
-active_defects:
+resolved_defects_revision_43:
   - code: SECURITY_CTXMIX_STATE2_PIXEL_EVIDENCE_MISSING
     severity: P1
-    status: CHANGES_REQUIRED
+    status: REPAIRED_EXACT_QA_AND_MANUAL_REVIEW_PASS
     discovery: >-
-      Run-42 technical gates exercise ctxmix states 1..4, but the durable prompt-state screenshot harness captures only
-      states 1, 3 and 4. State 2 is the first frame where mixed context becomes visible, so DOM/state assertions alone do
-      not satisfy the reinforced requirement for real pixel inspection of start, intermediate states and final state.
-    current_evidence: >-
-      Artifact 10382336736 contains 16 full-page captures, 16 focused visual captures, 24 ctxmix screenshots covering
-      states 1/3/4, 48 RAG screenshots and 40 defense-in-depth screenshots. Captured pixels inspected so far show no
-      clipping/global overflow/overlap/locale leakage, but current PIXEL_REVIEW and PEDAGOGY_REVIEW remain pending until
-      state 2 is captured and inspected for ES/EN × desktop/mobile × normal/reduced.
-    required_repair: >-
-      Extend the durable ctxmix capture evidence to state 2 without removing existing states, then inspect that exact
-      evidence across all locale/device/motion contexts before restoring editorial PASS.
+      Revision 42 exercised ctxmix states 1..4 but durably captured only states 1, 3 and 4. State 2 is the first frame
+      where mixed context becomes visible, so DOM/state assertions alone did not satisfy the reinforced real-pixel gate.
+    repair: >-
+      validate_security_prompt_visual_states.mjs now retains screenshots for all semantic states 1/2/3/4 without
+      removing prior evidence. Revision-43 artifact 10383286488 contains 32 ctxmix screenshots: 8 ES/EN ×
+      desktop/mobile × normal/reduced contexts × 4 states.
+    exact_qa: PASS_REVISION_43
+    manual_review: >-
+      State 2 was inspected in all eight locale/device/motion contexts together with start/later/final states. No clipping,
+      global horizontal overflow, overlap, locale leakage or giant-canvas dependency was observed. The sequence teaches
+      mixed context -> changed proposal -> runtime authorization result rather than cosmetic relabeling.
     regression_scope: EVIDENCE_HARNESS_ONLY_SECURITY_1_1
 
   - code: SECURITY_AUTHORIZATION_CHECK_LABEL_GATE_INCOMPLETE
     severity: P1
-    status: REPAIRED_GATE_PENDING_EXACT_INTEGRATION
+    status: REPAIRED_EXACT_QA_PASS
     discovery: >-
-      Revision-42 added semantic visibility for runtime authorization-check results, but its state-4 content assertion
-      only required `scope` for ES and `scope` + `permission` for EN. A missing ES `destino`/`permiso` or EN
-      `destination` could escape the negative gate even though the product renders all three checks.
+      Revision 42 did not require all three localized state-4 authorization-result labels, so a missing ES
+      destino/permiso or EN destination could escape the negative gate despite the product rendering the full check set.
     site_product_status: >-
       Current ES/EN product already renders scope + destino/permiso and scope + destination/permission respectively and
-      keeps the authorization-check result container structurally hidden until state 4. No site-facing change required.
+      keeps the authorization-check result container structurally hidden until state 4. No site-facing content change
+      was required.
     gate_repair: >-
-      validate_security_text_visibility.mjs now derives all three localized labels, fails when any is absent, records
-      expected terms, and includes deterministic missing-label mutations. No threshold was lowered.
+      validate_security_text_visibility.mjs derives all three required localized labels, fails when any is absent,
+      records expected terms and includes deterministic missing-label mutations. No threshold was lowered.
     gate_repair_commit: 24408773a3d129a14b7a9eb5bad1ec59dafaa065
-    local_helper_self_test: PASS
-    exact_integration: PENDING_NEXT_USEFUL_INTEGRATION
+    exact_qa: PASS_REVISION_43
 
-revision_42:
-  exact_head: 2ae733eea711bb59289711b5b74ac94340d46e86
-  run_id: 34932838934
-  artifact_id: 10382336736
+revision_43:
+  exact_head: d284f9079cdb7ff0d82fc3b706a7892b2278ce5b
+  run_id: 34934096540
+  artifact_id: 10383286488
   artifact_retention_days: 1
   status: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+  site_facing_bytes_changed_from_revision_42: false
   technical_active_set:
     negative_regression_fixtures: PASS
     public_series_discovery_regression: PASS
-    independent_source_coverage_audit_executed: PASS
+    independent_source_coverage_audit_executed: PASS_FAIL_CLOSED_GLOBAL_DEBT
     strict_es_build: PASS
     publication_contract: PASS
     security_native_media_probe_executed_fail_closed: PASS
     strict_en_build: PASS
     structured_provenance_locale_metadata: PASS
     reciprocal_article_watch_locale_ui: PASS
-    rendered_html_audit_executed: PASS
+    rendered_html_audit_executed: PASS_FAIL_CLOSED_GLOBAL_DEBT
     focused_browser_layout_playback: PASS
     wcag_contrast_and_text_visibility: PASS
     lifecycle_normal_reduced: PASS
     real_touch_article_watch: PASS
-    prompt_visual_states: PASS_TECHNICAL_WITH_STATE2_CAPTURE_GAP
+    prompt_visual_states: PASS_ALL_STATES_1_2_3_4_DURABLY_CAPTURED
+    localized_authorization_label_negative_mutations: PASS
     real_keyboard_focus: PASS
+    global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
     conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
   semantic_visibility_observed:
     state_1: {context: false, proposal: false, checks: false, verdict: false}
@@ -86,20 +88,30 @@ revision_42:
     state_4: {context: true, proposal: true, checks: true, verdict: true}
   editorial_review:
     reviewer_independence: SAME_AGENT
-    pixel_review: PENDING_STATE_2_PIXEL_EVIDENCE
-    pedagogy_review: PENDING_STATE_2_PIXEL_EVIDENCE
+    pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+    pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
     inspected_full_pages: 16
     inspected_focused_visuals: 16
-    inspected_ctxmix_screenshots: 24
-    ctxmix_screenshot_states: [1, 3, 4]
+    inspected_ctxmix_screenshots: 32
+    ctxmix_screenshot_states: [1, 2, 3, 4]
+    state_2_inspected_contexts: 8
     inspected_rag_screenshots: 48
     inspected_defense_screenshots: 40
-    observed_captured_findings: >-
-      No clipping, global horizontal overflow, overlap, locale leakage or giant-canvas dependency was observed in the
-      captured current-content pixels. This does not close editorial review because state 2 lacks durable pixel evidence.
-  superseded_gate_note: >-
-    Run 42 proves current site-facing technical behavior but predates commit 24408773; it does not prove the strengthened
-    localized authorization-check-label mutation gate.
+    findings: >-
+      Exact revision-43 pixels were reviewed for ES/EN × desktop/mobile × normal/reduced. No clipping, global horizontal
+      overflow, overlap, locale leakage or giant-canvas dependency was observed in the active set. State 2 visibly joins
+      trusted and untrusted context while proposal/checks/verdict remain unrevealed; later states expose the changed
+      proposal and runtime authorization result. This is same-agent review only and does not grant ARTICLE_GOLDEN.
+
+previous_revision_42:
+  run_id: 34932838934
+  exact_head: 2ae733eea711bb59289711b5b74ac94340d46e86
+  status: HISTORICAL_SUPERSEDED_BY_REVISION_43
+  technical_outcome: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+  superseded_reason: >-
+    Revision 42 lacked durable ctxmix state-2 pixels and predates exact integration of the complete localized
+    authorization-result label mutation gate.
+  article_golden: false
 
 previous_revision_41:
   run_id: 34931966681
@@ -148,14 +160,14 @@ sources_and_locale:
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_after_gate_repair: 196
-  branch_behind_main_after_gate_repair: 0
+  branch_ahead_of_main_at_revision_43: 200
+  branch_behind_main_at_revision_43: 0
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
   actions_started_this_automation_checkpoint: 0
-  existing_action_observed: 34932838934
-  existing_action_reason: REVISION_42_EXACT_INTEGRATION_ALREADY_STARTED_BEFORE_THIS_CHECKPOINT
-  new_action_for_gate_only_fix: false
+  existing_action_observed: 34934096540
+  existing_action_reason: REVISION_43_EXACT_INTEGRATION_STARTED_BEFORE_THIS_CHECKPOINT_AND_CONSUMED_AS_USEFUL_MILESTONE
+  new_action_for_manifest_reconciliation: false
   pr_created: false
   merged: false
   deployed: false
@@ -166,8 +178,8 @@ concurrency_and_release:
   linkedin_not_before: '2026-09-15T14:17:28+02:00'
 
 history:
-  previous_durable_checkpoint_comment: 5675126687
-  current_checkpoint_comment: 5675352898
+  previous_durable_checkpoint_comment: 5675352898
+  current_checkpoint_comment: 5675576427
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
@@ -175,9 +187,9 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    First extend durable ctxmix screenshots to state 2 and inspect ES/EN × desktop/mobile × normal/reduced; then integrate
-    the strengthened localized authorization-check-label gate at the next justified exact QA milestone. Do not restore
-    PIXEL_REVIEW/PEDAGOGY_REVIEW PASS until the missing state-2 pixels are actually reviewed.
+    Revision 43 closes the state-2 pixel evidence gap and localized authorization-label mutation gate. Keep the active set
+    on Security 00 + 1.1 and continue deterministic independent review/fixes that do not depend on external media input;
+    do not advance to 02-jailbreaks and do not treat same-agent editorial PASS as independent certification.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
