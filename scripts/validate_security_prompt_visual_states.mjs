@@ -104,6 +104,17 @@ async function activate(locator, mobile) {
 
 async function capture(locator, file) {
   await locator.scrollIntoViewIfNeeded();
+  const placement = await locator.evaluate(node => {
+    const occluders = [...document.querySelectorAll('.md-header,.md-tabs,[data-md-component="header"]')]
+      .map(el => ({ style: getComputedStyle(el), rect: el.getBoundingClientRect() }))
+      .filter(({ style, rect }) => ['fixed', 'sticky'].includes(style.position) && rect.height > 0 && rect.bottom > 0 && rect.top <= 8);
+    const safeTop = Math.max(0, ...occluders.map(({ rect }) => rect.bottom)) + 12;
+    const before = node.getBoundingClientRect();
+    if (before.top < safeTop) window.scrollBy(0, before.top - safeTop);
+    const after = node.getBoundingClientRect();
+    return { top: after.top, bottom: after.bottom, safeTop, viewportHeight: innerHeight };
+  });
+  check(placement.top >= placement.safeTop - 1, `${file}: screenshot target remains occluded by sticky navigation`, placement);
   await locator.screenshot({ path: path.join(out, file), animations: 'allow' });
 }
 
