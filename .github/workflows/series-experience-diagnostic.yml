@@ -56,7 +56,10 @@ jobs:
           node-version: '22'
 
       - name: Negative regression fixtures
-        run: python scripts/test_series_experience_audit.py -v
+        run: |
+          python scripts/test_series_experience_audit.py -v
+          python scripts/validate_series_experience_workflow_contract.py --self-test
+          python scripts/validate_series_experience_workflow_contract.py
 
       - name: Public-series discovery regression
         id: publication_discovery
@@ -307,8 +310,8 @@ jobs:
           raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
           PY
 
-      - name: Retain bounded failed-diagnostic evidence
-        if: failure()
+      - name: Retain bounded diagnostic evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: series-experience-diagnostic
