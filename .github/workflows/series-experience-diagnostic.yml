@@ -192,6 +192,15 @@ jobs:
         timeout-minutes: 5
         run: node scripts/validate_security_keyboard_focus.mjs
 
+      - name: Focused Security 00/01 runtime/resource listeners through context teardown
+        id: security_listener_lifetime
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          node scripts/validate_security_runtime_listener_lifetime.mjs --self-test
+          node scripts/validate_security_runtime_listener_lifetime.mjs
+          test -s artifacts/security-requalification/runtime-listener-lifetime/report.json
+
       - name: Enforce technical failures; never certify pixel or pedagogical quality
         if: always()
         env:
@@ -210,6 +219,7 @@ jobs:
           SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME: ${{ steps.security_article_watch_touch.outcome }}
           SECURITY_PROMPT_STATES_OUTCOME: ${{ steps.security_prompt_states.outcome }}
           SECURITY_KEYBOARD_FOCUS_OUTCOME: ${{ steps.security_keyboard_focus.outcome }}
+          SECURITY_LISTENER_LIFETIME_OUTCOME: ${{ steps.security_listener_lifetime.outcome }}
         run: |
           python - <<'PY'
           import json, os
@@ -284,6 +294,18 @@ jobs:
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
+          listener_report = Path('artifacts/security-requalification/runtime-listener-lifetime/report.json')
+          if listener_report.exists():
+              data = json.loads(listener_report.read_text())
+              print('security-requalification/runtime-listener-lifetime/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'chrome_launch_error': data.get('chrome_launch_error'),
+                  'verdict_basis': data.get('verdict_basis'),
+                  'contexts_expected': data.get('contexts_expected'),
+                  'contexts_observed': data.get('contexts_observed'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
 
           names = [
               'PUBLICATION_DISCOVERY_OUTCOME',
@@ -299,6 +321,7 @@ jobs:
               'SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
               'SECURITY_KEYBOARD_FOCUS_OUTCOME',
+              'SECURITY_LISTENER_LIFETIME_OUTCOME',
           ]
           if scope == 'full':
               names.append('BROWSER_OUTCOME')
