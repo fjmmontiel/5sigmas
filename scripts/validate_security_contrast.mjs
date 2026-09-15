@@ -236,6 +236,14 @@ async function record(page, contextLabel, scenario, selectors) {
   contexts.push({ context: contextLabel, scenario, probes: rows });
 }
 
+async function waitForStep(page, selector, step, timeout = 5000) {
+  await page.waitForFunction(
+    ({ selector, step }) => document.querySelector(selector)?.dataset.step === String(step),
+    { selector, step },
+    { timeout },
+  );
+}
+
 try {
   for (const item of routes) {
     for (const width of [1440, 390]) {
@@ -276,12 +284,21 @@ try {
             await record(page, label, `ctxmix-step-${step}`, probes.ctxmix);
           }
 
-          const clean = page.locator('.ragtrace [data-mode-btn="clean"]').first();
-          if (await clean.count()) await clean.click();
-          await record(page, label, 'rag-clean', probes.rag);
-          const poisoned = page.locator('.ragtrace [data-mode-btn="poisoned"]').first();
-          if (await poisoned.count()) await poisoned.click();
-          await record(page, label, 'rag-poisoned', probes.rag);
+          for (const mode of ['clean', 'poisoned']) {
+            const modeButton = page.locator(`.ragtrace [data-mode-btn="${mode}"]`).first();
+            if (await modeButton.count()) await modeButton.click();
+            await record(page, label, `rag-${mode}-step-0`, probes.rag);
+            const run = page.locator('.ragtrace [data-run]').first();
+            if (await run.count()) {
+              await run.click();
+              await waitForStep(page, '.ragtrace', 2);
+              await record(page, label, `rag-${mode}-step-2`, probes.rag);
+              await waitForStep(page, '.ragtrace', 3);
+              await record(page, label, `rag-${mode}-step-3`, probes.rag);
+            } else {
+              failures.push({ context: label, scenario: `rag-${mode}`, reason: 'rag-run-control-missing' });
+            }
+          }
 
           await record(page, label, 'defsim-all-on', probes.defsim);
           const firstGate = page.locator('.defsim [data-gate]').first();
