@@ -1,4 +1,4 @@
-schema_version: 9
+schema_version: 10
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -7,106 +7,128 @@ scope:
   article_golden: false
 
 head_state:
-  current_site_facing_head: e97e11422d7852ee3c24bf6a3a31d9a358739061
-  legibility_gate_source_head: 734e21e934e736b34a6e297eb7611f9d9006ca48
-  current_exact_qa_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
-  current_exact_qa_run: 34924687910
-  current_exact_qa_revision: 39
-  current_exact_qa_status: IN_PROGRESS
-  current_content_pixel_review: PENDING_CURRENT_EXACT_MANUAL
-  current_content_pedagogy_review: PENDING_CURRENT_EXACT_MANUAL
+  current_site_facing_head: 863d8bf4c833ec0855b53881fadf7a87bbdc4667
+  state_legibility_gate_head: adfd6f8f313951b80e69c1fe39d375a5eac8be6e
+  current_exact_qa_head: 852ccd3865b22eaa4add0a6be6e819c1733e00ce
+  current_exact_qa_run: 34926301149
+  current_exact_qa_revision: 40
+  current_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+  evidence_artifact_id: 10380033833
+  evidence_digest: sha256:29eb8b5224b863581b476f990386578cedd67d5cae69ec38bdc977985ae77a60
+  artifact_expires_at: 2026-09-16T03:55:50Z
+  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   independent_editorial_review: false
   article_golden: false
 
-resolved_source_defect:
-  code: SECURITY_STATE_SOURCE_CONTRADICTION_AND_ES_LOCALE_LEAK
-  severity: P2
-  status: SOURCE_REPAIRED_PENDING_EXACT_QA_AND_MANUAL_PIXEL_REVIEW
-  affected_visuals: [control-vs-datos, defensa-en-capas]
-  facts:
+active_defect:
+  code: SECURITY_STATE_LEGIBILITY_AND_PREMATURE_DISCLOSURE
+  severity: P1
+  status: REPAIRED_EXACT_QA_AND_MANUAL_REVIEW_PASS
+  affected_visuals: [control-vs-datos, rag-trigger-fragment, defensa-en-capas]
+  discovery:
     - >-
-      ES/EN control-vs-datos still contained stale inline whole-group opacity declarations even though the existing
-      revamp-ux Security contract already forced the rendered teaching groups fully opaque and hid the verdict until
-      state 4. The source therefore contradicted the effective rendered contract and made future regressions easier.
+      Revision 39 retained evidence exposed 88 focused ancestor-opacity failures that the step-level workflow summary
+      had not surfaced as a hard stop because the focused check is intentionally continue-on-error before conjunction.
     - >-
-      ES/EN defensa-en-capas used an inline opacity fade for disabled cards. ES additionally emitted the English
-      inactive token "off" inside otherwise Spanish UI.
-  diagnostic_correction: >-
-    Revision 38 strengthened the browser gate to inspect cumulative ancestor opacity and exercised the pre-cleanup
-    rendered bytes. Its contrast/text-visibility step PASSED, so the earlier hypothesis that current ctxmix pixels
-    were actually rendered at 20/25/35 percent opacity is REFUTED. Existing revamp-ux rules had already kept those
-    teaching groups opaque. Revision 38 must not be cited as a reproduced P1 pixel failure.
-  gate_repair: >-
-    validate_security_contrast.mjs now includes an ancestor-opacity negative fixture, rejects inspected teaching text
-    rendered through cumulative ancestor opacity below 0.999, and exercises presentation bounded/unbounded, ctxmix
-    steps 1..4, RAG clean/poisoned and defense all-on/first-off across ES/EN, desktop/mobile and normal/reduced motion
-    while retaining runtime/resource listeners.
+      The ctxmix final verdict could be sampled mid-fade under normal motion; RAG selected/outside top-K membership
+      text could exist at opacity zero; and future retrieved-context/proposal teaching text was visibly washed out
+      before its semantic step.
   site_repair: >-
-    ES/EN ctxmix source now matches the effective rendering contract: no stale text-bearing group fades, and the
-    final verdict is source-hidden until state 4. ES/EN defense disabled cards communicate state structurally without
-    fading the whole card. ES now uses "inactivo" instead of "off".
+    ES/EN future RAG teaching text is visibility-hidden until the matching semantic step, visible state text is fully
+    opaque immediately, top-K selected/outside membership is explicit and readable, and ctxmix verdict text no longer
+    fades. Defense disabled cards retain readable labels and represent state structurally rather than by fading text.
+  gate_repair: >-
+    validate_security_contrast.mjs retains cumulative ancestor-opacity enforcement and now samples RAG clean/poisoned
+    at step 0, step 2 and step 3 across ES/EN, desktop/mobile and normal/reduced motion. The separate text-visibility
+    gate checks semantic visibility over four ctxmix states. Negative mutation fixtures remain deterministic.
   regression_scope: >-
-    Site-facing changes are confined to the two Security 1.1 visual snippets in ES and EN; the gate change is confined
-    to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
-  certification_effect: >-
-    Because site-facing source bytes changed after the previous exact manual review, current PIXEL_REVIEW and
-    PEDAGOGY_REVIEW remain fail-closed PENDING until revision 39 completes and its retained pixels are inspected.
+    Site-facing repair remains confined to Security 1.1 ES/EN snippets. Datacenters and all pre-Datacenters reference
+    series are untouched by the current site-facing repair; the focused validators are scoped to Security.
 
-revision_38_diagnostic:
-  run_id: 34924229925
-  exact_head: eddc57e38c7f300f326d9ed6d4d756d7df1a6565
-  content_under_test: PRE_SOURCE_CLEANUP
-  status: CANCELLED_BY_REVISION_39_CONCURRENCY
-  decisive_result: >-
-    Focused Security WCAG contrast and state text visibility completed SUCCESS against the pre-cleanup rendered bytes,
-    refuting the rendered-opacity hypothesis for ctxmix. This diagnostic is retained as gate evidence, not current
-    content certification.
-  completed_success_before_cancel:
+exact_run_40:
+  run_id: 34926301149
+  exact_head: 852ccd3865b22eaa4add0a6be6e819c1733e00ce
+  status: COMPLETED_FAILURE_EXPECTED
+  artifact_id: 10380033833
+  technical_passes:
     - negative_regression_fixtures
     - publication_discovery
-    - independent_source_coverage
     - strict_es_build
     - publication_contract
-    - security_native_media_inspection
+    - security_native_media_probe_executed_fail_closed
     - strict_en_build
     - structured_provenance_locale_metadata
     - reciprocal_article_watch_locale_ui
-    - independent_rendered_html_audit
     - focused_browser_interaction_layout_playback
-    - focused_wcag_contrast_and_state_text_visibility
+    - wcag_contrast_and_state_text_visibility
     - video_lifecycle_keyboard_touch_normal_reduced
     - real_touch_article_watch_round_trip
     - prompt_injection_visual_state_evidence
-  cancelled_step: real_keyboard_traversal_and_visible_focus
-  enforcement_outcome_before_cancel: FAILURE_EXPECTED_GLOBAL_AND_MEDIA_DEBT
+    - real_keyboard_traversal_visible_focus
+    - evidence_retention
+  contrast_gate:
+    state_context_records: 128
+    minimum_observed_ratio: 4.504877636810088
+    required_ratio: 4.5
+    minimum_visible_ancestor_opacity: 1.0
+    failures: 0
+  text_visibility_gate:
+    contexts: 8
+    state_count_per_context: 4
+    minimum_visible_effective_opacity: 1.0
+    failures: 0
+  browser_evidence:
+    full_page_contexts: 16
+    full_page_matrix: ES_EN_x_PRESENTATION_PROMPT_x_DESKTOP_MOBILE_x_NORMAL_REDUCED
+    focused_prompt_state_contexts: 8
+    prompt_state_matrix: ES_EN_x_DESKTOP_MOBILE_x_NORMAL_REDUCED
+    runtime_failures: 0
+  fail_closed_outcomes:
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_PASS: false
+    RENDERED_GLOBAL_PASS: false
+    PIXEL_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    PEDAGOGY_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    ARTICLE_GOLDEN: false
+  note: >-
+    Overall workflow failure is intentional. Global source/rendered catalogue debt and Security media debt remain
+    blocking. Focused Security technical success does not certify the full catalogue or ARTICLE_GOLDEN.
 
-revision_39_current_exact_qa:
-  run_id: 34924687910
-  exact_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
-  content_under_test: CURRENT_SOURCE_CLEANUP_PLUS_STRENGTHENED_GATE
-  status: IN_PROGRESS
-  completed_success_observed:
-    - negative_regression_fixtures
-    - publication_discovery
-    - independent_source_coverage
-    - strict_es_build
-    - publication_contract
-    - security_native_media_inspection
-    - strict_en_build
-    - structured_provenance_locale_metadata
-    - reciprocal_article_watch_locale_ui
-    - independent_rendered_html_audit
-  current_step: focused_security_interaction_layout_codec_playback
-  no_editorial_pass_inferred: true
-
-previous_exact_run_37:
-  run_id: 34920449262
-  exact_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
-  artifact_id: 10377524435
-  status: RAG_REPAIR_TECHNICALLY_QUALIFIED_BUT_SITE_REVISION_SUPERSEDED
-  retained_fact: >-
-    RAG retrieval order/rank/top-K/accessibility was exact-qualified on run 37. It does not certify the current
-    post-cleanup whole-active-set pixels or pedagogy.
+current_manual_review:
+  exact_qa_head: 852ccd3865b22eaa4add0a6be6e819c1733e00ce
+  artifact_id: 10380033833
+  reviewer_independence: SAME_AGENT_NOT_INDEPENDENT
+  inspected:
+    - 16 full-page ES/EN presentation/prompt captures at desktop ~1440 and mobile ~390, normal and reduced motion
+    - 24 ctxmix state captures covering early/intermediate/final teaching states across the full matrix
+    - 48 RAG clean/poisoned step-0/step-2/step-3 captures across the full matrix
+    - 40 defense-in-depth all-on and progressively-disabled captures across the full matrix
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  observations:
+    - >-
+      Full-page review found no current global horizontal overflow, clipping, overlapping controls, accidental raw
+      markup, locale leakage, or mobile giant-canvas dependency in the active Security 00/1.1 pages.
+    - >-
+      Normal and reduced-motion layouts preserve the same semantic states. Mobile renders the principal relationship
+      vertically at readable width instead of requiring horizontal canvas traversal.
+    - >-
+      RAG step 0 exposes the retrieval ranking and top-K membership but does not prematurely display retrieved payload
+      or downstream proposal; step 2 reveals the retrieved context; step 3 additionally reveals the changed proposal.
+    - >-
+      Poisoned mode moves the hostile document into rank 1/top-K and changes retrieved context and the downstream
+      proposal, while clean mode keeps the benign runbook/ticket pair. The interaction teaches retrieval -> context ->
+      output causality rather than only changing color or labels.
+    - >-
+      Defense-in-depth disabled states keep all labels legible and change the first effective boundary/path result;
+      ctxmix separates model influence from runtime execution authority and reveals the final verdict only at the
+      semantic final state.
+  limitation: >-
+    This is an exact retained-pixel review by the same orchestration agent. It is not independent editorial review and
+    must not be represented as SERIES_GOLDEN or ARTICLE_GOLDEN.
 
 media:
   status: FAIL
@@ -125,6 +147,7 @@ media:
   en:
     00_presentacion_serie: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 47.567, audio_stream: false}
     01-prompt-injection: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 47.567, audio_stream: false}
+  authorized_narration_search_this_checkpoint: NO_MATCH_IN_5SIGMAS_OR_TOOLS_CONTENT_DEFAULT_BRANCH_CODE_SEARCH
   forbidden_substitutions:
     - generated_or_cloned_Francisco_voice
     - alternate_voice_as_fallback
@@ -141,6 +164,11 @@ catalogue_requalification:
     public_chapters: 67
     public_pages: 75
     errors: 0
+  main_nav_and_hubs:
+    es_hub_series: 13
+    en_hub_series: 13
+    target_order_preserved: true
+    chapter_first_targets_present: true
   current_open_counts:
     RAW_TEX_RENDERED: 28
     VIDEO_DECLARATION_MISSING: 60
@@ -151,25 +179,28 @@ catalogue_requalification:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
   note: >-
-    Current work remains deliberately focused on Security 00/1.1. Global findings remain fail-closed and are not
+    Current work remains deliberately focused on Security 00/1.1. Global findings stay fail-closed and are not
     converted into PASS by focused checks.
 
 sources_and_locale:
   material_claims_changed_in_this_repair: false
   primary_source_research_required_by_this_repair: false
   es_en_repair_mirrored: true
-  es_locale_cleanup: "defense inactive state: off -> inactivo"
+  structured_provenance_locale_gate: PASS
   note: >-
-    No factual claim, benchmark value, unit, formula, reference, caveat, code-example premise or media assertion
-    changed. Existing structured provenance remains subject to the exact revision-39 technical gate.
+    This checkpoint changes visual state presentation and validation only. No factual claim, benchmark value, unit,
+    formula, reference, caveat, code-example premise or media assertion changed, so no new factual-source research
+    was necessary. Existing primary-source provenance and ES/EN structural parity were re-exercised by the exact gate.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  current_exact_qa_head: 34861b8bb747b0e3213e4a1d530e4718820544e4
-  draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
+  repair_branch_exact_qa_head: 852ccd3865b22eaa4add0a6be6e819c1733e00ce
+  branch_ahead_of_main_at_exact_qa: 184
+  branch_behind_main_at_exact_qa: 0
+  draft_pr_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_run: 2
-  actions_reason: REV38_DIAGNOSTIC_THEN_REV39_EXACT_SOURCE_CLEANUP_VERIFICATION
+  actions_started_this_automation_checkpoint: 0
+  actions_reused: [34926301149]
   pr_created: false
   merged: false
   deployed: false
@@ -179,24 +210,21 @@ concurrency_and_release:
 
 history:
   previous_durable_checkpoint_comment: 5673763015
-  rag_defect_status: REPAIRED_EXACT_QA_RUN_37
+  revision_39_run: 34924687910
+  revision_39_status: SUPERSEDED_BY_REVISION_40_AFTER_RETAINED_EVIDENCE_FOUND_88_STATE_LEGIBILITY_FAILURES
+  revision_37_rag_semantics_status: REPAIRED_EXACT_QA
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
   stay_on_series: seguridad-ia
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
-  first_internal_gap: >-
-    Complete revision 39 and inspect its retained current pixels for ES/EN desktop/mobile normal/reduced, including
-    ctxmix early/final states and defense disabled state. Do not inherit a previous editorial PASS across changed bytes.
-  pixel_review_required: true
-  pedagogy_review_required: true
+  repaired_gap: SECURITY_STATE_LEGIBILITY_AND_PREMATURE_DISCLOSURE_CLOSED_ON_EXACT_RUN40
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   independent_work_policy: >-
     While VOICE_MISSING remains, continue deterministic defects independently verifiable in this active set; do not
     advance to 1.2 merely because the audiovisual input is external.
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until current exact pixel/pedagogy review is complete, authorized audio, captions,
-    transcript and curated key moments are complete, and the full conjunctive article gate is rerun on one stable
-    exact revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until authorized audio, captions, transcript and curated key moments are complete and
+    the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
