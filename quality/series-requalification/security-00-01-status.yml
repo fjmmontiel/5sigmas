@@ -1,4 +1,4 @@
-schema_version: 7
+schema_version: 8
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -7,97 +7,80 @@ scope:
   article_golden: false
 
 head_state:
-  current_site_facing_head: c74784f2f17c625bb9bb622395d836552a747273
-  semantic_gate_source_head: d5bf731a10e467b5a492ba46720635575dcc80a1
-  exact_qa_integration_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
-  diagnostic_run: 34920449262
-  diagnostic_revision: 37
-  diagnostic_status: COMPLETED_FAILURE_EXPECTED
-  evidence_artifact_id: 10377524435
-  evidence_digest: sha256:10cd9791c3feadc6f7d0799374d7308d0588e531f0263ea09a5d284bc887171b
-  artifact_expires_at: 2026-09-16T02:22:59Z
-  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_site_facing_head: e97e11422d7852ee3c24bf6a3a31d9a358739061
+  legibility_gate_source_head: 734e21e934e736b34a6e297eb7611f9d9006ca48
+  diagnostic_reproduction_head: eddc57e38c7f300f326d9ed6d4d756d7df1a6565
+  diagnostic_run: 34924229925
+  diagnostic_revision: 38
+  diagnostic_status: IN_PROGRESS_EXPECTED_TO_FAIL_ON_PRE_REPAIR_PIXELS
+  current_content_pixel_review: PENDING_CURRENT_EXACT_MANUAL
+  current_content_pedagogy_review: PENDING_CURRENT_EXACT_MANUAL
   independent_editorial_review: false
   article_golden: false
 
 active_defect:
-  code: RAG_RETRIEVAL_ORDER_AND_SELECTION_ACCESSIBILITY_MISMATCH
-  status: REPAIRED_EXACT_QA_AND_MANUAL_REVIEW_PASS
-  affected_visual: rag-trigger-fragment
-  repair: >-
-    ES and EN derive DOM sequence, top-K cut position, rank badges and per-row selected/outside semantics from
-    one mode-dependent ordering state. syncRanking() physically reorders rows, assigns ranks 1..4 and
-    synchronizes localized status text plus localized top-K aria-labels.
-  exact_gate: >-
-    The exact integration includes both the final site-facing repair and the strengthened visual-state validator.
-    For clean and poisoned states the gate asserts DOM/accessibility sequence, exact cut position, ranks 1..4,
-    selected/outside text and localized top-K aria-labels across ES/EN, desktop/mobile and normal/reduced motion.
+  code: TEACHING_TEXT_ANCESTOR_OPACITY_CONTRAST_BLIND_SPOT
+  severity: P1
+  status: SOURCE_REPAIRED_PENDING_EXACT_QA_AND_MANUAL_PIXEL_REVIEW
+  affected_visuals: [control-vs-datos, defensa-en-capas]
+  discovered_from_source:
+    - >-
+      The prior browser contrast gate measured descendant computed foreground/background colors but did not
+      account for CSS opacity applied by an ancestor, so text inside a faded teaching panel could falsely pass.
+    - >-
+      ES and EN control-vs-datos rendered mechanism/context/proposal groups at 20/25 percent opacity in early
+      states and the runtime group at 35 percent in state 3. The old verdict was also left visible at 18 percent.
+    - >-
+      ES and EN defensa-en-capas rendered an entire disabled gate at 42 percent opacity. The ES inactive status
+      additionally leaked the English token "off".
+  gate_repair: >-
+    validate_security_contrast.mjs now contains an ancestor-opacity regression fixture, rejects inspected teaching
+    text rendered through cumulative ancestor opacity below 0.999, and exercises presentation bounded/unbounded,
+    ctxmix steps 1..4, RAG clean/poisoned and defense all-on/first-off across ES/EN, desktop/mobile and
+    normal/reduced motion while retaining runtime/resource listeners.
+  site_repair: >-
+    ES/EN ctxmix no longer fades text-bearing mechanism groups. The final verdict is hidden until its explanatory
+    state and then shown at full opacity. ES/EN defense disabled gates preserve readable text and communicate state
+    through dashed border plus explicit state pill rather than fading the entire card. ES uses "inactivo".
   regression_scope: >-
-    Site-facing changes are confined to the Security 1.1 RAG snippet in ES and EN; gate hardening is confined
-    to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
+    Site-facing changes are confined to the two Security 1.1 visual snippets in ES and EN; the gate change is
+    confined to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
+  certification_effect: >-
+    Prior same-agent PIXEL_REVIEW/PEDAGOGY_REVIEW receipts cannot certify the current content revision after this
+    newly discovered defect and the subsequent site-facing repair. Current exact manual review is fail-closed PENDING.
 
-exact_run_37:
-  run_id: 34920449262
-  exact_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
-  status: COMPLETED_FAILURE_EXPECTED
-  artifact_id: 10377524435
-  technical_passes:
+exact_run_38_diagnostic:
+  run_id: 34924229925
+  exact_head: eddc57e38c7f300f326d9ed6d4d756d7df1a6565
+  content_under_test: PRE_REPAIR_OPACITY_STATES
+  purpose: REPRODUCE_ANCESTOR_OPACITY_BLIND_SPOT_WITH_STRENGTHENED_GATE
+  status: IN_PROGRESS
+  completed_passes_observed:
     - negative_regression_fixtures
     - publication_discovery
+    - independent_source_coverage
     - strict_es_build
     - publication_contract
+    - security_native_media_inspection
     - strict_en_build
     - structured_provenance_locale_metadata
     - reciprocal_article_watch_locale_ui
+    - independent_rendered_html_audit
     - focused_browser_interaction_layout_playback
-    - wcag_contrast_and_state_text_visibility
-    - video_lifecycle_keyboard_touch_normal_reduced
-    - real_touch_article_watch
-    - prompt_injection_visual_state_evidence
-    - real_keyboard_traversal_visible_focus
-    - evidence_retention
-  fail_closed_outcomes:
-    SOURCE_PASS: false
-    BUILD_PASS: true
-    BROWSER_PASS: true
-    MEDIA_PASS: false
-    RENDERED_GLOBAL_PASS: false
-    PIXEL_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
-    PEDAGOGY_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
-    ARTICLE_GOLDEN: false
+  current_step: focused_wcag_contrast_and_state_text_visibility
   note: >-
-    Overall workflow failure is intentional: the final enforcement preserves global source/rendered catalogue
-    debt and Security media debt as blockers. A focused technical run cannot certify the catalogue or article.
+    This diagnostic intentionally runs the strengthened gate against pre-repair site bytes. It is not evidence for
+    the current repaired content and cannot restore PIXEL_REVIEW, PEDAGOGY_REVIEW or ARTICLE_GOLDEN.
 
-current_manual_review:
-  exact_qa_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
-  content_head: c74784f2f17c625bb9bb622395d836552a747273
+previous_exact_run_37:
+  run_id: 34920449262
+  exact_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
   artifact_id: 10377524435
-  reviewer_independence: SAME_AGENT_NOT_INDEPENDENT
-  full_page_contexts_inspected: 16
-  full_page_matrix: ES_EN_x_PRESENTATION_PROMPT_x_DESKTOP_MOBILE_x_NORMAL_REDUCED
-  focused_visual_contexts_available_and_reviewed: 16
-  rag_final_state_contexts_inspected: 16
-  rag_matrix: ES_EN_x_DESKTOP_MOBILE_x_NORMAL_REDUCED_x_CLEAN_POISONED
-  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
-  observations:
-    - >-
-      Full-page captures preserve readable hierarchy and composition on desktop and ~390px mobile without global
-      horizontal overflow, clipping, locale leakage or a current RAG layout regression.
-    - >-
-      Clean RAG renders runbook rank 1 plus ticket history rank 2 above the top-K cut; poisoned RAG renders the
-      poisoned email rank 1 plus internal runbook rank 2 above the cut, with ranks 3 and 4 below it in both locales.
-    - >-
-      The scenario changes retrieved context and downstream proposal, so the interaction teaches an observable
-      retrieval-to-context-to-output mechanism rather than a cosmetic label/color change.
-    - >-
-      Normal and reduced-motion matrices remain semantically equivalent; reduced motion does not remove the
-      explanatory state transition or static alternative.
-  limitation: >-
-    This is a same-agent editorial review of the exact retained pixels, not an independent review, and therefore
-    must not be represented as independent certification or ARTICLE_GOLDEN.
+  status: SUPERSEDED_FOR_CURRENT_PIXEL_CERTIFICATION_BY_NEW_DEFECT
+  retained_fact: >-
+    The RAG retrieval order/rank/top-K/accessibility repair remains technically exact-qualified on run 37, but the
+    later-discovered ancestor-opacity legibility defect invalidates use of run 37 as a current whole-active-set
+    pixel/pedagogy PASS.
 
 media:
   status: FAIL
@@ -142,25 +125,24 @@ catalogue_requalification:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
   note: >-
-    Current work remains deliberately focused on Security 00/1.1. Global findings remain fail-closed and are
-    not converted into PASS by focused checks.
+    Current work remains deliberately focused on Security 00/1.1. Global findings remain fail-closed and are not
+    converted into PASS by focused checks.
 
 sources_and_locale:
   material_claims_changed_in_this_repair: false
   primary_source_research_required_by_this_repair: false
   es_en_repair_mirrored: true
-  structured_provenance_locale_gate: PASS
+  es_locale_cleanup: "defense inactive state: off -> inactivo"
   note: >-
-    The RAG repair changes representation/accessibility of an existing illustrative retrieval example, not a
-    material factual claim, benchmark value, unit, formula, reference, caveat or example premise.
+    This repair changes visual legibility/state presentation only. No factual claim, benchmark value, unit, formula,
+    reference, caveat, code example premise or media assertion changed.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  repair_branch_exact_head_before_manifest_reconcile: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
+  repair_branch_site_head_before_manifest_reconcile: e97e11422d7852ee3c24bf6a3a31d9a358739061
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_for_revision_37: 1
-  extra_action_after_manual_review: 0
+  actions_started_for_revision_38: 1
   pr_created: false
   merged: false
   deployed: false
@@ -169,22 +151,25 @@ concurrency_and_release:
   release_contract_281_preserved: true
 
 history:
-  previous_durable_checkpoint_comment: 5673181073
-  run36_exact_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
-  run36_artifact_id: 10376782066
-  run36_status: SUPERSEDED_FOR_CURRENT_CONTENT
+  previous_durable_checkpoint_comment: 5673763015
+  rag_defect_status: REPAIRED_EXACT_QA_RUN_37
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
   stay_on_series: seguridad-ia
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
-  repaired_gap: CURRENT_RAG_SEMANTICS_EXACTLY_REQUALIFIED
+  first_internal_gap: >-
+    Complete run 38 reproduction evidence, then integrate the repaired ES/EN site bytes with the strengthened
+    opacity-aware gate on one exact head and inspect the retained current pixels on desktop/mobile normal/reduced.
+  pixel_review_required: true
+  pedagogy_review_required: true
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   independent_work_policy: >-
-    While VOICE_MISSING remains, continue only deterministic defects independently verifiable in this active
-    set; do not advance to 1.2 merely because the audiovisual input is external.
+    While VOICE_MISSING remains, continue deterministic defects independently verifiable in this active set; do not
+    advance to 1.2 merely because the audiovisual input is external.
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until authorized audio, captions, transcript and curated key moments are complete
-    and the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until current exact pixel/pedagogy review is complete, authorized audio, captions,
+    transcript and curated key moments are complete, and the full conjunctive article gate is rerun on one stable
+    exact revision with zero known P0/P1/P2.
