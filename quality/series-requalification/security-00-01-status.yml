@@ -1,121 +1,85 @@
-schema_version: 3
+schema_version: 4
 scope:
   series: seguridad-ia
-  pages:
-    - 00_presentacion_serie
-    - 01-prompt-injection
+  pages: [00_presentacion_serie, 01-prompt-injection]
   locales: [es, en]
   status: REQUALIFICATION_QA
   article_golden: false
 
 head_state:
-  current_content_head: f36e04bb5b1c6462863828bb13d676a1aa4b6dcf
+  current_site_facing_head: 47ff154fb1302b4cd24bf5eeddf04a1de95d15f4
+  exact_qa_integration_head: e158a68da94537157cdb475e0bb8780d7f03f18b
+  diagnostic_run: 34912633066
+  diagnostic_revision: 34
+  diagnostic_status: IN_PROGRESS
+  content_changed_since_previous_manual_review: true
+  site_facing_change_class: STATE_VISIBILITY_AND_ACTIVE_HIGHLIGHT
+  visible_copy_changed: false
+  factual_claims_changed: false
+  teaching_model_changed: false
+  media_changed: false
+  current_content_pixel_review: PENDING_EXACT_HEAD_REINSPECTION
+  current_content_pedagogy_review: PENDING_EXACT_HEAD_REINSPECTION
+  independent_editorial_review: false
+  article_golden: false
+
+active_defect:
+  code: TEXT_BEARING_GROUP_OPACITY_NOT_COVERED_BY_CONTRAST_GATE
+  status: FIX_IMPLEMENTED_QA_PENDING
+  affected_visual: control-vs-data
+  finding: >-
+    Intermediate states dimmed complete explanatory containers to 20-35% opacity. The existing WCAG gate
+    correctly checked foreground/background colour contrast, including translucent backgrounds, but a
+    descendant's computed opacity remains 1 when an ancestor supplies group opacity; therefore it could
+    certify colours while the final rendered text was materially faded.
+  repair:
+    - keep context, model/runtime and proposal explanatory text at full opacity in every state
+    - communicate state 1/2/3/4 with structural outlines rather than fading text
+    - hide the final verdict until state 4 instead of rendering low-opacity ghost text
+    - exercise ES/EN, desktop/mobile, normal/reduced and states 1-4 in a browser gate
+    - multiply ancestor opacity for every explanatory text probe and fail below 0.99
+  files:
+    - docs/stylesheets/revamp-ux.css
+    - scripts/validate_security_text_visibility.mjs
+    - .github/workflows/series-experience-diagnostic.yml
+  regression_scope: >-
+    Overrides are restricted to .ctxmix[data-state], the stateful Security visual. The older prompt-injection
+    topic visual uses .ctxmix without data-state, and Datacenters/pre-Datacenters series are not targeted.
+
+previous_exact_review:
+  content_head: f36e04bb5b1c6462863828bb13d676a1aa4b6dcf
   exact_qa_integration_head: 2e1ed72c2cf6214e7a8b0ad9265314fb759e9889
   diagnostic_run: 34900424729
   evidence_artifact_id: 10371260583
-  evidence_artifact_sha256: 6a8068ccdb27d8317fc509242a4a61ce062602478796b1dcd9c211359c6c17e3
-  content_changed_since_previous_manual_review: true
-  site_facing_change_class: ACCESSIBILITY_CONTRAST_ONLY
-  visible_copy_changed: false
-  teaching_mechanism_changed: false
-  media_changed: false
-  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
-  independent_editorial_review: false
-  article_golden: false
-  note: >-
-    Security 00/1.1 site-facing pixels changed after the previous durable checkpoint to repair small-text
-    contrast in the presentation and RAG visual, mirrored in ES/EN. Run 34900424729 rendered the current
-    content inside exact QA integration head 2e1ed72c. The current artifact was manually inspected again
-    across ES/EN, desktop/mobile and normal/reduced motion before re-issuing same-agent pixel/pedagogy PASS.
-
-contrast_repair:
-  status: PASS_CURRENT_CONTENT
-  gate: scripts/validate_security_contrast.mjs
-  workflow: .github/workflows/series-experience-diagnostic.yml
-  threshold_wcag_ratio: 4.5
-  rendered_contexts: 16
-  failures: 0
-  minimum_observed_ratio: 4.504877636810088
-  minimum_observed_probe: .defsim__result-badge
-  minimum_observed_context: en/prompt/desktop/no-preference
-  presentation_minimum_ratio: 4.554082412061247
-  translucent_backgrounds_composited: true
-  mutation_fixtures: PASS
-  note: >-
-    The first contrast implementation was not accepted because translucent CSS Color 4 backgrounds were
-    treated as opaque. The corrected gate composites ancestor backgrounds before computing contrast and
-    keeps the original 4.5:1 threshold; no threshold was relaxed.
-
-manual_pixel_review:
-  verdict: PASS_ACTIVE_SET_SAME_AGENT
-  evidence_artifact_id: 10371260583
-  inspected:
-    - complete presentation ES desktop normal and reduced captures
-    - complete presentation ES mobile normal and reduced captures
-    - complete presentation EN desktop normal and reduced captures
-    - complete presentation EN mobile normal and reduced captures
-    - complete Prompt Injection ES desktop normal and reduced captures
-    - complete Prompt Injection ES mobile normal and reduced captures
-    - complete Prompt Injection EN desktop normal and reduced captures
-    - complete Prompt Injection EN mobile normal and reduced captures
-    - presentation control-vs-data visual in both locales and viewports
-    - Prompt Injection control-vs-data visual in both locales and viewports
-    - retrieval clean/poisoned mechanism states including current contrast repair
-    - defence-in-depth states including current result badges
-    - normal/reduced-motion current states
-  observed:
-    clipping_or_overlap: NONE_FOUND_IN_CURRENT_ARTIFACT
-    global_horizontal_overflow: NONE_FOUND
-    unreadable_labels: NONE_FOUND
-    accidental_raw_markup: NONE_FOUND_IN_ACTIVE_SET_CAPTURES
-    locale_leakage: NONE_FOUND
-    mobile_relation_requires_giant_horizontal_canvas: false
-    contrast_regression: NONE_FOUND
-  limitation: >-
-    This is a same-agent editorial inspection of the current active set, not an independent review and not
-    a catalogue-wide pixel certification. Sticky site chrome visible in tall stitched element screenshots
-    was checked against the complete page captures; it does not obscure the corresponding content in the
-    full-page render.
-
-manual_pedagogy_review:
-  verdict: PASS_ACTIVE_SET_SAME_AGENT
-  inspected_mechanisms:
-    - presentation path from hostile content through proposal to external authorization boundary
-    - control-vs-data distinction and change of execution authority
-    - retrieval clean versus poisoned top-K state and downstream proposal change
-    - defence-in-depth first-effective-boundary behavior and progressively disabled controls
-  observations:
-    interaction_changes_model_state_or_outcome: true
-    color_only_or_label_only_interaction: false
-    mechanism_inputs_outputs_observable: true
-    assumptions_or_counterexample_present_where_applicable: true
-  limitation: SAME_AGENT_NOT_INDEPENDENT
-
-technical_gates:
-  workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-  negative_regression_fixtures: PASS
-  publication_discovery: PASS
-  strict_es_build: PASS
-  publication_contract: PASS
-  strict_en_build: PASS
-  structured_provenance_locale_metadata: PASS
-  reciprocal_article_watch_locale_ui: PASS
-  security_browser_interaction_layout_playback: PASS
-  security_wcag_contrast: PASS
-  video_lifecycle: PASS
-  real_touch_article_watch: PASS
-  prompt_visual_states: PASS
-  expanded_provenance_details: PASS
-  real_keyboard_focus: PASS
-  final_enforcement: FAIL
-  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
-  source_pass: false
-  rendered_pass: false
-  browser_pass_active_set: true
-  media_pass: false
   pixel_review: PASS_ACTIVE_SET_SAME_AGENT
   pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  superseded_for_current_pixels: true
+  reason: >-
+    The prior same-agent review remains historical evidence for its exact bytes but cannot certify the new
+    state-visibility pixels introduced by the current repair.
+
+technical_gates:
+  negative_regression_fixtures: PREVIOUS_PASS
+  publication_discovery: PREVIOUS_PASS
+  strict_es_build: QA_PENDING
+  publication_contract: QA_PENDING
+  strict_en_build: QA_PENDING
+  structured_provenance_locale_metadata: QA_PENDING
+  reciprocal_article_watch_locale_ui: QA_PENDING
+  security_browser_interaction_layout_playback: QA_PENDING
+  security_wcag_contrast: QA_PENDING
+  security_state_text_visibility: QA_PENDING
+  video_lifecycle: QA_PENDING
+  real_touch_article_watch: QA_PENDING
+  prompt_visual_states: QA_PENDING
+  real_keyboard_focus: QA_PENDING
+  final_enforcement: QA_PENDING_EXPECTED_FAIL_CLOSED
+  global_browser_sweep: NOT_REQUESTED_FOCUSED_ITERATION
+  source_pass: false
+  rendered_pass: false
+  media_pass: false
+  pixel_review: PENDING_EXACT_HEAD_REINSPECTION
+  pedagogy_review: PENDING_EXACT_HEAD_REINSPECTION
   article_golden: false
 
 media:
@@ -129,31 +93,11 @@ media:
     VIDEO_TRANSCRIPT_MISSING: 4
     VIDEO_CHAPTERS_MISSING: 4
   es:
-    00_presentacion_serie:
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 60.300
-      audio_stream: false
-    01-prompt-injection:
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 60.333
-      audio_stream: false
+    00_presentacion_serie: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.300, audio_stream: false}
+    01-prompt-injection: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.333, audio_stream: false}
   en:
-    00_presentacion_serie:
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 47.567
-      audio_stream: false
-    01-prompt-injection:
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 47.567
-      audio_stream: false
+    00_presentacion_serie: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 47.567, audio_stream: false}
+    01-prompt-injection: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 47.567, audio_stream: false}
   forbidden_substitutions:
     - generated_or_cloned_Francisco_voice
     - alternate_voice_as_fallback
@@ -173,20 +117,20 @@ catalogue_requalification:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
   note: >-
-    Run 34900424729 was intentionally focused on Security 00/1.1. These catalogue counts remain fail-closed;
-    no focused technical PASS is represented as global certification.
+    Revision 34 is intentionally focused on Security 00/1.1. Global findings remain fail-closed and are not
+    converted into PASS by focused checks.
 
 sources_and_locale:
-  material_claims_changed_in_this_contrast_repair: false
+  material_claims_changed_in_this_repair: false
   primary_source_research_required_by_this_pixel_change: false
-  structured_provenance_gate: PASS
-  locale_mirror_gate: PASS_ACTIVE_SET
-  note: >-
-    The contrast repair changed only presentation colors, not factual claims, figures, units, references,
-    equations or examples. Existing primary-source qualification therefore remains applicable; this run
-    does not invent a new factual revalidation receipt.
+  previous_structured_provenance_gate: PASS
+  previous_locale_mirror_gate: PASS_ACTIVE_SET
+  current_exact_head_recheck: PENDING
 
-release:
+cost_and_release:
+  actions_started_this_revision: 1
+  action_reason: site-facing accessibility repair plus deterministic browser regression gate
+  artifact_policy: FAILURE_ONLY_ONE_DAY_BOUNDED
   pr_created: false
   merged: false
   deployed: false
@@ -195,24 +139,22 @@ release:
   release_contract_281_preserved: true
 
 history:
-  previous_manifest_blob_sha: cfff689f256e1c3192e017cfaf03245b1f263475
-  previous_durable_checkpoint_comment: 5670617117
+  previous_durable_checkpoint_comment: 5671572506
   historical_receipts_preserved_in_git_and_issue_305: true
-  superseded_visual_review:
-    content_head: 056f62f96595f9a3fa553024cd337059c47c5953
-    diagnostic_run: 34874667427
-    reason: >-
-      Superseded only as current pixel evidence because site-facing contrast colors changed afterward.
-      It remains historical evidence for the prior content revision.
+  note: >-
+    A transient attempt in this run to retain generic diagnostic artifacts on every conclusion was reverted
+    after re-reading the repository CI storage policy, which explicitly requires generic artifacts to be
+    failure-only with one-day retention. The branch content has no persistent diff from that attempt.
 
 next_exact_gap:
   stay_on_series: seguridad-ia
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
-  first_blocker: AUTHORIZED_NARRATION_AUDIO
+  immediate_action: >-
+    Complete revision 34, inspect the exact current visual artifact if retained by the expected fail-closed
+    workflow, and only then issue current pixel/pedagogy verdicts.
+  first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
-  allowed_parallel_work: >-
-    Continue only deterministic defects independent of missing authorized narration on the same active set.
   article_golden_condition: >-
     Do not grant ARTICLE_GOLDEN until audio, captions, transcript and curated key moments are complete and
     the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
