@@ -1,4 +1,4 @@
-schema_version: 17
+schema_version: 18
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,12 +8,12 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 99107ba02cbcfe72fcf37b117ffadb29863f9faf
+  current_gate_head: 865aa030cb3d99c0920e01c052cd9637631a5493
   last_exact_qa_head: afe6a46e109c3105064a8baa32c8073246fa33e1
   last_exact_qa_run: 34961682456
   last_exact_qa_revision: 47
   last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
-  current_gate_exact_qa: PASS_REVISION_47_REQUEST_CORRELATED_RUNTIME_SENTINEL
+  current_gate_exact_qa: PASS_REVISION_47_SENTINEL_SPECIALIZED_REPAIRS_PENDING_EXACT_QA
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_editorial_evidence_artifact: 10383286488
@@ -80,18 +80,28 @@ open_gate_debt_revision_47:
       - scripts/validate_security_text_visibility.mjs
       - scripts/validate_security_keyboard_focus.mjs
       - scripts/capture_security_visuals.mjs
-    first_repair:
-      file: scripts/validate_security_contrast.mjs
-      commit: 99107ba02cbcfe72fcf37b117ffadb29863f9faf
-      status: IMPLEMENTED_PENDING_EXACT_QA
-      site_facing_bytes_changed: false
-      thresholds_changed: false
-      details: >-
-        Removed blanket pre-teardown ERR_ABORTED filtering, added navigation/interaction/teardown phases and continuous
-        console/pageerror/requestfailed/HTTP capture, moves runtime verdict after context.close(), and only classifies
-        teardown-phase ERR_ABORTED as expected context cancellation. Deterministic mutations prove interaction aborts,
-        non-abort teardown request failures, page errors, console errors and HTTP errors remain fatal.
-    next_gate: scripts/validate_security_text_visibility.mjs
+    repairs_implemented_pending_exact_qa:
+      - file: scripts/validate_security_contrast.mjs
+        commit: 99107ba02cbcfe72fcf37b117ffadb29863f9faf
+        status: IMPLEMENTED_PENDING_EXACT_QA
+        site_facing_bytes_changed: false
+        thresholds_changed: false
+        details: >-
+          Removed blanket pre-teardown ERR_ABORTED filtering, added navigation/interaction/teardown phases and continuous
+          console/pageerror/requestfailed/HTTP capture, moves runtime verdict after context.close(), and only classifies
+          teardown-phase ERR_ABORTED as expected context cancellation. Deterministic mutations prove interaction aborts,
+          non-abort teardown request failures, page errors, console errors and HTTP errors remain fatal.
+      - file: scripts/validate_security_text_visibility.mjs
+        commit: 865aa030cb3d99c0920e01c052cd9637631a5493
+        status: IMPLEMENTED_PENDING_EXACT_QA
+        site_facing_bytes_changed: false
+        thresholds_changed: false
+        details: >-
+          Removed the blanket ERR_ABORTED suppression, records navigation/interaction/teardown phase on all runtime/resource
+          events, retains listeners through context.close(), computes the verdict from final post-teardown arrays, preserves
+          only teardown-phase ERR_ABORTED as expected cancellation, and adds deterministic listener-lifetime mutations while
+          preserving the existing opacity, semantic-staging and localized authorization-label contracts.
+    next_gate: scripts/validate_security_requalification_browser.mjs
 
 resolved_runtime_abort_defect:
   code: SECURITY_ES_INLINE_VIDEO_PRE_TEARDOWN_ERR_ABORTED
@@ -160,17 +170,17 @@ sources_and_locale:
   structured_provenance_locale_metadata: PASS_REVISION_47
   note: >-
     No material claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in revision 47
-    or the pending specialized-gate repair. No new factual validation is claimed.
+    or either pending specialized-gate repair. No new factual validation is claimed.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_before_this_manifest_commit: 217
+  branch_ahead_of_main_before_this_manifest_commit: 219
   branch_behind_main: 0
   draft_pr_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_checkpoint: 1
-  action_run: 34961682456
-  action_reason: REVISION_47_EXACT_REQUEST_CORRELATED_RUNTIME_SENTINEL
+  actions_started_this_checkpoint: 0
+  last_action_run: 34961682456
+  action_reason: NONE_THIS_CHECKPOINT_GATE_ONLY_HARMONIZATION_BUNDLED_FOR_NEXT_INTEGRATION
   new_action_for_specialized_gate_repair_or_persistence: false
   pr_created: false
   merged: false
@@ -186,10 +196,10 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Continue specialized-gate harmonization, beginning with validate_security_text_visibility.mjs, then the remaining
-    browser/lifecycle/touch/prompt/keyboard/evidence harnesses. Remove blanket ERR_ABORTED filtering, retain listeners
-    through teardown and compute verdicts from final arrays with deterministic negative mutations. Do not launch CI until
-    a useful integration milestone.
+    Continue specialized-gate harmonization with validate_security_requalification_browser.mjs, then lifecycle/touch/prompt/
+    keyboard/evidence harnesses. Contrast and text-visibility listener-lifetime repairs are both implemented but remain
+    pending one exact integration. Remove blanket ERR_ABORTED filtering, retain listeners through teardown and compute
+    verdicts from final arrays with deterministic negative mutations. Do not launch CI until a useful bundled milestone.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
