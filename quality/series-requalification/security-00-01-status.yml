@@ -1,4 +1,4 @@
-schema_version: 22
+schema_version: 23
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -9,56 +9,56 @@ scope:
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
   current_gate_head: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
-  last_exact_qa_head: 8d734702c0e5674393dedf70efbef9a399544994
-  last_exact_qa_run: 34999765129
-  last_exact_qa_revision: 49
-  last_exact_qa_status: COMPLETED_FAILURE_TOUCH_CLASSIFIER_AND_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
-  current_gate_exact_qa: CHANGES_REQUIRED_TOUCH_REPAIR_AND_CAPTURE_VISUALS_PENDING_EXACT_QA
+  last_exact_qa_head: 166f91cdd8de87b779fda7e52d823b88ff987cc7
+  last_exact_qa_run: 35006430159
+  last_exact_qa_revision: 50
+  last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT_SPECIALIZED_GATES_PASS
+  current_gate_exact_qa: SPECIALIZED_TECHNICAL_GATES_PASS_CAPTURE_VISUALS_PENDING_DIRECT_EXECUTION
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_editorial_evidence_artifact: 10383286488
   independent_editorial_review: false
   article_golden: false
 
-revision_49:
-  receipt_file: quality/series-requalification/security-00-01-revision49.yml
-  exact_head: 8d734702c0e5674393dedf70efbef9a399544994
-  run_id: 34999765129
-  artifact_id: 10409756114
+revision_50:
+  receipt_file: quality/series-requalification/security-00-01-revision50.yml
+  exact_head: 166f91cdd8de87b779fda7e52d823b88ff987cc7
+  run_id: 35006430159
+  artifact_id: 10412346090
+  artifact_files: 171
+  artifact_bytes: 44470688
   artifact_retention_days: 1
-  artifact_expires_at: '2026-09-16T17:22:59Z'
-  status: COMPLETED_FAILURE_TOUCH_CLASSIFIER_AND_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
+  status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT_SPECIALIZED_GATES_PASS
   site_facing_bytes_changed: false
   technical_active_set:
     negative_regression_fixtures: PASS_26_OF_26
     public_series_discovery_regression: PASS_5_OF_5
     independent_source_coverage_audit: FAIL_CLOSED_GLOBAL_DEBT
     strict_es_build: PASS
-    publication_contract: PASS
-    security_native_media_probe: FAIL_CLOSED_ACTIVE_MEDIA_DEBT
+    publication_contract: PASS_13_SERIES_67_CHAPTERS_75_PAGES
+    security_native_media_probe: FAIL_CLOSED_16_ACTIVE_MEDIA_BLOCKERS
     strict_en_build: PASS
     structured_provenance_locale_metadata: PASS
     reciprocal_article_watch_locale_ui: PASS
     rendered_html_audit: FAIL_CLOSED_GLOBAL_DEBT
     focused_browser_layout_playback: PASS
-    wcag_contrast: PASS_128_STATE_CONTEXT_RECORDS
+    wcag_contrast: PASS_128_STATE_CONTEXT_RECORDS_MIN_4_5
     text_visibility: PASS_8_CONTEXTS_X_4_STATES
     lifecycle_normal_reduced: PASS
-    real_touch_article_watch: FAIL_8_OF_8_MEDIA_ABORT_CLASSIFICATION
-    prompt_visual_states: PASS
-    real_keyboard_focus: PASS
-    runtime_listener_lifetime: PASS_16_OF_16_POST_TEARDOWN
+    real_touch_article_watch: PASS_ES_EN_00_01_NORMAL_REDUCED_REAL_MOBILE_TAP
+    prompt_visual_states: PASS_TECHNICAL
+    real_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+    runtime_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
     global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
-    conjunctive_enforcement: FAIL_EXPECTED_TOUCH_PLUS_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
-  article_watch_touch_failure:
-    common_event: REQUESTFAILED_NET_ERR_ABORTED_NATIVE_MEDIA_REQ_1
-    affected_contexts: 8
-    watch_interaction_failures: 7
-    article_to_watch_failures: 1
-    interpretation: >-
-      Revision 49 proves the previous phase-only touch classifier was too strict: the real mobile round trip can cancel the
-      exact native media request during a verified navigation or after a successful range response while the watch player is
-      healthy. This is not grounds for a blanket ERR_ABORTED allow-list.
+    conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
+  touch_classifier_repair:
+    repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
+    exact_qa: PASS
+    failure_count: 0
+    policy: >-
+      Navigation cancellation is admissible only for the exact native media request after successful destination navigation;
+      watch-interaction range cancellation requires a prior 200/206 on the same Request plus a healthy exact-source player.
+      Generic aborts and uncorrelated failures remain fatal.
   editorial_review:
     new_manual_review_performed_this_revision: false
     reason: SITE_FACING_BYTES_UNCHANGED_FROM_REVISION_43
@@ -68,23 +68,6 @@ revision_49:
     prior_review_artifact: 10383286488
 
 specialized_gate_debt:
-  - code: SECURITY_ARTICLE_WATCH_TOUCH_MEDIA_ABORT_CLASSIFICATION
-    severity: P1
-    status: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
-    exact_failure_run: 34999765129
-    exact_failure_artifact: 10409756114
-    repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
-    site_facing_bytes_changed: false
-    thresholds_changed: false
-    repair_policy: >-
-      Teardown aborts remain the only unconditional expected cancellation. Navigation-phase media abort requires the exact
-      native media URL, resourceType=media and successful destination navigation. Watch-interaction range cancellation requires
-      a prior 200/206 for the same Request before the abort plus watch reached, exact source match, readyState>=1 and no
-      media.error. Wrong source, non-media, failed navigation, absent/different/late response proof, unhealthy player,
-      non-abort failures, pageerror, console errors and HTTP errors remain fatal.
-    local_syntax_check: PASS
-    local_classifier_self_test: PASS_4_POSITIVE_12_NEGATIVE
-    browser_exact_qa_after_repair: NOT_RUN_THIS_CHECKPOINT
   - code: SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN
     severity: P1
     status: REPAIR_IMPLEMENTED_PENDING_DIRECT_EXECUTION
@@ -92,16 +75,21 @@ specialized_gate_debt:
     site_facing_bytes_changed: false
     thresholds_changed: false
     repair: LISTENERS_THROUGH_CONTEXT_TEARDOWN_POST_TEARDOWN_VERDICT_NO_INTERACTION_ABORT_ALLOWLIST
+  - code: FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE
+    severity: P2_COST
+    status: OPEN
+    evidence: REVISION_50_UPLOADED_171_FILES_44470688_BYTES
+    required_fix: BOUND_FUTURE_FOCUSED_ARTIFACTS_TO_MINIMAL_NEEDED_EVIDENCE_BEFORE_NEXT_CI
 
-specialized_gate_closed_in_revision_49:
-  keyboard_focus:
-    repair_commit: d57b30ead67605c6cb9921f469bd57779ec51908
+specialized_gate_closed_in_revision_50:
+  article_watch_touch:
+    repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
     exact_qa: PASS
+    real_touch: true
     listener_lifetime: THROUGH_CONTEXT_TEARDOWN
-    verdict_basis: POST_CONTEXT_TEARDOWN
+  keyboard_focus:
+    exact_qa: PASS
   prompt_visual_states:
-    concurrent_repair_commit: 0f4e27c03d429d64a84392235f326f173bdfb463
-    reused_without_blind_overwrite: true
     exact_qa: PASS
   video_lifecycle:
     exact_qa: PASS
@@ -113,9 +101,11 @@ specialized_gate_closed_in_revision_49:
   focused_browser:
     exact_qa: PASS
   runtime_listener_lifetime:
-    exact_qa: PASS
+    exact_qa: PASS_16_OF_16
+    verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
 
 historical_receipts:
+  revision_50_file: quality/series-requalification/security-00-01-revision50.yml
   revision_49_file: quality/series-requalification/security-00-01-revision49.yml
   revision_47_file: quality/series-requalification/security-00-01-revision47.yml
   revision_46_file: quality/series-requalification/security-00-01-revision46.yml
@@ -167,24 +157,22 @@ catalogue_requalification:
     VIDEO_TITLE_MISSING: 9
 
 sources_and_locale:
-  material_claims_changed_in_revision_49_or_pending_gate_repair: false
-  primary_source_research_required_by_security_gate_repair: false
-  strict_es_en: PASS_REVISION_49
-  structured_provenance_locale_metadata: PASS_REVISION_49
+  material_claims_changed_in_revision_50: false
+  primary_source_research_required_by_gate_only_change: false
+  strict_es_en: PASS_REVISION_50
+  structured_provenance_locale_metadata: PASS_REVISION_50
   note: >-
     No material Security claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in
-    revision 49 or the pending gate-only repairs. No new factual validation is claimed.
+    revision 50. No new factual validation beyond rerunning the structured provenance/locale contracts is claimed.
 
 release_contract_281_reconciliation:
   status: CHANGES_REQUIRED_FRESH_UNCACHED_LIVE_VERIFICATION
   latest_comment: 5683127656
-  article_source_state: >-
-    The author-reviewed #310 source revision a5efdfce72d11b2335452eaf45000f26ae524777 and current main already cite the
-    2026-09-10 GPT-Live-1 API launch separately from the earlier 2026-07-08 GPT-Live introduction. No source patch was made.
+  source_revision: a5efdfce72d11b2335452eaf45000f26ae524777
   runtime_limit: >-
-    #281 remains CHANGES_REQUIRED/BLOCKED until the article lane records a fresh uncached verification of the actually deployed
-    ES/EN revision or proves and repairs a deploy mismatch. This Security gate-only checkpoint does not claim production
-    verification and does not alter the article/LinkedIn dependency.
+    No fresh uncached production verification was established in this Security checkpoint. Cached web surfaces are not used as
+    current-production evidence. #281 remains BLOCKED until the article lane verifies the actually deployed ES/EN revision or
+    proves and repairs a deploy mismatch.
   linkedin_state: BLOCKED_PENDING_FRESH_UNCACHED_LIVE_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
   seventy_two_hour_clock_restarted: false
   linkedin_write_queue_activation: false
@@ -195,9 +183,9 @@ concurrency_and_release:
   draft_pr_34: OPEN_DRAFT_NONMERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
   actions_started_this_checkpoint: 1
-  last_action_run: 34999765129
-  action_reason: BUNDLED_EXACT_QA_OF_SPECIALIZED_RUNTIME_LISTENER_REPAIRS
-  action_after_touch_classifier_repair_or_persistence: false
+  last_action_run: 35006430159
+  action_reason: EXACT_QA_REPAIRED_ARTICLE_WATCH_TOUCH_CLASSIFIER_AND_BUNDLED_SPECIALIZED_GATES
+  additional_action_after_revision_50: false
   pr_created: false
   merged: false
   deployed: false
@@ -210,11 +198,12 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Execute one exact QA of the repaired article-watch touch classifier and directly execute capture_security_visuals on the
-    same stable gate revision. Do not inherit revision-49 touch failure as PASS, and do not treat technical green checks as new
-    PIXEL_REVIEW/PEDAGOGY_REVIEW. Keep the global source/rendered/media debts fail-closed.
+    Directly execute capture_security_visuals on the stable unchanged site-facing bytes and close its listener-lifetime repair
+    with evidence. Before any subsequent focused CI, bound artifact upload scope so technical iterations do not ship tens of
+    megabytes of screenshots unnecessarily. Keep source/rendered/media debt fail-closed and do not reinterpret technical PASS
+    as new PIXEL_REVIEW/PEDAGOGY_REVIEW.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until specialized gate debt is closed, authorized audio/captions/transcript/key moments are
-    complete, and the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until specialized gate and cost debt is closed, authorized audio/captions/transcript/key moments
+    are complete, and the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
