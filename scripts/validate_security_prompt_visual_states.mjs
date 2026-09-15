@@ -141,6 +141,8 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
       ranks: [...node.querySelectorAll('.ragtrace__row')].map(row => ({
         doc: row.dataset.doc,
         rank: (row.querySelector('.ragtrace__rank')?.textContent || '').trim(),
+        status: (row.querySelector('.ragtrace__selected')?.textContent || '').trim().toLowerCase(),
+        statusAria: (row.querySelector('.ragtrace__selected')?.getAttribute('aria-label') || '').trim().toLowerCase(),
       })),
     }));
     const expectedSequence = [expectedRows[0], expectedRows[1], 'CUT', expectedRows[2], expectedRows[3]];
@@ -150,8 +152,13 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
       { expectedSequence, actualSequence: rankingSemantics.sequence },
     );
     for (const [index, doc] of expectedRows.entries()) {
-      const actualRank = rankingSemantics.ranks.find(entry => entry.doc === doc)?.rank;
-      check(actualRank === String(index + 1), `${ctx}: ${mode} ${doc} visible rank badge is stale`, { expected: String(index + 1), actualRank, rankingSemantics });
+      const entry = rankingSemantics.ranks.find(candidate => candidate.doc === doc);
+      check(entry?.rank === String(index + 1), `${ctx}: ${mode} ${doc} visible rank badge is stale`, { expected: String(index + 1), entry, rankingSemantics });
+      const selected = index < 2;
+      const expectedStatus = item.locale === 'es' ? (selected ? 'seleccionado' : 'fuera') : (selected ? 'selected' : 'outside');
+      const expectedStatusAria = item.locale === 'es' ? (selected ? 'dentro del top-k' : 'fuera del top-k') : (selected ? 'inside top-k' : 'outside top-k');
+      check(entry?.status === expectedStatus, `${ctx}: ${mode} ${doc} selection text disagrees with top-K membership`, { expectedStatus, entry });
+      check(entry?.statusAria === expectedStatusAria, `${ctx}: ${mode} ${doc} accessible selection label disagrees with top-K membership`, { expectedStatusAria, entry });
     }
 
     const poison0 = await root.locator('[data-doc="poison"]').boundingBox();
