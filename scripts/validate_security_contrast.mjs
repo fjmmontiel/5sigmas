@@ -43,6 +43,12 @@ function compositeRgb(foreground, background, alpha) {
   return foreground.map((value, index) => value * alpha + background[index] * (1 - alpha));
 }
 
+function isExpectedTeardownCancellation(event) {
+  return event?.type === 'requestfailed'
+    && event?.phase === 'teardown'
+    && String(event?.detail || '').includes('ERR_ABORTED');
+}
+
 function runSelfTest() {
   const fixtures = [
     { name: 'legacy amber badge must fail', fg: '#b87400', bg: '#f4ead9', pass: false },
@@ -75,11 +81,27 @@ function runSelfTest() {
     failures.push({ name: '20% ancestor opacity must not masquerade as readable text', ratio: fadedRatio });
   }
 
+  // Listener-lifetime regression fixtures: an abort is ignorable only when context teardown
+  // itself cancels an in-flight request. Interaction/navigation aborts and every other error
+  // remain fatal, so this gate cannot become a blanket ERR_ABORTED allow-list.
+  const runtimeFixtures = [
+    { name: 'interaction ERR_ABORTED must fail', event: { type: 'requestfailed', phase: 'interaction', detail: 'net::ERR_ABORTED' }, expected: false },
+    { name: 'teardown ERR_ABORTED may be classified as expected cancellation', event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' }, expected: true },
+    { name: 'teardown non-abort request failure must fail', event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' }, expected: false },
+    { name: 'teardown pageerror must fail', event: { type: 'pageerror', phase: 'teardown', detail: 'boom' }, expected: false },
+    { name: 'teardown console error must fail', event: { type: 'console', phase: 'teardown', detail: 'boom' }, expected: false },
+    { name: 'teardown HTTP error must fail', event: { type: 'http', phase: 'teardown', status: 500 }, expected: false },
+  ];
+  for (const fixture of runtimeFixtures) {
+    const actual = isExpectedTeardownCancellation(fixture.event);
+    if (actual !== fixture.expected) failures.push({ name: fixture.name, actual, expected: fixture.expected });
+  }
+
   if (failures.length) {
     console.error('Security contrast self-test FAILED', JSON.stringify(failures, null, 2));
     process.exit(1);
   }
-  console.log('Security contrast self-test PASS: palette mutations, translucent backgrounds, and ancestor-opacity regression are covered.');
+  console.log('Security contrast self-test PASS: palette, translucent backgrounds, ancestor opacity, and fail-closed listener-lifetime mutations are covered.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -257,18 +279,22 @@ try {
         });
         const page = await context.newPage();
         const runtime = [];
-        page.on('pageerror', error => runtime.push({ type: 'pageerror', detail: String(error) }));
+        let phase = 'navigation';
+        page.on('pageerror', error => runtime.push({ type: 'pageerror', phase, detail: String(error) }));
+        page.on('console', message => {
+          if (message.type() === 'error') runtime.push({ type: 'console', phase, detail: message.text() });
+        });
         page.on('requestfailed', request => {
-          const detail = request.failure()?.errorText || '';
-          if (!detail.includes('ERR_ABORTED')) runtime.push({ type: 'requestfailed', url: request.url(), detail });
+          runtime.push({ type: 'requestfailed', phase, url: request.url(), detail: request.failure()?.errorText || '' });
         });
         page.on('response', response => {
-          if (response.status() >= 400) runtime.push({ type: 'http', status: response.status(), url: response.url() });
+          if (response.status() >= 400) runtime.push({ type: 'http', phase, status: response.status(), url: response.url() });
         });
 
         const response = await page.goto(new URL(item.route, base).href, { waitUntil: 'networkidle', timeout: 20000 });
         if (!response?.ok()) failures.push({ context: label, reason: 'page-http', status: response?.status() });
         await page.evaluate(async () => { await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]); });
+        phase = 'interaction';
 
         if (item.kind === 'presentation') {
           await record(page, label, 'bounded', probes.presentation);
@@ -307,9 +333,18 @@ try {
         }
 
         await page.waitForTimeout(120);
-        if (runtime.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime });
-        contexts.push({ context: label, scenario: 'runtime-listeners', runtime });
+        phase = 'teardown';
         await context.close();
+        const runtimeFailures = runtime.filter(event => !isExpectedTeardownCancellation(event));
+        if (runtimeFailures.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime: runtimeFailures });
+        contexts.push({
+          context: label,
+          scenario: 'runtime-listeners',
+          verdictBasis: 'POST_CONTEXT_TEARDOWN',
+          runtime,
+          expectedTeardownCancellations: runtime.filter(isExpectedTeardownCancellation).length,
+          runtimeFailures,
+        });
       }
     }
   }
@@ -321,6 +356,7 @@ const report = {
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
   thresholds: { wcag_normal_text: AA_NORMAL, opaque_teaching_text_min: OPAQUE_TEXT_MIN },
+  runtime_verdict_basis: 'POST_CONTEXT_TEARDOWN_FAIL_CLOSED_EXCEPT_TEARDOWN_ERR_ABORTED',
   failures,
   contexts,
 };
@@ -330,4 +366,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security contrast/legibility gate PASS: ${contexts.length} state/context records; inspected teaching text is opaque and >= ${AA_NORMAL}:1.`);
+console.log(`Security contrast/legibility gate PASS: ${contexts.length} state/context records; inspected teaching text is opaque and >= ${AA_NORMAL}:1, with runtime/resource verdict computed after context teardown.`);
