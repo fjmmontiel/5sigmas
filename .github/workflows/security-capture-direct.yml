@@ -77,43 +77,77 @@ jobs:
           node scripts/capture_security_visuals.mjs
           test -s artifacts/visual-review/security/report.json
 
+      - name: Regenerate Prompt Injection state evidence without sticky-header occlusion
+        id: prompt_states
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          node scripts/validate_security_prompt_visual_states.mjs
+          test -s artifacts/security-requalification/prompt-states/report.json
+          test -s artifacts/security-requalification/prompt-states/es-mobile-normal-ctxmix-state-4.png
+          test -s artifacts/security-requalification/prompt-states/es-mobile-reduced-ctxmix-state-4.png
+          test -s artifacts/security-requalification/prompt-states/en-mobile-normal-ctxmix-state-4.png
+          test -s artifacts/security-requalification/prompt-states/en-mobile-reduced-ctxmix-state-4.png
+
       - name: Summarize direct execution without editorial certification
         if: always()
         env:
           CAPTURE_OUTCOME: ${{ steps.capture_visuals.outcome }}
+          PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
-          report_path = Path('artifacts/visual-review/security/report.json')
+          capture_path = Path('artifacts/visual-review/security/report.json')
+          prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
           summary = {
               'capture_outcome': os.environ.get('CAPTURE_OUTCOME', ''),
-              'report_present': report_path.exists(),
+              'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
+              'capture_report_present': capture_path.exists(),
+              'prompt_report_present': prompt_path.exists(),
               'golden': False,
-              'pixel_review': 'NOT_PERFORMED_BY_THIS_TECHNICAL_RUN',
-              'pedagogy_review': 'NOT_PERFORMED_BY_THIS_TECHNICAL_RUN',
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_RETAINED_CRITICAL_IMAGES',
+              'pedagogy_review': 'NOT_CERTIFIED_BY_THIS_TECHNICAL_RUN',
           }
-          if report_path.exists():
-              data = json.loads(report_path.read_text())
+          if capture_path.exists():
+              data = json.loads(capture_path.read_text())
               rows = data.get('report', [])
               failures = data.get('failures', [])
               summary.update({
-                  'contexts_observed': len(rows),
-                  'failure_count': len(failures),
-                  'failures': failures,
-                  'post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
-                  'runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+                  'capture_contexts_observed': len(rows),
+                  'capture_failure_count': len(failures),
+                  'capture_failures': failures,
+                  'capture_post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+                  'capture_runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+              })
+          if prompt_path.exists():
+              data = json.loads(prompt_path.read_text())
+              evidence = data.get('evidence', [])
+              failures = data.get('failures', [])
+              summary.update({
+                  'prompt_contexts_observed': len(evidence),
+                  'prompt_failure_count': len(failures),
+                  'prompt_failures': failures,
+                  'prompt_post_teardown_contexts': sum(1 for row in evidence if row.get('verdict_basis') == 'POST_CONTEXT_TEARDOWN'),
+                  'prompt_runtime_unexpected_total': sum(len(row.get('runtime_unexpected', [])) for row in evidence),
               })
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
-          raise SystemExit(0 if os.environ.get('CAPTURE_OUTCOME') == 'success' else 1)
+          ok = os.environ.get('CAPTURE_OUTCOME') == 'success' and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
+          raise SystemExit(0 if ok else 1)
           PY
 
-      - name: Retain minimal direct-capture evidence
+      - name: Retain bounded direct-capture evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-capture-direct-report
-          path: artifacts/visual-review/security/report.json
+          path: |
+            artifacts/visual-review/security/report.json
+            artifacts/security-requalification/prompt-states/report.json
+            artifacts/security-requalification/prompt-states/es-mobile-normal-ctxmix-state-4.png
+            artifacts/security-requalification/prompt-states/es-mobile-reduced-ctxmix-state-4.png
+            artifacts/security-requalification/prompt-states/en-mobile-normal-ctxmix-state-4.png
+            artifacts/security-requalification/prompt-states/en-mobile-reduced-ctxmix-state-4.png
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
