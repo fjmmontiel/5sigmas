@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 48,
+  "diagnostic_revision": 49,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "165b5c5f10120d97aca5a4061d640eaf64810aa6",
-  "reason": "Exact-QA the bundled Security specialized-gate listener repairs through validate_security_video_lifecycle.mjs. Contrast, text visibility and focused browser already remove blanket pre-teardown ERR_ABORTED suppression and compute verdicts after browser-context teardown. Revision 48 must additionally prove the lifecycle gate retains console/pageerror/requestfailed/HTTP listeners through teardown and accepts a seek-time media ERR_ABORTED only with request identity, successful 200/206 response evidence and a settled/error-free lifecycle; generic aborts and non-abort failures remain fail-closed. Site-facing bytes are unchanged. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "377731a886aca18619fa477a9aceca428b302743",
+  "reason": "Exact-QA the bundled Security 00/01 specialized runtime-listener repairs after source harmonization. Revision 49 must exercise focused browser, contrast/text visibility, lifecycle, article-watch touch, Prompt Injection visual states, keyboard/focus and the independent listener-lifetime sentinel with listeners retained through browser-context teardown and final verdicts computed from post-teardown evidence. Prompt visual states and keyboard/focus no longer blanket-ignore interaction ERR_ABORTED; only actual teardown cancellation is classified as expected where those gates do not perform an explicit seek lifecycle. Lifecycle keeps its request-correlated seek classifier. Site-facing bytes are unchanged. The broader capture_security_visuals.mjs listener repair is committed but is not part of this focused workflow and remains pending direct execution. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
