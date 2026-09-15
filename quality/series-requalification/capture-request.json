@@ -1,10 +1,10 @@
 {
-  "capture_revision": 52,
+  "capture_revision": 53,
   "scope": "security_visual_capture_and_prompt_state_evidence",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "176d8784f6b1b8b23d0347a212795c2422e20647",
+  "requested_head_parent": "422e125da188d789eadceed4351138dc87248afe",
   "site_facing_bytes_changed": false,
-  "reason": "Exact bounded rerun after two gate-only repairs discovered by revision 51: align the ctxmix localized-title assertion with the already-reviewed current ES/EN site copy, and prevent mobile state screenshots from being captured underneath fixed/sticky navigation. Directly execute capture_security_visuals and Prompt Injection state evidence on the same unchanged site-facing bytes. Retain only both JSON reports plus four critical mobile ctxmix state-4 images for real manual inspection. This run is technical evidence only and must not grant PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permission to advance beyond Security 00 + 1.1.",
+  "reason": "Exact bounded rerun after revision 52 proved capture_security_visuals PASS but exposed 34 false-positive sticky-header placement failures in normal-motion Prompt Injection evidence. The repair makes asset screenshots fit-aware, positions with synchronous scrolling rather than CSS smooth-scroll semantics, and hides only fixed/sticky site chrome inside isolated element screenshots; the actual asset motion/state remains normal or reduced as requested. Re-run both technical harnesses on unchanged site-facing bytes and retain only the two JSON reports plus four critical mobile ctxmix state-4 images. This run cannot grant PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permission to advance beyond Security 00 + 1.1.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
