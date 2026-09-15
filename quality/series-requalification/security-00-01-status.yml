@@ -9,6 +9,7 @@ scope:
 head_state:
   current_site_facing_head: c08826cc7e9226f72f27b40e587b8dd73a51b92f
   exact_qa_integration_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  pending_gate_hardening_head: c59a5e556bc7e802760b158240439406ea072dc1
   diagnostic_run: 34916286889
   diagnostic_revision: 36
   diagnostic_status: IN_PROGRESS_PENDING_EXACT_REVIEW
@@ -27,7 +28,7 @@ head_state:
 
 active_defect:
   code: RAG_VISUAL_ORDER_RANK_LABEL_ACCESSIBILITY_SEQUENCE_MISMATCH
-  status: REPAIRED_PENDING_EXACT_REVIEW
+  status: REPAIRED_PENDING_EXACT_REVIEW_AND_GATE_INTEGRATION
   affected_visual: rag-trigger-fragment
   original_finding: >-
     In the optimized-trigger scenario CSS reordered the poisoned document from its clean position below the
@@ -41,10 +42,15 @@ active_defect:
   es_repair_head: 5a483ccc85b8cf56a4d2e68c351cff6f2b426410
   en_repair_head: c08826cc7e9226f72f27b40e587b8dd73a51b92f
   exact_validation_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
-  deterministic_evidence: PENDING_RUN36
+  semantic_gate_hardening_head: c59a5e556bc7e802760b158240439406ea072dc1
+  deterministic_evidence: >-
+    Run 36 is exact validation of the repaired site-facing bytes. A follow-up gate hardening commit adds
+    explicit DOM sequence and rank-badge assertions that the pre-repair poisoned state would fail; that gate
+    commit is intentionally not represented as validated by run 36 and requires the next integration hito.
   regression_scope: >-
-    Changes are confined to the Security 1.1 RAG snippet in ES and EN. Datacenters and all pre-Datacenters
-    reference-series files are untouched by this repair.
+    Site-facing changes are confined to the Security 1.1 RAG snippet in ES and EN; gate hardening is confined
+    to the focused Prompt Injection visual-state validator. Datacenters and all pre-Datacenters reference-series
+    files are untouched by this repair.
 
 last_completed_manual_review:
   content_head: 9b2232a92bd6893e19b4e33847c711d20139615a
@@ -94,6 +100,8 @@ current_technical_gates:
   media_pass: false
   pixel_review: PENDING_EXACT_RUN36_MANUAL
   pedagogy_review: PENDING_EXACT_RUN36_MANUAL
+  semantic_rank_dom_order_gate_source_head: c59a5e556bc7e802760b158240439406ea072dc1
+  semantic_rank_dom_order_gate_exact_validation: PENDING_NEXT_INTEGRATION
   article_golden: false
 
 media:
@@ -145,7 +153,8 @@ sources_and_locale:
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_relation_at_run36_request: AHEAD_159_BEHIND_0
+  branch_relation_after_gate_hardening: AHEAD_161_BEHIND_0
+  branch_head_after_gate_hardening: c59a5e556bc7e802760b158240439406ea072dc1
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
   actions_started_for_revision_36: 1
@@ -168,12 +177,13 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_action: >-
-    Finish run 36, inspect the retained exact-head artifact and manually verify clean/optimized RAG ranking
-    sequence, rank numerals, top-K membership and readable DOM/visual semantics across ES/EN, desktop/mobile
-    and normal/reduced motion. Do not restore current PIXEL_REVIEW or PEDAGOGY_REVIEW from run 35 by inheritance.
+    Finish run 36 and manually inspect its retained exact-content artifact for clean/optimized RAG sequence,
+    rank numerals, top-K membership and layout across ES/EN, desktop/mobile and normal/reduced motion. Then
+    integrate the c59a5e5 semantic rank/DOM-order assertions in the next exact QA hito; do not inherit run-35
+    PIXEL_REVIEW or PEDAGOGY_REVIEW onto the repaired bytes.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until the current RAG repair is exactly requalified, audio/captions/transcript/
-    curated key moments are complete, and the full conjunctive article gate is rerun on one stable exact
-    revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until the current RAG repair and its deterministic semantic gate are exactly
+    requalified, audio/captions/transcript/curated key moments are complete, and the full conjunctive article
+    gate is rerun on one stable exact revision with zero known P0/P1/P2.
