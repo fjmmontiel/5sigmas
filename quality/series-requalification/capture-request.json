@@ -1,10 +1,10 @@
 {
-  "capture_revision": 51,
-  "scope": "security_visual_capture_direct_execution",
+  "capture_revision": 52,
+  "scope": "security_visual_capture_and_prompt_state_evidence",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "c3357f955d87964737586de598fa76ed3fed45ec",
+  "requested_head_parent": "176d8784f6b1b8b23d0347a212795c2422e20647",
   "site_facing_bytes_changed": false,
-  "reason": "Directly execute the repaired capture_security_visuals harness on the current unchanged Security site-facing bytes. This is a technical runtime/listener closure only: retain listeners through context teardown, fail on interaction/runtime errors, generate normal/reduced desktop/mobile evidence, and do not reinterpret the run as PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permission to advance beyond Security 00 + 1.1. Upload only the JSON report to close the open P2 artifact-cost defect for focused technical iterations.",
+  "reason": "Exact bounded rerun after two gate-only repairs discovered by revision 51: align the ctxmix localized-title assertion with the already-reviewed current ES/EN site copy, and prevent mobile state screenshots from being captured underneath fixed/sticky navigation. Directly execute capture_security_visuals and Prompt Injection state evidence on the same unchanged site-facing bytes. Retain only both JSON reports plus four critical mobile ctxmix state-4 images for real manual inspection. This run is technical evidence only and must not grant PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN, or permission to advance beyond Security 00 + 1.1.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
