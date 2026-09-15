@@ -104,18 +104,42 @@ async function activate(locator, mobile) {
 
 async function capture(locator, file) {
   await locator.scrollIntoViewIfNeeded();
-  const placement = await locator.evaluate(node => {
+  const placement = await locator.evaluate(async node => {
     const occluders = [...document.querySelectorAll('.md-header,.md-tabs,[data-md-component="header"]')]
       .map(el => ({ style: getComputedStyle(el), rect: el.getBoundingClientRect() }))
       .filter(({ style, rect }) => ['fixed', 'sticky'].includes(style.position) && rect.height > 0 && rect.bottom > 0 && rect.top <= 8);
     const safeTop = Math.max(0, ...occluders.map(({ rect }) => rect.bottom)) + 12;
     const before = node.getBoundingClientRect();
-    if (before.top < safeTop) window.scrollBy(0, before.top - safeTop);
+    const requestedScrollY = Math.max(0, window.scrollY + before.top - safeTop);
+    if (before.top < safeTop) {
+      const scrollingElement = document.scrollingElement || document.documentElement;
+      scrollingElement.scrollTop = requestedScrollY;
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    }
     const after = node.getBoundingClientRect();
-    return { top: after.top, bottom: after.bottom, safeTop, viewportHeight: innerHeight };
+    const availableHeight = Math.max(0, innerHeight - safeTop);
+    return {
+      top: after.top,
+      bottom: after.bottom,
+      height: after.height,
+      safeTop,
+      viewportHeight: innerHeight,
+      availableHeight,
+      canFitBelowStickyChrome: after.height <= availableHeight + 1,
+      requestedScrollY,
+      actualScrollY: window.scrollY,
+    };
   });
-  check(placement.top >= placement.safeTop - 1, `${file}: screenshot target remains occluded by sticky navigation`, placement);
-  await locator.screenshot({ path: path.join(out, file), animations: 'allow' });
+  check(
+    !placement.canFitBelowStickyChrome || placement.top >= placement.safeTop - 1,
+    `${file}: screenshot target that fits the viewport remains occluded by sticky navigation`,
+    placement,
+  );
+  await locator.screenshot({
+    path: path.join(out, file),
+    animations: 'allow',
+    style: '.md-header,.md-tabs,[data-md-component="header"] { visibility: hidden !important; }',
+  });
 }
 
 async function assertReducedMotion(root, ctx) {
