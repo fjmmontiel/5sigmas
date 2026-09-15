@@ -28,6 +28,65 @@ function fail(message, detail = null) {
   failures.push({ message, detail });
 }
 
+function isExpectedTeardownCancellation(event) {
+  return event.type === 'requestfailed'
+    && event.phase === 'teardown'
+    && String(event.detail || '').includes('ERR_ABORTED');
+}
+
+function classifyRuntime(events) {
+  return {
+    unexpected: events.filter(event => !isExpectedTeardownCancellation(event)),
+    expectedTeardownCancellations: events.filter(isExpectedTeardownCancellation),
+  };
+}
+
+function runRuntimeMutationSelfTest() {
+  const cases = [
+    {
+      name: 'teardown ERR_ABORTED is expected context cancellation',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' },
+      expected: true,
+    },
+    {
+      name: 'poster interaction ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'poster-play', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'keyboard mechanism ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'mechanism-keyboard', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'teardown non-abort request failure remains fatal',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' },
+      expected: false,
+    },
+    {
+      name: 'teardown pageerror remains fatal',
+      event: { type: 'pageerror', phase: 'teardown', detail: 'late exception' },
+      expected: false,
+    },
+    {
+      name: 'teardown console error remains fatal',
+      event: { type: 'console', phase: 'teardown', detail: 'late console error' },
+      expected: false,
+    },
+    {
+      name: 'teardown HTTP failure remains fatal',
+      event: { type: 'http', phase: 'teardown', status: 500, url: 'https://example.invalid/fail' },
+      expected: false,
+    },
+  ];
+  const broken = cases.filter(item => isExpectedTeardownCancellation(item.event) !== item.expected);
+  if (broken.length) {
+    throw new Error(`Keyboard/focus runtime classification mutation self-test failed: ${broken.map(item => item.name).join(', ')}`);
+  }
+}
+
+runRuntimeMutationSelfTest();
+
 async function launchBrowser() {
   try {
     return { browser: await chromium.launch({ channel: 'chrome', headless: true }), engine: 'google-chrome' };
@@ -111,23 +170,49 @@ try {
       });
       const page = await context.newPage();
       const runtime = [];
-      page.on('pageerror', error => runtime.push(`pageerror: ${error.message}`));
+      let phase = 'navigation';
+      let seq = 0;
+      let nextRequestId = 1;
+      const requestIds = new WeakMap();
+      const requestId = request => {
+        if (!requestIds.has(request)) requestIds.set(request, nextRequestId++);
+        return requestIds.get(request);
+      };
+      const pushRuntime = event => runtime.push({ seq: ++seq, phase, ...event });
+
+      page.on('pageerror', error => pushRuntime({ type: 'pageerror', detail: String(error) }));
       page.on('console', message => {
-        if (message.type() === 'error') runtime.push(`console: ${message.text()}`);
+        if (message.type() === 'error') pushRuntime({ type: 'console', detail: message.text() });
       });
       page.on('response', response => {
-        if (response.status() >= 400) runtime.push(`http ${response.status()}: ${response.url()}`);
+        if (response.status() >= 400) {
+          const request = response.request();
+          pushRuntime({
+            type: 'http',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            status: response.status(),
+            url: response.url(),
+          });
+        }
       });
       page.on('requestfailed', request => {
-        const reason = request.failure()?.errorText || 'unknown';
-        if (!reason.includes('ERR_ABORTED')) runtime.push(`requestfailed: ${request.url()} (${reason})`);
+        pushRuntime({
+          type: 'requestfailed',
+          requestId: requestId(request),
+          resourceType: request.resourceType(),
+          url: request.url(),
+          detail: request.failure()?.errorText || 'unknown',
+        });
       });
 
+      phase = 'navigation';
       const response = await page.goto(new URL(item.route, base).href, {
         waitUntil: 'domcontentloaded',
         timeout: 20_000,
       });
       if (!response?.ok()) fail(`${ctx}: page HTTP failed`, { status: response?.status() });
+      phase = 'font-settle';
       await page.evaluate(async () => {
         await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]);
       });
@@ -142,6 +227,7 @@ try {
         focus: [],
       };
 
+      phase = 'poster-play';
       const poster = page.locator('article [data-s5-inline-video-start]').first();
       const posterFocus = await keyboardActivate(page, poster, ctx, 'video poster/play control');
       if (posterFocus) {
@@ -154,10 +240,12 @@ try {
         }
       }
 
+      phase = 'article-watch-focus';
       const watch = page.locator('article .s5-video-embed__watch a').first();
       const watchFocus = await tabTo(page, watch, ctx, 'article-to-watch link');
       if (watchFocus) record.focus.push(watchFocus);
 
+      phase = 'mechanism-keyboard';
       if (item.kind === 'presentation') {
         const root = page.locator('.secpath').first();
         const unbounded = root.locator('[data-mode-btn="unbounded"]');
@@ -196,10 +284,23 @@ try {
         }
       }
 
-      if (runtime.length) fail(`${ctx}: persistent runtime/resource errors`, runtime);
-      record.runtime = runtime;
+      phase = 'settle';
+      await page.waitForTimeout(150);
+      phase = 'teardown';
+      try {
+        await context.close();
+      } catch (error) {
+        pushRuntime({ type: 'context-close', detail: String(error) });
+      }
+
+      const finalRuntime = runtime.map(event => ({ ...event }));
+      const runtimeVerdict = classifyRuntime(finalRuntime);
+      if (runtimeVerdict.unexpected.length) fail(`${ctx}: persistent runtime/resource errors`, runtimeVerdict.unexpected);
+      record.runtime = finalRuntime;
+      record.runtime_unexpected = runtimeVerdict.unexpected;
+      record.expected_teardown_cancellations = runtimeVerdict.expectedTeardownCancellations;
+      record.verdict_basis = 'POST_CONTEXT_TEARDOWN';
       evidence.push(record);
-      await context.close();
     }
   }
 } finally {
