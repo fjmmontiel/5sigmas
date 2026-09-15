@@ -12,8 +12,8 @@ head_state:
   pending_gate_hardening_head: d5bf731a10e467b5a492ba46720635575dcc80a1
   diagnostic_run: 34916286889
   diagnostic_revision: 36
-  diagnostic_status: IN_PROGRESS_SUPERSEDED_FOR_CURRENT_CONTENT
-  evidence_artifact_id: null
+  diagnostic_status: COMPLETED_FAILURE_EXPECTED_SUPERSEDED_FOR_CURRENT_CONTENT
+  evidence_artifact_id: 10376782066
   content_changed_since_previous_manual_review: true
   site_facing_change_class: RAG_RANK_AND_SELECTION_ACCESSIBILITY_REPAIR
   visible_copy_changed: true
@@ -82,9 +82,11 @@ latest_exact_run:
   diagnostic_run: 34916286889
   exact_qa_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
   content_head_included: c08826cc7e9226f72f27b40e587b8dd73a51b92f
-  status: IN_PROGRESS
+  status: COMPLETED_FAILURE_EXPECTED
+  artifact_id: 10376782066
+  artifact_expires_at: 2026-09-16T01:19:09Z
   current_content_supersedes_it: true
-  technical_steps_observed_complete_so_far:
+  technical_steps_completed_success:
     - negative_regression_fixtures
     - publication_discovery
     - source_audit_execution
@@ -97,7 +99,29 @@ latest_exact_run:
     - rendered_audit_execution
     - focused_browser_interaction_layout_playback
     - wcag_contrast_and_state_text_visibility
+    - video_lifecycle_keyboard_touch_normal_reduced
+    - real_touch_article_watch
+    - prompt_injection_visual_state_evidence
+    - real_keyboard_traversal_visible_focus
+    - bounded_failed_diagnostic_evidence_retention
+  final_enforcement: FAIL_CLOSED_EXPECTED
   do_not_infer: [CURRENT_PIXEL_PASS, CURRENT_PEDAGOGY_PASS, ARTICLE_GOLDEN]
+
+historical_run36_manual_inspection:
+  exact_qa_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  artifact_id: 10376782066
+  reviewer_independence: SAME_AGENT_NOT_INDEPENDENT
+  inspected_rag_step0_matrix: ES_EN_x_DESKTOP_MOBILE_x_NORMAL_REDUCED_x_CLEAN_POISONED
+  observed_first_stage_result: >-
+    The retained run-36 RAG screenshots showed coherent visible first-stage ranking after the rank/DOM-order
+    repair: clean rendered runbook 1 and tickets 2 above the cut, while poisoned rendered poisoned email 1 and
+    runbook 2 above the cut, with ranks 3 and 4 below it. Representative desktop and mobile captures were also
+    inspected directly for clipping and readable composition.
+  current_pixel_pass: false
+  current_pedagogy_pass: false
+  superseded_reason: >-
+    Current site-facing bytes add selected/outside accessibility semantics after run 36, so this real inspection
+    is historical evidence only and cannot certify the current revision.
 
 current_technical_gates:
   current_site_facing_head: c74784f2f17c625bb9bb622395d836552a747273
@@ -159,7 +183,7 @@ sources_and_locale:
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_relation_before_this_manifest: AHEAD_165_BEHIND_0
+  branch_relation_before_final_manifest_reconcile: AHEAD_166_BEHIND_0
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
   actions_started_for_revision_36: 1
@@ -175,7 +199,7 @@ concurrency_and_release:
   release_contract_281_preserved: true
 
 history:
-  previous_durable_checkpoint_comment: 5673181073
+  durable_checkpoint_comment: 5673181073
   run35_manifest_head: 2f519b996c97aa8c70b4deac95919abe51547a3b
   historical_receipts_preserved_in_git_and_issue_305: true
 
