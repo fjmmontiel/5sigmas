@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 scope: seguridad-ia/00+01
 status: REQUALIFICATION_QA_CHANGES_REQUIRED
 article_golden: false
@@ -64,16 +64,32 @@ artifact_root_cause_evidence:
     explicit media-seek. The seek nevertheless settles exactly at the requested target with readyState=4 and
     networkState=1. Playwright response fires on successful response headers and requestfailed can later fire if that
     request body is cancelled, so URL-only "later response" correlation is not a valid request-lifecycle proof for this
-    observed pattern. The harness currently does not retain request identity, so it cannot yet prove that the preceding
-    206 and the later ERR_ABORTED belong to the same Request object. No whitelist is granted from this evidence alone.
+    observed pattern. The revision-46 harness did not retain request identity, so it could not prove that the preceding
+    206 and later ERR_ABORTED belonged to the same Request object. No whitelist is granted from revision-46 evidence alone.
 
-required_repair_before_next_exact_qa:
-  - assign a stable request_id to each Playwright Request and retain it in response and requestfailed evidence
-  - accept a media-seek ERR_ABORTED only when it is same-source and either the same request already produced 200/206 headers before cancellation or a later same-source 200/206 supersedes it
-  - additionally require the explicit seek to settle near target, media.error to remain null, readyState >= 2 and post-seek playback to advance
-  - add negative mutations for unrelated prior response, wrong request_id, wrong source, unsettled seek, media error, no post-seek playback, no response proof and non-ERR_ABORTED failures
-  - only after this sentinel passes exact QA, harmonize specialized Security gates that still blanket-ignore ERR_ABORTED or compute verdicts before context teardown
-  - do not change site content or advance to 02-jailbreaks while Security 00+01 remains uncertified
+candidate_gate_repair:
+  commit: 88cc6c2bc898fe11514d7efc57ce5eaa8a241e4d
+  status: IMPLEMENTED_PENDING_EXACT_QA
+  site_facing_bytes_changed: false
+  changes:
+    - assign stable request_id values to Playwright Request objects and retain them in media response and requestfailed evidence
+    - classify a media-seek ERR_ABORTED as expected only when same-source and either the same failed request already produced 200/206 headers or a later same-source 200/206 response supersedes it
+    - require settled seek near the requested target, readyState >= 2, non-NETWORK_NO_SOURCE state, media.error=null and advancing post-seek playback
+    - add deterministic negative mutations for generic abort, unrelated prior response/request_id, no response proof, wrong source, unsettled seek, failed post-seek playback, media error and non-ERR_ABORTED failure
+    - retain verdict computation after context teardown
+  verification_this_checkpoint:
+    syntax_check: PASS_LOCAL_NODE_CHECK
+    self_test_runtime_execution: NOT_RUN_LOCAL_PLAYWRIGHT_PACKAGE_UNAVAILABLE
+    exact_qa: PENDING_NEXT_MEANINGFUL_CI_HIT
+  note: >-
+    The candidate changes are intentionally not represented as PASS until one exact workflow run observes real request IDs,
+    seek/post-seek state and final post-teardown runtime arrays. No second Action was launched in this checkpoint.
+
+next_after_candidate_exact_pass:
+  - harmonize specialized Security gates that still blanket-ignore ERR_ABORTED or compute verdicts before context teardown
+  - add equivalent negative mutations before relying on those specialized gates
+  - preserve all global SOURCE/RENDERED/MEDIA failures fail-closed
+  - remain on Security 00+01 until all blockers including authorized narration/captions/transcript/key moments are closed
 
 technical_active_set:
   negative_regression_fixtures: PASS
@@ -92,7 +108,7 @@ technical_active_set:
   real_touch_article_watch: PASS
   prompt_visual_states: PASS
   real_keyboard_focus: PASS
-  runtime_listener_lifetime: FAIL_8_ES_MEDIA_SEEK_ABORTS_NOT_YET_REQUEST_CORRELATED
+  runtime_listener_lifetime: FAIL_REVISION_46_CANDIDATE_REPAIR_PENDING_EXACT_QA
   global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
   conjunctive_enforcement: FAIL_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_PLUS_RUNTIME_P1
 
