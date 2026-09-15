@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 42,
+  "diagnostic_revision": 43,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "4640d4e6798f6efb0acc606d84113a6563269feb",
-  "reason": "Manual pixel/pedagogy inspection of revision 41 found one remaining P1 sequencing leak in Security 1.1 ctxmix: the runtime authorization-result badges (scope/destination/permission failures) were already visible before state 4, even though state 4 is the step that performs those checks and denies the effect. ES/EN now keep the runtime boundary visible as orientation but structurally hide authorization check results until state 4. The text-visibility semantic contract and mutation fixtures now cover context at state 2, proposal at state 3, and both authorization check results plus verdict at state 4. Re-run the focused exact conjunction and retain current pixels. Global SOURCE/RENDERED and MEDIA remain fail-closed; no ARTICLE_GOLDEN is allowed.",
+  "requested_head_parent": "8cd63ee5c6cc7f073b27879735227758439db382",
+  "reason": "Integrate two fail-closed evidence/gate repairs discovered while reviewing revision 42: (1) retain ctxmix state 2 pixels, so all semantic states 1/2/3/4 are durably available for real ES/EN desktop/mobile normal/reduced pixel and pedagogy inspection; (2) require all three localized runtime authorization-result labels at state 4 (ES scope/destino/permiso; EN scope/destination/permission) with negative mutations for missing labels. Site-facing bytes are unchanged from b44a3e9d. Run one focused exact integration, retain bounded evidence, and keep global SOURCE/RENDERED and MEDIA fail-closed. No ARTICLE_GOLDEN is allowed.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
