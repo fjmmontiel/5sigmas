@@ -1,4 +1,4 @@
-schema_version: 5
+schema_version: 6
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -7,46 +7,46 @@ scope:
   article_golden: false
 
 head_state:
-  current_site_facing_head: 9b2232a92bd6893e19b4e33847c711d20139615a
-  exact_qa_integration_head: 1d38065785438489e648e17b71cdd520a059d59d
-  diagnostic_run: 34913404049
-  diagnostic_revision: 35
-  diagnostic_status: COMPLETE_EXPECTED_FAIL_CLOSED
-  evidence_artifact_id: 10375692414
-  content_changed_since_previous_manual_review: false
-  site_facing_change_class: RESIDUAL_RUNTIME_TEXT_VISIBILITY_REPAIR
-  visible_copy_changed: false
+  current_site_facing_head: c08826cc7e9226f72f27b40e587b8dd73a51b92f
+  exact_qa_integration_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  diagnostic_run: 34916286889
+  diagnostic_revision: 36
+  diagnostic_status: IN_PROGRESS_PENDING_EXACT_REVIEW
+  evidence_artifact_id: null
+  content_changed_since_previous_manual_review: true
+  site_facing_change_class: RAG_RETRIEVAL_ORDER_SEMANTICS_REPAIR
+  visible_copy_changed: true
+  visible_copy_change_scope: STATE_DEPENDENT_RANK_NUMERALS_ONLY
   factual_claims_changed: false
   teaching_model_changed: false
   media_changed: false
-  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_content_pixel_review: PENDING_EXACT_RUN36_MANUAL
+  current_content_pedagogy_review: PENDING_EXACT_RUN36_MANUAL
   independent_editorial_review: false
   article_golden: false
 
-closed_defect:
-  code: TEXT_BEARING_GROUP_OPACITY_NOT_COVERED_BY_CONTRAST_GATE
-  status: CLOSED_RUN35
-  affected_visual: control-vs-data
+active_defect:
+  code: RAG_VISUAL_ORDER_RANK_LABEL_ACCESSIBILITY_SEQUENCE_MISMATCH
+  status: REPAIRED_PENDING_EXACT_REVIEW
+  affected_visual: rag-trigger-fragment
   original_finding: >-
-    Intermediate states could leave explanatory runtime text materially faded because ancestor/group opacity
-    was not represented by the original foreground/background contrast calculation. Revision 34 exposed the
-    remaining .ctxmix__runtime small case in 32 browser contexts.
+    In the optimized-trigger scenario CSS reordered the poisoned document from its clean position below the
+    top-K cut to the first visible row, but the hard-coded visible badge still said rank 4. The other rows
+    retained their clean rank badges as well. CSS visual order also diverged from DOM/accessibility reading
+    order, so the same state presented incompatible retrieval sequences to sighted and non-visual readers.
   repair: >-
-    The stateful Security visual now forces .ctxmix__runtime small to full opacity together with the other
-    explanatory containers. State progression is communicated structurally rather than by dimming readable
-    explanatory text.
-  repair_head: 9b2232a92bd6893e19b4e33847c711d20139615a
-  exact_validation_head: 1d38065785438489e648e17b71cdd520a059d59d
-  deterministic_evidence:
-    - Security text-visibility mutation fixtures PASS; ancestor opacity is part of the rendered-text contract
-    - 8 ES/EN desktop/mobile normal/reduced contexts x 4 states PASS with no explanatory text dimmed through ancestor opacity
-    - WCAG contrast PASS in 16 active-set contexts at the existing 4.5:1 threshold
+    ES and EN now use one per-mode order model. render() calls syncRanking(), which physically reorders the
+    document rows and top-K cut in the DOM and derives each visible rank badge from that same order. Visual
+    sequence, DOM/accessibility sequence, cut membership and rank numerals therefore share one state source.
+  es_repair_head: 5a483ccc85b8cf56a4d2e68c351cff6f2b426410
+  en_repair_head: c08826cc7e9226f72f27b40e587b8dd73a51b92f
+  exact_validation_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  deterministic_evidence: PENDING_RUN36
   regression_scope: >-
-    The CSS override is restricted to .ctxmix[data-state]. No Datacenters/pre-Datacenters target selector was
-    changed by this repair.
+    Changes are confined to the Security 1.1 RAG snippet in ES and EN. Datacenters and all pre-Datacenters
+    reference-series files are untouched by this repair.
 
-manual_exact_review:
+last_completed_manual_review:
   content_head: 9b2232a92bd6893e19b4e33847c711d20139615a
   exact_qa_integration_head: 1d38065785438489e648e17b71cdd520a059d59d
   diagnostic_run: 34913404049
@@ -60,31 +60,15 @@ manual_exact_review:
     ragtrace: 48
     defsim: 40
   pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  pixel_findings: >-
-    Exact run-35 full-page and focused captures were visually reviewed. No clipping, global horizontal
-    overflow, accidental locale leakage, unreadable labels, broken composition or residual runtime-text
-    fading was found in the active set. Desktop and mobile preserve the principal relationship, and normal
-    versus reduced motion preserves the same final semantic state.
-  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
-  pedagogy_findings: >-
-    The control-vs-data visual changes observable geometry/state and ends at an explicit runtime authorization
-    boundary; the RAG visual changes selected retrieval context and downstream proposal under clean versus
-    poisoned conditions; the defense-in-depth visual changes the first effective boundary and whether an
-    external effect survives. These are mechanism/outcome changes rather than label- or color-only toggles.
-  limitation: >-
-    This is a same-agent editorial inspection and must not be represented as independent review or as
-    ARTICLE_GOLDEN. Multimedia and catalogue-wide source/rendered debt remain fail-closed.
-
-previous_exact_review:
-  content_head: f36e04bb5b1c6462863828bb13d676a1aa4b6dcf
-  exact_qa_integration_head: 2e1ed72c2cf6214e7a8b0ad9265314fb759e9889
-  diagnostic_run: 34900424729
-  evidence_artifact_id: 10371260583
-  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
   pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   superseded_for_current_pixels: true
+  superseded_reason: >-
+    Run 35 predates the RAG rank/DOM-order repair. Its review remains historical evidence for the prior bytes
+    and cannot certify current pixels or pedagogy until run 36 is completed and manually inspected.
 
-technical_gates:
+last_completed_technical_gates:
+  diagnostic_run: 34913404049
+  exact_qa_integration_head: 1d38065785438489e648e17b71cdd520a059d59d
   negative_regression_fixtures: PASS_RUN35
   publication_discovery: PASS_RUN35
   strict_es_build: PASS_RUN35
@@ -100,12 +84,16 @@ technical_gates:
   prompt_visual_states: PASS_TECHNICAL_RUN35
   real_keyboard_focus: PASS_RUN35
   final_enforcement: FAIL_CLOSED_EXPECTED
-  global_browser_sweep: NOT_REQUESTED_FOCUSED_ITERATION
+
+current_technical_gates:
+  diagnostic_run: 34916286889
+  exact_qa_integration_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  status: PENDING_RUN36_COMPLETION
   source_pass: false
   rendered_pass: false
   media_pass: false
-  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  pixel_review: PENDING_EXACT_RUN36_MANUAL
+  pedagogy_review: PENDING_EXACT_RUN36_MANUAL
   article_golden: false
 
 media:
@@ -118,7 +106,7 @@ media:
     VIDEO_CAPTIONS_MISSING: 4
     VIDEO_TRANSCRIPT_MISSING: 4
     VIDEO_CHAPTERS_MISSING: 4
-  locale_identity: PASS_RUN35_DISTINCT_ES_EN_MEDIA
+  locale_identity: LAST_COMPLETED_PASS_RUN35_DISTINCT_ES_EN_MEDIA
   es:
     00_presentacion_serie: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.300, audio_stream: false}
     01-prompt-injection: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.333, audio_stream: false}
@@ -144,25 +132,24 @@ catalogue_requalification:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
   note: >-
-    Revision 35 remains deliberately focused on Security 00/1.1. Global findings remain fail-closed and are
-    not converted into PASS by focused checks.
+    Run 36 is deliberately focused on Security 00/1.1. Global findings remain fail-closed and are not
+    converted into PASS by focused checks.
 
 sources_and_locale:
   material_claims_changed_in_this_repair: false
-  primary_source_research_required_by_this_pixel_change: false
-  structured_provenance_gate: PASS_RUN35
-  locale_mirror_active_set: PASS_RUN35
+  primary_source_research_required_by_this_repair: false
+  es_en_repair_mirrored: true
   note: >-
-    The repair only changes state visibility CSS. Claims, figures, units, formulas, references and examples
-    are unchanged, so no new factual source claim is being certified by this revision.
+    This repair corrects the representation of the already-stated illustrative retrieval order. No factual
+    claim, benchmark value, unit, formula, reference, caveat or example premise changed.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_relation_at_run35: AHEAD_155_BEHIND_0
-  draft_pr_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  branch_relation_at_run36_request: AHEAD_159_BEHIND_0
+  draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_for_revision_35: 1
-  action_reason: residual state-text visibility repair plus exact browser regression gate
+  actions_started_for_revision_36: 1
+  action_reason: RAG ranking semantics and accessibility-order repair exact requalification
   artifact_policy: FAILURE_ONLY_ONE_DAY_BOUNDED
   pr_created: false
   merged: false
@@ -172,7 +159,8 @@ concurrency_and_release:
   release_contract_281_preserved: true
 
 history:
-  previous_durable_checkpoint_comment: 5671572506
+  previous_durable_checkpoint_comment: 5672969810
+  run35_manifest_head: 2f519b996c97aa8c70b4deac95919abe51547a3b
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
@@ -180,11 +168,12 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_action: >-
-    Keep the active set fixed. The residual text-visibility defect is closed on exact run-35 evidence and the
-    current pixels/pedagogy are same-agent reviewed. Continue only deterministic repairs independent of the
-    external narration input; do not consume CI merely because another hourly checkpoint occurs.
+    Finish run 36, inspect the retained exact-head artifact and manually verify clean/optimized RAG ranking
+    sequence, rank numerals, top-K membership and readable DOM/visual semantics across ES/EN, desktop/mobile
+    and normal/reduced motion. Do not restore current PIXEL_REVIEW or PEDAGOGY_REVIEW from run 35 by inheritance.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until audio, captions, transcript and curated key moments are complete and
-    the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until the current RAG repair is exactly requalified, audio/captions/transcript/
+    curated key moments are complete, and the full conjunctive article gate is rerun on one stable exact
+    revision with zero known P0/P1/P2.
