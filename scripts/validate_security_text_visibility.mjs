@@ -1,5 +1,8 @@
 #!/usr/bin/env node
-/** Fail closed when explanatory Security 1.1 text is dimmed through ancestor opacity. */
+/**
+ * Fail closed when visible explanatory Security 1.1 text is dimmed through
+ * ancestor opacity or when ctxmix reveals a later mechanism state early.
+ */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
@@ -10,6 +13,21 @@ function cumulativeOpacity(values) {
   return values.reduce((value, opacity) => value * opacity, 1);
 }
 
+function expectedCtxmixVisibility(state) {
+  return {
+    context: state >= 2,
+    proposal: state >= 3,
+    verdict: state >= 4,
+  };
+}
+
+function stagingFailures(state, observed) {
+  const expected = expectedCtxmixVisibility(state);
+  return Object.entries(expected)
+    .filter(([key, value]) => observed[key] !== value)
+    .map(([key, value]) => ({ key, expected: value, actual: observed[key] }));
+}
+
 function runSelfTest() {
   const visible = cumulativeOpacity([1, 1, 1]);
   const legacyDimmed = cumulativeOpacity([1, 0.2, 1]);
@@ -17,7 +35,24 @@ function runSelfTest() {
   if (visible < MIN_EFFECTIVE_OPACITY || legacyDimmed >= MIN_EFFECTIVE_OPACITY || nestedDimmed >= MIN_EFFECTIVE_OPACITY) {
     throw new Error(`opacity mutation fixture failed: visible=${visible}, legacy=${legacyDimmed}, nested=${nestedDimmed}`);
   }
-  console.log('Security text-visibility mutation fixtures PASS: ancestor opacity is part of the rendered-text contract.');
+
+  for (const state of [1, 2, 3, 4]) {
+    const expected = expectedCtxmixVisibility(state);
+    if (stagingFailures(state, expected).length) throw new Error(`valid staging rejected at state ${state}`);
+  }
+  const mutations = [
+    { state: 1, observed: { context: true, proposal: false, verdict: false } },
+    { state: 1, observed: { context: false, proposal: true, verdict: false } },
+    { state: 2, observed: { context: true, proposal: true, verdict: false } },
+    { state: 3, observed: { context: true, proposal: true, verdict: true } },
+    { state: 4, observed: { context: true, proposal: false, verdict: true } },
+  ];
+  for (const fixture of mutations) {
+    if (!stagingFailures(fixture.state, fixture.observed).length) {
+      throw new Error(`ctxmix staging mutation escaped at state ${fixture.state}: ${JSON.stringify(fixture.observed)}`);
+    }
+  }
+  console.log('Security text-visibility mutation fixtures PASS: visible text opacity and ctxmix semantic staging are enforced.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -72,6 +107,9 @@ try {
         const page = await context.newPage();
         const runtime = [];
         page.on('pageerror', error => runtime.push({ type: 'pageerror', detail: String(error) }));
+        page.on('console', message => {
+          if (message.type() === 'error') runtime.push({ type: 'console', detail: message.text() });
+        });
         page.on('requestfailed', request => {
           const detail = request.failure()?.errorText || '';
           if (!detail.includes('ERR_ABORTED')) runtime.push({ type: 'requestfailed', url: request.url(), detail });
@@ -99,9 +137,10 @@ try {
 
           const stateResult = await page.evaluate(({ selectors, threshold, expectedState }) => {
             const root = document.querySelector('.ctxmix[data-state]');
-            if (!root) return { missingRoot: true, expectedState, actualState: null, probes: [], verdict: null };
+            if (!root) return { missingRoot: true, expectedState, actualState: null, probes: [], semanticVisibility: null };
 
             const inspect = node => {
+              if (!node) return null;
               const chain = [];
               let current = node;
               let effectiveOpacity = 1;
@@ -110,12 +149,7 @@ try {
                 const style = getComputedStyle(current);
                 const opacity = Number.parseFloat(style.opacity || '1');
                 effectiveOpacity *= Number.isFinite(opacity) ? opacity : 1;
-                chain.push({
-                  node: current.className || current.tagName,
-                  opacity,
-                  display: style.display,
-                  visibility: style.visibility,
-                });
+                chain.push({ node: current.className || current.tagName, opacity, display: style.display, visibility: style.visibility });
                 if (style.display === 'none' || style.visibility === 'hidden' || style.visibility === 'collapse') visible = false;
                 if (current === root) break;
                 current = current.parentElement;
@@ -127,7 +161,7 @@ try {
                 effectiveOpacity,
                 visible,
                 chain,
-                passes: visible && effectiveOpacity + 1e-9 >= threshold,
+                legibleWhenVisible: !visible || effectiveOpacity + 1e-9 >= threshold,
               };
             };
 
@@ -135,14 +169,22 @@ try {
             for (const selector of selectors) {
               for (const node of root.querySelectorAll(selector)) rows.push({ selector, ...inspect(node) });
             }
-            const verdictNode = root.querySelector('.ctxmix__verdict');
-            const verdict = verdictNode ? inspect(verdictNode) : null;
+            const contextNode = inspect(root.querySelector('[data-node="context"]'));
+            const proposalNode = inspect(root.querySelector('[data-node="model-proposal"]'));
+            const verdictNode = inspect(root.querySelector('[data-node="execution-result"]'));
             return {
               missingRoot: false,
               expectedState,
               actualState: Number(root.dataset.state),
               probes: rows,
-              verdict,
+              semanticVisibility: {
+                context: Boolean(contextNode?.visible),
+                proposal: Boolean(proposalNode?.visible),
+                verdict: Boolean(verdictNode?.visible),
+              },
+              contextNode,
+              proposalNode,
+              verdictNode,
             };
           }, { selectors: probes, threshold: MIN_EFFECTIVE_OPACITY, expectedState: state });
 
@@ -150,23 +192,26 @@ try {
           if (stateResult.actualState !== state) failures.push({ context: label, state, reason: 'state-did-not-change', actualState: stateResult.actualState });
           if (!stateResult.probes.length) failures.push({ context: label, state, reason: 'no-text-probes-found' });
           for (const probe of stateResult.probes) {
-            if (!probe.passes) failures.push({ context: label, state, reason: 'explanatory-text-not-fully-legible', probe });
+            if (!probe.legibleWhenVisible) failures.push({ context: label, state, reason: 'visible-explanatory-text-not-fully-legible', probe });
           }
-          if (!stateResult.verdict) {
-            failures.push({ context: label, state, reason: 'verdict-missing' });
-          } else if (state < 4) {
-            if (stateResult.verdict.visible && stateResult.verdict.effectiveOpacity > 0.01) {
-              failures.push({ context: label, state, reason: 'inactive-verdict-shown-as-ghost-text', verdict: stateResult.verdict });
+          for (const stagingFailure of stagingFailures(state, stateResult.semanticVisibility || {})) {
+            failures.push({ context: label, state, reason: 'ctxmix-semantic-disclosure-out-of-order', ...stagingFailure, semanticVisibility: stateResult.semanticVisibility });
+          }
+          if (state === 3 && !stateResult.proposalNode?.text.includes('send_credentials')) {
+            failures.push({ context: label, state, reason: 'state-3-risky-proposal-missing', proposal: stateResult.proposalNode });
+          }
+          if (state === 4) {
+            const expectedVerdict = item.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
+            if (!stateResult.verdictNode?.text.includes(expectedVerdict)) {
+              failures.push({ context: label, state, reason: 'state-4-verdict-missing', expectedVerdict, verdict: stateResult.verdictNode });
             }
-          } else if (!stateResult.verdict.passes) {
-            failures.push({ context: label, state, reason: 'final-verdict-not-fully-legible', verdict: stateResult.verdict });
           }
           states.push(stateResult);
         }
 
         await page.waitForTimeout(100);
-        if (runtime.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime });
-        contexts.push({ context: label, states, runtime });
+        if (runtime.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime: [...runtime] });
+        contexts.push({ context: label, states, runtime: [...runtime] });
         await context.close();
       }
     }
@@ -179,6 +224,12 @@ const report = {
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
   minimum_effective_opacity: MIN_EFFECTIVE_OPACITY,
+  semantic_staging_contract: {
+    state_1: expectedCtxmixVisibility(1),
+    state_2: expectedCtxmixVisibility(2),
+    state_3: expectedCtxmixVisibility(3),
+    state_4: expectedCtxmixVisibility(4),
+  },
   failures,
   contexts,
 };
@@ -189,4 +240,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states, no explanatory text dimmed through ancestor opacity.`);
+console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → verdict only at semantic states 2 → 3 → 4.`);
