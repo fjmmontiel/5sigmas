@@ -263,7 +263,7 @@ concurrency_and_release:
 
 history:
   previous_durable_checkpoint_comment: 5675576427
-  current_checkpoint_comment: PENDING_REVISION_44_PERSISTENCE
+  current_checkpoint_comment: 5677144712
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
