@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 44,
+  "diagnostic_revision": 45,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "d8924c5e66b2481d0ffdcd0ee8c99991cb3083d8",
-  "reason": "Close a shared fail-open listener-lifetime defect in the focused Security QA: several existing gates checked runtime/resource arrays before context.close(), so teardown-time lazy-media/resource errors could arrive after their verdict. Add an independent conjunctive post-teardown listener-lifetime gate across ES/EN Security 00/1.1, desktop/mobile, normal/reduced motion, teaching interactions and inline-media playback. The gate has a deterministic teardown mutation self-test and retains its final post-close arrays. Site-facing bytes are unchanged from b44a3e9d; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "308731cb08413142fea01b1b458acd09aac5338b",
+  "reason": "Close a residual fail-open request-failure classification bug in the revision-44 post-teardown Security gate. ERR_ABORTED was ignored unconditionally, so a real abort during navigation, teaching interactions, lazy-resource loading or media playback before teardown could escape despite listeners remaining attached. Revision 45 makes ERR_ABORTED ignorable only after context teardown begins, adds deterministic mutations proving pre-teardown ERR_ABORTED is fatal while teardown-only aborts are tolerated, and reruns the exact ES/EN Security 00/1.1 desktop/mobile normal/reduced interaction+media matrix. Site-facing bytes remain unchanged from b44a3e9d; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
