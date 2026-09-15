@@ -110,8 +110,12 @@ async function capture(locator, file) {
       .filter(({ style, rect }) => ['fixed', 'sticky'].includes(style.position) && rect.height > 0 && rect.bottom > 0 && rect.top <= 8);
     const safeTop = Math.max(0, ...occluders.map(({ rect }) => rect.bottom)) + 12;
     const before = node.getBoundingClientRect();
-    const requestedScrollY = Math.max(0, window.scrollY + before.top - safeTop);
-    if (before.top < safeTop) {
+    const availableHeightBefore = Math.max(0, innerHeight - safeTop);
+    const spareHeight = Math.max(0, availableHeightBefore - before.height);
+    const placementInset = before.height <= availableHeightBefore + 1 ? Math.min(2, spareHeight / 2) : 0;
+    const targetTop = safeTop + placementInset;
+    const requestedScrollY = Math.max(0, window.scrollY + before.top - targetTop);
+    if (before.top < targetTop) {
       const scrollingElement = document.scrollingElement || document.documentElement;
       scrollingElement.scrollTop = requestedScrollY;
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -126,6 +130,9 @@ async function capture(locator, file) {
       viewportHeight: innerHeight,
       availableHeight,
       canFitBelowStickyChrome: after.height <= availableHeight + 1,
+      spareHeight,
+      placementInset,
+      targetTop,
       requestedScrollY,
       actualScrollY: window.scrollY,
     };
