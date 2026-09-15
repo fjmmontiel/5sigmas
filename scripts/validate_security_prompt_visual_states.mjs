@@ -105,12 +105,10 @@ async function inspectCtxmix(page, item, mobile, motion, stem, record) {
       const expected = item.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
       check(result.includes(expected), `${ctx}: authorization state missing ${expected}`);
     }
-    if (state === '1' || state === '3' || state === '4') {
-      await capture(root, `${stem}-ctxmix-state-${state}.png`);
-    }
+    await capture(root, `${stem}-ctxmix-state-${state}.png`);
   }
   if (motion === 'reduce') await assertReducedMotion(root, ctx);
-  record.ctxmix = { states: ['1', '2', '3', '4'], screenshots: ['1', '3', '4'] };
+  record.ctxmix = { states: ['1', '2', '3', '4'], screenshots: ['1', '2', '3', '4'] };
 }
 
 async function waitForStep(page, selector, step, timeout = 5000) {
