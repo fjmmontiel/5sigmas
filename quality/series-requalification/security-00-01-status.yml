@@ -1,4 +1,4 @@
-schema_version: 18
+schema_version: 19
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,7 +8,7 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: 865aa030cb3d99c0920e01c052cd9637631a5493
+  current_gate_head: d3ae2b4c7b735b4c48cb54e7a1605019e570f7d9
   last_exact_qa_head: afe6a46e109c3105064a8baa32c8073246fa33e1
   last_exact_qa_run: 34961682456
   last_exact_qa_revision: 47
@@ -46,12 +46,12 @@ revision_47:
     structured_provenance_locale_metadata: PASS
     reciprocal_article_watch_locale_ui: PASS
     rendered_html_audit: FAIL_CLOSED_GLOBAL_DEBT
-    focused_browser_layout_playback: PASS
+    focused_browser_layout_playback: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
     wcag_contrast_and_text_visibility: PASS_AT_EXACT_HEAD_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    lifecycle_normal_reduced: PASS
-    real_touch_article_watch: PASS
-    prompt_visual_states: PASS
-    real_keyboard_focus: PASS
+    lifecycle_normal_reduced: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    real_touch_article_watch: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    prompt_visual_states: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    real_keyboard_focus: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
     runtime_listener_lifetime: PASS_EXACT_QA
     global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
     conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
@@ -101,7 +101,18 @@ open_gate_debt_revision_47:
           events, retains listeners through context.close(), computes the verdict from final post-teardown arrays, preserves
           only teardown-phase ERR_ABORTED as expected cancellation, and adds deterministic listener-lifetime mutations while
           preserving the existing opacity, semantic-staging and localized authorization-label contracts.
-    next_gate: scripts/validate_security_requalification_browser.mjs
+      - file: scripts/validate_security_requalification_browser.mjs
+        commit: d3ae2b4c7b735b4c48cb54e7a1605019e570f7d9
+        status: IMPLEMENTED_PENDING_EXACT_QA
+        site_facing_bytes_changed: false
+        thresholds_changed: false
+        details: >-
+          Removed blanket ERR_ABORTED suppression and added console/pageerror/requestfailed/HTTP capture with explicit phases,
+          stable Playwright Request identity, successful media-response evidence, a settled/error-free/advancing post-seek
+          lifecycle requirement, and verdict computation only after context.close(). Generic aborts, unrelated response proof,
+          missing response proof, wrong source, unsettled seek, media error, non-advancing playback and late console/HTTP
+          failures are deterministic negative mutations. Pixel and pedagogy remain explicitly pending in this technical gate.
+    next_gate: scripts/validate_security_video_lifecycle.mjs
 
 resolved_runtime_abort_defect:
   code: SECURITY_ES_INLINE_VIDEO_PRE_TEARDOWN_ERR_ABORTED
@@ -170,11 +181,11 @@ sources_and_locale:
   structured_provenance_locale_metadata: PASS_REVISION_47
   note: >-
     No material claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in revision 47
-    or either pending specialized-gate repair. No new factual validation is claimed.
+    or the pending specialized-gate repairs. No new factual validation is claimed.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_before_this_manifest_commit: 219
+  branch_ahead_of_main_before_this_manifest_commit: 221
   branch_behind_main: 0
   draft_pr_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
@@ -188,7 +199,7 @@ concurrency_and_release:
   datacenters_or_pre_datacenters_modified: false
   linkedin_lane_touched: false
   release_contract_281_preserved: true
-  linkedin_state: WAITING_72H_AT_RUN_START
+  linkedin_state: HOLD_THRESHOLD_PASSED_LINKEDIN_OWNER_REVALIDATION_REQUIRED
   linkedin_not_before: '2026-09-15T14:17:28+02:00'
 
 next_exact_gap:
@@ -196,10 +207,11 @@ next_exact_gap:
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Continue specialized-gate harmonization with validate_security_requalification_browser.mjs, then lifecycle/touch/prompt/
-    keyboard/evidence harnesses. Contrast and text-visibility listener-lifetime repairs are both implemented but remain
-    pending one exact integration. Remove blanket ERR_ABORTED filtering, retain listeners through teardown and compute
-    verdicts from final arrays with deterministic negative mutations. Do not launch CI until a useful bundled milestone.
+    Continue specialized-gate harmonization with validate_security_video_lifecycle.mjs, then touch/prompt/keyboard/evidence
+    harnesses. Contrast, text-visibility and focused browser listener-lifetime repairs are implemented but remain pending one
+    exact integration. Remove blanket ERR_ABORTED filtering, retain listeners through teardown and compute verdicts from final
+    arrays with deterministic negative mutations and request-correlated media exceptions where the harness performs seeks.
+    Do not launch CI until a useful bundled milestone.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
