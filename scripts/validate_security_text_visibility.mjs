@@ -29,6 +29,17 @@ function stagingFailures(state, observed) {
     .map(([key, value]) => ({ key, expected: value, actual: observed[key] }));
 }
 
+function expectedAuthorizationCheckTerms(locale) {
+  return locale === 'es'
+    ? ['scope', 'destino', 'permiso']
+    : ['scope', 'destination', 'permission'];
+}
+
+function missingAuthorizationCheckTerms(locale, text = '') {
+  const normalized = String(text).toLocaleLowerCase(locale === 'es' ? 'es' : 'en');
+  return expectedAuthorizationCheckTerms(locale).filter(term => !normalized.includes(term));
+}
+
 function runSelfTest() {
   const visible = cumulativeOpacity([1, 1, 1]);
   const legacyDimmed = cumulativeOpacity([1, 0.2, 1]);
@@ -55,7 +66,29 @@ function runSelfTest() {
       throw new Error(`ctxmix staging mutation escaped at state ${fixture.state}: ${JSON.stringify(fixture.observed)}`);
     }
   }
-  console.log('Security text-visibility mutation fixtures PASS: visible text opacity and ctxmix context/proposal/check-results/verdict semantic staging are enforced.');
+
+  const validCheckLabels = {
+    es: 'scope ✕ destino ✕ permiso ✕',
+    en: 'scope ✕ destination ✕ permission ✕',
+  };
+  for (const [locale, text] of Object.entries(validCheckLabels)) {
+    const missing = missingAuthorizationCheckTerms(locale, text);
+    if (missing.length) throw new Error(`valid ${locale} authorization labels rejected: ${missing.join(',')}`);
+  }
+  const labelMutations = [
+    ['es', 'scope ✕ permiso ✕', 'destino'],
+    ['es', 'scope ✕ destino ✕', 'permiso'],
+    ['en', 'scope ✕ permission ✕', 'destination'],
+    ['en', 'scope ✕ destination ✕', 'permission'],
+  ];
+  for (const [locale, text, missingTerm] of labelMutations) {
+    const missing = missingAuthorizationCheckTerms(locale, text);
+    if (!missing.includes(missingTerm)) {
+      throw new Error(`authorization-label mutation escaped for ${locale}: missing ${missingTerm}`);
+    }
+  }
+
+  console.log('Security text-visibility mutation fixtures PASS: opacity, ctxmix semantic staging, and localized authorization-result labels are enforced.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -208,8 +241,16 @@ try {
           }
           if (state === 4) {
             const expectedVerdict = item.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
-            if (!stateResult.checksNode?.text.includes('scope') || !stateResult.checksNode?.text.includes('permission') && item.locale === 'en') {
-              failures.push({ context: label, state, reason: 'state-4-authorization-check-results-missing', checks: stateResult.checksNode });
+            const missingCheckTerms = missingAuthorizationCheckTerms(item.locale, stateResult.checksNode?.text || '');
+            if (!stateResult.checksNode || missingCheckTerms.length) {
+              failures.push({
+                context: label,
+                state,
+                reason: 'state-4-authorization-check-results-missing',
+                expectedTerms: expectedAuthorizationCheckTerms(item.locale),
+                missingTerms: missingCheckTerms,
+                checks: stateResult.checksNode,
+              });
             }
             if (!stateResult.verdictNode?.text.includes(expectedVerdict)) {
               failures.push({ context: label, state, reason: 'state-4-verdict-missing', expectedVerdict, verdict: stateResult.verdictNode });
@@ -239,6 +280,10 @@ const report = {
     state_3: expectedCtxmixVisibility(3),
     state_4: expectedCtxmixVisibility(4),
   },
+  authorization_check_terms: {
+    es: expectedAuthorizationCheckTerms('es'),
+    en: expectedAuthorizationCheckTerms('en'),
+  },
   failures,
   contexts,
 };
@@ -249,4 +294,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → authorization-check results + verdict only at semantic states 2 → 3 → 4.`);
+console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → localized authorization-check results + verdict only at semantic states 2 → 3 → 4.`);
