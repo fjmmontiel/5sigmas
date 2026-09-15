@@ -40,6 +40,12 @@ function missingAuthorizationCheckTerms(locale, text = '') {
   return expectedAuthorizationCheckTerms(locale).filter(term => !normalized.includes(term));
 }
 
+function isExpectedTeardownCancellation(event) {
+  return event?.type === 'requestfailed'
+    && event?.phase === 'teardown'
+    && String(event?.detail || '').includes('ERR_ABORTED');
+}
+
 function runSelfTest() {
   const visible = cumulativeOpacity([1, 1, 1]);
   const legacyDimmed = cumulativeOpacity([1, 0.2, 1]);
@@ -88,7 +94,22 @@ function runSelfTest() {
     }
   }
 
-  console.log('Security text-visibility mutation fixtures PASS: opacity, ctxmix semantic staging, and localized authorization-result labels are enforced.');
+  const runtimeFixtures = [
+    { name: 'interaction ERR_ABORTED must fail', event: { type: 'requestfailed', phase: 'interaction', detail: 'net::ERR_ABORTED' }, expected: false },
+    { name: 'teardown ERR_ABORTED may be classified as expected cancellation', event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' }, expected: true },
+    { name: 'teardown non-abort request failure must fail', event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' }, expected: false },
+    { name: 'teardown pageerror must fail', event: { type: 'pageerror', phase: 'teardown', detail: 'boom' }, expected: false },
+    { name: 'teardown console error must fail', event: { type: 'console', phase: 'teardown', detail: 'boom' }, expected: false },
+    { name: 'teardown HTTP error must fail', event: { type: 'http', phase: 'teardown', status: 500 }, expected: false },
+  ];
+  for (const fixture of runtimeFixtures) {
+    const actual = isExpectedTeardownCancellation(fixture.event);
+    if (actual !== fixture.expected) {
+      throw new Error(`listener-lifetime mutation failed: ${fixture.name}; actual=${actual}, expected=${fixture.expected}`);
+    }
+  }
+
+  console.log('Security text-visibility mutation fixtures PASS: opacity, ctxmix semantic staging, localized authorization-result labels, and fail-closed listener lifetime are enforced.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -142,16 +163,16 @@ try {
         });
         const page = await context.newPage();
         const runtime = [];
-        page.on('pageerror', error => runtime.push({ type: 'pageerror', detail: String(error) }));
+        let phase = 'navigation';
+        page.on('pageerror', error => runtime.push({ type: 'pageerror', phase, detail: String(error) }));
         page.on('console', message => {
-          if (message.type() === 'error') runtime.push({ type: 'console', detail: message.text() });
+          if (message.type() === 'error') runtime.push({ type: 'console', phase, detail: message.text() });
         });
         page.on('requestfailed', request => {
-          const detail = request.failure()?.errorText || '';
-          if (!detail.includes('ERR_ABORTED')) runtime.push({ type: 'requestfailed', url: request.url(), detail });
+          runtime.push({ type: 'requestfailed', phase, url: request.url(), detail: request.failure()?.errorText || '' });
         });
         page.on('response', response => {
-          if (response.status() >= 400) runtime.push({ type: 'http', status: response.status(), url: response.url() });
+          if (response.status() >= 400) runtime.push({ type: 'http', phase, status: response.status(), url: response.url() });
         });
 
         const response = await page.goto(new URL(item.route, base).href, { waitUntil: 'networkidle', timeout: 20000 });
@@ -159,6 +180,7 @@ try {
         await page.evaluate(async () => {
           await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]);
         });
+        phase = 'interaction';
 
         const states = [];
         for (const state of [1, 2, 3, 4]) {
@@ -260,9 +282,30 @@ try {
         }
 
         await page.waitForTimeout(100);
-        if (runtime.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime: [...runtime] });
-        contexts.push({ context: label, states, runtime: [...runtime] });
+        const runtimeBeforeClose = [...runtime];
+        phase = 'teardown';
         await context.close();
+        const runtimeFinal = [...runtime];
+        const teardownAppended = runtimeFinal.slice(runtimeBeforeClose.length);
+        const expectedTeardownCancellations = runtimeFinal.filter(isExpectedTeardownCancellation);
+        const fatalRuntime = runtimeFinal.filter(event => !isExpectedTeardownCancellation(event));
+        if (fatalRuntime.length) {
+          failures.push({
+            context: label,
+            reason: 'runtime-resource-errors',
+            runtime: fatalRuntime,
+            runtimeBeforeClose,
+            teardownAppended,
+          });
+        }
+        contexts.push({
+          context: label,
+          states,
+          runtimeBeforeClose,
+          runtimeFinal,
+          teardownAppended,
+          expectedTeardownCancellations,
+        });
       }
     }
   }
@@ -274,6 +317,8 @@ const report = {
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
   minimum_effective_opacity: MIN_EFFECTIVE_OPACITY,
+  verdict_basis: 'POST_CONTEXT_TEARDOWN',
+  runtime_policy: 'all navigation/interaction runtime and resource failures are fatal; only requestfailed ERR_ABORTED events emitted during context teardown are classified as expected cancellation',
   semantic_staging_contract: {
     state_1: expectedCtxmixVisibility(1),
     state_2: expectedCtxmixVisibility(2),
@@ -294,4 +339,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque and ctxmix reveals context → proposal → localized authorization-check results + verdict only at semantic states 2 → 3 → 4.`);
+console.log(`Security text-visibility gate PASS: ${contexts.length} ES/EN desktop/mobile normal/reduced contexts × 4 states; visible explanatory text is fully opaque, ctxmix reveals context → proposal → localized authorization-check results + verdict only at semantic states 2 → 3 → 4, and the runtime verdict is computed after context teardown.`);
