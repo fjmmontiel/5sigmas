@@ -156,13 +156,15 @@ jobs:
         timeout-minutes: 10
         run: node scripts/validate_security_requalification_browser.mjs
 
-      - name: Focused Security 00/01 WCAG contrast with legacy-palette mutation fixtures
+      - name: Focused Security 00/01 WCAG contrast and state text visibility
         id: security_contrast
         continue-on-error: true
         timeout-minutes: 5
         run: |
           node scripts/validate_security_contrast.mjs --self-test
           node scripts/validate_security_contrast.mjs
+          node scripts/validate_security_text_visibility.mjs --self-test
+          node scripts/validate_security_text_visibility.mjs
 
       - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
         id: security_video_lifecycle
