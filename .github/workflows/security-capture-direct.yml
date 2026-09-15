@@ -1,0 +1,119 @@
+name: Security capture direct execution
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/capture-request.json']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-capture-direct-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Record exact capture request
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/capture-request.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install existing build dependencies
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Install existing Playwright version
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve built preview with byte-range media support
+        run: |
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/security-capture-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/security-capture-preview.log
+          exit 1
+
+      - name: Directly execute Security visual capture harness
+        id: capture_visuals
+        continue-on-error: true
+        timeout-minutes: 12
+        env:
+          S5_SECURITY_SCREENSHOT_DIR: artifacts/visual-review/security
+        run: |
+          node scripts/capture_security_visuals.mjs
+          test -s artifacts/visual-review/security/report.json
+
+      - name: Summarize direct execution without editorial certification
+        if: always()
+        env:
+          CAPTURE_OUTCOME: ${{ steps.capture_visuals.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report_path = Path('artifacts/visual-review/security/report.json')
+          summary = {
+              'capture_outcome': os.environ.get('CAPTURE_OUTCOME', ''),
+              'report_present': report_path.exists(),
+              'golden': False,
+              'pixel_review': 'NOT_PERFORMED_BY_THIS_TECHNICAL_RUN',
+              'pedagogy_review': 'NOT_PERFORMED_BY_THIS_TECHNICAL_RUN',
+          }
+          if report_path.exists():
+              data = json.loads(report_path.read_text())
+              rows = data.get('report', [])
+              failures = data.get('failures', [])
+              summary.update({
+                  'contexts_observed': len(rows),
+                  'failure_count': len(failures),
+                  'failures': failures,
+                  'post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+                  'runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+              })
+          print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+          raise SystemExit(0 if os.environ.get('CAPTURE_OUTCOME') == 'success' else 1)
+          PY
+
+      - name: Retain minimal direct-capture evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-capture-direct-report
+          path: artifacts/visual-review/security/report.json
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true
