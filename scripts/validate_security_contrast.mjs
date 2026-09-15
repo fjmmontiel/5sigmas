@@ -1,10 +1,19 @@
 #!/usr/bin/env node
-/** Deterministic WCAG contrast gate for the active Security 00/01 teaching visuals. */
+/**
+ * Deterministic legibility/contrast gate for the active Security 00/01 teaching visuals.
+ *
+ * Important: CSS `opacity` on an ancestor composites the whole subtree after paint. Reading
+ * only a descendant's computed `color` and `backgroundColor` can therefore report a false
+ * WCAG pass for text that is visibly faded on screen. This gate treats any inspected teaching
+ * text rendered through subtree opacity as a failure and exercises the interactive states that
+ * can introduce that condition.
+ */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
 const AA_NORMAL = 4.5;
+const OPAQUE_TEXT_MIN = 0.999;
 
 function hexToRgb(hex) {
   const value = hex.replace('#', '');
@@ -48,22 +57,29 @@ function runSelfTest() {
     if (actual !== fixture.pass) failures.push({ ...fixture, ratio });
   }
 
-  // Regression fixture for CSS Color 4 translucent backgrounds. Chromium can
-  // return `color(srgb ... / alpha)` for color-mix(). The prior gate treated
-  // that tint as an opaque background and produced a false ~1:1 ratio instead
-  // of compositing it over the page background.
+  // CSS Color 4 translucent background regression fixture.
   const risk = hexToRgb('#b93636');
   const tintedWhite = compositeRgb(risk, [255, 255, 255], 0.05);
   const riskRatio = contrastRatioRgb(risk, tintedWhite);
   if (riskRatio < AA_NORMAL || riskRatio > contrastRatio('#b93636', '#ffffff')) {
-    failures.push({ name: 'translucent risk tint must be composited over white', ratio: riskRatio, background: tintedWhite });
+    failures.push({ name: 'translucent risk tint must be composited over white', ratio: riskRatio });
+  }
+
+  // Ancestor-opacity regression fixture. The old browser gate inspected the local color pair
+  // and missed the group compositing produced by e.g. `opacity:.2` on a parent teaching panel.
+  const ink = hexToRgb('#111827');
+  const white = hexToRgb('#ffffff');
+  const fadedInk = compositeRgb(ink, white, 0.2);
+  const fadedRatio = contrastRatioRgb(fadedInk, white);
+  if (fadedRatio >= AA_NORMAL) {
+    failures.push({ name: '20% ancestor opacity must not masquerade as readable text', ratio: fadedRatio });
   }
 
   if (failures.length) {
     console.error('Security contrast self-test FAILED', JSON.stringify(failures, null, 2));
     process.exit(1);
   }
-  console.log('Security contrast self-test PASS: legacy mutations fail, repaired palette passes, and translucent backgrounds are composited before WCAG comparison.');
+  console.log('Security contrast self-test PASS: palette mutations, translucent backgrounds, and ancestor-opacity regression are covered.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -82,27 +98,25 @@ const routes = [
   { locale: 'en', kind: 'prompt', route: '/en/series/seguridad-ia/01-prompt-injection/' },
 ];
 
-const probesByKind = {
+const probes = {
   presentation: [
-    '.secpath__lesson--influence b',
-    '.secpath__lesson--authority b',
-    '.secpath__boundary',
-    '.secpath__verdict',
+    '.secpath__title', '.secpath__role', '.secpath__boundary', '.secpath__readout strong',
+    '.secpath__readout p', '.secpath__verdict', '.secpath__lesson b', '.secpath__lesson div',
   ],
-  prompt: [
-    '.ctxmix__model-core',
-    '.ctxmix__check',
-    '.ctxmix__proposal-item--risk',
-    '.ctxmix__principle b',
-    '.ctxmix__explain b',
-    '.ragtrace__rank',
-    '.ragtrace__selected',
-    '.ragtrace__ctx--system b',
-    '.ragtrace__ctx--user b',
-    '.ragtrace__status b',
-    '.defsim__state',
-    '.defsim__result-badge',
-    '.defsim__legend b',
+  ctxmix: [
+    '.ctxmix__lane-label', '.ctxmix__eyebrow', '.ctxmix__source-title', '.ctxmix__source p',
+    '.ctxmix__payload', '.ctxmix__segment', '.ctxmix__model-core', '.ctxmix__model-copy',
+    '.ctxmix__runtime strong', '.ctxmix__runtime small', '.ctxmix__check', '.ctxmix__proposal-item',
+    '.ctxmix__verdict strong', '.ctxmix__verdict span', '.ctxmix__principle', '.ctxmix__explain p',
+  ],
+  rag: [
+    '.ragtrace__label', '.ragtrace__rank', '.ragtrace__doc-title', '.ragtrace__doc-note',
+    '.ragtrace__selected', '.ragtrace__ctx b', '.ragtrace__ctx', '.ragtrace__proposal',
+    '.ragtrace__status', '.ragtrace__foot',
+  ],
+  defsim: [
+    '.defsim__gate-name', '.defsim__gate-scope', '.defsim__state', '.defsim__result-badge',
+    '.defsim__result strong', '.defsim__result span', '.defsim__legend b', '.defsim__legend div',
   ],
 };
 
@@ -114,9 +128,113 @@ async function launchBrowser() {
   }
 }
 
+async function measure(page, selectors) {
+  return page.evaluate(({ selectors, opaqueMin }) => {
+    const parseColor = value => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = '#000000';
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = [...ctx.getImageData(0, 0, 1, 1).data];
+      return [r, g, b, a / 255];
+    };
+    const composite = (foreground, background) => {
+      const fa = foreground[3];
+      const ba = background[3];
+      const outA = fa + ba * (1 - fa);
+      if (outA <= 1e-9) return [0, 0, 0, 0];
+      return [
+        (foreground[0] * fa + background[0] * ba * (1 - fa)) / outA,
+        (foreground[1] * fa + background[1] * ba * (1 - fa)) / outA,
+        (foreground[2] * fa + background[2] * ba * (1 - fa)) / outA,
+        outA,
+      ];
+    };
+    const luminance = ([r, g, b]) => {
+      const values = [r, g, b].map(value => {
+        const c = value / 255;
+        return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * values[0] + 0.7152 * values[1] + 0.0722 * values[2];
+    };
+    const ratio = (a, b) => {
+      const x = luminance(a), y = luminance(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    };
+    const effectiveBackground = node => {
+      const layers = [];
+      for (let current = node; current; current = current.parentElement) {
+        const value = getComputedStyle(current).backgroundColor;
+        if (!value || value === 'transparent') continue;
+        const rgba = parseColor(value);
+        if (rgba[3] <= 1e-9) continue;
+        layers.push({ value, rgba, source: String(current.className || current.tagName) });
+      }
+      let effective = [255, 255, 255, 1];
+      for (let index = layers.length - 1; index >= 0; index -= 1) effective = composite(layers[index].rgba, effective);
+      return { rgba: effective, value: `rgb(${effective.slice(0, 3).map(v => Math.round(v)).join(', ')})`, sources: layers };
+    };
+    const ancestorOpacity = node => {
+      let cumulative = 1;
+      const chain = [];
+      for (let current = node; current; current = current.parentElement) {
+        const opacity = Number.parseFloat(getComputedStyle(current).opacity || '1');
+        if (opacity < opaqueMin) chain.push({ source: String(current.className || current.tagName), opacity });
+        cumulative *= opacity;
+      }
+      return { cumulative, chain };
+    };
+
+    const rows = [];
+    for (const selector of selectors) {
+      for (const node of document.querySelectorAll(selector)) {
+        const style = getComputedStyle(node);
+        const rect = node.getBoundingClientRect();
+        if (style.display === 'none' || style.visibility === 'hidden' || rect.width <= 0 || rect.height <= 0) continue;
+        const text = (node.textContent || '').trim();
+        if (!text) continue;
+        const background = effectiveBackground(node);
+        const foregroundRaw = parseColor(style.color);
+        const foreground = foregroundRaw[3] < 0.999 ? composite(foregroundRaw, background.rgba) : foregroundRaw;
+        const opacity = ancestorOpacity(node);
+        rows.push({
+          selector,
+          text: text.slice(0, 140),
+          foreground: style.color,
+          background: background.value,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          ratio: ratio(foreground, background.rgba),
+          ancestorOpacity: opacity.cumulative,
+          opacityChain: opacity.chain,
+        });
+      }
+    }
+    return rows;
+  }, { selectors, opaqueMin: OPAQUE_TEXT_MIN });
+}
+
 const launched = await launchBrowser();
 const failures = [];
 const contexts = [];
+
+async function record(page, contextLabel, scenario, selectors) {
+  await page.waitForTimeout(80);
+  const rows = await measure(page, selectors);
+  if (!rows.length) failures.push({ context: contextLabel, scenario, reason: 'no-contrast-probes-found' });
+  for (const row of rows) {
+    if (row.ancestorOpacity + 1e-9 < OPAQUE_TEXT_MIN) {
+      failures.push({ context: contextLabel, scenario, reason: 'teaching-text-rendered-through-ancestor-opacity', ...row });
+    }
+    if (row.ratio + 1e-9 < AA_NORMAL) {
+      failures.push({ context: contextLabel, scenario, reason: 'contrast-below-wcag-aa', ...row });
+    }
+  }
+  contexts.push({ context: contextLabel, scenario, probes: rows });
+}
 
 try {
   for (const item of routes) {
@@ -144,100 +262,36 @@ try {
         if (!response?.ok()) failures.push({ context: label, reason: 'page-http', status: response?.status() });
         await page.evaluate(async () => { await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]); });
 
-        if (item.kind === 'prompt') {
-          const poison = page.locator('.ragtrace [data-mode-btn="poisoned"]').first();
-          if (await poison.count()) await poison.click();
+        if (item.kind === 'presentation') {
+          await record(page, label, 'bounded', probes.presentation);
+          const unbounded = page.locator('.secpath [data-mode-btn="unbounded"]').first();
+          if (await unbounded.count()) {
+            await unbounded.click();
+            await record(page, label, 'unbounded', probes.presentation);
+          }
+        } else {
+          for (const step of ['1', '2', '3', '4']) {
+            const button = page.locator(`.ctxmix [data-state-btn="${step}"]`).first();
+            if (await button.count()) await button.click();
+            await record(page, label, `ctxmix-step-${step}`, probes.ctxmix);
+          }
+
+          const clean = page.locator('.ragtrace [data-mode-btn="clean"]').first();
+          if (await clean.count()) await clean.click();
+          await record(page, label, 'rag-clean', probes.rag);
+          const poisoned = page.locator('.ragtrace [data-mode-btn="poisoned"]').first();
+          if (await poisoned.count()) await poisoned.click();
+          await record(page, label, 'rag-poisoned', probes.rag);
+
+          await record(page, label, 'defsim-all-on', probes.defsim);
           const firstGate = page.locator('.defsim [data-gate]').first();
           if (await firstGate.count()) await firstGate.click();
-        } else {
-          const unbounded = page.locator('.secpath [data-mode-btn="unbounded"]').first();
-          if (await unbounded.count()) await unbounded.click();
+          await record(page, label, 'defsim-first-gate-off', probes.defsim);
         }
 
-        const contrast = await page.evaluate(selectors => {
-          const parseColor = value => {
-            const canvas = document.createElement('canvas');
-            canvas.width = canvas.height = 1;
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            ctx.clearRect(0, 0, 1, 1);
-            ctx.fillStyle = '#000000';
-            ctx.fillStyle = value;
-            ctx.fillRect(0, 0, 1, 1);
-            const [r, g, b, a] = [...ctx.getImageData(0, 0, 1, 1).data];
-            return [r, g, b, a / 255];
-          };
-          const composite = (foreground, background) => {
-            const fa = foreground[3];
-            const ba = background[3];
-            const outA = fa + ba * (1 - fa);
-            if (outA <= 1e-9) return [0, 0, 0, 0];
-            return [
-              (foreground[0] * fa + background[0] * ba * (1 - fa)) / outA,
-              (foreground[1] * fa + background[1] * ba * (1 - fa)) / outA,
-              (foreground[2] * fa + background[2] * ba * (1 - fa)) / outA,
-              outA,
-            ];
-          };
-          const luminance = ([r, g, b]) => {
-            const values = [r, g, b].map(value => {
-              const c = value / 255;
-              return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-            });
-            return 0.2126 * values[0] + 0.7152 * values[1] + 0.0722 * values[2];
-          };
-          const ratio = (a, b) => {
-            const x = luminance(a), y = luminance(b);
-            return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-          };
-          const effectiveBackground = node => {
-            const layers = [];
-            for (let current = node; current; current = current.parentElement) {
-              const value = getComputedStyle(current).backgroundColor;
-              if (!value || value === 'transparent') continue;
-              const rgba = parseColor(value);
-              if (rgba[3] <= 1e-9) continue;
-              layers.push({ value, rgba, source: String(current.className || current.tagName) });
-            }
-            let effective = [255, 255, 255, 1];
-            for (let index = layers.length - 1; index >= 0; index -= 1) {
-              effective = composite(layers[index].rgba, effective);
-            }
-            return {
-              rgba: effective,
-              value: `rgb(${effective.slice(0, 3).map(channel => Math.round(channel)).join(', ')})`,
-              sources: layers.map(layer => ({ value: layer.value, source: layer.source, alpha: layer.rgba[3] })),
-            };
-          };
-          const rows = [];
-          for (const selector of selectors) {
-            for (const node of document.querySelectorAll(selector)) {
-              const style = getComputedStyle(node);
-              const rect = node.getBoundingClientRect();
-              if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) < 0.05 || rect.width <= 0 || rect.height <= 0) continue;
-              const background = effectiveBackground(node);
-              const foregroundRaw = parseColor(style.color);
-              const foreground = foregroundRaw[3] < 0.999 ? composite(foregroundRaw, background.rgba) : foregroundRaw;
-              rows.push({
-                selector,
-                text: (node.textContent || '').trim().slice(0, 120),
-                foreground: style.color,
-                background: background.value,
-                backgroundSources: background.sources,
-                fontSize: style.fontSize,
-                fontWeight: style.fontWeight,
-                ratio: ratio(foreground, background.rgba),
-              });
-            }
-          }
-          return rows;
-        }, probesByKind[item.kind]);
-
-        for (const row of contrast) {
-          if (row.ratio + 1e-9 < AA_NORMAL) failures.push({ context: label, reason: 'contrast-below-wcag-aa', ...row });
-        }
-        if (!contrast.length) failures.push({ context: label, reason: 'no-contrast-probes-found' });
+        await page.waitForTimeout(120);
         if (runtime.length) failures.push({ context: label, reason: 'runtime-resource-errors', runtime });
-        contexts.push({ context: label, probes: contrast, runtime });
+        contexts.push({ context: label, scenario: 'runtime-listeners', runtime });
         await context.close();
       }
     }
@@ -246,11 +300,17 @@ try {
   await launched.browser.close();
 }
 
-const report = { engine: launched.engine, chrome_launch_error: launched.chromeError || null, threshold: AA_NORMAL, failures, contexts };
+const report = {
+  engine: launched.engine,
+  chrome_launch_error: launched.chromeError || null,
+  thresholds: { wcag_normal_text: AA_NORMAL, opaque_teaching_text_min: OPAQUE_TEXT_MIN },
+  failures,
+  contexts,
+};
 await fs.writeFile(path.join(outDir, 'report.json'), JSON.stringify(report, null, 2));
 if (failures.length) {
-  console.error(`Security contrast gate FAILED (${failures.length})`);
+  console.error(`Security contrast/legibility gate FAILED (${failures.length})`);
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security contrast gate PASS: ${contexts.length} contexts, all inspected small-text probes >= ${AA_NORMAL}:1 after compositing translucent backgrounds.`);
+console.log(`Security contrast/legibility gate PASS: ${contexts.length} state/context records; inspected teaching text is opaque and >= ${AA_NORMAL}:1.`);
