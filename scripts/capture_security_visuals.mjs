@@ -55,6 +55,65 @@ const isGenericResourceConsoleError = (text) => (
   || /^Failed to load resource: net::ERR_/.test(text)
 );
 
+function isExpectedTeardownCancellation(event) {
+  return event.type === 'requestfailed'
+    && event.phase === 'teardown'
+    && String(event.detail || '').includes('ERR_ABORTED');
+}
+
+function classifyRuntime(events) {
+  return {
+    unexpected: events.filter(event => !isExpectedTeardownCancellation(event)),
+    expectedTeardownCancellations: events.filter(isExpectedTeardownCancellation),
+  };
+}
+
+function runRuntimeMutationSelfTest() {
+  const cases = [
+    {
+      name: 'teardown ERR_ABORTED is expected context cancellation',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' },
+      expected: true,
+    },
+    {
+      name: 'visual-interaction ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'visual-interaction', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'full-page-scroll ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'full-page-scroll', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'teardown non-abort request failure remains fatal',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' },
+      expected: false,
+    },
+    {
+      name: 'teardown pageerror remains fatal',
+      event: { type: 'pageerror', phase: 'teardown', detail: 'late exception' },
+      expected: false,
+    },
+    {
+      name: 'teardown console error remains fatal',
+      event: { type: 'console', phase: 'teardown', detail: 'late console error' },
+      expected: false,
+    },
+    {
+      name: 'teardown HTTP failure remains fatal',
+      event: { type: 'http', phase: 'teardown', status: 500, url: 'https://example.invalid/fail' },
+      expected: false,
+    },
+  ];
+  const broken = cases.filter(item => isExpectedTeardownCancellation(item.event) !== item.expected);
+  if (broken.length) {
+    throw new Error(`Security visual runtime classification mutation self-test failed: ${broken.map(item => item.name).join(', ')}`);
+  }
+}
+
+runRuntimeMutationSelfTest();
+
 const browser = await chromium.launch({ headless: true });
 const report = [];
 const failures = [];
@@ -180,41 +239,91 @@ try {
           reducedMotion: motion.reducedMotion,
         });
         const page = await context.newPage();
-        const runtimeErrors = [];
-        page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+        const runtimeEvents = [];
+        let phase = 'navigation';
+        let seq = 0;
+        let nextRequestId = 1;
+        const requestIds = new WeakMap();
+        const requestId = request => {
+          if (!requestIds.has(request)) requestIds.set(request, nextRequestId++);
+          return requestIds.get(request);
+        };
+        const pushRuntime = event => runtimeEvents.push({ seq: ++seq, phase, ...event });
+
+        page.on('pageerror', (error) => pushRuntime({ type: 'pageerror', detail: String(error) }));
         page.on('console', (message) => {
           if (message.type() !== 'error') return;
           const text = message.text();
           if (isGenericResourceConsoleError(text)) return;
           const location = message.location();
           const where = location?.url ? ` @ ${location.url}:${location.lineNumber ?? 0}:${location.columnNumber ?? 0}` : '';
-          runtimeErrors.push(`console: ${text}${where}`);
+          pushRuntime({ type: 'console', detail: `${text}${where}` });
         });
         page.on('response', (response) => {
           if (response.status() < 400) return;
           const request = response.request();
           if (isPreviewOnlySitemapProbe(response.url(), request.resourceType())) return;
-          runtimeErrors.push(`http ${response.status()}: ${response.url()} [type=${request.resourceType()}]`);
+          pushRuntime({
+            type: 'http',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            status: response.status(),
+            url: response.url(),
+          });
         });
         page.on('requestfailed', (request) => {
           if (isPreviewOnlySitemapProbe(request.url(), request.resourceType())) return;
-          runtimeErrors.push(`request failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown'}) [type=${request.resourceType()}]`);
+          pushRuntime({
+            type: 'requestfailed',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            url: request.url(),
+            detail: request.failure()?.errorText ?? 'unknown',
+          });
         });
 
         const runLabel = `${route.locale}/${route.slug}/${mode.name}/${motion.name}`;
         let response;
+        let navigationError = null;
         try {
+          phase = 'navigation';
           response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
         } catch (error) {
+          navigationError = error.message;
           fail(`${runLabel}: navigation failed: ${error.message}`);
-          await context.close();
+        }
+
+        if (navigationError) {
+          phase = 'teardown';
+          try {
+            await context.close();
+          } catch (error) {
+            pushRuntime({ type: 'context-close', detail: String(error) });
+          }
+          const finalRuntime = runtimeEvents.map(event => ({ ...event }));
+          const runtimeVerdict = classifyRuntime(finalRuntime);
+          if (runtimeVerdict.unexpected.length) fail(`${runLabel}: browser errors after navigation failure: ${JSON.stringify(runtimeVerdict.unexpected)}`);
+          report.push({
+            route: route.path,
+            locale: route.locale,
+            viewport: mode.name,
+            motion: motion.name,
+            navigationError,
+            runtimeEvents: finalRuntime,
+            runtimeUnexpected: runtimeVerdict.unexpected,
+            expectedTeardownCancellations: runtimeVerdict.expectedTeardownCancellations,
+            verdictBasis: 'POST_CONTEXT_TEARDOWN',
+          });
           continue;
         }
+
         if (!response?.ok()) fail(`${runLabel}: HTTP ${response?.status() ?? 'no response'}`);
+        phase = 'font-settle';
         await page.evaluate(() => document.fonts.ready);
         const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
         if (!htmlLang.startsWith(route.locale)) fail(`${runLabel}: html lang=${JSON.stringify(htmlLang)}`);
 
+        phase = 'initial-layout';
         const initial = await page.evaluate(() => ({
           viewportWidth: document.documentElement.clientWidth,
           scrollWidth: document.documentElement.scrollWidth,
@@ -224,12 +333,14 @@ try {
         if (initial.scrollWidth > initial.viewportWidth + 4) fail(`${runLabel}: page horizontal overflow ${JSON.stringify(initial)}`);
         if (initial.brokenImages.length) fail(`${runLabel}: broken images ${initial.brokenImages.join(', ')}`);
 
+        phase = 'visual-interaction';
         const visuals = [];
         for (const selector of route.roots) {
           const result = await exerciseGenericVisual(page, selector, route, mode, motion);
           if (result) visuals.push(result);
         }
 
+        phase = 'full-page-scroll';
         await page.evaluate(async () => {
           for (let y = 0; y < document.documentElement.scrollHeight; y += Math.max(280, innerHeight * .7)) {
             scrollTo(0, y);
@@ -239,6 +350,7 @@ try {
         });
         await page.waitForTimeout(250);
 
+        phase = 'post-interaction-layout';
         const after = await page.evaluate(() => ({
           viewportWidth: document.documentElement.clientWidth,
           scrollWidth: document.documentElement.scrollWidth,
@@ -247,13 +359,40 @@ try {
         }));
         if (after.scrollWidth > after.viewportWidth + 4) fail(`${runLabel}: overflow after full-page interaction ${JSON.stringify(after)}`);
         if (after.brokenImages.length) fail(`${runLabel}: broken images after scroll ${after.brokenImages.join(', ')}`);
-        if (runtimeErrors.length) fail(`${runLabel}: browser errors:\n${runtimeErrors.join('\n')}`);
 
         if (motion.name === 'normal') {
+          phase = 'screenshot';
           await page.screenshot({ path: `${outputDir}/${route.locale}-${route.slug}-${mode.name}-full.png`, fullPage: true, animations: 'allow' });
         }
-        report.push({ route: route.path, locale: route.locale, viewport: mode.name, motion: motion.name, initial, after, visuals, runtimeErrors });
-        await context.close();
+
+        phase = 'settle';
+        await page.waitForTimeout(150);
+        phase = 'teardown';
+        try {
+          await context.close();
+        } catch (error) {
+          pushRuntime({ type: 'context-close', detail: String(error) });
+        }
+
+        const finalRuntime = runtimeEvents.map(event => ({ ...event }));
+        const runtimeVerdict = classifyRuntime(finalRuntime);
+        if (runtimeVerdict.unexpected.length) {
+          fail(`${runLabel}: browser errors: ${JSON.stringify(runtimeVerdict.unexpected)}`);
+        }
+
+        report.push({
+          route: route.path,
+          locale: route.locale,
+          viewport: mode.name,
+          motion: motion.name,
+          initial,
+          after,
+          visuals,
+          runtimeEvents: finalRuntime,
+          runtimeUnexpected: runtimeVerdict.unexpected,
+          expectedTeardownCancellations: runtimeVerdict.expectedTeardownCancellations,
+          verdictBasis: 'POST_CONTEXT_TEARDOWN',
+        });
       }
     }
   }
