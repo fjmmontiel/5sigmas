@@ -1,4 +1,4 @@
-schema_version: 6
+schema_version: 7
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,131 +8,96 @@ scope:
 
 head_state:
   current_site_facing_head: c74784f2f17c625bb9bb622395d836552a747273
-  latest_exact_qa_run_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
-  pending_gate_hardening_head: d5bf731a10e467b5a492ba46720635575dcc80a1
-  diagnostic_run: 34916286889
-  diagnostic_revision: 36
-  diagnostic_status: COMPLETED_FAILURE_EXPECTED_SUPERSEDED_FOR_CURRENT_CONTENT
-  evidence_artifact_id: 10376782066
-  content_changed_since_previous_manual_review: true
-  site_facing_change_class: RAG_RANK_AND_SELECTION_ACCESSIBILITY_REPAIR
-  visible_copy_changed: true
-  visible_copy_change_scope: STATE_DEPENDENT_RANK_AND_TOPK_STATUS_LABELS
-  factual_claims_changed: false
-  teaching_model_changed: false
-  media_changed: false
-  current_content_pixel_review: PENDING_CURRENT_EXACT_MANUAL
-  current_content_pedagogy_review: PENDING_CURRENT_EXACT_MANUAL
+  semantic_gate_source_head: d5bf731a10e467b5a492ba46720635575dcc80a1
+  exact_qa_integration_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
+  diagnostic_run: 34920449262
+  diagnostic_revision: 37
+  diagnostic_status: COMPLETED_FAILURE_EXPECTED
+  evidence_artifact_id: 10377524435
+  evidence_digest: sha256:10cd9791c3feadc6f7d0799374d7308d0588e531f0263ea09a5d284bc887171b
+  artifact_expires_at: 2026-09-16T02:22:59Z
+  current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   independent_editorial_review: false
   article_golden: false
 
 active_defect:
   code: RAG_RETRIEVAL_ORDER_AND_SELECTION_ACCESSIBILITY_MISMATCH
-  status: REPAIRED_PENDING_CURRENT_EXACT_QA
+  status: REPAIRED_EXACT_QA_AND_MANUAL_REVIEW_PASS
   affected_visual: rag-trigger-fragment
-  findings:
-    - >-
-      In optimized-trigger mode CSS moved the poisoned document above the top-K cut while its hard-coded
-      visible badge remained rank 4; the other rows kept their clean badges and DOM/accessibility order stayed
-      in the clean sequence.
-    - >-
-      Selection labels were hidden from sighted users with opacity but remained exposed to assistive
-      technologies. The poisoned row therefore still announced selected in clean mode, and the ticket row
-      still announced selected after it moved below the top-K cut in poisoned mode.
   repair: >-
-    ES and EN now derive DOM sequence, cut position, rank badges and per-row selected/outside status from the
-    same per-mode order. syncRanking() physically reorders rows, assigns ranks 1..4 and synchronizes localized
-    visible status text plus an explicit localized top-K aria-label. Visual and non-visual representations now
-    share one state source.
-  first_stage_es_head: 5a483ccc85b8cf56a4d2e68c351cff6f2b426410
-  first_stage_en_head: c08826cc7e9226f72f27b40e587b8dd73a51b92f
-  final_es_head: e6ab8f4d3fcd43633dd6644b9d2b7a0f064771a3
-  final_en_site_facing_head: c74784f2f17c625bb9bb622395d836552a747273
-  semantic_gate_hardening_head: d5bf731a10e467b5a492ba46720635575dcc80a1
-  run36_scope_note: >-
-    Run 36 exact head 0d42b8b contains the first-stage rank/DOM-order repair but predates the follow-up
-    selected/outside accessibility-label repair and the hardened semantic assertions. It is diagnostic history,
-    not current-content certification.
-  deterministic_gate: >-
-    The focused Prompt Injection gate now asserts per mode: DOM/accessibility row sequence, exact cut position,
-    ranks 1..4, selected/outside text and localized top-K aria-label. The pre-repair states fail these assertions.
-    This gate source is pending exact integration and is not represented as validated by run 36.
+    ES and EN derive DOM sequence, top-K cut position, rank badges and per-row selected/outside semantics from
+    one mode-dependent ordering state. syncRanking() physically reorders rows, assigns ranks 1..4 and
+    synchronizes localized status text plus localized top-K aria-labels.
+  exact_gate: >-
+    The exact integration includes both the final site-facing repair and the strengthened visual-state validator.
+    For clean and poisoned states the gate asserts DOM/accessibility sequence, exact cut position, ranks 1..4,
+    selected/outside text and localized top-K aria-labels across ES/EN, desktop/mobile and normal/reduced motion.
   regression_scope: >-
     Site-facing changes are confined to the Security 1.1 RAG snippet in ES and EN; gate hardening is confined
-    to its focused visual-state validator. Datacenters and pre-Datacenters reference-series files are untouched.
+    to the focused Security validator. Datacenters and pre-Datacenters reference-series files are untouched.
 
-last_completed_manual_review:
-  content_head: 9b2232a92bd6893e19b4e33847c711d20139615a
-  exact_qa_integration_head: 1d38065785438489e648e17b71cdd520a059d59d
-  diagnostic_run: 34913404049
-  evidence_artifact_id: 10375692414
-  reviewer_independence: SAME_AGENT_NOT_INDEPENDENT
-  full_page_contexts_inspected: 16
-  full_page_matrix: ES_EN_x_PRESENTATION_PROMPT_x_DESKTOP_MOBILE_x_NORMAL_REDUCED
-  visual_asset_contexts_inspected: 16
-  prompt_state_captures_inspected: {ctxmix: 24, ragtrace: 48, defsim: 40}
-  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
-  superseded_for_current_pixels: true
-  superseded_reason: >-
-    Run 35 predates the current RAG rank, DOM-order and selection-accessibility repairs. Its review remains
-    historical evidence only and cannot certify current pixels or pedagogy.
-
-latest_exact_run:
-  diagnostic_run: 34916286889
-  exact_qa_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
-  content_head_included: c08826cc7e9226f72f27b40e587b8dd73a51b92f
+exact_run_37:
+  run_id: 34920449262
+  exact_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
   status: COMPLETED_FAILURE_EXPECTED
-  artifact_id: 10376782066
-  artifact_expires_at: 2026-09-16T01:19:09Z
-  current_content_supersedes_it: true
-  technical_steps_completed_success:
+  artifact_id: 10377524435
+  technical_passes:
     - negative_regression_fixtures
     - publication_discovery
-    - source_audit_execution
     - strict_es_build
     - publication_contract
-    - media_probe
     - strict_en_build
     - structured_provenance_locale_metadata
     - reciprocal_article_watch_locale_ui
-    - rendered_audit_execution
     - focused_browser_interaction_layout_playback
     - wcag_contrast_and_state_text_visibility
     - video_lifecycle_keyboard_touch_normal_reduced
     - real_touch_article_watch
     - prompt_injection_visual_state_evidence
     - real_keyboard_traversal_visible_focus
-    - bounded_failed_diagnostic_evidence_retention
-  final_enforcement: FAIL_CLOSED_EXPECTED
-  do_not_infer: [CURRENT_PIXEL_PASS, CURRENT_PEDAGOGY_PASS, ARTICLE_GOLDEN]
+    - evidence_retention
+  fail_closed_outcomes:
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_PASS: false
+    RENDERED_GLOBAL_PASS: false
+    PIXEL_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    PEDAGOGY_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
+    ARTICLE_GOLDEN: false
+  note: >-
+    Overall workflow failure is intentional: the final enforcement preserves global source/rendered catalogue
+    debt and Security media debt as blockers. A focused technical run cannot certify the catalogue or article.
 
-historical_run36_manual_inspection:
-  exact_qa_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
-  artifact_id: 10376782066
+current_manual_review:
+  exact_qa_head: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
+  content_head: c74784f2f17c625bb9bb622395d836552a747273
+  artifact_id: 10377524435
   reviewer_independence: SAME_AGENT_NOT_INDEPENDENT
-  inspected_rag_step0_matrix: ES_EN_x_DESKTOP_MOBILE_x_NORMAL_REDUCED_x_CLEAN_POISONED
-  observed_first_stage_result: >-
-    The retained run-36 RAG screenshots showed coherent visible first-stage ranking after the rank/DOM-order
-    repair: clean rendered runbook 1 and tickets 2 above the cut, while poisoned rendered poisoned email 1 and
-    runbook 2 above the cut, with ranks 3 and 4 below it. Representative desktop and mobile captures were also
-    inspected directly for clipping and readable composition.
-  current_pixel_pass: false
-  current_pedagogy_pass: false
-  superseded_reason: >-
-    Current site-facing bytes add selected/outside accessibility semantics after run 36, so this real inspection
-    is historical evidence only and cannot certify the current revision.
-
-current_technical_gates:
-  current_site_facing_head: c74784f2f17c625bb9bb622395d836552a747273
-  semantic_gate_source_head: d5bf731a10e467b5a492ba46720635575dcc80a1
-  exact_current_integration: PENDING_NEXT_MEANINGFUL_HITO
-  source_pass: false
-  rendered_pass: false
-  media_pass: false
-  pixel_review: PENDING_CURRENT_EXACT_MANUAL
-  pedagogy_review: PENDING_CURRENT_EXACT_MANUAL
-  article_golden: false
+  full_page_contexts_inspected: 16
+  full_page_matrix: ES_EN_x_PRESENTATION_PROMPT_x_DESKTOP_MOBILE_x_NORMAL_REDUCED
+  focused_visual_contexts_available_and_reviewed: 16
+  rag_final_state_contexts_inspected: 16
+  rag_matrix: ES_EN_x_DESKTOP_MOBILE_x_NORMAL_REDUCED_x_CLEAN_POISONED
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  observations:
+    - >-
+      Full-page captures preserve readable hierarchy and composition on desktop and ~390px mobile without global
+      horizontal overflow, clipping, locale leakage or a current RAG layout regression.
+    - >-
+      Clean RAG renders runbook rank 1 plus ticket history rank 2 above the top-K cut; poisoned RAG renders the
+      poisoned email rank 1 plus internal runbook rank 2 above the cut, with ranks 3 and 4 below it in both locales.
+    - >-
+      The scenario changes retrieved context and downstream proposal, so the interaction teaches an observable
+      retrieval-to-context-to-output mechanism rather than a cosmetic label/color change.
+    - >-
+      Normal and reduced-motion matrices remain semantically equivalent; reduced motion does not remove the
+      explanatory state transition or static alternative.
+  limitation: >-
+    This is a same-agent editorial review of the exact retained pixels, not an independent review, and therefore
+    must not be represented as independent certification or ARTICLE_GOLDEN.
 
 media:
   status: FAIL
@@ -144,7 +109,7 @@ media:
     VIDEO_CAPTIONS_MISSING: 4
     VIDEO_TRANSCRIPT_MISSING: 4
     VIDEO_CHAPTERS_MISSING: 4
-  locale_identity: LAST_COMPLETED_PASS_RUN35_DISTINCT_ES_EN_MEDIA
+  locale_identity: PASS_DISTINCT_ES_EN_MEDIA
   es:
     00_presentacion_serie: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.300, audio_stream: false}
     01-prompt-injection: {codec: h264, dimensions: 1920x1080, pixel_format: yuv420p, duration_seconds: 60.333, audio_stream: false}
@@ -160,6 +125,13 @@ catalogue_requalification:
   target_series: 7
   routes_per_locale: 42
   locale_pages: 84
+  publication_discovery:
+    public_series: 13
+    presentation_series: 8
+    chapter_first_series: 5
+    public_chapters: 67
+    public_pages: 75
+    errors: 0
   current_open_counts:
     RAW_TEX_RENDERED: 28
     VIDEO_DECLARATION_MISSING: 60
@@ -177,20 +149,18 @@ sources_and_locale:
   material_claims_changed_in_this_repair: false
   primary_source_research_required_by_this_repair: false
   es_en_repair_mirrored: true
+  structured_provenance_locale_gate: PASS
   note: >-
-    These repairs correct representation of an already-stated illustrative retrieval order and its top-K
-    membership. No factual claim, benchmark value, unit, formula, reference, caveat or example premise changed.
+    The RAG repair changes representation/accessibility of an existing illustrative retrieval example, not a
+    material factual claim, benchmark value, unit, formula, reference, caveat or example premise.
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_relation_before_final_manifest_reconcile: AHEAD_166_BEHIND_0
+  repair_branch_exact_head_before_manifest_reconcile: e58dcdc7f6df6eafcb5c5c088a7d397d07abf0b1
   draft_pr_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_for_revision_36: 1
-  second_action_started_after_followup_repair: 0
-  cost_note: >-
-    No second Action was launched merely to chase the follow-up accessibility repair during the same run.
-    The final site-facing bytes plus hardened gate must travel together in the next meaningful exact QA hito.
+  actions_started_for_revision_37: 1
+  extra_action_after_manual_review: 0
   pr_created: false
   merged: false
   deployed: false
@@ -199,22 +169,22 @@ concurrency_and_release:
   release_contract_281_preserved: true
 
 history:
-  durable_checkpoint_comment: 5673181073
-  run35_manifest_head: 2f519b996c97aa8c70b4deac95919abe51547a3b
+  previous_durable_checkpoint_comment: 5673181073
+  run36_exact_head: 0d42b8b3645c75e21d4d16c2a83eac1817899a63
+  run36_artifact_id: 10376782066
+  run36_status: SUPERSEDED_FOR_CURRENT_CONTENT
   historical_receipts_preserved_in_git_and_issue_305: true
 
 next_exact_gap:
   stay_on_series: seguridad-ia
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
-  immediate_action: >-
-    Treat run 36 as superseded for current-content certification. On the next meaningful exact integration,
-    include c74784f current site-facing bytes and d5bf731 semantic assertions together; inspect clean/poisoned
-    RAG sequence, rank numerals, top-K selected/outside semantics and layout across ES/EN, desktop/mobile and
-    normal/reduced motion. Do not inherit any prior PIXEL_REVIEW or PEDAGOGY_REVIEW.
+  repaired_gap: CURRENT_RAG_SEMANTICS_EXACTLY_REQUALIFIED
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  independent_work_policy: >-
+    While VOICE_MISSING remains, continue only deterministic defects independently verifiable in this active
+    set; do not advance to 1.2 merely because the audiovisual input is external.
   article_golden_condition: >-
-    Do not grant ARTICLE_GOLDEN until the current RAG repair and its deterministic semantic gate are exactly
-    requalified, audio/captions/transcript/curated key moments are complete, and the full conjunctive article
-    gate is rerun on one stable exact revision with zero known P0/P1/P2.
+    Do not grant ARTICLE_GOLDEN until authorized audio, captions, transcript and curated key moments are complete
+    and the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
