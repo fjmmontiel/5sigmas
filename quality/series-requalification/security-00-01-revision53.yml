@@ -1,0 +1,151 @@
+revision: 53
+scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  locales: [es, en]
+status: CHANGES_REQUIRED
+article_golden: false
+site_facing_bytes_changed: false
+
+exact_execution:
+  run_id: 35015072623
+  exact_head: 05c0f51bee3580a12caff263c2422cf446e4e38b
+  workflow: Security capture direct execution
+  overall_conclusion: failure
+  reason: PROMPT_STATE_CAPTURE_TWO_SUBPIXEL_PLACEMENT_FAILURES
+  strict_es_build: PASS
+  strict_en_build: PASS
+  range_preview_self_test: PASS
+
+capture_security_visuals:
+  direct_execution: PASS
+  contexts_observed: 56
+  coverage: 14_ES_EN_routes_x_desktop_mobile_x_normal_reduced
+  real_touch_mobile: true
+  prompt_influence_authorization_states: true
+  verdict_basis: POST_CONTEXT_TEARDOWN
+  post_teardown_contexts: 56
+  failure_count: 0
+  runtime_unexpected_total: 0
+  listener_lifetime_repair: CLOSED_BY_EXACT_EXECUTION
+
+prompt_visual_states:
+  technical_outcome: FAIL_CLOSED
+  contexts_observed: 8
+  post_teardown_contexts: 8
+  runtime_unexpected_total: 0
+  failure_count: 2
+  failures:
+    - locale: es
+      viewport: desktop_1440
+      motion: normal
+      state: ctxmix_4
+      measured_top_px: 67.53125
+      safe_top_px: 69
+      height_px: 925.203125
+      available_height_px: 931
+      classification: SUBPIXEL_SCROLL_QUANTIZATION_FALSE_POSITIVE
+    - locale: en
+      viewport: desktop_1440
+      motion: normal
+      state: ctxmix_4
+      measured_top_px: 67.90625
+      safe_top_px: 69
+      height_px: 925.203125
+      available_height_px: 931
+      classification: SUBPIXEL_SCROLL_QUANTIZATION_FALSE_POSITIVE
+  note: >-
+    All mobile placement failures from revision 52 are closed. The only remaining failures are two normal-motion desktop state-4
+    measurements approximately 1.1-1.5 px above the safe-top target while the isolated screenshot itself hides only fixed/sticky
+    site chrome. The pass threshold was not relaxed.
+
+post_run_repair:
+  commit: a903035c43c3d9e34b23c83186bd3f53de6cfe96
+  status: IMPLEMENTED_PENDING_EXACT_QA
+  site_facing_bytes_changed: false
+  thresholds_changed: false
+  repair: >-
+    For assets that physically fit below sticky chrome, target an adaptive positive placement inset up to 2 px based on available
+    spare height before assigning scrollTop. Keep the existing final safe-top assertion unchanged. Tall mobile assets receive no
+    inset and remain evaluated without an impossible whole-asset-fit requirement.
+
+bounded_artifact:
+  artifact_id: 10414979391
+  files: 6
+  bytes: 686865
+  retention_days: 1
+  contents: [capture_report_json, prompt_state_report_json, four_mobile_ctxmix_state4_pngs]
+  cost_gate: PASS_BOUNDED_LT_0_7MB
+
+manual_targeted_pixel_inspection:
+  performed: true
+  scope: FOUR_RETAINED_MOBILE_CTXMIX_STATE4_IMAGES_ONLY
+  images:
+    - es_mobile_normal
+    - es_mobile_reduced
+    - en_mobile_normal
+    - en_mobile_reduced
+  sticky_header_occlusion: PASS_NOT_PRESENT
+  labels_legible: PASS_IN_RETAINED_IMAGES
+  mechanism_visible: >-
+    Untrusted external content changes the proposal; runtime authority checks scope, destination and permission; the risky
+    send_credentials call to an attacker destination is denied.
+  whole_article_pixel_review: NOT_PERFORMED_THIS_REVISION
+  whole_article_pedagogy_review: NOT_PERFORMED_THIS_REVISION
+  reviewer_independence: SAME_AGENT
+  carried_whole_active_set_review: REVISION_43_SAME_AGENT_ONLY
+
+media:
+  status: FAIL
+  narration_status: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  generated_or_cloned_voice: false
+  fabricated_timings: false
+
+catalogue_global_debt:
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  RAW_TEX_RENDERED: 28
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_NOT_RENDERED: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  source_pass: false
+  rendered_pass: false
+  media_pass: false
+
+sources_and_locale:
+  material_claims_changed: false
+  new_primary_source_research_claimed: false
+  strict_es: PASS
+  strict_en: PASS
+  note: Gate-only and evidence-only changes; no benchmark, unit, formula, claim, caveat, reference, locale copy or site-facing visual changed.
+
+release_contract_281:
+  status: CHANGES_REQUIRED_BLOCKED_FRESH_UNCACHED_LIVE_VERIFICATION
+  linkedin_write_queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_issue_279: true
+
+release:
+  pr_created: false
+  merged: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified: false
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  do_not_start: 02-jailbreaks
+  immediate: EXACT_QA_ADAPTIVE_PLACEMENT_INSET_REPAIR
+  first_external_blocker: AUTHORIZED_NARRATION_AUDIO
+  dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  golden_forbidden_until_full_conjunctive_gate: true
