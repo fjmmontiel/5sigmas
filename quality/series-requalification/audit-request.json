@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 35,
+  "diagnostic_revision": 36,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "9b2232a92bd6893e19b4e33847c711d20139615a",
-  "reason": "Re-run Security 00/1.1 after revision 34 correctly failed the new text-visibility gate on one residual explanatory text selector (.ctxmix__runtime small) whose own opacity was 0.75 across all 32 ES/EN desktop/mobile normal/reduced state contexts. The group-opacity repair itself worked; this revision removes the remaining local fading without weakening the >=0.99 effective-opacity contract. Revision 34 logs prove the browser gate failed deterministically when its report contained 32 violations, so no threshold or enforcement change is required. Re-run all strict build, provenance, article-watch, playback, touch, contrast/text-visibility and focus gates on one exact head. SOURCE/RENDERED catalogue findings and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
+  "requested_head_parent": "c08826cc7e9226f72f27b40e587b8dd73a51b92f",
+  "reason": "Requalify Security 00/1.1 after finding a real pedagogy/accessibility defect in the RAG retrieval visual: CSS moved the poisoned document from rank 4 to visual rank 1 in the optimized-trigger scenario while the visible rank badge stayed 4 and DOM/accessibility order stayed in the original clean sequence. ES/EN now derive DOM order and rank badges from one canonical per-mode order so visual sequence, text labels and accessibility reading order agree. Run strict ES/EN, provenance, article-watch, browser/playback, contrast/text-visibility, lifecycle/touch, Prompt Injection state captures and keyboard/focus on the exact revision. Manually inspect clean/poisoned ranking pixels before restoring PIXEL/PEDAGOGY PASS. SOURCE/RENDERED catalogue debt and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
