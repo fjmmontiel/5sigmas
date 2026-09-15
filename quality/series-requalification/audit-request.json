@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 43,
+  "diagnostic_revision": 44,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "8cd63ee5c6cc7f073b27879735227758439db382",
-  "reason": "Integrate two fail-closed evidence/gate repairs discovered while reviewing revision 42: (1) retain ctxmix state 2 pixels, so all semantic states 1/2/3/4 are durably available for real ES/EN desktop/mobile normal/reduced pixel and pedagogy inspection; (2) require all three localized runtime authorization-result labels at state 4 (ES scope/destino/permiso; EN scope/destination/permission) with negative mutations for missing labels. Site-facing bytes are unchanged from b44a3e9d. Run one focused exact integration, retain bounded evidence, and keep global SOURCE/RENDERED and MEDIA fail-closed. No ARTICLE_GOLDEN is allowed.",
+  "requested_head_parent": "d8924c5e66b2481d0ffdcd0ee8c99991cb3083d8",
+  "reason": "Close a shared fail-open listener-lifetime defect in the focused Security QA: several existing gates checked runtime/resource arrays before context.close(), so teardown-time lazy-media/resource errors could arrive after their verdict. Add an independent conjunctive post-teardown listener-lifetime gate across ES/EN Security 00/1.1, desktop/mobile, normal/reduced motion, teaching interactions and inline-media playback. The gate has a deterministic teardown mutation self-test and retains its final post-close arrays. Site-facing bytes are unchanged from b44a3e9d; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
