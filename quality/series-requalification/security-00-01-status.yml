@@ -1,4 +1,4 @@
-schema_version: 24
+schema_version: 25
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -41,7 +41,7 @@ global_gate_state:
 last_full_exact_qa:
   revision: 50
   run_id: 35006430159
-  note: Full focused exact-QA before the later direct-capture-only milestones; SOURCE, RENDERED and MEDIA remained fail-closed.
+  note: Full focused exact-QA before later bounded capture milestones; SOURCE, RENDERED and MEDIA remained fail-closed.
 
 specialized_capture_milestones:
   revision_52:
@@ -52,9 +52,6 @@ specialized_capture_milestones:
     post_context_teardown: 56
     runtime_unexpected: 0
     prompt_state_outcome: FAIL_34_PLACEMENT_CHECKS
-    finding: >-
-      Direct capture closed the remaining capture_security_visuals listener-lifetime gap. The prompt harness exposed a bad placement
-      rule: tall mobile assets could not physically fit below sticky chrome and CSS smooth scrolling raced the measurement.
     artifact:
       id: 10415215920
       files: 6
@@ -76,35 +73,58 @@ specialized_capture_milestones:
     prompt_runtime_unexpected: 0
     prompt_failure_count: 2
     prompt_failures: [es_desktop_normal_ctxmix_state4_subpixel_placement, en_desktop_normal_ctxmix_state4_subpixel_placement]
-    finding: >-
-      Revision 53 closed every mobile placement failure. Only two normal-motion desktop state-4 measurements remained roughly
-      1.1-1.5 px above safeTop due browser scroll/subpixel quantization; isolated screenshot chrome was already hidden and the
-      direct visual capture passed, so this is a harness placement false positive, not a newly observed site-facing defect.
     artifact:
       id: 10414979391
       files: 6
       bytes: 686865
       retention_days: 1
+  revision_54:
+    run_id: 35018155184
+    exact_head: 676ae5982de6c8f4fa5b1bf3d05d2bf1d6c416f1
+    overall: PASS_BOUNDED_TECHNICAL_CAPTURE
+    strict_es: PASS
+    strict_en: PASS
+    range_preview_self_test: PASS
+    direct_capture_security_visuals: PASS
+    direct_capture_contexts: 56
+    direct_capture_post_context_teardown: 56
+    direct_capture_runtime_unexpected: 0
+    prompt_state_outcome: PASS
+    prompt_contexts: 8
+    prompt_post_context_teardown: 8
+    prompt_runtime_unexpected: 0
+    prompt_failure_count: 0
+    finding: >-
+      The adaptive placement inset closed the final two revision-53 false positives without weakening the safeTop assertion or
+      changing site-facing bytes. ES/EN desktop/mobile normal/reduced Prompt-state contexts now pass, and both capture harnesses
+      base their verdicts on post-context teardown state with zero unexpected runtime events.
+    artifact:
+      id: 10417245002
+      files: 6
+      bytes: 686611
+      retention_days: 1
+      expires_at: 2026-09-16T20:19:18Z
 
 specialized_debt:
   SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN:
-    state: CLOSED_BY_REVISION_52_AND_RECONFIRMED_REVISION_53
+    state: CLOSED_BY_REVISION_52_RECONFIRMED_REVISION_54
     evidence: DIRECT_CAPTURE_56_CONTEXTS_POST_TEARDOWN_ZERO_RUNTIME_FAILURES
   FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE:
-    state: CLOSED_BY_BOUNDED_REVISION_52_AND_53
+    state: CLOSED_BY_BOUNDED_REVISIONS_52_TO_54
     previous_revision_50: 171_FILES_44470688_BYTES
     current_bound: 6_FILES_LT_0_7MB_RETENTION_1_DAY
   PROMPT_STATE_STICKY_HEADER_CAPTURE:
-    state: IMPLEMENTED_PENDING_EXACT_QA
-    latest_repair_commit: a903035c43c3d9e34b23c83186bd3f53de6cfe96
+    state: CLOSED_BY_REVISION_54
+    repair_commit: a903035c43c3d9e34b23c83186bd3f53de6cfe96
     thresholds_lowered: false
+    evidence: PROMPT_8_CONTEXTS_ZERO_FAILURES_POST_TEARDOWN
     repair: >-
-      Fit-aware captures hide only fixed/sticky site chrome for isolated asset pixels and use synchronous scrolling. The latest
-      code adds an adaptive positive placement inset up to 2 px when spare viewport height allows it, absorbing scroll
-      quantization while leaving the existing safeTop assertion unchanged.
+      Fit-aware captures hide only fixed/sticky site chrome for isolated asset pixels and use synchronous scrolling. An adaptive
+      positive placement inset of at most 2 px applies only when spare viewport height permits it; the existing safeTop assertion
+      remains unchanged.
 
 manual_review:
-  revision_53_targeted_pixel_inspection:
+  revision_54_targeted_pixel_inspection:
     performed: true
     scope: FOUR_RETAINED_MOBILE_CTXMIX_STATE4_IMAGES_ONLY
     locales: [es, en]
@@ -114,6 +134,7 @@ manual_review:
     causal_mechanism_visible: true
     whole_article_pixel_review: NOT_PERFORMED
     whole_article_pedagogy_review: NOT_PERFORMED
+    desktop_manual_pixel_review: NOT_RETAINED_IN_BOUNDED_ARTIFACT
     independent_reviewer: false
   whole_active_set_last_review:
     revision: 43
@@ -138,9 +159,9 @@ media:
 sources_and_locales:
   material_claims_changed_since_revision_50: false
   factual_research_reopened_this_revision: false
-  latest_specialized_strict_es: PASS_REVISION_53
-  latest_specialized_strict_en: PASS_REVISION_53
-  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual was changed by revisions 52-53 or the pending placement repair.
+  latest_specialized_strict_es: PASS_REVISION_54
+  latest_specialized_strict_en: PASS_REVISION_54
+  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed in revision 54.
 
 concurrency_release:
   main_at_last_read: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
@@ -155,21 +176,26 @@ concurrency_release:
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
   blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  fresh_uncached_live_attempt_this_run: DNS_RESOLUTION_FAILED_IN_RUNTIME
+  cached_web_used_as_production_evidence: false
   linkedin_action_by_this_lane: false
   queue_activation_publish: false
   seventy_two_hour_clock_restarted: false
   preserve_279: true
 
 last_action:
-  run_id: 35015072623
-  revision: 53
-  reason: BOUNDED_EXACT_RETEST_AFTER_REVISION_52_CAPTURE_PLACEMENT_FINDINGS
-  additional_action_after_pending_repair: false
+  run_id: 35018155184
+  revision: 54
+  reason: BOUNDED_EXACT_QA_ADAPTIVE_PLACEMENT_INSET_REPAIR
+  conclusion: success
+  additional_action_after_result: false
 
 next_gap:
   stay_on: seguridad-ia_00_plus_01
-  immediate: EXACT_QA_ADAPTIVE_PLACEMENT_INSET_REPAIR
+  deterministic_specialized_capture_gap: CLOSED
   do_not_advance_to: 02-jailbreaks
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  whole_article_pixel_and_pedagogy_recertification_required_before_golden: true
+  global_source_rendered_media_debt_still_fail_closed: true
   golden_forbidden_until_all_conjunctive_gates_pass: true
