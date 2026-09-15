@@ -1,4 +1,4 @@
-schema_version: 19
+schema_version: 20
 scope:
   series: seguridad-ia
   pages: [00_presentacion_serie, 01-prompt-injection]
@@ -8,26 +8,80 @@ scope:
 
 head_state:
   current_site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
-  current_gate_head: d3ae2b4c7b735b4c48cb54e7a1605019e570f7d9
-  last_exact_qa_head: afe6a46e109c3105064a8baa32c8073246fa33e1
-  last_exact_qa_run: 34961682456
-  last_exact_qa_revision: 47
-  last_exact_qa_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
-  current_gate_exact_qa: PASS_REVISION_47_SENTINEL_SPECIALIZED_REPAIRS_PENDING_EXACT_QA
+  current_gate_head: 46f40bf51d2186fe8bd8b4097f433fe726565665
+  last_exact_qa_head: 99a38612704ee2d83be84faa7f3cec20ab4df1bc
+  last_exact_qa_run: 34987279088
+  last_exact_qa_revision: 48
+  last_exact_qa_status: COMPLETED_FAILURE_LIFECYCLE_CLASSIFIER_AND_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
+  current_gate_exact_qa: CHANGES_REQUIRED_REVISION_48_LIFECYCLE_RESIDUAL_REPAIRED_PENDING_EXACT_QA
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
   current_editorial_evidence_artifact: 10383286488
   independent_editorial_review: false
   article_golden: false
 
-revision_47:
-  receipt: quality/series-requalification/security-00-01-revision47.yml
-  exact_head: afe6a46e109c3105064a8baa32c8073246fa33e1
-  run_id: 34961682456
-  artifact_id: 10394042416
+revision_48:
+  exact_head: 99a38612704ee2d83be84faa7f3cec20ab4df1bc
+  run_id: 34987279088
+  artifact_id: 10404722127
   artifact_retention_days: 1
-  status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
+  artifact_expires_at: '2026-09-16T15:27:07Z'
+  status: COMPLETED_FAILURE_LIFECYCLE_CLASSIFIER_AND_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
   site_facing_bytes_changed: false
+  focused_browser:
+    status: PASS_EXACT_QA
+    verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
+    expected_contexts: 16
+    observed_contexts: 16
+    failure_count: 0
+  contrast:
+    status: PASS_EXACT_QA
+    contexts: 128
+    wcag_normal_text_threshold: 4.5
+    opaque_teaching_text_min: 0.999
+    failure_count: 0
+    runtime_verdict_basis: POST_CONTEXT_TEARDOWN_FAIL_CLOSED_EXCEPT_TEARDOWN_ERR_ABORTED
+  text_visibility:
+    status: PASS_EXACT_QA
+    minimum_effective_opacity: 0.99
+    failure_count: 0
+    verdict_basis: POST_CONTEXT_TEARDOWN
+  video_lifecycle:
+    status: FAIL_EXACT_QA_ONE_RESIDUAL_CLASSIFIER_EDGE
+    verdict_basis: POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE
+    expected_contexts: 16
+    observed_contexts: 16
+    failure_count: 1
+    exact_context: es/presentation/desktop/no-preference
+    exact_event: >-
+      The same media request req-55 returned HTTP 206 at sequence 54 while the player was in media-start, then Chromium emitted
+      net::ERR_ABORTED at sequence 55 after the explicit seek had settled and the post-seek playback probe was advancing.
+      The media remained error-free (readyState=4, networkState=1), the quarter-duration seek reached its target, playback
+      advanced, the end-seek reached its target, the ended event fired, and the player reset. Revision 48 correctly failed
+      because the classifier allowed the correlated cancellation only when the callback happened in media-seek, not when the
+      same cancellation callback arrived during post-seek-playback.
+    previous_classifier_commit: 165b5c5f10120d97aca5a4061d640eaf64810aa6
+    repair_commit: 46f40bf51d2186fe8bd8b4097f433fe726565665
+    repair_status: IMPLEMENTED_PENDING_EXACT_QA
+    repair_details: >-
+      The exception now covers only the explicit primary seek/playback lifecycle. A post-seek-playback abort requires a
+      successful 200/206 on the exact same Request before cancellation plus settled seek, readyState>=2, no media.error and
+      proven playback advance. A later same-source request is not sufficient proof in this phase. media-start/generic aborts,
+      unrelated requests, missing response proof, wrong source, unsettled seek, media error, non-advancing playback,
+      invalid end-state, non-abort failures and late console/HTTP errors remain deterministic fail-closed mutations.
+    mutation_self_test: IMPLEMENTED_NOT_EXECUTED_IN_REVISION_48_WORKFLOW
+  article_watch_touch:
+    status: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_LISTENER_DEBT_REMAINS
+    contexts: 8
+    failure_count: 0
+  prompt_visual_states:
+    status: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_LISTENER_DEBT_REMAINS
+    contexts: 8
+    failure_count: 0
+  keyboard_focus:
+    status: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_LISTENER_DEBT_REMAINS
+    contexts: 8
+    failure_count: 0
   runtime_listener_lifetime:
     status: PASS_EXACT_QA
     verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
@@ -46,15 +100,15 @@ revision_47:
     structured_provenance_locale_metadata: PASS
     reciprocal_article_watch_locale_ui: PASS
     rendered_html_audit: FAIL_CLOSED_GLOBAL_DEBT
-    focused_browser_layout_playback: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    wcag_contrast_and_text_visibility: PASS_AT_EXACT_HEAD_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    lifecycle_normal_reduced: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    real_touch_article_watch: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    prompt_visual_states: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    real_keyboard_focus: PASS_AT_REVISION_47_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
-    runtime_listener_lifetime: PASS_EXACT_QA
+    focused_browser_layout_playback: PASS_EXACT_QA_REVISION_48
+    wcag_contrast_and_text_visibility: PASS_EXACT_QA_REVISION_48
+    lifecycle_normal_reduced: FAIL_EXACT_QA_REVISION_48_ONE_CLASSIFIER_EDGE
+    real_touch_article_watch: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    prompt_visual_states: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    real_keyboard_focus: PASS_TECHNICAL_REVISION_48_BUT_SOURCE_AUDIT_FOUND_LISTENER_DEBT
+    runtime_listener_lifetime: PASS_EXACT_QA_REVISION_48
     global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
-    conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
+    conjunctive_enforcement: FAIL_EXPECTED_LIFECYCLE_PLUS_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
   editorial_review:
     new_manual_review_performed_this_revision: false
     reason: SITE_FACING_BYTES_UNCHANGED_FROM_REVISION_43
@@ -63,77 +117,42 @@ revision_47:
     pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
     prior_review_artifact: 10383286488
 
-open_gate_debt_revision_47:
-  - code: SECURITY_SPECIALIZED_GATES_RUNTIME_LISTENER_FAIL_OPEN
+specialized_gate_debt:
+  - code: SECURITY_VIDEO_LIFECYCLE_POST_SEEK_ABORT_PHASE_CLASSIFICATION
+    severity: P1
+    status: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+    exact_failure_run: 34987279088
+    exact_failure_artifact: 10404722127
+    repair_commit: 46f40bf51d2186fe8bd8b4097f433fe726565665
+    site_facing_bytes_changed: false
+    thresholds_changed: false
+  - code: SECURITY_REMAINING_SPECIALIZED_GATES_RUNTIME_LISTENER_FAIL_OPEN
     severity: P1
     status: IN_PROGRESS
     discovery: >-
-      After the request-correlated sentinel passed exact revision 47, source inspection found specialized Security gates that
-      still blanket-ignore net::ERR_ABORTED and/or compute runtime failure before context.close(). Their green technical
-      results do not independently satisfy the reinforced listener-lifetime contract.
+      Source inspection still finds specialized harnesses whose successful revision-48 step status cannot satisfy the reinforced
+      runtime-listener contract because they blanket-ignore ERR_ABORTED and/or decide from runtime arrays before teardown.
     affected:
-      - scripts/validate_security_requalification_browser.mjs
-      - scripts/validate_security_video_lifecycle.mjs
       - scripts/validate_security_article_watch_touch.mjs
       - scripts/validate_security_prompt_visual_states.mjs
-      - scripts/validate_security_contrast.mjs
-      - scripts/validate_security_text_visibility.mjs
       - scripts/validate_security_keyboard_focus.mjs
       - scripts/capture_security_visuals.mjs
-    repairs_implemented_pending_exact_qa:
-      - file: scripts/validate_security_contrast.mjs
-        commit: 99107ba02cbcfe72fcf37b117ffadb29863f9faf
-        status: IMPLEMENTED_PENDING_EXACT_QA
-        site_facing_bytes_changed: false
-        thresholds_changed: false
-        details: >-
-          Removed blanket pre-teardown ERR_ABORTED filtering, added navigation/interaction/teardown phases and continuous
-          console/pageerror/requestfailed/HTTP capture, moves runtime verdict after context.close(), and only classifies
-          teardown-phase ERR_ABORTED as expected context cancellation. Deterministic mutations prove interaction aborts,
-          non-abort teardown request failures, page errors, console errors and HTTP errors remain fatal.
-      - file: scripts/validate_security_text_visibility.mjs
-        commit: 865aa030cb3d99c0920e01c052cd9637631a5493
-        status: IMPLEMENTED_PENDING_EXACT_QA
-        site_facing_bytes_changed: false
-        thresholds_changed: false
-        details: >-
-          Removed the blanket ERR_ABORTED suppression, records navigation/interaction/teardown phase on all runtime/resource
-          events, retains listeners through context.close(), computes the verdict from final post-teardown arrays, preserves
-          only teardown-phase ERR_ABORTED as expected cancellation, and adds deterministic listener-lifetime mutations while
-          preserving the existing opacity, semantic-staging and localized authorization-label contracts.
-      - file: scripts/validate_security_requalification_browser.mjs
-        commit: d3ae2b4c7b735b4c48cb54e7a1605019e570f7d9
-        status: IMPLEMENTED_PENDING_EXACT_QA
-        site_facing_bytes_changed: false
-        thresholds_changed: false
-        details: >-
-          Removed blanket ERR_ABORTED suppression and added console/pageerror/requestfailed/HTTP capture with explicit phases,
-          stable Playwright Request identity, successful media-response evidence, a settled/error-free/advancing post-seek
-          lifecycle requirement, and verdict computation only after context.close(). Generic aborts, unrelated response proof,
-          missing response proof, wrong source, unsettled seek, media error, non-advancing playback and late console/HTTP
-          failures are deterministic negative mutations. Pixel and pedagogy remain explicitly pending in this technical gate.
-    next_gate: scripts/validate_security_video_lifecycle.mjs
-
-resolved_runtime_abort_defect:
-  code: SECURITY_ES_INLINE_VIDEO_PRE_TEARDOWN_ERR_ABORTED
-  status: RESOLVED_BY_REQUEST_CORRELATED_SENTINEL_REVISION_47
-  previous_failure_run: 34956668683
-  diagnostic_run: 34958785679
-  exact_pass_run: 34961682456
-  resolution: >-
-    The ES media seek can produce a successful 206 response and then Chromium cancellation on the same request while the
-    seek settles and post-seek playback remains healthy. Revision 47 proves this is accepted only through exact request
-    identity/response correlation plus settled, error-free, advancing media state; generic or unproven aborts remain fatal.
+    already_exact_qualified_revision_48:
+      - scripts/validate_security_contrast.mjs
+      - scripts/validate_security_text_visibility.mjs
+      - scripts/validate_security_requalification_browser.mjs
+      - scripts/validate_security_runtime_listener_lifetime.mjs
+    next_gate: scripts/validate_security_article_watch_touch.mjs
 
 historical_receipts:
   revision_46_file: quality/series-requalification/security-00-01-revision46.yml
   revision_47_file: quality/series-requalification/security-00-01-revision47.yml
+  revision_47_run: 34961682456
+  revision_46_run: 34958785679
   revision_45_run: 34956668683
   revision_44_run: 34945840966
   revision_43_run: 34934096540
   revision_43_editorial_artifact: 10383286488
-  revision_42_run: 34932838934
-  revision_41_run: 34931966681
   preserved_in_git_history_and_issue_305: true
 
 media:
@@ -175,43 +194,55 @@ catalogue_requalification:
     VIDEO_TITLE_MISSING: 9
 
 sources_and_locale:
-  material_claims_changed_in_revision_47_or_pending_gate_repair: false
-  primary_source_research_required_by_this_repair: false
-  strict_es_en: PASS_REVISION_47
-  structured_provenance_locale_metadata: PASS_REVISION_47
+  material_claims_changed_in_revision_48_or_pending_gate_repair: false
+  primary_source_research_required_by_security_gate_repair: false
+  strict_es_en: PASS_REVISION_48
+  structured_provenance_locale_metadata: PASS_REVISION_48
   note: >-
-    No material claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in revision 47
-    or the pending specialized-gate repairs. No new factual validation is claimed.
+    No material Security claim, benchmark, unit, formula, reference, caveat, locale copy or site-facing visual changed in
+    revision 48 or the pending gate-only repair. No new Security factual validation is claimed.
+
+release_contract_281_reconciliation:
+  status: CHANGES_REQUIRED_FRESH_UNCACHED_LIVE_VERIFICATION
+  latest_comment: 5682855171
+  article_source_state: >-
+    The author-reviewed #310 source revision a5efdfce72d11b2335452eaf45000f26ae524777 and current main already cite the
+    2026-09-10 GPT-Live-1 API launch separately from the earlier 2026-07-08 GPT-Live introduction. No source patch was made.
+  runtime_limit: >-
+    This runtime only exposed an older cached 5sigmas article rendering and direct uncached production fetch was unavailable,
+    so production current bytes were not re-certified and ARTICLE_LIVE_VERIFIED was not renewed.
+  linkedin_state: BLOCKED_PENDING_FRESH_UNCACHED_LIVE_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  seventy_two_hour_clock_restarted: false
+  linkedin_write_queue_activation: false
+  preserve_issue_279: true
 
 concurrency_and_release:
   main_head_checked: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
-  branch_ahead_of_main_before_this_manifest_commit: 221
+  branch_ahead_of_main_before_this_manifest_commit: 225
   branch_behind_main: 0
-  draft_pr_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  draft_pr_34: OPEN_DRAFT_NONMERGEABLE_DO_NOT_MERGE_BLINDLY
   draft_pr_323: OPEN_DRAFT_ORTHOGONAL
-  actions_started_this_checkpoint: 0
-  last_action_run: 34961682456
-  action_reason: NONE_THIS_CHECKPOINT_GATE_ONLY_HARMONIZATION_BUNDLED_FOR_NEXT_INTEGRATION
-  new_action_for_specialized_gate_repair_or_persistence: false
+  actions_started_this_checkpoint: 1
+  last_action_run: 34987279088
+  action_reason: EXACT_INTEGRATION_OF_BUNDLED_BROWSER_CONTRAST_TEXT_AND_VIDEO_LIFECYCLE_LISTENER_REPAIRS
+  new_action_after_revision_48_residual_repair_or_persistence: false
   pr_created: false
   merged: false
   deployed: false
   datacenters_or_pre_datacenters_modified: false
-  linkedin_lane_touched: false
+  linkedin_lane_touched: RECONCILIATION_COMMENT_ONLY_NO_PUBLISH_ACTION
   release_contract_281_preserved: true
-  linkedin_state: HOLD_THRESHOLD_PASSED_LINKEDIN_OWNER_REVALIDATION_REQUIRED
-  linkedin_not_before: '2026-09-15T14:17:28+02:00'
 
 next_exact_gap:
   stay_on_series: seguridad-ia
   stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
   do_not_start: 02-jailbreaks
   immediate_next: >-
-    Continue specialized-gate harmonization with validate_security_video_lifecycle.mjs, then touch/prompt/keyboard/evidence
-    harnesses. Contrast, text-visibility and focused browser listener-lifetime repairs are implemented but remain pending one
-    exact integration. Remove blanket ERR_ABORTED filtering, retain listeners through teardown and compute verdicts from final
-    arrays with deterministic negative mutations and request-correlated media exceptions where the harness performs seeks.
-    Do not launch CI until a useful bundled milestone.
+    Do not spend another Action merely to retest the one-line lifecycle phase edge. First harmonize
+    validate_security_article_watch_touch.mjs, then prompt visual states, keyboard/focus and capture_security_visuals.mjs so
+    blanket ERR_ABORTED filtering and pre-teardown verdicts are gone. Then execute one useful bundled exact-QA that includes
+    the lifecycle V2 classifier repair and deterministic self-test. Do not inherit successful continue-on-error step status as
+    PASS when the retained report records a failure.
   first_external_blocker: AUTHORIZED_NARRATION_AUDIO
   dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
   article_golden_condition: >-
