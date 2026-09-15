@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 37,
+  "diagnostic_revision": 38,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "37f07a1bf842fc9d71a6e6bd8d2fe63812e3bd50",
-  "reason": "Requalify Security 00/1.1 on one exact integration that contains both the final ES/EN RAG rank/selection accessibility repair (c74784f2f17c625bb9bb622395d836552a747273) and the strengthened semantic gate (d5bf731a10e467b5a492ba46720635575dcc80a1). Verify clean and poisoned DOM/accessibility order, ranks 1..4, top-K cut, selected/outside text and localized aria-label; run strict ES/EN, publication/provenance, article-watch, browser/playback, WCAG contrast/text visibility, lifecycle/touch, Prompt Injection state captures and real keyboard/focus. Retain exact screenshots for manual ES/EN x desktop/mobile x normal/reduced inspection before restoring PIXEL_REVIEW or PEDAGOGY_REVIEW. SOURCE/RENDERED catalogue debt and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN may be inferred from this focused run.",
+  "requested_head_parent": "734e21e934e736b34a6e297eb7611f9d9006ca48",
+  "reason": "Diagnose a newly discovered contrast/legibility blind spot in Security 00/1.1. The previous contrast gate inspected descendant computed colors but ignored CSS opacity applied by teaching-state ancestors. Current source visibly fades ctxmix teaching panels to 20/25/35% in steps 1-3 and defense-in-depth disabled gates to 42%, so earlier technical contrast PASS evidence cannot certify those rendered states. Revision 38 exercises ctxmix steps 1-4, RAG clean/poisoned and defense all-on/first-off across ES/EN x desktop/mobile x normal/reduced, keeps runtime listeners alive, and fails closed whenever inspected teaching text is rendered through ancestor opacity or falls below WCAG AA. This is a diagnostic integration only: do not infer PIXEL_REVIEW, PEDAGOGY_REVIEW or ARTICLE_GOLDEN; SOURCE/RENDERED catalogue debt and MEDIA_PASS remain fail-closed.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
