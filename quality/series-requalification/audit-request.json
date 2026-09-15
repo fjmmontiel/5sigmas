@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 47,
+  "diagnostic_revision": 48,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "216b3d0a6afdc8394782a05cadb8fdb06ea6034d",
-  "reason": "Exact-QA the request-correlated Security runtime sentinel implemented after revision 46. Revision 47 must prove that ES media-seek ERR_ABORTED events are accepted only with same-source request identity plus successful same-request 200/206 headers before cancellation or a later same-source replacement response, a settled seek, readyState >= 2, no media error, advancing post-seek playback, and a verdict computed after browser-context teardown. Generic aborts, unrelated request IDs, missing response proof, wrong source, unsettled seek, media errors, non-advancing post-seek playback and non-ERR_ABORTED failures must remain fatal. Site-facing bytes are unchanged; keep global SOURCE/RENDERED and Security MEDIA fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "165b5c5f10120d97aca5a4061d640eaf64810aa6",
+  "reason": "Exact-QA the bundled Security specialized-gate listener repairs through validate_security_video_lifecycle.mjs. Contrast, text visibility and focused browser already remove blanket pre-teardown ERR_ABORTED suppression and compute verdicts after browser-context teardown. Revision 48 must additionally prove the lifecycle gate retains console/pageerror/requestfailed/HTTP listeners through teardown and accepts a seek-time media ERR_ABORTED only with request identity, successful 200/206 response evidence and a settled/error-free lifecycle; generic aborts and non-abort failures remain fail-closed. Site-facing bytes are unchanged. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
