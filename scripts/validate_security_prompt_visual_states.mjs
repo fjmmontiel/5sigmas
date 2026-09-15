@@ -30,6 +30,60 @@ const overlap = (a, b, pad = 1) => Boolean(
   && a.y + a.height > b.y + pad
 );
 
+function isExpectedTeardownCancellation(event) {
+  return event.type === 'requestfailed'
+    && event.phase === 'teardown'
+    && String(event.detail || '').includes('ERR_ABORTED');
+}
+
+function classifyRuntime(events) {
+  return {
+    unexpected: events.filter(event => !isExpectedTeardownCancellation(event)),
+    expectedTeardownCancellations: events.filter(isExpectedTeardownCancellation),
+  };
+}
+
+function runRuntimeMutationSelfTest() {
+  const cases = [
+    {
+      name: 'teardown ERR_ABORTED is expected context cancellation',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' },
+      expected: true,
+    },
+    {
+      name: 'interaction ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'ragtrace', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'teardown non-abort request failure remains fatal',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' },
+      expected: false,
+    },
+    {
+      name: 'teardown pageerror remains fatal',
+      event: { type: 'pageerror', phase: 'teardown', detail: 'late exception' },
+      expected: false,
+    },
+    {
+      name: 'teardown console error remains fatal',
+      event: { type: 'console', phase: 'teardown', detail: 'late console error' },
+      expected: false,
+    },
+    {
+      name: 'teardown HTTP failure remains fatal',
+      event: { type: 'http', phase: 'teardown', status: 500, url: 'https://example.invalid/fail' },
+      expected: false,
+    },
+  ];
+  const broken = cases.filter(item => isExpectedTeardownCancellation(item.event) !== item.expected);
+  if (broken.length) {
+    throw new Error(`Prompt-state runtime classification mutation self-test failed: ${broken.map(item => item.name).join(', ')}`);
+  }
+}
+
+runRuntimeMutationSelfTest();
+
 async function launchBrowser() {
   try {
     return { browser: await chromium.launch({ channel: 'chrome', headless: true }), engine: 'google-chrome' };
@@ -275,21 +329,49 @@ try {
         });
         const page = await context.newPage();
         const runtime = [];
-        page.on('pageerror', error => runtime.push({ type: 'pageerror', detail: String(error) }));
+        let phase = 'navigation';
+        let seq = 0;
+        let nextRequestId = 1;
+        const requestIds = new WeakMap();
+        const requestId = request => {
+          if (!requestIds.has(request)) requestIds.set(request, nextRequestId++);
+          return requestIds.get(request);
+        };
+        const pushRuntime = event => runtime.push({ seq: ++seq, phase, ...event });
+
+        page.on('pageerror', error => pushRuntime({ type: 'pageerror', detail: String(error) }));
         page.on('console', message => {
-          if (message.type() === 'error' && !/^Failed to load resource:/.test(message.text())) runtime.push({ type: 'console', detail: message.text() });
+          if (message.type() === 'error' && !/^Failed to load resource:/.test(message.text())) {
+            pushRuntime({ type: 'console', detail: message.text() });
+          }
         });
         page.on('requestfailed', request => {
-          const detail = request.failure()?.errorText || '';
-          if (!detail.includes('ERR_ABORTED')) runtime.push({ type: 'requestfailed', url: request.url(), detail });
+          pushRuntime({
+            type: 'requestfailed',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            url: request.url(),
+            detail: request.failure()?.errorText || '',
+          });
         });
         page.on('response', response => {
-          if (response.status() >= 400) runtime.push({ type: 'http', status: response.status(), url: response.url() });
+          if (response.status() >= 400) {
+            const request = response.request();
+            pushRuntime({
+              type: 'http',
+              requestId: requestId(request),
+              resourceType: request.resourceType(),
+              status: response.status(),
+              url: response.url(),
+            });
+          }
         });
 
+        phase = 'navigation';
         const response = await page.goto(new URL(item.route, base).href, { waitUntil: 'domcontentloaded', timeout: 20000 });
         check(response?.ok(), `${stem}: page HTTP failed`, { status: response?.status() });
         await page.evaluate(async () => { await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]); });
+        phase = 'lazy-load';
         await page.evaluate(async () => {
           for (let y = 0; y < document.documentElement.scrollHeight; y += Math.max(innerHeight, 400)) {
             scrollTo(0, y);
@@ -307,13 +389,29 @@ try {
         check(geometry.scrollWidth <= geometry.clientWidth + 1, `${stem}: global horizontal overflow`, geometry);
         check(geometry.lang.toLowerCase().startsWith(item.locale), `${stem}: wrong locale`, geometry);
 
+        phase = 'ctxmix';
         await inspectCtxmix(page, item, mobile, motion, stem, record);
+        phase = 'ragtrace';
         await inspectRagtrace(page, item, mobile, motion, stem, record);
+        phase = 'defsim';
         await inspectDefsim(page, item, mobile, motion, stem, record);
-        check(runtime.length === 0, `${stem}: persistent runtime/resource errors`, runtime);
-        record.runtime = runtime;
+        phase = 'settle';
+        await page.waitForTimeout(150);
+        phase = 'teardown';
+        try {
+          await context.close();
+        } catch (error) {
+          pushRuntime({ type: 'context-close', detail: String(error) });
+        }
+
+        const finalRuntime = runtime.map(event => ({ ...event }));
+        const runtimeVerdict = classifyRuntime(finalRuntime);
+        check(runtimeVerdict.unexpected.length === 0, `${stem}: persistent runtime/resource errors`, runtimeVerdict.unexpected);
+        record.runtime = finalRuntime;
+        record.runtime_unexpected = runtimeVerdict.unexpected;
+        record.expected_teardown_cancellations = runtimeVerdict.expectedTeardownCancellations;
+        record.verdict_basis = 'POST_CONTEXT_TEARDOWN';
         evidence.push(record);
-        await context.close();
       }
     }
   }
