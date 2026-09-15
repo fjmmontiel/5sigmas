@@ -1,0 +1,113 @@
+revision: 54
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+active_scope: seguridad-ia_00_plus_01
+state: REQUALIFICATION_QA
+article_golden: false
+next_article_blocked: 02-jailbreaks
+
+exact_qa:
+  run_id: 35018155184
+  exact_head: 676ae5982de6c8f4fa5b1bf3d05d2bf1d6c416f1
+  conclusion: success
+  workflow: Security capture direct execution
+  site_facing_bytes_changed: false
+  strict_es: PASS
+  strict_en: PASS
+  range_preview_self_test: PASS
+  direct_capture_security_visuals: PASS
+  direct_capture_contexts: 56
+  direct_capture_post_context_teardown: 56
+  direct_capture_runtime_unexpected: 0
+  prompt_state_gate: PASS
+  prompt_contexts: 8
+  prompt_post_context_teardown: 8
+  prompt_runtime_unexpected: 0
+  prompt_failure_count: 0
+  note: >-
+    Revision 54 exact-QA closes the remaining Prompt Injection placement false positive from revision 53. The adaptive positive
+    inset is bounded to at most 2 px and only applies when the asset fits with spare viewport height; the existing safeTop
+    assertion was not weakened. ES/EN desktop/mobile normal/reduced Prompt-state contexts all passed with post-context teardown
+    verdicts and zero unexpected runtime events. This technical run does not certify whole-article pixel or pedagogy quality.
+
+artifact:
+  id: 10417245002
+  files: 6
+  bytes: 686611
+  retention_days: 1
+  expires_at: 2026-09-16T20:19:18Z
+
+manual_review:
+  performed: true
+  scope: FOUR_RETAINED_MOBILE_CTXMIX_STATE4_IMAGES_ONLY
+  locales: [es, en]
+  motion: [normal, reduced]
+  sticky_header_occlusion: PASS_NOT_PRESENT
+  labels_legible: true
+  causal_mechanism_visible: true
+  whole_article_pixel_review: NOT_PERFORMED
+  whole_article_pedagogy_review: NOT_PERFORMED
+  independent_reviewer: false
+  note: >-
+    The retained mobile state-4 images visibly preserve the causal chain from untrusted external content through model proposal
+    to the runtime authority boundary and denied external effect. No desktop screenshots were retained for manual review in this
+    bounded artifact; desktop normal/reduced placement is supported by the zero-failure technical gate, not a new manual pixel pass.
+
+specialized_debt_closed:
+  SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN: true
+  PROMPT_STATE_STICKY_HEADER_CAPTURE: true
+  FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE: true
+
+remaining_global_state:
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: NOT_NEWLY_CERTIFIED_WHOLE_ARTICLE
+  PEDAGOGY_REVIEW: NOT_NEWLY_CERTIFIED_WHOLE_ARTICLE
+  ARTICLE_GOLDEN: false
+  open_debt:
+    RAW_TEX_RENDERED: 28
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+
+media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  fresh_uncached_live_attempt_this_run: DNS_RESOLUTION_FAILED_IN_RUNTIME
+  cached_web_used_as_production_evidence: false
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+release:
+  pr_created: false
+  merged: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified: false
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  deterministic_specialized_capture_gap: CLOSED
+  first_external_blocker: AUTHORIZED_NARRATION_AUDIO
+  dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  do_not_advance_to: 02-jailbreaks
+  golden_forbidden_until_all_conjunctive_gates_pass: true
