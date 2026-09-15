@@ -2,12 +2,15 @@
 /**
  * Security 00/1.1 runtime/resource listener lifetime gate.
  *
- * Runtime/resource events are retained through browser-context teardown and the
- * verdict is computed only from the final arrays. Chromium may legitimately
- * cancel an in-flight media request when a seek supersedes it, but that is only
- * accepted when the cancellation is correlated with the explicit seek phase,
- * the same media URL, a successful later 200/206 response and a settled media
- * state. Generic pre-teardown ERR_ABORTED events remain fatal.
+ * The verdict is computed only after browser-context teardown. Chromium can
+ * cancel an in-flight media request when an explicit seek supersedes the
+ * current load. Such ERR_ABORTED events are accepted only when request
+ * lifecycle evidence proves one of two same-source patterns:
+ *   1) the failed media request had already produced successful 200/206
+ *      response headers before the seek cancelled its body, or
+ *   2) a later successful 200/206 media response superseded the failed request.
+ * In both cases the explicit seek must settle and post-seek playback must
+ * advance without a media error. Generic aborts remain fatal.
  *
  * Technical gate only: it never certifies PIXEL_REVIEW or PEDAGOGY_REVIEW.
  */
@@ -28,15 +31,26 @@ function isSettledSeek(video) {
     && Number.isFinite(video.seekTarget)
     && Math.abs(video.currentTime - video.seekTarget) <= 1.0
     && video.readyState >= 2
+    && video.networkState !== 3
+    && video.errorCode == null
+    && video.postSeekPlaybackAdvanced === true
   );
 }
 
-function laterSuccessfulMediaResponse(event, record) {
-  return (record.network_responses || []).some((response) => (
+function matchingSuccessfulResponse(event, record) {
+  const responses = record.network_responses || [];
+  const priorSameRequest = responses.some((response) => (
+    response.seq < event.seq
+    && response.requestId === event.requestId
+    && response.url === event.url
+    && [200, 206].includes(response.status)
+  ));
+  const laterSameSource = responses.some((response) => (
     response.seq > event.seq
     && response.url === event.url
     && [200, 206].includes(response.status)
   ));
+  return { priorSameRequest, laterSameSource, proven: priorSameRequest || laterSameSource };
 }
 
 function classifyRuntimeEvents(events, record) {
@@ -54,15 +68,21 @@ function classifyRuntimeEvents(events, record) {
       continue;
     }
 
+    const responseProof = matchingSuccessfulResponse(event, record);
     const provenSeekSupersession = (
       event.phase === 'media-seek'
       && event.resourceType === 'media'
       && record.video?.currentSrc === event.url
       && isSettledSeek(record.video)
-      && laterSuccessfulMediaResponse(event, record)
+      && responseProof.proven
     );
     if (provenSeekSupersession) {
-      expected.push({ ...event, classification: 'EXPECTED_MEDIA_SEEK_SUPERSESSION' });
+      expected.push({
+        ...event,
+        classification: responseProof.priorSameRequest
+          ? 'EXPECTED_MEDIA_SEEK_CANCEL_AFTER_RESPONSE_HEADERS'
+          : 'EXPECTED_MEDIA_SEEK_SUPERSEDED_BY_LATER_RESPONSE',
+      });
       continue;
     }
 
@@ -81,32 +101,48 @@ function runSelfTest() {
       seekTarget: 12,
       currentTime: 12,
       readyState: 4,
+      networkState: 1,
+      errorCode: null,
+      postSeekPlaybackAdvanced: true,
     },
     network_responses: [
-      { seq: 4, url: 'https://example.invalid/video.mp4', status: 206 },
+      { seq: 1, requestId: 'media-1', url: 'https://example.invalid/video.mp4', status: 206 },
     ],
   };
-
-  const genericAbort = [{
-    type: 'requestfailed', seq: 2, phase: 'interaction', resourceType: 'media',
+  const seekAbort = [{
+    type: 'requestfailed', seq: 2, requestId: 'media-1', phase: 'media-seek', resourceType: 'media',
     url: 'https://example.invalid/video.mp4', detail: 'net::ERR_ABORTED',
   }];
+
+  const genericAbort = [{ ...seekAbort[0], phase: 'interaction' }];
   if (classifyRuntimeEvents(genericAbort, baseRecord).fatal.length !== 1) {
     throw new Error('generic pre-teardown ERR_ABORTED mutation escaped');
   }
 
-  const seekAbort = [{
-    type: 'requestfailed', seq: 2, phase: 'media-seek', resourceType: 'media',
-    url: 'https://example.invalid/video.mp4', detail: 'net::ERR_ABORTED',
-  }];
-  const seekResult = classifyRuntimeEvents(seekAbort, baseRecord);
-  if (seekResult.fatal.length !== 0 || seekResult.expected.length !== 1) {
-    throw new Error('proven media-seek supersession fixture was rejected');
+  const provenPriorResponse = classifyRuntimeEvents(seekAbort, baseRecord);
+  if (provenPriorResponse.fatal.length !== 0 || provenPriorResponse.expected.length !== 1) {
+    throw new Error('same-request response-then-seek cancellation fixture was rejected');
   }
 
-  const noLaterResponse = { ...baseRecord, network_responses: [{ seq: 1, url: baseRecord.video.currentSrc, status: 206 }] };
-  if (classifyRuntimeEvents(seekAbort, noLaterResponse).fatal.length !== 1) {
-    throw new Error('media-seek abort without later successful response escaped');
+  const laterResponseRecord = {
+    ...baseRecord,
+    network_responses: [{ seq: 3, requestId: 'media-2', url: baseRecord.video.currentSrc, status: 206 }],
+  };
+  if (classifyRuntimeEvents(seekAbort, laterResponseRecord).fatal.length !== 0) {
+    throw new Error('later same-source superseding response fixture was rejected');
+  }
+
+  const differentRequest = {
+    ...baseRecord,
+    network_responses: [{ seq: 1, requestId: 'other-request', url: baseRecord.video.currentSrc, status: 206 }],
+  };
+  if (classifyRuntimeEvents(seekAbort, differentRequest).fatal.length !== 1) {
+    throw new Error('unrelated prior response escaped request correlation');
+  }
+
+  const noResponse = { ...baseRecord, network_responses: [] };
+  if (classifyRuntimeEvents(seekAbort, noResponse).fatal.length !== 1) {
+    throw new Error('media-seek abort without response proof escaped');
   }
 
   const wrongUrl = { ...baseRecord, video: { ...baseRecord.video, currentSrc: 'https://example.invalid/other.mp4' } };
@@ -119,18 +155,24 @@ function runSelfTest() {
     throw new Error('unsettled media-seek abort escaped');
   }
 
+  const replayFailed = { ...baseRecord, video: { ...baseRecord.video, postSeekPlaybackAdvanced: false } };
+  if (classifyRuntimeEvents(seekAbort, replayFailed).fatal.length !== 1) {
+    throw new Error('media-seek abort without post-seek playback escaped');
+  }
+
+  const mediaErrored = { ...baseRecord, video: { ...baseRecord.video, errorCode: 3 } };
+  if (classifyRuntimeEvents(seekAbort, mediaErrored).fatal.length !== 1) {
+    throw new Error('media-seek abort with media error escaped');
+  }
+
   const teardownAbort = [{
-    type: 'requestfailed', seq: 5, phase: 'teardown', resourceType: 'media',
-    url: baseRecord.video.currentSrc, detail: 'net::ERR_ABORTED',
+    ...seekAbort[0], seq: 5, phase: 'teardown', requestId: 'teardown-media',
   }];
   if (classifyRuntimeEvents(teardownAbort, baseRecord).fatal.length !== 0) {
     throw new Error('context-teardown ERR_ABORTED fixture was rejected');
   }
 
-  const nonAbort = [{
-    type: 'requestfailed', seq: 2, phase: 'media-seek', resourceType: 'media',
-    url: baseRecord.video.currentSrc, detail: 'net::ERR_FAILED',
-  }];
+  const nonAbort = [{ ...seekAbort[0], detail: 'net::ERR_FAILED' }];
   if (classifyRuntimeEvents(nonAbort, baseRecord).fatal.length !== 1) {
     throw new Error('non-abort request failure escaped');
   }
@@ -140,7 +182,7 @@ function runSelfTest() {
     throw new Error('late non-request runtime mutation escaped');
   }
 
-  console.log('Security runtime-listener lifetime mutation fixtures PASS: generic pre-teardown aborts remain fatal; only context teardown or a same-source, settled seek with a later successful 200/206 media response can classify ERR_ABORTED as expected.');
+  console.log('Security runtime-listener lifetime mutation fixtures PASS: generic aborts remain fatal; media-seek ERR_ABORTED is accepted only with same-source request/response correlation, settled seek, error-free media and advancing post-seek playback.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -177,7 +219,7 @@ async function activate(locator, mobile) {
   else await locator.click({ timeout: 5000 });
 }
 
-async function waitForStep(page, selector, step, timeout = 6000) {
+async function waitForStep(page, selector, step, timeout = 6500) {
   await page.waitForFunction(
     ({ selector, step }) => document.querySelector(selector)?.dataset.step === String(step),
     { selector, step },
@@ -185,84 +227,60 @@ async function waitForStep(page, selector, step, timeout = 6000) {
   );
 }
 
-async function exercisePresentation(page, mobile, contextLabel, record) {
-  const root = page.locator('.secpath').first();
-  if (!(await root.count())) {
-    fail(contextLabel, 'presentation-mechanism-missing');
+async function exerciseTeachingMechanism(page, item, mobile, label, record) {
+  if (item.kind === 'presentation') {
+    const root = page.locator('.secpath').first();
+    const unbounded = root.locator('[data-mode-btn="unbounded"]').first();
+    const play = root.locator('[data-action="play"]').first();
+    if (!(await root.count()) || !(await unbounded.count()) || !(await play.count())) {
+      fail(label, 'presentation-controls-missing');
+      return;
+    }
+    await activate(unbounded, mobile);
+    await activate(play, mobile);
+    try { await waitForStep(page, '.secpath', 6); }
+    catch (error) { fail(label, 'presentation-trajectory-did-not-reach-final-state', String(error)); }
+    record.presentation = { mode: await root.getAttribute('data-mode'), step: await root.getAttribute('data-step') };
     return;
   }
-  const unbounded = root.locator('[data-mode-btn="unbounded"]').first();
-  const play = root.locator('[data-action="play"]').first();
-  if (!(await unbounded.count()) || !(await play.count())) {
-    fail(contextLabel, 'presentation-controls-missing');
-    return;
-  }
-  await activate(unbounded, mobile);
-  if ((await root.getAttribute('data-mode')) !== 'unbounded') {
-    fail(contextLabel, 'presentation-unbounded-mode-did-not-activate');
-  }
-  await activate(play, mobile);
-  try {
-    await page.waitForFunction(() => document.querySelector('.secpath')?.dataset.step === '6', { timeout: 6500 });
-  } catch (error) {
-    fail(contextLabel, 'presentation-trajectory-did-not-reach-final-state', String(error));
-  }
-  record.presentation = {
-    mode: await root.getAttribute('data-mode'),
-    step: await root.getAttribute('data-step'),
-  };
-}
 
-async function exercisePrompt(page, mobile, contextLabel, record) {
   const ctxmix = page.locator('.ctxmix').first();
   const rag = page.locator('.ragtrace').first();
   const defsim = page.locator('.defsim').first();
   if (!(await ctxmix.count()) || !(await rag.count()) || !(await defsim.count())) {
-    fail(contextLabel, 'prompt-mechanism-missing', {
-      ctxmix: await ctxmix.count(), rag: await rag.count(), defsim: await defsim.count(),
-    });
+    fail(label, 'prompt-mechanism-missing');
     return;
   }
 
   const ctxStates = [];
   for (const state of ['1', '2', '3', '4']) {
     const button = ctxmix.locator(`[data-state-btn="${state}"]`).first();
-    if (!(await button.count())) {
-      fail(contextLabel, `ctxmix-state-${state}-control-missing`);
-      continue;
-    }
+    if (!(await button.count())) { fail(label, `ctxmix-state-${state}-control-missing`); continue; }
     await activate(button, mobile);
     await page.waitForTimeout(60);
     const actual = await ctxmix.getAttribute('data-state');
     ctxStates.push(actual);
-    if (actual !== state) fail(contextLabel, `ctxmix-state-${state}-did-not-activate`, { actual });
+    if (actual !== state) fail(label, `ctxmix-state-${state}-did-not-activate`, { actual });
   }
 
   const ragModes = [];
   for (const mode of ['clean', 'poisoned']) {
     const modeButton = rag.locator(`[data-mode-btn="${mode}"]`).first();
     const run = rag.locator('[data-run]').first();
-    if (!(await modeButton.count()) || !(await run.count())) {
-      fail(contextLabel, `rag-${mode}-controls-missing`);
-      continue;
-    }
+    if (!(await modeButton.count()) || !(await run.count())) { fail(label, `rag-${mode}-controls-missing`); continue; }
     await activate(modeButton, mobile);
     await page.waitForTimeout(50);
-    if ((await rag.getAttribute('data-mode')) !== mode) fail(contextLabel, `rag-${mode}-mode-did-not-activate`);
+    if ((await rag.getAttribute('data-mode')) !== mode) fail(label, `rag-${mode}-mode-did-not-activate`);
     await activate(run, mobile);
-    try {
-      await waitForStep(page, '.ragtrace', 2);
-      await waitForStep(page, '.ragtrace', 3);
-    } catch (error) {
-      fail(contextLabel, `rag-${mode}-did-not-reach-final-state`, String(error));
-    }
+    try { await waitForStep(page, '.ragtrace', 2); await waitForStep(page, '.ragtrace', 3); }
+    catch (error) { fail(label, `rag-${mode}-did-not-reach-final-state`, String(error)); }
     ragModes.push({ mode, step: await rag.getAttribute('data-step') });
   }
 
   const disabledGates = [];
   const gates = defsim.locator('[data-gate]');
   const gateCount = await gates.count();
-  if (gateCount < 4) fail(contextLabel, 'defense-gates-missing', { gateCount });
+  if (gateCount < 4) fail(label, 'defense-gates-missing', { gateCount });
   for (let index = 0; index < gateCount; index += 1) {
     const gate = gates.nth(index);
     const key = await gate.getAttribute('data-gate');
@@ -270,7 +288,6 @@ async function exercisePrompt(page, mobile, contextLabel, record) {
     await page.waitForTimeout(60);
     disabledGates.push(key);
   }
-
   record.prompt = {
     ctxmix_states: ctxStates,
     rag_modes: ragModes,
@@ -279,25 +296,21 @@ async function exercisePrompt(page, mobile, contextLabel, record) {
   };
 }
 
-async function exerciseInlineVideo(page, mobile, contextLabel, record, trace) {
+async function exerciseInlineVideo(page, mobile, label, record, trace) {
   const root = page.locator('article [data-s5-inline-video]').first();
   const poster = root.locator('[data-s5-inline-video-start]').first();
   const video = root.locator('[data-s5-inline-video-player]').first();
   if (!(await root.count()) || !(await poster.count()) || !(await video.count())) {
-    fail(contextLabel, 'inline-video-surface-missing');
+    fail(label, 'inline-video-surface-missing');
     return;
   }
 
   trace.phase = 'media-start';
   await activate(poster, mobile);
-  try {
-    await video.waitFor({ state: 'visible', timeout: 5000 });
-  } catch (error) {
-    fail(contextLabel, 'inline-video-not-visible-after-activation', String(error));
-    return;
-  }
+  try { await video.waitFor({ state: 'visible', timeout: 5000 }); }
+  catch (error) { fail(label, 'inline-video-not-visible-after-activation', String(error)); return; }
 
-  const playback = await video.evaluate(async (node) => {
+  const initial = await video.evaluate(async (node) => {
     node.muted = true;
     node.volume = 0;
     if (node.readyState < 1) {
@@ -312,18 +325,15 @@ async function exerciseInlineVideo(page, mobile, contextLabel, record, trace) {
     node.pause();
     return {
       currentSrc: node.currentSrc,
-      readyState: node.readyState,
-      networkState: node.networkState,
       duration: Number(node.duration),
       currentTime: Number(node.currentTime),
-      paused: node.paused,
     };
   });
 
   let seekTarget = null;
   let seeked = false;
-  if (Number.isFinite(playback.duration) && playback.duration > 1) {
-    seekTarget = Math.min(Math.max(0.5, playback.duration * 0.2), playback.duration - 0.5);
+  if (Number.isFinite(initial.duration) && initial.duration > 1) {
+    seekTarget = Math.min(Math.max(0.5, initial.duration * 0.2), initial.duration - 0.5);
     trace.phase = 'media-seek';
     seeked = await video.evaluate(async (node, target) => {
       let didSeek = false;
@@ -339,21 +349,42 @@ async function exerciseInlineVideo(page, mobile, contextLabel, record, trace) {
     }, seekTarget);
   }
 
-  trace.phase = 'media-steady';
-  const settled = await video.evaluate(node => ({
-    currentSrc: node.currentSrc,
-    readyState: node.readyState,
-    networkState: node.networkState,
-    duration: Number(node.duration),
-    currentTime: Number(node.currentTime),
-    paused: node.paused,
-  }));
+  trace.phase = 'post-seek-playback';
+  const postSeek = await video.evaluate(async (node) => {
+    const start = Number(node.currentTime);
+    const playPromise = node.play();
+    if (playPromise && typeof playPromise.catch === 'function') await playPromise.catch(() => {});
+    await new Promise(resolve => setTimeout(resolve, 350));
+    node.pause();
+    const end = Number(node.currentTime);
+    return {
+      start,
+      end,
+      advanced: Number.isFinite(start) && Number.isFinite(end) && end >= start + 0.05,
+      currentSrc: node.currentSrc,
+      readyState: node.readyState,
+      networkState: node.networkState,
+      duration: Number(node.duration),
+      currentTime: Number(node.currentTime),
+      paused: node.paused,
+      errorCode: node.error?.code ?? null,
+    };
+  });
 
-  const media = { ...settled, seekTarget, seeked };
-  record.video = media;
-  if (!(Number.isFinite(media.duration) && media.duration > 1)) fail(contextLabel, 'inline-video-duration-invalid', media);
-  if (seekTarget !== null && (!seeked || Math.abs(media.currentTime - seekTarget) > 1.0)) {
-    fail(contextLabel, 'inline-video-seek-did-not-settle', media);
+  trace.phase = 'media-steady';
+  record.video = {
+    ...postSeek,
+    seekTarget,
+    seeked,
+    postSeekPlaybackAdvanced: postSeek.advanced,
+  };
+  if (!(Number.isFinite(record.video.duration) && record.video.duration > 1)) fail(label, 'inline-video-duration-invalid', record.video);
+  if (seekTarget !== null && (!seeked || Math.abs(record.video.start - seekTarget) > 1.0)) {
+    fail(label, 'inline-video-seek-did-not-settle', record.video);
+  }
+  if (record.video.errorCode != null) fail(label, 'inline-video-media-error-after-seek', record.video);
+  if (seekTarget !== null && record.video.postSeekPlaybackAdvanced !== true) {
+    fail(label, 'inline-video-post-seek-playback-did-not-advance', record.video);
   }
 }
 
@@ -371,14 +402,20 @@ try {
           mobile,
           engine: launched.engine,
           chrome_launch_error: launched.chromeError || null,
-          verdict_basis: 'POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE',
+          verdict_basis: 'POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2',
           network_responses: [],
         };
         const runtime = [];
         const trace = { phase: 'navigation', seq: 0 };
+        const requestIds = new WeakMap();
+        let requestCounter = 0;
         let context = null;
 
         const nextSeq = () => { trace.seq += 1; return trace.seq; };
+        const requestId = (request) => {
+          if (!requestIds.has(request)) requestIds.set(request, `request-${++requestCounter}`);
+          return requestIds.get(request);
+        };
 
         try {
           context = await launched.browser.newContext({
@@ -388,6 +425,7 @@ try {
             reducedMotion: motion,
           });
           const page = await context.newPage();
+          page.on('request', request => { requestId(request); });
           page.on('pageerror', error => runtime.push({ type: 'pageerror', seq: nextSeq(), phase: trace.phase, detail: String(error) }));
           page.on('console', message => {
             if (message.type() === 'error') runtime.push({ type: 'console', seq: nextSeq(), phase: trace.phase, detail: message.text() });
@@ -396,6 +434,7 @@ try {
             runtime.push({
               type: 'requestfailed',
               seq: nextSeq(),
+              requestId: requestId(request),
               phase: trace.phase,
               url: request.url(),
               resourceType: request.resourceType(),
@@ -410,6 +449,7 @@ try {
             if (request.resourceType() === 'media' || /\.mp4(?:$|\?)/i.test(response.url())) {
               record.network_responses.push({
                 seq,
+                requestId: requestId(request),
                 phase: trace.phase,
                 url: response.url(),
                 status: response.status(),
@@ -426,6 +466,7 @@ try {
 
           const response = await page.goto(new URL(item.route, base).href, { waitUntil: 'networkidle', timeout: 20000 });
           if (!response?.ok()) fail(label, 'page-http-failed', { status: response?.status() });
+
           trace.phase = 'lazy-scroll';
           await page.evaluate(async () => {
             await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]);
@@ -437,8 +478,7 @@ try {
           });
 
           trace.phase = 'teaching-interactions';
-          if (item.kind === 'presentation') await exercisePresentation(page, mobile, label, record);
-          else await exercisePrompt(page, mobile, label, record);
+          await exerciseTeachingMechanism(page, item, mobile, label, record);
           await exerciseInlineVideo(page, mobile, label, record, trace);
 
           trace.phase = 'post-media';
@@ -466,9 +506,7 @@ try {
           const classified = classifyRuntimeEvents(finalRuntime, record);
           record.expected_runtime_cancellations = classified.expected;
           record.fatal_runtime_errors = classified.fatal;
-          if (classified.fatal.length) {
-            fail(label, 'fatal-runtime-resource-errors-present-after-context-teardown', classified.fatal);
-          }
+          if (classified.fatal.length) fail(label, 'fatal-runtime-resource-errors-present-after-context-teardown', classified.fatal);
           evidence.push(record);
         }
       }
@@ -481,8 +519,8 @@ try {
 const report = {
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
-  verdict_basis: 'POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE',
-  request_abort_policy: 'ERR_ABORTED is expected only for context teardown or a same-source media-seek supersession proven by settled seek state and a later successful 200/206 response.',
+  verdict_basis: 'POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2',
+  request_abort_policy: 'ERR_ABORTED is expected only for context teardown or an explicit same-source media seek with settled error-free state, advancing post-seek playback, and request-correlated successful 200/206 response evidence before the cancellation or a later same-source superseding response.',
   contexts_expected: 16,
   contexts_observed: evidence.length,
   failures,
@@ -499,4 +537,4 @@ if (failures.length) {
   for (const item of failures) console.error(`- ${item.context}: ${item.reason}${item.detail ? ` :: ${JSON.stringify(item.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security runtime-listener lifetime PASS using ${launched.engine}: 16 ES/EN Security 00/1.1 desktop/mobile normal/reduced contexts retained runtime/resource events through context teardown; generic pre-teardown ERR_ABORTED remained fatal, while any expected media cancellation had to be correlated to an explicit same-source seek, settled playback state and a later successful 200/206 response. PIXEL_REVIEW/PEDAGOGY_REVIEW remain editorial.`);
+console.log(`Security runtime-listener lifetime PASS using ${launched.engine}: 16 ES/EN Security 00/1.1 desktop/mobile normal/reduced contexts retained runtime/resource events through context teardown; generic aborts remained fatal, and media-seek cancellations required request/response correlation plus settled, error-free and advancing post-seek playback. PIXEL_REVIEW/PEDAGOGY_REVIEW remain editorial.`);
