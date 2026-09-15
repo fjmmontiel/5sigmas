@@ -5,9 +5,10 @@
  *
  * Runtime/resource listeners remain active through browser-context teardown. A
  * requestfailed ERR_ABORTED is never blanket-ignored: outside teardown it is
- * accepted only for an explicitly exercised media seek when request identity,
- * successful response evidence and the final media lifecycle prove a healthy
- * supersession. The retained report and verdict are both computed after close.
+ * accepted only for the explicitly exercised media seek/playback lifecycle when
+ * request identity, successful response evidence and final media state prove a
+ * healthy supersession/cancellation. The retained report and verdict are both
+ * computed after close.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -44,10 +45,10 @@ function matchingSuccessfulResponse(event, record) {
   return { priorSameRequest, laterSameSource, proven: priorSameRequest || laterSameSource };
 }
 
-function healthyPrimarySeek(record, event) {
+function healthyPrimaryLifecycle(record, event) {
   const seek = record.primary_seek;
   return Boolean(
-    event.phase === 'media-seek'
+    ['media-seek', 'post-seek-playback'].includes(event.phase)
     && event.resourceType === 'media'
     && seek
     && seek.currentSrc === event.url
@@ -102,13 +103,21 @@ function classifyRuntimeEvents(events, record) {
       continue;
     }
     const responseProof = matchingSuccessfulResponse(event, record);
-    const healthySeek = healthyPrimarySeek(record, event) || healthyEndSeek(record, event);
-    if (healthySeek && responseProof.proven) {
+    const primaryLifecycle = healthyPrimaryLifecycle(record, event);
+    const endSeek = healthyEndSeek(record, event);
+    // A cancellation observed after the post-seek play/pause probe must belong to
+    // the same request that already delivered successful range headers. A merely
+    // later same-source request is insufficient evidence for this phase. During
+    // the seek itself we may also accept a later same-source replacement request.
+    const proofIsStrongEnough = event.phase === 'post-seek-playback'
+      ? responseProof.priorSameRequest
+      : responseProof.proven;
+    if ((primaryLifecycle || endSeek) && proofIsStrongEnough) {
       expected.push({
         ...event,
         classification: responseProof.priorSameRequest
-          ? 'EXPECTED_MEDIA_SEEK_CANCEL_AFTER_RESPONSE_HEADERS'
-          : 'EXPECTED_MEDIA_SEEK_SUPERSEDED_BY_LATER_RESPONSE',
+          ? 'EXPECTED_MEDIA_LIFECYCLE_CANCEL_AFTER_RESPONSE_HEADERS'
+          : 'EXPECTED_MEDIA_LIFECYCLE_SUPERSEDED_BY_LATER_RESPONSE',
       });
       continue;
     }
@@ -151,11 +160,12 @@ function runSelfTest() {
     type: 'requestfailed', seq: 2, requestId: 'seek-1', phase: 'media-seek',
     resourceType: 'media', url: source, detail: 'net::ERR_ABORTED',
   };
+  const postSeekAbort = { ...primaryAbort, phase: 'post-seek-playback' };
   const endAbort = {
     type: 'requestfailed', seq: 4, requestId: 'end-1', phase: 'media-end-seek',
     resourceType: 'media', url: source, detail: 'net::ERR_ABORTED',
   };
-  for (const event of [primaryAbort, endAbort]) {
+  for (const event of [primaryAbort, postSeekAbort, endAbort]) {
     const result = classifyRuntimeEvents([event], healthyRecord);
     if (result.fatal.length || result.expected.length !== 1) {
       throw new Error(`healthy ${event.phase} cancellation fixture was rejected`);
@@ -164,8 +174,10 @@ function runSelfTest() {
 
   const mutations = [
     { name: 'generic interaction abort', event: { ...primaryAbort, phase: 'interaction' }, record: healthyRecord },
+    { name: 'media-start abort is not a seek/playback exception', event: { ...primaryAbort, phase: 'media-start' }, record: healthyRecord },
     { name: 'wrong resource type', event: { ...primaryAbort, resourceType: 'script' }, record: healthyRecord },
     { name: 'unrelated response request', event: primaryAbort, record: { ...healthyRecord, network_responses: [{ seq: 1, requestId: 'other', url: source, status: 206 }] } },
+    { name: 'post-seek requires same-request response proof', event: postSeekAbort, record: { ...healthyRecord, network_responses: [{ seq: 3, requestId: 'other', url: source, status: 206 }] } },
     { name: 'no response proof', event: primaryAbort, record: { ...healthyRecord, network_responses: [] } },
     { name: 'wrong source', event: primaryAbort, record: { ...healthyRecord, primary_seek: { ...healthyRecord.primary_seek, currentSrc: 'https://example.invalid/other.mp4' } } },
     { name: 'unsettled primary seek', event: primaryAbort, record: { ...healthyRecord, primary_seek: { ...healthyRecord.primary_seek, seeked: false } } },
@@ -186,7 +198,7 @@ function runSelfTest() {
   if (teardownAbort.fatal.length || teardownAbort.expected.length !== 1) {
     throw new Error('context teardown cancellation fixture was rejected');
   }
-  console.log('Security video lifecycle self-test PASS: request-correlated seeks and post-teardown listener mutations are fail-closed.');
+  console.log('Security video lifecycle self-test PASS: request-correlated seek/playback lifecycle and post-teardown listener mutations are fail-closed.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -436,7 +448,7 @@ try {
           mobile,
           engine: launched.engine,
           chrome_launch_error: launched.chromeError || null,
-          verdict_basis: 'POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE',
+          verdict_basis: 'POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE_V2',
         };
         const context = await browser.newContext({ viewport: { width, height: mobile ? 844 : 1000 }, isMobile: mobile, hasTouch: mobile, reducedMotion: motion });
         const page = await context.newPage();
@@ -517,7 +529,7 @@ try {
 await fs.writeFile(path.join(out, 'report.json'), JSON.stringify({
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
-  verdict_basis: 'POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE',
+  verdict_basis: 'POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE_V2',
   contexts_expected: routes.length * 2 * 2,
   contexts_observed: evidence.length,
   failures,
@@ -528,4 +540,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure.message}${failure.detail ? ` :: ${JSON.stringify(failure.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security video lifecycle technical gate PASS using ${launched.engine}; verdict computed post-teardown with request-correlated seek cancellation evidence.`);
+console.log(`Security video lifecycle technical gate PASS using ${launched.engine}; verdict computed post-teardown with request-correlated seek/playback cancellation evidence.`);
