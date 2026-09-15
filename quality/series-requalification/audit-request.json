@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 39,
+  "diagnostic_revision": 40,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "a25ddf8056dc6b1dd1fc82547c300c2078432e33",
-  "reason": "Verify the current Security 00/1.1 source-state legibility cleanup on one exact head. Revision 38's strengthened opacity-aware contrast/text-visibility step passed against the pre-cleanup rendered bytes, proving the previously certified ctxmix pixels were already held opaque by the existing revamp-ux contract; therefore do not mislabel the contradictory inline opacity declarations as a reproduced pixel failure. The current repair removes those stale inline fades in ES/EN, hides the ctxmix verdict until its final state at source level, removes the defense disabled-card fade, and fixes the ES inactive token from 'off' to 'inactivo'. Re-run strict ES/EN, publication/provenance/article-watch, browser/resource listeners, WCAG+effective-opacity, lifecycle, real touch, visual states and keyboard/focus across desktop/mobile normal/reduced. Fail closed on global SOURCE/RENDERED and MEDIA debt; no PIXEL_REVIEW/PEDAGOGY_REVIEW/ARTICLE_GOLDEN without exact retained-pixel inspection.",
+  "requested_head_parent": "adfd6f8f313951b80e69c1fe39d375a5eac8be6e",
+  "reason": "Run39 retained evidence exposed 88 focused ancestor-opacity failures that the step-level UI summary masked via continue-on-error: ctxmix verdict text was sampled mid-fade in normal motion; RAG outside/top-K membership labels were present but opacity-zero; unrevealed retrieved-context/proposal text was visibly washed out at step 0. Repair ES/EN so hidden future teaching text is visibility-hidden until its semantic step, visible text is immediately fully opaque, outside/top-K membership remains explicit and readable, and ctxmix verdict no longer fades text. Strengthen the contrast gate to cover RAG step 0, step 2 and step 3 for clean/poisoned across ES/EN desktop/mobile normal/reduced. Re-run the full focused technical conjunction and retain pixels for exact manual review. Global SOURCE/RENDERED and MEDIA remain fail-closed; no ARTICLE_GOLDEN is allowed.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
