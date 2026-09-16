@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 75,
-  "diagnostic_scope": "full",
+  "diagnostic_revision": 76,
+  "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "03ec79df65074784a2fc8ff0a434bdaacca18b60",
-  "reason": "Full integration milestone after rev74 focused regression passed the immutable Security plus Datacenters/pre-Datacenters browser matrix (64/64 contexts, 20 classifier mutations, zero failures) and all focused Security browser/contrast/lifecycle/touch/prompt-state/keyboard/listener-lifetime technical gates passed. Execute the canonical 84-page x desktop/mobile x normal/reduced sweep on the new named bounded DOM subprobes. Preserve the 25,000 ms global context budget, two-worker concurrency, 5,000 ms per DOM subprobe, no retry and no threshold increase. A stalled subprobe must fail closed as DOM_SUBPROBE_TIMEOUT. SOURCE/MEDIA/RENDERED are expected to remain red on the known video curriculum debt and therefore this full run cannot certify PIXEL_REVIEW, PEDAGOGY_REVIEW, MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN.",
+  "requested_head_parent": "52651f7f43673f4471715a13da3d366cde524620",
+  "reason": "Focused exact-head integration after rev75 completed 336/336 with zero BROWSER_CONTEXT_TIMEOUT, zero DOM_SUBPROBE_TIMEOUT and zero raw TeX, closing the browser-stall hardening defect while remaining fail-closed on known video/media debt. Validate the post-rev75 Security00 ES navigation parity repair and deterministic negative guard on their exact current head with strict ES/EN, publication/source/rendered checks, the immutable Security plus Datacenters/pre-Datacenters 64-context browser regression, and all focused Security browser/contrast/lifecycle/real-touch/prompt-state/keyboard/listener gates. Do not run the 336-context full catalogue sweep solely for this scoped footer/parity change. SOURCE/MEDIA/RENDERED are expected to stay red on known curriculum video debt; PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and this run cannot certify ARTICLE_GOLDEN or SERIES_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
