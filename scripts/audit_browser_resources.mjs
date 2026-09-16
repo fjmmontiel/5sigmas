@@ -258,10 +258,41 @@ const captureVideoHealth = async (page) => page.evaluate(() => [...document.quer
   };
 }));
 
+const launchAuditBrowser = async () => {
+  try {
+    const browser = await chromium.launch({ headless: true, channel: 'chrome' });
+    return {
+      browser,
+      runtime: {
+        requested_channel: 'chrome',
+        actual_channel: 'chrome',
+        version: browser.version(),
+        fallback_reason: null,
+      },
+    };
+  } catch (error) {
+    const fallbackReason = error instanceof Error ? error.message : String(error);
+    const browser = await chromium.launch({ headless: true });
+    return {
+      browser,
+      runtime: {
+        requested_channel: 'chrome',
+        actual_channel: 'playwright-chromium',
+        version: browser.version(),
+        fallback_reason: fallbackReason,
+      },
+    };
+  }
+};
+
 const reportPath = path.resolve('artifacts/security-requalification/shared-browser-resources/report.json');
 await fs.mkdir(path.dirname(reportPath), { recursive: true });
 
-const browser = await chromium.launch({ headless: true });
+// The published videos are H.264. Prefer the same system Chrome channel already
+// exercised by the Security lifecycle gate so codec availability is part of the
+// page audit instead of an accidental limitation of Playwright's bundled build.
+// Fallback remains fail-closed: media must still reach the same healthy state.
+const { browser, runtime: browserRuntime } = await launchAuditBrowser();
 const failures = [];
 const expectedAborts = [];
 const contextRecords = [];
@@ -417,9 +448,10 @@ const auditContext = async ({ route, profileName, order }) => {
 const writeReport = async ({ complete }) => {
   const sortedContexts = [...contextRecords].sort((left, right) => left.order - right.order);
   const report = {
-    schema_version: 3,
+    schema_version: 4,
     verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
     execution_model: 'BOUNDED_PARALLEL_BATCHES_WITH_INCREMENTAL_REPORTING',
+    browser_runtime: browserRuntime,
     complete,
     concurrency,
     elapsed_ms: Date.now() - auditStartedAt,
@@ -477,4 +509,5 @@ console.log(
   + `${expectedAborts.length} proven expected media/teardown aborts, bounded concurrency=${concurrency} `
   + 'and post-teardown verdicts.',
 );
+console.log(`Browser runtime: ${browserRuntime.actual_channel} ${browserRuntime.version}`);
 console.log(`Report: ${reportPath}`);
