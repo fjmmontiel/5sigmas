@@ -17,7 +17,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PAIR_RE = re.compile(
-    r"- canonical:\s*(herramientas/[^\n]+\.md)\s*\n\s*localized:\s*(tools/[^\n]+\.md)"
+    r"- canonical:\s*([^\n]+\.md)\s*\n\s*localized:\s*([^\n]+\.md)"
 )
 JSONLD_RE = re.compile(
     r'<script\s+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
@@ -26,11 +26,20 @@ JSONLD_RE = re.compile(
 H1_RE = re.compile(r"<h1\b[^>]*>.*?</h1>", re.IGNORECASE | re.DOTALL)
 TAG_RE = re.compile(r"<[^>]+>")
 EXTERNAL_LINK_RE = re.compile(r'href=["\']https?://(?!5sigmas\.com)[^"\']+["\']', re.IGNORECASE)
-CONTEXTUAL_LINK_RE = re.compile(
-    r'href=["\']/(?:en/)?(?:temas|topics|series|articulos-tecnicos|engineering)/[^"\']+["\']',
+CONTEXTUAL_HTML_LINK_RE = re.compile(
+    r'href=["\']/(?:en/)?(?:herramientas|tools|temas|topics|series|articulos-tecnicos|engineering|videos?)/[^"\']+["\']',
+    re.IGNORECASE,
+)
+CONTEXTUAL_MD_LINK_RE = re.compile(
+    r'\]\(/(?:en/)?(?:herramientas|tools|temas|topics|series|articulos-tecnicos|engineering|videos?)/[^)]+\)',
     re.IGNORECASE,
 )
 DATE_RE = re.compile(r"\b(?:20\d{2}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]20\d{2})\b")
+NUMERIC_CONTROL_RE = re.compile(
+    r'<input\b[^>]*\btype=["\'](?:number|range)["\'][^>]*>',
+    re.IGNORECASE,
+)
+METHOD_CLASS_RE = re.compile(r'class=["\'][^"\']*method[^"\']*["\']', re.IGNORECASE)
 
 PROTECTED: dict[str, str] = {
     "herramientas/ecosistema-global-ia.md": "PR #302 AWAITING_RECRAWL",
@@ -102,33 +111,44 @@ def _source_signals(text: str) -> dict[str, bool | int]:
     visible = TAG_RE.sub(" ", text)
     visible = re.sub(r"\s+", " ", visible).strip()
     controls = bool(re.search(r"<(?:input|select|textarea)\b", text, re.IGNORECASE))
+    numeric_controls = bool(NUMERIC_CONTROL_RE.search(text))
     defaults = bool(re.search(r'\bvalue=["\'][^"\']+["\']|<option\b', text, re.IGNORECASE))
     method = bool(
         "s5-tool-method" in lower
+        or METHOD_CLASS_RE.search(text)
         or re.search(r">\s*(?:método|method|metodología|methodology)\s*<", lower)
         or "qué calcula" in lower
         or "how it works" in lower
     )
     assumptions = bool(
-        controls
+        numeric_controls
         and re.search(
-            r"supuest|assumpt|unidad|units?|tokens?|\bms\b|\busd\b|\bkw\b|\bmw\b|\bgb\b|%",
+            r"supuest|assumpt|unidad|units?|tokens?|\bms\b|\busd\b|\bkw\b|\bmw\b|\bgb\b|\bgib\b|bits?|%|billion|millones?",
             lower,
         )
     )
     limits = bool(
         re.search(
-            r"\blímit|\blimit|caveat|no sustituye|no incluye|does not replace|does not include|uncertaint|incertidumbr|descriptiv[oa]",
+            r"\blímit|\blimit|caveat|no sustituye|no incluye|does not replace|does not include|"
+            r"uncertaint|incertidumbr|descriptiv|incomplet|partial|not a profiler|not a benchmark|"
+            r"not a probability|no (?:predice|modela|garantiza)|does not (?:predict|model|guarantee)|"
+            r"do not interpret|no interpretes|supone una|assumes (?:a|the)",
             lower,
         )
     )
-    provenance = bool(EXTERNAL_LINK_RE.search(text) or "s5-tool-source" in lower or "procedencia" in lower or "provenance" in lower)
-    contextual_links = len(CONTEXTUAL_LINK_RE.findall(text))
+    provenance = bool(
+        EXTERNAL_LINK_RE.search(text)
+        or "s5-tool-source" in lower
+        or "procedencia" in lower
+        or "provenance" in lower
+    )
+    contextual_links = len(CONTEXTUAL_HTML_LINK_RE.findall(text)) + len(CONTEXTUAL_MD_LINK_RE.findall(text))
     share = bool(re.search(r'data-action=["\'](?:share|copy)["\']', text, re.IGNORECASE))
     export = bool(re.search(r'data-action=["\'](?:export|csv|json)["\']', text, re.IGNORECASE))
     return {
         "h1": len(H1_RE.findall(text)) == 1,
         "interactive_controls": controls,
+        "numeric_assumptions_applicable": numeric_controls,
         "default_or_example_state": defaults or share or export,
         "methodology": method,
         "assumptions_or_units": assumptions,
@@ -173,7 +193,7 @@ def _audit_locale(
     }
 
 
-def _quality_gaps(row: dict[str, Any]) -> list[str]:
+def _check_states(row: dict[str, Any], *, volatile_data: bool = False) -> dict[str, str]:
     required = (
         "title",
         "description",
@@ -183,19 +203,30 @@ def _quality_gaps(row: dict[str, Any]) -> list[str]:
         "interactive_controls",
         "default_or_example_state",
         "methodology",
-        "assumptions_or_units",
         "limits_or_caveats",
         "primary_source_or_provenance",
         "llms_markdown_surface",
         "deterministic_test",
         "browser_validation",
     )
-    gaps = [key for key in required if not row.get(key)]
-    if int(row.get("contextual_internal_links") or 0) < 1:
-        gaps.append("contextual_internal_links")
-    if int(row.get("static_explanation_chars") or 0) < 900:
-        gaps.append("indexable_static_explanation")
-    return gaps
+    states = {key: ("PASS" if row.get(key) else "FAIL") for key in required}
+    states["assumptions_or_units"] = (
+        "PASS"
+        if row.get("numeric_assumptions_applicable") and row.get("assumptions_or_units")
+        else "FAIL"
+        if row.get("numeric_assumptions_applicable")
+        else "N/A"
+    )
+    states["contextual_internal_links"] = "PASS" if int(row.get("contextual_internal_links") or 0) >= 1 else "FAIL"
+    states["indexable_static_explanation"] = "PASS" if int(row.get("static_explanation_chars") or 0) >= 900 else "FAIL"
+    states["dated_primary_source_provenance"] = (
+        "PASS" if row.get("dated_source_signal") else "FAIL"
+    ) if volatile_data else "N/A"
+    return states
+
+
+def _quality_gaps(row: dict[str, Any], *, volatile_data: bool = False) -> list[str]:
+    return [key for key, state in _check_states(row, volatile_data=volatile_data).items() if state == "FAIL"]
 
 
 def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
@@ -219,6 +250,7 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
         browser_script = repo_root / "scripts" / scripts[1]
         es_route = canonical.removesuffix(".md")
         en_route = f"en/{localized.removesuffix('.md')}"
+        volatile_data = canonical in VOLATILE
         es = _audit_locale(
             repo_root / "docs" / canonical,
             route=es_route,
@@ -233,8 +265,10 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
             test_script=test_script,
             browser_script=browser_script,
         )
-        es_gaps = _quality_gaps(es) if not es.get("missing") else ["source_missing"]
-        en_gaps = _quality_gaps(en) if not en.get("missing") else ["source_missing"]
+        es_states = _check_states(es, volatile_data=volatile_data) if not es.get("missing") else {"source": "FAIL"}
+        en_states = _check_states(en, volatile_data=volatile_data) if not en.get("missing") else {"source": "FAIL"}
+        es_gaps = [key for key, state in es_states.items() if state == "FAIL"]
+        en_gaps = [key for key, state in en_states.items() if state == "FAIL"]
         protected_reason = PROTECTED.get(canonical)
         status = "PASS"
         if es_gaps or en_gaps:
@@ -243,10 +277,11 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
             "canonical": canonical,
             "localized": localized,
             "protected": protected_reason,
-            "volatile_data": canonical in VOLATILE,
+            "volatile_data": volatile_data,
             "status": status,
             "es": es,
             "en": en,
+            "checks": {"es": es_states, "en": en_states},
             "gaps": {"es": es_gaps, "en": en_gaps},
             "capabilities": {
                 "share": bool(es.get("share") and en.get("share")),
@@ -259,7 +294,7 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
             failures.append(f"{canonical}: ES gaps={es_gaps}; EN gaps={en_gaps}")
 
     report = {
-        "contract_version": 1,
+        "contract_version": 2,
         "published_tool_pairs": len(pairs),
         "summary": {
             "pass": sum(row["status"] == "PASS" for row in tools),
@@ -271,11 +306,21 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
                 row["volatile_data"] and row["capabilities"]["dated_source_signal"] for row in tools
             ),
             "volatile_total": sum(row["volatile_data"] for row in tools),
+            "not_applicable_checks": sum(
+                state == "N/A"
+                for row in tools
+                for locale in ("es", "en")
+                for state in row["checks"][locale].values()
+            ),
         },
         "tools": tools,
         "policy": {
             "protected_surfaces": PROTECTED,
             "share_export_are_capabilities_not_blanket_requirements": True,
+            "numeric_assumptions_units_are_applicability_gated": True,
+            "qualitative_select_checkbox_tools_may_report_assumptions_or_units_as_na": True,
+            "volatile_tools_require_dated_source_signal": True,
+            "contextual_links_include_related_tools_topics_series_engineering_and_video": True,
             "rendered_canonical_hreflang_sitemap_mobile_accessibility": "covered by existing tools-quality build/crawl/browser gates",
         },
     }
@@ -298,7 +343,8 @@ def main() -> int:
         "Tool SEO/GEO shell: "
         f"pairs={report['published_tool_pairs']}; pass={summary['pass']}; "
         f"fail={summary['fail']}; protected_review={summary['protected_review']}; "
-        f"share={summary['with_share']}; export={summary['with_export']}."
+        f"share={summary['with_share']}; export={summary['with_export']}; "
+        f"n/a checks={summary['not_applicable_checks']}."
     )
     for failure in failures:
         print(f"FAIL: {failure}")
