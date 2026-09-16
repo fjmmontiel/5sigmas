@@ -142,6 +142,22 @@ jobs:
           cat /tmp/series-experience-preview.log
           exit 1
 
+      - name: Shared browser resources — Security plus Datacenters/pre-Datacenters regression
+        id: shared_browser_resources
+        continue-on-error: true
+        timeout-minutes: 12
+        env:
+          S5_BROWSER_RESOURCE_PATHS: >-
+            /series/seguridad-ia/00_presentacion_serie/,/en/series/seguridad-ia/00_presentacion_serie/,
+            /series/seguridad-ia/01-prompt-injection/,/en/series/seguridad-ia/01-prompt-injection/,
+            /series/datacenters-espacio/00_presentacion_serie/,/en/series/datacenters-espacio/00_presentacion_serie/,
+            /series/ia-pib-bienestar-energia/00_presentacion_serie/,/en/series/ia-pib-bienestar-energia/00_presentacion_serie/,
+            /series/modelos-razonadores/00_presentacion_serie/,/en/series/modelos-razonadores/00_presentacion_serie/,
+            /series/multimodalidad-iag/00_presentacion_serie/,/en/series/multimodalidad-iag/00_presentacion_serie/,
+            /series/from-cave-to-agi/00_presentacion_serie/,/en/series/from-cave-to-agi/00_presentacion_serie/,
+            /series/fundamentos-ia-iag/00_presentacion_serie/,/en/series/fundamentos-ia-iag/00_presentacion_serie/
+        run: node scripts/audit_browser_resources.mjs
+
       - name: All inventoried pages, desktop/mobile, normal/reduced motion
         if: steps.diagnostic_scope.outputs.scope == 'full'
         id: browser
@@ -212,6 +228,7 @@ jobs:
           SECURITY_STRUCTURED_METADATA_OUTCOME: ${{ steps.security_structured_metadata.outcome }}
           SECURITY_ARTICLE_WATCH_OUTCOME: ${{ steps.security_article_watch.outcome }}
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
+          SHARED_BROWSER_RESOURCES_OUTCOME: ${{ steps.shared_browser_resources.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
           SECURITY_CONTRAST_OUTCOME: ${{ steps.security_contrast.outcome }}
@@ -315,6 +332,7 @@ jobs:
               'SECURITY_STRUCTURED_METADATA_OUTCOME',
               'SECURITY_ARTICLE_WATCH_OUTCOME',
               'RENDERED_OUTCOME',
+              'SHARED_BROWSER_RESOURCES_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
               'SECURITY_CONTRAST_OUTCOME',
               'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
