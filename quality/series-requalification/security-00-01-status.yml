@@ -1,4 +1,4 @@
-schema_version: 34
+schema_version: 35
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -7,7 +7,8 @@ release_contract_issue: fjmmontiel/5sigmas-tools-content#281
 
 active_scope:
   series: seguridad-ia
-  pages: [00_presentacion_serie, 01-prompt-injection]
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
   state: REQUALIFICATION_QA
   article_golden: false
   series_golden: false
@@ -42,77 +43,73 @@ global_gate_state:
     VIDEO_CHAPTERS_MISSING: 24
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
-  browser_note: Revision 60 passed the specialized 64-context shared browser regression matrix; the complete 84-page browser sweep remains open.
+  browser_note: Revision 60 passed the specialized 64-context shared browser regression matrix; the complete 84-page browser sweep remains open and is the next independent shared-gate milestone while Security00 narration is externally blocked.
 
-revision63:
+revision63_history:
   run_id: 35069519210
   exact_head: feead57f68e5e302b0c7bc71d4ee7a8365b6d678
   conclusion: FAILURE_FAIL_CLOSED
   strict_es: PASS
   strict_en: PASS
-  editorial_capture:
-    contexts_expected: 16
-    contexts_observed: 16
-    failure_count: 1
-    failure: EN_PRESENTATION_DESKTOP_NORMAL_POST_INTERACTION_SCROLLWIDTH_1456_FOR_CLIENTWIDTH_1440
-    runtime_unexpected_total: 0
-  semantic_trace:
-    contexts_expected: 16
-    contexts_observed: 16
-    checkpoint_count: 64
-    technical_failures: 0
-    runtime_unexpected_total: 0
-    verdict_basis: POST_CONTEXT_TEARDOWN
-  prompt_states:
-    contexts_observed: 8
-    technical_failures: 0
-    runtime_unexpected_total: 0
-  artifact_id: 10435916245
-  artifact_digest: sha256:7cd99cb365d3b422b6e4ba6ebbcc763f6ab6f016d36386d03954acca0c6050f9
-  artifact_compressed_bytes: 48337507
-  artifact_retention_days: 1
-  golden: false
+  editorial_capture_contexts: 16
+  semantic_trace_checkpoints: 64
+  prompt_state_contexts: 8
+  transient_tooltip_false_positive_found: true
+  diagnostic_run_id: 35070750697
+  tooltip_repair_commit: 19bc45e043a7f3d651711fc4cee19e55e5b50ae2
 
-manual_semantic_trace_review_revision63:
-  performed: true
-  independent_reviewer: false
-  retained_checkpoints_inspected: 64
-  locales: [es, en]
-  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-  secpath:
-    checkpoints: [bounded_step_1, bounded_step_3, bounded_step_5, unbounded_step_6]
-    targeted_pixel_result: PASS_SAME_AGENT
-    targeted_pedagogy_result: PASS_SAME_AGENT
-    finding: Hostile content -> system entry -> context influence -> changed proposal -> authorization boundary -> external effect remains legible across bounded/unbounded states; mobile checkpoints retain readable causal order without sticky-header overlap.
-  ragtrace:
-    checkpoints: [poisoned_step_1, poisoned_step_2, poisoned_step_3, clean_step_3]
-    targeted_pixel_result: PASS_SAME_AGENT
-    targeted_pedagogy_result: PASS_SAME_AGENT
-    finding: Ranking/top-K -> retrieved context -> downstream proposal is visible in clean and poisoned scenarios across both locales and both viewport classes.
-  whole_article_PIXEL_REVIEW: CHANGES_REQUIRED
-  whole_article_PEDAGOGY_REVIEW: CHANGES_REQUIRED
-  note: Targeted same-agent checkpoint review is not an independent review and does not certify the whole article.
+revision66:
+  exact_head: 059b8c781436d0c0f66b33326877b9a7e9fa4410
+  poster_materializer_commit: 7c2c9df08a7641cdb6b487c6fed3b909c752f311
+  poster_repair_run_id: 35084072750
+  editorial_capture_run_id: 35084200309
+  editorial_capture_conclusion: SUCCESS
+  artifact_id: 10441048974
+  artifact_digest: sha256:ebf24a5b8d196ca016ceb919047b2d34bd8b0995f0ab2fcf3ca43e3153771bcc
+  artifact_compressed_bytes: 48290288
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  technical_capture:
+    contexts_expected: 16
+    contexts_observed: 16
+    failure_count: 0
+    locales: [es, en]
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    byte_range_preview: PASS
+    tooltip_negative_mutation: PASS
+    semantic_trace_checkpoints: PASS
+    prompt_states: PASS
+    golden: false
+  security00_manual_review:
+    performed: true
+    independent_reviewer: false
+    exact_revision_bound: true
+    whole_page_contexts_inspected: 8
+    semantic_checkpoints_inspected: 32
+    PIXEL_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+    PEDAGOGY_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+    poster_clip: REPAIRED
+    raw_tex_or_html_visible: false
+    global_horizontal_overflow: false
+    pathological_mobile_canvas: false
+    causal_mechanism_verified: true
+    normal_motion_verified: true
+    reduced_motion_verified: true
+    desktop_verified: true
+    mobile_verified: true
+  security01_manual_review_from_revision66: NOT_GRANTED
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
 
 active_editorial_gate_defect:
-  id: TRANSIENT_MATERIAL_TOOLTIP_GLOBAL_OVERFLOW_FALSE_POSITIVE
-  severity: P1_GATE
-  state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
-  evidence:
-    revision61_same_site_bytes_full_width: 1440
-    revision62_full_width: 1456
-    revision63_full_width: 1456
-    visual_root_secpath_client_scroll_width: [1098, 1098]
-    diagnostic_run_id: 35070750697
-    diagnostic_head: 64baa9cafbe806ad0b80652e40d85816f9903be0
-    diagnostic_artifact_id: 10436630153
-    diagnostic_artifact_bytes: 2836
-    diagnostic_result: >-
-      The document remains 1440px through navigation, root scroll and all four secpath controls. Only after the scripted full-page scroll does scrollWidth become 1456. The new overflowing element is Material's transient .md-tooltip2__inner for the text 'Permanent link': left=16, width=1440, right=1456, top=-339.01 (off viewport). The secpath visual itself does not overflow.
-  disproved_hypothesis: Removing the revision-62 manual scrollTop mutation did not remove the 16px expansion.
-  repair_commit: 19bc45e043a7f3d651711fc4cee19e55e5b50ae2
-  repair: >-
-    Before the final article-layout overflow verdict, dismiss transient framework hover/focus UI by moving the desktop pointer away, pressing Escape, blurring the active element and waiting for shell settle. This does not resize, hide or relax any article content or overflow threshold.
-  exact_qa_required: true
+  id: SECURITY00_MEDIA_COMPLETION
+  severity: BLOCKER
+  state: BLOCKED_EXTERNAL_INPUT_WITH_INDEPENDENT_WORK_REMAINING
+  poster_or_layout_blocker: false
+  pixel_blocker_on_revision66: false
+  pedagogy_blocker_on_revision66: false
+  media_blocker: true
 
 media:
   state: FAIL_VOICE_MISSING
@@ -124,56 +121,64 @@ media:
     VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
-  authorized_narration_search_current_run:
+  authorized_narration_search_previous_run:
     private_repo_match: false
     drive_audio_match: false
     gmail_audio_attachment_match_last_180d: false
   generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
   fabricated_transcript_or_timings: false
 
 cost:
-  revision63_editorial_artifact_compressed_bytes: 48337507
-  overflow_diagnostic_artifact_compressed_bytes: 2836
+  revision66_editorial_artifact_compressed_bytes: 48290288
   retention_days: 1
   state: P2_OPEN_EDITORIAL_EVIDENCE_DEDUPLICATION
-  rule: Keep required manual-review evidence but do not accumulate redundant capture sets; focused diagnostics must remain JSON-only where possible.
+  rule: Keep required manual-review evidence but do not accumulate redundant capture sets; full shared diagnostics retain only bounded failure evidence with one-day retention.
 
 sources_and_locales:
-  site_facing_bytes_changed_revision63: false
-  material_claims_changed_revision63: false
-  factual_research_reopened_revision63: false
-  strict_es_revision63: PASS
-  strict_en_revision63: PASS
+  site_facing_bytes_changed_revision66: true
+  site_facing_change_scope_revision66: SECURITY00_ES_POSTER_ONLY
+  material_claims_changed_revision66: false
+  strict_es_revision66: PASS
+  strict_en_revision66: PASS
+  source_truth_note: Security00 primary OWASP mechanism claims were reopened in the rev66 review; poster repair changed no material claim.
 
 release_and_concurrency:
   main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
   repair_branch: quality/post-datacenters-requalification
   branch_behind_main_at_last_compare: 0
   draft_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
-  draft_323: OPEN_DRAFT_ORTHOGONAL
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
-  datacenters_or_pre_datacenters_modified_revision63: false
+  datacenters_or_pre_datacenters_modified_revision66: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
   blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  current_runtime_direct_dns_live_check: UNAVAILABLE
   cached_web_used_as_production_evidence: false
   linkedin_action_by_this_lane: false
   queue_activation_publish: false
   seventy_two_hour_clock_restarted: false
   preserve_279: true
 
+housekeeping:
+  resolved_overflow_diagnostic_helper: scripts/diagnose_security_editorial_overflow.mjs
+  helper_state: REMOVED_AFTER_ROOT_CAUSE_AND_PERMANENT_NEGATIVE_FIXTURE
+  retained_permanent_regression_gate: scripts/validate_material_tooltip_overflow.mjs
+
 next_gap:
-  stay_on: seguridad-ia_00_plus_01
-  immediate: EXACT_QA_OF_TRANSIENT_TOOLTIP_SETTLE_REPAIR_THEN_WHOLE_ARTICLE_MANUAL_PIXEL_AND_PEDAGOGY_REVIEW
-  after_that:
-    - COMPLETE_GLOBAL_84_PAGE_BROWSER_SWEEP
-    - SOURCE_RENDERED_MEDIA_DEBT
-    - AUTHORIZED_NARRATION_AUDIO
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent: COMPLETE_GLOBAL_84_PAGE_BROWSER_SWEEP
+  after_browser_sweep:
+    - RECONCILE_SOURCE_RENDERED_MEDIA_DEBT_FROM_FRESH_FULL_CATALOGUE_EVIDENCE
+    - FIX_SECURITY00_SHARED_GATES_THAT_DO_NOT_REQUIRE_NARRATION
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
     - CAPTIONS
     - TRANSCRIPT
     - CURATED_KEY_MOMENTS
+    - ARTICLE_WATCH_POSTER_PLAY_PAUSE_SEEK_END_NEXT
   do_not_advance_to: 02-jailbreaks
   article_golden_forbidden: true
