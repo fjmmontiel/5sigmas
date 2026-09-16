@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -137,6 +138,19 @@ class ToolSeoGeoShellAuditTests(unittest.TestCase):
         }
         self.assertNotIn("dated_primary_source_provenance", MODULE._quality_gaps(row, volatile_data=False))
         self.assertIn("dated_primary_source_provenance", MODULE._quality_gaps(row, volatile_data=True))
+
+    def test_shared_runtime_data_can_supply_volatile_dated_provenance(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "docs/assets/data/tools/llm-pricing.json"
+            data.parent.mkdir(parents=True)
+            data.write_text('{"updated_at":"2026-08-21"}', encoding="utf-8")
+            self.assertTrue(
+                MODULE._shared_dated_provenance(root, "herramientas/coste-latencia-llm.md")
+            )
+            self.assertFalse(
+                MODULE._shared_dated_provenance(root, "herramientas/linea-temporal-capacidades-modelos.md")
+            )
 
     def test_protected_surface_keeps_reason_machine_readable(self) -> None:
         self.assertIn("herramientas/ecosistema-global-ia.md", MODULE.PROTECTED)
