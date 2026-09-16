@@ -23,8 +23,14 @@ let next = 0;
 const JOB_TIMEOUT_MS = Number(process.env.S5_BROWSER_JOB_TIMEOUT_MS || 25000);
 const WORKER_COUNT = Number(process.env.S5_BROWSER_WORKERS || 2);
 const CLOSE_TIMEOUT_MS = 4000;
+const DOM_SUBPROBE_TIMEOUT_MS = Number(process.env.S5_DOM_SUBPROBE_TIMEOUT_MS || 5000);
 if (!Number.isInteger(WORKER_COUNT) || WORKER_COUNT < 1 || WORKER_COUNT > 4) {
   throw new Error(`S5_BROWSER_WORKERS must be an integer between 1 and 4; got ${WORKER_COUNT}`);
+}
+if (!Number.isFinite(DOM_SUBPROBE_TIMEOUT_MS) || DOM_SUBPROBE_TIMEOUT_MS <= 0 || DOM_SUBPROBE_TIMEOUT_MS >= JOB_TIMEOUT_MS) {
+  throw new Error(
+    `S5_DOM_SUBPROBE_TIMEOUT_MS must be > 0 and < S5_BROWSER_JOB_TIMEOUT_MS; got ${DOM_SUBPROBE_TIMEOUT_MS}`,
+  );
 }
 
 const classifyRequestFailure = ({ errorText, phase }) => {
@@ -112,9 +118,6 @@ const runHostScrollPlanMutations = () => {
   return fixtures.length + 2;
 };
 
-const requestFailureMutationCount = runRequestFailureClassifierMutations();
-const hostScrollPlanMutationCount = runHostScrollPlanMutations();
-
 async function bounded(promise, ms, label) {
   let timer;
   try {
@@ -128,6 +131,58 @@ async function bounded(promise, ms, label) {
     clearTimeout(timer);
   }
 }
+
+class DomSubprobeTimeoutError extends Error {
+  constructor(subprobe, timeoutMs, cause) {
+    super(`DOM subprobe ${subprobe} exceeded ${timeoutMs} ms`);
+    this.name = 'DomSubprobeTimeoutError';
+    this.subprobe = subprobe;
+    this.timeoutMs = timeoutMs;
+    this.cause = cause;
+  }
+}
+
+async function boundedDomSubprobe(subprobe, operation, timeoutMs = DOM_SUBPROBE_TIMEOUT_MS) {
+  try {
+    return await bounded(
+      Promise.resolve().then(operation),
+      timeoutMs,
+      `DOM subprobe ${subprobe}`,
+    );
+  } catch (error) {
+    if (/DOM subprobe .* exceeded \d+ ms/.test(String(error))) {
+      throw new DomSubprobeTimeoutError(subprobe, timeoutMs, error);
+    }
+    throw error;
+  }
+}
+
+async function runDomSubprobeMutations() {
+  const fast = await boundedDomSubprobe('mutation-fast', () => Promise.resolve('ok'), 100);
+  if (fast !== 'ok') throw new Error('DOM subprobe fast mutation did not resolve');
+
+  let timedOut = false;
+  try {
+    await boundedDomSubprobe(
+      'mutation-stalled',
+      () => new Promise(resolve => setTimeout(() => resolve('late'), 30)),
+      5,
+    );
+  } catch (error) {
+    timedOut =
+      error instanceof DomSubprobeTimeoutError &&
+      error.subprobe === 'mutation-stalled' &&
+      error.timeoutMs === 5;
+  }
+  if (!timedOut) {
+    throw new Error('DOM subprobe stalled mutation did not fail closed with DOM_SUBPROBE_TIMEOUT semantics');
+  }
+  return 2;
+}
+
+const requestFailureMutationCount = runRequestFailureClassifierMutations();
+const hostScrollPlanMutationCount = runHostScrollPlanMutations();
+const domSubprobeMutationCount = await runDomSubprobeMutations();
 
 async function boundedClose(context) {
   if (!context) return false;
@@ -282,6 +337,7 @@ async function inspect(job) {
     errors,
     expected_request_aborts: expectedRequestAborts,
     phase_timing_ms: phaseTimingMs,
+    dom_subprobes: {},
     pixel_review: 'PENDING',
     pedagogy_review: 'PENDING',
     interaction_review: 'NOT_RUN',
@@ -331,6 +387,25 @@ async function inspect(job) {
       errors.push({ code: 'REQUEST_FAILED', ...evidence });
     });
 
+    const runDomProbe = async (name, callback) => {
+      const started = performance.now();
+      try {
+        const value = await boundedDomSubprobe(name, () => page.evaluate(callback));
+        result.dom_subprobes[name] = {
+          ok: true,
+          host_ms: Number((performance.now() - started).toFixed(2)),
+        };
+        return value;
+      } catch (error) {
+        result.dom_subprobes[name] = {
+          ok: false,
+          host_ms: Number((performance.now() - started).toFixed(2)),
+          error: String(error),
+        };
+        throw error;
+      }
+    };
+
     await bounded((async () => {
       const response = await page.goto(new URL(job.route, base).href, {
         waitUntil: 'domcontentloaded',
@@ -370,89 +445,130 @@ async function inspect(job) {
       await new Promise(resolve => setTimeout(resolve, 180));
 
       transitionPhase('dom-inspection');
-      result.dom = await page.evaluate(() => {
-        const root =
-          document.querySelector('article.md-content__inner') ||
-          document.querySelector('article');
+      const rootSummary = await runDomProbe('root-summary', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
         if (!root) return { missing_article: true };
-
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-        const parts = [];
-        while (walker.nextNode()) {
-          const node = walker.currentNode;
-          if (
-            !node.parentElement?.closest(
-              'script,style,pre,code,math,annotation,mjx-container,.katex',
-            )
-          ) {
-            parts.push(node.textContent || '');
-          }
-        }
-        const prose = parts.join(' ');
-        const tex =
-          prose.match(
-            /\\(?:frac|text|tau|pi|Delta|sum|prod|begin|end|lambda|mathbb|mathrm|mathbf|subseteq|land|min|max|mid|theta|sigma|alpha|beta)\b|\\[\[\]]|\$\$/g,
-          ) || [];
-        const escapedSnippet = [...root.querySelectorAll('pre,code')].some(node =>
-          /include_html\(|<\s*(?:section|svg|style)\b[^\n]*(?:s5v|anim-|viewBox|data-anim)/i.test(
-            node.textContent || '',
-          ),
-        );
-        const visualLabels = [...root.querySelectorAll('svg text')].flatMap(node => {
-          const rect = node.getBoundingClientRect();
-          const matrix = node.getScreenCTM();
-          if (!rect.width || !rect.height || !matrix) return [];
-          return [
-            {
-              label: node.textContent?.trim().slice(0, 100),
-              px: Number(
-                (
-                  parseFloat(getComputedStyle(node).fontSize) *
-                  Math.hypot(matrix.c, matrix.d)
-                ).toFixed(2),
-              ),
-            },
-          ];
-        });
-        const pannable = [...root.querySelectorAll('div')]
-          .filter(node => {
-            const overflow = getComputedStyle(node).overflowX;
-            return (
-              ['auto', 'scroll'].includes(overflow) &&
-              node.scrollWidth > node.clientWidth + 2 &&
-              node.querySelector('svg')
-            );
-          })
-          .map(node => ({
-            class: String(node.className || ''),
-            viewport: node.clientWidth,
-            content: node.scrollWidth,
-          }));
-
         return {
+          missing_article: false,
           lang: document.documentElement.lang,
           video_count: root.querySelectorAll('video').length,
           native_math_count: root.querySelectorAll('math').length,
-          raw_tex_markers: [...new Set(tex)],
-          escaped_snippet:
-            escapedSnippet || /\{\{\s*include_html/.test(prose),
           page_overflow:
-            document.documentElement.scrollWidth >
-            document.documentElement.clientWidth + 1,
-          broken_images: [...root.querySelectorAll('img')]
-            .filter(image => image.complete && !image.naturalWidth)
-            .map(image => image.currentSrc || image.src),
+            document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        };
+      });
+
+      if (rootSummary.missing_article) {
+        result.dom = { missing_article: true };
+      } else {
+        const textScan = await runDomProbe('text-scan', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { missing_article: true, raw_tex_markers: [], include_html_visible: false };
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          const parts = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (!node.parentElement?.closest('script,style,pre,code,math,annotation,mjx-container,.katex')) {
+              parts.push(node.textContent || '');
+            }
+          }
+          const prose = parts.join(' ');
+          const tex = prose.match(
+            /\\(?:frac|text|tau|pi|Delta|sum|prod|begin|end|lambda|mathbb|mathrm|mathbf|subseteq|land|min|max|mid|theta|sigma|alpha|beta)\b|\\[\[\]]|\$\$/g,
+          ) || [];
+          return {
+            missing_article: false,
+            raw_tex_markers: [...new Set(tex)],
+            include_html_visible: /\{\{\s*include_html/.test(prose),
+          };
+        });
+
+        const snippetScan = await runDomProbe('snippet-scan', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { escaped_pre_code: false };
+          return {
+            escaped_pre_code: [...root.querySelectorAll('pre,code')].some(node =>
+              /include_html\(|<\s*(?:section|svg|style)\b[^\n]*(?:s5v|anim-|viewBox|data-anim)/i.test(node.textContent || ''),
+            ),
+          };
+        });
+
+        const svgLabelGeometry = await runDomProbe('svg-label-geometry', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { labels: [] };
+          const labels = [...root.querySelectorAll('svg text')].flatMap(node => {
+            const rect = node.getBoundingClientRect();
+            const matrix = node.getScreenCTM();
+            if (!rect.width || !rect.height || !matrix) return [];
+            return [{
+              label: node.textContent?.trim().slice(0, 100),
+              px: Number((parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.c, matrix.d)).toFixed(2)),
+            }];
+          });
+          return { labels };
+        });
+
+        const pannableGeometry = await runDomProbe('pannable-geometry', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { pannable_visuals: [] };
+          const pannable = [...root.querySelectorAll('div')]
+            .filter(node => {
+              const overflow = getComputedStyle(node).overflowX;
+              return (
+                ['auto', 'scroll'].includes(overflow) &&
+                node.scrollWidth > node.clientWidth + 2 &&
+                node.querySelector('svg')
+              );
+            })
+            .map(node => ({
+              class: String(node.className || ''),
+              viewport: node.clientWidth,
+              content: node.scrollWidth,
+            }));
+          return { pannable_visuals: pannable };
+        });
+
+        const imageScan = await runDomProbe('image-scan', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { broken_images: [] };
+          return {
+            broken_images: [...root.querySelectorAll('img')]
+              .filter(image => image.complete && !image.naturalWidth)
+              .map(image => image.currentSrc || image.src),
+          };
+        });
+
+        const animationScan = await runDomProbe('animation-scan', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { animation_count: 0 };
+          return { animation_count: root.getAnimations({ subtree: true }).length };
+        });
+
+        const controlScan = await runDomProbe('control-scan', () => {
+          const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+          if (!root) return { visual_control_count: 0 };
+          return {
+            visual_control_count: root.querySelectorAll(
+              '.s5v button, .anim-brand-shell button, [role="tab"], input[type="range"]',
+            ).length,
+          };
+        });
+
+        const visualLabels = svgLabelGeometry.labels || [];
+        result.dom = {
+          ...rootSummary,
+          raw_tex_markers: textScan.raw_tex_markers || [],
+          escaped_snippet: Boolean(textScan.include_html_visible || snippetScan.escaped_pre_code),
+          broken_images: imageScan.broken_images || [],
           label_review_candidates: visualLabels.filter(label => label.px < 12),
           minimum_svg_label_px: visualLabels.length
             ? Math.min(...visualLabels.map(label => label.px))
             : null,
-          pannable_visuals: pannable,
-          animation_count: root.getAnimations({ subtree: true }).length,
-          visual_control_count: root.querySelectorAll(
-            '.s5v button, .anim-brand-shell button, [role="tab"], input[type="range"]',
-          ).length,
+          pannable_visuals: pannableGeometry.pannable_visuals || [],
+          animation_count: animationScan.animation_count || 0,
+          visual_control_count: controlScan.visual_control_count || 0,
         };
-      });
+      }
 
       if (result.dom.missing_article) {
         errors.push({ code: 'ARTICLE_MISSING' });
@@ -488,12 +604,8 @@ async function inspect(job) {
 
       // Bounded evidence sample; never pretend these are pixel/pedagogy approvals.
       const sample =
-        /\/seguridad-ia\/(?:00_presentacion_serie|01-prompt-injection)\/$/.test(
-          job.route,
-        ) ||
-        /\/evaluating-ai-systems-production\/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria\/$/.test(
-          job.route,
-        );
+        /\/seguridad-ia\/(?:00_presentacion_serie|01-prompt-injection)\/$/.test(job.route) ||
+        /\/evaluating-ai-systems-production\/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria\/$/.test(job.route);
       if (sample) {
         transitionPhase('pixel-capture');
         const stem = `${job.locale}-${job.width}-${job.motion}-${job.route
@@ -505,9 +617,7 @@ async function inspect(job) {
           fullPage: true,
           animations: job.motion === 'reduce' ? 'disabled' : 'allow',
         });
-        const visual = page
-          .locator('article .anim-brand-shell, article .s5v')
-          .first();
+        const visual = page.locator('article .anim-brand-shell, article .s5v').first();
         if (await visual.count()) {
           await visual.scrollIntoViewIfNeeded();
           await page.screenshot({
@@ -520,10 +630,20 @@ async function inspect(job) {
       await new Promise(resolve => setTimeout(resolve, 100));
     })(), JOB_TIMEOUT_MS, `${job.locale} ${job.width} ${job.motion} ${job.route}`);
   } catch (error) {
-    const code = /exceeded \d+ ms/.test(String(error))
-      ? 'BROWSER_CONTEXT_TIMEOUT'
-      : 'BROWSER_AUDIT_ERROR';
-    errors.push({ code, phase, detail: String(error) });
+    if (error instanceof DomSubprobeTimeoutError) {
+      errors.push({
+        code: 'DOM_SUBPROBE_TIMEOUT',
+        phase,
+        subprobe: error.subprobe,
+        timeout_ms: error.timeoutMs,
+        detail: String(error),
+      });
+    } else {
+      const code = /exceeded \d+ ms/.test(String(error))
+        ? 'BROWSER_CONTEXT_TIMEOUT'
+        : 'BROWSER_AUDIT_ERROR';
+      errors.push({ code, phase, detail: String(error) });
+    }
   } finally {
     transitionPhase('teardown');
     if (await boundedClose(context)) {
@@ -546,17 +666,14 @@ try {
         results.push(result);
         console.log(
           `${job.locale} ${job.width} ${job.motion} ${job.route} => ${
-            [...new Set(result.errors.map(error => error.code))].join(',') ||
-            'TECHNICAL_ONLY'
+            [...new Set(result.errors.map(error => error.code))].join(',') || 'TECHNICAL_ONLY'
           }`,
         );
       }
     }),
   );
 } finally {
-  await boundedClose({
-    close: () => browser.close(),
-  });
+  await boundedClose({ close: () => browser.close() });
 }
 
 results.sort(
@@ -579,10 +696,13 @@ const report = {
   expected_contexts: jobs.length,
   worker_count: WORKER_COUNT,
   context_timeout_ms: JOB_TIMEOUT_MS,
+  dom_subprobe_timeout_ms: DOM_SUBPROBE_TIMEOUT_MS,
   findings: counts,
   request_failure_policy: 'FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_FAILURES; ONLY_CONTEXT_TEARDOWN_ERR_ABORTED_IS_EXPECTED',
   request_failure_mutation_count: requestFailureMutationCount,
   host_scroll_plan_mutation_count: hostScrollPlanMutationCount,
+  dom_subprobe_mutation_count: domSubprobeMutationCount,
+  dom_subprobe_policy: 'NAMED_FAIL_CLOSED_SUBPROBES; NO_RETRY; GLOBAL_CONTEXT_BUDGET_UNCHANGED',
   lazy_traversal_timer_owner: 'host',
   expected_teardown_abort_count: expectedAbortCount,
   golden: 'NOT_CERTIFIED',
@@ -596,10 +716,7 @@ await fs.writeFile(
   path.join(output, 'browser-report.json'),
   JSON.stringify(report, null, 2) + '\n',
 );
-console.log(
-  'BROWSER_DIAGNOSTIC_SUMMARY ' +
-    JSON.stringify({ ...report, results: undefined }),
-);
+console.log('BROWSER_DIAGNOSTIC_SUMMARY ' + JSON.stringify({ ...report, results: undefined }));
 if (Object.keys(counts).length || results.length !== jobs.length) {
   process.exitCode = 1;
 }
