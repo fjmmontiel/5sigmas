@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 69,
-  "diagnostic_scope": "focused_security_00_01",
+  "diagnostic_revision": 70,
+  "diagnostic_scope": "full",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "4ea59f6e271107f9a74e4a5435347f80c38893f5",
-  "reason": "Bounded exact-QA validation after repairing shared browser-resource abort sequence proof. Revision 68 exposed one fail-closed reference-media abort on EN from-cave-to-agi mobile/reduced because audit_browser_resources.mjs treated an observed media request with unavailable Playwright request.timing().startTime as if the request-start event itself were missing, despite already recording nodeObservedAtMs. Revision 69 preserves fail-closed semantics: genuinely absent request events remain fatal; a request event with unavailable browser timing may use its recorded Node observation clock only when healthy pre-start metadata, an earlier successful different request for the same URL, and healthy final media state also prove redundancy. Added a positive mutation for the fallback and a negative mutation for a request event with no usable clock. Run focused Security00/01 diagnostics plus the 64-context Security + Datacenters/pre-Datacenters reference regression matrix; skip the expensive 336-context global sweep in this validation milestone. Do not infer PIXEL_REVIEW or PEDAGOGY_REVIEW from technical success and do not grant GOLDEN. If the reference matrix is clean, persist the result and return to the already-known full-catalogue timeouts/raw-TeX/media debt without modifying reference content.",
+  "requested_head_parent": "3e609ec33485b3a9468f93c88a69abd96ca45a9d",
+  "reason": "Exact full-catalog QA after diagnosing nondeterministic browser-context timeout targets across revisions 67 and 68 with no published-content delta between those audited heads. Keep the per-context timeout at 25000 ms and fail closed; reduce full-catalog browser workers from four to two to remove suspected CPU scheduling contention, record per-phase timing for navigation/lazy-load/interaction/pixel/settle/teardown, retain request/runtime listeners through teardown, and rerun the complete 84-page x desktop/mobile x normal/reduced = 336-context sweep plus the 64-context Security + Datacenters/pre-Datacenters reference matrix. This run is a technical integration milestone only: SOURCE/RENDERED/MEDIA findings remain independent failures, PIXEL_REVIEW and PEDAGOGY_REVIEW remain editorial/revision-scoped, and no GOLDEN status may be inferred from a clean timeout result.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
