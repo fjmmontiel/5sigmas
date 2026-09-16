@@ -91,6 +91,7 @@ published_routes:
   - temas/razonamiento.md
   - temas/evaluacion-modelos.md
   - temas/agentes-ia.md
+  - temas/agentes-voz-tiempo-real.md
   - temas/prompt-injection.md
   - articulos-tecnicos/index.md
   - articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
@@ -278,7 +279,7 @@ coverage:
   datacenters_space_series: text_visuals_and_native_media_complete
   security_series: text_visuals_and_native_media_complete
   remaining_chapters: complete
-  concept_hubs: canonical_six_complete
+  concept_hubs: canonical_seven_complete
   technical_articles: text_visuals_and_native_media_complete
   visual_hub: native_english_complete
   video_hub: native_english_complete
