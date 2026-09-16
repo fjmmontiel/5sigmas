@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 72,
-  "diagnostic_scope": "full",
+  "diagnostic_revision": 74,
+  "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "3e9915f3c4d37a929ec51eaf0c1ccb609f290254",
-  "reason": "Exact full-catalog integration for the systemic ES/EN math-rendering repair. Rev71 completed 336/336 browser contexts but still failed closed with three BROWSER_CONTEXT_TIMEOUT findings, all EN/390/reduced during lazy traversal, plus the previously known raw-TeX and media failures; therefore rev71 does not grant BROWSER_PASS. This revision enables pymdownx.arithmatex generic mode and the existing MathJax configuration/runtime in both locale builds, updates the static rendered audit to distinguish protected Arithmatex source from genuinely leaked TeX, and adds negative mutation coverage proving TeX outside the protected wrapper still fails. Require strict ES/EN, 84-page rendered coverage, zero visible raw TeX after browser typesetting, zero runtime/resource regressions from the new MathJax dependency, shared Security plus Datacenters/pre-Datacenters regression, and continued fail-closed reporting of the timeout class. MEDIA remains independent and failing until authorized native narration/captions/transcript/key moments exist. PIXEL_REVIEW and PEDAGOGY_REVIEW remain editorial/revision-scoped and may not be inferred from this technical run. No GOLDEN status may be inferred from this diagnostic.",
+  "requested_head_parent": "4b15299369e6061240fb59ec9589fcd3792b4e86",
+  "reason": "Focused integration milestone after splitting the canonical full-catalog browser auditor's monolithic DOM inspection into named fail-closed bounded subprobes. Preserve the global 25,000 ms context budget and two-worker concurrency; no retry and no threshold increase. Startup mutations now prove a deliberately stalled subprobe produces DOM_SUBPROBE_TIMEOUT semantics. Run the existing Security 00/01 technical gates plus the immutable Security + Datacenters/pre-Datacenters shared browser regression before any new 84-page x desktop/mobile x normal/reduced sweep. This focused run does not certify the global browser catalogue, PIXEL_REVIEW, PEDAGOGY_REVIEW, MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN. MEDIA remains independently blocked by authorized native narration/captions/transcript/key moments.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
