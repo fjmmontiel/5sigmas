@@ -1,5 +1,6 @@
 ---
 title: Voice-agent latency — response and barge-in budget
+description: Break down voice-agent latency across transport, turn end, STT, model, TTS, output and buffering, and calculate the interruption path separately.
 summary: Break down a voice agent's latency across transport, turn end, STT, model, TTS, output and buffering, then model the interruption path separately.
 ---
 
