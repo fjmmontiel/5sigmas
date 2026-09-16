@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 58,
+  "diagnostic_revision": 59,
   "diagnostic_scope": "focused_security_00_01",
-  "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "55243cae67af4950bd82d3736cf79cc258098291",
-  "reason": "Exact-QA the bounded-parallel shared browser-resource repair implemented after revision 57 timed out. Re-run the unchanged 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion: 64 isolated Playwright contexts total, processed in bounded batches with incremental evidence so timeout cannot erase progress. Preserve healthy metadata requirements, stable Request identity, 200/206 correlation, listeners through context.close(), post-teardown verdicts and all negative mutation fixtures; do not weaken thresholds or treat generic/navigation/non-media/unproven aborts as expected. Re-run the focused Security technical gates on the exact same head and retain bounded JSON-only diagnostic artifacts. This is not a whole-catalogue BROWSER_PASS, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
+  "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
+  "requested_head_parent": "6386930ea6520a0020dde90a93a3254a0afe058c",
+  "reason": "Exact-QA the shared browser-resource gate after the revision-58 diagnosis and production-capable browser repair. Re-run the unchanged 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion: 64 isolated contexts total. Require the emitted report to record requested_channel=chrome, actual browser channel/version and any fallback reason. Preserve healthy H.264 metadata requirements, stable Request identity, 200/206 response correlation, listeners through context.close(), post-teardown verdicts, bounded batches/incremental evidence and all shared negative mutation fixtures. A fallback to bundled Playwright Chromium remains fail-closed and cannot establish BROWSER_PASS if media is unhealthy. Re-run the focused Security technical gates on the same exact head. Main@7d9daf6 is merged non-force beforehand; its #324 bilingual internal-link graph change is accepted as current-main compatibility and must not weaken Security/Datacenters regression coverage. This is not whole-catalogue BROWSER_PASS, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
