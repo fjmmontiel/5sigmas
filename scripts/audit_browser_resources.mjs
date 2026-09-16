@@ -85,22 +85,6 @@ const safeFrameUrl = (request) => {
   }
 };
 
-const matchingSuccessfulResponse = (event, record) => {
-  const responses = record.networkResponses ?? [];
-  const priorSameRequest = responses.some((response) => (
-    response.seq < event.seq
-    && response.requestId === event.requestId
-    && response.url === event.url
-    && [200, 206].includes(response.status)
-  ));
-  const laterSameSource = responses.some((response) => (
-    response.seq > event.seq
-    && response.url === event.url
-    && [200, 206].includes(response.status)
-  ));
-  return { priorSameRequest, laterSameSource, proven: priorSameRequest || laterSameSource };
-};
-
 const isHealthyVideo = (video) => Boolean(
   video
   && video.readyState >= 1
@@ -110,10 +94,69 @@ const isHealthyVideo = (video) => Boolean(
   && video.duration > 0
 );
 
+const isHealthyCheckpoint = (checkpoint) => Boolean(
+  checkpoint
+  && checkpoint.readyState >= 1
+  && checkpoint.networkState !== 3
+  && checkpoint.errorCode == null
+  && Number.isFinite(checkpoint.duration)
+  && checkpoint.duration > 0
+);
+
 const matchingHealthyVideo = (event, record) => (record.videos ?? []).find((video) => (
   video.sources.includes(event.url)
   && isHealthyVideo(video)
 ));
+
+const priorSameRequestResponse = (event, record) => (record.networkResponses ?? []).find((response) => (
+  response.seq < event.seq
+  && response.requestId === event.requestId
+  && response.url === event.url
+  && [200, 206].includes(response.status)
+));
+
+const redundantAbortProof = (event, record) => {
+  const start = (record.mediaRequestStarts ?? []).find((candidate) => (
+    candidate.requestId === event.requestId
+    && candidate.url === event.url
+  ));
+  if (!start || !Number.isFinite(start.startedAtMs)) {
+    return { proven: false, reason: 'missing-request-start' };
+  }
+
+  const checkpoint = (record.mediaHealthCheckpoints ?? [])
+    .filter((candidate) => (
+      candidate.sources.includes(event.url)
+      && isHealthyCheckpoint(candidate)
+      && Number.isFinite(candidate.observedAtMs)
+      && candidate.observedAtMs <= start.startedAtMs
+    ))
+    .sort((left, right) => right.observedAtMs - left.observedAtMs)[0];
+  if (!checkpoint) {
+    return { proven: false, reason: 'no-healthy-metadata-before-request-start', start };
+  }
+
+  const priorResponse = (record.networkResponses ?? [])
+    .filter((response) => (
+      response.requestId !== event.requestId
+      && response.url === event.url
+      && [200, 206].includes(response.status)
+      && response.seq < start.seq
+      && Number.isFinite(response.observedAtMs)
+      && response.observedAtMs <= start.startedAtMs
+    ))
+    .sort((left, right) => right.observedAtMs - left.observedAtMs)[0];
+  if (!priorResponse) {
+    return {
+      proven: false,
+      reason: 'no-prior-successful-different-request-before-redundant-start',
+      start,
+      checkpoint,
+    };
+  }
+
+  return { proven: true, start, checkpoint, priorResponse };
+};
 
 const classifyRequestFailure = (event, record) => {
   if (!/ERR_ABORTED/i.test(event.errorText ?? '')) {
@@ -133,64 +176,123 @@ const classifyRequestFailure = (event, record) => {
     return { expected: false, classification: 'FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO' };
   }
 
-  const responseProof = matchingSuccessfulResponse(event, record);
-  if (!responseProof.proven) {
-    return { expected: false, classification: 'FATAL_MEDIA_ABORT_WITHOUT_RESPONSE_PROOF' };
+  const sameRequestResponse = priorSameRequestResponse(event, record);
+  if (sameRequestResponse) {
+    return {
+      expected: true,
+      classification: 'EXPECTED_METADATA_RANGE_CANCEL_AFTER_RESPONSE_HEADERS',
+      proof: { sameRequestResponse },
+    };
+  }
+
+  const redundantProof = redundantAbortProof(event, record);
+  if (redundantProof.proven) {
+    return {
+      expected: true,
+      classification: 'EXPECTED_REDUNDANT_MEDIA_REQUEST_ABORT_AFTER_HEALTHY_METADATA',
+      proof: redundantProof,
+    };
   }
 
   return {
-    expected: true,
-    classification: responseProof.priorSameRequest
-      ? 'EXPECTED_METADATA_RANGE_CANCEL_AFTER_RESPONSE_HEADERS'
-      : 'EXPECTED_METADATA_RANGE_CANCEL_SUPERSEDED_BY_LATER_RESPONSE',
+    expected: false,
+    classification: 'FATAL_MEDIA_ABORT_WITHOUT_SEQUENCE_PROOF',
+    proof: redundantProof,
   };
 };
 
 const runClassifierMutations = () => {
   const url = 'https://example.invalid/video.mp4';
+  const otherUrl = 'https://example.invalid/other.mp4';
   const healthyVideo = {
     sources: [url], readyState: 1, networkState: 1, errorCode: null, duration: 60,
   };
-  const baseRecord = {
-    videos: [healthyVideo],
-    networkResponses: [{ seq: 1, requestId: 'media-1', url, status: 206 }],
+  const healthyCheckpoint = {
+    sources: [url], readyState: 1, networkState: 1, errorCode: null, duration: 60, observedAtMs: 100,
   };
   const lazyAbort = {
-    seq: 2,
+    seq: 4,
     requestId: 'media-1',
     phase: 'lazy-load',
     resourceType: 'media',
     url,
     errorText: 'net::ERR_ABORTED',
   };
+  const sameRequestRecord = {
+    videos: [healthyVideo],
+    mediaRequestStarts: [{ seq: 1, requestId: 'media-1', url, startedAtMs: 90 }],
+    mediaHealthCheckpoints: [],
+    networkResponses: [{ seq: 2, requestId: 'media-1', url, status: 206, observedAtMs: 110 }],
+  };
+  const redundantAbort = { ...lazyAbort, seq: 8, requestId: 'media-2' };
+  const redundantRecord = {
+    videos: [healthyVideo],
+    mediaRequestStarts: [
+      { seq: 1, requestId: 'media-1', url, startedAtMs: 80 },
+      { seq: 6, requestId: 'media-2', url, startedAtMs: 120 },
+    ],
+    mediaHealthCheckpoints: [healthyCheckpoint],
+    networkResponses: [{ seq: 2, requestId: 'media-1', url, status: 206, observedAtMs: 90 }],
+  };
 
   const fixtures = [
-    ['proven same-request metadata cancellation', lazyAbort, baseRecord, true],
-    ['later same-source superseding response', lazyAbort, {
+    ['proven same-request metadata cancellation', lazyAbort, sameRequestRecord, true],
+    ['redundant request after healthy metadata and prior response', redundantAbort, redundantRecord, true],
+    ['later same-source response cannot prove earlier abort', lazyAbort, {
       videos: [healthyVideo],
-      networkResponses: [{ seq: 3, requestId: 'media-2', url, status: 206 }],
-    }, true],
-    ['generic navigation abort', { ...lazyAbort, phase: 'navigation' }, baseRecord, false],
-    ['generic non-media lazy abort', { ...lazyAbort, resourceType: 'script' }, baseRecord, false],
-    ['different prior request only', lazyAbort, {
-      videos: [healthyVideo],
-      networkResponses: [{ seq: 1, requestId: 'other-request', url, status: 206 }],
+      mediaRequestStarts: [{ seq: 1, requestId: 'media-1', url, startedAtMs: 90 }],
+      mediaHealthCheckpoints: [],
+      networkResponses: [{ seq: 5, requestId: 'media-2', url, status: 206, observedAtMs: 130 }],
     }, false],
-    ['missing response proof', lazyAbort, { videos: [healthyVideo], networkResponses: [] }, false],
-    ['wrong media URL', lazyAbort, {
-      videos: [{ ...healthyVideo, sources: ['https://example.invalid/other.mp4'] }],
-      networkResponses: baseRecord.networkResponses,
+    ['different prior request without metadata checkpoint', redundantAbort, {
+      ...redundantRecord,
+      mediaHealthCheckpoints: [],
     }, false],
-    ['unhealthy media', lazyAbort, {
+    ['metadata checkpoint after redundant request start', redundantAbort, {
+      ...redundantRecord,
+      mediaHealthCheckpoints: [{ ...healthyCheckpoint, observedAtMs: 121 }],
+    }, false],
+    ['unhealthy metadata checkpoint', redundantAbort, {
+      ...redundantRecord,
+      mediaHealthCheckpoints: [{ ...healthyCheckpoint, readyState: 0, duration: null }],
+    }, false],
+    ['wrong metadata URL', redundantAbort, {
+      ...redundantRecord,
+      mediaHealthCheckpoints: [{ ...healthyCheckpoint, sources: [otherUrl] }],
+    }, false],
+    ['missing redundant request start', redundantAbort, {
+      ...redundantRecord,
+      mediaRequestStarts: redundantRecord.mediaRequestStarts.filter((item) => item.requestId !== 'media-2'),
+    }, false],
+    ['prior response after redundant request start', redundantAbort, {
+      ...redundantRecord,
+      networkResponses: [{ seq: 7, requestId: 'media-1', url, status: 206, observedAtMs: 121 }],
+    }, false],
+    ['prior response wrong URL', redundantAbort, {
+      ...redundantRecord,
+      networkResponses: [{ seq: 2, requestId: 'media-1', url: otherUrl, status: 206, observedAtMs: 90 }],
+    }, false],
+    ['generic navigation abort', { ...lazyAbort, phase: 'navigation' }, sameRequestRecord, false],
+    ['generic non-media lazy abort', { ...lazyAbort, resourceType: 'script' }, sameRequestRecord, false],
+    ['missing response proof', lazyAbort, {
+      videos: [healthyVideo], mediaRequestStarts: [], mediaHealthCheckpoints: [], networkResponses: [],
+    }, false],
+    ['wrong final media URL', lazyAbort, {
+      ...sameRequestRecord,
+      videos: [{ ...healthyVideo, sources: [otherUrl] }],
+    }, false],
+    ['unhealthy final media', lazyAbort, {
+      ...sameRequestRecord,
       videos: [{ ...healthyVideo, readyState: 0, duration: null }],
-      networkResponses: baseRecord.networkResponses,
     }, false],
-    ['media error', lazyAbort, {
+    ['final media error', lazyAbort, {
+      ...sameRequestRecord,
       videos: [{ ...healthyVideo, errorCode: 3 }],
-      networkResponses: baseRecord.networkResponses,
     }, false],
-    ['non-abort request failure', { ...lazyAbort, errorText: 'net::ERR_FAILED' }, baseRecord, false],
-    ['context teardown abort', { ...lazyAbort, phase: 'teardown' }, { videos: [], networkResponses: [] }, true],
+    ['non-abort request failure', { ...lazyAbort, errorText: 'net::ERR_FAILED' }, sameRequestRecord, false],
+    ['context teardown abort', { ...lazyAbort, phase: 'teardown' }, {
+      videos: [], mediaRequestStarts: [], mediaHealthCheckpoints: [], networkResponses: [],
+    }, true],
   ];
 
   for (const [name, event, record, expected] of fixtures) {
@@ -206,6 +308,36 @@ const mutationCount = runClassifierMutations();
 
 const exerciseLazyResources = async (page) => {
   await page.evaluate(async () => {
+    const resolveUrl = (value) => {
+      if (!value) return null;
+      try { return new URL(value, document.baseURI).href; }
+      catch { return value; }
+    };
+    const snapshotVideo = (video, kind) => ({
+      kind,
+      observedAtMs: Date.now(),
+      sources: [...new Set([
+        video.currentSrc,
+        video.getAttribute('src'),
+        ...[...video.querySelectorAll('source')].map((source) => source.getAttribute('src')),
+      ].map(resolveUrl).filter(Boolean))],
+      readyState: video.readyState,
+      networkState: video.networkState,
+      errorCode: video.error?.code ?? null,
+      duration: Number.isFinite(video.duration) ? Number(video.duration) : null,
+    });
+
+    window.__s5MediaHealthCheckpoints = [];
+    const videos = [...document.querySelectorAll('video')];
+    for (const video of videos) {
+      if (video.readyState >= 1) {
+        window.__s5MediaHealthCheckpoints.push(snapshotVideo(video, 'initial-healthy-state'));
+      }
+      video.addEventListener('loadedmetadata', () => {
+        window.__s5MediaHealthCheckpoints.push(snapshotVideo(video, 'loadedmetadata'));
+      }, { once: true });
+    }
+
     const root = document.scrollingElement ?? document.documentElement;
     const maxY = Math.max(0, root.scrollHeight - window.innerHeight);
     if (maxY > 0) {
@@ -216,7 +348,6 @@ const exerciseLazyResources = async (page) => {
       }
     }
 
-    const videos = [...document.querySelectorAll('video')];
     for (const video of videos) {
       // Changing preload from none to metadata is sufficient to ask Chromium to run
       // media resource selection. Calling load() in the same task races that selection
@@ -224,7 +355,6 @@ const exerciseLazyResources = async (page) => {
       if (video.preload === 'none') video.preload = 'metadata';
     }
 
-    // Give the resource-selection task a chance to start before awaiting metadata.
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     await Promise.all(videos.map(async (video) => {
@@ -258,6 +388,10 @@ const captureVideoHealth = async (page) => page.evaluate(() => [...document.quer
   };
 }));
 
+const captureMediaHealthCheckpoints = async (page) => page.evaluate(() => (
+  Array.isArray(window.__s5MediaHealthCheckpoints) ? window.__s5MediaHealthCheckpoints : []
+));
+
 const launchAuditBrowser = async () => {
   try {
     const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -288,10 +422,6 @@ const launchAuditBrowser = async () => {
 const reportPath = path.resolve('artifacts/security-requalification/shared-browser-resources/report.json');
 await fs.mkdir(path.dirname(reportPath), { recursive: true });
 
-// The published videos are H.264. Prefer the same system Chrome channel already
-// exercised by the Security lifecycle gate so codec availability is part of the
-// page audit instead of an accidental limitation of Playwright's bundled build.
-// Fallback remains fail-closed: media must still reach the same healthy state.
 const { browser, runtime: browserRuntime } = await launchAuditBrowser();
 const failures = [];
 const expectedAborts = [];
@@ -319,9 +449,11 @@ const auditContext = async ({ route, profileName, order }) => {
   let seq = 0;
   let requestCounter = 0;
   const requestIds = new WeakMap();
+  const mediaRequestStarts = [];
   const networkResponses = [];
   const requestFailures = [];
   const directFailures = [];
+  let mediaHealthCheckpoints = [];
   let videos = [];
   const label = `${route} [${profileName}]`;
   const contextStartedAt = Date.now();
@@ -339,6 +471,25 @@ const auditContext = async ({ route, profileName, order }) => {
     directFailures.push(`${label}: console:error during ${phase}: ${message.text()}`);
   });
 
+  page.on('request', (request) => {
+    if (request.resourceType() !== 'media') return;
+    let startedAtMs = null;
+    try {
+      const candidate = request.timing()?.startTime;
+      if (Number.isFinite(candidate) && candidate > 0) startedAtMs = candidate;
+    } catch {
+      startedAtMs = null;
+    }
+    mediaRequestStarts.push({
+      seq: ++seq,
+      requestId: requestIdFor(request),
+      url: request.url(),
+      phase,
+      startedAtMs,
+      nodeObservedAtMs: Date.now(),
+    });
+  });
+
   page.on('response', (response) => {
     const request = response.request();
     const resourceType = request.resourceType();
@@ -349,6 +500,7 @@ const auditContext = async ({ route, profileName, order }) => {
         requestId: requestIdFor(request),
         url: response.url(),
         status: response.status(),
+        observedAtMs: Date.now(),
       });
     }
     if (response.status() < 400) return;
@@ -370,6 +522,7 @@ const auditContext = async ({ route, profileName, order }) => {
       resourceType: request.resourceType(),
       frame: safeFrameUrl(request),
       navigation: request.isNavigationRequest(),
+      observedAtMs: Date.now(),
     });
   });
 
@@ -389,6 +542,7 @@ const auditContext = async ({ route, profileName, order }) => {
     phase = 'settle';
     await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
     await page.waitForTimeout(100);
+    mediaHealthCheckpoints = await captureMediaHealthCheckpoints(page);
     videos = await captureVideoHealth(page);
     for (const [videoIndex, video] of videos.entries()) {
       if (!isHealthyVideo(video)) {
@@ -402,12 +556,11 @@ const auditContext = async ({ route, profileName, order }) => {
   } catch (error) {
     directFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
   } finally {
-    // Keep every listener active through context teardown. The verdict is computed only afterwards.
     phase = 'teardown';
     await context.close();
   }
 
-  const record = { videos, networkResponses };
+  const record = { videos, networkResponses, mediaRequestStarts, mediaHealthCheckpoints };
   const classified = requestFailures.map((event) => ({
     event,
     verdict: classifyRequestFailure(event, record),
@@ -416,13 +569,19 @@ const auditContext = async ({ route, profileName, order }) => {
   const localExpectedAborts = [];
   for (const item of classified) {
     if (item.verdict.expected) {
-      localExpectedAborts.push({ label, ...item.event, classification: item.verdict.classification });
+      localExpectedAborts.push({
+        label,
+        ...item.event,
+        classification: item.verdict.classification,
+        proof: item.verdict.proof ?? null,
+      });
       continue;
     }
     localFailures.push(
       `${label}: request failed during ${item.event.phase}: ${item.event.url} (${item.event.errorText}) `
-      + `[type=${item.event.resourceType}; frame=${item.event.frame}; navigation=${item.event.navigation}; `
-      + `classification=${item.verdict.classification}]`,
+      + `[requestId=${item.event.requestId}; seq=${item.event.seq}; type=${item.event.resourceType}; `
+      + `frame=${item.event.frame}; navigation=${item.event.navigation}; `
+      + `classification=${item.verdict.classification}; proof=${JSON.stringify(item.verdict.proof ?? null)}]`,
     );
   }
 
@@ -440,7 +599,18 @@ const auditContext = async ({ route, profileName, order }) => {
       fatal_request_failure_count: classified.filter((item) => !item.verdict.expected).length,
       direct_failure_count: directFailures.length,
       successful_media_response_count: networkResponses.length,
+      media_request_start_count: mediaRequestStarts.length,
+      media_health_checkpoint_count: mediaHealthCheckpoints.length,
       videos,
+      media_request_starts: mediaRequestStarts,
+      media_health_checkpoints: mediaHealthCheckpoints,
+      network_responses: networkResponses,
+      request_failures: classified.map(({ event, verdict }) => ({
+        ...event,
+        classification: verdict.classification,
+        expected: verdict.expected,
+        proof: verdict.proof ?? null,
+      })),
     },
   };
 };
@@ -448,8 +618,8 @@ const auditContext = async ({ route, profileName, order }) => {
 const writeReport = async ({ complete }) => {
   const sortedContexts = [...contextRecords].sort((left, right) => left.order - right.order);
   const report = {
-    schema_version: 4,
-    verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
+    schema_version: 5,
+    verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_START_RESPONSE_AND_PRE_REQUEST_METADATA_SEQUENCE_PROOF',
     execution_model: 'BOUNDED_PARALLEL_BATCHES_WITH_INCREMENTAL_REPORTING',
     browser_runtime: browserRuntime,
     complete,
@@ -464,7 +634,7 @@ const writeReport = async ({ complete }) => {
     failure_count: failures.length,
     failures,
     expected_aborts: expectedAborts,
-    contexts: sortedContexts.map(({ order, ...record }) => record),
+    contexts: sortedContexts.map(({ order: omittedOrder, ...record }) => record),
   };
   await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 };
