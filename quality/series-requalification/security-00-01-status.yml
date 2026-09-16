@@ -1,4 +1,4 @@
-schema_version: 33
+schema_version: 34
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -42,83 +42,77 @@ global_gate_state:
     VIDEO_CHAPTERS_MISSING: 24
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
-  browser_note: Revision 60 passed the specialized 64-context shared browser regression matrix; the complete 84-page browser sweep remains open, therefore BROWSER_PASS is still false.
+  browser_note: Revision 60 passed the specialized 64-context shared browser regression matrix; the complete 84-page browser sweep remains open.
 
-latest_completed_editorial_capture:
-  revision: 61
-  run_id: 35067385838
-  exact_head: 2acea24cdb903757c90e801aeef304999588decb
-  conclusion: success
-  browser: CHROME_152_0_7977_82
+revision63:
+  run_id: 35069519210
+  exact_head: feead57f68e5e302b0c7bc71d4ee7a8365b6d678
+  conclusion: FAILURE_FAIL_CLOSED
   strict_es: PASS
   strict_en: PASS
-  contexts_expected: 16
-  contexts_observed: 16
-  technical_failures: 0
-  runtime_unexpected_total: 0
-  prompt_state_contexts: 8
-  prompt_state_failures: 0
-  screenshots_retained: 176
-  artifact_id: 10434608568
-  artifact_compressed_bytes: 40771919
+  editorial_capture:
+    contexts_expected: 16
+    contexts_observed: 16
+    failure_count: 1
+    failure: EN_PRESENTATION_DESKTOP_NORMAL_POST_INTERACTION_SCROLLWIDTH_1456_FOR_CLIENTWIDTH_1440
+    runtime_unexpected_total: 0
+  semantic_trace:
+    contexts_expected: 16
+    contexts_observed: 16
+    checkpoint_count: 64
+    technical_failures: 0
+    runtime_unexpected_total: 0
+    verdict_basis: POST_CONTEXT_TEARDOWN
+  prompt_states:
+    contexts_observed: 8
+    technical_failures: 0
+    runtime_unexpected_total: 0
+  artifact_id: 10435916245
+  artifact_digest: sha256:7cd99cb365d3b422b6e4ba6ebbcc763f6ab6f016d36386d03954acca0c6050f9
+  artifact_compressed_bytes: 48337507
   artifact_retention_days: 1
-  artifact_expires_at: 2026-09-17T07:17:26Z
-  technical_capture_success_does_not_certify_pixel_or_pedagogy: true
+  golden: false
 
-manual_review_revision61:
+manual_semantic_trace_review_revision63:
   performed: true
-  whole_page_contexts_inspected: 16
-  asset_state_screenshots_inspected: 160
+  independent_reviewer: false
+  retained_checkpoints_inspected: 64
   locales: [es, en]
   profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-  no_global_horizontal_overflow_observed_in_security_00_01: true
-  no_raw_tex_or_accidental_html_observed_in_security_00_01: true
-  no_obvious_document_level_clipping_observed: true
-  ctxmix_pedagogy: PASS_TARGETED
-  defsim_pedagogy: PASS_TARGETED
-  secpath_static_scenario_pedagogy: PASS_TARGETED
-  ragtrace_static_scenario_pedagogy: PASS_TARGETED
+  secpath:
+    checkpoints: [bounded_step_1, bounded_step_3, bounded_step_5, unbounded_step_6]
+    targeted_pixel_result: PASS_SAME_AGENT
+    targeted_pedagogy_result: PASS_SAME_AGENT
+    finding: Hostile content -> system entry -> context influence -> changed proposal -> authorization boundary -> external effect remains legible across bounded/unbounded states; mobile checkpoints retain readable causal order without sticky-header overlap.
+  ragtrace:
+    checkpoints: [poisoned_step_1, poisoned_step_2, poisoned_step_3, clean_step_3]
+    targeted_pixel_result: PASS_SAME_AGENT
+    targeted_pedagogy_result: PASS_SAME_AGENT
+    finding: Ranking/top-K -> retrieved context -> downstream proposal is visible in clean and poisoned scenarios across both locales and both viewport classes.
   whole_article_PIXEL_REVIEW: CHANGES_REQUIRED
   whole_article_PEDAGOGY_REVIEW: CHANGES_REQUIRED
-  independent_reviewer: false
+  note: Targeted same-agent checkpoint review is not an independent review and does not certify the whole article.
 
 active_editorial_gate_defect:
-  id: SEMANTIC_TRACE_CHECKPOINT_EVIDENCE_MISSING
+  id: TRANSIENT_MATERIAL_TOOLTIP_GLOBAL_OVERFLOW_FALSE_POSITIVE
   severity: P1_GATE
-  affected_visuals: [secpath, ragtrace]
-  finding: >-
-    Revision 61 generic Play screenshots were sampled after only 50 ms in reduced motion or 180 ms in normal motion.
-    The actual secpath script advances every 650 ms and ragtrace every 700 ms, so the retained Play screenshot is effectively the initial state and cannot prove start/intermediate/final behavior.
-  false_pass_forbidden: true
-  repair_state: IMPLEMENTED_PENDING_EXACT_QA
-  repair_script: scripts/capture_security_trace_checkpoints.mjs
-  workflow: .github/workflows/security-capture-direct.yml
-  repair_contract:
-    expected_contexts: 16
-    locales: [es, en]
-    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-    secpath_checkpoints: [bounded_step_1, bounded_step_3, bounded_step_5, unbounded_step_6]
-    ragtrace_checkpoints: [poisoned_step_1, poisoned_step_2, poisoned_step_3, clean_step_3]
-    real_viewport_chrome_visible: true
-    sticky_chrome_target_overlap: FAIL_CLOSED
-    listeners_through_context_close: true
-    post_context_teardown_verdict: true
-    manual_pixel_review_after_exact_qa: true
-    manual_pedagogy_review_after_exact_qa: true
-
-concurrent_capture_observed:
-  revision: 62
-  request_commit: 6dc53806dab14ae2454566683a51cde785c633f8
-  run_id: 35068457407
-  state_at_reconciliation: IN_PROGRESS
-  note: >-
-    Revision 62 was started concurrently after revision 61 to isolate locator screenshots from sticky chrome. It is not accepted as closing the semantic checkpoint defect because the generic Play sampling timing remained unchanged. The semantic repair was added without overwriting that work.
-
-cost:
-  revision61_editorial_artifact_compressed_bytes: 40771919
-  retention_days: 1
-  state: P2_OPEN_BOUNDED_DEDUPLICATION
-  rule: Preserve required real editorial evidence; reduce redundant generic Play/control frames in future exact captures rather than weakening image fidelity or deleting required checkpoints.
+  state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+  evidence:
+    revision61_same_site_bytes_full_width: 1440
+    revision62_full_width: 1456
+    revision63_full_width: 1456
+    visual_root_secpath_client_scroll_width: [1098, 1098]
+    diagnostic_run_id: 35070750697
+    diagnostic_head: 64baa9cafbe806ad0b80652e40d85816f9903be0
+    diagnostic_artifact_id: 10436630153
+    diagnostic_artifact_bytes: 2836
+    diagnostic_result: >-
+      The document remains 1440px through navigation, root scroll and all four secpath controls. Only after the scripted full-page scroll does scrollWidth become 1456. The new overflowing element is Material's transient .md-tooltip2__inner for the text 'Permanent link': left=16, width=1440, right=1456, top=-339.01 (off viewport). The secpath visual itself does not overflow.
+  disproved_hypothesis: Removing the revision-62 manual scrollTop mutation did not remove the 16px expansion.
+  repair_commit: 19bc45e043a7f3d651711fc4cee19e55e5b50ae2
+  repair: >-
+    Before the final article-layout overflow verdict, dismiss transient framework hover/focus UI by moving the desktop pointer away, pressing Escape, blurring the active element and waiting for shell settle. This does not resize, hide or relax any article content or overflow threshold.
+  exact_qa_required: true
 
 media:
   state: FAIL_VOICE_MISSING
@@ -130,21 +124,26 @@ media:
     VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
+  authorized_narration_search_current_run:
+    private_repo_match: false
+    drive_audio_match: false
+    gmail_audio_attachment_match_last_180d: false
   generated_cloned_or_substituted_francisco_voice: false
   fabricated_transcript_or_timings: false
 
-sources_and_locales:
-  site_facing_bytes_changed_revision61: false
-  material_claims_changed_revision61: false
-  factual_research_reopened_revision61: false
-  strict_es_revision61: PASS
-  strict_en_revision61: PASS
-  note: No claim, benchmark, unit, formula, caveat, reference or locale copy was changed by this evidence-capture run.
+cost:
+  revision63_editorial_artifact_compressed_bytes: 48337507
+  overflow_diagnostic_artifact_compressed_bytes: 2836
+  retention_days: 1
+  state: P2_OPEN_EDITORIAL_EVIDENCE_DEDUPLICATION
+  rule: Keep required manual-review evidence but do not accumulate redundant capture sets; focused diagnostics must remain JSON-only where possible.
 
-raw_tex_scope:
-  affected_route_pairs_per_locale: 14
-  total_locale_pages: 28
-  security_00_01_affected: false
+sources_and_locales:
+  site_facing_bytes_changed_revision63: false
+  material_claims_changed_revision63: false
+  factual_research_reopened_revision63: false
+  strict_es_revision63: PASS
+  strict_en_revision63: PASS
 
 release_and_concurrency:
   main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
@@ -155,7 +154,7 @@ release_and_concurrency:
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
-  datacenters_or_pre_datacenters_modified_revision61: false
+  datacenters_or_pre_datacenters_modified_revision63: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
@@ -168,7 +167,7 @@ release_contract_281_310:
 
 next_gap:
   stay_on: seguridad-ia_00_plus_01
-  immediate: EXACT_QA_OF_SEMANTIC_TRACE_CHECKPOINT_REPAIR_THEN_REAL_MANUAL_PIXEL_AND_PEDAGOGY_REVIEW
+  immediate: EXACT_QA_OF_TRANSIENT_TOOLTIP_SETTLE_REPAIR_THEN_WHOLE_ARTICLE_MANUAL_PIXEL_AND_PEDAGOGY_REVIEW
   after_that:
     - COMPLETE_GLOBAL_84_PAGE_BROWSER_SWEEP
     - SOURCE_RENDERED_MEDIA_DEBT
