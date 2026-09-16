@@ -48,20 +48,6 @@ const fail = (label, message) => failures.push(`${label}: ${message}`);
 
 async function capture(locator, filename) {
   await locator.scrollIntoViewIfNeeded();
-  await locator.evaluate(async (node) => {
-    const occluders = [...document.querySelectorAll('.md-header,.md-tabs,[data-md-component="header"]')]
-      .map((element) => ({ style: getComputedStyle(element), rect: element.getBoundingClientRect() }))
-      .filter(({ style, rect }) => ['fixed', 'sticky'].includes(style.position)
-        && rect.height > 0
-        && rect.bottom > 0
-        && rect.top <= 8);
-    const safeTop = Math.max(0, ...occluders.map(({ rect }) => rect.bottom)) + 12;
-    const before = node.getBoundingClientRect();
-    const requestedScrollY = Math.max(0, window.scrollY + before.top - safeTop);
-    const scrollingElement = document.scrollingElement || document.documentElement;
-    scrollingElement.scrollTop = requestedScrollY;
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  });
   await locator.screenshot({
     path: path.join(screenshotDir, filename),
     type: 'jpeg',
@@ -311,14 +297,15 @@ try {
 }
 
 const report = {
-  schema_version: 2,
+  schema_version: 3,
   scope: 'security-00-01-whole-article-editorial-evidence',
   golden: false,
   pixel_review: 'REQUIRES_MANUAL_PIXEL_INSPECTION_OF_ALL_RETAINED_SCREENSHOTS',
   pedagogy_review: 'REQUIRES_MANUAL_EDITORIAL_REVIEW; THIS_CAPTURE_DOES_NOT_CERTIFY_PEDAGOGY',
   isolated_asset_capture: {
     sticky_chrome_hidden: true,
-    purpose: 'ISOLATE_COMPLETE_VISUAL_STATE_FOR_EDITORIAL_REVIEW',
+    document_scroll_mutated_for_isolated_capture: false,
+    purpose: 'ISOLATE_COMPLETE_VISUAL_STATE_FOR_EDITORIAL_REVIEW_WITHOUT_STICKY_CHROME_CONTAMINATION',
     full_page_capture_preserves_real_sticky_chrome: true,
   },
   browser: { channel: 'chrome', version: browserVersion },
