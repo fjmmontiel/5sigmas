@@ -164,11 +164,24 @@ class ExperienceAuditTest(unittest.TestCase):
         issues, _ = rendered_findings(html, "es")
         self.assertIn("RAW_TEX_RENDERED", {f["code"] for f in issues})
 
+    def test_arithmatex_wrapper_is_protected_at_static_layer(self):
+        html = '<html lang="es"><article><p>Mechanism</p><div class="arithmatex">\\[Recall@k=\\frac{x}{y}\\]</div><video></video></article></html>'
+        issues, stats = rendered_findings(html, "es")
+        self.assertEqual(issues, [])
+        self.assertEqual(stats["arithmatex_wrappers"], 1)
+        self.assertEqual(stats["native_math_elements"], 0)
+
+    def test_tex_outside_arithmatex_still_fails_when_wrapper_exists(self):
+        html = '<html lang="en"><article><p>\\frac{a}{b}</p><div class="arithmatex">\\[x+y\\]</div><video></video></article></html>'
+        issues, stats = rendered_findings(html, "en")
+        self.assertEqual(stats["arithmatex_wrappers"], 1)
+        self.assertIn("RAW_TEX_RENDERED", {f["code"] for f in issues})
+
     def test_native_math_and_real_video_structure_pass_only_this_layer(self):
         html = '<html lang="en"><article><p>Recall</p><math><mfrac><mi>x</mi><mi>y</mi></mfrac></math><video><source src="x.mp4"></video></article></html>'
         issues, stats = rendered_findings(html, "en")
         self.assertEqual(issues, [])
-        self.assertEqual(stats, {"video_elements": 1, "native_math_elements": 1})
+        self.assertEqual(stats, {"video_elements": 1, "native_math_elements": 1, "arithmatex_wrappers": 0})
 
     def test_tex_code_example_is_not_misclassified(self):
         html = '<html lang="es"><article><p>Code example</p><pre><code>\\frac{x}{y}</code></pre><video></video></article></html>'
