@@ -9,8 +9,8 @@ hide:
 
 <link rel="stylesheet" href="/stylesheets/tools.css" />
 <link rel="stylesheet" href="/stylesheets/tools-prompt-injection.css" />
-<script src="/assets/javascripts/tools-prompt-injection-core.js" defer></script>
-<script src="/assets/javascripts/tools-prompt-injection.js" defer></script>
+<script src="/assets/javascripts/tools/prompt-injection-core.js" defer></script>
+<script src="/assets/javascripts/tools/prompt-injection.js" defer></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Explorador de amenazas de prompt injection — 5sigmas","url":"https://5sigmas.com/herramientas/amenazas-prompt-injection/","applicationCategory":"SecurityApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"Explorador defensivo de rutas de impacto y controles para prompt injection en sistemas LLM y agentes."}</script>
 
 <div class="s5-landing s5-tool-page s5-threat" data-s5-prompt-injection data-locale="es">
