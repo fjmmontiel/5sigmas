@@ -40,7 +40,7 @@ const classifyRequestFailure = ({ errorText, phase }) => {
 
 const runRequestFailureClassifierMutations = () => {
   const fixtures = [
-    ['pre-teardown media abort fails closed', { errorText: 'net::ERR_ABORTED', phase: 'lazy-load' }, false],
+    ['pre-teardown media abort fails closed', { errorText: 'net::ERR_ABORTED', phase: 'lazy-traversal' }, false],
     ['interaction abort fails closed', { errorText: 'net::ERR_ABORTED', phase: 'interaction-playback' }, false],
     ['teardown abort is expected', { errorText: 'net::ERR_ABORTED', phase: 'teardown' }, true],
     ['non-abort teardown failure remains fatal', { errorText: 'net::ERR_FAILED', phase: 'teardown' }, false],
@@ -54,7 +54,66 @@ const runRequestFailureClassifierMutations = () => {
   return fixtures.length;
 };
 
+const buildHostScrollPlan = ({ height, viewportHeight }) => {
+  const documentHeight = Number(height);
+  const viewport = Number(viewportHeight);
+  if (!Number.isFinite(documentHeight) || documentHeight <= 0) {
+    throw new Error(`Invalid document height for lazy traversal: ${height}`);
+  }
+  if (!Number.isFinite(viewport) || viewport <= 0) {
+    throw new Error(`Invalid viewport height for lazy traversal: ${viewportHeight}`);
+  }
+  const step = Math.max(viewport, 400);
+  const positions = [];
+  for (let y = 0; y < documentHeight; y += step) positions.push(y);
+  return { documentHeight, viewportHeight: viewport, step, positions };
+};
+
+const runHostScrollPlanMutations = () => {
+  const fixtures = [
+    {
+      name: 'single viewport traverses from top once',
+      input: { height: 844, viewportHeight: 844 },
+      positions: [0],
+    },
+    {
+      name: 'two mobile viewports traverse both regions',
+      input: { height: 1688, viewportHeight: 844 },
+      positions: [0, 844],
+    },
+    {
+      name: 'small viewport retains 400px minimum step',
+      input: { height: 801, viewportHeight: 300 },
+      positions: [0, 400, 800],
+    },
+  ];
+  for (const fixture of fixtures) {
+    const actual = buildHostScrollPlan(fixture.input).positions;
+    if (JSON.stringify(actual) !== JSON.stringify(fixture.positions)) {
+      throw new Error(
+        `Host scroll plan mutation failed: ${fixture.name}; expected=${JSON.stringify(fixture.positions)}; actual=${JSON.stringify(actual)}`,
+      );
+    }
+  }
+  for (const invalid of [
+    { height: 0, viewportHeight: 844 },
+    { height: 844, viewportHeight: 0 },
+  ]) {
+    let failedClosed = false;
+    try {
+      buildHostScrollPlan(invalid);
+    } catch {
+      failedClosed = true;
+    }
+    if (!failedClosed) {
+      throw new Error(`Host scroll plan accepted invalid geometry: ${JSON.stringify(invalid)}`);
+    }
+  }
+  return fixtures.length + 2;
+};
+
 const requestFailureMutationCount = runRequestFailureClassifierMutations();
+const hostScrollPlanMutationCount = runHostScrollPlanMutations();
 
 async function bounded(promise, ms, label) {
   let timer;
@@ -279,25 +338,38 @@ async function inspect(job) {
       });
       if (!response?.ok()) errors.push({ code: 'PAGE_HTTP_ERROR', status: response?.status() });
 
-      transitionPhase('lazy-load');
-      await page.evaluate(async () => {
-        await Promise.race([
-          document.fonts.ready,
-          new Promise(resolve => setTimeout(resolve, 1500)),
-        ]);
-      });
+      transitionPhase('font-settle');
+      await Promise.race([
+        page.evaluate(() => document.fonts.ready.then(() => true)),
+        new Promise(resolve => setTimeout(resolve, 1500)),
+      ]);
 
-      // Traverse the complete page to exercise lazy loading, not only its hero.
-      await page.evaluate(async () => {
-        const height = document.documentElement.scrollHeight;
-        for (let y = 0; y < height; y += Math.max(innerHeight, 400)) {
-          scrollTo(0, y);
-          await new Promise(resolve => setTimeout(resolve, 20));
-        }
-        scrollTo(0, 0);
-      });
-      await page.waitForTimeout(180);
+      transitionPhase('lazy-traversal');
+      const geometry = await page.evaluate(() => ({
+        height: document.documentElement.scrollHeight,
+        viewportHeight: innerHeight,
+      }));
+      const scrollPlan = buildHostScrollPlan(geometry);
+      result.lazy_traversal = {
+        document_height: scrollPlan.documentHeight,
+        viewport_height: scrollPlan.viewportHeight,
+        step: scrollPlan.step,
+        steps: scrollPlan.positions.length,
+        dwell_ms: 20,
+        timer_owner: 'host',
+      };
+      // Exercise the complete page from the host process. Avoid renderer-side timer
+      // throttling while preserving the same viewport-sized lazy-load traversal.
+      for (const y of scrollPlan.positions) {
+        await page.evaluate(scrollY => window.scrollTo(0, scrollY), y);
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
 
+      transitionPhase('post-scroll-settle');
+      await new Promise(resolve => setTimeout(resolve, 180));
+
+      transitionPhase('dom-inspection');
       result.dom = await page.evaluate(() => {
         const root =
           document.querySelector('article.md-content__inner') ||
@@ -445,7 +517,7 @@ async function inspect(job) {
         }
       }
       transitionPhase('settle');
-      await page.waitForTimeout(100);
+      await new Promise(resolve => setTimeout(resolve, 100));
     })(), JOB_TIMEOUT_MS, `${job.locale} ${job.width} ${job.motion} ${job.route}`);
   } catch (error) {
     const code = /exceeded \d+ ms/.test(String(error))
@@ -510,6 +582,8 @@ const report = {
   findings: counts,
   request_failure_policy: 'FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_FAILURES; ONLY_CONTEXT_TEARDOWN_ERR_ABORTED_IS_EXPECTED',
   request_failure_mutation_count: requestFailureMutationCount,
+  host_scroll_plan_mutation_count: hostScrollPlanMutationCount,
+  lazy_traversal_timer_owner: 'host',
   expected_teardown_abort_count: expectedAbortCount,
   golden: 'NOT_CERTIFIED',
   pixel_review: 'PENDING',
