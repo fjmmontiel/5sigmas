@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 79,
+  "diagnostic_revision": 80,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "376af1b8002c3ebff33a4d637d88b38ec7533d9d",
-  "requested_head_parent": "9ef065a09ea9dea09ac345cfdd5a334f4f601be6",
-  "reason": "Focused integration of the fail-closed curriculum-video section mapping gate. The source auditor now requires every H2 on a page with declared video to map explicitly to a curated video_chapters key moment, while allowing several H2 sections to share one key moment so the contract does not force one MP4 per H2. Negative fixtures cover missing maps, unmapped H2s, unknown sections, unknown key moments, and shared-key-moment coverage. Run the full 84-page source/rendered inventory and the existing Security plus Datacenters/pre-Datacenters regression/focused Security gates, but do not repeat the 336-context browser sweep because published site bytes are unchanged. Expected source/media failure is evidence: current target pages do not yet carry the required section-to-key-moment maps, and existing narration/captions/transcripts/key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
+  "requested_head_parent": "7fbc1e3c7244fa672aad641d04e5d578a3af7376",
+  "reason": "Focused integration of the independent expected-video curriculum contract. scope.json now states fail-closed that every one of the 42 target routes requires native video independently in ES and EN, yielding 84 locale/video obligations with no opt-out. A standalone validator and negative fixtures reject missing policy, opt-out, non-native policy, incomplete locales and canonical counts other than 42/84. This closes the semantic loophole where absence in both locales could be mistaken for parity even though the existing source audit already reports VIDEO_DECLARATION_MISSING. Run the full 84-page source/rendered inventory and the existing Security plus Datacenters/pre-Datacenters regression/focused Security gates, but do not repeat the 336-context browser sweep because no published site bytes changed. Expected source/media failure remains evidence: 60 locale pages are still undeclared and Security narration/captions/transcripts/key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
