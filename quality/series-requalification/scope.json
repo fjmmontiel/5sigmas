@@ -1,8 +1,14 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "contract_issue": 305,
   "amendment_comment": 5655569434,
   "excluded_through": "datacenters-espacio",
+  "media_policy": {
+    "video_required_for_every_target_route": true,
+    "native_video_required_per_locale": true,
+    "video_opt_out_allowed": false,
+    "required_locales": ["es", "en"]
+  },
   "series": {
     "seguridad-ia": [
       "00_presentacion_serie.md", "01-prompt-injection.md", "02-jailbreaks.md", "03-envenenamiento.md", "04-red-teaming.md", "05-controles-produccion.md"
