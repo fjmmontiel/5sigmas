@@ -67,58 +67,66 @@ jobs:
           cat /tmp/security-capture-preview.log
           exit 1
 
-      - name: Directly execute Security visual capture harness
-        id: capture_visuals
+      - name: Capture whole-article and per-asset editorial evidence for active Security 00/01
+        id: editorial_capture
         continue-on-error: true
         timeout-minutes: 12
         env:
-          S5_SECURITY_SCREENSHOT_DIR: artifacts/visual-review/security
+          S5_SECURITY_EDITORIAL_DIR: artifacts/security-requalification/editorial-evidence
         run: |
-          node scripts/capture_security_visuals.mjs
-          test -s artifacts/visual-review/security/report.json
+          node scripts/capture_security_editorial_evidence.mjs
+          test -s artifacts/security-requalification/editorial-evidence/report.json
 
-      - name: Regenerate Prompt Injection state evidence without sticky-header occlusion
+      - name: Re-run Prompt Injection state gate across normal/reduced motion
         id: prompt_states
         continue-on-error: true
         timeout-minutes: 10
         run: |
           node scripts/validate_security_prompt_visual_states.mjs
           test -s artifacts/security-requalification/prompt-states/report.json
-          test -s artifacts/security-requalification/prompt-states/es-mobile-normal-ctxmix-state-4.png
-          test -s artifacts/security-requalification/prompt-states/es-mobile-reduced-ctxmix-state-4.png
-          test -s artifacts/security-requalification/prompt-states/en-mobile-normal-ctxmix-state-4.png
-          test -s artifacts/security-requalification/prompt-states/en-mobile-reduced-ctxmix-state-4.png
 
-      - name: Summarize direct execution without editorial certification
+      - name: Summarize technical capture without editorial certification
         if: always()
         env:
-          CAPTURE_OUTCOME: ${{ steps.capture_visuals.outcome }}
+          EDITORIAL_OUTCOME: ${{ steps.editorial_capture.outcome }}
           PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
-          capture_path = Path('artifacts/visual-review/security/report.json')
+
+          editorial_path = Path('artifacts/security-requalification/editorial-evidence/report.json')
           prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
           summary = {
-              'capture_outcome': os.environ.get('CAPTURE_OUTCOME', ''),
+              'editorial_capture_outcome': os.environ.get('EDITORIAL_OUTCOME', ''),
               'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
-              'capture_report_present': capture_path.exists(),
+              'editorial_report_present': editorial_path.exists(),
               'prompt_report_present': prompt_path.exists(),
               'golden': False,
-              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_RETAINED_CRITICAL_IMAGES',
-              'pedagogy_review': 'NOT_CERTIFIED_BY_THIS_TECHNICAL_RUN',
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES',
+              'pedagogy_review': 'PENDING_MANUAL_EDITORIAL_REVIEW; TECHNICAL_CAPTURE_CANNOT_CERTIFY',
           }
-          if capture_path.exists():
-              data = json.loads(capture_path.read_text())
-              rows = data.get('report', [])
+          if editorial_path.exists():
+              data = json.loads(editorial_path.read_text())
+              rows = data.get('contexts', [])
               failures = data.get('failures', [])
+              screenshots = []
+              for row in rows:
+                  if row.get('fullPageScreenshot'):
+                      screenshots.append(row['fullPageScreenshot'])
+                  for asset in row.get('assets', []):
+                      screenshots.extend(asset.get('screenshots', []))
               summary.update({
-                  'capture_contexts_observed': len(rows),
-                  'capture_failure_count': len(failures),
-                  'capture_failures': failures,
-                  'capture_post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
-                  'capture_runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+                  'editorial_contexts_expected': data.get('expected_contexts'),
+                  'editorial_contexts_observed': len(rows),
+                  'editorial_failure_count': len(failures),
+                  'editorial_failures': failures,
+                  'retained_screenshot_count': len(screenshots),
+                  'profiles': data.get('profiles', []),
+                  'locales': data.get('locales', []),
+                  'browser': data.get('browser', {}),
+                  'post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+                  'runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
               })
           if prompt_path.exists():
               data = json.loads(prompt_path.read_text())
@@ -127,27 +135,22 @@ jobs:
               summary.update({
                   'prompt_contexts_observed': len(evidence),
                   'prompt_failure_count': len(failures),
-                  'prompt_failures': failures,
-                  'prompt_post_teardown_contexts': sum(1 for row in evidence if row.get('verdict_basis') == 'POST_CONTEXT_TEARDOWN'),
                   'prompt_runtime_unexpected_total': sum(len(row.get('runtime_unexpected', [])) for row in evidence),
               })
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
-          ok = os.environ.get('CAPTURE_OUTCOME') == 'success' and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
+          ok = os.environ.get('EDITORIAL_OUTCOME') == 'success' and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
           raise SystemExit(0 if ok else 1)
           PY
 
-      - name: Retain bounded direct-capture evidence
+      - name: Retain bounded active-article evidence for manual pixel and pedagogy review
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-capture-direct-report
           path: |
-            artifacts/visual-review/security/report.json
+            artifacts/security-requalification/editorial-evidence/report.json
+            artifacts/security-requalification/editorial-evidence/screenshots/*.jpg
             artifacts/security-requalification/prompt-states/report.json
-            artifacts/security-requalification/prompt-states/es-mobile-normal-ctxmix-state-4.png
-            artifacts/security-requalification/prompt-states/es-mobile-reduced-ctxmix-state-4.png
-            artifacts/security-requalification/prompt-states/en-mobile-normal-ctxmix-state-4.png
-            artifacts/security-requalification/prompt-states/en-mobile-reduced-ctxmix-state-4.png
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
