@@ -8,8 +8,11 @@ or navigation entry cannot silently make a published lesson disappear.
 This gate deliberately treats a video *declaration* as weaker evidence than a
 complete learning-media contract. A page can only clear the source-media layer
 when its native locale has a video, poster, duration, title/summary, captions,
-transcript, and editorially reviewed chapter/key-moment map. Binary codec,
-duration and playback are separate runtime checks and are never inferred here.
+transcript, an editorially reviewed chapter/key-moment map, and an explicit
+mapping from every H2 curriculum section to one of those key moments. Several
+sections may map to the same key moment; this gate does NOT require one MP4 per
+H2. Binary codec, duration and playback are separate runtime checks and are
+never inferred here.
 """
 from __future__ import annotations
 
@@ -142,7 +145,55 @@ def _local_media_exists(source: Path, value: str) -> bool:
     return bool(value) and (_is_url(value) or (source.parent / value).is_file())
 
 
-def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
+def _video_section_map_findings(sections: list[str], chapters: list[dict], section_map: Any) -> tuple[list[dict], list[dict]]:
+    """Require every article H2 to map to a curated video key moment.
+
+    Mapping is locale-native and uses exact H2 text plus a key-moment name from
+    ``video_chapters``. Multiple H2s may map to one key moment, so this proves
+    curriculum coverage without imposing one media file or one timeline chapter
+    per section.
+    """
+    if not sections:
+        return [], []
+    if len(set(sections)) != len(sections):
+        return [{"code": "VIDEO_SECTION_HEADINGS_DUPLICATED", "detail": sections}], []
+    if not isinstance(section_map, list) or not section_map:
+        return [{"code": "VIDEO_SECTION_MAP_MISSING"}], []
+
+    findings: list[dict] = []
+    normalized: list[dict] = []
+    known_sections = set(sections)
+    known_moments = {str(chapter.get("name") or "").strip() for chapter in chapters if isinstance(chapter, dict)}
+    mapped_sections: list[str] = []
+
+    for index, item in enumerate(section_map):
+        if not isinstance(item, dict):
+            findings.append({"code": "VIDEO_SECTION_MAP_INVALID", "detail": f"index {index}: not a mapping"})
+            continue
+        section = str(item.get("section") or "").strip()
+        key_moment = str(item.get("key_moment") or "").strip()
+        if not section or not key_moment:
+            findings.append({"code": "VIDEO_SECTION_MAP_INVALID", "detail": f"index {index}: section/key_moment required"})
+            continue
+        if section not in known_sections:
+            findings.append({"code": "VIDEO_SECTION_MAP_UNKNOWN_SECTION", "detail": section})
+            continue
+        if key_moment not in known_moments:
+            findings.append({"code": "VIDEO_SECTION_MAP_UNKNOWN_KEY_MOMENT", "detail": key_moment})
+            continue
+        if section in mapped_sections:
+            findings.append({"code": "VIDEO_SECTION_MAP_DUPLICATE_SECTION", "detail": section})
+            continue
+        mapped_sections.append(section)
+        normalized.append({"section": section, "key_moment": key_moment})
+
+    missing = [section for section in sections if section not in mapped_sections]
+    if missing:
+        findings.append({"code": "VIDEO_SECTION_UNMAPPED", "detail": missing})
+    return findings, normalized
+
+
+def media_findings(source: Path, meta: dict, sections: list[str]) -> tuple[list[dict], dict]:
     """Check source-level learning-media completeness without pretending playback QA."""
     findings: list[dict] = []
     video = str(meta.get("video") or "").strip()
@@ -156,6 +207,7 @@ def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
     captions = str(meta.get("video_captions") or "").strip()
     transcript = str(meta.get("video_transcript") or "").strip()
     chapters = meta.get("video_chapters")
+    section_map = meta.get("video_section_map")
 
     if not _local_media_exists(source, video):
         findings.append({"code": "VIDEO_FILE_MISSING", "detail": video})
@@ -205,6 +257,9 @@ def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
             last_start = float(start)
             normalized_chapters.append({"name": name, "start": start, **({"end": end} if end is not None else {})})
 
+    section_findings, normalized_section_map = _video_section_map_findings(sections, normalized_chapters, section_map)
+    findings.extend(section_findings)
+
     return findings, {
         "video": video,
         "video_poster": poster,
@@ -214,6 +269,8 @@ def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
         "video_captions": captions,
         "video_transcript": transcript,
         "video_chapters": normalized_chapters,
+        "curriculum_sections": sections,
+        "video_section_map": normalized_section_map,
         "binary_playback_review": "PENDING",
         "content_alignment_review": "PENDING",
     }
@@ -322,7 +379,8 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
             content = source.read_text(encoding="utf-8")
             meta, body = metadata(content)
             entry["source_sha256"] = hashlib.sha256(content.encode()).hexdigest()
-            entry["sections"] = re.findall(r"(?m)^##\s+(.+)$", body)
+            sections = re.findall(r"(?m)^##\s+(.+)$", body)
+            entry["sections"] = sections
             entry["tex_source_markers"] = dict(Counter(TEX.findall(strip_code(body))))
             entry["snippets"] = list(dict.fromkeys(INCLUDE.findall(body)))
             media_path = root / "locales" / locale / "media.yml"
@@ -335,7 +393,7 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
                 if isinstance(data, dict):
                     for key, value in data.items():
                         meta.setdefault(key, value)
-            media_issues, media_contract = media_findings(source, meta)
+            media_issues, media_contract = media_findings(source, meta, sections)
             issues.extend(media_issues)
             entry["video"] = media_contract
             for snippet in entry["snippets"]:
@@ -357,7 +415,7 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     counts = Counter(f["code"] for f in findings)
     counts.update(f["code"] for entry in entries for f in entry["findings"])
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "scope": "post-datacenters-exclusive",
         "status": "TECHNICAL_FAIL" if counts else "TECHNICAL_PASS_ONLY",
         "golden": "NOT_CERTIFIED",
