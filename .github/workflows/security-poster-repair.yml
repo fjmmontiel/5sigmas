@@ -1,0 +1,68 @@
+name: Security poster deterministic repair
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/poster-repair-request.json']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: security-poster-repair-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install bounded poster dependency
+        run: pip install Pillow==11.3.0
+
+      - name: Record exact repair request
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/poster-repair-request.json
+
+      - name: Regenerate the authored Spanish Security series poster
+        run: |
+          python scripts/generate_security_series_poster.py
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          p = Path('docs/series/seguridad-ia/00_presentacion_serie.jpg')
+          with Image.open(p) as im:
+              assert im.format == 'JPEG'
+              assert im.size == (1920, 1080)
+          assert p.stat().st_size > 100_000
+          print(f'poster_bytes={p.stat().st_size}')
+          PY
+          git diff --exit-code --quiet -- docs/series/seguridad-ia/00_presentacion_serie.jpg && {
+            echo 'Expected the defective authored poster to change.' >&2
+            exit 1
+          } || true
+
+      - name: Commit only the repaired poster without overwriting concurrent work
+        env:
+          BRANCH: quality/post-datacenters-requalification
+        run: |
+          git fetch origin "$BRANCH"
+          test "$(git rev-parse "origin/$BRANCH")" = "$GITHUB_SHA" || {
+            echo 'Branch advanced during poster generation; refusing to overwrite concurrent work.' >&2
+            exit 1
+          }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- docs/series/seguridad-ia/00_presentacion_serie.jpg
+          test "$(git diff --cached --name-only)" = 'docs/series/seguridad-ia/00_presentacion_serie.jpg'
+          git commit -m 'fix: repair clipped Security series poster'
+          git push origin "HEAD:$BRANCH"
