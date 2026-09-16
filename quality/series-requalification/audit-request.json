@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 74,
-  "diagnostic_scope": "focused_security_00_01",
+  "diagnostic_revision": 75,
+  "diagnostic_scope": "full",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "4b15299369e6061240fb59ec9589fcd3792b4e86",
-  "reason": "Focused integration milestone after splitting the canonical full-catalog browser auditor's monolithic DOM inspection into named fail-closed bounded subprobes. Preserve the global 25,000 ms context budget and two-worker concurrency; no retry and no threshold increase. Startup mutations now prove a deliberately stalled subprobe produces DOM_SUBPROBE_TIMEOUT semantics. Run the existing Security 00/01 technical gates plus the immutable Security + Datacenters/pre-Datacenters shared browser regression before any new 84-page x desktop/mobile x normal/reduced sweep. This focused run does not certify the global browser catalogue, PIXEL_REVIEW, PEDAGOGY_REVIEW, MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN. MEDIA remains independently blocked by authorized native narration/captions/transcript/key moments.",
+  "requested_head_parent": "03ec79df65074784a2fc8ff0a434bdaacca18b60",
+  "reason": "Full integration milestone after rev74 focused regression passed the immutable Security plus Datacenters/pre-Datacenters browser matrix (64/64 contexts, 20 classifier mutations, zero failures) and all focused Security browser/contrast/lifecycle/touch/prompt-state/keyboard/listener-lifetime technical gates passed. Execute the canonical 84-page x desktop/mobile x normal/reduced sweep on the new named bounded DOM subprobes. Preserve the 25,000 ms global context budget, two-worker concurrency, 5,000 ms per DOM subprobe, no retry and no threshold increase. A stalled subprobe must fail closed as DOM_SUBPROBE_TIMEOUT. SOURCE/MEDIA/RENDERED are expected to remain red on the known video curriculum debt and therefore this full run cannot certify PIXEL_REVIEW, PEDAGOGY_REVIEW, MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
