@@ -186,6 +186,8 @@ markdown_extensions:
   - footnotes
   - toc:
       permalink: true
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.superfences:
   - pymdownx.highlight:
       auto_title: true
@@ -229,6 +231,8 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/reader-direct-navigation.js
     defer: true
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 extra_css:
   - stylesheets/extra.css
   - stylesheets/tools-kv-context.css
