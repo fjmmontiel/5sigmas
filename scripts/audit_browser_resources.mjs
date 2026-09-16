@@ -94,13 +94,18 @@ const matchingSuccessfulResponse = (event, record) => {
   return { priorSameRequest, laterSameSource, proven: priorSameRequest || laterSameSource };
 };
 
-const matchingHealthyVideo = (event, record) => (record.videos ?? []).find((video) => (
-  video.sources.includes(event.url)
+const isHealthyVideo = (video) => Boolean(
+  video
   && video.readyState >= 1
   && video.networkState !== 3
   && video.errorCode == null
   && Number.isFinite(video.duration)
   && video.duration > 0
+);
+
+const matchingHealthyVideo = (event, record) => (record.videos ?? []).find((video) => (
+  video.sources.includes(event.url)
+  && isHealthyVideo(video)
 ));
 
 const classifyRequestFailure = (event, record) => {
@@ -206,10 +211,14 @@ const exerciseLazyResources = async (page) => {
 
     const videos = [...document.querySelectorAll('video')];
     for (const video of videos) {
+      // Changing preload from none to metadata is sufficient to ask Chromium to run
+      // media resource selection. Calling load() in the same task races that selection
+      // and can itself cancel the valid range request we are trying to observe.
       if (video.preload === 'none') video.preload = 'metadata';
-      // Do not reset an already-active media request: load() itself can cancel a valid range body.
-      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
     }
+
+    // Give the resource-selection task a chance to start before awaiting metadata.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     await Promise.all(videos.map(async (video) => {
       if (video.readyState >= 1 || video.error) return;
@@ -337,6 +346,15 @@ try {
         await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
         await page.waitForTimeout(100);
         videos = await captureVideoHealth(page);
+        for (const [videoIndex, video] of videos.entries()) {
+          if (!isHealthyVideo(video)) {
+            directFailures.push(
+              `${label}: video ${videoIndex + 1} did not reach healthy metadata state `
+              + `[readyState=${video.readyState}; networkState=${video.networkState}; errorCode=${video.errorCode}; `
+              + `duration=${video.duration}; sources=${video.sources.join(',')}]`,
+            );
+          }
+        }
       } catch (error) {
         directFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
       } finally {
@@ -371,6 +389,8 @@ try {
         expected_abort_count: classified.filter((item) => item.verdict.expected).length,
         fatal_request_failure_count: classified.filter((item) => !item.verdict.expected).length,
         direct_failure_count: directFailures.length,
+        successful_media_response_count: networkResponses.length,
+        videos,
       });
     }
   }
@@ -379,7 +399,7 @@ try {
 }
 
 const report = {
-  schema_version: 1,
+  schema_version: 2,
   verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
   paths,
   profiles: profileNames,
