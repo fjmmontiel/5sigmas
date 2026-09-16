@@ -53,6 +53,11 @@ VOLATILE = {
     "herramientas/ecosistema-global-ia.md",
 }
 
+VOLATILE_PROVENANCE_FILES: dict[str, str] = {
+    "herramientas/coste-latencia-llm.md": "docs/assets/data/tools/llm-pricing.json",
+    "herramientas/precio-rendimiento-modelos.md": "docs/assets/data/tools/model-price-performance.json",
+}
+
 TESTS: dict[str, tuple[str, str]] = {
     "coste-latencia-llm": ("test_llm_cost_latency_tool.mjs", "validate_llm_cost_latency_tool.mjs"),
     "precio-rendimiento-modelos": ("test_model_price_performance_tool.mjs", "validate_model_price_performance_tool.mjs"),
@@ -173,12 +178,14 @@ def _audit_locale(
     llms_text: str,
     test_script: Path,
     browser_script: Path,
+    extra_dated_source_signal: bool = False,
 ) -> dict[str, Any]:
     if not path.is_file():
         return {"source": str(path), "missing": True}
     text = path.read_text(encoding="utf-8")
     fm = _frontmatter(text)
     signals = _source_signals(text)
+    signals["dated_source_signal"] = bool(signals["dated_source_signal"] or extra_dated_source_signal)
     return {
         "source": str(path),
         "missing": False,
@@ -191,6 +198,16 @@ def _audit_locale(
         "browser_validation": browser_script.is_file(),
         **signals,
     }
+
+
+def _shared_dated_provenance(repo_root: Path, canonical: str) -> bool:
+    relative = VOLATILE_PROVENANCE_FILES.get(canonical)
+    if not relative:
+        return False
+    path = repo_root / relative
+    if not path.is_file():
+        return False
+    return bool(DATE_RE.search(path.read_text(encoding="utf-8")))
 
 
 def _check_states(row: dict[str, Any], *, volatile_data: bool = False) -> dict[str, str]:
@@ -251,12 +268,14 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
         es_route = canonical.removesuffix(".md")
         en_route = f"en/{localized.removesuffix('.md')}"
         volatile_data = canonical in VOLATILE
+        shared_dated_provenance = _shared_dated_provenance(repo_root, canonical)
         es = _audit_locale(
             repo_root / "docs" / canonical,
             route=es_route,
             llms_text=es_llms,
             test_script=test_script,
             browser_script=browser_script,
+            extra_dated_source_signal=shared_dated_provenance,
         )
         en = _audit_locale(
             repo_root / "locales" / "en" / localized,
@@ -264,6 +283,7 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
             llms_text=en_llms,
             test_script=test_script,
             browser_script=browser_script,
+            extra_dated_source_signal=shared_dated_provenance,
         )
         es_states = _check_states(es, volatile_data=volatile_data) if not es.get("missing") else {"source": "FAIL"}
         en_states = _check_states(en, volatile_data=volatile_data) if not en.get("missing") else {"source": "FAIL"}
@@ -320,6 +340,7 @@ def audit(repo_root: Path = ROOT) -> tuple[dict[str, Any], list[str]]:
             "numeric_assumptions_units_are_applicability_gated": True,
             "qualitative_select_checkbox_tools_may_report_assumptions_or_units_as_na": True,
             "volatile_tools_require_dated_source_signal": True,
+            "dated_provenance_may_live_in_shared_runtime_data_assets": True,
             "contextual_links_include_related_tools_topics_series_engineering_and_video": True,
             "rendered_canonical_hreflang_sitemap_mobile_accessibility": "covered by existing tools-quality build/crawl/browser gates",
         },
