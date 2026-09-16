@@ -52,10 +52,10 @@ A conversation can move on while a tool is still executing. If the user changes 
 
 A robust contract separates at least:
 
-- `turn_id`: which turn originated the intent;
-- `operation_id`: which durable operation was started;
-- execution state: requested, accepted, completed, failed or canceled;
-- idempotency: how to avoid duplicating an effect after a retry or reconnect;
+- `turn_id`: which turn originated the intent.
+- `operation_id`: which durable operation was started.
+- execution state: requested, accepted, completed, failed or canceled.
+- idempotency: how to avoid duplicating an effect after a retry or reconnect.
 - interruption policy: what can stop playback, inference and the tool.
 
 [Tools and state: executing actions without breaking the conversation](/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/) develops that lifecycle. [Reactive and proactive voice agents](/en/articulos-tecnicos/reactive-proactive-voice-agents/) connects acoustic activity, playback, barge-in and asynchronous operations.
@@ -76,12 +76,12 @@ That keeps two different questions separate: **does it respond fast enough?** an
 
 A useful evaluation preserves evidence per turn and per operation. At minimum, it should be able to answer:
 
-- what audio the system actually received;
-- when it decided that the user had finished or interrupted;
-- what output it generated and which part was actually played;
-- which tools were proposed, authorized and executed;
-- what latency occurred at each relevant boundary;
-- whether an interruption left obsolete work running;
+- what audio the system actually received.
+- when it decided that the user had finished or interrupted.
+- what output it generated and which part was actually played.
+- which tools were proposed, authorized and executed.
+- what latency occurred at each relevant boundary.
+- whether an interruption left obsolete work running.
 - what the final task state was and whether recovery occurred.
 
 [Evaluating a voice agent: turn-level evidence, observability and reliability](/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/) turns those signals into a reproducible evaluation contract.
