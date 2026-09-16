@@ -77,6 +77,16 @@ jobs:
           node scripts/capture_security_editorial_evidence.mjs
           test -s artifacts/security-requalification/editorial-evidence/report.json
 
+      - name: Capture semantic start intermediate and final trace checkpoints with real viewport chrome
+        id: trace_checkpoints
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          S5_SECURITY_TRACE_DIR: artifacts/security-requalification/trace-checkpoints
+        run: |
+          node scripts/capture_security_trace_checkpoints.mjs
+          test -s artifacts/security-requalification/trace-checkpoints/report.json
+
       - name: Re-run Prompt Injection state gate across normal/reduced motion
         id: prompt_states
         continue-on-error: true
@@ -89,6 +99,7 @@ jobs:
         if: always()
         env:
           EDITORIAL_OUTCOME: ${{ steps.editorial_capture.outcome }}
+          TRACE_OUTCOME: ${{ steps.trace_checkpoints.outcome }}
           PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
         run: |
           python - <<'PY'
@@ -96,14 +107,17 @@ jobs:
           from pathlib import Path
 
           editorial_path = Path('artifacts/security-requalification/editorial-evidence/report.json')
+          trace_path = Path('artifacts/security-requalification/trace-checkpoints/report.json')
           prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
           summary = {
               'editorial_capture_outcome': os.environ.get('EDITORIAL_OUTCOME', ''),
+              'trace_checkpoints_outcome': os.environ.get('TRACE_OUTCOME', ''),
               'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
               'editorial_report_present': editorial_path.exists(),
+              'trace_report_present': trace_path.exists(),
               'prompt_report_present': prompt_path.exists(),
               'golden': False,
-              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES',
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
               'pedagogy_review': 'PENDING_MANUAL_EDITORIAL_REVIEW; TECHNICAL_CAPTURE_CANNOT_CERTIFY',
           }
           if editorial_path.exists():
@@ -128,6 +142,19 @@ jobs:
                   'post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
                   'runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
               })
+          if trace_path.exists():
+              data = json.loads(trace_path.read_text())
+              rows = data.get('contexts', [])
+              failures = data.get('failures', [])
+              summary.update({
+                  'trace_contexts_expected': data.get('expected_contexts'),
+                  'trace_contexts_observed': len(rows),
+                  'trace_failure_count': len(failures),
+                  'trace_failures': failures,
+                  'trace_checkpoint_count': sum(len(row.get('checkpoints', [])) for row in rows),
+                  'trace_runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+                  'trace_post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+              })
           if prompt_path.exists():
               data = json.loads(prompt_path.read_text())
               evidence = data.get('evidence', [])
@@ -138,7 +165,11 @@ jobs:
                   'prompt_runtime_unexpected_total': sum(len(row.get('runtime_unexpected', [])) for row in evidence),
               })
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
-          ok = os.environ.get('EDITORIAL_OUTCOME') == 'success' and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
+          ok = (
+              os.environ.get('EDITORIAL_OUTCOME') == 'success'
+              and os.environ.get('TRACE_OUTCOME') == 'success'
+              and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
+          )
           raise SystemExit(0 if ok else 1)
           PY
 
@@ -150,6 +181,8 @@ jobs:
           path: |
             artifacts/security-requalification/editorial-evidence/report.json
             artifacts/security-requalification/editorial-evidence/screenshots/*.jpg
+            artifacts/security-requalification/trace-checkpoints/report.json
+            artifacts/security-requalification/trace-checkpoints/screenshots/*.jpg
             artifacts/security-requalification/prompt-states/report.json
           retention-days: 1
           if-no-files-found: warn
