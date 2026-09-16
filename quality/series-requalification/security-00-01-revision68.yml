@@ -1,0 +1,191 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+status: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+series: seguridad-ia
+active_article: 00_presentacion_serie
+technical_companion_page: 01-prompt-injection
+article_golden: false
+series_golden: false
+
+revision:
+  label: 68
+  exact_head: 0e0210996be7b605441c3b8c32d85a9ec8ac3776
+  main_base: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  action_run: 35094186406
+  action_conclusion: FAILURE_FAIL_CLOSED
+  action_failure_is_expected_gate_enforcement: true
+
+catalogue:
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  contexts_expected: 336
+  contexts_observed: 336
+  publication_discovery:
+    errors: 0
+    public_series: 13
+    presentation_first_series: 8
+    chapter_first_series: 5
+    public_chapters: 67
+    public_pages: 75
+    discovery_requires_presentation: false
+
+source_gate:
+  SOURCE_PASS: false
+  findings:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+  negative_mutation_fixtures: 26
+  negative_mutation_result: PASS
+  publication_discovery_regressions: 5
+  publication_discovery_result: PASS
+
+build_and_locale:
+  strict_es: PASS
+  strict_en: PASS
+  es_internal_link_pages: 156
+  en_internal_link_pages: 156
+  paired_pages: 156
+  crawl_orphans: 0
+  contextual_presence_mismatches: 0
+
+rendered_gate:
+  RENDERED_PASS: false
+  RAW_TEX_RENDERED_locale_pages: 28
+  RAW_TEX_RENDERED_article_routes: 14
+  affected_routes:
+    coding-agents-agent-harnesses:
+      - 04-agent-harnesses-tools-sandboxes-policies-observabilidad
+      - 05-evaluacion-coding-agents
+    context-engineering-memory-mcp:
+      - 01-context-engineering-vs-prompt-engineering
+      - 02-anatomia-contexto-presupuesto-tokens-attention-retrieval-tool-state
+      - 04-memory-systems-short-long-episodic-semantic-working
+    llm-inference-engineering-economics:
+      - 01-prefill-decode-throughput-latency-batching
+      - 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention
+      - 03-quantization-kernels-speculative-decoding
+      - 04-distributed-inference-parallelism-networking
+      - 05-model-routing-fallback-caching-workload-aware-serving
+      - 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints
+    evaluating-ai-systems-production:
+      - 01-evals-benchmark-vs-production
+      - 02-datasets-test-sets-contamination-splits
+      - 03-llm-as-judge-human-evals-rubrics-calibration
+
+browser_gate:
+  BROWSER_PASS: false
+  contexts_expected: 336
+  contexts_observed: 336
+  policy: FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_FAILURES_ONLY_CONTEXT_TEARDOWN_ERR_ABORTED_EXPECTED
+  request_failure_mutation_fixtures: 4
+  findings:
+    REQUEST_FAILED: 96
+    VIDEO_PLAYBACK_ERROR: 96
+    VIDEO_NOT_RENDERED: 238
+    RAW_TEX_VISIBLE: 111
+    BROWSER_CONTEXT_TIMEOUT: 2
+  timeouts:
+    - locale: es
+      profile: mobile-reduced
+      route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    - locale: es
+      profile: desktop-reduced
+      route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/
+
+shared_reference_regression_gate:
+  PASS: false
+  contexts_expected: 64
+  contexts_observed: 64
+  classifier_mutation_fixtures: 18
+  expected_abort_count: 64
+  failure_count: 1
+  failure:
+    route: /en/series/from-cave-to-agi/00_presentacion_serie/
+    profile: mobile-reduced
+    phase: lazy-load
+    resource: /en/series/from-cave-to-agi/00_presentacion_serie.mp4
+    error: net::ERR_ABORTED
+    classification: FATAL_MEDIA_ABORT_WITHOUT_SEQUENCE_PROOF
+    proof_reason: missing-request-start
+  code_level_diagnosis:
+    state: OPEN_FAIL_CLOSED
+    finding: audit_browser_resources.mjs records nodeObservedAtMs for every media request start but redundantAbortProof requires finite request.timing().startTime and ignores nodeObservedAtMs.
+    consequence: a request event with unavailable browser timing is reported with the same missing-request-start reason as a genuinely absent request-start event.
+    do_not_waive: true
+    required_fix: distinguish absent request event from unavailable request.timing timestamp and preserve chronological proof using the recorded node observation timestamp only when the request event itself exists.
+    required_negative_fixture: request event exists with startedAtMs unavailable, nodeObservedAtMs finite, healthy pre-start metadata and a prior successful different request.
+    required_failure_fixture: request event exists but neither browser timing nor node observation timestamp is finite.
+    required_validation: rerun only the 64-context Security plus Datacenters/pre-Datacenters reference matrix before any broader integration sweep.
+
+security_focused_technical_gates:
+  browser_layout: PASS_AUTOMATED_TECHNICAL_ONLY
+  contrast_text_visibility: PASS_AUTOMATED_TECHNICAL_ONLY
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  video_lifecycle: PASS_AUTOMATED_TECHNICAL_ONLY
+  real_touch_article_watch_roundtrip: PASS_AUTOMATED_TECHNICAL_ONLY
+  prompt_visual_states: PASS_AUTOMATED_TECHNICAL_ONLY
+  keyboard_focus: PASS_AUTOMATED_TECHNICAL_ONLY
+  runtime_listener_lifetime: PASS_AUTOMATED_TECHNICAL_ONLY
+  pixel_review_from_this_revision: PENDING
+  pedagogy_review_from_this_revision: PENDING
+
+manual_editorial_evidence:
+  current_new_review_in_rev68: false
+  retained_scoped_evidence:
+    revision: 66
+    article: seguridad-ia/00_presentacion_serie
+    PIXEL_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+    PEDAGOGY_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+    security01_inherits: false
+
+media:
+  MEDIA_PASS: false
+  state: VOICE_MISSING
+  security_00_01_locale_native_binaries_distinct: true
+  codec: H264_1920X1080_YUV420P
+  audio_stream_missing: 4
+  captions_missing: 4
+  transcript_missing: 4
+  chapters_or_curated_key_moments_missing: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+
+release_and_concurrency:
+  repair_branch: quality/post-datacenters-requalification
+  main: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  behind_main: 0
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  linkedin_write: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent:
+    - FIX_SHARED_BROWSER_ABORT_SEQUENCE_PROOF_WITHOUT_WEAKENING_FAIL_CLOSED_POLICY
+    - RERUN_64_CONTEXT_REFERENCE_REGRESSION_MATRIX_ONLY
+    - IF_CLEAN_RECONCILE_TWO_FULL_CATALOG_BROWSER_TIMEOUTS_AND_RAW_TEX_RENDERING_DEBT
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+    - ARTICLE_WATCH_POSTER_PLAY_PAUSE_SEEK_END_NEXT
+  do_not_advance_to: 02-jailbreaks
