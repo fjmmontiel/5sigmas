@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 76,
+  "diagnostic_revision": 79,
   "diagnostic_scope": "focused_security_00_01",
-  "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "52651f7f43673f4471715a13da3d366cde524620",
-  "reason": "Focused exact-head integration after rev75 completed 336/336 with zero BROWSER_CONTEXT_TIMEOUT, zero DOM_SUBPROBE_TIMEOUT and zero raw TeX, closing the browser-stall hardening defect while remaining fail-closed on known video/media debt. Validate the post-rev75 Security00 ES navigation parity repair and deterministic negative guard on their exact current head with strict ES/EN, publication/source/rendered checks, the immutable Security plus Datacenters/pre-Datacenters 64-context browser regression, and all focused Security browser/contrast/lifecycle/real-touch/prompt-state/keyboard/listener gates. Do not run the 336-context full catalogue sweep solely for this scoped footer/parity change. SOURCE/MEDIA/RENDERED are expected to stay red on known curriculum video debt; PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and this run cannot certify ARTICLE_GOLDEN or SERIES_GOLDEN.",
+  "published_content_base": "376af1b8002c3ebff33a4d637d88b38ec7533d9d",
+  "requested_head_parent": "9ef065a09ea9dea09ac345cfdd5a334f4f601be6",
+  "reason": "Focused integration of the fail-closed curriculum-video section mapping gate. The source auditor now requires every H2 on a page with declared video to map explicitly to a curated video_chapters key moment, while allowing several H2 sections to share one key moment so the contract does not force one MP4 per H2. Negative fixtures cover missing maps, unmapped H2s, unknown sections, unknown key moments, and shared-key-moment coverage. Run the full 84-page source/rendered inventory and the existing Security plus Datacenters/pre-Datacenters regression/focused Security gates, but do not repeat the 336-context browser sweep because published site bytes are unchanged. Expected source/media failure is evidence: current target pages do not yet carry the required section-to-key-moment maps, and existing narration/captions/transcripts/key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
