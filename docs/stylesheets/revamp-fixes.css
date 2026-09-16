@@ -85,6 +85,19 @@
   text-underline-offset: .2em;
 }
 
+/*
+ * Material 9.7.7 mounts inline title/permalink tooltips lazily. In the built
+ * site an inactive tooltip can otherwise keep a viewport-wide inner block at
+ * a 1rem inline offset, making document.scrollWidth exceed the viewport after
+ * real scrolling/hover. Keep informational tooltips shrink-wrapped while
+ * preserving Material's positioning, transitions and pointer semantics.
+ */
+.md-tooltip2[role="tooltip"] > .md-tooltip2__inner {
+  inline-size: fit-content;
+  max-inline-size: min(calc(100vw - 2rem), 25rem);
+  box-sizing: border-box;
+}
+
 @media (max-width: 800px) {
   .s5-landing,
   .s5-landing > * { width: 100%; }
