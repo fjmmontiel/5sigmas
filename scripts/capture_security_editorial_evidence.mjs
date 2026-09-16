@@ -120,6 +120,20 @@ async function captureAssetStates(page, root, selector, route, profile, label) {
   };
 }
 
+async function settleTransientShell(page, profile) {
+  // The Material permalink tooltip can remain positioned off-viewport after
+  // scripted scrolling/clicking and temporarily contribute its 100vw inner
+  // box to document.scrollWidth. Reset only transient hover/focus UI before
+  // measuring article layout; do not hide or resize article content.
+  if (!profile.mobile) await page.mouse.move(1, 1);
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => {
+    const active = document.activeElement;
+    if (active && typeof active.blur === 'function') active.blur();
+  });
+  await page.waitForTimeout(300);
+}
+
 let browser;
 let browserVersion = null;
 try {
@@ -230,6 +244,9 @@ try {
         });
         await page.waitForTimeout(300);
 
+        phase = 'transient-shell-settle';
+        await settleTransientShell(page, profile);
+
         phase = 'post-interaction-layout';
         after = await page.evaluate(() => ({
           viewportWidth: document.documentElement.clientWidth,
@@ -297,7 +314,7 @@ try {
 }
 
 const report = {
-  schema_version: 3,
+  schema_version: 4,
   scope: 'security-00-01-whole-article-editorial-evidence',
   golden: false,
   pixel_review: 'REQUIRES_MANUAL_PIXEL_INSPECTION_OF_ALL_RETAINED_SCREENSHOTS',
@@ -305,6 +322,7 @@ const report = {
   isolated_asset_capture: {
     sticky_chrome_hidden: true,
     document_scroll_mutated_for_isolated_capture: false,
+    transient_framework_tooltips_settled_before_global_overflow_verdict: true,
     purpose: 'ISOLATE_COMPLETE_VISUAL_STATE_FOR_EDITORIAL_REVIEW_WITHOUT_STICKY_CHROME_CONTAMINATION',
     full_page_capture_preserves_real_sticky_chrome: true,
   },
