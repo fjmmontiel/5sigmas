@@ -1,10 +1,10 @@
 {
-  "capture_revision": 61,
+  "capture_revision": 62,
   "scope": "security_00_01_whole_article_editorial_requalification",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "f031eb45569895fd7b2869648f946a6a8630662c",
+  "requested_head_parent": "a0b71143842d2f3c6c42cdb8370178095a78429f",
   "site_facing_bytes_changed": false,
-  "reason": "Bounded active-article editorial evidence capture required by the reinforced GOLDEN requalification contract after revision 60 closed the shared browser classifier defect. Execute only Security 00 presentation and 01 Prompt Injection in ES/EN across desktop 1440 and mobile 390, normal and reduced motion. Retain whole-page screenshots plus all captured initial/intermediate/final visual states for actual manual pixel and pedagogy review. Keep runtime listeners through context teardown and retain the Prompt Injection technical state gate. This capture is evidence collection only: PIXEL_REVIEW, PEDAGOGY_REVIEW, SOURCE_PASS, RENDERED_PASS, MEDIA_PASS, BROWSER_PASS, ARTICLE_GOLDEN and advancement to 02-jailbreaks remain fail-closed until their own evidence is complete.",
+  "reason": "Revision 61 completed technical capture but manual review found the retained mobile post-interaction isolated-asset screenshots were contaminated by the sticky site header because Playwright tap/click auto-scroll moved the visual beneath fixed chrome. The capture harness now repositions each isolated visual below sticky chrome and hides only the sticky chrome inside isolated locator screenshots, while full-page screenshots preserve the real page chrome. Re-run the exact Security 00 presentation and 01 Prompt Injection ES/EN matrix across desktop 1440 and mobile 390, normal and reduced motion. Retain whole-page screenshots plus every isolated initial/intermediate/final visual state. This is evidence collection only: PIXEL_REVIEW and PEDAGOGY_REVIEW remain fail-closed pending manual inspection of all retained images; SOURCE_PASS, RENDERED_PASS, MEDIA_PASS, BROWSER_PASS, ARTICLE_GOLDEN and advancement to 02-jailbreaks remain false until their own conjunctive evidence is complete.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
