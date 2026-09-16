@@ -1,0 +1,54 @@
+schema_version: 1
+status: IMPLEMENTED_PENDING_EXACT_QA
+golden: NOT_CERTIFIED
+scope: post-datacenters-exclusive
+problem:
+  code: RAW_TEX_RENDERED
+  prior_evidence: rev68
+  locale_pages: 28
+  article_routes: 14
+  routes:
+    - coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries
+    - coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion
+    - context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering
+    - context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance
+    - context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding
+    - llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget
+    - llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention
+    - llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs
+    - llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations
+    - llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving
+    - llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints
+    - evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria
+    - evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning
+    - evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo
+implementation:
+  es:
+    arithmatex_generic: true
+    mathjax_config: javascripts/mathjax.js
+    mathjax_runtime: https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  en:
+    arithmatex_generic: true
+    mathjax_config: javascripts/mathjax.js
+    mathjax_runtime: https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  static_audit:
+    protected_wrapper: arithmatex
+    raw_tex_outside_wrapper: FAIL_CLOSED
+    browser_typesetting_proof: REQUIRED
+  mutation_tests:
+    protected_arithmatex_wrapper: added
+    raw_tex_outside_arithmatex_with_wrapper_present: added
+references:
+  - https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/#arithmatex
+verification:
+  strict_es: PENDING_ON_REPAIR_HEAD
+  strict_en: PENDING_ON_REPAIR_HEAD
+  rendered_all_84_locale_pages: PENDING_ON_REPAIR_HEAD
+  browser_336_contexts: PENDING_ON_REPAIR_HEAD
+  shared_reference_regression: PENDING_ON_REPAIR_HEAD
+  pixel_review: PENDING
+  pedagogy_review: PENDING
+notes:
+  - Static HTML may legitimately contain TeX inside Arithmatex wrappers before the MathJax runtime executes.
+  - Browser QA must still fail if raw TeX is visible, the MathJax runtime fails, or an external resource errors.
+  - No Datacenters or pre-Datacenters content was modified by this repair.
