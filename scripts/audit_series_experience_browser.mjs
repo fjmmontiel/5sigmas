@@ -23,6 +23,35 @@ let next = 0;
 const JOB_TIMEOUT_MS = Number(process.env.S5_BROWSER_JOB_TIMEOUT_MS || 25000);
 const CLOSE_TIMEOUT_MS = 4000;
 
+const classifyRequestFailure = ({ errorText, phase }) => {
+  const aborted = /ERR_ABORTED/i.test(errorText || '');
+  if (aborted && phase === 'teardown') {
+    return { expected: true, classification: 'EXPECTED_CONTEXT_TEARDOWN_ABORT' };
+  }
+  if (aborted) {
+    return { expected: false, classification: 'FATAL_UNPROVEN_PRE_TEARDOWN_ABORT' };
+  }
+  return { expected: false, classification: 'FATAL_NON_ABORT_REQUEST_FAILURE' };
+};
+
+const runRequestFailureClassifierMutations = () => {
+  const fixtures = [
+    ['pre-teardown media abort fails closed', { errorText: 'net::ERR_ABORTED', phase: 'lazy-load' }, false],
+    ['interaction abort fails closed', { errorText: 'net::ERR_ABORTED', phase: 'interaction-playback' }, false],
+    ['teardown abort is expected', { errorText: 'net::ERR_ABORTED', phase: 'teardown' }, true],
+    ['non-abort teardown failure remains fatal', { errorText: 'net::ERR_FAILED', phase: 'teardown' }, false],
+  ];
+  for (const [name, event, expected] of fixtures) {
+    const actual = classifyRequestFailure(event).expected;
+    if (actual !== expected) {
+      throw new Error(`Full-catalog request-failure mutation failed: ${name}; expected=${expected}; actual=${actual}`);
+    }
+  }
+  return fixtures.length;
+};
+
+const requestFailureMutationCount = runRequestFailureClassifierMutations();
+
 async function bounded(promise, ms, label) {
   let timer;
   try {
@@ -171,13 +200,16 @@ async function inspectInlineVideo(page, job, errors) {
 
 async function inspect(job) {
   let context;
+  let phase = 'navigation';
   const errors = [];
+  const expectedRequestAborts = [];
   const result = {
     route: job.route,
     locale: job.locale,
     width: job.width,
     motion: job.motion,
     errors,
+    expected_request_aborts: expectedRequestAborts,
     pixel_review: 'PENDING',
     pedagogy_review: 'PENDING',
     interaction_review: 'NOT_RUN',
@@ -195,14 +227,15 @@ async function inspect(job) {
     page.setDefaultTimeout(10000);
     page.setDefaultNavigationTimeout(20000);
 
-    // Retain listeners for the entire context: navigation, lazy loading, controls and media.
+    // Retain listeners for the entire context: navigation, lazy loading, controls, media and teardown.
     page.on('pageerror', error =>
-      errors.push({ code: 'RUNTIME_ERROR', detail: String(error) }),
+      errors.push({ code: 'RUNTIME_ERROR', phase, detail: String(error) }),
     );
     page.on('response', response => {
       if (response.status() >= 400) {
         errors.push({
           code: 'HTTP_RESOURCE_ERROR',
+          phase,
           status: response.status(),
           url: response.url(),
         });
@@ -210,9 +243,20 @@ async function inspect(job) {
     });
     page.on('requestfailed', request => {
       const detail = request.failure()?.errorText || '';
-      if (!String(detail).includes('ERR_ABORTED')) {
-        errors.push({ code: 'REQUEST_FAILED', url: request.url(), detail });
+      const verdict = classifyRequestFailure({ errorText: detail, phase });
+      const evidence = {
+        url: request.url(),
+        detail,
+        phase,
+        resourceType: request.resourceType(),
+        navigation: request.isNavigationRequest(),
+        classification: verdict.classification,
+      };
+      if (verdict.expected) {
+        expectedRequestAborts.push(evidence);
+        return;
       }
+      errors.push({ code: 'REQUEST_FAILED', ...evidence });
     });
 
     await bounded((async () => {
@@ -222,6 +266,7 @@ async function inspect(job) {
       });
       if (!response?.ok()) errors.push({ code: 'PAGE_HTTP_ERROR', status: response?.status() });
 
+      phase = 'lazy-load';
       await page.evaluate(async () => {
         await Promise.race([
           document.fonts.ready,
@@ -351,6 +396,7 @@ async function inspect(job) {
       }
 
       if (result.dom?.video_count) {
+        phase = 'interaction-playback';
         result.media = await inspectInlineVideo(page, job, errors);
         result.playback_review = 'AUTOMATED_TECHNICAL_ONLY';
       }
@@ -364,6 +410,7 @@ async function inspect(job) {
           job.route,
         );
       if (sample) {
+        phase = 'pixel-capture';
         const stem = `${job.locale}-${job.width}-${job.motion}-${job.route
           .split('/')
           .filter(Boolean)
@@ -384,13 +431,16 @@ async function inspect(job) {
           });
         }
       }
+      phase = 'settle';
+      await page.waitForTimeout(100);
     })(), JOB_TIMEOUT_MS, `${job.locale} ${job.width} ${job.motion} ${job.route}`);
   } catch (error) {
     const code = /exceeded \d+ ms/.test(String(error))
       ? 'BROWSER_CONTEXT_TIMEOUT'
       : 'BROWSER_AUDIT_ERROR';
-    errors.push({ code, detail: String(error) });
+    errors.push({ code, phase, detail: String(error) });
   } finally {
+    phase = 'teardown';
     if (await boundedClose(context)) {
       errors.push({
         code: 'BROWSER_CONTEXT_CLOSE_TIMEOUT',
@@ -430,7 +480,9 @@ results.sort(
     a.motion.localeCompare(b.motion),
 );
 const counts = {};
+let expectedAbortCount = 0;
 for (const result of results) {
+  expectedAbortCount += result.expected_request_aborts?.length || 0;
   for (const code of new Set(result.errors.map(error => error.code))) {
     counts[code] = (counts[code] || 0) + 1;
   }
@@ -440,6 +492,9 @@ const report = {
   contexts: results.length,
   expected_contexts: jobs.length,
   findings: counts,
+  request_failure_policy: 'FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_FAILURES; ONLY_CONTEXT_TEARDOWN_ERR_ABORTED_IS_EXPECTED',
+  request_failure_mutation_count: requestFailureMutationCount,
+  expected_teardown_abort_count: expectedAbortCount,
   golden: 'NOT_CERTIFIED',
   pixel_review: 'PENDING',
   pedagogy_review: 'PENDING',
