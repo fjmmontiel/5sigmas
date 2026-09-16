@@ -1,0 +1,176 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+
+revision:
+  number: 60
+  state: REQUALIFICATION_QA
+  article_golden: false
+  series_golden: false
+  exact_qa_run_id: 35063163574
+  exact_qa_job_id: 104687633164
+  exact_head: 07c4badc95040e62bcf564e00a9b40c4d82ec9c5
+  run_conclusion: failure
+  interpretation: >-
+    Fail-closed overall result. The shared browser-resource defect from revision 59 is closed by exact sequence proof,
+    while SOURCE, RENDERED, MEDIA, full-catalogue browser coverage, and fresh whole-article PIXEL/PEDAGOGY review remain open.
+
+active_scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  next_article_blocked: 02-jailbreaks
+  site_facing_bytes_changed_by_revision60: false
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  public_series_discovered: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+
+shared_browser_resources:
+  state: PASS_EXACT_QA_REVISION60
+  report_schema_version: 5
+  verdict_basis: POST_CONTEXT_TEARDOWN_WITH_REQUEST_START_RESPONSE_AND_PRE_REQUEST_METADATA_SEQUENCE_PROOF
+  browser:
+    requested_channel: chrome
+    actual_channel: chrome
+    version: 152.0.7977.82
+    fallback_reason: null
+  requested_routes: 16
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  contexts_expected: 64
+  contexts_observed: 64
+  concurrency: 4
+  elapsed_ms: 72350
+  mutation_fixture_count: 18
+  expected_abort_count: 64
+  expected_abort_classification: EXPECTED_METADATA_RANGE_CANCEL_AFTER_RESPONSE_HEADERS
+  failure_count: 0
+  revision59_isolated_en_from_cave_abort_closed: true
+  proof: >-
+    Every observed media ERR_ABORTED had a successful HTTP 206 response on the same request identity before the cancellation.
+    No later response, unrelated prior request, blanket ERR_ABORTED allowlist, threshold reduction, or reference-content edit was used.
+  classifier_hardening_commit: 82240799852d2d39305a4fc66c19e23d7e99d2ff
+
+specialized_exact_qa:
+  strict_es: PASS
+  strict_en: PASS
+  negative_regression_fixtures: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  independent_source_coverage_audit: PASS_TECHNICAL_AUDIT_WITH_OPEN_FINDINGS
+  structured_provenance_locale: PASS
+  article_watch_contract: PASS
+  focused_security_browser: PASS
+  focused_security_contrast: PASS
+  focused_security_text_visibility: PASS
+  focused_security_video_lifecycle: PASS
+  focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
+  focused_security_prompt_states: PASS_TECHNICAL_ONLY
+  focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  focused_security_listener_lifetime: PASS_POST_CONTEXT_TEARDOWN
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+
+conjunctive_gate_state:
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: NOT_PERFORMED_FOR_WHOLE_ACTIVE_ARTICLES_REVISION60
+  PEDAGOGY_REVIEW: NOT_PERFORMED_FOR_WHOLE_ACTIVE_ARTICLES_REVISION60
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+  note: >-
+    Shared-browser PASS is a specialized gate only. Global BROWSER_PASS remains false because the complete 84-page browser sweep
+    was not run, and technical checks never substitute for pixel or pedagogy review.
+
+global_open_debt:
+  RAW_TEX_RENDERED: 28
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_NOT_RENDERED: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+
+security_media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+sources_and_locales:
+  material_claims_changed_revision60: false
+  strict_es: PASS
+  strict_en: PASS
+  factual_research_reopened_revision60: false
+  note: >-
+    No benchmark, unit, formula, caveat, reference, locale copy, or site-facing visual changed in revision 60.
+
+editorial_review:
+  whole_article_pixel_review: NOT_PERFORMED
+  whole_article_pedagogy_review: NOT_PERFORMED
+  latest_historical_whole_active_set_review: REVISION43_SAME_AGENT_NOT_INDEPENDENT
+  golden_from_technical_gates_forbidden: true
+  new_capture_harness:
+    state: IMPLEMENTED_PENDING_DIRECT_EXECUTION
+    script: scripts/capture_security_editorial_evidence.mjs
+    workflow: .github/workflows/security-capture-direct.yml
+    exact_scope: SECURITY_00_01_ES_EN_ONLY
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    evidence: WHOLE_ARTICLE_PLUS_EACH_ACTIVE_VISUAL_AND_INTERACTION_STATE
+    retention_days: 1
+    pixel_review_still_manual: true
+    pedagogy_review_still_manual: true
+
+artifact:
+  id: 10433866439
+  compressed_bytes: 131453
+  files: 12
+  retention_days: 1
+  expires_at: 2026-09-17T06:31:45Z
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  article_pr_310_author_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: WHOLE_ARTICLE_PIXEL_AND_PEDAGOGY_RECERTIFICATION
+  required_next_evidence:
+    - ES_EN_WHOLE_ARTICLE_DESKTOP_NORMAL
+    - ES_EN_WHOLE_ARTICLE_DESKTOP_REDUCED
+    - ES_EN_WHOLE_ARTICLE_MOBILE_NORMAL
+    - ES_EN_WHOLE_ARTICLE_MOBILE_REDUCED
+    - EACH_ACTIVE_VISUAL_INITIAL_INTERMEDIATE_FINAL_STATES
+    - MANUAL_PIXEL_INSPECTION_OF_RETAINED_SCREENSHOTS
+    - MANUAL_PEDAGOGY_REVIEW_AGAINST_PROBLEM_MECHANISM_EVIDENCE_TRADEOFFS_PRODUCTION
+  after_editorial_review:
+    - COMPLETE_GLOBAL_BROWSER_SWEEP
+    - SOURCE_RENDERED_MEDIA_DEBT
+    - AUTHORIZED_NARRATION_AUDIO
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  golden_forbidden_until_all_conjunctive_gates_pass: true
