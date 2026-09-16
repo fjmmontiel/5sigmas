@@ -33,6 +33,7 @@
 - [Razonamiento en LLMs](https://5sigmas.com/temas/razonamiento/index.html.md): chain of thought, búsqueda, verificadores y test-time compute.
 - [Evaluación de modelos de IA](https://5sigmas.com/temas/evaluacion-modelos/index.html.md): benchmarks, conjuntos propios, jueces y métricas de producción.
 - [Qué es un agente de IA](https://5sigmas.com/temas/agentes-ia/index.html.md): diferencia entre chatbot, workflow y agente, tools, memoria, estado, evaluación y seguridad.
+- [Agentes de voz en tiempo real](https://5sigmas.com/temas/agentes-voz-tiempo-real/index.html.md): arquitecturas de audio, turn-taking, latencia, tools, WebRTC/SIP, capacidad y evaluación por turno.
 - [Qué es prompt injection](https://5sigmas.com/temas/prompt-injection/index.html.md): por qué contenido externo puede influir en un LLM y qué arquitectura mantiene la autorización fuera del prompt.
 
 ## Vídeos
