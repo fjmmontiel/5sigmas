@@ -21,7 +21,11 @@ const browser = await chromium.launch({ headless: true });
 let next = 0;
 
 const JOB_TIMEOUT_MS = Number(process.env.S5_BROWSER_JOB_TIMEOUT_MS || 25000);
+const WORKER_COUNT = Number(process.env.S5_BROWSER_WORKERS || 2);
 const CLOSE_TIMEOUT_MS = 4000;
+if (!Number.isInteger(WORKER_COUNT) || WORKER_COUNT < 1 || WORKER_COUNT > 4) {
+  throw new Error(`S5_BROWSER_WORKERS must be an integer between 1 and 4; got ${WORKER_COUNT}`);
+}
 
 const classifyRequestFailure = ({ errorText, phase }) => {
   const aborted = /ERR_ABORTED/i.test(errorText || '');
@@ -201,6 +205,14 @@ async function inspectInlineVideo(page, job, errors) {
 async function inspect(job) {
   let context;
   let phase = 'navigation';
+  let phaseStartedAtMs = performance.now();
+  const phaseTimingMs = {};
+  const transitionPhase = nextPhase => {
+    const now = performance.now();
+    phaseTimingMs[phase] = Number(((phaseTimingMs[phase] || 0) + (now - phaseStartedAtMs)).toFixed(2));
+    phase = nextPhase;
+    phaseStartedAtMs = now;
+  };
   const errors = [];
   const expectedRequestAborts = [];
   const result = {
@@ -210,6 +222,7 @@ async function inspect(job) {
     motion: job.motion,
     errors,
     expected_request_aborts: expectedRequestAborts,
+    phase_timing_ms: phaseTimingMs,
     pixel_review: 'PENDING',
     pedagogy_review: 'PENDING',
     interaction_review: 'NOT_RUN',
@@ -266,7 +279,7 @@ async function inspect(job) {
       });
       if (!response?.ok()) errors.push({ code: 'PAGE_HTTP_ERROR', status: response?.status() });
 
-      phase = 'lazy-load';
+      transitionPhase('lazy-load');
       await page.evaluate(async () => {
         await Promise.race([
           document.fonts.ready,
@@ -396,7 +409,7 @@ async function inspect(job) {
       }
 
       if (result.dom?.video_count) {
-        phase = 'interaction-playback';
+        transitionPhase('interaction-playback');
         result.media = await inspectInlineVideo(page, job, errors);
         result.playback_review = 'AUTOMATED_TECHNICAL_ONLY';
       }
@@ -410,7 +423,7 @@ async function inspect(job) {
           job.route,
         );
       if (sample) {
-        phase = 'pixel-capture';
+        transitionPhase('pixel-capture');
         const stem = `${job.locale}-${job.width}-${job.motion}-${job.route
           .split('/')
           .filter(Boolean)
@@ -431,7 +444,7 @@ async function inspect(job) {
           });
         }
       }
-      phase = 'settle';
+      transitionPhase('settle');
       await page.waitForTimeout(100);
     })(), JOB_TIMEOUT_MS, `${job.locale} ${job.width} ${job.motion} ${job.route}`);
   } catch (error) {
@@ -440,20 +453,21 @@ async function inspect(job) {
       : 'BROWSER_AUDIT_ERROR';
     errors.push({ code, phase, detail: String(error) });
   } finally {
-    phase = 'teardown';
+    transitionPhase('teardown');
     if (await boundedClose(context)) {
       errors.push({
         code: 'BROWSER_CONTEXT_CLOSE_TIMEOUT',
         detail: `context close exceeded ${CLOSE_TIMEOUT_MS} ms`,
       });
     }
+    transitionPhase('complete');
   }
   return result;
 }
 
 try {
   await Promise.all(
-    Array.from({ length: 4 }, async () => {
+    Array.from({ length: WORKER_COUNT }, async () => {
       while (next < jobs.length) {
         const job = jobs[next++];
         const result = await inspect(job);
@@ -491,6 +505,8 @@ const report = {
   scope: inventory.scope,
   contexts: results.length,
   expected_contexts: jobs.length,
+  worker_count: WORKER_COUNT,
+  context_timeout_ms: JOB_TIMEOUT_MS,
   findings: counts,
   request_failure_policy: 'FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_FAILURES; ONLY_CONTEXT_TEARDOWN_ERR_ABORTED_IS_EXPECTED',
   request_failure_mutation_count: requestFailureMutationCount,
