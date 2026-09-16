@@ -1,0 +1,93 @@
+schema: 1
+program: post-datacenters-requalification
+status: CHANGES_REQUIRED
+run:
+  workflow_run_id: 35107507352
+  workflow_run_number: 60
+  head_sha: b7a531f0e5edb452dd1d93e9255b09f4501f5664
+  artifact_id: 10451857596
+  artifact_digest: sha256:15a9d163bafb784245499012987d1b2b2b86a392caf49fa12e454af7e7bc2062
+  worker_count: 2
+  context_timeout_ms: 25000
+catalog:
+  locale_pages: 84
+  browser_contexts_expected: 336
+  browser_contexts_completed: 336
+findings:
+  REQUEST_FAILED: 95
+  VIDEO_PLAYBACK_ERROR: 95
+  VIDEO_NOT_RENDERED: 238
+  RAW_TEX_VISIBLE: 111
+  BROWSER_CONTEXT_TIMEOUT: 3
+timeouts:
+  - route: /series/seguridad-ia/01-prompt-injection/
+    locale: es
+    width: 390
+    motion: reduce
+    phase: lazy-load
+    phase_timing_ms:
+      navigation: 753.43
+      lazy-load: 24313.73
+      teardown: 32.35
+    healthy_peer_lazy_ms:
+      es_390_normal: 855.65
+      en_390_reduce: 876.70
+      es_1440_reduce: 804.08
+  - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    locale: es
+    width: 390
+    motion: reduce
+    phase: lazy-load
+    phase_timing_ms:
+      navigation: 1127.84
+      lazy-load: 23922.97
+      teardown: 9.86
+    healthy_peer_lazy_ms:
+      es_390_normal: 1053.28
+      en_390_reduce: 971.51
+      es_1440_reduce: 880.67
+  - route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/
+    locale: es
+    width: 390
+    motion: reduce
+    phase: lazy-load
+    phase_timing_ms:
+      navigation: 821.14
+      lazy-load: 24239.58
+      teardown: 4.84
+    healthy_peer_lazy_ms:
+      es_390_normal: 1064.46
+      en_390_reduce: 993.47
+      es_1440_reduce: 941.98
+profile_distribution:
+  es_390_reduce:
+    contexts: 42
+    lazy_load_median_ms: 1258.4
+    lazy_load_p90_ms: 1509.2
+    lazy_load_max_ms: 24313.73
+  en_390_reduce:
+    contexts: 42
+    lazy_load_median_ms: 1026.7
+    lazy_load_p90_ms: 1247.9
+    lazy_load_max_ms: 1418.6
+diagnosis:
+  proven:
+    - All three rev70 timeouts are ES, 390px, reduced-motion and occur inside the current coarse lazy-load phase.
+    - Matching locale/motion/viewport peers for the same routes complete lazy-load in roughly 0.8-1.1 seconds.
+    - Lowering full-sweep concurrency from four workers to two did not eliminate the timeout class.
+    - The current lazy traversal uses an in-page setTimeout(20) between viewport-sized scroll steps while two browser contexts run concurrently.
+  hypothesis_not_yet_certified:
+    - Renderer-side timer throttling or renderer scheduling during the in-page traversal is the leading auditor-side explanation for the ~24 second stalls; this must not be reported as proven until the traversal implementation is changed and rerun.
+  rejected_actions:
+    - Do not increase the 25000 ms context timeout.
+    - Do not mark these routes defective from timeout alone.
+    - Do not advance BROWSER_PASS from this run.
+next_exact_fix:
+  - Replace renderer-timed lazy traversal with host-controlled viewport scroll steps while retaining full-document lazy-load coverage.
+  - Split lazy-load telemetry into fonts, traversal, post-scroll settle and DOM inspection so a future timeout names the exact subphase.
+  - Add deterministic self-checks for traversal planning and preserve fail-closed request listeners through teardown.
+  - Run focused mobile/reduced reproductions first; only then run one 84x4 integration sweep if the focused reproductions are clean.
+editorial_state:
+  pixel_review: PENDING_FOR_REV70
+  pedagogy_review: PENDING_FOR_REV70
+  inherited_manual_evidence: SECURITY00_REV66_SAME_AGENT_ONLY
