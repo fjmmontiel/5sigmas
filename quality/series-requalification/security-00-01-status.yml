@@ -1,4 +1,4 @@
-schema_version: 36
+schema_version: 37
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -44,20 +44,7 @@ global_gate_state:
     VIDEO_CHAPTERS_MISSING: 24
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
-  browser_note: Revision 68 completed the exact hardened 84-page x desktop/mobile x normal/reduced sweep. It remains fail-closed due 96 request failures, 96 playback errors, 238 missing rendered videos, 111 raw-TeX-visible observations, two browser-context timeouts and one unproven pre-teardown reference-media abort in the 64-context shared regression matrix.
-
-revision63_history:
-  run_id: 35069519210
-  exact_head: feead57f68e5e302b0c7bc71d4ee7a8365b6d678
-  conclusion: FAILURE_FAIL_CLOSED
-  strict_es: PASS
-  strict_en: PASS
-  editorial_capture_contexts: 16
-  semantic_trace_checkpoints: 64
-  prompt_state_contexts: 8
-  transient_tooltip_false_positive_found: true
-  diagnostic_run_id: 35070750697
-  tooltip_repair_commit: 19bc45e043a7f3d651711fc4cee19e55e5b50ae2
+  browser_note: Revision 68 completed the hardened 84-page x desktop/mobile x normal/reduced sweep and remains fail-closed due 96 request failures, 96 playback errors, 238 missing rendered videos, 111 raw-TeX-visible observations and two browser-context timeouts. The separate 64-context immutable-reference regression defect found by rev68 was repaired and passed in rev69; this does not convert the full-catalogue BROWSER_PASS to true.
 
 revision66:
   exact_head: 059b8c781436d0c0f66b33326877b9a7e9fa4410
@@ -65,23 +52,8 @@ revision66:
   poster_repair_run_id: 35084072750
   editorial_capture_run_id: 35084200309
   editorial_capture_conclusion: SUCCESS
-  artifact_id: 10441048974
-  artifact_digest: sha256:ebf24a5b8d196ca016ceb919047b2d34bd8b0995f0ab2fcf3ca43e3153771bcc
-  artifact_compressed_bytes: 48290288
-  artifact_retention_days: 1
   strict_es: PASS
   strict_en: PASS
-  technical_capture:
-    contexts_expected: 16
-    contexts_observed: 16
-    failure_count: 0
-    locales: [es, en]
-    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-    byte_range_preview: PASS
-    tooltip_negative_mutation: PASS
-    semantic_trace_checkpoints: PASS
-    prompt_states: PASS
-    golden: false
   security00_manual_review:
     performed: true
     independent_reviewer: false
@@ -134,19 +106,37 @@ revision68:
     failure_profile: mobile-reduced
     classification: FATAL_MEDIA_ABORT_WITHOUT_SEQUENCE_PROOF
     proof_reason: missing-request-start
-    state: FAIL_CLOSED_PENDING_CLASSIFIER_SEQUENCE_FIX_AND_RERUN
-  focused_security_technical:
-    browser_layout: PASS
-    contrast_text_visibility: PASS
-    structured_metadata: PASS
-    article_watch_contract: PASS
-    video_lifecycle: PASS
-    real_touch_article_watch_roundtrip: PASS
-    prompt_visual_states: PASS
-    keyboard_focus: PASS
-    runtime_listener_lifetime: PASS
-    pixel_review: PENDING_NO_NEW_EDITORIAL_REVIEW
-    pedagogy_review: PENDING_NO_NEW_EDITORIAL_REVIEW
+    state: SUPERSEDED_BY_REV69_FIX_AND_PASS
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+revision69:
+  run_id: 35100877425
+  exact_action_head: f168355d24301803759b1ee1b1b7e7979ccbe1fb
+  classifier_fix_commit: 4ea59f6e271107f9a74e4a5435347f80c38893f5
+  scope: focused_security_00_01
+  full_catalogue_336_context_step: SKIPPED_BY_DESIGN
+  shared_reference_gate:
+    step_conclusion: SUCCESS
+    contexts_expected: 64
+    state: PASS_TECHNICAL_REV69
+    proof_contract:
+      absent_request_event: FAIL_CLOSED
+      request_event_without_browser_timing: USE_RECORDED_NODE_EVENT_CLOCK_ONLY
+      healthy_final_video_required: true
+      healthy_pre_start_metadata_required: true
+      prior_successful_different_request_required: true
+      same_url_required: true
+      response_statuses_allowed: [200, 206]
+    new_positive_mutation: PASS
+    new_negative_no_clock_mutation: PASS
+    thresholds_lowered: false
+    reference_content_modified: false
+  editorial:
+    PIXEL_REVIEW: PENDING_NO_NEW_EDITORIAL_REVIEW
+    PEDAGOGY_REVIEW: PENDING_NO_NEW_EDITORIAL_REVIEW
+    security00_rev66_manual_evidence_retained: true
+    security01_inherits: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
 
@@ -159,20 +149,15 @@ active_editorial_gate_defect:
   pedagogy_blocker_on_revision66: false
   media_blocker: true
 
-active_shared_gate_defect:
+resolved_shared_gate_defect:
   id: SHARED_MEDIA_ABORT_SEQUENCE_PROOF
-  severity: P1_GATE_DEFECT
-  state: OPEN_FAIL_CLOSED
+  prior_severity: P1_GATE_DEFECT
+  state: REPAIRED_AND_TARGET_MATRIX_PASS_REV69
   file: scripts/audit_browser_resources.mjs
-  exact_code_finding: redundantAbortProof requires finite request.timing().startTime even though the request listener also records nodeObservedAtMs; a real request event with unavailable browser timing is therefore reported as missing-request-start.
-  cannot_be_waived: true
-  fix_contract:
-    - preserve fail-closed classification for genuinely absent request events
-    - use the recorded node observation timestamp only as fallback when the request event exists but browser timing is unavailable
-    - require healthy pre-start metadata and an earlier successful different request before classifying a redundant abort expected
-    - add positive mutation for unavailable browser timing with finite node observation timestamp
-    - add negative mutation for a request start without either usable timestamp
-    - rerun only the 64-context Security plus Datacenters/pre-Datacenters reference regression matrix before a broader sweep
+  fix: Distinguish absent request events from request events with unavailable Playwright timing. The latter may use the already-recorded Node observation clock only while retaining all sequence, successful-response, healthy-metadata and healthy-final-media proof requirements.
+  negative_proof_preserved: true
+  reference_regression_matrix_passed: true
+  no_reference_content_changes: true
 
 media:
   state: FAIL_VOICE_MISSING
@@ -184,44 +169,32 @@ media:
     VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
-  authorized_narration_search_previous_run:
-    private_repo_match: false
-    drive_audio_match: false
-    gmail_audio_attachment_match_last_180d: false
   generated_cloned_or_substituted_francisco_voice: false
   es_media_used_as_en_fallback: false
   fabricated_transcript_or_timings: false
 
-cost:
-  revision66_editorial_artifact_compressed_bytes: 48290288
-  revision68_full_failed_diagnostic_artifact_retention_days: 1
-  state: P2_OPEN_EDITORIAL_EVIDENCE_DEDUPLICATION
-  rule: Keep required manual-review evidence but do not accumulate redundant capture sets; full shared diagnostics retain only bounded failure evidence with one-day retention.
-
 sources_and_locales:
-  site_facing_bytes_changed_revision68: false
-  material_claims_changed_revision68: false
-  strict_es_revision68: PASS
-  strict_en_revision68: PASS
-  source_truth_note: Security00 OWASP primary mechanism claims remain current; rev68 changed only audit request/evidence and did not modify content claims.
+  site_facing_bytes_changed_revision69: false
+  material_claims_changed_revision69: false
+  strict_es_revision69: PASS
+  strict_en_revision69: PASS
+  source_truth_note: Security00 OWASP primary mechanism claims remain current; rev69 only changes an audit classifier and its bounded validation request.
 
 release_and_concurrency:
   main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
   repair_branch: quality/post-datacenters-requalification
   branch_behind_main_at_last_compare: 0
-  branch_ahead_main_at_last_compare: 318
   draft_34: OPEN_DRAFT_NON_MERGEABLE_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
-  datacenters_or_pre_datacenters_modified_revision68: false
+  datacenters_or_pre_datacenters_content_modified_revision69: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
   blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
   pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
   pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
-  current_runtime_direct_dns_live_check: UNAVAILABLE
   cached_web_used_as_production_evidence: false
   linkedin_action_by_this_lane: false
   queue_activation_publish: false
@@ -230,17 +203,16 @@ release_contract_281_310:
   preserve_279: true
 
 housekeeping:
-  resolved_overflow_diagnostic_helper: scripts/diagnose_security_editorial_overflow.mjs
-  helper_state: REMOVED_AFTER_ROOT_CAUSE_AND_PERMANENT_NEGATIVE_FIXTURE
-  retained_permanent_regression_gate: scripts/validate_material_tooltip_overflow.mjs
   revision68_receipt: quality/series-requalification/security-00-01-revision68.yml
+  revision69_receipt: quality/series-requalification/security-00-01-revision69.yml
+  retained_permanent_regression_gate: scripts/validate_material_tooltip_overflow.mjs
 
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - FIX_SHARED_BROWSER_ABORT_SEQUENCE_PROOF_WITHOUT_WEAKENING_FAIL_CLOSED_POLICY
-    - RERUN_64_CONTEXT_REFERENCE_REGRESSION_MATRIX_ONLY
-    - IF_CLEAN_RECONCILE_TWO_FULL_CATALOG_BROWSER_TIMEOUTS_AND_RAW_TEX_RENDERING_DEBT
+    - RECONCILE_AND_DIAGNOSE_TWO_FULL_CATALOG_BROWSER_CONTEXT_TIMEOUTS_WITHOUT_RAISING_TIMEOUTS_BLINDLY
+    - REPAIR_RAW_TEX_RENDERING_ACROSS_ALL_14_AFFECTED_ARTICLE_ROUTES_AND_BOTH_LOCALES_WITH_REFERENCE_REGRESSION_PROOF
+    - CONTINUE_SOURCE_MEDIA_COVERAGE_REPAIR_INDEPENDENT_OF_MISSING_VOICE
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
     - CAPTIONS
