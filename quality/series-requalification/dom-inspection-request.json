@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "purpose": "rev73 focused isolation of the rev72 DOM-inspection timeout without relaxing the canonical browser gate",
+  "route": "/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/",
+  "canonical_context_budget_ms": 25000,
+  "diagnostic_modes": ["serial", "parallel2"],
+  "repetitions_per_context": 2,
+  "certifies_golden": false
+}
