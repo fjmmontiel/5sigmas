@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 55,
+  "diagnostic_revision": 56,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "6f15957ba83de0dec5b47758907a37c26bb06e08",
-  "reason": "Exact-QA the hardened shared browser-resource gate now integrated into the existing diagnostic. Exercise Security 00/01 plus explicit Datacenters and one presentation route from every pre-Datacenters reference series in both ES and EN, across desktop ~1440 and mobile ~390, normal and reduced motion. The gate must keep pageerror, console:error, HTTP>=400 and requestfailed listeners active through lazy-resource/media loading and context teardown, reject ERR_ABORTED outside teardown, and compute the verdict only after teardown. This is regression evidence for a shared gate change, not a whole-catalogue BROWSER_PASS and not touch-interaction certification. Re-run the existing focused Security technical gates on the same exact head. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to actual manual review evidence, and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "8d4cb3179ba07bb3d2c1e262ed281a6b4af50546",
+  "reason": "Exact-QA the repaired shared browser-resource gate after revision 55 exposed deterministic native-media ERR_ABORTED false positives. Re-run the same 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion. Require post-context-close verdicts, stable Request identity, successful 200/206 correlation and final healthy matching media before accepting any lazy-load/settle media cancellation; generic/navigation/non-media/unproven aborts and all non-abort failures remain fatal. Verify the bounded focused artifact policy by retaining JSON reports only. Re-run existing focused Security technical gates on the exact same head. This is not a whole-catalogue BROWSER_PASS, touch certification, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
