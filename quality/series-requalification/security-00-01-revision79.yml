@@ -1,0 +1,147 @@
+revision: 79
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+change:
+  kind: SHARED_FAIL_CLOSED_GATE_HARDENING
+  published_site_bytes_changed: false
+  audit_schema_version: 3
+  video_curriculum_section_mapping:
+    required_for_every_h2_when_video_declared: true
+    mapping_fields: [section, key_moment]
+    section_must_match_locale_native_h2: true
+    key_moment_must_exist_in_video_chapters: true
+    multiple_h2_sections_may_share_one_key_moment: true
+    one_mp4_per_h2_required: false
+    failure_codes:
+      - VIDEO_SECTION_HEADINGS_DUPLICATED
+      - VIDEO_SECTION_MAP_MISSING
+      - VIDEO_SECTION_MAP_INVALID
+      - VIDEO_SECTION_MAP_UNKNOWN_SECTION
+      - VIDEO_SECTION_MAP_UNKNOWN_KEY_MOMENT
+      - VIDEO_SECTION_MAP_DUPLICATE_SECTION
+      - VIDEO_SECTION_UNMAPPED
+  negative_fixtures:
+    missing_section_map: PASS
+    unmapped_h2: PASS
+    unknown_section: PASS
+    unknown_key_moment: PASS
+    many_h2_to_one_key_moment_positive_control: PASS
+
+integration:
+  action: 35156245155
+  exact_head: bc3d33de4d378e7489a8481daaeb99f7e2673439
+  result: FAILURE_FAIL_CLOSED_EXPECTED
+  failure_reason: source_and_media_contract_debt_remains
+  artifact_id: 10471221980
+  artifact_digest: sha256:eea7d5badf63dc2341cf2464973bcac288c183f277bdc27e59431b24e43190db
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  source_inventory_pages_per_locale: 42
+  source_inventory_locale_pages: 84
+  rendered_html_audited: true
+  full_336_browser_sweep_repeated: false
+  full_336_browser_sweep_skip_reason: published_site_bytes_unchanged
+  shared_security_plus_datacenters_pre_datacenters:
+    contexts_expected: 64
+    contexts_observed: 64
+    mutation_fixtures: 20
+    failures: 0
+  focused_security:
+    interaction_layout_codec_contexts_expected: 16
+    interaction_layout_codec_contexts_observed: 16
+    interaction_layout_codec_failures: 0
+    contrast_and_state_visibility: PASS
+    video_lifecycle_contexts_expected: 16
+    video_lifecycle_contexts_observed: 16
+    video_lifecycle_failures: 0
+    real_touch_article_watch_round_trip: PASS
+    prompt_injection_visual_states: PASS
+    keyboard_focus: PASS
+    listener_lifetime_contexts_expected: 16
+    listener_lifetime_contexts_observed: 16
+    listener_lifetime_failures: 0
+
+source_and_rendered_debt_rev79:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+  source_pass: false
+  rendered_pass: false
+
+media:
+  media_pass: false
+  voice_missing: true
+  security00_01_native_locale_files: 4
+  security00_01_video_audio_stream_missing: 4
+  security00_01_captions_missing: 4
+  security00_01_transcripts_missing: 4
+  security00_01_curated_key_moment_maps_missing: 4
+  codec: H264_1920X1080_YUV420P
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+editorial:
+  new_pixel_review_this_revision: false
+  new_pedagogy_review_this_revision: false
+  reason: audit_code_tests_and_request_only_no_published_site_bytes_changed
+  carry_forward_only_revision_scoped_security00_evidence: rev78
+  pixel_review_global: false
+  pedagogy_review_global: false
+  security01_inherits_security00_editorial_pass: false
+
+last_authoritative_global_browser_sweep:
+  revision: 75
+  action: 35134585450
+  contexts_expected: 336
+  contexts_observed: 336
+  raw_tex_visible: 0
+  browser_context_timeout: 0
+  dom_subprobe_timeout: 0
+  browser_pass: false
+  browser_pass_reason: browser_visible_video_media_failures_remain
+
+release_contract_281_310:
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+  issue_281_state: CHANGES_REQUIRED_BLOCKED
+
+release:
+  branch: quality/post-datacenters-requalification
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  draft_34_merge: false
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  exact:
+    - BUILD_EXPLICIT_LOCALE_NATIVE_H2_TO_CURATED_KEY_MOMENT_INVENTORY_FOR_DECLARED_VIDEO_PAGES_WITHOUT_FABRICATING_TIMINGS_OR_CONTENT
+    - SECURITY00_REMAINS_BLOCKED_UNTIL_AUTHORIZED_NATIVE_ES_EN_NARRATION_CAPTIONS_TRANSCRIPT_AND_REAL_CURATED_KEY_MOMENTS_EXIST
+    - CONTINUE_INDEPENDENT_FAIL_CLOSED_EXPECTED_VIDEO_COVERAGE_REPAIR_FOR_THE_60_UNDECLARED_LOCALE_PAGES_WITHOUT_ADVANCING_ACTIVE_ARTICLE
+  do_not_advance_to: 02-jailbreaks
