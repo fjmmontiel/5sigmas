@@ -16,6 +16,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import sys
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -130,6 +131,7 @@ def _run_bilingual_internal_link_gate(site_dir: Path, locale: str) -> None:
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Cannot load bilingual internal-link audit: {script}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
 
     report, failures = module.audit(site_dir.parent)
