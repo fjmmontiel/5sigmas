@@ -9,8 +9,8 @@ hide:
 
 <link rel="stylesheet" href="/stylesheets/tools.css" />
 <link rel="stylesheet" href="/stylesheets/tools-prompt-injection.css" />
-<script src="/assets/javascripts/tools-prompt-injection-core.js" defer></script>
-<script src="/assets/javascripts/tools-prompt-injection.js" defer></script>
+<script src="/assets/javascripts/tools/prompt-injection-core.js" defer></script>
+<script src="/assets/javascripts/tools/prompt-injection.js" defer></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Prompt-Injection Threat Explorer — 5sigmas","url":"https://5sigmas.com/en/tools/prompt-injection-threat/","applicationCategory":"SecurityApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"Defensive explorer of impact paths and controls for prompt injection in LLM and agent systems."}</script>
 
 <div class="s5-landing s5-tool-page s5-threat" data-s5-prompt-injection data-locale="en"><section class="s5-page-intro"><div class="s5-eyebrow">Tools · Security · 12</div><h1>Trace what a prompt injection can reach before assigning a risk score.</h1><p>The problem does not end when a model interprets an untrusted instruction. Impact depends on which data, tools, outbound channels and memory the influenced model can reach next. This explorer models those paths and the controls that cut them, without generating attack payloads or teaching offensive techniques.</p></section><div class="s5-tool-summary-strip"><div><small>Input</small><strong>direct, indirect or multimodal</strong></div><div><small>Boundary</small><strong>isolated reader vs privileged model</strong></div><div><small>Impact</small><strong>data, actions, egress and memory</strong></div><div><small>Method</small><strong>deterministic reachability, not probability</strong></div></div>
