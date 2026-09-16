@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 57,
+  "diagnostic_revision": 58,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "571ac6de1a35eebfc4f506253942545fc19b4182",
-  "reason": "Exact-QA the revision-56 shared browser-resource repair after removing the harness self-reset race: changing preload=none to metadata must exercise Chromium resource selection without calling video.load() in the same task. Re-run the same 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion. Require healthy final metadata for every existing video, post-context-close verdicts, stable Request identity and successful 200/206 correlation before accepting any pre-teardown media cancellation; generic/navigation/non-media/unproven aborts and all non-abort failures remain fatal. Re-run the focused Security technical gates on the exact same head and retain bounded JSON-only diagnostic artifacts. This is not a whole-catalogue BROWSER_PASS, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "55243cae67af4950bd82d3736cf79cc258098291",
+  "reason": "Exact-QA the bounded-parallel shared browser-resource repair implemented after revision 57 timed out. Re-run the unchanged 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion: 64 isolated Playwright contexts total, processed in bounded batches with incremental evidence so timeout cannot erase progress. Preserve healthy metadata requirements, stable Request identity, 200/206 correlation, listeners through context.close(), post-teardown verdicts and all negative mutation fixtures; do not weaken thresholds or treat generic/navigation/non-media/unproven aborts as expected. Re-run the focused Security technical gates on the exact same head and retain bounded JSON-only diagnostic artifacts. This is not a whole-catalogue BROWSER_PASS, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
