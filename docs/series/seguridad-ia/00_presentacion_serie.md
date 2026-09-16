@@ -3,7 +3,7 @@ title: Seguridad en IA — ataques y defensas
 description: "Una serie sobre cómo una orden escondida en un documento puede influir en un sistema con IA, cómo puede conservarse ese riesgo y qué controles limitan las acciones."
 keywords: seguridad IA, prompt injection, jailbreak LLM, agentes IA, RAG security, OWASP LLM, red teaming IA
 date: 2026-08-06
-date_modified: 2026-09-14
+date_modified: 2026-09-16
 tags:
   - IA
   - Seguridad
@@ -55,3 +55,9 @@ La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. 
 - Qué arquitectura defensiva tiene sentido en sistemas reales.
 - Dónde sirven los guardrails y dónde no.
 - Cómo combinar políticas, sandboxing, revisión humana y telemetría sin convertir el producto en algo inútil.
+
+---
+
+**Series relacionadas:** [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) · [Agentes de IA](/series/agentes-ia/00_presentacion_serie/)
+
+[Ver todas las series](/series/){ .md-button }
