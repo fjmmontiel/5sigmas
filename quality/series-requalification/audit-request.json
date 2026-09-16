@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 70,
+  "diagnostic_revision": 71,
   "diagnostic_scope": "full",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "3e609ec33485b3a9468f93c88a69abd96ca45a9d",
-  "reason": "Exact full-catalog QA after diagnosing nondeterministic browser-context timeout targets across revisions 67 and 68 with no published-content delta between those audited heads. Keep the per-context timeout at 25000 ms and fail closed; reduce full-catalog browser workers from four to two to remove suspected CPU scheduling contention, record per-phase timing for navigation/lazy-load/interaction/pixel/settle/teardown, retain request/runtime listeners through teardown, and rerun the complete 84-page x desktop/mobile x normal/reduced = 336-context sweep plus the 64-context Security + Datacenters/pre-Datacenters reference matrix. This run is a technical integration milestone only: SOURCE/RENDERED/MEDIA findings remain independent failures, PIXEL_REVIEW and PEDAGOGY_REVIEW remain editorial/revision-scoped, and no GOLDEN status may be inferred from a clean timeout result.",
+  "requested_head_parent": "a41b9b8adcc9d5e151962f5ff9901c482766ab31",
+  "reason": "Exact full-catalog integration after rev70 proved that reducing browser workers from four to two did not eliminate the timeout class: all three remaining timeouts were ES/390/reduced and spent about 24 seconds in the coarse lazy-load phase while matched profiles completed in about one second. The auditor now keeps the 25000 ms context budget unchanged, replaces renderer-side setTimeout scrolling with host-controlled viewport scroll steps, records deterministic scroll-plan mutations and explicit font-settle/lazy-traversal/post-scroll-settle/DOM-inspection timings, and retains fail-closed request/runtime listeners through teardown. The existing workflow has no three-route focused scope; running one existing exact-head full integration avoids introducing a second CI workflow. Require zero BROWSER_CONTEXT_TIMEOUT before BROWSER_PASS. SOURCE/RENDERED/MEDIA failures remain independent; PIXEL_REVIEW and PEDAGOGY_REVIEW remain editorial/revision-scoped; no GOLDEN status may be inferred from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
