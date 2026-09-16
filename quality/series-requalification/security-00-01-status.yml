@@ -1,4 +1,4 @@
-schema_version: 39
+schema_version: 40
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -35,26 +35,30 @@ global_gate_state:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  source_debt_last_exact_focused_run_rev74:
+  source_debt_rev75:
     VIDEO_DECLARATION_MISSING: 60
     VIDEO_CAPTIONS_MISSING: 24
     VIDEO_TRANSCRIPT_MISSING: 24
     VIDEO_CHAPTERS_MISSING: 24
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
-  rendered_debt_last_exact_focused_run_rev74:
+  rendered_debt_rev75:
     VIDEO_NOT_RENDERED: 60
     RAW_TEX_RENDERED: 0
-  browser_last_authoritative_completed_full_run_rev72:
+  browser_last_authoritative_completed_full_run_rev75:
+    action: 35134585450
+    exact_head: 2ad5776cb00e27c5ba48de9510981fcda19b7804
     contexts_expected: 336
     contexts_observed: 336
     REQUEST_FAILED: 96
     VIDEO_PLAYBACK_ERROR: 96
-    VIDEO_NOT_RENDERED: 239
+    VIDEO_NOT_RENDERED: 240
     RAW_TEX_VISIBLE: 0
-    BROWSER_CONTEXT_TIMEOUT: 1
-    timeout_context: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/ [desktop-reduced]
-    timeout_phase: dom-inspection
+    BROWSER_CONTEXT_TIMEOUT: 0
+    DOM_SUBPROBE_TIMEOUT: 0
+    browser_timeout_hardening_verified: true
+    browser_pass: false
+    browser_pass_reason: browser-visible video/media failures remain
 
 shared_gate_hardening:
   dom_stall_diagnosis_rev73:
@@ -82,24 +86,22 @@ shared_gate_hardening:
   rev75_full_integration:
     action: 35134585450
     exact_head: 2ad5776cb00e27c5ba48de9510981fcda19b7804
-    expected_contexts: 336
-    state: IN_PROGRESS_AFTER_FULL_BROWSER_STEP_SUCCESS
-    completed_stages:
-      negative_regression_fixtures: PASS
-      publication_discovery: PASS
-      source_audit_stage: COMPLETE_FAIL_CLOSED_EXPECTED
-      strict_es: PASS
-      publication_contract_stage: COMPLETE
-      security_media_probe_stage: COMPLETE_FAIL_CLOSED_EXPECTED
-      strict_en: PASS
-      structured_metadata_stage: COMPLETE
-      article_watch_contract_stage: COMPLETE
-      rendered_audit_stage: COMPLETE_FAIL_CLOSED_EXPECTED
-      shared_security_plus_reference_browser_regression: PASS
-      full_catalogue_browser_sweep: SUCCESS_STEP_CONCLUSION
-    full_catalogue_browser_final_artifact_harvested: false
-    final_enforcement_completed: false
-    BROWSER_PASS: PENDING_FINAL_ARTIFACT_AND_ENFORCEMENT
+    state: COMPLETED_FAIL_CLOSED_ON_KNOWN_VIDEO_MEDIA_DEBT
+    final_artifact_harvested: true
+    final_enforcement_completed: true
+    negative_regression_fixtures: PASS
+    publication_discovery: PASS
+    strict_es: PASS
+    strict_en: PASS
+    publication_contract: PASS
+    security_structured_metadata: PASS
+    security_article_watch_contract: PASS
+    shared_security_plus_reference_browser_regression: PASS
+    full_catalogue_browser_contexts: 336
+    full_catalogue_browser_timeout_findings: 0
+    full_catalogue_dom_subprobe_timeout_findings: 0
+    raw_tex_visible: 0
+    raw_tex_rendered: 0
     pixel_or_pedagogy_certification_allowed: false
     can_override_source_or_media_debt: false
 
@@ -129,7 +131,7 @@ security00_locale_parity:
     - /en/series/agentes-ia/00_presentacion_serie/
     - /en/series/
   date_modified_records_real_edit: 2026-09-16
-  exact_integration_validation: PENDING_AFTER_REV75_BECAUSE_REV75_HEAD_PREDATES_FIX_AND_GUARD
+  exact_integration_validation: PENDING_FOCUSED_REV76
   article_golden_effect: STILL_FALSE
 
 media:
@@ -151,8 +153,17 @@ media:
   fabricated_transcript_or_timings: false
 
 editorial:
-  PIXEL_REVIEW: PENDING_NO_NEW_FORMAL_REVIEW_CURRENT_HEAD
-  PEDAGOGY_REVIEW: PENDING_NO_NEW_FORMAL_REVIEW_CURRENT_HEAD
+  PIXEL_REVIEW: PENDING_CURRENT_HEAD
+  PEDAGOGY_REVIEW: PENDING_CURRENT_HEAD
+  manual_rev75_reinspection_this_run:
+    whole_page_contexts_inspected: 8
+    primary_visual_detailed_captures_inspected: 5
+    desktop: true
+    mobile: true
+    normal_motion: true
+    reduced_motion: true
+    new_visible_p0_p1_p2_found: 0
+    limitation: rev75 predates current-head Security00 footer parity repair and not every intermediate interaction/playback state was manually re-inspected
   last_complete_security00_manual_evidence: REV66_SAME_AGENT_ONLY
   last_complete_security00_manual_contexts:
     whole_page_contexts: 8
@@ -179,7 +190,7 @@ sources_and_locales:
 release_and_concurrency:
   main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
   repair_branch: quality/post-datacenters-requalification
-  repair_branch_head_before_this_status_write: e106e789a5cebbcea220ce911a2921dd15371057
+  repair_branch_head_before_this_status_write: 80bec27241b8572fb78d1184978e08728335ee64
   branch_behind_main_at_last_verified_receipt: 0
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
@@ -227,9 +238,9 @@ historical_receipts_preserved:
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - HARVEST_REV75_FULL_336_CONTEXT_FINAL_ENFORCEMENT_AND_ARTIFACT
-    - CONFIRM_FULL_BROWSER_REPORT_HAS_336_OF_336_AND_ZERO_BROWSER_CONTEXT_TIMEOUT_ZERO_DOM_SUBPROBE_TIMEOUT
-    - AFTER_REV75_COMPLETES_TRIGGER_ONE_FOCUSED_EXACT_HEAD_QA_FOR_SECURITY00_NAVIGATION_FIX_AND_NEGATIVE_GUARD
+    - TRIGGER_ONE_FOCUSED_EXACT_HEAD_QA_FOR_SECURITY00_NAVIGATION_FIX_AND_NEGATIVE_PARITY_GUARD
+    - REQUIRE_STRICT_ES_EN_SHARED_REFERENCE_REGRESSION_AND_ALL_FOCUSED_SECURITY_TECHNICAL_GATES
+    - REINSPECT_CURRENT_HEAD_SECURITY00_PIXELS_AFTER_FOOTER_PARITY_REPAIR_WITHOUT_INHERITING_REV75_EDITORIAL_EVIDENCE
     - CONTINUE_SOURCE_MEDIA_COVERAGE_REPAIR_INDEPENDENT_OF_MISSING_VOICE
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
