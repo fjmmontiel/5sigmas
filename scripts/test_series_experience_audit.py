@@ -30,6 +30,8 @@ class ExperienceAuditTest(unittest.TestCase):
             "  - name: Problem\n    start: 0\n    end: 10\n"
             "  - name: Mechanism\n    start: 10\n    end: 22\n"
             "  - name: Consequence\n    start: 22\n    end: 30\n"
+            "video_section_map:\n"
+            "  - section: Mechanism\n    key_moment: Mechanism\n"
             "---\n# Lesson\n\n## Mechanism\nOne explicit relationship.\n"
         )
         for prefix in ("docs/", "locales/en/"):
@@ -158,6 +160,46 @@ class ExperienceAuditTest(unittest.TestCase):
         codes = self.codes(audit(self.root, self.scope))
         self.assertEqual(codes["VIDEO_TITLE_MISSING"], 1)
         self.assertEqual(codes["VIDEO_SUMMARY_MISSING"], 1)
+
+    def test_missing_video_section_map_is_blocked(self):
+        block = "video_section_map:\n  - section: Mechanism\n    key_moment: Mechanism\n"
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            path.write_text(path.read_text().replace(block, ""))
+        codes = self.codes(audit(self.root, self.scope))
+        self.assertEqual(codes["VIDEO_SECTION_MAP_MISSING"], 2)
+
+    def test_unmapped_h2_is_blocked(self):
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            path.write_text(path.read_text() + "\n## Production\nA second curriculum section.\n")
+        codes = self.codes(audit(self.root, self.scope))
+        self.assertEqual(codes["VIDEO_SECTION_UNMAPPED"], 2)
+
+    def test_unknown_key_moment_is_blocked(self):
+        path = self.root / "docs" / self.rel
+        path.write_text(path.read_text().replace("key_moment: Mechanism", "key_moment: Not a real key moment"))
+        codes = self.codes(audit(self.root, self.scope))
+        self.assertEqual(codes["VIDEO_SECTION_MAP_UNKNOWN_KEY_MOMENT"], 1)
+        self.assertEqual(codes["VIDEO_SECTION_UNMAPPED"], 1)
+
+    def test_unknown_section_is_blocked(self):
+        path = self.root / "docs" / self.rel
+        path.write_text(path.read_text().replace("section: Mechanism", "section: Not a real section"))
+        codes = self.codes(audit(self.root, self.scope))
+        self.assertEqual(codes["VIDEO_SECTION_MAP_UNKNOWN_SECTION"], 1)
+        self.assertEqual(codes["VIDEO_SECTION_UNMAPPED"], 1)
+
+    def test_multiple_h2s_can_share_one_key_moment(self):
+        old = "video_section_map:\n  - section: Mechanism\n    key_moment: Mechanism\n"
+        new = old + "  - section: Production\n    key_moment: Mechanism\n"
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            path.write_text(path.read_text().replace(old, new) + "\n## Production\nA second curriculum section.\n")
+        report = audit(self.root, self.scope)
+        self.assertNotIn("VIDEO_SECTION_UNMAPPED", self.codes(report))
+        self.assertNotIn("VIDEO_SECTION_MAP_INVALID", self.codes(report))
+        self.assertEqual(report["status"], "TECHNICAL_PASS_ONLY")
 
     def test_rendered_raw_tex_is_blocked(self):
         html = '<html lang="es"><article><p>\\[Recall@k=\\frac{x}{y}\\]</p><video></video></article></html>'
