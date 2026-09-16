@@ -1,4 +1,4 @@
-schema_version: 41
+schema_version: 42
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -61,102 +61,47 @@ global_gate_state:
     browser_pass_reason: browser-visible video/media failures remain
 
 shared_gate_hardening:
-  dom_stall_diagnosis_rev73:
-    action: 35126652537
-    contexts: 16
-    anomalies: 0
-    max_context_ms: 2251.98
-    max_dom_inspection_ms: 167.99
-    max_named_subprobe_ms: 20.67
-    conclusion: stable route complexity did not reproduce the rev72 monolithic DOM stall
-  bounded_dom_subprobes_rev74:
-    canonical_commit: f8a71c17df0f5444cf554c9d3346713814c10f9f
-    focused_action: 35133026420
-    exact_head: 03ec79df65074784a2fc8ff0a434bdaacca18b60
-    global_context_budget_ms: 25000
-    dom_subprobe_budget_ms: 5000
-    worker_count: 2
-    retries_added: false
-    thresholds_raised: false
-    fail_closed_code: DOM_SUBPROBE_TIMEOUT
-    negative_stalled_subprobe_mutation: PASS
-    shared_security_plus_reference_contexts: 64
-    shared_security_plus_reference_failures: 0
-    reference_content_modified: false
-  rev75_full_integration:
-    action: 35134585450
-    exact_head: 2ad5776cb00e27c5ba48de9510981fcda19b7804
-    state: COMPLETED_FAIL_CLOSED_ON_KNOWN_VIDEO_MEDIA_DEBT
-    final_artifact_harvested: true
-    final_enforcement_completed: true
-    negative_regression_fixtures: PASS
-    publication_discovery: PASS
-    strict_es: PASS
-    strict_en: PASS
-    publication_contract: PASS
-    security_structured_metadata: PASS
-    security_article_watch_contract: PASS
-    shared_security_plus_reference_browser_regression: PASS
-    full_catalogue_browser_contexts: 336
-    full_catalogue_browser_timeout_findings: 0
-    full_catalogue_dom_subprobe_timeout_findings: 0
-    raw_tex_visible: 0
-    raw_tex_rendered: 0
-    pixel_or_pedagogy_certification_allowed: false
-    can_override_source_or_media_debt: false
-  rev76_focused_exact_head_integration:
-    action: 35139328045
-    exact_head: 89f1483cde45ba9f962bf5df49943df73995bf47
-    state: COMPLETED_FAIL_CLOSED_ON_KNOWN_SOURCE_RENDERED_MEDIA_DEBT
-    strict_es: PASS
-    strict_en: PASS
-    publication_discovery: PASS
-    publication_contract: PASS
-    negative_regression_fixtures: PASS
-    security_structured_metadata: PASS
-    security_article_watch_contract_and_negative_locale_parity_guard: PASS
-    shared_security_plus_reference_contexts: 64
-    shared_security_plus_reference_classifier_mutations: 20
-    shared_security_plus_reference_failures: 0
-    focused_security_browser: PASS
-    contrast_and_legibility: PASS
-    text_visibility_desktop_mobile_normal_reduced: PASS
-    real_mobile_touch: PASS
-    keyboard_and_focus: PASS
-    prompt_injection_visual_states: PASS
-    video_lifecycle_technical: PASS
-    runtime_listener_lifetime_through_teardown: PASS
-    full_catalogue_browser_repeated: false
-    final_enforcement_reason: known required video declaration/caption/transcript/chapter and media-audio debt
+  publication_discovery_all_seven_target_series: PASS
+  raw_tex_renderer_and_browser_visibility: PASS_ZERO_VISIBLE_TEX_REV75
+  browser_listener_lifetime_through_teardown: PASS
+  dom_subprobe_timeout_fail_closed: PASS
+  shared_security_plus_datacenters_pre_datacenters_regression: PASS
+  reference_content_modified: false
+  current_thresholds_relaxed_to_hide_defect: false
+
+rev76_exact_head_integration:
+  action: 35139328045
+  exact_head: 89f1483cde45ba9f962bf5df49943df73995bf47
+  state: COMPLETED_FAIL_CLOSED_ON_KNOWN_SOURCE_RENDERED_MEDIA_DEBT
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  negative_regression_fixtures: PASS
+  security_structured_metadata: PASS
+  security_article_watch_contract_and_negative_locale_parity_guard: PASS
+  shared_security_plus_reference_contexts: 64
+  shared_security_plus_reference_classifier_mutations: 20
+  shared_security_plus_reference_failures: 0
+  focused_security_browser: PASS
+  contrast_and_legibility: PASS
+  text_visibility_desktop_mobile_normal_reduced: PASS
+  real_mobile_touch: PASS
+  keyboard_and_focus: PASS
+  prompt_injection_visual_states: PASS
+  video_lifecycle_technical: PASS
+  runtime_listener_lifetime_through_teardown: PASS
+  full_catalogue_browser_repeated: false
+  final_enforcement_reason: known required video declaration/caption/transcript/chapter and media-audio debt
 
 security00_locale_parity:
   defect: ES presentation omitted the related-series and all-series navigation present in EN
-  detected: 2026-09-16
   repaired: true
   repair_commit: 77c4eacb7d758e73f6ec3e45a430f1bf9552f14c
   deterministic_guard_commit: e106e789a5cebbcea220ce911a2921dd15371057
   guard_file: scripts/validate_security_article_watch_contract.py
-  guard_contract:
-    reads_real_es_en_security00_markdown: true
-    expected_canonical_series_links:
-      - /series/modelos-razonadores/00_presentacion_serie/
-      - /series/agentes-ia/00_presentacion_serie/
-      - /series/
-    rejects_cross_locale_series_paths: true
-    requires_localized_related_series_labels: true
-    requires_es_en_canonical_link_set_equality: true
-    negative_link_removal_mutation: REQUIRED_TO_FAIL
-  es_added_navigation:
-    - /series/modelos-razonadores/00_presentacion_serie/
-    - /series/agentes-ia/00_presentacion_serie/
-    - /series/
-  en_equivalents:
-    - /en/series/modelos-razonadores/00_presentacion_serie/
-    - /en/series/agentes-ia/00_presentacion_serie/
-    - /en/series/
-  date_modified_records_real_edit: 2026-09-16
   exact_integration_validation: PASS_REV76
-  current_head_pixel_validation: PASS_CONTENT_SCOPED_REV77
+  current_head_pixel_validation: PASS_CONTENT_SCOPED_REV78
   article_golden_effect: STILL_FALSE
 
 media:
@@ -178,29 +123,8 @@ media:
   fabricated_transcript_or_timings: false
 
 editorial:
-  PIXEL_REVIEW: FAIL_CLOSED_MEDIA_SURFACE_PENDING
-  PEDAGOGY_REVIEW: FAIL_CLOSED_MEDIA_SURFACE_PENDING
-  rev77_current_head_capture:
-    action: 35145128901
-    exact_head: 337248d0531e28330335a846791b4ba9b6de8440
-    artifact_id: 10466797070
-    artifact_digest: sha256:25ec37cae1698a8e6c1204653a5810b6756969eb4a2a416cfab0fa43a5c924cf
-    artifact_retention_days: 1
-    site_facing_bytes_changed_from_rev76: false
-    strict_es: PASS
-    strict_en: PASS
-    shared_tooltip_negative_mutation: PASS
-    editorial_contexts_expected: 16
-    editorial_contexts_observed: 16
-    editorial_failures: 0
-    editorial_runtime_unexpected: 0
-    semantic_trace_contexts_expected: 16
-    semantic_trace_contexts_observed: 16
-    semantic_trace_checkpoints: 64
-    semantic_trace_failures: 0
-    semantic_trace_runtime_unexpected: 0
-    prompt_state_contexts: 8
-    prompt_state_failures: 0
+  PIXEL_REVIEW: FAIL_CLOSED_REQUIRED_MEDIA_CONTENT_INCOMPLETE
+  PEDAGOGY_REVIEW: FAIL_CLOSED_REQUIRED_MEDIA_CONTENT_INCOMPLETE
   security00_manual_rev77:
     reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
     whole_page_contexts_inspected: 8
@@ -209,24 +133,59 @@ editorial:
     mobile: true
     normal_motion: true
     reduced_motion: true
-    static_and_interactive_pixel_review: PASS_CURRENT_HEAD_REV77_CONTENT_SCOPED
-    interactive_pedagogy_review: PASS_CURRENT_HEAD_REV77_CONTENT_SCOPED
+    static_and_interactive_pixel_review: PASS_CURRENT_HEAD_CONTENT_SCOPED
+    interactive_pedagogy_review: PASS_CURRENT_HEAD_CONTENT_SCOPED
     new_visible_p0_p1_p2_found: 0
-    observed_quality:
-      - ES footer related-series and all-series parity is visibly present and localized.
-      - Spanish poster headline remains fully visible on desktop and mobile.
-      - No raw TeX or accidental HTML, global horizontal overflow, clipping, visible overlap or broken-resource artifact was found in inspected Security00 article and secpath pixels.
-      - Mobile secpath uses a readable vertical causal path instead of requiring a giant horizontal canvas.
-      - Normal and reduced motion preserve the same causal states and outcomes.
-      - Bounded mode stops at the authorization boundary with BLOCKED; broad permissions reach External effect/EFFECT.
-      - State changes alter path geometry/progress, active stage, boundary state and outcome rather than only color or labels.
-      - Real-viewport semantic targets inspected were not occluded by sticky chrome.
-    limitation:
-      - required incomplete video/media surface is not certified by this content-scoped PASS
-      - poster-play-pause-seek-end-next player pixels were not manually re-reviewed in rev77
-      - Security01 does not inherit Security00 editorial PASS
+  rev78_current_head_capture:
+    action: 35151129732
+    exact_head: 63b2741bf37dabe20edf97fdaf538e21e157317a
+    result: SUCCESS
+    artifact_id: 10468524974
+    artifact_digest: sha256:f08b9958ebee4dfc4c7acb2bc5f50345b1e8b60669e1a0ab571f62dec052d5c0
+    artifact_retention_days: 1
+    strict_es: PASS
+    strict_en: PASS
+    shared_tooltip_negative_mutation: PASS
+    whole_article_and_per_asset_capture: PASS
+    semantic_trace_capture: PASS
+    prompt_state_gate: PASS
+    canonical_video_lifecycle_gate: PASS
+    canonical_video_lifecycle_contexts_expected: 16
+    canonical_video_lifecycle_contexts_observed: 16
+    canonical_video_lifecycle_failures: 0
+    lifecycle_state_contexts_expected: 8
+    lifecycle_state_contexts_observed: 8
+    lifecycle_state_screenshots_observed: 48
+    lifecycle_state_failures: 0
+    site_facing_bytes_changed: false
+  security00_manual_rev78_lifecycle:
+    reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
+    lifecycle_pixel_contexts_manually_inspected: 8
+    lifecycle_state_images_manually_inspected: 48
+    locales: [es, en]
+    desktop_1440: true
+    mobile_390: true
+    normal_motion: true
+    reduced_motion: true
+    states: [poster, playing, paused, seeked, ended_reset, next_article]
+    pixel_review: PASS_CURRENT_HEAD_REV78_LIFECYCLE_SURFACE_CONTENT_SCOPED
+    pedagogy_review: PASS_CURRENT_HEAD_REV78_LIFECYCLE_SURFACE_CONTENT_SCOPED
+    new_visible_p0_p1_p2_found: 0
+    observations:
+      - poster text and diagrams are legible without clipping or overlap in both locales and viewports
+      - playing, paused and seeked states show coherent native video frames and controls without broken-resource surfaces or accidental markup
+      - ended state restores the localized poster cleanly
+      - next navigation visibly reaches the localized Prompt Injection article
+      - normal and reduced motion preserve the same lifecycle semantics
+      - ES and EN retain distinct native video artwork/content with no visible cross-locale media fallback
+      - mobile lifecycle surface does not require a giant horizontal canvas or global horizontal scrolling
+    limitations:
+      - visual capture is muted for deterministic browser interaction and provides no evidence for audio/narration
+      - authorized narration, captions, transcript and curated key moments remain missing
+      - Security01 does not inherit Security00 editorial review
       - same-orchestrator review is not represented as independent review
-  last_complete_security00_pre_current_head_manual_evidence: REV66_SAME_AGENT_ONLY
+    global_pixel_review_after_rev78: false
+    global_pedagogy_review_after_rev78: false
   technical_browser_gates_do_not_equal_editorial_pass: true
 
 sources_and_locales:
@@ -239,19 +198,28 @@ sources_and_locales:
     - indirect prompt injection can arrive through external content
     - external content should be treated as untrusted
     - least privilege and explicit authorization constrain high-impact actions
-  security00_es_en_text_and_secpath_manual_parity: PASS
-  security00_es_en_navigation_parity_repaired_current_head: true
+  security00_es_en_text_secpath_and_navigation_manual_parity: PASS_CONTENT_SCOPED
 
 release_and_concurrency:
-  main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  main_at_last_read: 376af1b8002c3ebff33a4d637d88b38ec7533d9d
   repair_branch: quality/post-datacenters-requalification
-  repair_branch_head_before_this_status_write: cea18f8cc7a3c4cf02e1e832234e3bfa61c7d9a9
-  branch_behind_main_at_last_verified_receipt: 0
+  main_reconciliation_current_run:
+    branch_was_diverged: true
+    main_only_commits_before_reconcile: 24
+    main_only_scope: bilingual_tool_SEO_GEO_shell
+    overlapping_paths_with_requalification: 0
+    merge_commit: e04c850f0eb10c5e75910431b994ee93e300d3a5
+    merge_parents:
+      - f73f304fcca0da127c42ccb285d73cc362389b60
+      - 376af1b8002c3ebff33a4d637d88b38ec7533d9d
+    force_push: false
+    branch_behind_main_after_merge: 0
+    datacenters_or_pre_datacenters_content_modified: false
+  branch_head_before_this_status_write: 48d0238c00cef6e17c5275df275e86f625b61d6a
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
-  datacenters_or_pre_datacenters_content_modified_current_change: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
@@ -287,6 +255,7 @@ historical_receipts_preserved:
   - quality/series-requalification/security-00-01-revision74.yml
   - quality/series-requalification/security-00-01-revision75.yml
   - quality/series-requalification/security-00-01-revision77.yml
+  - quality/series-requalification/security-00-01-revision78.yml
   - quality/series-requalification/dom-inspection-diagnosis.yml
   - quality/series-requalification/full-browser-timeout-diagnosis.yml
   - quality/series-requalification/full-browser-abort-hardening.yml
@@ -296,8 +265,8 @@ historical_receipts_preserved:
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - EXTEND_CURRENT_HEAD_MEDIA_QA_TO_RETAIN_AND_MANUALLY_REVIEW_POSTER_PLAY_PAUSE_SEEK_END_NEXT_PIXELS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_WITHOUT_PRETENDING_MISSING_AUDIO_CAPTIONS_TRANSCRIPT_KEY_MOMENTS_ARE_ACCEPTABLE
-    - CONTINUE_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_WITHOUT_ADVANCING_ARTICLE
+    - CONTINUE_FAIL_CLOSED_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_FOR_REMAINING_CATALOGUE_WITHOUT_ADVANCING_THE_ACTIVE_ARTICLE
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_INPUTS_ONLY_WHEN_NEW_EVIDENCE_OR_STORAGE_SURFACE_EXISTS; DO_NOT_SYNTHESIZE_CLONE_OR_SUBSTITUTE_VOICE
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
     - CAPTIONS
