@@ -15,7 +15,7 @@ concurrency:
 jobs:
   capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -98,12 +98,33 @@ jobs:
           node scripts/validate_security_prompt_visual_states.mjs
           test -s artifacts/security-requalification/prompt-states/report.json
 
+      - name: Re-run canonical poster play pause seek end next lifecycle gate
+        id: video_lifecycle
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          node scripts/validate_security_video_lifecycle.mjs --self-test
+          node scripts/validate_security_video_lifecycle.mjs
+          test -s artifacts/security-requalification/video-lifecycle/report.json
+
+      - name: Retain bounded Security00 lifecycle state pixels for manual review
+        id: lifecycle_state_capture
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          S5_SECURITY_LIFECYCLE_STATE_DIR: artifacts/security-requalification/video-lifecycle-states
+        run: |
+          node scripts/capture_security_video_lifecycle_states.mjs
+          test -s artifacts/security-requalification/video-lifecycle-states/report.json
+
       - name: Summarize technical capture without editorial certification
         if: always()
         env:
           EDITORIAL_OUTCOME: ${{ steps.editorial_capture.outcome }}
           TRACE_OUTCOME: ${{ steps.trace_checkpoints.outcome }}
           PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
+          VIDEO_LIFECYCLE_OUTCOME: ${{ steps.video_lifecycle.outcome }}
+          LIFECYCLE_STATE_CAPTURE_OUTCOME: ${{ steps.lifecycle_state_capture.outcome }}
         run: |
           python - <<'PY'
           import json, os
@@ -112,15 +133,22 @@ jobs:
           editorial_path = Path('artifacts/security-requalification/editorial-evidence/report.json')
           trace_path = Path('artifacts/security-requalification/trace-checkpoints/report.json')
           prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
+          lifecycle_path = Path('artifacts/security-requalification/video-lifecycle/report.json')
+          lifecycle_states_path = Path('artifacts/security-requalification/video-lifecycle-states/report.json')
           summary = {
               'editorial_capture_outcome': os.environ.get('EDITORIAL_OUTCOME', ''),
               'trace_checkpoints_outcome': os.environ.get('TRACE_OUTCOME', ''),
               'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
+              'video_lifecycle_outcome': os.environ.get('VIDEO_LIFECYCLE_OUTCOME', ''),
+              'lifecycle_state_capture_outcome': os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME', ''),
               'editorial_report_present': editorial_path.exists(),
               'trace_report_present': trace_path.exists(),
               'prompt_report_present': prompt_path.exists(),
+              'video_lifecycle_report_present': lifecycle_path.exists(),
+              'lifecycle_state_report_present': lifecycle_states_path.exists(),
               'golden': False,
-              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
+              'media_pass': False,
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES_VIDEO_STATES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
               'pedagogy_review': 'PENDING_MANUAL_EDITORIAL_REVIEW; TECHNICAL_CAPTURE_CANNOT_CERTIFY',
           }
           if editorial_path.exists():
@@ -167,12 +195,30 @@ jobs:
                   'prompt_failure_count': len(failures),
                   'prompt_runtime_unexpected_total': sum(len(row.get('runtime_unexpected', [])) for row in evidence),
               })
+          if lifecycle_path.exists():
+              data = json.loads(lifecycle_path.read_text())
+              summary.update({
+                  'video_lifecycle_contexts_expected': data.get('contexts_expected'),
+                  'video_lifecycle_contexts_observed': data.get('contexts_observed'),
+                  'video_lifecycle_failure_count': len(data.get('failures', [])),
+              })
+          if lifecycle_states_path.exists():
+              data = json.loads(lifecycle_states_path.read_text())
+              summary.update({
+                  'lifecycle_state_contexts_expected': data.get('expected_contexts'),
+                  'lifecycle_state_contexts_observed': data.get('contexts_observed'),
+                  'lifecycle_state_screenshots_observed': data.get('screenshots_observed'),
+                  'lifecycle_state_failure_count': len(data.get('failures', [])),
+                  'lifecycle_state_media_audio_evidence': data.get('media_audio_evidence'),
+              })
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
-          ok = (
-              os.environ.get('EDITORIAL_OUTCOME') == 'success'
-              and os.environ.get('TRACE_OUTCOME') == 'success'
-              and os.environ.get('PROMPT_STATES_OUTCOME') == 'success'
-          )
+          ok = all([
+              os.environ.get('EDITORIAL_OUTCOME') == 'success',
+              os.environ.get('TRACE_OUTCOME') == 'success',
+              os.environ.get('PROMPT_STATES_OUTCOME') == 'success',
+              os.environ.get('VIDEO_LIFECYCLE_OUTCOME') == 'success',
+              os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME') == 'success',
+          ])
           raise SystemExit(0 if ok else 1)
           PY
 
@@ -187,6 +233,9 @@ jobs:
             artifacts/security-requalification/trace-checkpoints/report.json
             artifacts/security-requalification/trace-checkpoints/screenshots/*.jpg
             artifacts/security-requalification/prompt-states/report.json
+            artifacts/security-requalification/video-lifecycle/report.json
+            artifacts/security-requalification/video-lifecycle-states/report.json
+            artifacts/security-requalification/video-lifecycle-states/screenshots/*.jpg
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
