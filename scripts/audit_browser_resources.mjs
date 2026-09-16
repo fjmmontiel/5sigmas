@@ -115,13 +115,29 @@ const priorSameRequestResponse = (event, record) => (record.networkResponses ?? 
   && [200, 206].includes(response.status)
 ));
 
+const requestStartClock = (start) => {
+  if (!start) return null;
+  if (Number.isFinite(start.startedAtMs)) {
+    return { observedAtMs: start.startedAtMs, source: 'playwright-request-timing' };
+  }
+  if (Number.isFinite(start.nodeObservedAtMs)) {
+    return { observedAtMs: start.nodeObservedAtMs, source: 'node-request-event' };
+  }
+  return null;
+};
+
 const redundantAbortProof = (event, record) => {
   const start = (record.mediaRequestStarts ?? []).find((candidate) => (
     candidate.requestId === event.requestId
     && candidate.url === event.url
   ));
-  if (!start || !Number.isFinite(start.startedAtMs)) {
+  if (!start) {
     return { proven: false, reason: 'missing-request-start' };
+  }
+
+  const startClock = requestStartClock(start);
+  if (!startClock) {
+    return { proven: false, reason: 'missing-request-start-timestamp', start };
   }
 
   const checkpoint = (record.mediaHealthCheckpoints ?? [])
@@ -129,11 +145,16 @@ const redundantAbortProof = (event, record) => {
       candidate.sources.includes(event.url)
       && isHealthyCheckpoint(candidate)
       && Number.isFinite(candidate.observedAtMs)
-      && candidate.observedAtMs <= start.startedAtMs
+      && candidate.observedAtMs <= startClock.observedAtMs
     ))
     .sort((left, right) => right.observedAtMs - left.observedAtMs)[0];
   if (!checkpoint) {
-    return { proven: false, reason: 'no-healthy-metadata-before-request-start', start };
+    return {
+      proven: false,
+      reason: 'no-healthy-metadata-before-request-start',
+      start,
+      startClock,
+    };
   }
 
   const priorResponse = (record.networkResponses ?? [])
@@ -143,7 +164,7 @@ const redundantAbortProof = (event, record) => {
       && [200, 206].includes(response.status)
       && response.seq < start.seq
       && Number.isFinite(response.observedAtMs)
-      && response.observedAtMs <= start.startedAtMs
+      && response.observedAtMs <= startClock.observedAtMs
     ))
     .sort((left, right) => right.observedAtMs - left.observedAtMs)[0];
   if (!priorResponse) {
@@ -151,11 +172,18 @@ const redundantAbortProof = (event, record) => {
       proven: false,
       reason: 'no-prior-successful-different-request-before-redundant-start',
       start,
+      startClock,
       checkpoint,
     };
   }
 
-  return { proven: true, start, checkpoint, priorResponse };
+  return {
+    proven: true,
+    start,
+    startClock,
+    checkpoint,
+    priorResponse,
+  };
 };
 
 const classifyRequestFailure = (event, record) => {
@@ -234,10 +262,18 @@ const runClassifierMutations = () => {
     mediaHealthCheckpoints: [healthyCheckpoint],
     networkResponses: [{ seq: 2, requestId: 'media-1', url, status: 206, observedAtMs: 90 }],
   };
+  const redundantRecordNodeClock = {
+    ...redundantRecord,
+    mediaRequestStarts: [
+      { seq: 1, requestId: 'media-1', url, startedAtMs: 80, nodeObservedAtMs: 80 },
+      { seq: 6, requestId: 'media-2', url, startedAtMs: null, nodeObservedAtMs: 120 },
+    ],
+  };
 
   const fixtures = [
     ['proven same-request metadata cancellation', lazyAbort, sameRequestRecord, true],
     ['redundant request after healthy metadata and prior response', redundantAbort, redundantRecord, true],
+    ['redundant request uses request-event clock when browser timing is unavailable', redundantAbort, redundantRecordNodeClock, true],
     ['later same-source response cannot prove earlier abort', lazyAbort, {
       videos: [healthyVideo],
       mediaRequestStarts: [{ seq: 1, requestId: 'media-1', url, startedAtMs: 90 }],
@@ -263,6 +299,13 @@ const runClassifierMutations = () => {
     ['missing redundant request start', redundantAbort, {
       ...redundantRecord,
       mediaRequestStarts: redundantRecord.mediaRequestStarts.filter((item) => item.requestId !== 'media-2'),
+    }, false],
+    ['request start without any usable clock remains fatal', redundantAbort, {
+      ...redundantRecord,
+      mediaRequestStarts: [
+        redundantRecord.mediaRequestStarts[0],
+        { seq: 6, requestId: 'media-2', url, startedAtMs: null, nodeObservedAtMs: null },
+      ],
     }, false],
     ['prior response after redundant request start', redundantAbort, {
       ...redundantRecord,
@@ -618,8 +661,8 @@ const auditContext = async ({ route, profileName, order }) => {
 const writeReport = async ({ complete }) => {
   const sortedContexts = [...contextRecords].sort((left, right) => left.order - right.order);
   const report = {
-    schema_version: 5,
-    verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_START_RESPONSE_AND_PRE_REQUEST_METADATA_SEQUENCE_PROOF',
+    schema_version: 6,
+    verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_EVENT_CLOCK_RESPONSE_AND_PRE_REQUEST_METADATA_SEQUENCE_PROOF',
     execution_model: 'BOUNDED_PARALLEL_BATCHES_WITH_INCREMENTAL_REPORTING',
     browser_runtime: browserRuntime,
     complete,
