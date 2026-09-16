@@ -1,4 +1,4 @@
-schema_version: 42
+schema_version: 43
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -35,14 +35,15 @@ global_gate_state:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  source_debt_rev75:
+  source_debt_rev79:
     VIDEO_DECLARATION_MISSING: 60
     VIDEO_CAPTIONS_MISSING: 24
     VIDEO_TRANSCRIPT_MISSING: 24
     VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SECTION_MAP_MISSING: 24
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
-  rendered_debt_rev75:
+  rendered_debt_rev79:
     VIDEO_NOT_RENDERED: 60
     RAW_TEX_RENDERED: 0
   browser_last_authoritative_completed_full_run_rev75:
@@ -65,9 +66,17 @@ shared_gate_hardening:
   raw_tex_renderer_and_browser_visibility: PASS_ZERO_VISIBLE_TEX_REV75
   browser_listener_lifetime_through_teardown: PASS
   dom_subprobe_timeout_fail_closed: PASS
-  shared_security_plus_datacenters_pre_datacenters_regression: PASS
+  shared_security_plus_datacenters_pre_datacenters_regression: PASS_REV79
   reference_content_modified: false
   current_thresholds_relaxed_to_hide_defect: false
+  video_curriculum_section_mapping_rev79:
+    every_h2_on_declared_video_page_requires_mapping: true
+    section_must_match_locale_native_h2: true
+    key_moment_must_exist_in_video_chapters: true
+    multiple_h2s_may_share_one_key_moment: true
+    one_mp4_per_h2_required: false
+    missing_mapping_fails_closed: true
+    mutation_fixtures: PASS
 
 rev76_exact_head_integration:
   action: 35139328045
@@ -94,13 +103,51 @@ rev76_exact_head_integration:
   full_catalogue_browser_repeated: false
   final_enforcement_reason: known required video declaration/caption/transcript/chapter and media-audio debt
 
+rev79_exact_head_integration:
+  action: 35156245155
+  exact_head: bc3d33de4d378e7489a8481daaeb99f7e2673439
+  state: COMPLETED_FAIL_CLOSED_ON_SOURCE_AND_MEDIA_CONTRACT_DEBT
+  result: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10471221980
+  artifact_digest: sha256:eea7d5badf63dc2341cf2464973bcac288c183f277bdc27e59431b24e43190db
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  negative_regression_fixtures: PASS
+  source_inventory_pages_per_locale: 42
+  source_inventory_locale_pages: 84
+  rendered_html_audited: true
+  shared_security_plus_reference_contexts_expected: 64
+  shared_security_plus_reference_contexts_observed: 64
+  shared_security_plus_reference_classifier_mutations: 20
+  shared_security_plus_reference_failures: 0
+  focused_security_browser_contexts_expected: 16
+  focused_security_browser_contexts_observed: 16
+  focused_security_browser_failures: 0
+  contrast_and_legibility: PASS
+  text_visibility_desktop_mobile_normal_reduced: PASS
+  real_mobile_touch: PASS
+  keyboard_and_focus: PASS
+  prompt_injection_visual_states: PASS
+  video_lifecycle_contexts_expected: 16
+  video_lifecycle_contexts_observed: 16
+  video_lifecycle_failures: 0
+  runtime_listener_lifetime_contexts_expected: 16
+  runtime_listener_lifetime_contexts_observed: 16
+  runtime_listener_lifetime_failures: 0
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
+  final_enforcement_reason: source and media contract debt including missing curriculum section to key-moment mappings
+
 security00_locale_parity:
   defect: ES presentation omitted the related-series and all-series navigation present in EN
   repaired: true
   repair_commit: 77c4eacb7d758e73f6ec3e45a430f1bf9552f14c
   deterministic_guard_commit: e106e789a5cebbcea220ce911a2921dd15371057
   guard_file: scripts/validate_security_article_watch_contract.py
-  exact_integration_validation: PASS_REV76
+  exact_integration_validation: PASS_REV79
   current_head_pixel_validation: PASS_CONTENT_SCOPED_REV78
   article_golden_effect: STILL_FALSE
 
@@ -186,6 +233,11 @@ editorial:
       - same-orchestrator review is not represented as independent review
     global_pixel_review_after_rev78: false
     global_pedagogy_review_after_rev78: false
+  rev79_editorial_scope:
+    published_site_bytes_changed: false
+    new_manual_pixel_review: false
+    new_manual_pedagogy_review: false
+    carry_forward_only_revision_scoped_security00_evidence: rev78
   technical_browser_gates_do_not_equal_editorial_pass: true
 
 sources_and_locales:
@@ -199,6 +251,8 @@ sources_and_locales:
     - external content should be treated as untrusted
     - least privilege and explicit authorization constrain high-impact actions
   security00_es_en_text_secpath_and_navigation_manual_parity: PASS_CONTENT_SCOPED
+  rev79_content_or_claim_change: false
+  rev79_new_factual_source_recertification: false
 
 release_and_concurrency:
   main_at_last_read: 376af1b8002c3ebff33a4d637d88b38ec7533d9d
@@ -215,7 +269,8 @@ release_and_concurrency:
     force_push: false
     branch_behind_main_after_merge: 0
     datacenters_or_pre_datacenters_content_modified: false
-  branch_head_before_this_status_write: 48d0238c00cef6e17c5275df275e86f625b61d6a
+  rev79_audited_head: bc3d33de4d378e7489a8481daaeb99f7e2673439
+  branch_head_before_this_status_write: 32a0bdb28aa221277992a9e258ebf32d00dd91ee
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
   production_merge: false
@@ -256,6 +311,7 @@ historical_receipts_preserved:
   - quality/series-requalification/security-00-01-revision75.yml
   - quality/series-requalification/security-00-01-revision77.yml
   - quality/series-requalification/security-00-01-revision78.yml
+  - quality/series-requalification/security-00-01-revision79.yml
   - quality/series-requalification/dom-inspection-diagnosis.yml
   - quality/series-requalification/full-browser-timeout-diagnosis.yml
   - quality/series-requalification/full-browser-abort-hardening.yml
@@ -265,7 +321,8 @@ historical_receipts_preserved:
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - CONTINUE_FAIL_CLOSED_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_FOR_REMAINING_CATALOGUE_WITHOUT_ADVANCING_THE_ACTIVE_ARTICLE
+    - BUILD_EXPLICIT_LOCALE_NATIVE_H2_TO_CURATED_KEY_MOMENT_INVENTORY_FOR_DECLARED_VIDEO_PAGES_WITHOUT_FABRICATING_TIMINGS_OR_CONTENT
+    - CONTINUE_FAIL_CLOSED_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_FOR_60_UNDECLARED_LOCALE_PAGES_WITHOUT_ADVANCING_THE_ACTIVE_ARTICLE
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_INPUTS_ONLY_WHEN_NEW_EVIDENCE_OR_STORAGE_SURFACE_EXISTS; DO_NOT_SYNTHESIZE_CLONE_OR_SUBSTITUTE_VOICE
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
