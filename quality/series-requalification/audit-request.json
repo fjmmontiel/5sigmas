@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 50,
+  "diagnostic_revision": 55,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "93e063fec4cb850dd5b92e25c068c511c1d629fc",
-  "reason": "Exact-QA the repaired Security 00/01 article-watch real-touch classifier after revision 49. The gate must prove the current request-correlated policy on all ES/EN mobile normal/reduced contexts without reinstating a blanket ERR_ABORTED allow-list: navigation cancellation is admissible only for the exact native media request after successful destination navigation, and watch-interaction range cancellation requires a prior 200/206 on the same Request plus a healthy exact-source player. Re-run the already-hardened focused browser, contrast/text visibility, lifecycle, Prompt Injection visual states, keyboard/focus and independent post-teardown listener sentinel on the same exact head. Site-facing bytes are unchanged. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to the last real manual review, and do not grant ARTICLE_GOLDEN. The separate capture_security_visuals direct execution remains mandatory before closing specialized gate debt.",
+  "requested_head_parent": "6f15957ba83de0dec5b47758907a37c26bb06e08",
+  "reason": "Exact-QA the hardened shared browser-resource gate now integrated into the existing diagnostic. Exercise Security 00/01 plus explicit Datacenters and one presentation route from every pre-Datacenters reference series in both ES and EN, across desktop ~1440 and mobile ~390, normal and reduced motion. The gate must keep pageerror, console:error, HTTP>=400 and requestfailed listeners active through lazy-resource/media loading and context teardown, reject ERR_ABORTED outside teardown, and compute the verdict only after teardown. This is regression evidence for a shared gate change, not a whole-catalogue BROWSER_PASS and not touch-interaction certification. Re-run the existing focused Security technical gates on the same exact head. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed, keep PIXEL/PEDAGOGY tied to actual manual review evidence, and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
