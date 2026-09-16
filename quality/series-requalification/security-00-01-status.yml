@@ -1,4 +1,4 @@
-schema_version: 29
+schema_version: 30
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -46,112 +46,89 @@ last_full_exact_qa:
   run_id: 35006430159
   note: Full focused exact-QA before later bounded milestones; SOURCE, RENDERED and MEDIA remained fail-closed.
 
-specialized_capture_milestones:
-  revision_54:
-    run_id: 35018155184
-    exact_head: 676ae5982de6c8f4fa5b1bf3d05d2bf1d6c416f1
-    overall: PASS_BOUNDED_TECHNICAL_CAPTURE
-    strict_es: PASS
-    strict_en: PASS
-    direct_capture_security_visuals: PASS_56_OF_56_POST_TEARDOWN
-    prompt_state_outcome: PASS_8_OF_8_POST_TEARDOWN
-    prompt_failure_count: 0
-    artifact:
-      id: 10417245002
-      bytes: 686611
-      retention_days: 1
-  revision_55:
-    run_id: 35039168019
-    exact_head: 5fe98f976d8f0d828d31bb508ee0c6012a43ccd3
-    overall: FAIL_CLOSED
-    focused_security_technical_set: PASS
-    shared_browser_resources: FAIL_64_OF_64_MEDIA_ERR_ABORTED_LAZY_LOAD
-    global_browser_sweep: INTENTIONALLY_SKIPPED
-    source: FAIL
-    rendered: FAIL
-    media: FAIL
-    artifact:
-      id: 10423809929
-      bytes: 44518360
-      retention_days: 1
-  revision_56:
-    run_id: 35040683005
-    job_id: 104619617705
-    exact_head: 5c609314bb3b65d7168774381499e12391015422
-    overall: FAIL_CLOSED
-    strict_es: PASS
-    strict_en: PASS
-    publication_discovery: PASS
-    publication_contract: PASS
-    structured_provenance_locale: PASS
-    article_watch_contract: PASS
-    focused_security_browser: PASS
-    focused_security_contrast: PASS
-    focused_security_text_visibility: PASS
-    focused_security_video_lifecycle: PASS
-    focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
-    focused_security_prompt_states: PASS_TECHNICAL_ONLY
-    focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
-    focused_security_listener_lifetime: PASS_POST_CONTEXT_TEARDOWN
-    shared_browser_resources:
-      state: FAIL
-      requested_routes: 16
-      profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-      contexts_expected: 64
-      contexts_observed: 64
-      mutation_fixture_count: 11
-      failure_count: 64
-      expected_abort_count: 0
-      signature: FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO
-      interpretation: DETERMINISTIC_AUDIT_SELF_CANCELLATION_NOT_64_PUBLISHED_MEDIA_BREAKAGES
-    global_browser_sweep: INTENTIONALLY_SKIPPED
-    source: FAIL
-    rendered: FAIL
-    media: FAIL
-    artifact:
-      id: 10426070817
-      compressed_bytes: 124619
-      json_files: 11
-      uncompressed_bytes: 2737041
-      retention_days: 1
-      expires_at: 2026-09-17T01:01:27Z
-  revision_57:
-    run_id: 35050844662
-    job_id: 104650666002
-    exact_head: 042d2db0d5ab80ae8cf96586a43c35613910e5c3
-    overall: FAIL_CLOSED_TIMEOUT
-    strict_es: PASS
-    strict_en: PASS
-    publication_discovery: PASS_5_OF_5_FIXTURES
-    publication_contract: PASS_13_PUBLIC_SERIES_67_CHAPTERS_75_PAGES
-    structured_provenance_locale: PASS
-    article_watch_contract: PASS
-    focused_security_browser: PASS
-    focused_security_contrast: PASS_128_STATE_CONTEXT_RECORDS
-    focused_security_text_visibility: PASS_8_CONTEXTS_X_4_STATES
-    focused_security_video_lifecycle: PASS
-    focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
-    focused_security_prompt_states: PASS_TECHNICAL_ONLY
-    focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
-    focused_security_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
-    shared_browser_resources:
-      state: FAIL_TIMEOUT
-      requested_routes: 16
-      profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-      contexts_expected: 64
-      timeout_minutes: 12
-      verdict_produced: false
-      report_uploaded: false
-      interpretation: SERIAL_64_CONTEXT_EXECUTION_EXCEEDED_TIME_BUDGET
-    global_browser_sweep: INTENTIONALLY_SKIPPED
-    source: FAIL
-    rendered: FAIL
-    media: FAIL
-    artifact:
-      id: 10429576757
-      compressed_bytes: 124477
-      retention_days: 1
-      expires_at: 2026-09-17T03:34:47Z
+latest_specialized_exact_qa:
+  revision: 58
+  run_id: 35054518006
+  job_id: 104661760793
+  exact_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
+  overall: FAIL_CLOSED_SHARED_BROWSER_RESOURCE_GATE
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS_5_OF_5_FIXTURES
+  publication_contract: PASS_13_PUBLIC_SERIES_67_CHAPTERS_75_PAGES
+  structured_provenance_locale: PASS
+  article_watch_contract: PASS
+  focused_security_browser: PASS
+  focused_security_contrast: PASS_128_STATE_CONTEXT_RECORDS
+  focused_security_text_visibility: PASS_8_CONTEXTS_X_4_STATES
+  focused_security_video_lifecycle: PASS
+  focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
+  focused_security_prompt_states: PASS_TECHNICAL_ONLY
+  focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  focused_security_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
+  negative_mutation_fixtures: PASS_26_OF_26
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+  shared_browser_resources:
+    state: FAIL
+    requested_routes: 16
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    contexts_expected: 64
+    contexts_observed: 64
+    concurrency: 4
+    elapsed_ms: 104699
+    failure_count: 128
+    failures_per_context: 2
+    signatures:
+      - VIDEO_METADATA_UNHEALTHY_READY_STATE_0_NETWORK_STATE_NO_SOURCE
+      - FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO
+    preview_range_206: true
+    matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+    interpretation: >-
+      Revision 58 closed the revision-57 timeout and produced a complete 64-context verdict. The identical H.264 metadata failure pattern
+      on Security and Datacenters/pre-Datacenters, while the dedicated lifecycle gate passes the same Security media using system Chrome
+      and the preview server returns byte-range 206, strongly indicates a browser-runtime/codec mismatch in this shared gate. This is a
+      diagnosis pending exact-QA of the repaired gate and does not grant BROWSER_PASS.
+  source: FAIL
+  rendered: FAIL
+  media: FAIL
+  artifact:
+    id: 10429934581
+    compressed_bytes: 127526
+    files: 12
+    retention_days: 1
+
+shared_gate_hardening:
+  BROWSER_RESOURCE_AUDIT:
+    state: IMPLEMENTED_PENDING_EXACT_QA_AFTER_REVISION58_BROWSER_RUNTIME_REPAIR
+    path: scripts/audit_browser_resources.mjs
+    original_hardening_commit: 770f782cc4ba3cd6ccc1eee060660102d78b1590
+    request_response_correlation_commit: 47cde00854142114f43837001f6bdf23a5ddfb79
+    self_reset_removal_commit: f270ca0d37a526993ff7f8af41fea139444c6454
+    bounded_parallel_runtime_commit: a3802a05da6d2d37048514f175448d671cf59df8
+    browser_runtime_repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
+    repair:
+      - PREFER_SYSTEM_CHROME_CHANNEL_FOR_H264_MEDIA_AUDIT
+      - FALL_BACK_TO_BUNDLED_PLAYWRIGHT_CHROMIUM_FAIL_CLOSED
+      - RECORD_REQUESTED_ACTUAL_BROWSER_CHANNEL_VERSION_AND_FALLBACK_REASON
+      - PRESERVE_ALL_64_ROUTE_PROFILE_CONTEXTS
+      - PRESERVE_BOUNDED_PARALLEL_BATCHES_DEFAULT_4_MAX_8
+      - PRESERVE_INCREMENTAL_REPORT_AND_TIMINGS
+      - PRESERVE_STRICT_METADATA_HEALTH_REQUIREMENT
+      - PRESERVE_STABLE_REQUEST_IDENTITY_AND_HTTP_200_206_CORRELATION
+      - PRESERVE_LISTENERS_THROUGH_CONTEXT_CLOSE
+      - PRESERVE_POST_CONTEXT_TEARDOWN_VERDICT
+      - PRESERVE_11_SHARED_CLASSIFIER_MUTATIONS
+    report_schema_version: 4
+    site_facing_bytes_changed: false
+    thresholds_lowered: false
+    coverage_reduced: false
+    blanket_err_aborted_allowlist: false
+    local_syntax_check: NOT_EXECUTED_IN_THIS_RUNTIME
+    action_triggered_after_repair_commit: false
+    exact_qa_required_before_browser_pass: true
+    touch_claim: >-
+      Mobile profiles are touch-capable only to expose mobile loading behavior. This shared resource gate does not certify real touch;
+      the dedicated Security touch gate owns that contract.
 
 specialized_debt:
   SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN:
@@ -160,73 +137,31 @@ specialized_debt:
     state: CLOSED_BY_REVISION_54
     thresholds_lowered: false
   FOCUSED_DIAGNOSTIC_ARTIFACT_TOO_LARGE:
-    state: CLOSED_BY_REVISION56_AND_REVISION57_FOCUSED_JSON_ONLY_ARTIFACT
+    state: CLOSED_BY_REVISION56_AND_LATER_JSON_ONLY_ARTIFACTS
     revision_55_bytes: 44518360
     revision_56_compressed_bytes: 124619
     revision_57_compressed_bytes: 124477
+    revision_58_compressed_bytes: 127526
     retention_days: 1
-  SHARED_BROWSER_METADATA_SELF_CANCELLATION:
-    state: REPAIR_IMPLEMENTED_AWAITING_RUNTIME_RETEST
-    revision_56_signature: FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO_64_OF_64
-    repair_commit: f270ca0d37a526993ff7f8af41fea139444c6454
-    thresholds_lowered: false
-    blanket_err_aborted_allowlist: false
   SHARED_BROWSER_64_CONTEXT_RUNTIME_BOUND:
-    state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
-    revision_57_signature: STEP_TIMEOUT_12_MINUTES_NO_SHARED_VERDICT
-    root_cause: >-
-      The strengthened shared gate preserved 16 routes x 4 profiles but executed all 64 isolated browser contexts serially. The exact
-      revision-57 step exhausted its 12-minute budget before completing the matrix, so BROWSER_PASS remained fail-closed and no shared
-      report was available in the artifact.
+    state: CLOSED_BY_REVISION58_COMPLETE_64_CONTEXT_VERDICT
     repair_commit: a3802a05da6d2d37048514f175448d671cf59df8
-    repair:
-      - PRESERVE_ALL_64_ROUTE_PROFILE_CONTEXTS
-      - BOUNDED_PARALLEL_BATCHES_DEFAULT_CONCURRENCY_4_MAX_8
-      - ONE_ISOLATED_BROWSER_CONTEXT_PER_ROUTE_PROFILE
-      - INCREMENTAL_REPORT_AFTER_EACH_BATCH
-      - PER_CONTEXT_AND_TOTAL_ELAPSED_TIME_EVIDENCE
-      - DETERMINISTIC_FINAL_CONTEXT_ORDER
-      - RETAIN_METADATA_HEALTH_AND_REQUEST_RESPONSE_CORRELATION
-      - RETAIN_LISTENERS_THROUGH_CONTEXT_CLOSE_AND_POST_TEARDOWN_VERDICT
-      - RETAIN_11_CLASSIFIER_MUTATIONS
-    preview_server_parallel_safe: THREADING_HTTP_SERVER
+  SHARED_BROWSER_H264_RUNTIME_MISMATCH:
+    state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+    revision_58_signature: ALL_64_CONTEXTS_READY_STATE_0_NETWORK_STATE_NO_SOURCE_PLUS_MEDIA_ERR_ABORTED
+    evidence:
+      - SAME_PATTERN_ON_SECURITY_AND_DATACENTERS_PRE_DATACENTERS
+      - PREVIEW_BYTE_RANGE_HTTP_206_PASS
+      - DEDICATED_SECURITY_LIFECYCLE_GATE_PASSES_SAME_MEDIA_USING_SYSTEM_CHROME
+      - SHARED_GATE_REVISION58_USED_BUNDLED_PLAYWRIGHT_CHROMIUM
+    diagnosis_confidence: STRONG_PENDING_EXACT_QA
+    repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
     thresholds_lowered: false
-    coverage_reduced: false
-    local_syntax_check: PASS_NODE_CHECK
-    action_triggered_by_repair_commit: false
-
-shared_gate_hardening:
-  BROWSER_RESOURCE_AUDIT:
-    state: IMPLEMENTED_PENDING_EXACT_QA_AFTER_REVISION57_RUNTIME_BOUND_REPAIR
-    path: scripts/audit_browser_resources.mjs
-    original_hardening_commit: 770f782cc4ba3cd6ccc1eee060660102d78b1590
-    request_response_correlation_commit: 47cde00854142114f43837001f6bdf23a5ddfb79
-    self_reset_removal_commit: f270ca0d37a526993ff7f8af41fea139444c6454
-    bounded_parallel_runtime_commit: a3802a05da6d2d37048514f175448d671cf59df8
     site_facing_bytes_changed: false
-    thresholds_lowered: false
-    coverage_reduced: false
-    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-    listener_lifetime: THROUGH_CONTEXT_CLOSE
-    verdict: POST_CONTEXT_TEARDOWN
-    captures: [pageerror, console_error, http_gte_400, requestfailed]
-    lazy_resource_scroll: true
-    metadata_health_required_for_existing_video: true
-    stable_request_identity: true
-    successful_media_response_correlation: [http_200, http_206]
-    negative_and_positive_classifier_mutations: 11
-    blanket_err_aborted_allowlist: false
-    execution_model: BOUNDED_PARALLEL_BATCHES_INCREMENTAL_REPORTING
-    default_concurrency: 4
-    maximum_concurrency: 8
-    report: artifacts/security-requalification/shared-browser-resources/report.json
-    exact_qa_required_before_browser_pass: true
-    touch_claim: >-
-      Mobile profiles are touch-capable only to expose mobile loading behavior. This shared resource gate does not certify real touch;
-      the dedicated Security touch gate owns that contract.
 
 manual_review:
-  revision_54_targeted_pixel_inspection:
+  latest_targeted_pixel_inspection:
+    revision: 54
     performed: true
     scope: FOUR_RETAINED_MOBILE_CTXMIX_STATE4_IMAGES_ONLY
     locales: [es, en]
@@ -237,7 +172,7 @@ manual_review:
     whole_article_pixel_review: NOT_PERFORMED
     whole_article_pedagogy_review: NOT_PERFORMED
     independent_reviewer: false
-  revision_57:
+  revision_58:
     whole_article_pixel_review: NOT_PERFORMED
     whole_article_pedagogy_review: NOT_PERFORMED
     technical_gate_pass_does_not_certify_editorial_review: true
@@ -265,16 +200,16 @@ media:
 sources_and_locales:
   material_claims_changed_since_revision_50: false
   factual_research_reopened_this_revision: false
-  latest_specialized_strict_es: PASS_REVISION57
-  latest_specialized_strict_en: PASS_REVISION57
-  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed in revision 57 or its gate-only runtime repair.
+  latest_specialized_strict_es: PASS_REVISION58
+  latest_specialized_strict_en: PASS_REVISION58
+  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed in revision 58 or its gate-only browser-runtime repair.
 
 concurrency_release:
   main_at_last_read: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
   repair_branch: quality/post-datacenters-requalification
-  last_exact_qa_request_head: 042d2db0d5ab80ae8cf96586a43c35613910e5c3
-  runtime_repair_commit: a3802a05da6d2d37048514f175448d671cf59df8
-  revision57_receipt_commit: 1a2b97ae9ffa2f4fb2f40c999f801654a332663f
+  revision58_exact_qa_request_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
+  browser_runtime_repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
+  revision58_receipt_commit: f16ee117c52f50f28a7c2a0d2ded4fa64522e880
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   draft_323: OPEN_DRAFT_ORTHOGONAL
   pr_created_by_requalification: false
@@ -292,20 +227,29 @@ release_contract_281_310:
   preserve_279: true
 
 last_action:
-  run_id: 35050844662
-  revision: 57
-  exact_head: 042d2db0d5ab80ae8cf96586a43c35613910e5c3
-  reason: EXACT_QA_SHARED_BROWSER_RESOURCE_NO_SELF_RESET_WITH_REFERENCE_REGRESSION
+  run_id: 35054518006
+  revision: 58
+  exact_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
+  reason: EXACT_QA_SHARED_BROWSER_RESOURCE_BOUNDED_PARALLEL_WITH_REFERENCE_REGRESSION
   conclusion: failure
-  shared_gate_failure: TIMEOUT_12_MINUTES_NO_VERDICT
-  artifact_id: 10429576757
-  artifact_compressed_bytes: 124477
+  shared_gate_failure: COMPLETE_64_CONTEXT_H264_METADATA_RUNTIME_PATTERN
+  artifact_id: 10429934581
+  artifact_compressed_bytes: 127526
+  artifact_files: 12
   additional_action_after_result: false
 
 next_gap:
   stay_on: seguridad-ia_00_plus_01
-  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_BOUNDED_PARALLEL_64_CONTEXT_MATRIX
+  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_SYSTEM_CHROME_RUNTIME_64_CONTEXT_MATRIX
   required_regression_matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+  required_evidence:
+    - REPORT_ACTUAL_BROWSER_CHANNEL_AND_VERSION
+    - ALL_64_CONTEXTS_COMPLETE
+    - HEALTHY_METADATA_FOR_EXISTING_VIDEO
+    - REQUEST_RESPONSE_CORRELATION
+    - LISTENERS_THROUGH_CONTEXT_CLOSE
+    - POST_TEARDOWN_VERDICT
+    - NO_THRESHOLD_RELAXATION
   artifact_policy: BOUNDED_FOCUSED_JSON_ONLY_INCREMENTAL_SHARED_REPORT
   do_not_advance_to: 02-jailbreaks
   first_external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO
