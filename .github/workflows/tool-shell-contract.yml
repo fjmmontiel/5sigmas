@@ -37,12 +37,12 @@ jobs:
       - name: Audit all published ES/EN tool shells
         run: python scripts/audit_tool_seo_geo_shell.py --output seo-audit/tool-seo-geo-shell.json
 
-      - name: Upload machine-readable tool-shell inventory
-        if: always()
+      - name: Upload failing machine-readable tool-shell inventory
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: tool-seo-geo-shell
           path: seo-audit/tool-seo-geo-shell.json
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
           overwrite: true
