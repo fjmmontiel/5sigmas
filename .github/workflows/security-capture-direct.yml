@@ -67,6 +67,9 @@ jobs:
           cat /tmp/security-capture-preview.log
           exit 1
 
+      - name: Validate shared Material tooltip overflow fix and negative mutation
+        run: node scripts/validate_material_tooltip_overflow.mjs
+
       - name: Capture whole-article and per-asset editorial evidence for active Security 00/01
         id: editorial_capture
         continue-on-error: true
