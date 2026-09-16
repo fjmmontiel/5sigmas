@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 56,
+  "diagnostic_revision": 57,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "8d4cb3179ba07bb3d2c1e262ed281a6b4af50546",
-  "reason": "Exact-QA the repaired shared browser-resource gate after revision 55 exposed deterministic native-media ERR_ABORTED false positives. Re-run the same 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion. Require post-context-close verdicts, stable Request identity, successful 200/206 correlation and final healthy matching media before accepting any lazy-load/settle media cancellation; generic/navigation/non-media/unproven aborts and all non-abort failures remain fatal. Verify the bounded focused artifact policy by retaining JSON reports only. Re-run existing focused Security technical gates on the exact same head. This is not a whole-catalogue BROWSER_PASS, touch certification, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
+  "requested_head_parent": "571ac6de1a35eebfc4f506253942545fc19b4182",
+  "reason": "Exact-QA the revision-56 shared browser-resource repair after removing the harness self-reset race: changing preload=none to metadata must exercise Chromium resource selection without calling video.load() in the same task. Re-run the same 16 ES/EN Security + Datacenters/pre-Datacenters reference routes across desktop ~1440 and mobile ~390, normal and reduced motion. Require healthy final metadata for every existing video, post-context-close verdicts, stable Request identity and successful 200/206 correlation before accepting any pre-teardown media cancellation; generic/navigation/non-media/unproven aborts and all non-abort failures remain fatal. Re-run the focused Security technical gates on the exact same head and retain bounded JSON-only diagnostic artifacts. This is not a whole-catalogue BROWSER_PASS, PIXEL_REVIEW or PEDAGOGY_REVIEW. Keep global SOURCE/RENDERED and Security MEDIA debt fail-closed and do not grant ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
