@@ -7,6 +7,7 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const route = process.env.S5_DOM_STALL_ROUTE || '/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/';
 const output = process.env.S5_DOM_STALL_REPORT || 'artifacts/dom-inspection-diagnostic.json';
 const CONTEXT_BUDGET_MS = 25000;
+const PROBE_BUDGET_MS = 5000;
 const DOM_ANOMALY_MS = 1000;
 const repetitions = Number(process.env.S5_DOM_STALL_REPETITIONS || 2);
 
@@ -46,10 +47,11 @@ async function runOne(job, mode, repetition) {
     width: job.width,
     motion: job.motion,
     context_budget_ms: CONTEXT_BUDGET_MS,
+    probe_budget_ms: PROBE_BUDGET_MS,
     ok: false,
     error: null,
     phase_ms: {},
-    dom: null,
+    probes: {},
   };
 
   try {
@@ -98,110 +100,118 @@ async function runOne(job, mode, repetition) {
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve(true))));
       phase('post_scroll_frame');
 
-      const hostDomStarted = performance.now();
-      result.dom = await page.evaluate(async () => {
-        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
-        if (!root) return { missing_article: true, subprobe_ms: {} };
-        const subprobe_ms = {};
-        const measure = (name, fn) => {
-          const start = performance.now();
-          const value = fn();
-          subprobe_ms[name] = Number((performance.now() - start).toFixed(3));
-          return value;
-        };
-        const yieldFrame = () => new Promise(resolve => requestAnimationFrame(() => resolve()));
-
-        const text = measure('text_scan', () => {
-          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-          const parts = [];
-          let nodes = 0;
-          while (walker.nextNode()) {
-            nodes += 1;
-            const node = walker.currentNode;
-            if (!node.parentElement?.closest('script,style,pre,code,math,annotation,mjx-container,.katex')) {
-              parts.push(node.textContent || '');
-            }
-          }
-          const prose = parts.join(' ');
-          return {
-            nodes,
-            chars: prose.length,
-            tex: (prose.match(/\\(?:frac|text|tau|pi|Delta|sum|prod|begin|end|lambda|mathbb|mathrm|mathbf|subseteq|land|min|max|mid|theta|sigma|alpha|beta)\b|\\[\[\]]|\$\$/g) || []).length,
+      const runProbe = async (name, callback) => {
+        const probeStarted = performance.now();
+        try {
+          const value = await bounded(page.evaluate(callback), PROBE_BUDGET_MS, name);
+          result.probes[name] = {
+            ok: true,
+            host_ms: Number((performance.now() - probeStarted).toFixed(2)),
+            value,
           };
-        });
-        await yieldFrame();
+        } catch (error) {
+          result.probes[name] = {
+            ok: false,
+            host_ms: Number((performance.now() - probeStarted).toFixed(2)),
+            error: String(error),
+          };
+          throw new Error(`DOM subprobe ${name} failed: ${error}`);
+        }
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve(true))));
+      };
 
-        const snippets = measure('snippet_scan', () => ({
-          pre_code: root.querySelectorAll('pre,code').length,
-          escaped: [...root.querySelectorAll('pre,code')].some(node =>
-            /include_html\(|<\s*(?:section|svg|style)\b[^\n]*(?:s5v|anim-|viewBox|data-anim)/i.test(node.textContent || ''),
-          ),
-        }));
-        await yieldFrame();
-
-        const svgLabels = measure('svg_label_geometry', () => {
-          const nodes = [...root.querySelectorAll('svg text')];
-          let visible = 0;
-          let minimumPx = null;
-          for (const node of nodes) {
-            const rect = node.getBoundingClientRect();
-            const matrix = node.getScreenCTM();
-            if (!rect.width || !rect.height || !matrix) continue;
-            visible += 1;
-            const px = parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.c, matrix.d);
-            minimumPx = minimumPx === null ? px : Math.min(minimumPx, px);
+      const domStarted = performance.now();
+      await runProbe('text_scan', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const parts = [];
+        let nodes = 0;
+        while (walker.nextNode()) {
+          nodes += 1;
+          const node = walker.currentNode;
+          if (!node.parentElement?.closest('script,style,pre,code,math,annotation,mjx-container,.katex')) {
+            parts.push(node.textContent || '');
           }
-          return { total: nodes.length, visible, minimum_px: minimumPx };
-        });
-        await yieldFrame();
-
-        const pannable = measure('pannable_geometry', () => {
-          const divs = [...root.querySelectorAll('div')];
-          let candidates = 0;
-          for (const node of divs) {
-            const overflow = getComputedStyle(node).overflowX;
-            if (['auto', 'scroll'].includes(overflow) && node.scrollWidth > node.clientWidth + 2 && node.querySelector('svg')) {
-              candidates += 1;
-            }
-          }
-          return { divs: divs.length, candidates };
-        });
-        await yieldFrame();
-
-        const documentGeometry = measure('document_geometry', () => ({
-          scroll_width: document.documentElement.scrollWidth,
-          client_width: document.documentElement.clientWidth,
-        }));
-        await yieldFrame();
-
-        const images = measure('image_scan', () => {
-          const nodes = [...root.querySelectorAll('img')];
-          return { total: nodes.length, broken: nodes.filter(image => image.complete && !image.naturalWidth).length };
-        });
-        await yieldFrame();
-
-        const animations = measure('animation_scan', () => root.getAnimations({ subtree: true }).length);
-        await yieldFrame();
-
-        const controls = measure(
-          'control_scan',
-          () => root.querySelectorAll('.s5v button, .anim-brand-shell button, [role="tab"], input[type="range"]').length,
-        );
-
+        }
+        const prose = parts.join(' ');
         return {
-          missing_article: false,
-          subprobe_ms,
-          text,
-          snippets,
-          svg_labels: svgLabels,
-          pannable,
-          document_geometry: documentGeometry,
-          images,
-          animations,
-          controls,
+          nodes,
+          chars: prose.length,
+          tex: (prose.match(/\\(?:frac|text|tau|pi|Delta|sum|prod|begin|end|lambda|mathbb|mathrm|mathbf|subseteq|land|min|max|mid|theta|sigma|alpha|beta)\b|\\[\[\]]|\$\$/g) || []).length,
         };
       });
-      result.phase_ms.dom_inspection_host = Number((performance.now() - hostDomStarted).toFixed(2));
+
+      await runProbe('snippet_scan', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        const nodes = [...root.querySelectorAll('pre,code')];
+        return {
+          pre_code: nodes.length,
+          escaped: nodes.some(node =>
+            /include_html\(|<\s*(?:section|svg|style)\b[^\n]*(?:s5v|anim-|viewBox|data-anim)/i.test(node.textContent || ''),
+          ),
+        };
+      });
+
+      await runProbe('svg_label_geometry', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        const nodes = [...root.querySelectorAll('svg text')];
+        let visible = 0;
+        let minimumPx = null;
+        for (const node of nodes) {
+          const rect = node.getBoundingClientRect();
+          const matrix = node.getScreenCTM();
+          if (!rect.width || !rect.height || !matrix) continue;
+          visible += 1;
+          const px = parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.c, matrix.d);
+          minimumPx = minimumPx === null ? px : Math.min(minimumPx, px);
+        }
+        return { total: nodes.length, visible, minimum_px: minimumPx };
+      });
+
+      await runProbe('pannable_geometry', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        const divs = [...root.querySelectorAll('div')];
+        let candidates = 0;
+        for (const node of divs) {
+          const overflow = getComputedStyle(node).overflowX;
+          if (['auto', 'scroll'].includes(overflow) && node.scrollWidth > node.clientWidth + 2 && node.querySelector('svg')) {
+            candidates += 1;
+          }
+        }
+        return { divs: divs.length, candidates };
+      });
+
+      await runProbe('document_geometry', () => ({
+        scroll_width: document.documentElement.scrollWidth,
+        client_width: document.documentElement.clientWidth,
+      }));
+
+      await runProbe('image_scan', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        const nodes = [...root.querySelectorAll('img')];
+        return { total: nodes.length, broken: nodes.filter(image => image.complete && !image.naturalWidth).length };
+      });
+
+      await runProbe('animation_scan', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        return { count: root.getAnimations({ subtree: true }).length };
+      });
+
+      await runProbe('control_scan', () => {
+        const root = document.querySelector('article.md-content__inner') || document.querySelector('article');
+        if (!root) return { missing_article: true };
+        return {
+          count: root.querySelectorAll('.s5v button, .anim-brand-shell button, [role="tab"], input[type="range"]').length,
+        };
+      });
+
+      result.phase_ms.dom_inspection_host = Number((performance.now() - domStarted).toFixed(2));
       result.ok = true;
     })(), CONTEXT_BUDGET_MS, `${mode} ${job.width} ${job.motion}`);
   } catch (error) {
@@ -239,13 +249,14 @@ const results = [...serial, ...parallel2];
 const anomalies = results.filter(result =>
   !result.ok ||
   (result.phase_ms.dom_inspection_host || 0) >= DOM_ANOMALY_MS ||
-  Object.values(result.dom?.subprobe_ms || {}).some(ms => ms >= DOM_ANOMALY_MS),
+  Object.values(result.probes || {}).some(probe => !probe.ok || probe.host_ms >= DOM_ANOMALY_MS),
 );
 const report = {
   purpose: 'isolate full-catalog DOM-inspection stall without changing canonical 25s gate',
   route,
   repetitions,
   context_budget_ms: CONTEXT_BUDGET_MS,
+  per_probe_budget_ms: PROBE_BUDGET_MS,
   diagnostic_anomaly_ms: DOM_ANOMALY_MS,
   contexts: results.length,
   serial_contexts: serial.length,
