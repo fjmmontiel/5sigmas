@@ -49,6 +49,10 @@ const requestedProfiles = (process.env.S5_BROWSER_RESOURCE_PROFILES ?? '')
 const profileNames = requestedProfiles.length
   ? [...new Set(requestedProfiles)]
   : Object.keys(profileCatalog);
+const requestedConcurrency = Number.parseInt(
+  process.env.S5_BROWSER_RESOURCE_CONCURRENCY ?? '4',
+  10,
+);
 
 for (const route of paths) {
   if (!route.startsWith('/')) throw new Error(`Browser resource audit path must start with '/': ${route}`);
@@ -59,6 +63,9 @@ for (const name of profileNames) {
       `Unknown browser resource profile '${name}'. Expected one of: ${Object.keys(profileCatalog).join(', ')}`,
     );
   }
+}
+if (!Number.isInteger(requestedConcurrency) || requestedConcurrency < 1 || requestedConcurrency > 8) {
+  throw new Error('S5_BROWSER_RESOURCE_CONCURRENCY must be an integer between 1 and 8');
 }
 
 const isTransientExternalFontFailure = (url, resourceType) => {
@@ -258,161 +265,204 @@ const browser = await chromium.launch({ headless: true });
 const failures = [];
 const expectedAborts = [];
 const contextRecords = [];
+const tasks = paths.flatMap((route, routeIndex) => profileNames.map((profileName, profileIndex) => ({
+  route,
+  profileName,
+  order: routeIndex * profileNames.length + profileIndex,
+})));
+const concurrency = Math.min(requestedConcurrency, Math.max(tasks.length, 1));
+const auditStartedAt = Date.now();
 let auditedContexts = 0;
 
-try {
-  for (const route of paths) {
-    for (const profileName of profileNames) {
-      const profile = profileCatalog[profileName];
-      const context = await browser.newContext({
-        viewport: profile.viewport,
-        colorScheme: 'light',
-        reducedMotion: profile.reducedMotion,
-        isMobile: profile.isMobile,
-        hasTouch: profile.hasTouch,
-      });
-      const page = await context.newPage();
-      let phase = 'navigation';
-      let seq = 0;
-      let requestCounter = 0;
-      const requestIds = new WeakMap();
-      const networkResponses = [];
-      const requestFailures = [];
-      const directFailures = [];
-      let videos = [];
-      const label = `${route} [${profileName}]`;
-      const requestIdFor = (request) => {
-        if (!requestIds.has(request)) requestIds.set(request, `request-${++requestCounter}`);
-        return requestIds.get(request);
-      };
+const auditContext = async ({ route, profileName, order }) => {
+  const profile = profileCatalog[profileName];
+  const context = await browser.newContext({
+    viewport: profile.viewport,
+    colorScheme: 'light',
+    reducedMotion: profile.reducedMotion,
+    isMobile: profile.isMobile,
+    hasTouch: profile.hasTouch,
+  });
+  const page = await context.newPage();
+  let phase = 'navigation';
+  let seq = 0;
+  let requestCounter = 0;
+  const requestIds = new WeakMap();
+  const networkResponses = [];
+  const requestFailures = [];
+  const directFailures = [];
+  let videos = [];
+  const label = `${route} [${profileName}]`;
+  const contextStartedAt = Date.now();
+  const requestIdFor = (request) => {
+    if (!requestIds.has(request)) requestIds.set(request, `request-${++requestCounter}`);
+    return requestIds.get(request);
+  };
 
-      page.on('pageerror', (error) => {
-        directFailures.push(`${label}: pageerror during ${phase}: ${error.message}`);
-      });
+  page.on('pageerror', (error) => {
+    directFailures.push(`${label}: pageerror during ${phase}: ${error.message}`);
+  });
 
-      page.on('console', (message) => {
-        if (message.type() !== 'error') return;
-        directFailures.push(`${label}: console:error during ${phase}: ${message.text()}`);
-      });
+  page.on('console', (message) => {
+    if (message.type() !== 'error') return;
+    directFailures.push(`${label}: console:error during ${phase}: ${message.text()}`);
+  });
 
-      page.on('response', (response) => {
-        const request = response.request();
-        const resourceType = request.resourceType();
-        const eventSeq = ++seq;
-        if (resourceType === 'media' && [200, 206].includes(response.status())) {
-          networkResponses.push({
-            seq: eventSeq,
-            requestId: requestIdFor(request),
-            url: response.url(),
-            status: response.status(),
-          });
-        }
-        if (response.status() < 400) return;
-        if (isTransientExternalFontFailure(response.url(), resourceType)) return;
-        directFailures.push(
-          `${label}: HTTP ${response.status()} during ${phase}: ${response.url()} `
-          + `[type=${resourceType}; frame=${safeFrameUrl(request)}; navigation=${request.isNavigationRequest()}]`,
-        );
-      });
-
-      page.on('requestfailed', (request) => {
-        if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
-        requestFailures.push({
-          seq: ++seq,
-          requestId: requestIdFor(request),
-          phase,
-          url: request.url(),
-          errorText: request.failure()?.errorText ?? 'unknown error',
-          resourceType: request.resourceType(),
-          frame: safeFrameUrl(request),
-          navigation: request.isNavigationRequest(),
-        });
-      });
-
-      try {
-        const response = await page.goto(`${baseUrl}${route}`, {
-          waitUntil: 'networkidle',
-          timeout: 30_000,
-        });
-        if (!response?.ok()) {
-          directFailures.push(`${label}: document returned ${response?.status() ?? 'no response'}`);
-        }
-
-        phase = 'lazy-load';
-        await exerciseLazyResources(page);
-        await page.waitForTimeout(250);
-
-        phase = 'settle';
-        await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
-        await page.waitForTimeout(100);
-        videos = await captureVideoHealth(page);
-        for (const [videoIndex, video] of videos.entries()) {
-          if (!isHealthyVideo(video)) {
-            directFailures.push(
-              `${label}: video ${videoIndex + 1} did not reach healthy metadata state `
-              + `[readyState=${video.readyState}; networkState=${video.networkState}; errorCode=${video.errorCode}; `
-              + `duration=${video.duration}; sources=${video.sources.join(',')}]`,
-            );
-          }
-        }
-      } catch (error) {
-        directFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
-      } finally {
-        // Keep every listener active through context teardown. The verdict is computed only afterwards.
-        phase = 'teardown';
-        await context.close();
-        auditedContexts += 1;
-      }
-
-      const record = { videos, networkResponses };
-      const classified = requestFailures.map((event) => ({
-        event,
-        verdict: classifyRequestFailure(event, record),
-      }));
-      for (const item of classified) {
-        if (item.verdict.expected) {
-          expectedAborts.push({ label, ...item.event, classification: item.verdict.classification });
-          continue;
-        }
-        failures.push(
-          `${label}: request failed during ${item.event.phase}: ${item.event.url} (${item.event.errorText}) `
-          + `[type=${item.event.resourceType}; frame=${item.event.frame}; navigation=${item.event.navigation}; `
-          + `classification=${item.verdict.classification}]`,
-        );
-      }
-      failures.push(...directFailures);
-      contextRecords.push({
-        route,
-        profile: profileName,
-        video_count: videos.length,
-        request_failure_count: requestFailures.length,
-        expected_abort_count: classified.filter((item) => item.verdict.expected).length,
-        fatal_request_failure_count: classified.filter((item) => !item.verdict.expected).length,
-        direct_failure_count: directFailures.length,
-        successful_media_response_count: networkResponses.length,
-        videos,
+  page.on('response', (response) => {
+    const request = response.request();
+    const resourceType = request.resourceType();
+    const eventSeq = ++seq;
+    if (resourceType === 'media' && [200, 206].includes(response.status())) {
+      networkResponses.push({
+        seq: eventSeq,
+        requestId: requestIdFor(request),
+        url: response.url(),
+        status: response.status(),
       });
     }
+    if (response.status() < 400) return;
+    if (isTransientExternalFontFailure(response.url(), resourceType)) return;
+    directFailures.push(
+      `${label}: HTTP ${response.status()} during ${phase}: ${response.url()} `
+      + `[type=${resourceType}; frame=${safeFrameUrl(request)}; navigation=${request.isNavigationRequest()}]`,
+    );
+  });
+
+  page.on('requestfailed', (request) => {
+    if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
+    requestFailures.push({
+      seq: ++seq,
+      requestId: requestIdFor(request),
+      phase,
+      url: request.url(),
+      errorText: request.failure()?.errorText ?? 'unknown error',
+      resourceType: request.resourceType(),
+      frame: safeFrameUrl(request),
+      navigation: request.isNavigationRequest(),
+    });
+  });
+
+  try {
+    const response = await page.goto(`${baseUrl}${route}`, {
+      waitUntil: 'networkidle',
+      timeout: 30_000,
+    });
+    if (!response?.ok()) {
+      directFailures.push(`${label}: document returned ${response?.status() ?? 'no response'}`);
+    }
+
+    phase = 'lazy-load';
+    await exerciseLazyResources(page);
+    await page.waitForTimeout(250);
+
+    phase = 'settle';
+    await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
+    await page.waitForTimeout(100);
+    videos = await captureVideoHealth(page);
+    for (const [videoIndex, video] of videos.entries()) {
+      if (!isHealthyVideo(video)) {
+        directFailures.push(
+          `${label}: video ${videoIndex + 1} did not reach healthy metadata state `
+          + `[readyState=${video.readyState}; networkState=${video.networkState}; errorCode=${video.errorCode}; `
+          + `duration=${video.duration}; sources=${video.sources.join(',')}]`,
+        );
+      }
+    }
+  } catch (error) {
+    directFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
+  } finally {
+    // Keep every listener active through context teardown. The verdict is computed only afterwards.
+    phase = 'teardown';
+    await context.close();
   }
+
+  const record = { videos, networkResponses };
+  const classified = requestFailures.map((event) => ({
+    event,
+    verdict: classifyRequestFailure(event, record),
+  }));
+  const localFailures = [...directFailures];
+  const localExpectedAborts = [];
+  for (const item of classified) {
+    if (item.verdict.expected) {
+      localExpectedAborts.push({ label, ...item.event, classification: item.verdict.classification });
+      continue;
+    }
+    localFailures.push(
+      `${label}: request failed during ${item.event.phase}: ${item.event.url} (${item.event.errorText}) `
+      + `[type=${item.event.resourceType}; frame=${item.event.frame}; navigation=${item.event.navigation}; `
+      + `classification=${item.verdict.classification}]`,
+    );
+  }
+
+  return {
+    order,
+    failures: localFailures,
+    expectedAborts: localExpectedAborts,
+    context: {
+      route,
+      profile: profileName,
+      elapsed_ms: Date.now() - contextStartedAt,
+      video_count: videos.length,
+      request_failure_count: requestFailures.length,
+      expected_abort_count: classified.filter((item) => item.verdict.expected).length,
+      fatal_request_failure_count: classified.filter((item) => !item.verdict.expected).length,
+      direct_failure_count: directFailures.length,
+      successful_media_response_count: networkResponses.length,
+      videos,
+    },
+  };
+};
+
+const writeReport = async ({ complete }) => {
+  const sortedContexts = [...contextRecords].sort((left, right) => left.order - right.order);
+  const report = {
+    schema_version: 3,
+    verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
+    execution_model: 'BOUNDED_PARALLEL_BATCHES_WITH_INCREMENTAL_REPORTING',
+    complete,
+    concurrency,
+    elapsed_ms: Date.now() - auditStartedAt,
+    paths,
+    profiles: profileNames,
+    contexts_expected: tasks.length,
+    contexts_observed: auditedContexts,
+    mutation_fixture_count: mutationCount,
+    expected_abort_count: expectedAborts.length,
+    failure_count: failures.length,
+    failures,
+    expected_aborts: expectedAborts,
+    contexts: sortedContexts.map(({ order, ...record }) => record),
+  };
+  await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+};
+
+try {
+  await writeReport({ complete: false });
+  for (let offset = 0; offset < tasks.length; offset += concurrency) {
+    const batch = tasks.slice(offset, offset + concurrency);
+    const results = await Promise.all(batch.map((task) => auditContext(task)));
+    for (const result of results) {
+      failures.push(...result.failures);
+      expectedAborts.push(...result.expectedAborts);
+      contextRecords.push({ order: result.order, ...result.context });
+      auditedContexts += 1;
+    }
+    await writeReport({ complete: false });
+    console.log(
+      `[shared-browser-resources] completed ${auditedContexts}/${tasks.length} contexts `
+      + `with concurrency=${concurrency}; elapsed_ms=${Date.now() - auditStartedAt}`,
+    );
+  }
+  await writeReport({ complete: true });
 } finally {
   await browser.close();
 }
 
-const report = {
-  schema_version: 2,
-  verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
-  paths,
-  profiles: profileNames,
-  contexts_expected: paths.length * profileNames.length,
-  contexts_observed: auditedContexts,
-  mutation_fixture_count: mutationCount,
-  expected_abort_count: expectedAborts.length,
-  failure_count: failures.length,
-  failures,
-  expected_aborts: expectedAborts,
-  contexts: contextRecords,
-};
-await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+if (auditedContexts !== tasks.length) {
+  failures.push(`Browser resource audit observed ${auditedContexts}/${tasks.length} expected contexts`);
+  await writeReport({ complete: false });
+}
 
 if (failures.length > 0) {
   console.error('Browser resource audit failed:');
@@ -424,6 +474,7 @@ if (failures.length > 0) {
 console.log(
   `Browser resource audit passed for ${paths.length} pages across ${profileNames.length} profiles `
   + `(${auditedContexts} contexts), including lazy-resource exercise, ${mutationCount} classifier mutations, `
-  + `${expectedAborts.length} proven expected media/teardown aborts and post-teardown verdicts.`,
+  + `${expectedAborts.length} proven expected media/teardown aborts, bounded concurrency=${concurrency} `
+  + 'and post-teardown verdicts.',
 );
 console.log(`Report: ${reportPath}`);
