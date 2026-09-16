@@ -6,12 +6,18 @@ This focused fixture deliberately exercises the real renderer for each locale,
 plus one Datacenters reference surface, so a test cannot create a false locale
 failure by calling the Spanish renderer for English output.
 
+The active Security00 presentation also carries reader navigation that must stay
+ES/EN equivalent. This gate therefore verifies the real Markdown sources for the
+related-series and series-hub links and runs an in-process negative mutation so
+removing one locale link cannot silently pass.
+
 This gate does not certify MEDIA_PASS, pixel quality, pedagogy, or the global
 catalogue.
 """
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,6 +75,96 @@ REQUIRED_ES_WATCH_UI = (
     "Vídeos relacionados",
     "Tu navegador no soporta el elemento de vídeo.",
 )
+
+SECURITY00_SOURCE = {
+    "es": ROOT / "docs/series/seguridad-ia/00_presentacion_serie.md",
+    "en": ROOT / "locales/en/series/seguridad-ia/00_presentacion_serie.md",
+}
+
+EXPECTED_SECURITY00_SERIES_LINKS = {
+    "/series/modelos-razonadores/00_presentacion_serie/",
+    "/series/agentes-ia/00_presentacion_serie/",
+    "/series/",
+}
+
+MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\((/[^)\s]+)\)")
+
+
+def _canonical_series_links(text: str, locale: str) -> tuple[set[str], list[str]]:
+    links: set[str] = set()
+    failures: list[str] = []
+    for raw in MARKDOWN_LINK_RE.findall(text):
+        path = raw.split("#", 1)[0].split("?", 1)[0]
+        if locale == "en":
+            if path.startswith("/series/"):
+                failures.append(f"en: non-localized Spanish series link leaked: {path}")
+                continue
+            if not path.startswith("/en/series/"):
+                continue
+            path = path.removeprefix("/en")
+        else:
+            if path.startswith("/en/series/"):
+                failures.append(f"es: English series link leaked: {path}")
+                continue
+            if not path.startswith("/series/"):
+                continue
+        links.add(path)
+    return links, failures
+
+
+def security00_navigation_failures(es_text: str, en_text: str) -> list[str]:
+    failures: list[str] = []
+    es_links, es_failures = _canonical_series_links(es_text, "es")
+    en_links, en_failures = _canonical_series_links(en_text, "en")
+    failures.extend(es_failures)
+    failures.extend(en_failures)
+
+    if "**Series relacionadas:**" not in es_text:
+        failures.append("es/security00: related-series navigation label missing")
+    if "[Ver todas las series](/series/)" not in es_text:
+        failures.append("es/security00: all-series hub link missing")
+    if "**Related series:**" not in en_text:
+        failures.append("en/security00: related-series navigation label missing")
+    if "[View all series](/en/series/)" not in en_text:
+        failures.append("en/security00: all-series hub link missing")
+
+    if es_links != EXPECTED_SECURITY00_SERIES_LINKS:
+        failures.append(
+            "es/security00: canonical series navigation mismatch: "
+            f"expected={sorted(EXPECTED_SECURITY00_SERIES_LINKS)!r} got={sorted(es_links)!r}"
+        )
+    if en_links != EXPECTED_SECURITY00_SERIES_LINKS:
+        failures.append(
+            "en/security00: canonical series navigation mismatch: "
+            f"expected={sorted(EXPECTED_SECURITY00_SERIES_LINKS)!r} got={sorted(en_links)!r}"
+        )
+    if es_links != en_links:
+        failures.append(
+            f"security00: ES/EN canonical series-link parity mismatch: es={sorted(es_links)!r} en={sorted(en_links)!r}"
+        )
+    return failures
+
+
+def assert_security00_navigation_contract(failures: list[str]) -> None:
+    missing = [str(path.relative_to(ROOT)) for path in SECURITY00_SOURCE.values() if not path.is_file()]
+    if missing:
+        failures.append(f"security00: navigation source missing: {missing!r}")
+        return
+
+    es_text = SECURITY00_SOURCE["es"].read_text(encoding="utf-8")
+    en_text = SECURITY00_SOURCE["en"].read_text(encoding="utf-8")
+    failures.extend(security00_navigation_failures(es_text, en_text))
+
+    # Deterministic negative proof: the checker itself must reject a locale
+    # mirror that drops one related-series route while retaining the labels.
+    mutated_es = es_text.replace(
+        " · [Agentes de IA](/series/agentes-ia/00_presentacion_serie/)",
+        "",
+        1,
+    )
+    mutation_failures = security00_navigation_failures(mutated_es, en_text)
+    if not any("canonical series navigation mismatch" in item or "parity mismatch" in item for item in mutation_failures):
+        failures.append("security00: negative navigation-parity mutation was not detected")
 
 
 def entry(
@@ -184,6 +280,8 @@ def assert_watch_locale(failures: list[str], current: dict, locale: str) -> None
 def main() -> None:
     failures: list[str] = []
     security_entries: dict[str, list[dict]] = {"es": [], "en": []}
+
+    assert_security00_navigation_contract(failures)
 
     for locale in ("es", "en"):
         site_url = "https://5sigmas.com" if locale == "es" else "https://5sigmas.com/en"
