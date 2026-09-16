@@ -1,10 +1,10 @@
 {
-  "capture_revision": 66,
+  "capture_revision": 77,
   "scope": "security_00_01_whole_article_plus_semantic_trace_requalification",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "7c2c9df08a7641cdb6b487c6fed3b909c752f311",
-  "site_facing_bytes_changed": true,
-  "reason": "Revision 65 technical capture was green, but manual whole-page pixel review failed closed on a real P2 publication defect: the Spanish Security series poster baked the final headline line below the 1920x1080 image boundary. The defect was in the authored JPEG, not CSS/object-fit, and English did not reproduce it. Revision 66 replaces only that Spanish poster through the new tracked deterministic renderer, using the site's established 1920x1080/Lato/dark-canvas/teal-diagram visual language and explicit headline safe-area assertions; no text is removed and no runtime CSS crop is used. Re-run strict ES/EN build, shared tooltip negative mutation, exact Security00/01 desktop~1440/mobile~390 normal/reduced whole-article and per-asset capture, semantic trace checkpoints and Prompt-state gate. Manual PIXEL_REVIEW and PEDAGOGY_REVIEW remain fail-closed until the retained images are actually inspected. MEDIA_PASS remains false while native ES/EN narration/captions/transcript/key-moment requirements are unresolved; ARTICLE_GOLDEN is false and 02-jailbreaks remains blocked.",
+  "requested_head_parent": "89f1483cde45ba9f962bf5df49943df73995bf47",
+  "site_facing_bytes_changed": false,
+  "reason": "Fresh current-head manual pixel and pedagogy evidence is required after the Spanish Security00 related-series/all-series footer/navigation parity repair. Rev75 pixels predated that repair and rev76 proved strict ES/EN, publication discovery, 64-context Security + Datacenters/pre-Datacenters regression, real touch, keyboard/focus, contrast, Prompt Injection states, video lifecycle and listener lifetime without adding current-head retained whole-page screenshots. Run the bounded capture workflow only: strict ES/EN build, shared tooltip negative mutation, Security00/01 ES/EN desktop~1440/mobile~390 normal/reduced whole-article and per-asset screenshots, semantic start/intermediate/final trace checkpoints, and Prompt-state gate. PIXEL_REVIEW and PEDAGOGY_REVIEW remain PENDING until retained current-head images are manually inspected. MEDIA_PASS remains false while native ES/EN narration, captions, transcript and curated key moments are unresolved; ARTICLE_GOLDEN remains false and Security02 stays blocked.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
