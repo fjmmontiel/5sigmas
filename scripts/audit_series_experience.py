@@ -220,19 +220,21 @@ def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
 
 
 class ArticleHTML(HTMLParser):
-    """Extract actual article text while distinguishing code from prose."""
+    """Extract actual article text while distinguishing code and protected math."""
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.stack: list[str] = []
+        self.stack: list[tuple[str, set[str]]] = []
         self.article_depth = 0
         self.prose: list[str] = []
         self.code: list[str] = []
         self.videos = 0
         self.math = 0
+        self.arithmatex = 0
         self.lang = ""
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
+        classes = set((attr.get("class") or "").split())
         if tag == "html":
             self.lang = attr.get("lang") or ""
         if tag == "article":
@@ -243,24 +245,33 @@ class ArticleHTML(HTMLParser):
             self.videos += 1
         if tag == "math":
             self.math += 1
+        if "arithmatex" in classes:
+            self.arithmatex += 1
         if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}:
-            self.stack.append(tag)
+            self.stack.append((tag, classes))
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs)
         self.handle_endtag(tag)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in self.stack:
-            i = len(self.stack) - 1 - self.stack[::-1].index(tag)
+        tags = [item[0] for item in self.stack]
+        if tag in tags:
+            i = len(tags) - 1 - tags[::-1].index(tag)
             self.stack = self.stack[:i]
         if tag == "article":
             self.article_depth = max(0, self.article_depth - 1)
 
     def handle_data(self, data: str) -> None:
-        if not self.article_depth or any(t in self.stack for t in ("script", "style", "math", "annotation")):
+        tags = {tag for tag, _ in self.stack}
+        classes = {name for _, item_classes in self.stack for name in item_classes}
+        if (
+            not self.article_depth
+            or any(t in tags for t in ("script", "style", "math", "annotation"))
+            or "arithmatex" in classes
+        ):
             return
-        (self.code if any(t in self.stack for t in ("pre", "code")) else self.prose).append(data)
+        (self.code if any(t in tags for t in ("pre", "code")) else self.prose).append(data)
 
 
 def rendered_findings(html: str, locale: str) -> tuple[list[dict], dict]:
@@ -279,7 +290,11 @@ def rendered_findings(html: str, locale: str) -> tuple[list[dict], dict]:
         findings.append({"code": "SNIPPET_OR_MACRO_RENDERED_AS_TEXT"})
     if not parsed.videos:
         findings.append({"code": "VIDEO_NOT_RENDERED"})
-    return findings, {"video_elements": parsed.videos, "native_math_elements": parsed.math}
+    return findings, {
+        "video_elements": parsed.videos,
+        "native_math_elements": parsed.math,
+        "arithmatex_wrappers": parsed.arithmatex,
+    }
 
 
 def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
