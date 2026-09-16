@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { chromium } from 'playwright';
 
 const baseUrl = process.env.S5_PREVIEW_URL ?? 'http://127.0.0.1:8000';
@@ -48,8 +50,8 @@ const profileNames = requestedProfiles.length
   ? [...new Set(requestedProfiles)]
   : Object.keys(profileCatalog);
 
-for (const path of paths) {
-  if (!path.startsWith('/')) throw new Error(`Browser resource audit path must start with '/': ${path}`);
+for (const route of paths) {
+  if (!route.startsWith('/')) throw new Error(`Browser resource audit path must start with '/': ${route}`);
 }
 for (const name of profileNames) {
   if (!profileCatalog[name]) {
@@ -68,24 +70,6 @@ const isTransientExternalFontFailure = (url, resourceType) => {
   }
 };
 
-const isExpectedTeardownAbort = ({ phase, errorText }) => (
-  phase === 'teardown' && /ERR_ABORTED/i.test(errorText ?? '')
-);
-
-// Deterministic negative mutations: never let an ERR_ABORTED blanket allow-list creep back in.
-const classifierMutations = [
-  [{ phase: 'teardown', errorText: 'net::ERR_ABORTED' }, true],
-  [{ phase: 'navigation', errorText: 'net::ERR_ABORTED' }, false],
-  [{ phase: 'lazy-load', errorText: 'net::ERR_ABORTED' }, false],
-  [{ phase: 'settle', errorText: 'net::ERR_ABORTED' }, false],
-  [{ phase: 'teardown', errorText: 'net::ERR_FAILED' }, false],
-];
-for (const [event, expected] of classifierMutations) {
-  if (isExpectedTeardownAbort(event) !== expected) {
-    throw new Error(`Browser resource failure-classifier mutation failed for ${JSON.stringify(event)}`);
-  }
-}
-
 const safeFrameUrl = (request) => {
   try {
     return request.frame().url();
@@ -93,6 +77,120 @@ const safeFrameUrl = (request) => {
     return '<detached-frame>';
   }
 };
+
+const matchingSuccessfulResponse = (event, record) => {
+  const responses = record.networkResponses ?? [];
+  const priorSameRequest = responses.some((response) => (
+    response.seq < event.seq
+    && response.requestId === event.requestId
+    && response.url === event.url
+    && [200, 206].includes(response.status)
+  ));
+  const laterSameSource = responses.some((response) => (
+    response.seq > event.seq
+    && response.url === event.url
+    && [200, 206].includes(response.status)
+  ));
+  return { priorSameRequest, laterSameSource, proven: priorSameRequest || laterSameSource };
+};
+
+const matchingHealthyVideo = (event, record) => (record.videos ?? []).find((video) => (
+  video.sources.includes(event.url)
+  && video.readyState >= 1
+  && video.networkState !== 3
+  && video.errorCode == null
+  && Number.isFinite(video.duration)
+  && video.duration > 0
+));
+
+const classifyRequestFailure = (event, record) => {
+  if (!/ERR_ABORTED/i.test(event.errorText ?? '')) {
+    return { expected: false, classification: 'FATAL_NON_ABORT_REQUEST_FAILURE' };
+  }
+
+  if (event.phase === 'teardown') {
+    return { expected: true, classification: 'EXPECTED_CONTEXT_TEARDOWN_ABORT' };
+  }
+
+  if (!['lazy-load', 'settle'].includes(event.phase) || event.resourceType !== 'media') {
+    return { expected: false, classification: 'FATAL_UNPROVEN_PRE_TEARDOWN_ABORT' };
+  }
+
+  const video = matchingHealthyVideo(event, record);
+  if (!video) {
+    return { expected: false, classification: 'FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO' };
+  }
+
+  const responseProof = matchingSuccessfulResponse(event, record);
+  if (!responseProof.proven) {
+    return { expected: false, classification: 'FATAL_MEDIA_ABORT_WITHOUT_RESPONSE_PROOF' };
+  }
+
+  return {
+    expected: true,
+    classification: responseProof.priorSameRequest
+      ? 'EXPECTED_METADATA_RANGE_CANCEL_AFTER_RESPONSE_HEADERS'
+      : 'EXPECTED_METADATA_RANGE_CANCEL_SUPERSEDED_BY_LATER_RESPONSE',
+  };
+};
+
+const runClassifierMutations = () => {
+  const url = 'https://example.invalid/video.mp4';
+  const healthyVideo = {
+    sources: [url], readyState: 1, networkState: 1, errorCode: null, duration: 60,
+  };
+  const baseRecord = {
+    videos: [healthyVideo],
+    networkResponses: [{ seq: 1, requestId: 'media-1', url, status: 206 }],
+  };
+  const lazyAbort = {
+    seq: 2,
+    requestId: 'media-1',
+    phase: 'lazy-load',
+    resourceType: 'media',
+    url,
+    errorText: 'net::ERR_ABORTED',
+  };
+
+  const fixtures = [
+    ['proven same-request metadata cancellation', lazyAbort, baseRecord, true],
+    ['later same-source superseding response', lazyAbort, {
+      videos: [healthyVideo],
+      networkResponses: [{ seq: 3, requestId: 'media-2', url, status: 206 }],
+    }, true],
+    ['generic navigation abort', { ...lazyAbort, phase: 'navigation' }, baseRecord, false],
+    ['generic non-media lazy abort', { ...lazyAbort, resourceType: 'script' }, baseRecord, false],
+    ['different prior request only', lazyAbort, {
+      videos: [healthyVideo],
+      networkResponses: [{ seq: 1, requestId: 'other-request', url, status: 206 }],
+    }, false],
+    ['missing response proof', lazyAbort, { videos: [healthyVideo], networkResponses: [] }, false],
+    ['wrong media URL', lazyAbort, {
+      videos: [{ ...healthyVideo, sources: ['https://example.invalid/other.mp4'] }],
+      networkResponses: baseRecord.networkResponses,
+    }, false],
+    ['unhealthy media', lazyAbort, {
+      videos: [{ ...healthyVideo, readyState: 0, duration: null }],
+      networkResponses: baseRecord.networkResponses,
+    }, false],
+    ['media error', lazyAbort, {
+      videos: [{ ...healthyVideo, errorCode: 3 }],
+      networkResponses: baseRecord.networkResponses,
+    }, false],
+    ['non-abort request failure', { ...lazyAbort, errorText: 'net::ERR_FAILED' }, baseRecord, false],
+    ['context teardown abort', { ...lazyAbort, phase: 'teardown' }, { videos: [], networkResponses: [] }, true],
+  ];
+
+  for (const [name, event, record, expected] of fixtures) {
+    const actual = classifyRequestFailure(event, record).expected;
+    if (actual !== expected) {
+      throw new Error(`Browser resource failure-classifier mutation failed: ${name}; expected=${expected}; actual=${actual}`);
+    }
+  }
+  return fixtures.length;
+};
+
+const mutationCount = runClassifierMutations();
 
 const exerciseLazyResources = async (page) => {
   await page.evaluate(async () => {
@@ -106,19 +204,55 @@ const exerciseLazyResources = async (page) => {
       }
     }
 
-    for (const video of document.querySelectorAll('video')) {
+    const videos = [...document.querySelectorAll('video')];
+    for (const video of videos) {
       if (video.preload === 'none') video.preload = 'metadata';
-      video.load();
+      // Do not reset an already-active media request: load() itself can cancel a valid range body.
+      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
     }
+
+    await Promise.all(videos.map(async (video) => {
+      if (video.readyState >= 1 || video.error) return;
+      await Promise.race([
+        new Promise((resolve) => video.addEventListener('loadedmetadata', resolve, { once: true })),
+        new Promise((resolve) => video.addEventListener('error', resolve, { once: true })),
+        new Promise((resolve) => setTimeout(resolve, 3000)),
+      ]);
+    }));
   });
 };
 
+const captureVideoHealth = async (page) => page.evaluate(() => [...document.querySelectorAll('video')].map((video) => {
+  const resolveUrl = (value) => {
+    if (!value) return null;
+    try { return new URL(value, document.baseURI).href; }
+    catch { return value; }
+  };
+  const sources = [
+    video.currentSrc,
+    video.getAttribute('src'),
+    ...[...video.querySelectorAll('source')].map((source) => source.getAttribute('src')),
+  ].map(resolveUrl).filter(Boolean);
+  return {
+    sources: [...new Set(sources)],
+    readyState: video.readyState,
+    networkState: video.networkState,
+    errorCode: video.error?.code ?? null,
+    duration: Number.isFinite(video.duration) ? Number(video.duration) : null,
+  };
+}));
+
+const reportPath = path.resolve('artifacts/security-requalification/shared-browser-resources/report.json');
+await fs.mkdir(path.dirname(reportPath), { recursive: true });
+
 const browser = await chromium.launch({ headless: true });
-const failures = new Set();
+const failures = [];
+const expectedAborts = [];
+const contextRecords = [];
 let auditedContexts = 0;
 
 try {
-  for (const path of paths) {
+  for (const route of paths) {
     for (const profileName of profileNames) {
       const profile = profileCatalog[profileName];
       const context = await browser.newContext({
@@ -130,51 +264,69 @@ try {
       });
       const page = await context.newPage();
       let phase = 'navigation';
-      const contextFailures = [];
-      const label = `${path} [${profileName}]`;
+      let seq = 0;
+      let requestCounter = 0;
+      const requestIds = new WeakMap();
+      const networkResponses = [];
+      const requestFailures = [];
+      const directFailures = [];
+      let videos = [];
+      const label = `${route} [${profileName}]`;
+      const requestIdFor = (request) => {
+        if (!requestIds.has(request)) requestIds.set(request, `request-${++requestCounter}`);
+        return requestIds.get(request);
+      };
 
       page.on('pageerror', (error) => {
-        contextFailures.push(`${label}: pageerror during ${phase}: ${error.message}`);
+        directFailures.push(`${label}: pageerror during ${phase}: ${error.message}`);
       });
 
       page.on('console', (message) => {
         if (message.type() !== 'error') return;
-        contextFailures.push(`${label}: console:error during ${phase}: ${message.text()}`);
+        directFailures.push(`${label}: console:error during ${phase}: ${message.text()}`);
       });
 
       page.on('response', (response) => {
-        if (response.status() < 400) return;
         const request = response.request();
-        if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
-        contextFailures.push(
+        const resourceType = request.resourceType();
+        const eventSeq = ++seq;
+        if (resourceType === 'media' && [200, 206].includes(response.status())) {
+          networkResponses.push({
+            seq: eventSeq,
+            requestId: requestIdFor(request),
+            url: response.url(),
+            status: response.status(),
+          });
+        }
+        if (response.status() < 400) return;
+        if (isTransientExternalFontFailure(response.url(), resourceType)) return;
+        directFailures.push(
           `${label}: HTTP ${response.status()} during ${phase}: ${response.url()} `
-          + `[type=${request.resourceType()}; frame=${safeFrameUrl(request)}; `
-          + `navigation=${request.isNavigationRequest()}]`,
+          + `[type=${resourceType}; frame=${safeFrameUrl(request)}; navigation=${request.isNavigationRequest()}]`,
         );
       });
 
       page.on('requestfailed', (request) => {
         if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
-        const event = {
+        requestFailures.push({
+          seq: ++seq,
+          requestId: requestIdFor(request),
           phase,
+          url: request.url(),
           errorText: request.failure()?.errorText ?? 'unknown error',
-        };
-        if (isExpectedTeardownAbort(event)) return;
-        contextFailures.push(
-          `${label}: request failed during ${phase}: ${request.url()} `
-          + `(${event.errorText}) `
-          + `[type=${request.resourceType()}; frame=${safeFrameUrl(request)}; `
-          + `navigation=${request.isNavigationRequest()}]`,
-        );
+          resourceType: request.resourceType(),
+          frame: safeFrameUrl(request),
+          navigation: request.isNavigationRequest(),
+        });
       });
 
       try {
-        const response = await page.goto(`${baseUrl}${path}`, {
+        const response = await page.goto(`${baseUrl}${route}`, {
           waitUntil: 'networkidle',
           timeout: 30_000,
         });
         if (!response?.ok()) {
-          contextFailures.push(`${label}: document returned ${response?.status() ?? 'no response'}`);
+          directFailures.push(`${label}: document returned ${response?.status() ?? 'no response'}`);
         }
 
         phase = 'lazy-load';
@@ -184,8 +336,9 @@ try {
         phase = 'settle';
         await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
         await page.waitForTimeout(100);
+        videos = await captureVideoHealth(page);
       } catch (error) {
-        contextFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
+        directFailures.push(`${label}: audit exception during ${phase}: ${error.message}`);
       } finally {
         // Keep every listener active through context teardown. The verdict is computed only afterwards.
         phase = 'teardown';
@@ -193,20 +346,64 @@ try {
         auditedContexts += 1;
       }
 
-      for (const failure of contextFailures) failures.add(failure);
+      const record = { videos, networkResponses };
+      const classified = requestFailures.map((event) => ({
+        event,
+        verdict: classifyRequestFailure(event, record),
+      }));
+      for (const item of classified) {
+        if (item.verdict.expected) {
+          expectedAborts.push({ label, ...item.event, classification: item.verdict.classification });
+          continue;
+        }
+        failures.push(
+          `${label}: request failed during ${item.event.phase}: ${item.event.url} (${item.event.errorText}) `
+          + `[type=${item.event.resourceType}; frame=${item.event.frame}; navigation=${item.event.navigation}; `
+          + `classification=${item.verdict.classification}]`,
+        );
+      }
+      failures.push(...directFailures);
+      contextRecords.push({
+        route,
+        profile: profileName,
+        video_count: videos.length,
+        request_failure_count: requestFailures.length,
+        expected_abort_count: classified.filter((item) => item.verdict.expected).length,
+        fatal_request_failure_count: classified.filter((item) => !item.verdict.expected).length,
+        direct_failure_count: directFailures.length,
+      });
     }
   }
 } finally {
   await browser.close();
 }
 
-if (failures.size > 0) {
+const report = {
+  schema_version: 1,
+  verdict_basis: 'POST_CONTEXT_TEARDOWN_WITH_REQUEST_RESPONSE_CORRELATION_AND_FINAL_MEDIA_HEALTH',
+  paths,
+  profiles: profileNames,
+  contexts_expected: paths.length * profileNames.length,
+  contexts_observed: auditedContexts,
+  mutation_fixture_count: mutationCount,
+  expected_abort_count: expectedAborts.length,
+  failure_count: failures.length,
+  failures,
+  expected_aborts: expectedAborts,
+  contexts: contextRecords,
+};
+await fs.writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+
+if (failures.length > 0) {
   console.error('Browser resource audit failed:');
   for (const failure of failures) console.error(`- ${failure}`);
+  console.error(`Report: ${reportPath}`);
   process.exit(1);
 }
 
 console.log(
   `Browser resource audit passed for ${paths.length} pages across ${profileNames.length} profiles `
-  + `(${auditedContexts} contexts), including lazy-resource exercise and post-teardown verdicts.`,
+  + `(${auditedContexts} contexts), including lazy-resource exercise, ${mutationCount} classifier mutations, `
+  + `${expectedAborts.length} proven expected media/teardown aborts and post-teardown verdicts.`,
 );
+console.log(`Report: ${reportPath}`);
