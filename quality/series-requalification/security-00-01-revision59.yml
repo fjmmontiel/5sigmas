@@ -1,0 +1,166 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+scope: seguridad-ia_00_plus_01
+revision: 59
+state: REQUALIFICATION_QA_NO_GOLDEN
+article_golden: false
+next_article_blocked: 02-jailbreaks
+
+exact_qa:
+  run_id: 35058353692
+  job_id: 104673167911
+  exact_head: de1fbf0bc44dfb0c272e9a4e441b6aa74d47459a
+  main_merged_non_force_before_run: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  overall_conclusion: failure
+  expected_fail_closed: true
+  artifact:
+    id: 10431198095
+    compressed_bytes: 127423
+    files: 12
+    retention_days: 1
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  public_series: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+  discovery_regression_fixtures: PASS_5_OF_5
+
+focused_technical_results:
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  structured_provenance_locale: PASS
+  current_main_internal_link_graph: PASS_ES_EN_156_OF_156_PARITY_ZERO_ORPHANS_ZERO_UNDERLINKED
+  article_watch_contract: PASS
+  focused_security_browser: PASS
+  focused_security_contrast: PASS_128_STATE_CONTEXT_RECORDS
+  focused_security_text_visibility: PASS_8_CONTEXTS_X_4_STATES
+  focused_security_video_lifecycle: PASS_GOOGLE_CHROME
+  focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
+  focused_security_prompt_states: PASS_TECHNICAL_ONLY
+  focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  focused_security_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
+  negative_regression_fixtures: PASS_26_OF_26
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+
+shared_browser_resources:
+  state: FAIL_CLOSED_ONE_ISOLATED_REFERENCE_ABORT
+  report_schema_version: 4
+  browser_runtime:
+    requested_channel: chrome
+    actual_channel: chrome
+    version: 152.0.7977.82
+    fallback_reason: null
+  routes: 16
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  contexts_expected: 64
+  contexts_observed: 64
+  concurrency: 4
+  elapsed_ms: 71982
+  mutation_fixture_count: 11
+  failure_count: 1
+  systemic_h264_runtime_failure_from_revision58_closed: true
+  isolated_failure:
+    route: /en/series/from-cave-to-agi/00_presentacion_serie/
+    profile: desktop-normal
+    phase: lazy-load
+    resource_type: media
+    error: net::ERR_ABORTED
+    classification: FATAL_MEDIA_ABORT_WITHOUT_RESPONSE_PROOF
+    final_video_health:
+      readyState: 4
+      networkState: 1
+      errorCode: null
+      duration_seconds: 63
+    successful_media_response_count: 2
+    request_failure_count: 2
+    expected_abort_count: 1
+    fatal_request_failure_count: 1
+    reference_page_modified: false
+  interpretation: >-
+    Switching the shared audit to system Chrome removed revision 58's 128 H.264/NO_SOURCE failures and completed all 64 contexts.
+    One English pre-Datacenters reference context still emitted an extra media ERR_ABORTED for which the classifier had no response proof
+    for that specific cancellation. The final player was healthy and two successful media responses were observed, but this receipt keeps
+    the event fatal rather than weakening correlation rules from one observation. BROWSER_PASS therefore remains false.
+
+source_gate:
+  state: FAIL
+  findings:
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_TRANSCRIPT_MISSING: 24
+
+rendered_gate:
+  state: FAIL
+  findings:
+    RAW_TEX_RENDERED: 28
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_TRANSCRIPT_MISSING: 24
+  raw_tex_scope: >-
+    14 routes across both locales: coding-agents chapters 04-05; context-engineering chapters 01,02,04;
+    llm-inference chapters 01-06; evaluating-ai-systems chapters 01-03. Security 00+01 are not among the RAW_TEX_RENDERED routes.
+
+media_gate:
+  state: FAIL
+  reason: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  mp4_es_en_distinct: true
+  codec: H264_1920X1080_YUV420P
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+editorial_review:
+  whole_article_pixel_review_this_revision: NOT_PERFORMED
+  whole_article_pedagogy_review_this_revision: NOT_PERFORMED
+  technical_pass_does_not_certify_pixel_or_pedagogy: true
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deploy: false
+  datacenters_or_pre_datacenters_modified: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  draft_323: OPEN_DRAFT_ORTHOGONAL
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: DIAGNOSE_ISOLATED_SHARED_MEDIA_ABORT_WITHOUT_WEAKENING_REQUEST_RESPONSE_CORRELATION
+  exact_reference: /en/series/from-cave-to-agi/00_presentacion_serie/_desktop_normal
+  rule: DO_NOT_MODIFY_REFERENCE_CONTENT_AND_DO_NOT_ALLOW_BLANKET_ERR_ABORTED
+  desired_evidence:
+    - REQUEST_SEQUENCE_AROUND_FATAL_ABORT
+    - WHETHER_ABORTED_REQUEST_IS_REDUNDANT_AFTER_ALREADY_HEALTHY_METADATA
+    - SAME_REQUEST_OR_SUPERSEDING_REQUEST_RESPONSE_PROOF
+    - FINAL_MEDIA_HEALTH
+    - NEGATIVE_MUTATION_FOR_ANY_NEW_EXPECTED_ABORT_CLASS
+  action_policy: NO_SECOND_CI_IN_THIS_RUN
+  whole_article_pixel_and_pedagogy_recertification_required: true
+  external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO_THEN_CAPTIONS_TRANSCRIPT_CURATED_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
