@@ -4,12 +4,19 @@ The semantic generator may use internal source identifiers while building. This 
 post-build boundary strips them before deployment and fails if repository metadata or
 GitHub-family hosts reach the public JSON. It also verifies that the same crawlable
 links materially increase related-item coverage in the public knowledge graph.
+
+After the English build completes inside a combined ES+EN build tree, the hook also
+runs the bilingual internal-link graph audit. Standalone English validation builds do
+not contain the Spanish graph, so they explicitly defer this bilingual-only gate. The
+combined build remains the enforcement boundary.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
+import sys
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -113,6 +120,52 @@ def _assert_graph_relationships(site_dir: Path) -> tuple[int, int]:
     return with_three, len(pages)
 
 
+def _run_bilingual_internal_link_gate(site_dir: Path, locale: str) -> None:
+    if locale != "en":
+        return
+
+    bilingual_root = site_dir.parent
+    spanish_paths = bilingual_root / "agent" / "learning-paths.json"
+    if not spanish_paths.is_file():
+        print("Bilingual internal-link graph audit deferred: standalone EN build has no ES graph.")
+        return
+
+    script = Path(__file__).resolve().parents[1] / "scripts" / "audit_internal_link_graph.py"
+    if not script.is_file():
+        raise RuntimeError(f"Bilingual internal-link audit is missing: {script}")
+    spec = importlib.util.spec_from_file_location("s5_audit_internal_link_graph", script)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load bilingual internal-link audit: {script}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+
+    report, failures = module.audit(bilingual_root)
+    output = bilingual_root / "seo-audit" / "internal-link-graph.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    for graph_locale in ("es", "en"):
+        row = report[graph_locale]
+        print(
+            f"Internal-link graph {graph_locale}: pages={row['pages']}; "
+            f"important={row['important_pages']}; crawl_orphans={len(row['crawl_orphans'])}; "
+            f"contextual_underlinked={len(row['contextual_underlinked'])}; "
+            f"contextual_coverage={row['contextual_coverage_ratio']:.1%}."
+        )
+    parity = report["parity"]
+    print(
+        "Internal-link graph parity: "
+        f"{parity['paired_pages']}/{parity['en_pages']} EN pages paired to ES; "
+        f"contextual_presence_mismatches={len(parity['contextual_presence_mismatches'])}."
+    )
+
+    if failures:
+        raise RuntimeError(
+            "Bilingual internal-link graph audit failed: " + " | ".join(failures)
+        )
+
+
 def on_post_build(config, **kwargs) -> None:
     site_dir = Path(config["site_dir"])
     path = site_dir / "agent" / "learning-paths.json"
@@ -136,3 +189,5 @@ def on_post_build(config, **kwargs) -> None:
     coverage["knowledge_graph_3plus_related_ratio"] = round(with_three / graph_pages, 4)
     payload["coverage"] = coverage
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    _run_bilingual_internal_link_gate(site_dir, str(payload.get("locale") or "").strip().lower())
