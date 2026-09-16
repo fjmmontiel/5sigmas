@@ -1,4 +1,4 @@
-schema_version: 30
+schema_version: 31
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -41,94 +41,106 @@ global_gate_state:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
 
-last_full_exact_qa:
-  revision: 50
-  run_id: 35006430159
-  note: Full focused exact-QA before later bounded milestones; SOURCE, RENDERED and MEDIA remained fail-closed.
-
 latest_specialized_exact_qa:
-  revision: 58
-  run_id: 35054518006
-  job_id: 104661760793
-  exact_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
+  revision: 59
+  run_id: 35058353692
+  job_id: 104673167911
+  exact_head: de1fbf0bc44dfb0c272e9a4e441b6aa74d47459a
   overall: FAIL_CLOSED_SHARED_BROWSER_RESOURCE_GATE
+  main_merged_non_force_before_run: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
   strict_es: PASS
   strict_en: PASS
   publication_discovery: PASS_5_OF_5_FIXTURES
   publication_contract: PASS_13_PUBLIC_SERIES_67_CHAPTERS_75_PAGES
+  current_main_internal_link_graph: PASS_ES_EN_156_OF_156_PARITY_ZERO_ORPHANS_ZERO_CONTEXTUAL_UNDERLINKED
   structured_provenance_locale: PASS
   article_watch_contract: PASS
   focused_security_browser: PASS
   focused_security_contrast: PASS_128_STATE_CONTEXT_RECORDS
   focused_security_text_visibility: PASS_8_CONTEXTS_X_4_STATES
-  focused_security_video_lifecycle: PASS
+  focused_security_video_lifecycle: PASS_GOOGLE_CHROME
   focused_security_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
   focused_security_prompt_states: PASS_TECHNICAL_ONLY
   focused_security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
   focused_security_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
-  negative_mutation_fixtures: PASS_26_OF_26
+  negative_regression_fixtures: PASS_26_OF_26
   global_browser_sweep: INTENTIONALLY_SKIPPED
   shared_browser_resources:
-    state: FAIL
+    state: FAIL_ONE_ISOLATED_REFERENCE_ABORT
+    report_schema_version: 4
+    browser_runtime:
+      requested_channel: chrome
+      actual_channel: chrome
+      version: 152.0.7977.82
+      fallback_reason: null
     requested_routes: 16
     profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
     contexts_expected: 64
     contexts_observed: 64
     concurrency: 4
-    elapsed_ms: 104699
-    failure_count: 128
-    failures_per_context: 2
-    signatures:
-      - VIDEO_METADATA_UNHEALTHY_READY_STATE_0_NETWORK_STATE_NO_SOURCE
-      - FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO
-    preview_range_206: true
-    matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+    elapsed_ms: 71982
+    mutation_fixture_count: 11
+    failure_count: 1
+    systemic_revision58_h264_no_source_failures_closed: true
+    isolated_failure:
+      route: /en/series/from-cave-to-agi/00_presentacion_serie/
+      profile: desktop-normal
+      phase: lazy-load
+      error: net::ERR_ABORTED
+      classification: FATAL_MEDIA_ABORT_WITHOUT_RESPONSE_PROOF
+      final_ready_state: 4
+      final_network_state: 1
+      final_error_code: null
+      final_duration_seconds: 63
+      successful_media_response_count: 2
+      request_failure_count: 2
+      expected_abort_count: 1
+      fatal_request_failure_count: 1
     interpretation: >-
-      Revision 58 closed the revision-57 timeout and produced a complete 64-context verdict. The identical H.264 metadata failure pattern
-      on Security and Datacenters/pre-Datacenters, while the dedicated lifecycle gate passes the same Security media using system Chrome
-      and the preview server returns byte-range 206, strongly indicates a browser-runtime/codec mismatch in this shared gate. This is a
-      diagnosis pending exact-QA of the repaired gate and does not grant BROWSER_PASS.
+      System Chrome removed revision 58's systemic H.264 codec/runtime false failures: 63/64 contexts are now clean under the strict
+      classifier and the remaining context ends with a healthy player plus two successful media responses. One extra cancellation still
+      lacks proof tied to that cancellation, so it remains fatal until its request sequence is diagnosed. This does not grant BROWSER_PASS.
   source: FAIL
   rendered: FAIL
   media: FAIL
   artifact:
-    id: 10429934581
-    compressed_bytes: 127526
+    id: 10431198095
+    compressed_bytes: 127423
     files: 12
     retention_days: 1
 
 shared_gate_hardening:
   BROWSER_RESOURCE_AUDIT:
-    state: IMPLEMENTED_PENDING_EXACT_QA_AFTER_REVISION58_BROWSER_RUNTIME_REPAIR
+    state: REVISION59_SYSTEMIC_RUNTIME_REPAIR_VERIFIED_ONE_ISOLATED_ABORT_REMAINS
     path: scripts/audit_browser_resources.mjs
     original_hardening_commit: 770f782cc4ba3cd6ccc1eee060660102d78b1590
     request_response_correlation_commit: 47cde00854142114f43837001f6bdf23a5ddfb79
     self_reset_removal_commit: f270ca0d37a526993ff7f8af41fea139444c6454
     bounded_parallel_runtime_commit: a3802a05da6d2d37048514f175448d671cf59df8
     browser_runtime_repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
-    repair:
-      - PREFER_SYSTEM_CHROME_CHANNEL_FOR_H264_MEDIA_AUDIT
-      - FALL_BACK_TO_BUNDLED_PLAYWRIGHT_CHROMIUM_FAIL_CLOSED
-      - RECORD_REQUESTED_ACTUAL_BROWSER_CHANNEL_VERSION_AND_FALLBACK_REASON
-      - PRESERVE_ALL_64_ROUTE_PROFILE_CONTEXTS
-      - PRESERVE_BOUNDED_PARALLEL_BATCHES_DEFAULT_4_MAX_8
-      - PRESERVE_INCREMENTAL_REPORT_AND_TIMINGS
-      - PRESERVE_STRICT_METADATA_HEALTH_REQUIREMENT
-      - PRESERVE_STABLE_REQUEST_IDENTITY_AND_HTTP_200_206_CORRELATION
-      - PRESERVE_LISTENERS_THROUGH_CONTEXT_CLOSE
-      - PRESERVE_POST_CONTEXT_TEARDOWN_VERDICT
-      - PRESERVE_11_SHARED_CLASSIFIER_MUTATIONS
+    verified_runtime:
+      actual_channel: chrome
+      version: 152.0.7977.82
+      fallback_reason: null
+    preserved_contract:
+      - ALL_64_ROUTE_PROFILE_CONTEXTS
+      - BOUNDED_PARALLEL_BATCHES_DEFAULT_4_MAX_8
+      - INCREMENTAL_REPORT_AND_TIMINGS
+      - STRICT_METADATA_HEALTH_REQUIREMENT
+      - STABLE_REQUEST_IDENTITY_AND_HTTP_200_206_CORRELATION
+      - LISTENERS_THROUGH_CONTEXT_CLOSE
+      - POST_CONTEXT_TEARDOWN_VERDICT
+      - 11_SHARED_CLASSIFIER_MUTATIONS
     report_schema_version: 4
     site_facing_bytes_changed: false
     thresholds_lowered: false
     coverage_reduced: false
     blanket_err_aborted_allowlist: false
-    local_syntax_check: NOT_EXECUTED_IN_THIS_RUNTIME
-    action_triggered_after_repair_commit: false
     exact_qa_required_before_browser_pass: true
-    touch_claim: >-
-      Mobile profiles are touch-capable only to expose mobile loading behavior. This shared resource gate does not certify real touch;
-      the dedicated Security touch gate owns that contract.
+    next_diagnostic: >-
+      Persist request/response sequence evidence for the one EN from-cave desktop-normal cancellation and only add a new expected-abort
+      class if it can prove a redundant request after already-established healthy metadata while retaining negative mutations. Do not
+      modify the pre-Datacenters reference page and do not accept a prior unrelated response as sufficient proof.
 
 specialized_debt:
   SECURITY_CAPTURE_VISUALS_RUNTIME_LISTENER_FAIL_OPEN:
@@ -142,24 +154,32 @@ specialized_debt:
     revision_56_compressed_bytes: 124619
     revision_57_compressed_bytes: 124477
     revision_58_compressed_bytes: 127526
+    revision_59_compressed_bytes: 127423
     retention_days: 1
   SHARED_BROWSER_64_CONTEXT_RUNTIME_BOUND:
-    state: CLOSED_BY_REVISION58_COMPLETE_64_CONTEXT_VERDICT
+    state: CLOSED_BY_REVISION58_AND_RECONFIRMED_REVISION59
     repair_commit: a3802a05da6d2d37048514f175448d671cf59df8
   SHARED_BROWSER_H264_RUNTIME_MISMATCH:
-    state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+    state: CLOSED_BY_REVISION59_SYSTEM_CHROME_VERIFICATION
     revision_58_signature: ALL_64_CONTEXTS_READY_STATE_0_NETWORK_STATE_NO_SOURCE_PLUS_MEDIA_ERR_ABORTED
-    evidence:
-      - SAME_PATTERN_ON_SECURITY_AND_DATACENTERS_PRE_DATACENTERS
-      - PREVIEW_BYTE_RANGE_HTTP_206_PASS
-      - DEDICATED_SECURITY_LIFECYCLE_GATE_PASSES_SAME_MEDIA_USING_SYSTEM_CHROME
-      - SHARED_GATE_REVISION58_USED_BUNDLED_PLAYWRIGHT_CHROMIUM
-    diagnosis_confidence: STRONG_PENDING_EXACT_QA
+    revision_59_result: SYSTEMIC_PATTERN_REMOVED_63_OF_64_CONTEXTS_CLEAN_ONE_UNPROVEN_CANCEL_REMAINS
+    verified_browser: CHROME_152_0_7977_82
     repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
     thresholds_lowered: false
     site_facing_bytes_changed: false
+  SHARED_BROWSER_ISOLATED_PRE_DATACENTERS_MEDIA_ABORT:
+    state: OPEN_FAIL_CLOSED
+    route: /en/series/from-cave-to-agi/00_presentacion_serie/
+    profile: desktop-normal
+    reference_content_modification_forbidden: true
+    blanket_abort_allowlist_forbidden: true
+    exact_response_proof_missing: true
 
 manual_review:
+  revision_59:
+    whole_article_pixel_review: NOT_PERFORMED
+    whole_article_pedagogy_review: NOT_PERFORMED
+    technical_gate_pass_does_not_certify_editorial_review: true
   latest_targeted_pixel_inspection:
     revision: 54
     performed: true
@@ -172,16 +192,12 @@ manual_review:
     whole_article_pixel_review: NOT_PERFORMED
     whole_article_pedagogy_review: NOT_PERFORMED
     independent_reviewer: false
-  revision_58:
-    whole_article_pixel_review: NOT_PERFORMED
-    whole_article_pedagogy_review: NOT_PERFORMED
-    technical_gate_pass_does_not_certify_editorial_review: true
   whole_active_set_last_review:
     revision: 43
     PIXEL_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
     PEDAGOGY_REVIEW: PASS_ACTIVE_SET_SAME_AGENT
     independent_reviewer: false
-    note: Historical applicable review only; does not grant ARTICLE_GOLDEN.
+    note: Historical evidence only; does not grant ARTICLE_GOLDEN.
 
 media:
   state: FAIL
@@ -194,31 +210,58 @@ media:
     VIDEO_CHAPTERS_MISSING: 4
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
+  durations_seconds:
+    es_00: 60.3
+    en_00: 47.5667
+    es_01: 60.3333
+    en_01: 47.5667
   generated_cloned_or_substituted_francisco_voice: false
   fabricated_transcript_or_timings: false
 
 sources_and_locales:
   material_claims_changed_since_revision_50: false
   factual_research_reopened_this_revision: false
-  latest_specialized_strict_es: PASS_REVISION58
-  latest_specialized_strict_en: PASS_REVISION58
-  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed in revision 58 or its gate-only browser-runtime repair.
+  latest_specialized_strict_es: PASS_REVISION59
+  latest_specialized_strict_en: PASS_REVISION59
+  note: No benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed in revision 59.
+
+raw_tex_scope:
+  affected_route_pairs_per_locale: 14
+  total_locale_pages: 28
+  routes:
+    - coding-agents-agent-harnesses/04
+    - coding-agents-agent-harnesses/05
+    - context-engineering-memory-mcp/01
+    - context-engineering-memory-mcp/02
+    - context-engineering-memory-mcp/04
+    - llm-inference-engineering-economics/01
+    - llm-inference-engineering-economics/02
+    - llm-inference-engineering-economics/03
+    - llm-inference-engineering-economics/04
+    - llm-inference-engineering-economics/05
+    - llm-inference-engineering-economics/06
+    - evaluating-ai-systems-production/01
+    - evaluating-ai-systems-production/02
+    - evaluating-ai-systems-production/03
+  security_00_01_affected: false
 
 concurrency_release:
-  main_at_last_read: baf32aefc3c9538bd90a5f28c2be395cb4fac0d5
+  main_at_last_read: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  main_merge_into_repair_branch: 6386930ea6520a0020dde90a93a3254a0afe058c
   repair_branch: quality/post-datacenters-requalification
-  revision58_exact_qa_request_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
-  browser_runtime_repair_commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
-  revision58_receipt_commit: f16ee117c52f50f28a7c2a0d2ded4fa64522e880
+  revision59_exact_qa_request_head: de1fbf0bc44dfb0c272e9a4e441b6aa74d47459a
+  revision59_receipt_commit: d85e42369fb36fa6ecdf961154940e2a79bd7099
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   draft_323: OPEN_DRAFT_ORTHOGONAL
-  pr_created_by_requalification: false
-  merged: false
+  production_pr_created_by_requalification: false
+  production_merge: false
   deployed: false
   datacenters_or_pre_datacenters_modified: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
+  article_pr_310_author_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  article_pr_310_merge: 3ab69d10c59863780802140251619f2ee5dfba52
   blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
   cached_web_used_as_production_evidence: false
   linkedin_action_by_this_lane: false
@@ -227,33 +270,38 @@ release_contract_281_310:
   preserve_279: true
 
 last_action:
-  run_id: 35054518006
-  revision: 58
-  exact_head: c27c499bd57f5f0ef91937122ebbb657605bd2e8
-  reason: EXACT_QA_SHARED_BROWSER_RESOURCE_BOUNDED_PARALLEL_WITH_REFERENCE_REGRESSION
+  run_id: 35058353692
+  revision: 59
+  exact_head: de1fbf0bc44dfb0c272e9a4e441b6aa74d47459a
+  reason: EXACT_QA_SHARED_BROWSER_RESOURCE_SYSTEM_CHROME_WITH_CURRENT_MAIN_REFERENCE_REGRESSION
   conclusion: failure
-  shared_gate_failure: COMPLETE_64_CONTEXT_H264_METADATA_RUNTIME_PATTERN
-  artifact_id: 10429934581
-  artifact_compressed_bytes: 127526
+  failure_is_fail_closed: true
+  shared_gate_failure: ONE_ISOLATED_EN_FROM_CAVE_DESKTOP_NORMAL_MEDIA_ABORT_WITHOUT_RESPONSE_PROOF
+  artifact_id: 10431198095
+  artifact_compressed_bytes: 127423
   artifact_files: 12
   additional_action_after_result: false
 
 next_gap:
   stay_on: seguridad-ia_00_plus_01
-  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_SYSTEM_CHROME_RUNTIME_64_CONTEXT_MATRIX
-  required_regression_matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+  immediate: DIAGNOSE_ISOLATED_SHARED_MEDIA_ABORT_WITHOUT_WEAKENING_CORRELATION
+  exact_reference_route: /en/series/from-cave-to-agi/00_presentacion_serie/
+  exact_profile: desktop-normal
   required_evidence:
-    - REPORT_ACTUAL_BROWSER_CHANNEL_AND_VERSION
-    - ALL_64_CONTEXTS_COMPLETE
-    - HEALTHY_METADATA_FOR_EXISTING_VIDEO
-    - REQUEST_RESPONSE_CORRELATION
-    - LISTENERS_THROUGH_CONTEXT_CLOSE
-    - POST_TEARDOWN_VERDICT
-    - NO_THRESHOLD_RELAXATION
-  artifact_policy: BOUNDED_FOCUSED_JSON_ONLY_INCREMENTAL_SHARED_REPORT
-  do_not_advance_to: 02-jailbreaks
+    - REQUEST_SEQUENCE_AROUND_FATAL_ABORT
+    - SAME_REQUEST_OR_SUPERSEDING_REQUEST_RESPONSE_PROOF
+    - WHETHER_ABORT_OCCURS_AFTER_ALREADY_ESTABLISHED_HEALTHY_METADATA
+    - FINAL_MEDIA_HEALTH
+    - NEGATIVE_MUTATION_FOR_ANY_NEW_EXPECTED_ABORT_CLASS
+  forbidden_shortcuts:
+    - MODIFY_PRE_DATACENTERS_REFERENCE_CONTENT
+    - BLANKET_ERR_ABORTED_ALLOWLIST
+    - PRIOR_UNRELATED_RESPONSE_AS_SUFFICIENT_PROOF
+    - LOWER_METADATA_HEALTH_THRESHOLD
+  action_policy: NO_SECOND_CI_IN_THIS_RUN
+  after_shared_gate: WHOLE_ARTICLE_PIXEL_AND_PEDAGOGY_RECERTIFICATION_SECURITY_00_01
   first_external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO
   dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
-  whole_article_pixel_and_pedagogy_recertification_required_before_golden: true
+  do_not_advance_to: 02-jailbreaks
   global_source_rendered_media_debt_still_fail_closed: true
   golden_forbidden_until_all_conjunctive_gates_pass: true
