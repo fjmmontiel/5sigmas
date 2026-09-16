@@ -14,9 +14,18 @@ presentations. Discovery additionally uses ES/EN navigation and every Markdown
 source page in both locales plus manifest-only entries in those seven directories. A missing presentation, video or nav
 entry cannot delete a lesson from validation. EN manifest coverage is independent.
 
+The scope also carries the independent curriculum-media expectation: every one
+of those 42 target routes requires a native video in both ES and EN, for **84
+expected locale/video obligations**. There is no video opt-out in this program.
+This expectation is validated separately from frontmatter/media discovery, so a
+future renderer or hook cannot turn "video absent in ES and EN" into parity or a
+pass. Media integrity, narration, captions, transcript, key moments, playback and
+pixel/pedagogy review remain separate fail-closed gates.
+
 ## Run locally
 
     python scripts/test_series_experience_audit.py -v
+    python scripts/audit_video_curriculum_expectation.py
     python scripts/audit_series_experience.py
     mkdocs build --clean --strict
     python scripts/prepare_locale.py --locale en
