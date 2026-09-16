@@ -266,6 +266,18 @@ jobs:
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
+          shared_report = Path('artifacts/security-requalification/shared-browser-resources/report.json')
+          if shared_report.exists():
+              data = json.loads(shared_report.read_text())
+              print('security-requalification/shared-browser-resources/report.json', json.dumps({
+                  'verdict_basis': data.get('verdict_basis'),
+                  'contexts_expected': data.get('contexts_expected'),
+                  'contexts_observed': data.get('contexts_observed'),
+                  'mutation_fixture_count': data.get('mutation_fixture_count'),
+                  'expected_abort_count': data.get('expected_abort_count'),
+                  'failure_count': data.get('failure_count'),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
           contrast_report = Path('artifacts/security-requalification/contrast/report.json')
           if contrast_report.exists():
               data = json.loads(contrast_report.read_text())
@@ -350,8 +362,31 @@ jobs:
           raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
           PY
 
-      - name: Retain bounded failed-diagnostic evidence
-        if: failure()
+      - name: Retain bounded focused failed-diagnostic evidence
+        if: failure() && steps.diagnostic_scope.outputs.scope == 'focused_security_00_01'
+        uses: actions/upload-artifact@v4
+        with:
+          name: series-experience-diagnostic
+          path: |
+            artifacts/series-experience/report.json
+            artifacts/series-experience/browser-report.json
+            artifacts/security-requalification/media-report.json
+            artifacts/security-requalification/report.json
+            artifacts/security-requalification/shared-browser-resources/report.json
+            artifacts/security-requalification/contrast/report.json
+            artifacts/security-requalification/text-visibility/report.json
+            artifacts/security-requalification/video-lifecycle/report.json
+            artifacts/security-requalification/article-watch-touch/report.json
+            artifacts/security-requalification/article-watch-touch-report.json
+            artifacts/security-requalification/prompt-states/report.json
+            artifacts/security-requalification/keyboard-focus/report.json
+            artifacts/security-requalification/runtime-listener-lifetime/report.json
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true
+
+      - name: Retain full failed-diagnostic evidence only for full catalogue scope
+        if: failure() && steps.diagnostic_scope.outputs.scope == 'full'
         uses: actions/upload-artifact@v4
         with:
           name: series-experience-diagnostic
