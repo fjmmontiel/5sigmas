@@ -1,10 +1,10 @@
 {
-  "capture_revision": 62,
-  "scope": "security_00_01_whole_article_editorial_requalification",
+  "capture_revision": 63,
+  "scope": "security_00_01_whole_article_plus_semantic_trace_requalification",
   "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "a0b71143842d2f3c6c42cdb8370178095a78429f",
+  "requested_head_parent": "ae09c9e8d697d6a824ffc0dd9248be907627b51b",
   "site_facing_bytes_changed": false,
-  "reason": "Revision 61 completed technical capture but manual review found the retained mobile post-interaction isolated-asset screenshots were contaminated by the sticky site header because Playwright tap/click auto-scroll moved the visual beneath fixed chrome. The capture harness now repositions each isolated visual below sticky chrome and hides only the sticky chrome inside isolated locator screenshots, while full-page screenshots preserve the real page chrome. Re-run the exact Security 00 presentation and 01 Prompt Injection ES/EN matrix across desktop 1440 and mobile 390, normal and reduced motion. Retain whole-page screenshots plus every isolated initial/intermediate/final visual state. This is evidence collection only: PIXEL_REVIEW and PEDAGOGY_REVIEW remain fail-closed pending manual inspection of all retained images; SOURCE_PASS, RENDERED_PASS, MEDIA_PASS, BROWSER_PASS, ARTICLE_GOLDEN and advancement to 02-jailbreaks remain false until their own conjunctive evidence is complete.",
+  "reason": "Revision 62 proved strict ES/EN and Prompt-state technical PASS but its editorial capture failed one EN presentation desktop-normal context with a blank 16px horizontal expansion (clientWidth 1440, scrollWidth 1456). Revision 61 on the same site-facing bytes had remained 1440. The expansion appeared only after the revision-62 capture harness began mutating document scrollTop to reposition isolated assets. The harness now stops mutating document scroll geometry and isolates sticky chrome only inside locator screenshots. In the same exact integration, also execute the already-implemented semantic trace checkpoint collector for secpath and ragtrace so start/intermediate/final mechanism states are retained with real viewport chrome. Run ES/EN presentation + Prompt Injection at desktop ~1440/mobile ~390 in normal and reduced motion. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual fail-closed; SOURCE_PASS, RENDERED_PASS, BROWSER_PASS, MEDIA_PASS, ARTICLE_GOLDEN and advancement to 02-jailbreaks remain false until their own conjunctive evidence completes.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
