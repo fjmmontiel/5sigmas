@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Negative fixtures for coverage, rendering and media blind spots reported in #305."""
 from pathlib import Path
+import json
 import tempfile
 import unittest
 
 from audit_series_experience import audit, load_yaml, rendered_findings
+from audit_video_curriculum_expectation import validate_video_expectation
 
 
 class ExperienceAuditTest(unittest.TestCase):
@@ -13,7 +15,16 @@ class ExperienceAuditTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.rel = "series/new-series/01-lesson.md"
-        self.scope = {"excluded_through": "datacenters-espacio", "series": {"new-series": ["01-lesson.md"]}}
+        self.scope = {
+            "excluded_through": "datacenters-espacio",
+            "media_policy": {
+                "video_required_for_every_target_route": True,
+                "native_video_required_per_locale": True,
+                "video_opt_out_allowed": False,
+                "required_locales": ["es", "en"],
+            },
+            "series": {"new-series": ["01-lesson.md"]},
+        }
         self.write("mkdocs.yml", "nav:\n - series/datacenters-espacio/00_presentacion_serie.md\n - " + self.rel + "\n")
         self.write("mkdocs.en.yml", "nav:\n - " + self.rel + "\n")
         self.write("locales/en/manifest.yml", "published_routes:\n - " + self.rel + "\n")
@@ -55,6 +66,40 @@ class ExperienceAuditTest(unittest.TestCase):
         self.assertEqual(report["media"], "SOURCE_PASS_BINARY_PENDING")
         self.assertEqual(report["golden"], "NOT_CERTIFIED")
         self.assertEqual(report["pixel_review"], "PENDING")
+
+    def test_video_expectation_policy_is_explicit_and_complete(self):
+        result = validate_video_expectation(self.scope)
+        self.assertEqual(result["policy"], "ALL_TARGET_ROUTES_NATIVE_PER_LOCALE_NO_OPT_OUT")
+        self.assertEqual(result["target_routes"], 1)
+        self.assertEqual(result["required_locales"], ["es", "en"])
+        self.assertEqual(result["expected_locale_pages_with_video"], 2)
+
+    def test_missing_video_expectation_policy_fails_closed(self):
+        scope = dict(self.scope)
+        scope.pop("media_policy")
+        with self.assertRaises(ValueError):
+            validate_video_expectation(scope)
+
+    def test_video_opt_out_policy_fails_closed(self):
+        scope = dict(self.scope)
+        scope["media_policy"] = dict(scope["media_policy"], video_opt_out_allowed=True)
+        with self.assertRaises(ValueError):
+            validate_video_expectation(scope)
+
+    def test_non_native_or_incomplete_locale_policy_fails_closed(self):
+        scope = dict(self.scope)
+        scope["media_policy"] = dict(scope["media_policy"], native_video_required_per_locale=False)
+        with self.assertRaises(ValueError):
+            validate_video_expectation(scope)
+        scope["media_policy"] = dict(self.scope["media_policy"], required_locales=["es"])
+        with self.assertRaises(ValueError):
+            validate_video_expectation(scope)
+
+    def test_canonical_scope_requires_video_for_all_84_locale_pages(self):
+        scope_path = Path(__file__).resolve().parents[1] / "quality/series-requalification/scope.json"
+        result = validate_video_expectation(json.loads(scope_path.read_text(encoding="utf-8")))
+        self.assertEqual(result["target_routes"], 42)
+        self.assertEqual(result["expected_locale_pages_with_video"], 84)
 
     def test_video_missing_in_both_languages_is_not_parity_pass(self):
         for prefix in ("docs/", "locales/en/"):
