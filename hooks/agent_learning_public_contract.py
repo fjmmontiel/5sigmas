@@ -5,10 +5,10 @@ post-build boundary strips them before deployment and fails if repository metada
 GitHub-family hosts reach the public JSON. It also verifies that the same crawlable
 links materially increase related-item coverage in the public knowledge graph.
 
-After the English build completes, the hook additionally runs the bilingual internal-
-link graph audit. That gate separates navigation/chrome from page-body and generated
-semantic relationships, prevents important public pages from becoming true crawl
-orphans, and emits a review-only queue for contextual underlinking.
+After the English build completes inside a combined ES+EN build tree, the hook also
+runs the bilingual internal-link graph audit. Standalone English validation builds do
+not contain the Spanish graph, so they explicitly defer this bilingual-only gate. The
+combined build remains the enforcement boundary.
 """
 
 from __future__ import annotations
@@ -124,6 +124,12 @@ def _run_bilingual_internal_link_gate(site_dir: Path, locale: str) -> None:
     if locale != "en":
         return
 
+    bilingual_root = site_dir.parent
+    spanish_paths = bilingual_root / "agent" / "learning-paths.json"
+    if not spanish_paths.is_file():
+        print("Bilingual internal-link graph audit deferred: standalone EN build has no ES graph.")
+        return
+
     script = Path(__file__).resolve().parents[1] / "scripts" / "audit_internal_link_graph.py"
     if not script.is_file():
         raise RuntimeError(f"Bilingual internal-link audit is missing: {script}")
@@ -134,10 +140,26 @@ def _run_bilingual_internal_link_gate(site_dir: Path, locale: str) -> None:
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
 
-    report, failures = module.audit(site_dir.parent)
-    output = site_dir.parent / "seo-audit" / "internal-link-graph.json"
+    report, failures = module.audit(bilingual_root)
+    output = bilingual_root / "seo-audit" / "internal-link-graph.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    for graph_locale in ("es", "en"):
+        row = report[graph_locale]
+        print(
+            f"Internal-link graph {graph_locale}: pages={row['pages']}; "
+            f"important={row['important_pages']}; crawl_orphans={len(row['crawl_orphans'])}; "
+            f"contextual_underlinked={len(row['contextual_underlinked'])}; "
+            f"contextual_coverage={row['contextual_coverage_ratio']:.1%}."
+        )
+    parity = report["parity"]
+    print(
+        "Internal-link graph parity: "
+        f"{parity['paired_pages']}/{parity['en_pages']} EN pages paired to ES; "
+        f"contextual_presence_mismatches={len(parity['contextual_presence_mismatches'])}."
+    )
+
     if failures:
         raise RuntimeError(
             "Bilingual internal-link graph audit failed: " + " | ".join(failures)
