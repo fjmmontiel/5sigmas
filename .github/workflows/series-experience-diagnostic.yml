@@ -78,6 +78,11 @@ jobs:
         continue-on-error: true
         run: python scripts/audit_video_curriculum_inventory.py
 
+      - name: Bilingual video schema and accessibility contract
+        id: video_schema_contract
+        continue-on-error: true
+        run: python scripts/test_video_schema_contract.py
+
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
 
@@ -234,6 +239,7 @@ jobs:
           PUBLICATION_DISCOVERY_OUTCOME: ${{ steps.publication_discovery.outcome }}
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
           VIDEO_CURRICULUM_INVENTORY_OUTCOME: ${{ steps.video_curriculum_inventory.outcome }}
+          VIDEO_SCHEMA_CONTRACT_OUTCOME: ${{ steps.video_schema_contract.outcome }}
           PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
           MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
           SECURITY_STRUCTURED_METADATA_OUTCOME: ${{ steps.security_structured_metadata.outcome }}
@@ -360,6 +366,7 @@ jobs:
               'PUBLICATION_DISCOVERY_OUTCOME',
               'SOURCE_OUTCOME',
               'VIDEO_CURRICULUM_INVENTORY_OUTCOME',
+              'VIDEO_SCHEMA_CONTRACT_OUTCOME',
               'PUBLICATION_OUTCOME',
               'MEDIA_PROBE_OUTCOME',
               'SECURITY_STRUCTURED_METADATA_OUTCOME',
