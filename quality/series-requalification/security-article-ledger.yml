@@ -1,10 +1,10 @@
-schema_version: 7
+schema_version: 8
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_precedence_restatement_comment: 5719162654
 iteration_count_epoch: owner_amendment_5716685049
 pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
-updated_at_utc: 2026-09-17T21:35:00Z
+updated_at_utc: 2026-09-17T23:17:12Z
 series: seguridad-ia
 series_state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
 article_golden_requires_voice: false
@@ -24,73 +24,82 @@ shared_current_contract:
     target_locale_pages: 84
     video_obligations_audited: 84
     curriculum_h2_obligations: 1198
-  latest_focused_integration:
-    action_run: 35276344907
-    exact_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
-    scope: focused_security_02_05
-    workflow_result: EXPECTED_FAIL_CLOSED
-    passed:
-      - PUBLICATION_DISCOVERY
-      - SECURITY02_SOURCE_AND_PEDAGOGY_MUTATIONS
-      - SECURITY03_SOURCE_AND_PERSISTENCE_PEDAGOGY_MUTATIONS
-      - SECURITY04_SOURCE_ATTRIBUTION_MUTATIONS
-      - SECURITY05_SOURCE_AND_RELEASE_GATE_PEDAGOGY_MUTATIONS
-      - STRICT_ES_BUILD
-      - PUBLICATION_CONTRACT
-      - STRICT_EN_BUILD
-      - COMPLETE_RENDERED_HTML_AUDIT_EXECUTION
-      - SHARED_BROWSER_RESOURCES_96_OF_96_CONTEXTS_ZERO_FATAL_FAILURES
-    active_fail_closed_debt:
-      - SECURITY02_05_MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS
-      - GLOBAL_VIDEO_CURRICULUM_COVERAGE_60_REQUIRED_UNDECLARED
-      - GLOBAL_DECLARED_VIDEO_CONTRACT_24_INCOMPLETE
-      - REAL_PIXEL_AND_PEDAGOGY_REVIEW_PENDING
-    global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_SCOPE
-    pixel_or_pedagogy_certified: false
-  post_integration_site_facing_head:
-    exact_head: 289e6d3e409bb1de8a23d711d3fc49cb739aed46
-    changed_article: security03
-    exact_integration_evidence_invalidated_for_changed_visual_bytes: [BUILD_PASS, PIXEL_REVIEW, PEDAGOGY_REVIEW]
-    source_repairs:
-      runtime_vs_weights_html: 2ff5129ee4bb608e97abaedddc3b865140e11c34
-      runtime_vs_weights_en_i18n: 2a4a2ef95935fd03cb6186ccd1f6ce498a8cb8bd
-      propagation_map_html: d215f817f31afd52201928b7b7c015917902bc3e
-      propagation_map_en_i18n: 2bebb2e641631adc5f801d82ac9eadfb5859cc53
-      security03_pedagogy_guard: dbe8ac8838cf3596a5f479e09826cdb7aaadc839
-    exact_guard_execution: PENDING_NEXT_COHERENT_INTEGRATION_MILESTONE
-  global_coverage_snapshot:
-    locale_pages: 84
-    video_required_undeclared_pages: 60
-    video_declared_contract_incomplete_pages: 24
-    curriculum_h2_obligations: 1198
-    h2_blocked_curated_key_moments_missing: 154
-    h2_blocked_video_undeclared: 1044
-    rendered_findings:
-      VIDEO_CAPTIONS_MISSING: 24
-      VIDEO_CHAPTERS_MISSING: 24
-      VIDEO_DECLARATION_MISSING: 60
-      VIDEO_NOT_RENDERED: 60
-      VIDEO_SECTION_MAP_MISSING: 24
-      VIDEO_SUMMARY_MISSING: 18
-      VIDEO_TITLE_MISSING: 9
-      VIDEO_TRANSCRIPT_MISSING: 24
-  security_02_05_media_visual:
-    MEDIA_VISUAL_PASS: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    native_video_probe: PASS_H264_1920x1080_YUV420P_ES_EN_ALL_8
-    active_visual_blockers_count: 24
-    active_visual_blockers:
-      es_each_02_03_04_05: [VIDEO_POSTER_MISSING, VIDEO_TITLE_MISSING, VIDEO_SUMMARY_MISSING, VIDEO_CHAPTERS_MISSING]
-      en_each_02_03_04_05: [VIDEO_SUMMARY_MISSING, VIDEO_CHAPTERS_MISSING]
-    deferred_voice_findings_count: 24
-    deferred_voice_each_locale_route: [VIDEO_AUDIO_STREAM_MISSING, VIDEO_CAPTIONS_MISSING, VIDEO_TRANSCRIPT_MISSING]
-  shared_browser_resource_regression:
-    contexts_expected: 96
-    contexts_observed: 96
-    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
-    failure_count: 0
-    expected_metadata_range_cancels: 96
-    scope: Security00-05_ES_EN_plus_Datacenters_and_preDatacenters_references
+
+latest_focused_integration:
+  action_run: 35282395140
+  exact_head: fc0c482018f073fcf7ebb7618a1b45c3b7e1754a
+  scope: focused_security_02_05
+  workflow_result: EXPECTED_FAIL_CLOSED
+  passed:
+    - PUBLICATION_DISCOVERY
+    - SECURITY02_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY03_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY04_SOURCE_AND_REGRESSION_RELATIONSHIP_MUTATIONS
+    - SECURITY05_SOURCE_AND_RELEASE_GATE_RELATIONSHIP_MUTATIONS
+    - STRICT_ES_BUILD
+    - PUBLICATION_CONTRACT
+    - SECURITY02_05_MEDIA_VISUAL_GATE_EXECUTED
+    - STRICT_EN_BUILD
+    - COMPLETE_RENDERED_HTML_AUDIT_EXECUTION
+    - SHARED_BROWSER_RESOURCES_96_OF_96_CONTEXTS_ZERO_FATAL_FAILURES
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_SCOPE
+  pixel_or_pedagogy_certified: false
+  artifact_id: 10523690654
+  artifact_retention: ONE_DAY
+  media_report_schema: 2
+  deterministic_video_samples: SIX_FRAMES_PER_EXACT_NATIVE_MP4_EVIDENCE_ONLY
+
+current_site_facing_head_before_ledger_commit:
+  exact_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+  changes_after_latest_integration:
+    - EN_VIDEO_SUMMARY_ADDED_SECURITY02_03_04_05
+    - ES_VIDEO_POSTER_TITLE_SUMMARY_ADDED_SECURITY02_03_04_05
+  exact_head_recertification_required: true
+  invalidated_until_next_coherent_integration: [SOURCE_PASS, BUILD_PASS, BROWSER_PASS, MEDIA_VISUAL_PASS, PIXEL_REVIEW, PEDAGOGY_REVIEW]
+
+coverage_last_verified:
+  locale_pages: 84
+  video_required_undeclared_pages: 60
+  video_declared_contract_incomplete_pages: 24
+  curriculum_h2_obligations: 1198
+  h2_blocked_curated_key_moments_missing: 154
+  h2_blocked_video_undeclared: 1044
+  rendered_findings:
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_SECTION_MAP_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_TRANSCRIPT_MISSING: 24
+  note: Counts above are the last full verified sweep; targeted Security02-05 metadata changed afterwards and must be re-audited before changing global counts.
+
+security_02_05_media_visual:
+  MEDIA_VISUAL_PASS: false
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  exact_pre_metadata_report_head: fc0c482018f073fcf7ebb7618a1b45c3b7e1754a
+  native_video_probe: PASS_H264_1920x1080_YUV420P_ES_EN_ALL_8
+  verified_pre_metadata_visual_blockers_count: 24
+  metadata_blockers_fixed_after_report_count: 16
+  fixed_after_report:
+    es_each_02_03_04_05: [VIDEO_POSTER_MISSING, VIDEO_TITLE_MISSING, VIDEO_SUMMARY_MISSING]
+    en_each_02_03_04_05: [VIDEO_SUMMARY_MISSING]
+  expected_remaining_visual_blockers_pending_exact_rerun_count: 8
+  expected_remaining_visual_blocker: VIDEO_CHAPTERS_MISSING_ES_EN_SECURITY02_03_04_05
+  deferred_voice_findings_count: 24
+  deferred_voice_each_locale_route: [VIDEO_AUDIO_STREAM_MISSING, VIDEO_CAPTIONS_MISSING, VIDEO_TRANSCRIPT_MISSING]
+  voice_findings_are_current_golden_blockers: false
+  chapter_policy: CURATE_FROM_VISUAL_TIMELINE_ONLY_NEVER_FROM_FUTURE_VOICE
+
+shared_browser_resource_regression:
+  exact_verified_head: fc0c482018f073fcf7ebb7618a1b45c3b7e1754a
+  contexts_expected: 96
+  contexts_observed: 96
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  failure_count: 0
+  scope: Security00-05_ES_EN_plus_Datacenters_and_preDatacenters_references
+  note: Supporting resource evidence only; not BROWSER_PASS or PIXEL/PEDAGOGY certification.
 
 articles:
   - route: series/seguridad-ia/00_presentacion_serie.md
@@ -108,6 +117,7 @@ articles:
     parity_factual_source: PASS_CURRENT_ROUTE_BYTES
     watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
     defects: {P0: [], P1: [VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
     next_action: Define honest visual-timeline key moments independent of future narration.
 
   - route: series/seguridad-ia/00_presentacion_serie.md
@@ -125,6 +135,7 @@ articles:
     parity_factual_source: PASS_CURRENT_ROUTE_BYTES
     watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
     defects: {P0: [], P1: [VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
     next_action: Define honest visual-timeline key moments independent of future narration.
 
   - route: series/seguridad-ia/01-prompt-injection.md
@@ -142,6 +153,7 @@ articles:
     parity_factual_source: PASS_CURRENT_ROUTE_BYTES
     watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
     defects: {P0: [], P1: [VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
     next_action: Define honest visual-timeline key moments independent of future narration.
 
   - route: series/seguridad-ia/01-prompt-injection.md
@@ -159,50 +171,31 @@ articles:
     parity_factual_source: PASS_CURRENT_ROUTE_BYTES
     watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
     defects: {P0: [], P1: [VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
     next_action: Define honest visual-timeline key moments independent of future narration.
 
   - route: series/seguridad-ia/02-jailbreaks.md
     locale: es
-    iteration_count: 5
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
+    iteration_count: 6
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
+    SOURCE_PASS: false
+    BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD
+    parity_factual_source: PRE_METADATA_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    defects: {P0: [], P1: [OUTCOME_LADDER_STILL_PRIMARILY_SELECTION_HIGHLIGHT_AND_COPY, MEDIA_VISUAL_ES_POSTER_TITLE_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Redesign outcome-ladder; add ES visual metadata/key moments; then render all states and inspect real pixels/interactions.
+    defects: {P0: [], P1: [OUTCOME_REACHABILITY_MODEL_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters from exact visual timeline; rerun exact source/build/media; then real desktop/mobile normal/reduced keyboard/touch review.
 
   - route: series/seguridad-ia/02-jailbreaks.md
     locale: en
-    iteration_count: 5
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
-    state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD
-    watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    defects: {P0: [], P1: [OUTCOME_LADDER_STILL_PRIMARILY_SELECTION_HIGHLIGHT_AND_COPY, MEDIA_VISUAL_EN_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Redesign outcome-ladder; add EN summary/key moments; then render all states and inspect real pixels/interactions.
-
-  - route: series/seguridad-ia/03-envenenamiento.md
-    locale: es
-    iteration_count: 5
-    last_reviewed_head: 289e6d3e409bb1de8a23d711d3fc49cb739aed46
+    iteration_count: 6
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
     SOURCE_PASS: false
     BUILD_PASS: false
@@ -211,22 +204,16 @@ articles:
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: NEW_RUNTIME_AND_PROPAGATION_ES_EN_VISUALS_REBOUND_PENDING_EXACT_GUARD
+    parity_factual_source: PRE_METADATA_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    defects: {P0: [], P1: [NEW_RUNTIME_CAUSAL_INTERVENTION_PENDING_RENDER_REVIEW, NEW_PROPAGATION_LINEAGE_STATE_PENDING_RENDER_REVIEW, MEDIA_VISUAL_ES_POSTER_TITLE_SUMMARY_CHAPTERS_MISSING], P2: []}
-    source_level_repairs_this_run:
-      - PERSISTENCE_MODELED_MEMORY_DERIVATIVE_RETRIEVAL_REVOCATION_GRAPH
-      - RUNTIME_VS_WEIGHTS_NOW_MODELS_CLEAR_RUNTIME_VS_SWAP_WEIGHTS_CAUSAL_INTERVENTIONS
-      - PROPAGATION_MAP_NOW_MODELS_DERIVATIVE_LINEAGE_ORIGIN_DELETE_AND_INVALIDATION
-      - EN_I18N_REBOUND_TO_EXACT_VISUAL_BLOBS
-      - SECURITY03_PEDAGOGY_GUARD_EXTENDED_TO_ALL_THREE_MECHANISMS
-    evidence_pending: [EXECUTE_UPDATED_SECURITY03_PEDAGOGY_GUARD, STRICT_ES_EN_AFTER_SITE_FACING_CHANGE, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Execute updated source/pedagogy guard with next coherent cluster; add ES visual metadata/key moments; render all states and inspect pixels/interactions.
+    defects: {P0: [], P1: [OUTCOME_REACHABILITY_MODEL_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters from exact visual timeline; rerun exact source/build/media; then real desktop/mobile normal/reduced keyboard/touch review.
 
   - route: series/seguridad-ia/03-envenenamiento.md
-    locale: en
-    iteration_count: 5
-    last_reviewed_head: 289e6d3e409bb1de8a23d711d3fc49cb739aed46
+    locale: es
+    iteration_count: 6
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
     SOURCE_PASS: false
     BUILD_PASS: false
@@ -235,99 +222,105 @@ articles:
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: NEW_RUNTIME_AND_PROPAGATION_ES_EN_VISUALS_REBOUND_PENDING_EXACT_GUARD
+    parity_factual_source: PRE_METADATA_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    defects: {P0: [], P1: [NEW_RUNTIME_CAUSAL_INTERVENTION_PENDING_RENDER_REVIEW, NEW_PROPAGATION_LINEAGE_STATE_PENDING_RENDER_REVIEW, MEDIA_VISUAL_EN_SUMMARY_CHAPTERS_MISSING], P2: []}
-    source_level_repairs_this_run:
-      - PERSISTENCE_MODELED_MEMORY_DERIVATIVE_RETRIEVAL_REVOCATION_GRAPH
-      - RUNTIME_VS_WEIGHTS_NOW_MODELS_CLEAR_RUNTIME_VS_SWAP_WEIGHTS_CAUSAL_INTERVENTIONS
-      - PROPAGATION_MAP_NOW_MODELS_DERIVATIVE_LINEAGE_ORIGIN_DELETE_AND_INVALIDATION
-      - EN_I18N_REBOUND_TO_EXACT_VISUAL_BLOBS
-      - SECURITY03_PEDAGOGY_GUARD_EXTENDED_TO_ALL_THREE_MECHANISMS
-    evidence_pending: [EXECUTE_UPDATED_SECURITY03_PEDAGOGY_GUARD, STRICT_ES_EN_AFTER_SITE_FACING_CHANGE, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Execute updated source/pedagogy guard with next coherent cluster; add EN summary/key moments; render all states and inspect pixels/interactions.
+    defects: {P0: [], P1: [RUNTIME_PROPAGATION_RELATIONSHIP_MODELS_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then render and inspect every interaction state.
+
+  - route: series/seguridad-ia/03-envenenamiento.md
+    locale: en
+    iteration_count: 6
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    state: QA
+    SOURCE_PASS: false
+    BUILD_PASS: false
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    parity_factual_source: PRE_METADATA_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
+    watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
+    defects: {P0: [], P1: [RUNTIME_PROPAGATION_RELATIONSHIP_MODELS_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then render and inspect every interaction state.
 
   - route: series/seguridad-ia/04-red-teaming.md
     locale: es
-    iteration_count: 3
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
+    iteration_count: 4
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
+    SOURCE_PASS: false
+    BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD
+    parity_factual_source: PRE_METADATA_REGRESSION_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    defects: {P0: [], P1: [MEDIA_VISUAL_ES_POSTER_TITLE_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [ALL_TEACHING_VISUALS_RELATIONSHIP_FIRST_REVIEW, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW]
-    next_action: Inspect every teaching mechanism; add ES visual metadata/key moments; then real desktop/mobile normal/reduced interaction review.
+    defects: {P0: [], P1: [REGRESSION_RELEASE_STATE_GRAPH_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then inspect all teaching mechanisms and real pixels.
 
   - route: series/seguridad-ia/04-red-teaming.md
     locale: en
-    iteration_count: 3
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
+    iteration_count: 4
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
+    SOURCE_PASS: false
+    BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD
+    parity_factual_source: PRE_METADATA_REGRESSION_RELATIONSHIP_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    defects: {P0: [], P1: [MEDIA_VISUAL_EN_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [ALL_TEACHING_VISUALS_RELATIONSHIP_FIRST_REVIEW, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW]
-    next_action: Inspect every teaching mechanism; add EN summary/key moments; then real desktop/mobile normal/reduced interaction review.
+    defects: {P0: [], P1: [REGRESSION_RELEASE_STATE_GRAPH_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then inspect all teaching mechanisms and real pixels.
 
   - route: series/seguridad-ia/05-controles-produccion.md
     locale: es
-    iteration_count: 3
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
+    iteration_count: 4
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
+    SOURCE_PASS: false
+    BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD_CCPLUSPLUS
+    parity_factual_source: PRE_METADATA_CCPLUSPLUS_AND_RELEASE_GATE_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, release_gate_pedagogy_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    source_level_repairs_verified: [CCPLUSPLUS_JAN_2026_EXCHANGE_CLASSIFIER_CASCADE_PROBES_UPDATE_ES_EN, CCPLUSPLUS_SETUP_SPECIFIC_40X_005_PERCENT_1700H_CAVEAT, RELEASE_GATE_EVIDENCE_PATH_AND_FAILURE_PROPAGATION]
-    defects: {P0: [], P1: [MEDIA_VISUAL_ES_POSTER_TITLE_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [ALL_TEACHING_VISUALS_RELATIONSHIP_FIRST_REVIEW, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Inspect all remaining teaching visuals; add ES visual metadata/key moments; then render and interact on desktop/mobile normal/reduced.
+    defects: {P0: [], P1: [RELEASE_GATE_RELATIONSHIP_MODEL_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then inspect all remaining teaching visuals and interactions.
 
   - route: series/seguridad-ia/05-controles-produccion.md
     locale: en
-    iteration_count: 3
-    last_reviewed_head: ac1d2fdae297e9701b305402d9e48a64fc31c11b
+    iteration_count: 4
+    last_reviewed_head: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
     state: QA
-    SOURCE_PASS: true
-    BUILD_PASS: true
+    SOURCE_PASS: false
+    BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    parity_factual_source: PASS_EXACT_FOCUSED_HEAD_CCPLUSPLUS
+    parity_factual_source: PRE_METADATA_CCPLUSPLUS_AND_RELEASE_GATE_GUARDS_PASS_EXACT_FC0C482_CURRENT_METADATA_PENDING
     watch_video_lifecycle: PENDING_FULL_ARTICLE_INTERACTION_REVIEW
-    evidence: {action_run: 35276344907, source_mutations: PASS, release_gate_pedagogy_mutations: PASS, strict_es_en: PASS, rendered_audit_execution: PASS, shared_browser_resources: PASS_SUPPORTING_NOT_BROWSER_CERTIFICATION}
-    source_level_repairs_verified: [CCPLUSPLUS_JAN_2026_EXCHANGE_CLASSIFIER_CASCADE_PROBES_UPDATE_ES_EN, CCPLUSPLUS_SETUP_SPECIFIC_40X_005_PERCENT_1700H_CAVEAT, RELEASE_GATE_EVIDENCE_PATH_AND_FAILURE_PROPAGATION]
-    defects: {P0: [], P1: [MEDIA_VISUAL_EN_SUMMARY_CHAPTERS_MISSING], P2: []}
-    evidence_pending: [ALL_TEACHING_VISUALS_RELATIONSHIP_FIRST_REVIEW, REAL_1440_390_NORMAL_REDUCED_PIXEL_REVIEW, REAL_KEYBOARD_TOUCH_PEDAGOGY_REVIEW]
-    next_action: Inspect all remaining teaching visuals; add EN summary/key moments; then render and interact on desktop/mobile normal/reduced.
+    defects: {P0: [], P1: [RELEASE_GATE_RELATIONSHIP_MODEL_PENDING_REAL_PIXEL_PEDAGOGY_REVIEW, VIDEO_CHAPTERS_KEY_MOMENTS_MISSING], P2: []}
+    evidence_revision: 7fa7161d9ac4e3d623da1746eb8ff11903b56d95
+    next_action: Curate non-voice chapters; rerun exact guards/build/media; then inspect all remaining teaching visuals and interactions.
 
 next_batch:
-  - SECURITY02_OUTCOME_LADDER_RELATIONSHIP_FIRST_REDESIGN
-  - EXECUTE_SECURITY03_UPDATED_ALL_VISUAL_PEDAGOGY_GUARD_WITH_STRICT_ES_EN
-  - SECURITY04_05_ALL_VISUAL_RELATIONSHIP_FIRST_REVIEW
-  - SECURITY02_05_MEDIA_VISUAL_METADATA_AND_NONVOICE_KEY_MOMENTS
+  - CURATE_SECURITY02_05_NONVOICE_CHAPTERS_FROM_EXACT_VISUAL_TIMELINES
+  - RERUN_SECURITY02_05_EXACT_SOURCE_BUILD_MEDIA_AFTER_METADATA_AND_CHAPTERS
   - SECURITY02_05_REAL_PIXEL_PEDAGOGY_NORMAL_REDUCED_DESKTOP_MOBILE_KEYBOARD_TOUCH
+  - CLOSE_SECURITY00_01_NONVOICE_KEY_MOMENTS
+  - SECURITY_SERIES_ZERO_BASED_REQUALIFICATION_AUDIT_WHEN_ALL_ARTICLES_GREEN
