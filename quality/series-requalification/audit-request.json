@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 81,
+  "diagnostic_revision": 82,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "27ee187e47c3caaaf0e3c157431046d0083e4fd2",
-  "requested_head_parent": "336e286b4aab9ce34456ed55b3c2dfee84b03f40",
-  "reason": "Focused integration after current main merged PR #327. The repair branch was reconciled without force-push and now contains main's permanent bilingual video accessibility/key-moment schema regression on top of the requalification watch-page localization and fail-closed curriculum gates. PR #327 is test-only and changed no published page/media bytes; its exact head already passed build-and-capture and English-locale checks on main. Run the 84-page source/rendered inventory plus existing Security and Datacenters/pre-Datacenters regression/focused Security gates to detect integration incompatibility. Do not repeat the 336-context browser sweep because published site bytes did not change. Expected source/media failure remains evidence, not certification: 60 locale pages still lack video declarations and Security native narration/captions/transcripts/curated key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
+  "requested_head_parent": "b7c47e6060479843f55e26c0a3fa99e44f4dc68a",
+  "reason": "Focused integration milestone after harvesting rev81 and hardening the canonical expected-video curriculum gate. The gate now emits and internally validates one unique native-video obligation for every canonical route+locale pair, so the 84 required ES/EN video obligations are independently addressable and aggregate parity cannot hide a missing locale or route. No published page/media byte changed. Re-run negative fixtures, the 84-page source/rendered inventory, Security media probes, and Security plus Datacenters/pre-Datacenters focused browser regressions. Do not repeat the 336-context global browser sweep because published site bytes are unchanged. Expected source/rendered/media failure remains evidence, not certification: 60 locale pages still lack video declarations; the 24 declared locale pages carry 154 native H2 obligations but have no curated chapters/valid section maps; Security narration/captions/transcripts/key moments remain incomplete. Never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
