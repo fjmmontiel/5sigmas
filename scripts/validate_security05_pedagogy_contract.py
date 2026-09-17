@@ -19,8 +19,9 @@ REQUIRED = (
     'data-edge="authority"',
     'data-edge="state"',
     'data-edge="recovery"',
-    'data-output="deploy"',
-    'data-output="hold"',
+    '<path class="rg-output rg-output--deploy" data-output="deploy"',
+    '<path class="rg-output rg-output--hold" data-output="hold"',
+    "hold=root.querySelector('[data-output=\"hold\"]')",
     "e.classList.toggle('is-failed',failed)",
     'deploy.hidden=!pass',
     'hold.hidden=pass',
@@ -80,10 +81,19 @@ def self_test(html: str, i18n_text: str) -> None:
     if current:
         raise AssertionError(f"positive current visual fixture must pass: {current}")
 
-    mutated = html.replace('data-output="hold"', 'data-output="blocked-copy"', 1)
+    mutated = html.replace(
+        '<path class="rg-output rg-output--hold" data-output="hold"',
+        '<path class="rg-output rg-output--hold" data-output="blocked-copy"',
+        1,
+    )
     result = failures(mutated, i18n_text)
-    if not any('data-output="hold"' in item for item in result):
+    if not any('rg-output--hold' in item and 'data-output' in item for item in result):
         raise AssertionError('missing HOLD-path mutation was not rejected')
+
+    mutated = html.replace("hold.hidden=pass", "hold.hidden=true", 1)
+    result = failures(mutated, i18n_text)
+    if not any('hold.hidden=pass' in item for item in result):
+        raise AssertionError('HOLD visibility-state mutation was not rejected')
 
     mutated = html + '<div class="releasegate__meter"><div class="releasegate__bar"></div></div>'
     result = failures(mutated, i18n_text)
