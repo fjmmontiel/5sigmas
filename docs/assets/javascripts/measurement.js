@@ -263,7 +263,9 @@
   const onVideo = (event) => {
     const video = event.target;
     if (!(video instanceof HTMLVideoElement)) return;
-    const videoId = cleanToken(video.dataset.s5VideoId || video.id || video.currentSrc?.split('/').pop() || 'video');
+    const mediaPath = pathOnly(video.currentSrc || '');
+    const mediaName = mediaPath.split('/').filter(Boolean).pop() || '';
+    const videoId = cleanToken(video.dataset.s5VideoId || video.id || mediaName || 'video');
     transmit(event.type === 'ended' ? 'video_complete' : 'video_play', { video_id: videoId });
   };
 
