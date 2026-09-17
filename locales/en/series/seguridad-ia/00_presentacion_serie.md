@@ -24,7 +24,7 @@ This series is not a catalogue of new AI security scares. Its goal is narrower: 
 
 {{ include_html("snippets/seguridad-ia/00-series-mapa.html") }}
 
-## Contents
+## Table of contents
 
 ### 1. **An instruction hidden in a document can change what the system does**
 - What breaks when an LLM processes the control plane and the data plane through the same channel.
