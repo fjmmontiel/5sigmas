@@ -1,0 +1,68 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  locales: [es, en]
+  independent_of_media_blocker: true
+
+finding:
+  severity: P2
+  id: SECURITY00_MODEL_INFLUENCE_VS_EXECUTION_IMPACT_CONFLATION
+  previous_es: "Un documento recuperado por RAG, una observación escrita por otro agente, una salida de herramienta o una nota guardada en memoria pueden dejar de ser simples datos y convertirse en una orden operativa si el sistema no separa bien privilegios, contexto y ejecución."
+  previous_en: "A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can stop behaving like passive data and become an operational instruction if the system does not separate privileges, context and execution correctly."
+  defect: privilege_context_execution_separation_was_worded_as_if_it_determined_whether_untrusted_content_can_influence_the_model_instead_of_bounding_the_consequences_after_influence
+
+correction:
+  es: "Untrusted retrieved/tool/memory content can influence the model as if it were an instruction; separating privileges, context and execution does not eliminate that influence and instead limits the data/actions reachable if the model follows it."
+  en: "Untrusted retrieved/tool/memory content can influence the model as if it were an instruction; separating privileges, context and execution does not eliminate that influence and instead limits the data/actions reachable if the model follows it."
+  es_en_material_parity: true
+  site_facing_change: true
+
+primary_evidence:
+  revalidated_on: 2026-09-17
+  sources:
+    - https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+  evidence_summary:
+    - prompt_injection_arises_because_natural_language_instructions_and_data_are_processed_together
+    - external_documents_tool_outputs_and_other_external_data_are_untrusted_prompt_injection_surfaces
+    - least_privilege_and_explicit_tool_authorization_bound_what_an_influenced_agent_can_reach_or_execute
+
+regression_guard:
+  file: scripts/validate_security_source_claims.py
+  reviewed_es_en_claim_required: true
+  old_es_en_claim_forbidden: true
+  negative_mutations_added: true
+  canonical_parent_gate: scripts/validate_security_media_metadata_parity.py
+  executed_in_this_run: false
+  next_validation: focused_exact_head_source_guard_and_strict_es_en_before_editorial_recapture
+
+editorial_evidence_boundary:
+  prior_security00_pixel_review_current_for_new_site_bytes: false
+  prior_security00_pedagogy_review_current_for_new_site_bytes: false
+  reason: site_facing_text_changed_after_rev92_manual_capture
+  global_PIXEL_REVIEW: false
+  global_PEDAGOGY_REVIEW: false
+
+media_debt_unchanged:
+  video_accessibility_contract: FAIL_CLOSED_92_GT_91
+  voice_missing: true
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  linkedin_action: false
+  do_not_advance_to: 02-jailbreaks
