@@ -10,6 +10,11 @@ const targets = [
     locale: 'es',
     route: '/videos/series/seguridad-ia/00_presentacion_serie/',
     expectedSummary: 'Cómo una entrada no confiable puede influir en un sistema con IA y qué fronteras de autorización limitan que esa influencia se convierta en una acción.',
+    expectedTakeaways: [
+      '1. Una orden escondida en un documento puede cambiar lo que hace el sistema',
+      '2. Pedir al modelo que ignore sus límites',
+      '3. Guardar una señal peligrosa dentro del sistema',
+    ],
     requiredUi: ['Resumen del vídeo', 'Leer el artículo →', 'Vídeos relacionados'],
     forbiddenUi: ['Video summary', 'Read the article →', 'Related videos'],
   },
@@ -17,6 +22,11 @@ const targets = [
     locale: 'en',
     route: '/en/videos/series/seguridad-ia/00_presentacion_serie/',
     expectedSummary: 'How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action.',
+    expectedTakeaways: [
+      '1. An instruction hidden in a document can change what the system does',
+      '2. Asking the model to ignore its limits',
+      '3. Keeping a dangerous signal inside the system',
+    ],
     requiredUi: ['Video summary', 'Read the article →', 'Related videos'],
     forbiddenUi: ['Resumen del vídeo', 'Leer el artículo →', 'Vídeos relacionados'],
   },
@@ -32,6 +42,7 @@ const motions = [
   { name: 'reduced', value: 'reduce' },
 ];
 
+const compact = (value) => String(value || '').replace(/\s+/g, ' ').trim();
 const isExpectedMediaAbort = (url, errorText = '') => /\.(mp4|webm)(?:\?|$)/i.test(url) && /ERR_ABORTED|NS_BINDING_ABORTED/i.test(errorText);
 
 await fs.mkdir(path.join(outputDir, 'screenshots'), { recursive: true });
@@ -76,16 +87,21 @@ for (const target of targets) {
 
       const url = new URL(target.route, baseUrl).toString();
       let summaryText = '';
+      let takeawayTitles = [];
       let fullPageScreenshot = '';
+      let headerScreenshot = '';
       let summaryScreenshot = '';
       let dimensions = null;
       let uiText = '';
       try {
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
         const watch = page.locator('[data-s5-video-watch]');
-        const summary = watch.locator('.s5-video-watch__summary');
+        const header = watch.locator('.s5-video-watch__header');
+        const summaryDescription = header.locator(':scope > p');
+        const takeawaySection = watch.locator('.s5-video-watch__summary');
         await watch.waitFor({ state: 'visible', timeout: 15_000 });
-        await summary.waitFor({ state: 'visible', timeout: 15_000 });
+        await summaryDescription.waitFor({ state: 'visible', timeout: 15_000 });
+        await takeawaySection.waitFor({ state: 'visible', timeout: 15_000 });
         await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {});
 
         await page.evaluate(async () => {
@@ -102,16 +118,20 @@ for (const target of targets) {
         });
         await page.waitForTimeout(250);
 
-        summaryText = (await summary.innerText()).replace(/\s+/g, ' ').trim();
-        uiText = (await watch.innerText()).replace(/\s+/g, ' ').trim();
+        summaryText = compact(await summaryDescription.textContent());
+        takeawayTitles = (await takeawaySection.locator('article h2').allTextContents()).map(compact);
+        uiText = compact(await watch.textContent());
         dimensions = await page.evaluate(() => ({
           viewportWidth: document.documentElement.clientWidth,
           scrollWidth: document.documentElement.scrollWidth,
           scrollHeight: document.documentElement.scrollHeight,
         }));
 
-        if (!summaryText.includes(target.expectedSummary)) {
-          failures.push(`${label}: expected locale-native summary missing; got=${JSON.stringify(summaryText)}`);
+        if (summaryText !== target.expectedSummary) {
+          failures.push(`${label}: locale-native header summary mismatch; expected=${JSON.stringify(target.expectedSummary)} got=${JSON.stringify(summaryText)}`);
+        }
+        if (JSON.stringify(takeawayTitles) !== JSON.stringify(target.expectedTakeaways)) {
+          failures.push(`${label}: pedagogical takeaway sequence mismatch; expected=${JSON.stringify(target.expectedTakeaways)} got=${JSON.stringify(takeawayTitles)}`);
         }
         for (const required of target.requiredUi) {
           if (!uiText.includes(required)) failures.push(`${label}: required UI missing: ${required}`);
@@ -124,9 +144,11 @@ for (const target of targets) {
         }
 
         fullPageScreenshot = path.join(outputDir, 'screenshots', `${label}-full.jpg`);
-        summaryScreenshot = path.join(outputDir, 'screenshots', `${label}-summary.jpg`);
+        headerScreenshot = path.join(outputDir, 'screenshots', `${label}-header.jpg`);
+        summaryScreenshot = path.join(outputDir, 'screenshots', `${label}-takeaways.jpg`);
         await page.screenshot({ path: fullPageScreenshot, fullPage: true, type: 'jpeg', quality: 88 });
-        await summary.screenshot({ path: summaryScreenshot, type: 'jpeg', quality: 94 });
+        await header.screenshot({ path: headerScreenshot, type: 'jpeg', quality: 94 });
+        await takeawaySection.screenshot({ path: summaryScreenshot, type: 'jpeg', quality: 94 });
         await page.waitForTimeout(180);
       } catch (error) {
         failures.push(`${label}: ${error?.stack || error}`);
@@ -145,9 +167,12 @@ for (const target of targets) {
         viewport: profile.viewport,
         summaryText,
         expectedSummary: target.expectedSummary,
+        takeawayTitles,
+        expectedTakeaways: target.expectedTakeaways,
         dimensions,
         runtimeUnexpected,
         fullPageScreenshot,
+        headerScreenshot,
         summaryScreenshot,
         verdictBasis: 'PRE_CONTEXT_TEARDOWN_AND_RETAINED_PIXEL_EVIDENCE',
       });
@@ -159,7 +184,7 @@ for (const target of targets) {
 await browser.close();
 
 const report = {
-  schema_version: 1,
+  schema_version: 2,
   scope: 'security00_watch_summary_exact_head_pixel_evidence',
   expected_contexts: targets.length * profiles.length * motions.length,
   contexts_observed: contexts.length,
