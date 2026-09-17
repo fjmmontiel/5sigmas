@@ -1,6 +1,7 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 created_at_utc: 2026-09-17T14:03:44Z
+updated_at_utc: 2026-09-17T14:03:44Z
 state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
 contract_issue: 305
 requalification_amendment_comment: 5655569434
@@ -44,11 +45,14 @@ primary_sources_revalidated:
 commits:
   es: e61e939daefd4b7f7583bcf61e1664f3ed59d11b
   en: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
-  current_site_facing_head_before_receipt: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  deterministic_guard: 820b977714f9c9691846e76624828038b4d75b3b
+  current_site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
 
 qa:
   source_parity_editorial_review: PASS_FOR_THIS_CLAIM
-  deterministic_negative_mutation_for_new_boundary: PENDING
+  deterministic_guard: scripts/validate_security_source_claims.py
+  deterministic_negative_mutation_for_new_boundary: ADDED_NOT_YET_EXECUTED_ON_EXACT_CURRENT_HEAD
+  positive_current_source_fixture_in_guard: ADDED_NOT_YET_EXECUTED
   strict_es_exact_current_head: PENDING
   strict_en_exact_current_head: PENDING
   browser_exact_current_head: PENDING
@@ -79,14 +83,14 @@ media_blocker_unchanged:
 actions:
   launched_this_fix: false
   reason: >-
-    This is a small source/parity repair cluster. Per the cost contract, CI is deferred
-    until a justified integration milestone rather than triggering Actions every hour.
+    This is a small source/parity/guard repair cluster. Per the cost contract, CI is
+    deferred until a justified integration milestone rather than triggering Actions
+    every hour.
 
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate:
-    - ADD_DETERMINISTIC_NEGATIVE_MUTATION_FOR_PREVENTION_VS_IMPACT_CONTROL_BOUNDARY
-    - RUN_SOURCE_GUARD_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
+    - RUN_SOURCE_GUARD_SELF_TEST_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
     - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_FOR_NEXT_CONCRETE_DEFECT
     - RECAPTURE_AND_MANUALLY_REVIEW_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_SITE_FACING_CLUSTER
     - KEEP_92_GT_91_AND_ALL_1198_H2_OBLIGATIONS_FAIL_CLOSED
