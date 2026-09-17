@@ -1,0 +1,157 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+owner_priority_date: 2026-09-13
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+revision89:
+  repair_branch: quality/post-datacenters-requalification
+  content_head_after_es_en_fix: 8363efe67741da6c6299e4a4157d2ff6fabd5929
+  main_at_start: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  branch_behind_main_after_fix: 0
+  site_facing_bytes_changed: true
+  finding_id: P2_SECURITY00_INDIRECT_INJECTION_SEVERITY_OVERCLAIM
+  finding:
+    previous_es: "Por qué la inyección indirecta en RAG y agentes es más grave que el caso de chat aislado."
+    previous_en: "Why indirect injection in RAG and agents is more severe than the isolated-chat case."
+    problem: unconditional_severity_ranking_not_established_by_primary_sources
+    corrected_es: "Por qué la inyección indirecta puede ser más grave cuando el sistema conecta contenido no confiable con herramientas, datos o acciones con privilegios."
+    corrected_en: "Why indirect injection can be more severe when the system connects untrusted content to tools, data, or privileged actions."
+    es_en_material_parity_after_fix: true
+    date_modified_updated_to: 2026-09-17
+  changed_paths:
+    - docs/series/seguridad-ia/00_presentacion_serie.md
+    - locales/en/series/seguridad-ia/00_presentacion_serie.md
+  changed_assets_or_media: false
+  changed_datacenters_or_pre_datacenters: false
+
+primary_source_revalidation:
+  date: 2026-09-17
+  sources:
+    - name: OWASP_LLM_Prompt_Injection_Prevention_Cheat_Sheet
+      supports:
+        - indirect_remote_prompt_injection_through_external_content
+        - unauthorized_actions_via_tools_or_apis
+        - least_privilege_and_action_screening
+    - name: OWASP_AI_Agent_Security_Cheat_Sheet
+      supports:
+        - untrusted_external_content_as_agent_input
+        - tool_abuse_and_privilege_escalation_risk
+        - explicit_tool_authorization
+        - separation_of_decision_from_execution
+    - name: OWASP_RAG_Security_Cheat_Sheet
+      supports:
+        - rag_introduces_distinct_attack_surfaces
+  conclusion: conditional_risk_statement_supported_universal_severity_ranking_removed
+
+media_duration_investigation:
+  source_action: 35181006570
+  es_security00_declared: PT1M0S
+  es_security00_binary_seconds: 60.400
+  en_security00_declared: PT48S
+  en_security00_binary_seconds: 47.967
+  metadata_drift: false
+  conclusion: locale_native_video_durations_are_different_and_each_declaration_matches_its_binary
+  media_changed_in_revision89: false
+
+catalogue_and_curriculum_baseline:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  expected_locale_video_obligations: 84
+  audited_obligations: 84
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  video_declaration_missing: 60
+  video_captions_missing: 24
+  video_transcript_missing: 24
+  video_chapters_missing: 24
+  video_section_map_missing: 24
+  video_summary_missing: 18
+  video_title_missing: 9
+  video_not_rendered: 60
+  raw_tex_rendered: 0
+
+shared_accessibility_gate:
+  exact_locale_video_surfaces_on_repair_branch: 92
+  legacy_missing_captions_transcript_budget: 91
+  current_missing_captions_transcript_surfaces: 92
+  debt_budget_raised: false
+  state: FAIL_92_GT_91
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+qa_current_head:
+  action_run_for_revision89: false
+  action_skip_reason: small_source_parity_fix_is_not_yet_a_justified_ci_integration_milestone
+  strict_es_exact_current_head: PENDING
+  strict_en_exact_current_head: PENDING
+  browser_exact_current_head: PENDING
+  media_exact_current_head: NOT_CHANGED_FROM_FAILING_BASELINE
+  pixel_review_exact_current_head: false
+  pedagogy_review_exact_current_head: false
+  historical_rev88_pixel_pedagogy_preserved_as_historical_only: true
+  historical_rev88_inherited_as_current_pass: false
+  independent_editorial_review_claimed: false
+
+global_gates:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+release_and_concurrency:
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  force_push: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent:
+    - ADD_FAIL_CLOSED_ES_EN_SOURCE_CLAIM_REGRESSION_MUTATION_FOR_REMOVED_UNCONDITIONAL_SEVERITY_RANKING
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
+    - RUN_ONE_FOCUSED_EXACT_HEAD_CAPTURE_AFTER_SOURCE_PARITY_FIX_CLUSTER_REACHES_A_MEANINGFUL_INTEGRATION_MILESTONE
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true
