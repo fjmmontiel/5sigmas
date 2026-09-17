@@ -48,7 +48,7 @@ SEARCH_REQUIRED_EN = (
 BUDGET_REQUIRED_HTML = (
     '<svg viewBox="0 0 680 320" role="img"',
     'data-fixed-rays',
-    'data-adaptive-path',
+    '<polyline class="jbbudget__adaptive-path" data-adaptive-path points=""/>',
     'data-candidates',
     'root.dataset.mode=mode',
     "path.setAttribute('points'",
@@ -153,7 +153,7 @@ def self_test(
     if not any("adaptive-search: missing mechanism token" in item for item in result):
         raise AssertionError("adaptive-search trajectory-removal mutation was not rejected")
 
-    mutated_budget = budget_html.replace("data-adaptive-path", "data-no-adaptive-path", 1)
+    mutated_budget = budget_html.replace('<polyline class="jbbudget__adaptive-path" data-adaptive-path points=""/>', '<polyline class="jbbudget__adaptive-path" data-no-adaptive-path points=""/>', 1)
     result = failures(search_html, search_i18n, mutated_budget, budget_i18n)
     if not any("attack-budget: missing mechanism token" in item for item in result):
         raise AssertionError("attack-budget adaptive-trajectory mutation was not rejected")
