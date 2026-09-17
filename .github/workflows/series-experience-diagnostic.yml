@@ -35,7 +35,7 @@ jobs:
           from pathlib import Path
           request = json.loads(Path('quality/series-requalification/audit-request.json').read_text())
           scope = request.get('diagnostic_scope', 'full')
-          allowed = {'full', 'focused_security_00_01', 'focused_security_02_04'}
+          allowed = {'full', 'focused_security_00_01', 'focused_security_02_05'}
           if scope not in allowed:
               raise SystemExit(f'unsupported diagnostic_scope={scope!r}; allowed={sorted(allowed)}')
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
@@ -84,24 +84,34 @@ jobs:
         run: python scripts/test_video_schema_contract.py
 
       - name: Security02 reviewed source claims and relationship-first source contract
-        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_05' }}
         id: security02_contracts
         continue-on-error: true
         run: |
           python scripts/validate_security02_source_claims.py --self-test
           python scripts/validate_security02_pedagogy_contract.py --self-test
 
-      - name: Security03 reviewed Sep-2026 source claims
-        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+      - name: Security03 reviewed source and relationship-first contracts
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_05' }}
         id: security03_contracts
         continue-on-error: true
-        run: python scripts/validate_security03_source_claims.py --self-test
+        run: |
+          python scripts/validate_security03_source_claims.py --self-test
+          python scripts/validate_security03_pedagogy_contract.py --self-test
 
       - name: Security04 reviewed source attribution
-        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_05' }}
         id: security04_contracts
         continue-on-error: true
         run: python scripts/validate_security04_source_claims.py --self-test
+
+      - name: Security05 reviewed current source and release-gate contracts
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_05' }}
+        id: security05_contracts
+        continue-on-error: true
+        run: |
+          python scripts/validate_security05_source_claims.py --self-test
+          python scripts/validate_security05_pedagogy_contract.py --self-test
 
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
@@ -136,9 +146,9 @@ jobs:
             artifacts/security-requalification/media-report.json \
             --output artifacts/security-requalification/media-visual-classification.json
 
-      - name: Security 02-04 current MEDIA_VISUAL gate; VOICE stays deferred
-        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
-        id: security_media_02_04_visual
+      - name: Security 02-05 current MEDIA_VISUAL gate; VOICE stays deferred
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_05' }}
+        id: security_media_02_05_visual
         continue-on-error: true
         run: |
           set -euo pipefail
@@ -146,8 +156,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y ffmpeg
           fi
-          python scripts/validate_security_02_04_media_visual.py --self-test
-          python scripts/validate_security_02_04_media_visual.py
+          python scripts/validate_security_02_05_media_visual.py --self-test
+          python scripts/validate_security_02_05_media_visual.py
 
       - name: Prepare English
         run: python scripts/prepare_locale.py --locale en
@@ -158,7 +168,7 @@ jobs:
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
       - name: Security 1.1 rendered structured provenance and locale metadata
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_structured_metadata
         continue-on-error: true
         run: |
@@ -166,13 +176,13 @@ jobs:
           python scripts/validate_security_structured_metadata.py
 
       - name: Security 00/01 reciprocal article-watch links and locale UI
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_article_watch
         continue-on-error: true
         run: python scripts/validate_security_article_watch_contract.py
 
       - name: Security 00/01 reviewed ES/EN media metadata parity
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_media_metadata_parity
         continue-on-error: true
         run: |
@@ -202,7 +212,7 @@ jobs:
           cat /tmp/series-experience-preview.log
           exit 1
 
-      - name: Shared browser resources — Security02-04 plus Security00-01 and Datacenters/pre-Datacenters regression
+      - name: Shared browser resources — Security00-05 and Datacenters/pre-Datacenters regression
         id: shared_browser_resources
         continue-on-error: true
         timeout-minutes: 12
@@ -213,6 +223,7 @@ jobs:
             /series/seguridad-ia/02-jailbreaks/,/en/series/seguridad-ia/02-jailbreaks/,
             /series/seguridad-ia/03-envenenamiento/,/en/series/seguridad-ia/03-envenenamiento/,
             /series/seguridad-ia/04-red-teaming/,/en/series/seguridad-ia/04-red-teaming/,
+            /series/seguridad-ia/05-controles-produccion/,/en/series/seguridad-ia/05-controles-produccion/,
             /series/datacenters-espacio/00_presentacion_serie/,/en/series/datacenters-espacio/00_presentacion_serie/,
             /series/ia-pib-bienestar-energia/00_presentacion_serie/,/en/series/ia-pib-bienestar-energia/00_presentacion_serie/,
             /series/modelos-razonadores/00_presentacion_serie/,/en/series/modelos-razonadores/00_presentacion_serie/,
@@ -230,14 +241,14 @@ jobs:
         run: node scripts/audit_series_experience_browser.mjs
 
       - name: Focused Security 00/01 interaction, layout and codec-aware playback diagnostic
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_browser
         continue-on-error: true
         timeout-minutes: 10
         run: node scripts/validate_security_requalification_browser.mjs
 
       - name: Focused Security 00/01 WCAG contrast and state text visibility
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_contrast
         continue-on-error: true
         timeout-minutes: 5
@@ -248,13 +259,13 @@ jobs:
           node scripts/validate_security_text_visibility.mjs
 
       - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_video_lifecycle
         continue-on-error: true
         run: node scripts/validate_security_video_lifecycle.mjs
 
       - name: Focused Security 00/01 real touch article-watch round trip
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_article_watch_touch
         continue-on-error: true
         timeout-minutes: 5
@@ -264,21 +275,21 @@ jobs:
           test -s artifacts/security-requalification/article-watch-touch-report.json
 
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_prompt_states
         continue-on-error: true
         timeout-minutes: 10
         run: node scripts/validate_security_prompt_visual_states.mjs
 
       - name: Focused Security 00/01 real keyboard traversal and visible focus
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_keyboard_focus
         continue-on-error: true
         timeout-minutes: 5
         run: node scripts/validate_security_keyboard_focus.mjs
 
       - name: Focused Security 00/01 runtime/resource listeners through context teardown
-        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
         id: security_listener_lifetime
         continue-on-error: true
         timeout-minutes: 10
@@ -299,8 +310,9 @@ jobs:
           SECURITY02_CONTRACTS_OUTCOME: ${{ steps.security02_contracts.outcome }}
           SECURITY03_CONTRACTS_OUTCOME: ${{ steps.security03_contracts.outcome }}
           SECURITY04_CONTRACTS_OUTCOME: ${{ steps.security04_contracts.outcome }}
+          SECURITY05_CONTRACTS_OUTCOME: ${{ steps.security05_contracts.outcome }}
           SECURITY_MEDIA_00_01_VISUAL_OUTCOME: ${{ steps.security_media_00_01_visual.outcome }}
-          SECURITY_MEDIA_02_04_VISUAL_OUTCOME: ${{ steps.security_media_02_04_visual.outcome }}
+          SECURITY_MEDIA_02_05_VISUAL_OUTCOME: ${{ steps.security_media_02_05_visual.outcome }}
           SECURITY_STRUCTURED_METADATA_OUTCOME: ${{ steps.security_structured_metadata.outcome }}
           SECURITY_ARTICLE_WATCH_OUTCOME: ${{ steps.security_article_watch.outcome }}
           SECURITY_MEDIA_METADATA_PARITY_OUTCOME: ${{ steps.security_media_metadata_parity.outcome }}
@@ -326,7 +338,7 @@ jobs:
 
           for path in (
               Path('artifacts/security-requalification/media-visual-classification.json'),
-              Path('artifacts/security-requalification/security-02-04-media-visual.json'),
+              Path('artifacts/security-requalification/security-02-05-media-visual.json'),
           ):
               if path.exists():
                   data = json.loads(path.read_text())
@@ -345,12 +357,13 @@ jobs:
               'RENDERED_OUTCOME',
               'SHARED_BROWSER_RESOURCES_OUTCOME',
           ]
-          if scope in {'full', 'focused_security_02_04'}:
+          if scope in {'full', 'focused_security_02_05'}:
               names += [
                   'SECURITY02_CONTRACTS_OUTCOME',
                   'SECURITY03_CONTRACTS_OUTCOME',
                   'SECURITY04_CONTRACTS_OUTCOME',
-                  'SECURITY_MEDIA_02_04_VISUAL_OUTCOME',
+                  'SECURITY05_CONTRACTS_OUTCOME',
+                  'SECURITY_MEDIA_02_05_VISUAL_OUTCOME',
               ]
           if scope in {'full', 'focused_security_00_01'}:
               names += [
@@ -386,7 +399,7 @@ jobs:
             artifacts/series-experience/video-curriculum-inventory.json
             artifacts/security-requalification/media-report.json
             artifacts/security-requalification/media-visual-classification.json
-            artifacts/security-requalification/security-02-04-media-visual.json
+            artifacts/security-requalification/security-02-05-media-visual.json
             artifacts/security-requalification/report.json
             artifacts/security-requalification/shared-browser-resources/report.json
             artifacts/security-requalification/contrast/report.json
