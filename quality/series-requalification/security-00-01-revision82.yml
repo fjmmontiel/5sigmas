@@ -1,0 +1,108 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+revision82:
+  action: 35169683059
+  exact_head: 8538000fc6224e8b919d34195a1748743bcf3b46
+  purpose: validate independently-addressable expected native-video obligations after shared gate hardening
+  diagnostic_scope: focused_security_00_01
+  completed: true
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10476955115
+  artifact_digest: sha256:2f70abeae788d2fd03cc3d72298955ea2cc570cbcb22b8b9beecc64ae79e525c
+  artifact_retention_days: 1
+  negative_regression_fixtures: PASS
+  public_series_discovery_regression: PASS
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  security_structured_metadata: PASS
+  security_article_watch_locale_contract: PASS
+  shared_security_plus_datacenters_pre_datacenters_browser_resources: PASS
+  focused_security_browser_interaction_layout_playback: PASS
+  contrast_and_text_visibility: PASS
+  canonical_video_lifecycle: PASS
+  real_touch_article_watch_round_trip: PASS
+  prompt_injection_visual_states: PASS
+  real_keyboard_and_visible_focus: PASS
+  runtime_resource_listeners_through_teardown: PASS
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: no_published_page_or_media_bytes_changed_since_authoritative_rev75_336_context_sweep
+  final_enforcement: FAIL_CLOSED
+  final_enforcement_reason: source_rendered_and_media_contracts_remain_incomplete; technical green subchecks are not editorial or GOLDEN certification
+
+source_inventory:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  findings:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SECTION_MAP_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_NOT_RENDERED: 60
+  raw_tex_rendered: 0
+
+expected_video_gate:
+  policy: ALL_TARGET_ROUTES_NATIVE_PER_LOCALE_NO_OPT_OUT
+  expected_route_locale_video_obligations: 84
+  obligation_identity: unique_route_plus_locale
+  aggregate_count_can_hide_missing_pair: false
+  declaration_or_media_pass_inferred: false
+
+security_media:
+  state: VOICE_MISSING
+  native_mp4_count: 4
+  failures_total: 16
+  VIDEO_AUDIO_STREAM_MISSING: 4
+  VIDEO_CAPTIONS_MISSING: 4
+  VIDEO_TRANSCRIPT_MISSING: 4
+  VIDEO_CHAPTERS_MISSING: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_key_moment_or_timing: false
+
+post_action_work_not_covered_by_revision82:
+  current_state_inventory_script_added_after_action: scripts/audit_video_curriculum_inventory.py
+  mutation_fixture_file_added_after_action: scripts/test_video_curriculum_inventory.py
+  exact_rev81_inventory_receipt: quality/series-requalification/video-curriculum-inventory-rev81.yml
+  exact_rev81_inventory_summary:
+    route_locale_video_obligations: 84
+    curriculum_h2_obligations: 1198
+    declared_page_h2_obligations_blocked_curated_key_moments_missing: 154
+    undeclared_page_h2_obligations_blocked_video_undeclared: 1044
+  note: do_not_claim_revision82_executed_post_action_inventory_code
+
+editorial:
+  new_pixel_review_this_revision: false
+  new_pedagogy_review_this_revision: false
+  prior_security00_rev78_manual_evidence_remains_revision_scoped_same_orchestrator_only: true
+  security01_inherits_security00_editorial_pass: false
+  global_pixel_review: false
+  global_pedagogy_review: false
+
+release_contract_281_310:
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  - keep Security00 active and Security02 blocked
+  - integrate the explicit required-to-current-state-to-H2-to-real-key-moment inventory into the canonical diagnostic and run its negative fixtures at the next justified integration milestone
+  - retain all 60 undeclared route-locale video failures and all 1198 locale-native H2 obligations without fabricating mappings, timings, narration, captions, or transcripts
+  - consume only authorized native ES/EN narration if it appears; otherwise keep VOICE_MISSING and continue independent non-media repair
