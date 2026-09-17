@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Deterministic source contracts for Security02 relationship-first explainers.
 
-These checks prove that the adaptive-search and attack-budget explainers encode
-observable geometry/state changes and that their EN localization mirrors exact
+These checks prove that adaptive search, budget geometry and the outcome model
+encode observable geometry/state changes and that EN localization mirrors exact
 source blobs. They do NOT certify rendered pixels or editorial pedagogy.
 """
 from __future__ import annotations
@@ -17,6 +17,8 @@ SEARCH_HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-superficie-jailbreak.ht
 SEARCH_I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-superficie-jailbreak.i18n.json"
 BUDGET_HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-attack-budget.html"
 BUDGET_I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-attack-budget.i18n.json"
+OUTCOME_HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-outcome-ladder.html"
+OUTCOME_I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-outcome-ladder.i18n.json"
 
 SEARCH_REQUIRED_HTML = (
     '<svg viewBox="0 0 640 320" role="img"',
@@ -71,6 +73,40 @@ BUDGET_REQUIRED_EN = (
     'Fixed search tests independent candidates from the same origin. Adaptive search connects candidates because each result informs the next step.',
 )
 
+OUTCOME_REQUIRED_HTML = (
+    '<svg viewBox="0 0 760 250" role="img"',
+    'data-edge',
+    'data-route',
+    'data-toggle="actionable"',
+    'data-toggle="write"',
+    'data-toggle="auth"',
+    "route.setAttribute('points'",
+    "mq.matches?layouts.narrow:layouts.wide",
+    "const stage=!state.actionable?0:!state.write?2:!state.auth?3:4",
+    'TEXT_ONLY',
+    'READ_ONLY_BOUNDARY',
+    'AUTH_BLOCKED',
+    'EXTERNAL_EFFECT',
+    'Contraejemplo:',
+    '@media(max-width:760px)',
+    '@media(prefers-reduced-motion:reduce)',
+)
+OUTCOME_FORBIDDEN_HTML = (
+    'jbladder__step',
+    'data-step="bypass"',
+    'Selecciona cada nivel',
+)
+OUTCOME_REQUIRED_EN = (
+    'A textual jailbreak is not the same as an external effect',
+    'Actionable output',
+    'Tool with write scope',
+    'Authorization allows the action',
+    'The bypass remains text-only.',
+    'A write path exists, but authorization cuts it.',
+    'The complete trajectory reaches an external effect.',
+    'Counterexample:',
+)
+
 
 def git_blob_sha(text: str) -> str:
     raw = text.encode("utf-8")
@@ -117,6 +153,8 @@ def failures(
     search_i18n: str,
     budget_html: str,
     budget_i18n: str,
+    outcome_html: str,
+    outcome_i18n: str,
 ) -> list[str]:
     return [
         *check_contract(
@@ -135,6 +173,14 @@ def failures(
             BUDGET_FORBIDDEN_HTML,
             BUDGET_REQUIRED_EN,
         ),
+        *check_contract(
+            "security02:outcome-reachability",
+            outcome_html,
+            outcome_i18n,
+            OUTCOME_REQUIRED_HTML,
+            OUTCOME_FORBIDDEN_HTML,
+            OUTCOME_REQUIRED_EN,
+        ),
     ]
 
 
@@ -143,31 +189,66 @@ def self_test(
     search_i18n: str,
     budget_html: str,
     budget_i18n: str,
+    outcome_html: str,
+    outcome_i18n: str,
 ) -> None:
-    current = failures(search_html, search_i18n, budget_html, budget_i18n)
+    current = failures(
+        search_html, search_i18n, budget_html, budget_i18n, outcome_html, outcome_i18n
+    )
     if current:
         raise AssertionError(f"positive current-source fixture must pass: {current}")
 
     mutated = search_html.replace("path.setAttribute('points'", "voidPath.setAttribute('points'", 1)
-    result = failures(mutated, search_i18n, budget_html, budget_i18n)
+    result = failures(mutated, search_i18n, budget_html, budget_i18n, outcome_html, outcome_i18n)
     if not any("adaptive-search: missing mechanism token" in item for item in result):
         raise AssertionError("adaptive-search trajectory-removal mutation was not rejected")
 
-    mutated_budget = budget_html.replace('<polyline class="jbbudget__adaptive-path" data-adaptive-path points=""/>', '<polyline class="jbbudget__adaptive-path" data-no-adaptive-path points=""/>', 1)
-    result = failures(search_html, search_i18n, mutated_budget, budget_i18n)
+    mutated_budget = budget_html.replace(
+        '<polyline class="jbbudget__adaptive-path" data-adaptive-path points=""/>',
+        '<polyline class="jbbudget__adaptive-path" data-no-adaptive-path points=""/>',
+        1,
+    )
+    result = failures(
+        search_html, search_i18n, mutated_budget, budget_i18n, outcome_html, outcome_i18n
+    )
     if not any("attack-budget: missing mechanism token" in item for item in result):
         raise AssertionError("attack-budget adaptive-trajectory mutation was not rejected")
 
     mutated_budget = budget_html + '<div class="jbbudget__dots"><i class="jbbudget__dot"></i></div>'
-    result = failures(search_html, search_i18n, mutated_budget, budget_i18n)
+    result = failures(
+        search_html, search_i18n, mutated_budget, budget_i18n, outcome_html, outcome_i18n
+    )
     if not any("attack-budget: cosmetic legacy token regressed" in item for item in result):
         raise AssertionError("attack-budget generic-dot regression was not rejected")
 
-    stale = json.loads(budget_i18n)
+    mutated_outcome = outcome_html.replace(
+        "route.setAttribute('points'", "voidRoute.setAttribute('points'", 1
+    )
+    result = failures(
+        search_html, search_i18n, budget_html, budget_i18n, mutated_outcome, outcome_i18n
+    )
+    if not any("outcome-reachability: missing mechanism token" in item for item in result):
+        raise AssertionError("outcome reachability mutation was not rejected")
+
+    legacy_outcome = outcome_html + '<button class="jbladder__step" data-step="bypass">legacy</button>'
+    result = failures(
+        search_html, search_i18n, budget_html, budget_i18n, legacy_outcome, outcome_i18n
+    )
+    if not any("outcome-reachability: cosmetic legacy token regressed" in item for item in result):
+        raise AssertionError("outcome legacy-selection regression was not rejected")
+
+    stale = json.loads(outcome_i18n)
     stale["source_blob_sha"] = "0" * 40
-    result = failures(search_html, search_i18n, budget_html, json.dumps(stale))
-    if not any("attack-budget:i18n: source_blob_sha stale" in item for item in result):
-        raise AssertionError("attack-budget stale localization-source mutation was not rejected")
+    result = failures(
+        search_html,
+        search_i18n,
+        budget_html,
+        budget_i18n,
+        outcome_html,
+        json.dumps(stale),
+    )
+    if not any("outcome-reachability:i18n: source_blob_sha stale" in item for item in result):
+        raise AssertionError("outcome stale localization-source mutation was not rejected")
 
 
 def main() -> int:
@@ -179,12 +260,23 @@ def main() -> int:
     search_i18n = SEARCH_I18N_PATH.read_text(encoding="utf-8")
     budget_html = BUDGET_HTML_PATH.read_text(encoding="utf-8")
     budget_i18n = BUDGET_I18N_PATH.read_text(encoding="utf-8")
+    outcome_html = OUTCOME_HTML_PATH.read_text(encoding="utf-8")
+    outcome_i18n = OUTCOME_I18N_PATH.read_text(encoding="utf-8")
 
     if args.self_test:
-        self_test(search_html, search_i18n, budget_html, budget_i18n)
+        self_test(
+            search_html,
+            search_i18n,
+            budget_html,
+            budget_i18n,
+            outcome_html,
+            outcome_i18n,
+        )
         print("PASS Security02 pedagogy-contract mutation fixtures")
 
-    result = failures(search_html, search_i18n, budget_html, budget_i18n)
+    result = failures(
+        search_html, search_i18n, budget_html, budget_i18n, outcome_html, outcome_i18n
+    )
     if result:
         for item in result:
             print(f"FAIL {item}")
