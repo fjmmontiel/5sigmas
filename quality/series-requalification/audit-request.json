@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 98,
+  "diagnostic_revision": 99,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "98443c39c325ebf90594996665b4613beb5d1ec9",
-  "reason": "Coherent owner-current Security02-05 integration milestone after source-level relationship repairs: execute the strengthened Security02 outcome-reachability mutation gate, the updated Security03 all-mechanism pedagogy gate, Security04 source attribution plus release-regression pedagogy mutations, existing Security05 CC++/release-gate mutations, strict ES/EN builds, publication/discovery/rendered audits, shared browser-resource regression through Security05 plus Datacenters/pre-Datacenters references, and MEDIA_VISUAL 02-05 while keeping narration/audio/captions/transcript as VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL. This focused milestone deliberately does not certify PIXEL_REVIEW or PEDAGOGY_REVIEW and does not run the global all-page browser sweep.",
+  "requested_head_parent": "47e1b9b760b456c1093edbc594ba9f8e034671b8",
+  "reason": "Retry the coherent Security02-05 integration milestone only after fixing three deterministic validator/localization defects exposed by revision98: Security03 persistence reachability token matched the actual modeled state and gained a negative mutation; Security04 EN forbidden-token guard no longer self-matches valid English and the regression graph now has explicit guarded node geometry; Security05 HOLD-path self-test now mutates the actual output path and visibility contract. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and this run still does not certify manual PIXEL_REVIEW or PEDAGOGY_REVIEW.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
