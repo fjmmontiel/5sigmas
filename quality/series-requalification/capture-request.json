@@ -1,10 +1,10 @@
 {
-  "capture_revision": 80,
-  "scope": "security_00_watch_summary_exact_head_pixel_requalification",
+  "capture_revision": 81,
+  "scope": "security_00_watch_summary_takeaway_parity_exact_head",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "fa8974258f109a2d6a75a9fb2145ee47e520df96",
-  "site_facing_bytes_changed": false,
-  "reason": "Bounded follow-up pixel evidence for the exact missing Security00 watch-page surface after capture revision 79. Capture the canonical ES/EN Security00 watch page at desktop~1440/mobile~390 in normal/reduced motion, assert the repaired locale-native video_summary is visible, reject wrong-locale UI/global overflow/runtime-resource errors, and retain full-page plus summary-region pixels for manual review. This run is QA-tooling-only relative to capture79: it must not set MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN; PIXEL/PEDAGOGY remain manual and scoped. Preserve VOICE_MISSING and shared 92>91 accessibility debt; no audio evidence is claimed.",
+  "requested_head_parent": "c3a7cd5124b7c98713e2e5a434cc0eadc3f5ac3e",
+  "site_facing_bytes_changed": true,
+  "reason": "Exact-head follow-up after manual review of capture 80 found two distinct issues: the capture asserted video_summary against the takeaway section instead of the watch header, and the English Security00 watch page promoted the non-pedagogical Contents heading into takeaway slot 01, displacing the poisoning mechanism present in Spanish. The English source now uses the already-filtered heading 'Table of contents'; the capture now asserts the locale-native header summary and the exact three pedagogical takeaway titles independently. Re-render ES/EN Security00 watch plus active Security evidence at desktop~1440/mobile~390 in normal/reduced motion. This remains same-orchestrator scoped evidence, not independent PIXEL/PEDAGOGY certification; preserve VOICE_MISSING, MEDIA_PASS=false and 92>91 accessibility debt.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
