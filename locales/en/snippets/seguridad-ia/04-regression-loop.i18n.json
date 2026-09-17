@@ -32,7 +32,7 @@
   "forbidden_output_tokens": [
     "Un hallazgo sólo",
     "Modifica tres evidencias",
-    "Fixture reproduce",
+    "Fixture reproduce el ataque",
     "Mitigación corta",
     "Caso legítimo",
     "Ruta desde hallazgo",
