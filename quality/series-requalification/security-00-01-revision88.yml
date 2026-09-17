@@ -1,0 +1,160 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+series: seguridad-ia
+article: 00_presentacion_serie
+technical_companion_page: 01-prompt-injection
+next_article_blocked: 02-jailbreaks
+article_golden: false
+series_golden: false
+
+audited_revision:
+  head: ff19aa74d1bfeb2055b714dfe022dabc8be8e54c
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  repair_branch: quality/post-datacenters-requalification
+  branch_behind_main_before_receipt: 0
+  site_facing_bytes_changed_since_prior_manual_review: true
+
+implemented_corrections:
+  - EN Security00 watch metadata summary now states the same untrusted-input -> influence -> authorization-boundary -> action mechanism as ES.
+  - EN Security00 article heading changed from generic Contents to idiomatic Table of contents so the watch takeaway extractor no longer displaces the poisoning mechanism with a navigation heading.
+  - Exact-head watch capture now validates the header video_summary independently from the three pedagogical takeaway titles.
+
+exact_head_capture:
+  action: 35192375338
+  workflow: Security capture direct execution
+  conclusion: SUCCESS
+  capture_revision: 81
+  artifact_id: 10484617980
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  editorial_contexts_expected: 16
+  editorial_contexts_observed: 16
+  editorial_failures: 0
+  trace_contexts_expected: 16
+  trace_contexts_observed: 16
+  trace_checkpoints: 64
+  trace_failures: 0
+  prompt_state_contexts: 8
+  prompt_state_failures: 0
+  video_lifecycle_contexts_expected: 16
+  video_lifecycle_contexts_observed: 16
+  video_lifecycle_failures: 0
+  lifecycle_pixel_contexts: 8
+  lifecycle_retained_jpegs: 48
+  lifecycle_pixel_failures: 0
+  watch_contexts_expected: 8
+  watch_contexts_observed: 8
+  watch_failures: 0
+  runtime_unexpected_total: 0
+  listeners_retained_through_interaction_and_playback: true
+  audio_evidence_present: false
+
+manual_exact_head_review:
+  reviewer_model: same_orchestrator
+  independence_claimed: false
+  scope: Security00 exact head only; Security01 does not inherit this review
+  locales_inspected: [es, en]
+  viewports_inspected: [desktop_approx_1440, mobile_approx_390]
+  motion_modes_inspected: [normal, reduced]
+  surfaces_inspected:
+    - full article
+    - full watch page
+    - interactive semantic start/intermediate/final checkpoints
+    - video poster/play/pause/seek/end-reset/next states
+  pixel_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  pixel_findings:
+    - no visible raw TeX, accidental HTML/macros, clipping, overlap, global horizontal overflow, broken visible resources, or illegible primary labels on inspected Security00 surfaces
+    - mobile preserves the principal relationship without a giant horizontal canvas
+    - normal and reduced motion preserve the same semantic layout and endpoint states
+    - ES and EN watch summaries and three takeaway titles render in the intended locale
+  pedagogy_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  pedagogy_findings:
+    - start state exposes hostile/untrusted content without yet producing an action
+    - intermediate state shows influence entering context/proposal flow
+    - least-privilege path reaches the authorization boundary and ends BLOCKED
+    - broad-permission counterexample reaches external EFFECT
+    - interaction changes trajectory, state and outcome rather than only color or labels
+    - watch takeaways preserve the poisoning, limit-bypass and persistence mechanisms in both locales
+  global_pixel_review: false
+  global_pedagogy_review: false
+
+catalogue_and_debt:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  expected_locale_video_obligations: 84
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+shared_accessibility_gate:
+  exact_locale_video_surfaces: 92
+  legacy_missing_captions_transcript_budget: 91
+  current_missing_captions_transcript_surfaces: 92
+  threshold_raised: false
+  state: FAIL_REAL_ACCESSIBILITY_DEBT_92_GT_91
+
+sources:
+  revalidated_primary_sources:
+    - OWASP LLM Prompt Injection Prevention Cheat Sheet
+    - OWASP AI Agent Security Cheat Sheet
+  material_security00_claim_change_required: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+
+release_contract_281_310:
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+  issue_281_state: CHANGES_REQUIRED_BLOCKED
+
+global_gates:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  exact:
+    - keep shared video accessibility debt visible at 92 > 91 without threshold whitening
+    - continue the next source/parity/pedagogy defect search that is independent of missing external narration
+    - retain all 1198 locale-native H2 obligations fail-closed
+    - complete native ES/EN narration, captions, transcripts and curated key moments only from authorized real inputs
+  do_not_advance_to: 02-jailbreaks
