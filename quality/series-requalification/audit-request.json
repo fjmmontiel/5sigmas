@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 85,
+  "diagnostic_revision": 86,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "7d9e7ac35946b3989874d47b28afceb2f708a906",
-  "requested_head_parent": "7fd94f3c32c04fda6bf1cd83654274b7eef4d9f7",
-  "reason": "Focused rerun after rev84 correctly exposed a stale 91-surface checkpoint. Root cause is now reconciled explicitly: main already declared EN Security00 video while this requalification branch deliberately adds the missing native ES Security00 surface, so the exact inventory is 92. This is not threshold relaxation: the captions/transcript debt budget remains 91 and therefore the new incomplete surface still fails closed in the standalone accessibility contract. The canonical mutation step now verifies all 92 physical ES/EN asset paths with negative fixtures while leaving current known accessibility debt to SOURCE/MEDIA enforcement. No published article/media byte changed in this iteration; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters regression and focused Security gates, without repeating the 336-context global sweep. Never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
+  "requested_head_parent": "8abbcd04556dc72a7db3fe52dab2497dd590c47e",
+  "reason": "Focused integration milestone after wiring scripts/test_video_schema_contract.py into the canonical requalification diagnostic as an explicit fail-closed outcome. Preserve the exact bilingual inventory at EXPECTED_VIDEO_LOCALE_SURFACES=92 while keeping LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91 unchanged: the new incomplete Security00 ES video surface must remain visible as debt rather than being normalized away. No published article/media byte changed in this iteration. Re-run strict ES/EN, publication/source/rendered/media, the new video schema/accessibility contract, Security plus Datacenters/pre-Datacenters regression and focused Security gates. Do not repeat the 336-context global sweep and never infer PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
