@@ -1,4 +1,4 @@
-schema_version: 53
+schema_version: 54
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -96,12 +96,14 @@ current_source_fix:
   receipt: quality/series-requalification/security-00-prevention-impact-control-fix.yml
   finding: P2_SECURITY00_PREVENTION_VS_IMPACT_CONTROL_CONFLATION
   site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  deterministic_guard_commit: 820b977714f9c9691846e76624828038b4d75b3b
   corrected_es: true
   corrected_en: true
   material_es_en_parity: true
   primary_sources_revalidated: true
-  deterministic_negative_mutation_added: false
-  source_guard_exact_current_head: PENDING
+  deterministic_negative_mutation_added: true
+  deterministic_positive_fixture_added: true
+  source_guard_exact_current_head: PENDING_NOT_EXECUTED
   strict_es_exact_current_head: PENDING
   strict_en_exact_current_head: PENDING
   browser_exact_current_head: PENDING
@@ -178,8 +180,8 @@ shared_gate_coverage:
     guards_bounded_software_injection_claim: true
     guards_security01_direct_indirect_impact_scope: true
     guards_security00_model_influence_vs_execution_impact: true
-    guards_security00_prevention_vs_impact_control_split: false
-    latest_exact_head_execution: PENDING_AFTER_SITE_FACING_CHANGE
+    guards_security00_prevention_vs_impact_control_split: true
+    latest_exact_head_execution: PENDING_AFTER_SITE_FACING_AND_GUARD_CHANGE
 
 current_global_gates:
   SOURCE_PASS: false
@@ -191,7 +193,7 @@ current_global_gates:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  note: current Security00 site-facing bytes changed after rev94; historical technical/editorial evidence is preserved but is not reused as exact-current-head certification
+  note: current Security00 site-facing bytes and source guard changed after rev94; historical technical/editorial evidence is preserved but is not reused as exact-current-head certification
 
 editorial:
   latest_site_facing_change_receipt: quality/series-requalification/security-00-prevention-impact-control-fix.yml
@@ -250,9 +252,9 @@ release_and_concurrency:
   main_last_checked: e2f301e3fe346a4328cb773c46fa49ca34388a12
   repair_branch: quality/post-datacenters-requalification
   latest_site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
-  branch_head_before_status_write: aa06e9da62b9b6373c1d1b9a16728bff2cff030d
-  branch_ahead_main_before_receipt_write: 454
-  branch_ahead_main_before_status_write: 455
+  latest_guard_head: 820b977714f9c9691846e76624828038b4d75b3b
+  branch_head_before_status_write: 0a191fd0011c60882620605b79d90ae6711930e5
+  branch_ahead_main_before_status_write: 458
   branch_behind_main_last_checked: 0
   merge_base_is_current_main: true
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
@@ -281,8 +283,7 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - ADD_DETERMINISTIC_NEGATIVE_MUTATION_FOR_PREVENTION_VS_IMPACT_CONTROL_BOUNDARY
-    - RUN_SOURCE_GUARD_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
+    - RUN_SOURCE_GUARD_SELF_TEST_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
     - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_FOR_NEXT_CONCRETE_DEFECT
     - RECAPTURE_AND_MANUALLY_REVIEW_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_SITE_FACING_CLUSTER
     - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
