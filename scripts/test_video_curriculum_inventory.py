@@ -116,11 +116,12 @@ class VideoCurriculumInventoryTest(unittest.TestCase):
         self.assertEqual(inventory["status"], "FAIL_CLOSED")  # Spanish obligation is still missing video.
 
     def test_bilingual_accessibility_assets_fail_closed(self) -> None:
-        """The requalification diagnostic must exercise both locale asset paths, not ES only."""
+        """Exercise both locale asset paths without whitening known accessibility debt."""
         assert_accessibility_fail_closed_contract()
-        inventory = audit_published_accessibility_inventory()
-        self.assertEqual(inventory["locale_surfaces"], 91)
+        inventory = audit_published_accessibility_inventory(enforce_debt=False)
+        self.assertEqual(inventory["locale_surfaces"], 92)
         self.assertEqual(inventory["partial_declarations"], 0)
+        self.assertGreater(inventory["captions_transcript_review"], 0)
 
 
 if __name__ == "__main__":
