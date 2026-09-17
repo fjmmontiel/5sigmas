@@ -1,10 +1,10 @@
 {
-  "capture_revision": 83,
-  "scope": "security_00_01_indirect_injection_impact_exact_head",
+  "capture_revision": 84,
+  "scope": "security_00_01_post_rev93_influence_impact_exact_head",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "b6a4816bd0a6523fe583260650814ec480268b86",
+  "requested_head_parent": "978e042b76cf82f9703ea81e9625b9000c64dc6f",
   "site_facing_bytes_changed": true,
-  "reason": "Exact-head editorial capture after Security01 ES/EN removed an unsupported universal indirect-vs-direct prompt-injection severity hierarchy. The revised text conditions impact on whether retrieved untrusted content reaches privileged tools, sensitive data or actions and explicitly notes that direct injection can be equally high-impact when the same capabilities are exposed. Re-render and retain active Security00/01 article/watch evidence in ES/EN at desktop~1440/mobile~390 under normal/reduced motion, including whole-page, per-asset, semantic start/intermediate/final checkpoints and poster-play-pause-seek-end-next states. Technical capture is not editorial certification; manual pixel and pedagogy inspection remains mandatory. Preserve VOICE_MISSING, MEDIA_PASS=false, 92>91 accessibility debt and all 1,198 locale-native H2 obligations fail-closed.",
+  "reason": "Exact-head editorial capture for the current Security00 bytes after the post-rev93 correction separating model influence from reachable execution impact. Retain active Security00/01 article and watch evidence in ES/EN at desktop~1440/mobile~390 under normal/reduced motion, including whole-page/per-asset pixels, semantic start/intermediate/final checkpoints, real viewport chrome, Prompt Injection states, and poster-play-pause-seek-end-next lifecycle states. This capture is evidence only: PIXEL_REVIEW and PEDAGOGY_REVIEW require manual inspection of the retained pixels and must not be inferred from a green workflow. Preserve VOICE_MISSING, MEDIA_PASS=false, 92>91 accessibility debt and all 1,198 locale-native H2 obligations fail-closed.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
