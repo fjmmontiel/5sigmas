@@ -1,0 +1,185 @@
+schema_version: 1
+revision: 90
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  diagnostic_scope: focused_security_00_01
+  full_catalogue_browser_sweep_repeated: false
+  full_catalogue_browser_skip_reason: focused_iteration_no_need_to_repeat_336_context_global_sweep
+
+action:
+  id: 35203598471
+  audited_head: 6bfe07e68aaf39c41fd9d7f329af5f18fd8e5b89
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  golden: NOT_CERTIFIED
+  artifact:
+    id: 10489326722
+    name: series-experience-diagnostic
+    size_bytes: 167224
+    retention_days: 1
+    digest: sha256:eebbfe80812d51196355cbce5e7899f0aa8b9bdd9031ba53291aeb2121f3067e
+
+mutation_and_discovery_tests:
+  series_experience: 38_of_38_PASS
+  video_curriculum_inventory: 7_of_7_PASS
+  publication_discovery: 5_of_5_PASS
+
+build_and_publication:
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  public_series: 13
+  presentation_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+  en_es_link_graph_pages: 156
+  en_es_link_graph_paired: 156
+  crawl_orphans: 0
+  contextual_underlinked: 0
+
+technical_outcomes:
+  PUBLICATION_DISCOVERY_OUTCOME: success
+  SOURCE_OUTCOME: failure
+  VIDEO_CURRICULUM_INVENTORY_OUTCOME: failure
+  VIDEO_SCHEMA_CONTRACT_OUTCOME: failure
+  PUBLICATION_OUTCOME: success
+  MEDIA_PROBE_OUTCOME: failure
+  SECURITY_STRUCTURED_METADATA_OUTCOME: success
+  SECURITY_ARTICLE_WATCH_OUTCOME: success
+  SECURITY_MEDIA_METADATA_PARITY_OUTCOME: success
+  RENDERED_OUTCOME: failure
+  SHARED_BROWSER_RESOURCES_OUTCOME: success
+  BROWSER_OUTCOME: skipped
+  SECURITY_BROWSER_OUTCOME: success
+  SECURITY_CONTRAST_OUTCOME: success
+  SECURITY_VIDEO_LIFECYCLE_OUTCOME: success
+  SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME: success
+  SECURITY_PROMPT_STATES_OUTCOME: success
+  SECURITY_KEYBOARD_FOCUS_OUTCOME: success
+  SECURITY_LISTENER_LIFETIME_OUTCOME: success
+
+source_claim_gate:
+  canonical_entrypoint: scripts/validate_security_media_metadata_parity.py
+  delegated_guard: scripts/validate_security_source_claims.py
+  severity_claim_self_test: PASS
+  severity_claim_current_source: PASS
+  note: >-
+    This Action checked the conditional indirect-injection severity claim introduced in
+    rev89. A later software-injection boundary P2 repair and its additional mutations
+    were committed after this Action had already checked out audited_head and therefore
+    are not certified by rev90.
+
+coverage:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  expected_locale_video_obligations: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE: 24
+  VIDEO_REQUIRED_UNDECLARED: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  BLOCKED_CURATED_KEY_MOMENTS_MISSING: 154
+  BLOCKED_VIDEO_UNDECLARED: 1044
+  findings:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SECTION_MAP_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_NOT_RENDERED: 60
+
+video_accessibility_contract:
+  locale_surfaces: 92
+  missing_captions_transcript_surfaces: 92
+  legacy_missing_captions_transcript_budget: 91
+  debt_budget_raised: false
+  result: FAIL_CLOSED_92_GT_91
+  failure: "Captions/transcript debt increased: 92 surfaces exceed the legacy budget 91. New video surfaces must not silently expand accessibility debt."
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_video_identity: PASS_DISTINCT_BINARIES
+  format: H264_1920X1080_YUV420P
+  security00_es_duration_seconds: 60.3
+  security00_es_declared_duration: PT1M0S
+  security00_en_duration_seconds: 47.566667
+  security00_en_declared_duration: PT48S
+  security01_es_duration_seconds: 60.333333
+  security01_en_duration_seconds: 47.566667
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+browser_and_accessibility_technical:
+  shared_reference_regression:
+    pages: 16
+    profiles_per_page: 4
+    contexts: 64_of_64_PASS
+    classifier_mutations: 20_PASS
+    expected_media_teardown_aborts: 64_PROVEN
+    failures: 0
+    includes_datacenters_and_pre_datacenters_references: true
+  focused_security_browser: PASS
+  contrast:
+    state_context_records: 128
+    teaching_text_min_ratio: 4.5
+    failures: 0
+  text_visibility:
+    contexts: 8
+    states_per_context: 4
+    locales: [es, en]
+    desktop_mobile: true
+    normal_reduced_motion: true
+    failures: 0
+  video_lifecycle: PASS
+  real_mobile_touch_article_watch_roundtrip: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus_real_tab_enter: PASS
+  runtime_listener_lifetime:
+    contexts: 16_of_16_PASS
+    listeners_retained_through_context_teardown: true
+    failures: 0
+
+editorial_truth:
+  rev90_pixel_review: PENDING_MANUAL
+  rev90_pedagogy_review: PENDING_MANUAL
+  technical_gates_are_not_editorial_pass: true
+  independent_review_claimed: false
+  current_branch_head_inherits_rev90: false
+  reason: >-
+    Site-facing Security00 ES/EN source text and its deterministic guard were changed
+    after rev90 checkout. No pixel, pedagogy or technical result from rev90 is inherited
+    to those later bytes.
+
+post_action_change:
+  receipt: quality/series-requalification/security-00-source-boundary-fix.yml
+  finding: P2_SECURITY00_SOFTWARE_CODE_DATA_BOUNDARY_OVERGENERALIZATION
+  exact_current_head_ci: false
+  exact_current_head_manual_pixel_review: false
+  exact_current_head_manual_pedagogy_review: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  linkedin_action: false
