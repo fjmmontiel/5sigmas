@@ -1,10 +1,10 @@
 {
-  "capture_revision": 81,
-  "scope": "security_00_watch_summary_takeaway_parity_exact_head",
+  "capture_revision": 82,
+  "scope": "security_00_post_rev90_source_boundary_exact_head",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "c3a7cd5124b7c98713e2e5a434cc0eadc3f5ac3e",
+  "requested_head_parent": "cd722f110f915dbfd4a48dd7da37e4394d744c73",
   "site_facing_bytes_changed": true,
-  "reason": "Exact-head follow-up after manual review of capture 80 found two distinct issues: the capture asserted video_summary against the takeaway section instead of the watch header, and the English Security00 watch page promoted the non-pedagogical Contents heading into takeaway slot 01, displacing the poisoning mechanism present in Spanish. The English source now uses the already-filtered heading 'Table of contents'; the capture now asserts the locale-native header summary and the exact three pedagogical takeaway titles independently. Re-render ES/EN Security00 watch plus active Security evidence at desktop~1440/mobile~390 in normal/reduced motion. This remains same-orchestrator scoped evidence, not independent PIXEL/PEDAGOGY certification; preserve VOICE_MISSING, MEDIA_PASS=false and 92>91 accessibility debt.",
+  "reason": "Exact-head editorial capture after the post-rev90 Security00 ES/EN source repair narrowed the software code/data separation claim to the supported interpreter-injection control path and explicitly states that it does not solve all attack classes. Re-render and retain active Security00 article/watch evidence in ES/EN at desktop~1440/mobile~390 under normal/reduced motion, including whole-page, per-asset, semantic start/intermediate/final checkpoints and poster-play-pause-seek-end-next states. Technical capture is not editorial certification; manual pixel and pedagogy inspection remains mandatory. Preserve VOICE_MISSING, MEDIA_PASS=false, 92>91 accessibility debt and all 1,198 locale-native H2 obligations fail-closed.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
