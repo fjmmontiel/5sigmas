@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 87,
+  "diagnostic_revision": 90,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "5470028add0bf62daca5b0cffaeb7ca5b385bdd0",
-  "reason": "Focused integration milestone after adding validate_security_media_metadata_parity.py as an explicit canonical diagnostic outcome and final-enforcement dependency. Verify the repaired Security00 EN video_summary against the reviewed ES/EN mechanism contract while preserving all existing fail-closed video debt, including EXPECTED_VIDEO_LOCALE_SURFACES=92 versus LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91. Re-run strict ES/EN, source/publication/rendered/media/video-schema checks, Security plus Datacenters/pre-Datacenters regression and focused Security browser/lifecycle/accessibility/listener gates. Do not repeat the 336-context global sweep in this focused iteration and never infer PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from the technical run.",
+  "requested_head_parent": "5a139618f6c8471e8d73b1709e96fffab4390e6b",
+  "reason": "Focused integration milestone after the Security00 ES/EN indirect-injection severity overclaim was narrowed to a source-supported conditional statement and a deterministic mutation guard was added to the already-canonical reviewed-source parity gate. Re-run strict ES/EN, source/publication/rendered/media/video-schema checks, Security plus Datacenters/pre-Datacenters regression, and focused Security browser/lifecycle/accessibility/listener gates. Preserve EXPECTED_VIDEO_LOCALE_SURFACES=92 versus LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91 without threshold whitening. Do not repeat the 336-context global sweep in this focused iteration and never infer PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from the technical run alone.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
