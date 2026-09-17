@@ -20,7 +20,7 @@ In software security, a classic defense against [injection](https://cheatsheetse
 
 That changes the risk surface structurally. A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can influence the model as if it were an instruction. [Separating privileges, context and execution](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html) does not eliminate that influence; it limits which data and actions it can reach if the model follows it.
 
-This series is not a catalogue of new AI security scares. Its goal is narrower: understand where the risk actually comes from, which parts belong to architecture and which belong to controls, and why many mitigations that sound reasonable buy time without closing the underlying path.
+This series is not a catalogue of new AI security scares. Its goal is to separate mechanisms that are often conflated: which controls reduce the chance that untrusted content changes model behavior, and which controls limit the consequences—accessible data, tools and actions—even when that influence occurs.
 
 {{ include_html("snippets/seguridad-ia/00-series-mapa.html") }}
 
