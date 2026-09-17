@@ -215,24 +215,28 @@ series/seguridad-ia/02-jailbreaks.md:
   video: 02-jailbreaks.mp4
   video_poster: 02-jailbreaks.jpg
   video_title: Jailbreaks
+  video_summary: "How repeated and adaptive prompt attempts change the attack surface, and why authorization and attempt limits still matter after a refusal."
   video_duration: PT48S
 
 series/seguridad-ia/03-envenenamiento.md:
   video: 03-envenenamiento.mp4
   video_poster: 03-envenenamiento.jpg
   video_title: Poisoning
+  video_summary: "How untrusted input can become persistent memory, re-enter a later decision, and survive naive deletion through derived state."
   video_duration: PT48S
 
 series/seguridad-ia/04-red-teaming.md:
   video: 04-red-teaming.mp4
   video_poster: 04-red-teaming.jpg
   video_title: Red Teaming
+  video_summary: "How to test the full causal path from adversarial input to authorization, external effect, recovery, and a reproducible release regression."
   video_duration: PT48S
 
 series/seguridad-ia/05-controles-produccion.md:
   video: 05-controles-produccion.mp4
   video_poster: 05-controles-produccion.jpg
   video_title: Production Controls
+  video_summary: "How least privilege, independent authorization, kill paths, observability, and evidence-bound release gates limit damage when the model fails."
   video_duration: PT48S
 
 articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
