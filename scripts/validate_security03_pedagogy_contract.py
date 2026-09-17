@@ -29,7 +29,7 @@ REQUIRED = {
         'data-action="write"', 'data-action="retrieve"', 'data-action="revoke"', 'data-action="invalidate"',
         'data-edge="derive-index"', 'data-edge="derive-cache"', 'data-edge="index-retrieve"',
         'data-edge="cache-retrieve"', 'data-edge="decision-tool"',
-        "const residual=s.index||s.cache", "const reaches=s.retrieved&&residual",
+        "const residual=s.index||s.cache,reaches=s.retrieved&&residual",
         "s={...s,row:false,revoked:true}", "s={...s,index:false,cache:false,retrieved:false}",
         "Borrar la fila original no prueba olvido",
         "La revocación solo es completa cuando esos derivados dejan de ser alcanzables",
@@ -114,6 +114,17 @@ def self_test(texts: dict[str, tuple[str, str]]) -> None:
     mutated["persistence"] = (persistence_html.replace('data-edge="cache-retrieve"', 'data-edge="cache-decorative"', 1), persistence_i18n)
     if not any("cache-retrieve" in item for item in failures(mutated)):
         raise AssertionError("residual cache path mutation was not rejected")
+    mutated = dict(texts)
+    mutated["persistence"] = (
+        persistence_html.replace(
+            "const residual=s.index||s.cache,reaches=s.retrieved&&residual",
+            "const residual=s.index||s.cache,reaches=s.retrieved",
+            1,
+        ),
+        persistence_i18n,
+    )
+    if not any("retrieved&&residual" in item for item in failures(mutated)):
+        raise AssertionError("persistence residual-reachability mutation was not rejected")
     runtime_html, runtime_i18n = texts["runtime_vs_weights"]
     mutated = dict(texts)
     mutated["runtime_vs_weights"] = (runtime_html.replace('data-intervention="swap-model"', 'data-intervention="highlight-model"', 1), runtime_i18n)
