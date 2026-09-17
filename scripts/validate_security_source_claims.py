@@ -70,6 +70,28 @@ FORBIDDEN_IMPACT_BOUNDARY_EN = (
     "(https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)."
 )
 
+REVIEWED_CONTROL_SPLIT_ES = (
+    "El objetivo es separar mecanismos que suelen confundirse: qué controles reducen la "
+    "probabilidad de que contenido no confiable altere el comportamiento del modelo y qué "
+    "controles limitan las consecuencias —datos accesibles, herramientas y acciones— incluso "
+    "cuando esa influencia ocurre."
+)
+REVIEWED_CONTROL_SPLIT_EN = (
+    "Its goal is to separate mechanisms that are often conflated: which controls reduce the "
+    "chance that untrusted content changes model behavior, and which controls limit the "
+    "consequences—accessible data, tools and actions—even when that influence occurs."
+)
+FORBIDDEN_CONTROL_SPLIT_ES = (
+    "El objetivo es entender qué se rompe cuando datos e instrucciones comparten el mismo canal, "
+    "cómo recorrer la cadena completa de riesgo y por qué muchas mitigaciones que parecen "
+    "razonables solo compran tiempo sin cerrar el camino de fondo."
+)
+FORBIDDEN_CONTROL_SPLIT_EN = (
+    "The goal is to understand what breaks when data and instructions share the same channel, "
+    "how risk propagates across the full chain, and why many seemingly reasonable mitigations "
+    "buy time without closing the underlying path."
+)
+
 REVIEWED_01_INTRO_ES = (
     "por qué la inyección indirecta en RAG y agentes puede aumentar el impacto cuando contenido "
     "no confiable alcanza herramientas, datos o acciones con privilegios"
@@ -158,6 +180,15 @@ def claim_failures(
     if FORBIDDEN_IMPACT_BOUNDARY_EN in en_text:
         failures.append("security00:en: privilege separation incorrectly presented as preventing model influence")
 
+    if REVIEWED_CONTROL_SPLIT_ES not in es_text:
+        failures.append("security00:es: reviewed prevention-versus-impact control split missing")
+    if REVIEWED_CONTROL_SPLIT_EN not in en_text:
+        failures.append("security00:en: reviewed prevention-versus-impact control split missing")
+    if FORBIDDEN_CONTROL_SPLIT_ES in es_text:
+        failures.append("security00:es: vague mitigation-buy-time framing regressed")
+    if FORBIDDEN_CONTROL_SPLIT_EN in en_text:
+        failures.append("security00:en: vague mitigation-buy-time framing regressed")
+
     reviewed_01 = (
         (REVIEWED_01_INTRO_ES, es01_text, "security01:es: reviewed conditional impact intro missing"),
         (REVIEWED_01_INTRO_EN, en01_text, "security01:en: reviewed conditional impact intro missing"),
@@ -242,6 +273,20 @@ def self_test(
     failures = claim_failures(es_text, mutated_impact_en, es01_text, en01_text)
     if not any("security00:en: privilege separation incorrectly presented as preventing model influence" in item for item in failures):
         raise AssertionError("EN influence-vs-impact regression mutation was not rejected")
+
+    mutated_control_split_es = es_text.replace(REVIEWED_CONTROL_SPLIT_ES, FORBIDDEN_CONTROL_SPLIT_ES, 1)
+    failures = claim_failures(mutated_control_split_es, en_text, es01_text, en01_text)
+    if not any("security00:es: vague mitigation-buy-time framing regressed" in item for item in failures):
+        raise AssertionError("ES prevention-vs-impact regression mutation was not rejected")
+    if not any("security00:es: reviewed prevention-versus-impact control split missing" in item for item in failures):
+        raise AssertionError("ES removal of reviewed prevention-vs-impact split was not rejected")
+
+    mutated_control_split_en = en_text.replace(REVIEWED_CONTROL_SPLIT_EN, FORBIDDEN_CONTROL_SPLIT_EN, 1)
+    failures = claim_failures(es_text, mutated_control_split_en, es01_text, en01_text)
+    if not any("security00:en: vague mitigation-buy-time framing regressed" in item for item in failures):
+        raise AssertionError("EN prevention-vs-impact regression mutation was not rejected")
+    if not any("security00:en: reviewed prevention-versus-impact control split missing" in item for item in failures):
+        raise AssertionError("EN removal of reviewed prevention-vs-impact split was not rejected")
 
     mutated_01_es = es01_text.replace(REVIEWED_01_INTRO_ES, FORBIDDEN_01_INTRO_ES, 1)
     failures = claim_failures(es_text, en_text, mutated_01_es, en01_text)
