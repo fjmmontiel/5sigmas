@@ -5,6 +5,11 @@ This gate verifies rendered output, not just front matter or template source. It
 covers the article Open Graph contract that can otherwise disappear when a
 locale replaces MkDocs' inherited hook list, plus the canonical TechArticle
 JSON-LD identity rendered by the locale templates.
+
+Publication and modification dates are derived from the reviewed locale source
+front matter. This prevents the gate itself from becoming stale after a real
+content edit while still requiring rendered Open Graph and JSON-LD dates to
+match the source exactly.
 """
 
 from __future__ import annotations
@@ -21,25 +26,59 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED = {
     "es": {
         "path": ROOT / "site/series/seguridad-ia/01-prompt-injection/index.html",
+        "source": ROOT / "docs/series/seguridad-ia/01-prompt-injection.md",
         "url": "https://5sigmas.com/series/seguridad-ia/01-prompt-injection/",
         "section": "Seguridad en IA",
-        "published": "2026-05-26T00:00:00+00:00",
-        "modified": "2026-09-14T00:00:00+00:00",
-        "jsonld_published": "2026-05-26",
-        "jsonld_modified": "2026-09-14",
         "tags": {"IA", "Seguridad", "LLMs", "Agentes"},
     },
     "en": {
         "path": ROOT / "site/en/series/seguridad-ia/01-prompt-injection/index.html",
+        "source": ROOT / "locales/en/series/seguridad-ia/01-prompt-injection.md",
         "url": "https://5sigmas.com/en/series/seguridad-ia/01-prompt-injection/",
         "section": "AI Security",
-        "published": "2026-05-26T00:00:00+00:00",
-        "modified": "2026-09-14T00:00:00+00:00",
-        "jsonld_published": "2026-05-26",
-        "jsonld_modified": "2026-09-14",
         "tags": {"AI", "Security", "LLMs", "Agents"},
     },
 }
+
+
+def _frontmatter_dates(source: Path) -> tuple[str, str]:
+    """Return source date/date_modified as ISO dates, failing closed on drift."""
+    if not source.is_file():
+        raise ValueError(f"source missing: {source.relative_to(ROOT)}")
+    text = source.read_text(encoding="utf-8")
+    if not text.startswith("---\n"):
+        raise ValueError(f"front matter missing: {source.relative_to(ROOT)}")
+    end = text.find("\n---\n", 4)
+    if end < 0:
+        raise ValueError(f"front matter terminator missing: {source.relative_to(ROOT)}")
+    fields: dict[str, str] = {}
+    for raw in text[4:end].splitlines():
+        if ":" not in raw:
+            continue
+        key, value = raw.split(":", 1)
+        if key in {"date", "date_modified"}:
+            fields[key] = value.strip().strip("'\"")
+    published = fields.get("date", "")
+    modified = fields.get("date_modified", "")
+    for key, value in (("date", published), ("date_modified", modified)):
+        parts = value.split("-")
+        if len(parts) != 3 or tuple(map(len, parts)) != (4, 2, 2) or not all(part.isdigit() for part in parts):
+            raise ValueError(
+                f"{source.relative_to(ROOT)}: {key} must be explicit YYYY-MM-DD, got {value!r}"
+            )
+    return published, modified
+
+
+def _expected(locale: str) -> dict[str, Any]:
+    base = dict(EXPECTED[locale])
+    published, modified = _frontmatter_dates(base["source"])
+    base.update(
+        published=f"{published}T00:00:00+00:00",
+        modified=f"{modified}T00:00:00+00:00",
+        jsonld_published=published,
+        jsonld_modified=modified,
+    )
+    return base
 
 
 class MetadataParser(HTMLParser):
@@ -103,7 +142,10 @@ def _tech_articles(parser: MetadataParser) -> list[dict[str, Any]]:
 
 
 def validate_html(html: str, locale: str) -> list[str]:
-    expected = EXPECTED[locale]
+    try:
+        expected = _expected(locale)
+    except ValueError as exc:
+        return [f"{locale}: {exc}"]
     errors: list[str] = []
     parser = MetadataParser()
     try:
@@ -158,15 +200,23 @@ def validate_html(html: str, locale: str) -> list[str]:
     return errors
 
 
-def _synthetic_html(locale: str, *, section: str | None = None, include_article_meta: bool = True) -> str:
-    expected = EXPECTED[locale]
+def _synthetic_html(
+    locale: str,
+    *,
+    section: str | None = None,
+    include_article_meta: bool = True,
+    modified_override: str | None = None,
+) -> str:
+    expected = _expected(locale)
+    modified = modified_override or expected["jsonld_modified"]
+    modified_time = f"{modified}T00:00:00+00:00"
     meta = '<meta property="og:type" content="article">'
     if include_article_meta:
         meta += (
             '<meta property="article:author" content="https://5sigmas.com/meta/about/">'
             f'<meta property="article:section" content="{section or expected["section"]}">'
             f'<meta property="article:published_time" content="{expected["published"]}">'
-            f'<meta property="article:modified_time" content="{expected["modified"]}">'
+            f'<meta property="article:modified_time" content="{modified_time}">'
             + "".join(f'<meta property="article:tag" content="{tag}">' for tag in sorted(expected["tags"]))
         )
     article = {
@@ -175,7 +225,7 @@ def _synthetic_html(locale: str, *, section: str | None = None, include_article_
         "url": expected["url"],
         "inLanguage": locale,
         "datePublished": expected["jsonld_published"],
-        "dateModified": expected["jsonld_modified"],
+        "dateModified": modified,
         "mainEntityOfPage": {"@type": "WebPage", "@id": expected["url"]},
     }
     return f"<html><head>{meta}<script type=\"application/ld+json\">{json.dumps(article)}</script></head></html>"
@@ -191,6 +241,14 @@ def self_test() -> None:
         assert validate_html(_synthetic_html(locale, section=EXPECTED[other]["section"]), locale), (
             f"cross-locale article section must fail for {locale}"
         )
+        stale = "1999-01-01"
+        stale_failures = validate_html(_synthetic_html(locale, modified_override=stale), locale)
+        assert any("article:modified_time" in item for item in stale_failures), (
+            f"stale Open Graph modified date must fail for {locale}"
+        )
+        assert any("TechArticle.dateModified" in item for item in stale_failures), (
+            f"stale JSON-LD modified date must fail for {locale}"
+        )
     print("Security structured metadata negative fixtures PASS")
 
 
@@ -203,7 +261,12 @@ def main() -> int:
         return 0
 
     failures: list[str] = []
-    for locale, expected in EXPECTED.items():
+    for locale in EXPECTED:
+        try:
+            expected = _expected(locale)
+        except ValueError as exc:
+            failures.append(f"{locale}: {exc}")
+            continue
         path: Path = expected["path"]
         if not path.is_file():
             failures.append(f"{locale}: built page missing: {path.relative_to(ROOT)}")
