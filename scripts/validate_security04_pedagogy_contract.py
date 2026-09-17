@@ -24,6 +24,13 @@ REQUIRED_HTML = (
     'data-branch="attack"',
     'data-branch="legit"',
     'data-mobile="gate"',
+    'data-node="finding" transform="translate(90 150)"',
+    'data-node="fixture" transform="translate(250 150)"',
+    'data-node="rerun" transform="translate(410 150)"',
+    'data-node="gate" transform="translate(570 150)"',
+    'data-node="deploy" transform="translate(690 65)"',
+    'data-node="attack" transform="translate(690 150)"',
+    'data-node="legit" transform="translate(690 240)"',
     "const verdict=!state.fixture?'NO_FIXTURE':!state.blocked?'ATTACK_PERSISTS':!state.legit?'LEGIT_BREAKS':'DEPLOY'",
     "route.setAttribute('points'",
     "mobile.gate.dataset.result=verdict==='DEPLOY'?'DEPLOY':'HOLD'",
@@ -85,6 +92,14 @@ def self_test(html: str, i18n_text: str) -> None:
     mutated = html.replace("route.setAttribute('points'", "voidRoute.setAttribute('points'", 1)
     if not any("missing mechanism token" in item for item in failures(mutated, i18n_text)):
         raise AssertionError("release-route mutation was not rejected")
+
+    geometry_mutation = html.replace(
+        'data-node="gate" transform="translate(570 150)"',
+        'data-node="gate"',
+        1,
+    )
+    if not any("missing mechanism token" in item for item in failures(geometry_mutation, i18n_text)):
+        raise AssertionError("release-gate node-geometry mutation was not rejected")
 
     legacy = html + "<script>setInterval(()=>{},620)</script>"
     if not any("cosmetic legacy token regressed" in item for item in failures(legacy, i18n_text)):
