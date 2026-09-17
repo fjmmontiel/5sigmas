@@ -47,6 +47,29 @@ FORBIDDEN_BOUNDARY_EN = (
     "if code and data are cleanly separated, the main attack classes are easier to bound."
 )
 
+REVIEWED_IMPACT_BOUNDARY_ES = (
+    "[Separar privilegios, contexto y ejecución](https://cheatsheetseries.owasp.org/cheatsheets/"
+    "AI_Agent_Security_Cheat_Sheet.html) no elimina esa influencia; limita qué datos y acciones "
+    "puede alcanzar si el modelo la sigue."
+)
+REVIEWED_IMPACT_BOUNDARY_EN = (
+    "[Separating privileges, context and execution](https://cheatsheetseries.owasp.org/cheatsheets/"
+    "AI_Agent_Security_Cheat_Sheet.html) does not eliminate that influence; it limits which data "
+    "and actions it can reach if the model follows it."
+)
+FORBIDDEN_IMPACT_BOUNDARY_ES = (
+    "Un documento recuperado por RAG, una observación escrita por otro agente, una salida de "
+    "herramienta o una nota guardada en memoria pueden dejar de ser simples datos y convertirse "
+    "en una orden operativa si el sistema no [separa bien privilegios, contexto y ejecución]"
+    "(https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)."
+)
+FORBIDDEN_IMPACT_BOUNDARY_EN = (
+    "A document retrieved by RAG, an observation written by another agent, a tool result or a note "
+    "stored in memory can stop behaving like passive data and become an operational instruction "
+    "if the system does not [separate privileges, context and execution correctly]"
+    "(https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)."
+)
+
 REVIEWED_01_INTRO_ES = (
     "por qué la inyección indirecta en RAG y agentes puede aumentar el impacto cuando contenido "
     "no confiable alcanza herramientas, datos o acciones con privilegios"
@@ -126,6 +149,15 @@ def claim_failures(
     if FORBIDDEN_BOUNDARY_EN in en_text:
         failures.append("security00:en: broad code-data security generalization regressed")
 
+    if REVIEWED_IMPACT_BOUNDARY_ES not in es_text:
+        failures.append("security00:es: reviewed model-influence versus execution-impact boundary missing")
+    if REVIEWED_IMPACT_BOUNDARY_EN not in en_text:
+        failures.append("security00:en: reviewed model-influence versus execution-impact boundary missing")
+    if FORBIDDEN_IMPACT_BOUNDARY_ES in es_text:
+        failures.append("security00:es: privilege separation incorrectly presented as preventing model influence")
+    if FORBIDDEN_IMPACT_BOUNDARY_EN in en_text:
+        failures.append("security00:en: privilege separation incorrectly presented as preventing model influence")
+
     reviewed_01 = (
         (REVIEWED_01_INTRO_ES, es01_text, "security01:es: reviewed conditional impact intro missing"),
         (REVIEWED_01_INTRO_EN, en01_text, "security01:en: reviewed conditional impact intro missing"),
@@ -200,6 +232,16 @@ def self_test(
         raise AssertionError("EN broad software-security mutation was not rejected")
     if not any("en: reviewed bounded software-injection claim missing" in item for item in failures):
         raise AssertionError("EN removal of reviewed bounded injection claim was not rejected")
+
+    mutated_impact_es = es_text.replace(REVIEWED_IMPACT_BOUNDARY_ES, FORBIDDEN_IMPACT_BOUNDARY_ES, 1)
+    failures = claim_failures(mutated_impact_es, en_text, es01_text, en01_text)
+    if not any("security00:es: privilege separation incorrectly presented as preventing model influence" in item for item in failures):
+        raise AssertionError("ES influence-vs-impact regression mutation was not rejected")
+
+    mutated_impact_en = en_text.replace(REVIEWED_IMPACT_BOUNDARY_EN, FORBIDDEN_IMPACT_BOUNDARY_EN, 1)
+    failures = claim_failures(es_text, mutated_impact_en, es01_text, en01_text)
+    if not any("security00:en: privilege separation incorrectly presented as preventing model influence" in item for item in failures):
+        raise AssertionError("EN influence-vs-impact regression mutation was not rejected")
 
     mutated_01_es = es01_text.replace(REVIEWED_01_INTRO_ES, FORBIDDEN_01_INTRO_ES, 1)
     failures = claim_failures(es_text, en_text, mutated_01_es, en01_text)
