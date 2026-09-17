@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fail-closed ES/EN media-metadata parity for active Security requalification.
+"""Fail-closed ES/EN reviewed-source parity for active Security requalification.
 
-This gate is intentionally source-based. It checks the reviewed native summaries
-for Security00/01 rather than inferring parity from the fact that both locales
-happen to declare a video. It does not certify binary media, captions,
-transcripts, key moments, pixel quality or pedagogy.
+This gate is intentionally source-based. It checks the reviewed native video
+metadata for Security00/01 and delegates reviewed Security00 material-claim
+protection to ``validate_security_source_claims``. It does not certify binary
+media, captions, transcripts, key moments, pixel quality or pedagogy.
 """
 from __future__ import annotations
 
@@ -14,6 +14,13 @@ import re
 from pathlib import Path
 
 import yaml
+
+from validate_security_source_claims import (
+    EN_PATH as SOURCE_CLAIM_EN_PATH,
+    ES_PATH as SOURCE_CLAIM_ES_PATH,
+    claim_failures as source_claim_failures,
+    self_test as source_claim_self_test,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 ES_ROOT = ROOT / "docs/series/seguridad-ia"
@@ -91,9 +98,16 @@ def parity_failures(es: dict[str, dict], en: dict[str, dict]) -> list[str]:
     return failures
 
 
+def load_source_claim_texts() -> tuple[str, str]:
+    return (
+        SOURCE_CLAIM_ES_PATH.read_text(encoding="utf-8"),
+        SOURCE_CLAIM_EN_PATH.read_text(encoding="utf-8"),
+    )
+
+
 def self_test(es: dict[str, dict], en: dict[str, dict]) -> None:
     if parity_failures(es, en):
-        raise AssertionError("positive source fixture must satisfy reviewed parity contract")
+        raise AssertionError("positive source fixture must satisfy reviewed metadata parity contract")
 
     mutated = copy.deepcopy(en)
     mutated["00_presentacion_serie.md"]["video_summary"] = (
@@ -110,6 +124,9 @@ def self_test(es: dict[str, dict], en: dict[str, dict]) -> None:
     if not any("01-prompt-injection.md:en_summary" in item for item in failures):
         raise AssertionError("missing EN summary mutation was not rejected")
 
+    es_text, en_text = load_source_claim_texts()
+    source_claim_self_test(es_text, en_text)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -117,19 +134,24 @@ def main() -> int:
     args = parser.parse_args()
 
     es, en = load_contract()
+    es_text, en_text = load_source_claim_texts()
+
     if args.self_test:
         self_test(es, en)
         print("SECURITY_MEDIA_METADATA_PARITY_SELF_TEST=PASS")
+        print("SECURITY_SOURCE_CLAIMS_SELF_TEST=PASS")
         return 0
 
     failures = parity_failures(es, en)
+    failures.extend(source_claim_failures(es_text, en_text))
     if failures:
-        print("SECURITY_MEDIA_METADATA_PARITY=FAIL")
+        print("SECURITY_REVIEWED_SOURCE_PARITY=FAIL")
         for failure in failures:
             print(f"- {failure}")
         return 1
 
     print("SECURITY_MEDIA_METADATA_PARITY=PASS")
+    print("SECURITY_SOURCE_CLAIMS=PASS")
     return 0
 
 
