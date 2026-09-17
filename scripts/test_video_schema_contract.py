@@ -2,6 +2,7 @@
 """Regression checks for the generated video discovery and playback contract."""
 
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import json
 import sys
 
@@ -24,6 +25,7 @@ from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_front
 
 
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
+EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # Deliberate inventory checkpoint. A new locale/watch surface must update this contract,
 # so video accessibility debt cannot grow silently as the library expands.
 EXPECTED_VIDEO_LOCALE_SURFACES = 91
@@ -131,13 +133,55 @@ def _accessibility_state(meta: dict, *, label: str, source_dir: Path | None = No
     }
 
 
+def assert_accessibility_fail_closed_contract() -> None:
+    """Negative fixtures: partial or dangling accessibility declarations must fail."""
+    try:
+        _accessibility_state(
+            {"video_captions": "captions.vtt"},
+            label="mutation:partial-accessibility",
+        )
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError("partial captions/transcript declaration unexpectedly passed")
+
+    with TemporaryDirectory() as tmp:
+        source_dir = Path(tmp)
+        declared = {
+            "video_captions": "captions.vtt",
+            "video_transcript": "transcript.md",
+        }
+        try:
+            _accessibility_state(
+                declared,
+                label="mutation:missing-accessibility-assets",
+                source_dir=source_dir,
+            )
+        except AssertionError as exc:
+            assert "missing declared captions" in str(exc)
+        else:
+            raise AssertionError("dangling captions/transcript declaration unexpectedly passed")
+
+        (source_dir / "captions.vtt").write_text("WEBVTT\n", encoding="utf-8")
+        try:
+            _accessibility_state(
+                declared,
+                label="mutation:missing-transcript",
+                source_dir=source_dir,
+            )
+        except AssertionError as exc:
+            assert "missing declared transcript" in str(exc)
+        else:
+            raise AssertionError("missing transcript asset unexpectedly passed")
+
+
 def audit_published_accessibility_inventory() -> dict:
     """Inventory captions/transcripts separately from search eligibility and Google selection.
 
     Missing both remains explicit legacy accessibility debt rather than being mislabelled as
-    a Search Console/video-indexing blocker. Partial declarations and broken ES asset
-    references fail deterministically. The fixed 91-surface checkpoint forces deliberate
-    review whenever the bilingual watch catalogue changes.
+    a Search Console/video-indexing blocker. Partial declarations and broken locale-native
+    accessibility asset references fail deterministically. The fixed 91-surface checkpoint
+    forces deliberate review whenever the bilingual watch catalogue changes.
     """
 
     records: list[dict] = []
@@ -169,7 +213,12 @@ def audit_published_accessibility_inventory() -> dict:
             continue
         merged = dict(source_meta)
         merged.update(declared)
-        state = _accessibility_state(merged, label=f"en:{src_uri}")
+        english_source_dir = (EN_LOCALE_ROOT / str(src_uri)).parent
+        state = _accessibility_state(
+            merged,
+            label=f"en:{src_uri}",
+            source_dir=english_source_dir,
+        )
         state["locale"] = "en"
         records.append(state)
 
@@ -278,6 +327,7 @@ def main() -> None:
         "article video embeds must opt into anonymous CORS for the production media origin"
     )
 
+    assert_accessibility_fail_closed_contract()
     inventory = audit_published_accessibility_inventory()
     assert inventory["partial_declarations"] == 0
 
