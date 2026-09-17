@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 83,
+  "diagnostic_revision": 84,
   "diagnostic_scope": "focused_security_00_01",
-  "published_content_base": "27ee187e47c3caaaf0e3c157431046d0083e4fd2",
-  "requested_head_parent": "06a5fb3b16a48606b53c1c8c4219be59add4a1aa",
-  "reason": "Focused integration milestone after wiring the explicit fail-closed curriculum-state ledger into the canonical GOLDEN diagnostic. Run the inventory self-test plus mutation suite, then execute the live 84-obligation route+locale -> source-contract -> locale-native H2 -> real curated-key-moment inventory and retain its report. Final enforcement must include VIDEO_CURRICULUM_INVENTORY_OUTCOME, so current missing video/key-moment debt remains an explicit technical failure rather than an informational side ledger. No published page/media byte changed; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters shared regression and focused Security gates, but do not repeat the 336-context global browser sweep. Preserve 154 declared-page H2 obligations blocked on real curated key moments and 1044 undeclared-page H2 obligations blocked on video declaration; never fabricate media, timings, transcripts or narration and never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
+  "published_content_base": "7d9e7ac35946b3989874d47b28afceb2f708a906",
+  "requested_head_parent": "1ce28e4ef2c9a479958ffb44b1e3eff2bb83d6f5",
+  "reason": "Focused integration milestone after reconciling merged PR #328 and closing its ES-only accessibility-asset validation gap. Exercise the bilingual 91-surface captions/transcript inventory through the canonical video-curriculum mutation step, including negative fixtures for partial declarations and dangling caption/transcript assets, while validating English assets against locales/en rather than silently checking only Spanish source paths. No published article/media byte changed; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters shared regression and focused Security interaction/accessibility gates, but do not repeat the 336-context global browser sweep. Preserve all existing fail-closed video/key-moment and VOICE_MISSING blockers; never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
