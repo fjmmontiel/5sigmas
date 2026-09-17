@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Fail-closed reviewed-source guard for Security04 red-teaming attribution."""
+"""Fail-closed reviewed-source and pedagogy guard for Security04 red-teaming."""
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
+
+import validate_security04_pedagogy_contract as pedagogy_contract
 
 ROOT = Path(__file__).resolve().parents[1]
 ES_PATH = ROOT / "docs/series/seguridad-ia/04-red-teaming.md"
@@ -63,6 +65,10 @@ def self_test(es: str, en: str) -> None:
     if not any("over-specific" in item for item in result):
         raise AssertionError("EN stale attribution mutation was not rejected")
 
+    html = pedagogy_contract.HTML_PATH.read_text(encoding="utf-8")
+    i18n = pedagogy_contract.I18N_PATH.read_text(encoding="utf-8")
+    pedagogy_contract.self_test(html, i18n)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -72,13 +78,16 @@ def main() -> int:
     en = EN_PATH.read_text(encoding="utf-8")
     if args.self_test:
         self_test(es, en)
-        print("PASS Security04 source-claim mutation fixtures")
+        print("PASS Security04 source-claim + regression-pedagogy mutation fixtures")
     result = failures(es, en)
+    html = pedagogy_contract.HTML_PATH.read_text(encoding="utf-8")
+    i18n = pedagogy_contract.I18N_PATH.read_text(encoding="utf-8")
+    result.extend(pedagogy_contract.failures(html, i18n))
     if result:
         for item in result:
             print(f"FAIL {item}")
         return 1
-    print("PASS Security04 reviewed red-team attribution ES/EN")
+    print("PASS Security04 reviewed source attribution + release-regression source contract")
     return 0
 
 
