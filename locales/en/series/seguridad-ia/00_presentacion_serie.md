@@ -3,7 +3,7 @@ title: AI Security — attacks and defenses
 description: "A series on how an instruction hidden in a document can influence an AI system, how that risk can persist and which controls constrain actions."
 keywords: AI security, prompt injection, LLM jailbreak, AI agents, RAG security, OWASP LLM, AI red teaming
 date: 2026-08-06
-date_modified: 2026-09-14
+date_modified: 2026-09-17
 tags:
   - AI
   - Security
@@ -28,7 +28,7 @@ This series is not a catalogue of new AI security scares. Its goal is narrower: 
 
 ### 1. **An instruction hidden in a document can change what the system does**
 - What breaks when an LLM processes the control plane and the data plane through the same channel.
-- Why indirect injection in RAG and agents is more severe than the isolated-chat case.
+- Why indirect injection can be more severe when the system connects untrusted content to tools, data, or privileged actions.
 - Which defenses materially change the architecture.
 
 ### 2. **Asking the model to ignore its limits**
