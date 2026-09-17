@@ -201,7 +201,7 @@ series/seguridad-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: AI Security
-  video_summary: "How an instruction hidden in a document can influence an AI system, how that risk can persist and which controls constrain actions."
+  video_summary: "How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action."
   video_duration: PT48S
 
 series/seguridad-ia/01-prompt-injection.md:
