@@ -226,6 +226,7 @@ nav:
       - Reasoning in LLMs: temas/razonamiento.md
       - Evaluating AI models: temas/evaluacion-modelos.md
       - What is an AI agent?: temas/agentes-ia.md
+      - Realtime voice agents: temas/agentes-voz-tiempo-real.md
       - What is prompt injection?: temas/prompt-injection.md
   - Build:
       - articulos-tecnicos/index.md
