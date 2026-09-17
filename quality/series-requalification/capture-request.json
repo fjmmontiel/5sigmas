@@ -1,10 +1,10 @@
 {
-  "capture_revision": 78,
-  "scope": "security_00_video_lifecycle_state_pixel_requalification",
-  "published_content_base": "7d9daf6e31361c91d00fb74c0e447ccf2743f580",
-  "requested_head_parent": "dc18fdacc910f217e7c33544ad10bc97949ee447",
-  "site_facing_bytes_changed": false,
-  "reason": "Close the first unresolved current-head editorial gap without claiming MEDIA_PASS: retain real Security00 ES/EN desktop~1440/mobile~390 normal/reduced poster -> playing -> paused -> seeked -> ended/reset -> next-article pixels while the canonical fail-closed lifecycle gate independently proves poster/play/pause/seek/end/next semantics and listeners stay active through teardown. This is bounded evidence capture only; audio is muted for deterministic visual capture and is explicitly not narration evidence. PIXEL_REVIEW/PEDAGOGY_REVIEW remain pending until all 48 retained lifecycle-state JPEGs are manually inspected. MEDIA_PASS remains false while native authorized ES/EN narration, captions, transcripts and curated key moments are unresolved; ARTICLE_GOLDEN remains false and Security02 stays blocked.",
+  "capture_revision": 79,
+  "scope": "security_00_en_summary_exact_head_pixel_requalification",
+  "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
+  "requested_head_parent": "06f77b77617029fed96fdef5a25bda3e521229e2",
+  "site_facing_bytes_changed": true,
+  "reason": "Bounded exact-head render evidence after repairing the site-facing Security00 English video_summary and wiring its reviewed ES/EN metadata-parity gate. Capture active Security00/01 whole article plus assets and semantic checkpoints across ES/EN, desktop~1440/mobile~390 and normal/reduced motion, plus poster/play/pause/seek/end/next lifecycle pixels. This run supplies pixels only: manual inspection is still required and no technical capture may set PIXEL_REVIEW, PEDAGOGY_REVIEW, MEDIA_PASS, ARTICLE_GOLDEN or SERIES_GOLDEN. Preserve VOICE_MISSING and the shared 92>91 accessibility debt; audio capture is not narration evidence.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
