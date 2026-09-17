@@ -1,10 +1,11 @@
 {
-  "diagnostic_revision": 95,
-  "diagnostic_scope": "focused_security_00_01",
+  "diagnostic_revision": 96,
+  "diagnostic_scope": "focused_security_02_04",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "e048543e8c0bef21e16387224c2094f750eb2cc7",
-  "reason": "Justified exact-head non-media requalification milestone after the owner clarified that local voice synthesis is deferred and must not block progression once content is requalified. Re-run the deterministic Security00 reviewed-source guard and negative mutations for the latest prevention-vs-impact-control site-facing bytes, strict ES/EN, publication/discovery and curriculum inventories, video/accessibility debt without threshold whitening, structured metadata and article-watch contracts, Security plus Datacenters/pre-Datacenters regression, focused browser/resources/interactions/accessibility/lifecycle/listener checks in normal and reduced motion. This technical run may establish non-media technical evidence but must not infer editorial PIXEL_REVIEW, PEDAGOGY_REVIEW, CONTENT_REQUALIFIED, ARTICLE_GOLDEN or SERIES_GOLDEN. Preserve MEDIA_DEFERRED/VOICE_PENDING fail-closed for final GOLDEN.",
+  "requested_head_parent": "19ade9fe6d4a840f77c8420adeea9398c08c8b49",
+  "reason": "Owner-current integration milestone for Security02-04 after PROGRAM AMENDMENT 5716685049: execute the reviewed source/mutation contracts for Jailbreaks, Poisoning and Red Teaming; strict ES/EN builds; publication/discovery and complete rendered audits; shared browser-resource regression including Security02-04 plus Datacenters/pre-Datacenters references; and the new MEDIA_VISUAL gate that preserves audio/captions/transcript as VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL rather than a current GOLDEN blocker. This focused milestone deliberately does not certify PIXEL_REVIEW or PEDAGOGY_REVIEW and does not run the global all-page browser sweep. Known relationship-first visual defects remain fail-closed in the per-article ledger until real desktop/mobile normal/reduced pixel review is completed.",
   "contract_issue": 305,
-  "amendment_comment": 5655569434,
-  "owner_clarification_comment": 5716742417
+  "requalification_amendment_comment": 5655569434,
+  "owner_amendment_comment": 5716685049,
+  "owner_precedence_receipt_comment": 5719162654
 }
