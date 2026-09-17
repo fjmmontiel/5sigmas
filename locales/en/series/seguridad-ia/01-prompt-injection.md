@@ -2,7 +2,7 @@
 title: Prompt injection — when a document can change what the system does
 description: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
 date: 2026-05-26
-date_modified: 2026-09-14
+date_modified: 2026-09-17
 keywords: "prompt injection, LLM security, indirect prompt injection, RAG security, AI agent security, dual LLM pattern"
 tags:
   - AI
@@ -13,7 +13,7 @@ tags:
 
 # Chapter 1 — Prompt injection
 
-This chapter explains why prompt injection arises from the way LLM systems are built. By the end, the reader will understand what breaks when instructions and data share the same channel, why indirect injection in RAG and agents changes the severity, the limits of filters and post-processing guardrails, and which defensive architecture makes sense when a system can read external content and act through tools.
+This chapter explains why prompt injection arises from the way LLM systems are built. By the end, the reader will understand what breaks when instructions and data share the same channel, why indirect injection in RAG and agents can increase impact when untrusted content reaches privileged tools, data or actions, the limits of filters and post-processing guardrails, and which defensive architecture makes sense when a system can read external content and act through tools.
 
 Traditional software security often relies on a separation. The program has a control plane, where it decides what to do, and a data plane, which holds the material it processes. When that boundary is preserved, many defenses are reasonable because the system knows, at least approximately, which part of the input should be executed and which should only be interpreted.
 
@@ -41,7 +41,7 @@ The practical consequence is simple: if the system reads untrusted content, assu
 
 ## 2. The instruction can enter through retrieval
 
-In a simple chat, the attacker still speaks directly to the model. That is already a problem, but the risk remains relatively contained: the malicious input and the effect stay within the same interaction.
+In a chat without tools or access to privileged data, the effect of a direct injection may remain limited to the interaction itself. That limit is not universal: if the same chat exposes tools, secrets or external actions, a direct injection can also produce privileged effects.
 
 The situation changes when the system retrieves external documents or coordinates several steps before responding. In RAG, an agent may read an email, an internal wiki, a PDF or a support note and treat that content as legitimate working material. If a hostile instruction is embedded there, the attack no longer enters through the user's input box. It enters through the supply chain of the system's own context.
 
@@ -51,7 +51,7 @@ That is why recent literature emphasizes the **retrieval barrier**. Indirect inj
 
 The reported results show the scale of the risk. That line of work demonstrates fragments of roughly ten tokens capable of forcing near-perfect retrieval across different embeddings and benchmarks, at very low cost per target query. In its most striking experiment, a single poisoned email causes a multi-agent flow with GPT-4o to exfiltrate SSH keys in more than 80% of attempts.
 
-This changes the threat model in two ways. The attacker no longer needs a privileged interactive session with the model; it is enough to contaminate a source the system already considers relevant. Retrieval and orchestration also multiply the damage. The agent that executes a tool may never see the original attack text. It only sees the instruction after another agent or the retrieval layer has normalized it. At that point, the instruction appears to come from a “trusted” part of the pipeline.
+This changes the threat model in two ways. The attacker no longer needs a privileged interactive session with the model; it is enough to contaminate a source the system already considers relevant. Retrieval and orchestration can also widen the impact when they propagate the instruction toward components with greater privileges, sensitive data or action capability. The agent that executes a tool may never see the original attack text. It only sees the instruction after another agent or the retrieval layer has normalized it. At that point, the instruction appears to come from a “trusted” part of the pipeline.
 
 Multi-agent systems often look better in a demo than in an audit. Functional separation between agents creates a sense of order, but it also introduces channels where an observation or summary starts being treated as local authority. If one of those observations is contaminated, the rest of the system inherits the contamination with less context for questioning it.
 
@@ -129,8 +129,8 @@ The practical conclusion is that prompt injection will persist while systems mix
 **Is it correct to say that prompt injection is “like SQL injection”?**  
 Only in a very general sense: in both cases untrusted data changes system behavior. But the practical difference matters. In SQL injection, the exploit lives inside a formal grammar and can usually be addressed with strict separation between query and parameters. In LLMs the problem is semantic: instructions and data already share the same medium, and the model has no hard boundary between them.
 
-**Why is indirect injection more dangerous than direct prompt injection?**  
-Because the attack no longer depends on a frontal interaction with the user and instead hides inside a source the system already considers relevant: an email, a document, a retrieved page or memory written by another agent. At that point, the hostile instruction travels inside the system's own context chain.
+**When can indirect injection have more impact than direct prompt injection?**  
+When hostile content enters through an external source the system retrieves and then propagates toward sensitive data, tools or more privileged actions. This is not a universal hierarchy: direct injection can also have high impact when the workflow exposes the same capabilities. The distinguishing feature is that indirect injection can hide inside the system's own context chain and reach the model without a frontal attacker interaction.
 
 **Are guardrails based on another LLM useful?**  
 They are useful as an additional layer, not as a substitute for architecture. A guardrail can block obvious cases and improve coverage, but it is still a model processing natural language and therefore shares part of the same attack surface. If the system continues to give broad privileges to the main actor, the guardrail only reduces part of the risk.
