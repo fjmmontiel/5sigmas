@@ -18,7 +18,7 @@ hide:
 
 In software security, a classic defense against [injection](https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html) is to prevent untrusted data from changing the syntax or meaning of an instruction executed by an interpreter. That boundary does not solve every attack class, but it does stop that data from becoming control through the same channel. In LLM systems, that separation is no longer sufficient because the system itself consumes [instructions and data through the same medium](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html): natural language.
 
-That changes the risk surface structurally. A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can stop behaving like passive data and become an operational instruction if the system does not [separate privileges, context and execution correctly](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).
+That changes the risk surface structurally. A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can influence the model as if it were an instruction. [Separating privileges, context and execution](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html) does not eliminate that influence; it limits which data and actions it can reach if the model follows it.
 
 This series is not a catalogue of new AI security scares. Its goal is narrower: understand where the risk actually comes from, which parts belong to architecture and which belong to controls, and why many mitigations that sound reasonable buy time without closing the underlying path.
 
