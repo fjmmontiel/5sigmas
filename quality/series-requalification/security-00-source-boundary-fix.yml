@@ -1,0 +1,80 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+finding:
+  severity: P2
+  id: SECURITY00_SOFTWARE_CODE_DATA_BOUNDARY_OVERGENERALIZATION
+  previous_es: "si separas bien el código de los datos, las clases de ataque principales quedan acotadas"
+  previous_en: "if code and data are cleanly separated, the main attack classes are easier to bound"
+  problem: >-
+    The statement generalized a useful injection-security boundary into a claim about
+    the main software attack classes. OWASP Injection Prevention and MITRE CWE-74
+    support the narrower mechanism: untrusted data reaching an interpreter can alter
+    parsing/control when special elements are not safely separated or neutralized.
+    They do not support the broader ranking over software security as a whole.
+
+repair:
+  es: >-
+    En seguridad de software, una defensa clásica contra las inyecciones consiste en
+    impedir que datos no confiables modifiquen la sintaxis o el significado de una
+    instrucción que ejecuta un intérprete. Esa frontera no resuelve todas las clases
+    de ataque, pero sí evita que esos datos se conviertan en control por el mismo canal.
+  en: >-
+    In software security, a classic defense against injection is to prevent untrusted
+    data from changing the syntax or meaning of an instruction executed by an
+    interpreter. That boundary does not solve every attack class, but it does stop
+    that data from becoming control through the same channel.
+  es_en_material_parity: true
+  source_guard: scripts/validate_security_source_claims.py
+  guard_is_called_by: scripts/validate_security_media_metadata_parity.py
+  guard_canonical_workflow_path: .github/workflows/series-experience-diagnostic.yml
+  negative_mutations_added:
+    - restore_broad_es_code_data_generalization
+    - restore_broad_en_code_data_generalization
+    - remove_reviewed_es_bounded_claim
+    - remove_reviewed_en_bounded_claim
+
+primary_sources:
+  - name: OWASP Injection Prevention Cheat Sheet
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html
+    supports: injection_occurs_when_untrusted_data_reaches_an_interpreter
+  - name: MITRE CWE-74
+    url: https://cwe.mitre.org/data/definitions/74.html
+    supports: externally_influenced_input_can_modify_downstream_parsing_or_interpretation
+  - name: OWASP LLM Prompt Injection Prevention Cheat Sheet
+    url: https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html
+    supports: llm_prompt_injection_exploits_instructions_and_data_processed_together
+
+qa_truth:
+  exact_current_head_ci: false
+  exact_current_head_manual_pixel_review: false
+  exact_current_head_manual_pedagogy_review: false
+  reason: >-
+    This site-facing ES/EN source repair was committed after the already-running rev90
+    diagnostic had checked out its audited head. No result from that Action is inherited
+    to these later bytes. A later exact-head focused capture/manual review remains required.
+
+unchanged_fail_closed_blockers:
+  expected_locale_video_obligations: 84
+  curriculum_h2_obligations: 1198
+  video_accessibility_surfaces_missing_captions_transcript: 92
+  legacy_missing_captions_transcript_budget: 91
+  voice_missing: true
+  media_pass: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  linkedin_action: false
