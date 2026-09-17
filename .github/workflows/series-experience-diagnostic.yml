@@ -126,6 +126,13 @@ jobs:
         continue-on-error: true
         run: python scripts/validate_security_article_watch_contract.py
 
+      - name: Security 00/01 reviewed ES/EN media metadata parity
+        id: security_media_metadata_parity
+        continue-on-error: true
+        run: |
+          python scripts/validate_security_media_metadata_parity.py --self-test
+          python scripts/validate_security_media_metadata_parity.py
+
       - name: Independent complete rendered HTML audit
         id: rendered
         continue-on-error: true
@@ -244,6 +251,7 @@ jobs:
           MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
           SECURITY_STRUCTURED_METADATA_OUTCOME: ${{ steps.security_structured_metadata.outcome }}
           SECURITY_ARTICLE_WATCH_OUTCOME: ${{ steps.security_article_watch.outcome }}
+          SECURITY_MEDIA_METADATA_PARITY_OUTCOME: ${{ steps.security_media_metadata_parity.outcome }}
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           SHARED_BROWSER_RESOURCES_OUTCOME: ${{ steps.shared_browser_resources.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
@@ -371,6 +379,7 @@ jobs:
               'MEDIA_PROBE_OUTCOME',
               'SECURITY_STRUCTURED_METADATA_OUTCOME',
               'SECURITY_ARTICLE_WATCH_OUTCOME',
+              'SECURITY_MEDIA_METADATA_PARITY_OUTCOME',
               'RENDERED_OUTCOME',
               'SHARED_BROWSER_RESOURCES_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
