@@ -2,7 +2,7 @@
 title: Production controls — limit actions when the model fails
 description: "Which controls limit damage when an AI system reads external content, uses tools, and one defense fails."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: production LLM security, least privilege, dual LLM, guardrails, MCP security, tool poisoning, agent observability
 tags:
   - AI
@@ -81,13 +81,15 @@ OWASP recommends validating and sanitizing data before persistence, isolating me
 
 A useful rule follows: **writing to memory is a privileged action**. It is not necessarily as sensitive as sending a payment, but it is important enough to require provenance, scope and revocation.
 
-## Classify text while it is generated
+## Classify exchanges with a cascade, not isolated text alone
 
-Constitutional Classifiers presents input and output classifiers that can evaluate the sequence as it is generated. If dangerous content appears, the system can stop generation without waiting until the end.
+The first generation of *Constitutional Classifiers* used input and output classifiers to detect dangerous content. In January 2026, *Constitutional Classifiers++* materially changed the production architecture: it evaluates the **full exchange** in context, uses a **two-stage cascade**, and combines inexpensive linear probes with more expensive external classifiers. The first stage screens all traffic and escalates only suspicious exchanges to the second stage ([Anthropic, *Next-generation Constitutional Classifiers*](https://www.anthropic.com/research/next-generation-constitutional-classifiers); [Cunningham et al., 2026](https://arxiv.org/abs/2601.04603)).
 
-This can improve response time and user experience, but it does not replace the rest of the architecture. A guardrail is still a model or component that needs evaluation. It also adds cost, latency and another signal to monitor.
+The paper reports a **40× reduction in computational cost relative to its baseline exchange classifier**, a **0.05% refusal rate on production traffic**, and more than **1,700 cumulative hours of red-teaming**. Those figures describe Anthropic's evaluated system and harnesses; they are not universal numbers for every guardrail, model or traffic distribution. Anthropic also states that the defenses are not perfect and describes reconstruction and output-obfuscation attacks as weaknesses that motivated the redesign.
 
-Classifiers are most useful when their enforcement matches the risk. A low-impact conversation can use a cheap check. A sensitive tool call may require a specialized layer, deterministic validation and human approval.
+The architecture lesson matters more than memorizing the numbers: a cheap signal can decide **which traffic deserves a more expensive evaluation**, while the final decision retains enough context to detect relationships between the request and response. This makes the cost-latency-risk trade-off explicit instead of running the same heavy classifier on every token.
+
+A guardrail is still a model or component that needs evaluation and can fail. Classifiers are most useful when their enforcement matches the risk. A low-impact conversation can use a cheap check. A sensitive tool call may require a specialized layer, deterministic validation and human approval.
 
 The mistake is to put the guardrail only in front of visible text and leave an equivalent path open through a tool. **Blocking the response while allowing the action is not a mitigation.**
 
@@ -135,6 +137,8 @@ A security gate for an agent can be small and specific:
 
 {{ include_html("snippets/seguridad-ia/05-release-gate.html") }}
 
+A gate should not merely count checks. Every condition needs **evidence bound to the revision being deployed**: a policy and its scopes, a baseline for schemas/state, and an end-to-end attack-and-recovery test. If one artifact is missing, stale or no longer describes the deployable system, the correct path is `HOLD` even when the other controls are green.
+
 OWASP explicitly includes adversarial validation, CI/CD and release gates in its recommendations for agent security. The important idea is not to adopt a universal number, but to make the acceptance criterion reproducible and connected to the product's threat model ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
 ## The resulting design
@@ -164,4 +168,6 @@ The final rule is simple and practical. **The more power you give to a system th
 - OWASP, [*MCP Tool Poisoning*](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning).
 - OWASP, [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html).
 - Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- Anthropic (2026), [*Next-generation Constitutional Classifiers: More efficient protection against universal jailbreaks*](https://www.anthropic.com/research/next-generation-constitutional-classifiers).
+- Cunningham et al. (2026), [*Constitutional Classifiers++: Efficient Production-Grade Defenses against Universal Jailbreaks*](https://arxiv.org/abs/2601.04603).
 - NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).
