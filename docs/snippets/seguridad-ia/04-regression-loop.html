@@ -13,16 +13,16 @@
     <svg viewBox="0 0 760 320" role="img" aria-label="Ruta desde hallazgo reproducible hasta gate de release">
       <polyline class="regloop__base" data-base points="90,150 250,150 410,150 570,150"/>
       <polyline class="regloop__route" data-route points="90,150 250,150"/>
-      <line class="regloop__branch" data-branch="safe" data-kind="safe" x1="410" y1="150" x2="680" y2="70"/>
-      <line class="regloop__branch" data-branch="attack" data-kind="attack" x1="410" y1="150" x2="680" y2="150"/>
-      <line class="regloop__branch" data-branch="legit" data-kind="legit" x1="410" y1="150" x2="680" y2="235"/>
-      <g class="regloop__node" data-node="finding"><circle r="43"/><text y="-4">Hallazgo</text><text y="18">trazado</text></g>
-      <g class="regloop__node" data-node="fixture"><circle r="43"/><text y="-4">Fixture</text><text y="18">reproducible</text></g>
-      <g class="regloop__node" data-node="rerun"><circle r="43"/><text y="-4">Re-run</text><text y="18">misma ruta</text></g>
-      <g class="regloop__node" data-node="gate"><circle r="43"/><text y="-4">Gate</text><text y="18">release</text></g>
-      <g class="regloop__node" data-node="deploy"><circle r="39"/><text y="-4">DEPLOY</text><text y="18">ataque bloqueado</text></g>
-      <g class="regloop__node" data-node="attack"><circle r="39"/><text y="-4">HOLD</text><text y="18">ataque persiste</text></g>
-      <g class="regloop__node" data-node="legit"><circle r="39"/><text y="-4">HOLD</text><text y="18">regresión legítima</text></g>
+      <line class="regloop__branch" data-branch="safe" data-kind="safe" x1="570" y1="150" x2="690" y2="65"/>
+      <line class="regloop__branch" data-branch="attack" data-kind="attack" x1="570" y1="150" x2="690" y2="150"/>
+      <line class="regloop__branch" data-branch="legit" data-kind="legit" x1="570" y1="150" x2="690" y2="240"/>
+      <g class="regloop__node" data-node="finding" transform="translate(90 150)"><circle r="43"/><text y="-4">Hallazgo</text><text y="18">trazado</text></g>
+      <g class="regloop__node" data-node="fixture" transform="translate(250 150)"><circle r="43"/><text y="-4">Fixture</text><text y="18">reproducible</text></g>
+      <g class="regloop__node" data-node="rerun" transform="translate(410 150)"><circle r="43"/><text y="-4">Re-run</text><text y="18">misma ruta</text></g>
+      <g class="regloop__node" data-node="gate" transform="translate(570 150)"><circle r="43"/><text y="-4">Gate</text><text y="18">release</text></g>
+      <g class="regloop__node" data-node="deploy" transform="translate(690 65)"><circle r="39"/><text y="-4">DEPLOY</text><text y="18">ataque bloqueado</text></g>
+      <g class="regloop__node" data-node="attack" transform="translate(690 150)"><circle r="39"/><text y="-4">HOLD</text><text y="18">ataque persiste</text></g>
+      <g class="regloop__node" data-node="legit" transform="translate(690 240)"><circle r="39"/><text y="-4">HOLD</text><text y="18">regresión legítima</text></g>
     </svg>
   </div>
   <div class="regloop__mobile" aria-label="Ruta móvil del gate de release"><div class="regloop__mstep" data-mobile="finding">Hallazgo trazado</div><div class="regloop__mstep" data-mobile="fixture">Fixture reproducible</div><div class="regloop__mstep" data-mobile="rerun">Re-run de la misma ruta</div><div class="regloop__mstep" data-mobile="gate" data-result="HOLD">Gate → HOLD</div></div>
