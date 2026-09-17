@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Deterministic source contract for the Security02 adaptive-search explainer.
+"""Deterministic source contracts for Security02 relationship-first explainers.
 
-This gate proves that the explainer encodes an observable candidate trajectory,
-feedback-dependent state and a localized static/reduced-motion-compatible SVG.
-It does NOT certify rendered pixels or editorial pedagogy by itself.
+These checks prove that the adaptive-search and attack-budget explainers encode
+observable geometry/state changes and that their EN localization mirrors exact
+source blobs. They do NOT certify rendered pixels or editorial pedagogy.
 """
 from __future__ import annotations
 
@@ -13,10 +13,12 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-superficie-jailbreak.html"
-I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-superficie-jailbreak.i18n.json"
+SEARCH_HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-superficie-jailbreak.html"
+SEARCH_I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-superficie-jailbreak.i18n.json"
+BUDGET_HTML_PATH = ROOT / "docs/snippets/seguridad-ia/02-attack-budget.html"
+BUDGET_I18N_PATH = ROOT / "locales/en/snippets/seguridad-ia/02-attack-budget.i18n.json"
 
-REQUIRED_HTML = (
+SEARCH_REQUIRED_HTML = (
     '<svg viewBox="0 0 640 320" role="img"',
     'data-step',
     'data-reset',
@@ -30,17 +32,43 @@ REQUIRED_HTML = (
     'Traza pedagógica normalizada — no es un benchmark',
     '@media(prefers-reduced-motion:reduce)',
 )
-FORBIDDEN_HTML = (
+SEARCH_FORBIDDEN_HTML = (
     'jbsearch__attempts',
     'jbsearch__attempt is-tried',
     'data-bar',
     'Ejecutar 12 intentos',
 )
-REQUIRED_EN = (
+SEARCH_REQUIRED_EN = (
     'An automated jailbreak is an adaptive search',
     'Feedback improves: keep and refine this direction.',
     'Feedback worsens: switch branch.',
     'Normalized teaching trace — not a benchmark',
+)
+
+BUDGET_REQUIRED_HTML = (
+    '<svg viewBox="0 0 680 320" role="img"',
+    'data-fixed-rays',
+    'data-adaptive-path',
+    'data-candidates',
+    'root.dataset.mode=mode',
+    "path.setAttribute('points'",
+    "line.setAttribute('x1','112')",
+    "mode==='adaptive'?adaptive:fixed",
+    'Geometría pedagógica normalizada. No estima una probabilidad de jailbreak ni reproduce un benchmark.',
+    'cada resultado cambia el siguiente paso',
+    '@media(prefers-reduced-motion:reduce)',
+)
+BUDGET_FORBIDDEN_HTML = (
+    'jbbudget__dots',
+    'jbbudget__dot',
+    'Representación conceptual de intentos',
+)
+BUDGET_REQUIRED_EN = (
+    'A security claim needs to declare the budget',
+    'Fixed · every attempt returns to the same origin',
+    'Adaptive · every result changes the next step',
+    'Normalized teaching geometry. It does not estimate jailbreak probability or reproduce a benchmark.',
+    'Fixed search tests independent candidates from the same origin. Adaptive search connects candidates because each result informs the next step.',
 )
 
 
@@ -49,54 +77,97 @@ def git_blob_sha(text: str) -> str:
     return hashlib.sha1(f"blob {len(raw)}\0".encode() + raw).hexdigest()
 
 
-def failures(html: str, i18n_text: str) -> list[str]:
+def check_contract(
+    label: str,
+    html: str,
+    i18n_text: str,
+    required_html: tuple[str, ...],
+    forbidden_html: tuple[str, ...],
+    required_en: tuple[str, ...],
+) -> list[str]:
     out: list[str] = []
-    for needle in REQUIRED_HTML:
+    for needle in required_html:
         if needle not in html:
-            out.append(f"security02:pedagogy: missing mechanism token: {needle}")
-    for needle in FORBIDDEN_HTML:
+            out.append(f"{label}: missing mechanism token: {needle}")
+    for needle in forbidden_html:
         if needle in html:
-            out.append(f"security02:pedagogy: cosmetic legacy token regressed: {needle}")
+            out.append(f"{label}: cosmetic legacy token regressed: {needle}")
 
     try:
         i18n = json.loads(i18n_text)
     except json.JSONDecodeError as exc:
-        return out + [f"security02:i18n: invalid JSON: {exc}"]
+        return out + [f"{label}:i18n: invalid JSON: {exc}"]
 
     expected_blob = git_blob_sha(html)
     if i18n.get("source_blob_sha") != expected_blob:
         out.append(
-            "security02:i18n: source_blob_sha stale "
+            f"{label}:i18n: source_blob_sha stale "
             f"expected={expected_blob} actual={i18n.get('source_blob_sha')}"
         )
     replacements = i18n.get("replacements", {})
     translated = "\n".join(str(v) for v in replacements.values())
-    for needle in REQUIRED_EN:
+    for needle in required_en:
         if needle not in translated:
-            out.append(f"security02:i18n: missing reviewed EN mechanism text: {needle}")
+            out.append(f"{label}:i18n: missing reviewed EN mechanism text: {needle}")
     return out
 
 
-def self_test(html: str, i18n_text: str) -> None:
-    current = failures(html, i18n_text)
+def failures(
+    search_html: str,
+    search_i18n: str,
+    budget_html: str,
+    budget_i18n: str,
+) -> list[str]:
+    return [
+        *check_contract(
+            "security02:adaptive-search",
+            search_html,
+            search_i18n,
+            SEARCH_REQUIRED_HTML,
+            SEARCH_FORBIDDEN_HTML,
+            SEARCH_REQUIRED_EN,
+        ),
+        *check_contract(
+            "security02:attack-budget",
+            budget_html,
+            budget_i18n,
+            BUDGET_REQUIRED_HTML,
+            BUDGET_FORBIDDEN_HTML,
+            BUDGET_REQUIRED_EN,
+        ),
+    ]
+
+
+def self_test(
+    search_html: str,
+    search_i18n: str,
+    budget_html: str,
+    budget_i18n: str,
+) -> None:
+    current = failures(search_html, search_i18n, budget_html, budget_i18n)
     if current:
         raise AssertionError(f"positive current-source fixture must pass: {current}")
 
-    mutated = html.replace("path.setAttribute('points'", "voidPath.setAttribute('points'", 1)
-    result = failures(mutated, i18n_text)
-    if not any("missing mechanism token" in item for item in result):
-        raise AssertionError("trajectory-removal mutation was not rejected")
+    mutated = search_html.replace("path.setAttribute('points'", "voidPath.setAttribute('points'", 1)
+    result = failures(mutated, search_i18n, budget_html, budget_i18n)
+    if not any("adaptive-search: missing mechanism token" in item for item in result):
+        raise AssertionError("adaptive-search trajectory-removal mutation was not rejected")
 
-    mutated = html + '<div class="jbsearch__attempts" data-bar></div>'
-    result = failures(mutated, i18n_text)
-    if not any("cosmetic legacy token regressed" in item for item in result):
-        raise AssertionError("legacy dots/progress mutation was not rejected")
+    mutated_budget = budget_html.replace("data-adaptive-path", "data-no-adaptive-path", 1)
+    result = failures(search_html, search_i18n, mutated_budget, budget_i18n)
+    if not any("attack-budget: missing mechanism token" in item for item in result):
+        raise AssertionError("attack-budget adaptive-trajectory mutation was not rejected")
 
-    i18n = json.loads(i18n_text)
-    i18n["source_blob_sha"] = "0" * 40
-    result = failures(html, json.dumps(i18n))
-    if not any("source_blob_sha stale" in item for item in result):
-        raise AssertionError("stale localization-source mutation was not rejected")
+    mutated_budget = budget_html + '<div class="jbbudget__dots"><i class="jbbudget__dot"></i></div>'
+    result = failures(search_html, search_i18n, mutated_budget, budget_i18n)
+    if not any("attack-budget: cosmetic legacy token regressed" in item for item in result):
+        raise AssertionError("attack-budget generic-dot regression was not rejected")
+
+    stale = json.loads(budget_i18n)
+    stale["source_blob_sha"] = "0" * 40
+    result = failures(search_html, search_i18n, budget_html, json.dumps(stale))
+    if not any("attack-budget:i18n: source_blob_sha stale" in item for item in result):
+        raise AssertionError("attack-budget stale localization-source mutation was not rejected")
 
 
 def main() -> int:
@@ -104,18 +175,21 @@ def main() -> int:
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 
-    html = HTML_PATH.read_text(encoding="utf-8")
-    i18n_text = I18N_PATH.read_text(encoding="utf-8")
+    search_html = SEARCH_HTML_PATH.read_text(encoding="utf-8")
+    search_i18n = SEARCH_I18N_PATH.read_text(encoding="utf-8")
+    budget_html = BUDGET_HTML_PATH.read_text(encoding="utf-8")
+    budget_i18n = BUDGET_I18N_PATH.read_text(encoding="utf-8")
+
     if args.self_test:
-        self_test(html, i18n_text)
+        self_test(search_html, search_i18n, budget_html, budget_i18n)
         print("PASS Security02 pedagogy-contract mutation fixtures")
 
-    result = failures(html, i18n_text)
+    result = failures(search_html, search_i18n, budget_html, budget_i18n)
     if result:
         for item in result:
             print(f"FAIL {item}")
         return 1
-    print("PASS Security02 adaptive-search source contract")
+    print("PASS Security02 relationship-first source contracts")
     return 0
 
 
