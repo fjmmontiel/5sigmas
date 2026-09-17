@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 80,
+  "diagnostic_revision": 81,
   "diagnostic_scope": "focused_security_00_01",
-  "published_content_base": "376af1b8002c3ebff33a4d637d88b38ec7533d9d",
-  "requested_head_parent": "7fbc1e3c7244fa672aad641d04e5d578a3af7376",
-  "reason": "Focused integration of the independent expected-video curriculum contract. scope.json now states fail-closed that every one of the 42 target routes requires native video independently in ES and EN, yielding 84 locale/video obligations with no opt-out. A standalone validator and negative fixtures reject missing policy, opt-out, non-native policy, incomplete locales and canonical counts other than 42/84. This closes the semantic loophole where absence in both locales could be mistaken for parity even though the existing source audit already reports VIDEO_DECLARATION_MISSING. Run the full 84-page source/rendered inventory and the existing Security plus Datacenters/pre-Datacenters regression/focused Security gates, but do not repeat the 336-context browser sweep because no published site bytes changed. Expected source/media failure remains evidence: 60 locale pages are still undeclared and Security narration/captions/transcripts/key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
+  "published_content_base": "27ee187e47c3caaaf0e3c157431046d0083e4fd2",
+  "requested_head_parent": "336e286b4aab9ce34456ed55b3c2dfee84b03f40",
+  "reason": "Focused integration after current main merged PR #327. The repair branch was reconciled without force-push and now contains main's permanent bilingual video accessibility/key-moment schema regression on top of the requalification watch-page localization and fail-closed curriculum gates. PR #327 is test-only and changed no published page/media bytes; its exact head already passed build-and-capture and English-locale checks on main. Run the 84-page source/rendered inventory plus existing Security and Datacenters/pre-Datacenters regression/focused Security gates to detect integration incompatibility. Do not repeat the 336-context browser sweep because published site bytes did not change. Expected source/media failure remains evidence, not certification: 60 locale pages still lack video declarations and Security native narration/captions/transcripts/curated key moments remain incomplete. This diagnostic must not certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
