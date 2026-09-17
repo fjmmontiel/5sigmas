@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 82,
+  "diagnostic_revision": 83,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "27ee187e47c3caaaf0e3c157431046d0083e4fd2",
-  "requested_head_parent": "b7c47e6060479843f55e26c0a3fa99e44f4dc68a",
-  "reason": "Focused integration milestone after harvesting rev81 and hardening the canonical expected-video curriculum gate. The gate now emits and internally validates one unique native-video obligation for every canonical route+locale pair, so the 84 required ES/EN video obligations are independently addressable and aggregate parity cannot hide a missing locale or route. No published page/media byte changed. Re-run negative fixtures, the 84-page source/rendered inventory, Security media probes, and Security plus Datacenters/pre-Datacenters focused browser regressions. Do not repeat the 336-context global browser sweep because published site bytes are unchanged. Expected source/rendered/media failure remains evidence, not certification: 60 locale pages still lack video declarations; the 24 declared locale pages carry 154 native H2 obligations but have no curated chapters/valid section maps; Security narration/captions/transcripts/key moments remain incomplete. Never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
+  "requested_head_parent": "06a5fb3b16a48606b53c1c8c4219be59add4a1aa",
+  "reason": "Focused integration milestone after wiring the explicit fail-closed curriculum-state ledger into the canonical GOLDEN diagnostic. Run the inventory self-test plus mutation suite, then execute the live 84-obligation route+locale -> source-contract -> locale-native H2 -> real curated-key-moment inventory and retain its report. Final enforcement must include VIDEO_CURRICULUM_INVENTORY_OUTCOME, so current missing video/key-moment debt remains an explicit technical failure rather than an informational side ledger. No published page/media byte changed; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters shared regression and focused Security gates, but do not repeat the 336-context global browser sweep. Preserve 154 declared-page H2 obligations blocked on real curated key moments and 1044 undeclared-page H2 obligations blocked on video declaration; never fabricate media, timings, transcripts or narration and never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
