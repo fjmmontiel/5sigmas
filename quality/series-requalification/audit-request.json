@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 84,
+  "diagnostic_revision": 85,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "7d9e7ac35946b3989874d47b28afceb2f708a906",
-  "requested_head_parent": "1ce28e4ef2c9a479958ffb44b1e3eff2bb83d6f5",
-  "reason": "Focused integration milestone after reconciling merged PR #328 and closing its ES-only accessibility-asset validation gap. Exercise the bilingual 91-surface captions/transcript inventory through the canonical video-curriculum mutation step, including negative fixtures for partial declarations and dangling caption/transcript assets, while validating English assets against locales/en rather than silently checking only Spanish source paths. No published article/media byte changed; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters shared regression and focused Security interaction/accessibility gates, but do not repeat the 336-context global browser sweep. Preserve all existing fail-closed video/key-moment and VOICE_MISSING blockers; never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
+  "requested_head_parent": "7fd94f3c32c04fda6bf1cd83654274b7eef4d9f7",
+  "reason": "Focused rerun after rev84 correctly exposed a stale 91-surface checkpoint. Root cause is now reconciled explicitly: main already declared EN Security00 video while this requalification branch deliberately adds the missing native ES Security00 surface, so the exact inventory is 92. This is not threshold relaxation: the captions/transcript debt budget remains 91 and therefore the new incomplete surface still fails closed in the standalone accessibility contract. The canonical mutation step now verifies all 92 physical ES/EN asset paths with negative fixtures while leaving current known accessibility debt to SOURCE/MEDIA enforcement. No published article/media byte changed in this iteration; rerun strict ES/EN, source/rendered/media, Security plus Datacenters/pre-Datacenters regression and focused Security gates, without repeating the 336-context global sweep. Never certify PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
