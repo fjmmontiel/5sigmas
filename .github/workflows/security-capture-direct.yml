@@ -117,6 +117,15 @@ jobs:
           node scripts/capture_security_video_lifecycle_states.mjs
           test -s artifacts/security-requalification/video-lifecycle-states/report.json
 
+      - name: Capture Security00 watch summary pixels in both locales and motion modes
+        id: watch_summary_capture
+        timeout-minutes: 5
+        env:
+          S5_SECURITY_WATCH_SUMMARY_DIR: artifacts/security-requalification/watch-summary
+        run: |
+          node scripts/capture_security_watch_summary.mjs
+          test -s artifacts/security-requalification/watch-summary/report.json
+
       - name: Summarize technical capture without editorial certification
         if: always()
         env:
@@ -125,6 +134,7 @@ jobs:
           PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
           VIDEO_LIFECYCLE_OUTCOME: ${{ steps.video_lifecycle.outcome }}
           LIFECYCLE_STATE_CAPTURE_OUTCOME: ${{ steps.lifecycle_state_capture.outcome }}
+          WATCH_SUMMARY_CAPTURE_OUTCOME: ${{ steps.watch_summary_capture.outcome }}
         run: |
           python - <<'PY'
           import json, os
@@ -135,20 +145,23 @@ jobs:
           prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
           lifecycle_path = Path('artifacts/security-requalification/video-lifecycle/report.json')
           lifecycle_states_path = Path('artifacts/security-requalification/video-lifecycle-states/report.json')
+          watch_summary_path = Path('artifacts/security-requalification/watch-summary/report.json')
           summary = {
               'editorial_capture_outcome': os.environ.get('EDITORIAL_OUTCOME', ''),
               'trace_checkpoints_outcome': os.environ.get('TRACE_OUTCOME', ''),
               'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
               'video_lifecycle_outcome': os.environ.get('VIDEO_LIFECYCLE_OUTCOME', ''),
               'lifecycle_state_capture_outcome': os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME', ''),
+              'watch_summary_capture_outcome': os.environ.get('WATCH_SUMMARY_CAPTURE_OUTCOME', ''),
               'editorial_report_present': editorial_path.exists(),
               'trace_report_present': trace_path.exists(),
               'prompt_report_present': prompt_path.exists(),
               'video_lifecycle_report_present': lifecycle_path.exists(),
               'lifecycle_state_report_present': lifecycle_states_path.exists(),
+              'watch_summary_report_present': watch_summary_path.exists(),
               'golden': False,
               'media_pass': False,
-              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_IMAGES_VIDEO_STATES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_WATCH_IMAGES_VIDEO_STATES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
               'pedagogy_review': 'PENDING_MANUAL_EDITORIAL_REVIEW; TECHNICAL_CAPTURE_CANNOT_CERTIFY',
           }
           if editorial_path.exists():
@@ -211,6 +224,15 @@ jobs:
                   'lifecycle_state_failure_count': len(data.get('failures', [])),
                   'lifecycle_state_media_audio_evidence': data.get('media_audio_evidence'),
               })
+          if watch_summary_path.exists():
+              data = json.loads(watch_summary_path.read_text())
+              summary.update({
+                  'watch_summary_contexts_expected': data.get('expected_contexts'),
+                  'watch_summary_contexts_observed': data.get('contexts_observed'),
+                  'watch_summary_failure_count': len(data.get('failures', [])),
+                  'watch_summary_failures': data.get('failures', []),
+                  'watch_summary_media_audio_evidence': data.get('media_audio_evidence'),
+              })
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
           ok = all([
               os.environ.get('EDITORIAL_OUTCOME') == 'success',
@@ -218,6 +240,7 @@ jobs:
               os.environ.get('PROMPT_STATES_OUTCOME') == 'success',
               os.environ.get('VIDEO_LIFECYCLE_OUTCOME') == 'success',
               os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME') == 'success',
+              os.environ.get('WATCH_SUMMARY_CAPTURE_OUTCOME') == 'success',
           ])
           raise SystemExit(0 if ok else 1)
           PY
@@ -236,6 +259,8 @@ jobs:
             artifacts/security-requalification/video-lifecycle/report.json
             artifacts/security-requalification/video-lifecycle-states/report.json
             artifacts/security-requalification/video-lifecycle-states/screenshots/*.jpg
+            artifacts/security-requalification/watch-summary/report.json
+            artifacts/security-requalification/watch-summary/screenshots/*.jpg
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
