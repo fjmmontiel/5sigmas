@@ -1,10 +1,11 @@
 {
-  "capture_revision": 84,
-  "scope": "security_00_01_post_rev93_influence_impact_exact_head",
+  "capture_revision": 85,
+  "scope": "security_00_01_prevention_vs_impact_exact_head",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "978e042b76cf82f9703ea81e9625b9000c64dc6f",
+  "requested_head_parent": "f98acf3697d6feff6bc7e614e87fa15f5171815f",
   "site_facing_bytes_changed": true,
-  "reason": "Exact-head editorial capture for the current Security00 bytes after the post-rev93 correction separating model influence from reachable execution impact. Retain active Security00/01 article and watch evidence in ES/EN at desktop~1440/mobile~390 under normal/reduced motion, including whole-page/per-asset pixels, semantic start/intermediate/final checkpoints, real viewport chrome, Prompt Injection states, and poster-play-pause-seek-end-next lifecycle states. This capture is evidence only: PIXEL_REVIEW and PEDAGOGY_REVIEW require manual inspection of the retained pixels and must not be inferred from a green workflow. Preserve VOICE_MISSING, MEDIA_PASS=false, 92>91 accessibility debt and all 1,198 locale-native H2 obligations fail-closed.",
+  "reason": "Fresh editorial evidence capture for the latest Security00 prevention-vs-impact-control site-facing bytes after the owner clarified MEDIA_DEFERRED/VOICE_PENDING sequencing. Capture ES/EN at desktop~1440/mobile~390 under normal/reduced motion: complete article, every active Security00 asset, semantic start/intermediate/bounded-final/broad-permission-final checkpoints, real touch/keyboard states, watch surface, and poster-play-pause-seek-end-next lifecycle while runtime listeners remain through teardown. Capture success is evidence only; PIXEL_REVIEW and PEDAGOGY_REVIEW require manual pixel inspection and must not be inferred from the workflow. VOICE_MISSING remains fail-closed only for MEDIA_PASS/ARTICLE_GOLDEN, not for CONTENT_REQUALIFIED progression once all non-media gates are proven.",
   "contract_issue": 305,
-  "amendment_comment": 5655569434
+  "amendment_comment": 5655569434,
+  "owner_clarification_comment": 5716742417
 }
