@@ -35,6 +35,7 @@
     load('/assets/javascripts/agent-webmcp.js', 'webmcp-tools');
     load('/assets/javascripts/agent-knowledge-webmcp.js', 'webmcp-knowledge');
     load('/assets/javascripts/agent-learning-webmcp.js', 'webmcp-learning-paths');
+    load('/assets/javascripts/measurement.js', 'measurement');
 })();
 
 function copyEmailToClipboard() {
