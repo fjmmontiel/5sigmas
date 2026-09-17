@@ -10,6 +10,9 @@ tags:
   - LLMs
   - Agentes
 video: "03-envenenamiento.mp4"
+video_poster: "03-envenenamiento.jpg"
+video_title: "Envenenamiento"
+video_summary: "Cómo una entrada no confiable puede convertirse en memoria persistente, reaparecer en una decisión futura y sobrevivir a un borrado incompleto mediante estado derivado."
 video_duration: "PT1M0S"
 ---
 
