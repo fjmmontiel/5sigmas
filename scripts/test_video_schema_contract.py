@@ -2,7 +2,10 @@
 """Regression checks for the generated video discovery and playback contract."""
 
 from pathlib import Path
+import json
 import sys
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -17,6 +20,14 @@ from hooks.video_sitemap_en import (
     _render_watch_page as render_watch_page_en,
     _video_schema as video_schema_en,
 )
+from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_frontmatter
+
+
+EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
+# Deliberate inventory checkpoint. A new locale/watch surface must update this contract,
+# so video accessibility debt cannot grow silently as the library expands.
+EXPECTED_VIDEO_LOCALE_SURFACES = 91
+LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
 
 
 def base_entry() -> dict:
@@ -98,6 +109,97 @@ def assert_clip_contract(schema: dict, watch_url: str) -> None:
     assert schema["hasPart"][1]["url"] == f"{watch_url}?t=25"
 
 
+def _accessibility_state(meta: dict, *, label: str, source_dir: Path | None = None) -> dict:
+    captions = str(meta.get("video_captions") or "").strip()
+    transcript = str(meta.get("video_transcript") or "").strip()
+    assert bool(captions) == bool(transcript), (
+        f"{label}: captions/transcript must be declared as a pair; partial accessibility "
+        "metadata is not allowed"
+    )
+
+    if source_dir is not None and captions:
+        captions_path = source_dir / captions
+        transcript_path = source_dir / transcript
+        assert captions_path.is_file(), f"{label}: missing declared captions {captions_path.name}"
+        assert transcript_path.is_file(), f"{label}: missing declared transcript {transcript_path.name}"
+
+    return {
+        "label": label,
+        "captions": bool(captions),
+        "transcript": bool(transcript),
+        "complete": bool(captions and transcript),
+    }
+
+
+def audit_published_accessibility_inventory() -> dict:
+    """Inventory captions/transcripts separately from search eligibility and Google selection.
+
+    Missing both remains explicit legacy accessibility debt rather than being mislabelled as
+    a Search Console/video-indexing blocker. Partial declarations and broken ES asset
+    references fail deterministically. The fixed 91-surface checkpoint forces deliberate
+    review whenever the bilingual watch catalogue changes.
+    """
+
+    records: list[dict] = []
+    patterns = exclude_patterns()
+
+    for md in sorted(DOCS.rglob("*.md")):
+        if is_excluded(md, patterns):
+            continue
+        meta = read_frontmatter(md)
+        if not str(meta.get("video") or "").strip():
+            continue
+        if "noindex" in str(meta.get("robots") or "").lower():
+            continue
+        rel = md.relative_to(DOCS).as_posix()
+        state = _accessibility_state(meta, label=f"es:{rel}", source_dir=md.parent)
+        state["locale"] = "es"
+        records.append(state)
+
+    english_media = yaml.safe_load(EN_MEDIA_INDEX.read_text(encoding="utf-8")) or {}
+    assert isinstance(english_media, dict), "English media index must be a mapping"
+    for src_uri, declared in sorted(english_media.items()):
+        if not isinstance(declared, dict) or not str(declared.get("video") or "").strip():
+            continue
+        source_md = DOCS / str(src_uri)
+        source_meta = read_frontmatter(source_md) if source_md.is_file() else {}
+        if source_md.is_file() and is_excluded(source_md, patterns):
+            continue
+        if "noindex" in str(source_meta.get("robots") or "").lower():
+            continue
+        merged = dict(source_meta)
+        merged.update(declared)
+        state = _accessibility_state(merged, label=f"en:{src_uri}")
+        state["locale"] = "en"
+        records.append(state)
+
+    assert len(records) == EXPECTED_VIDEO_LOCALE_SURFACES, (
+        "Bilingual video/watch inventory changed: expected "
+        f"{EXPECTED_VIDEO_LOCALE_SURFACES}, observed {len(records)}. Review the new/removed "
+        "surface and update the accessibility checkpoint deliberately."
+    )
+
+    missing = [row for row in records if not row["complete"]]
+    assert len(missing) <= LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET, (
+        "Captions/transcript debt increased: "
+        f"{len(missing)} surfaces exceed the legacy budget "
+        f"{LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET}. New video surfaces must not silently "
+        "expand accessibility debt."
+    )
+
+    summary = {
+        "locale_surfaces": len(records),
+        "es": sum(1 for row in records if row["locale"] == "es"),
+        "en": sum(1 for row in records if row["locale"] == "en"),
+        "captions_transcript_complete": len(records) - len(missing),
+        "captions_transcript_review": len(missing),
+        "partial_declarations": 0,
+        "classification": "ACCESSIBILITY_REVIEW_NOT_GOOGLE_SELECTION_CAUSE",
+    }
+    print("Video accessibility inventory: " + json.dumps(summary, sort_keys=True))
+    return summary
+
+
 def main() -> None:
     global_root = "https://5sigmas.com"
     entry = base_entry()
@@ -175,6 +277,9 @@ def main() -> None:
     assert 'crossorigin="anonymous"' in embed_source, (
         "article video embeds must opt into anonymous CORS for the production media origin"
     )
+
+    inventory = audit_published_accessibility_inventory()
+    assert inventory["partial_declarations"] == 0
 
     print("Bilingual video discovery, accessibility and key-moment contract passed.")
 
