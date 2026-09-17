@@ -10,6 +10,9 @@ tags:
   - Evaluación
   - LLMs
 video: "04-red-teaming.mp4"
+video_poster: "04-red-teaming.jpg"
+video_title: "Red-teaming"
+video_summary: "Cómo probar la cadena causal completa desde una entrada adversaria hasta autorización, efecto externo, recuperación y una regresión reproducible de release."
 video_duration: "PT1M0S"
 ---
 
