@@ -25,7 +25,7 @@ En seguridad de software, una defensa clásica contra las [inyecciones](https://
 
 Eso cambia la superficie de riesgo de forma estructural. Un documento recuperado por RAG, una observación escrita por otro agente, una salida de herramienta o una nota guardada en memoria pueden influir en el modelo como si fueran instrucciones. [Separar privilegios, contexto y ejecución](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html) no elimina esa influencia; limita qué datos y acciones puede alcanzar si el modelo la sigue.
 
-La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. El objetivo es más preciso: entender dónde aparece el riesgo de verdad, qué parte pertenece a la arquitectura y qué parte pertenece a los controles, y por qué muchas mitigaciones que parecen razonables solo ganan tiempo pero no cierran el problema.
+La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. El objetivo es separar mecanismos que suelen confundirse: qué controles reducen la probabilidad de que contenido no confiable altere el comportamiento del modelo y qué controles limitan las consecuencias —datos accesibles, herramientas y acciones— incluso cuando esa influencia ocurre.
 
 {{ include_html("snippets/seguridad-ia/00-series-mapa.html") }}
 
