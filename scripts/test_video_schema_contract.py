@@ -26,9 +26,12 @@ from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_front
 
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
 EN_LOCALE_ROOT = ROOT / "locales" / "en"
-# Deliberate inventory checkpoint. A new locale/watch surface must update this contract,
-# so video accessibility debt cannot grow silently as the library expands.
-EXPECTED_VIDEO_LOCALE_SURFACES = 91
+# Exact surface inventory, not a quality threshold. Main carried 91 surfaces because the
+# Spanish Security 00 presentation had no video declaration while EN already did. The
+# requalification branch deliberately adds that missing native ES surface, so its truthful
+# catalogue contains 92. The legacy accessibility-debt budget remains 91 below: the new
+# incomplete surface must therefore stay fail-closed until captions + transcript exist.
+EXPECTED_VIDEO_LOCALE_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
 
 
@@ -175,12 +178,12 @@ def assert_accessibility_fail_closed_contract() -> None:
             raise AssertionError("missing transcript asset unexpectedly passed")
 
 
-def audit_published_accessibility_inventory() -> dict:
+def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dict:
     """Inventory captions/transcripts separately from search eligibility and Google selection.
 
     Missing both remains explicit legacy accessibility debt rather than being mislabelled as
     a Search Console/video-indexing blocker. Partial declarations and broken locale-native
-    accessibility asset references fail deterministically. The fixed 91-surface checkpoint
+    accessibility asset references fail deterministically. The exact surface checkpoint
     forces deliberate review whenever the bilingual watch catalogue changes.
     """
 
@@ -229,13 +232,6 @@ def audit_published_accessibility_inventory() -> dict:
     )
 
     missing = [row for row in records if not row["complete"]]
-    assert len(missing) <= LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET, (
-        "Captions/transcript debt increased: "
-        f"{len(missing)} surfaces exceed the legacy budget "
-        f"{LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET}. New video surfaces must not silently "
-        "expand accessibility debt."
-    )
-
     summary = {
         "locale_surfaces": len(records),
         "es": sum(1 for row in records if row["locale"] == "es"),
@@ -246,6 +242,14 @@ def audit_published_accessibility_inventory() -> dict:
         "classification": "ACCESSIBILITY_REVIEW_NOT_GOOGLE_SELECTION_CAUSE",
     }
     print("Video accessibility inventory: " + json.dumps(summary, sort_keys=True))
+
+    if enforce_debt:
+        assert len(missing) <= LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET, (
+            "Captions/transcript debt increased: "
+            f"{len(missing)} surfaces exceed the legacy budget "
+            f"{LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET}. New video surfaces must not silently "
+            "expand accessibility debt."
+        )
     return summary
 
 
