@@ -1,0 +1,209 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+iteration_count_epoch: owner_amendment_5716685049
+pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
+updated_at_utc: 2026-09-17T16:20:00Z
+series: seguridad-ia
+series_state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden_requires_voice: false
+series_golden_requires_voice: false
+legacy_status_file: quality/series-requalification/security-00-01-status.yml
+legacy_status_semantics: SUPERSEDED_WHERE_INCOMPATIBLE_BY_OWNER_AMENDMENT_5716685049
+
+shared_current_contract:
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  voice_is_blocker: false
+  media_visual_and_voice_are_separate: true
+  legacy_accessibility_debt:
+    incomplete_captions_transcript_surfaces: 92
+    legacy_budget: 91
+    state: PRESERVED_AS_FUTURE_VOICE_ACCESSIBILITY_DEBT_NOT_CURRENT_GOLDEN_BLOCKER
+  catalogue:
+    target_series: 7
+    target_routes_per_locale: 42
+    target_locale_pages: 84
+    video_obligations_audited: 84
+    curriculum_h2_obligations: 1198
+  shared_media_classifier:
+    path: scripts/classify_requalification_media.py
+    commit: 2208ca0d473c5f55abcaaef1711d27c6310a65c9
+    rule: >-
+      Audio/captions/transcript failures are VOICE_ENHANCEMENT debt; chapters/key moments,
+      poster, codec, dimensions, duration, metadata, playback and visual-video failures remain
+      MEDIA_VISUAL blockers unless a route-specific receipt proves a timing dependency on future narration.
+
+articles:
+  - route: series/seguridad-ia/00_presentacion_serie.md
+    locale: es
+    iteration_count: 1
+    state: CONTENT_READY
+    evidence_revision:
+      technical: f98acf3697d6feff6bc7e614e87fa15f5171815f
+      capture: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
+      later_changes_touch_route_bytes: false
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    review_scope: CONTENT_SCOPED_SAME_ORCHESTRATOR_NOT_INDEPENDENT
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: PASS_CURRENT_ROUTE_BYTES
+    watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
+    defects:
+      P0: []
+      P1:
+        - VIDEO_CHAPTERS_KEY_MOMENTS_MISSING_NONVOICE_CLASSIFICATION_PENDING
+      P2: []
+    next_action: >-
+      Determine honest visual-timeline key moments/chapters that remain stable independently of
+      future narration; do not fabricate narration-dependent timings. Voice remains deferred.
+
+  - route: series/seguridad-ia/00_presentacion_serie.md
+    locale: en
+    iteration_count: 1
+    state: CONTENT_READY
+    evidence_revision:
+      technical: f98acf3697d6feff6bc7e614e87fa15f5171815f
+      capture: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
+      later_changes_touch_route_bytes: false
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    review_scope: CONTENT_SCOPED_SAME_ORCHESTRATOR_NOT_INDEPENDENT
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: PASS_CURRENT_ROUTE_BYTES
+    watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
+    defects:
+      P0: []
+      P1:
+        - VIDEO_CHAPTERS_KEY_MOMENTS_MISSING_NONVOICE_CLASSIFICATION_PENDING
+      P2: []
+    next_action: >-
+      Determine honest visual-timeline key moments/chapters that remain stable independently of
+      future narration; do not fabricate narration-dependent timings. Voice remains deferred.
+
+  - route: series/seguridad-ia/01-prompt-injection.md
+    locale: es
+    iteration_count: 1
+    state: CONTENT_READY
+    evidence_revision:
+      technical: f98acf3697d6feff6bc7e614e87fa15f5171815f
+      capture: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
+      later_changes_touch_route_bytes: false
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    review_scope: CONTENT_SCOPED_SAME_ORCHESTRATOR_NOT_INDEPENDENT
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: PASS_CURRENT_ROUTE_BYTES
+    watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
+    defects:
+      P0: []
+      P1:
+        - VIDEO_CHAPTERS_KEY_MOMENTS_MISSING_NONVOICE_CLASSIFICATION_PENDING
+      P2: []
+    next_action: >-
+      Determine honest visual-timeline key moments/chapters that remain stable independently of
+      future narration; do not fabricate narration-dependent timings. Voice remains deferred.
+
+  - route: series/seguridad-ia/01-prompt-injection.md
+    locale: en
+    iteration_count: 1
+    state: CONTENT_READY
+    evidence_revision:
+      technical: f98acf3697d6feff6bc7e614e87fa15f5171815f
+      capture: 4444d3a9fafdadaea03cb4a81d3a677764557dfe
+      later_changes_touch_route_bytes: false
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    review_scope: CONTENT_SCOPED_SAME_ORCHESTRATOR_NOT_INDEPENDENT
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: PASS_CURRENT_ROUTE_BYTES
+    watch_video_lifecycle: PASS_CURRENT_ROUTE_BYTES
+    defects:
+      P0: []
+      P1:
+        - VIDEO_CHAPTERS_KEY_MOMENTS_MISSING_NONVOICE_CLASSIFICATION_PENDING
+      P2: []
+    next_action: >-
+      Determine honest visual-timeline key moments/chapters that remain stable independently of
+      future narration; do not fabricate narration-dependent timings. Voice remains deferred.
+
+  - route: series/seguridad-ia/02-jailbreaks.md
+    locale: es
+    iteration_count: 1
+    state: QA
+    evidence_revision:
+      source_fix: c60f6f7e088bd56adcfb2862855064d9d67ee001
+      guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
+      receipt: 5f8f7d828557d13fc1f5f734b64a668d46434e4d
+    SOURCE_PASS: false
+    BUILD_PASS: false
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: CORRECTED_PENDING_EXACT_HEAD_GATES
+    watch_video_lifecycle: PENDING
+    defects:
+      P0: []
+      P1:
+        - GCG_WHITEBOX_MECHANICS_OMITTED_CORRECTED_PENDING_GATE
+        - INTERACTIONS_TOO_COSMETIC_OPEN
+      P2:
+        - TEMPERATURE_ZERO_CAUSAL_OVERCLAIM_CORRECTED_PENDING_GATE
+    next_action: >-
+      Run Security02 source guard self-test and strict ES/EN in the next coherent local/integration
+      cluster; redesign the first explicit pedagogical mechanism before any pixel/pedagogy PASS.
+
+  - route: series/seguridad-ia/02-jailbreaks.md
+    locale: en
+    iteration_count: 1
+    state: QA
+    evidence_revision:
+      source_fix: d7c1979a3fbc99186a608df8d06734f07d388e05
+      guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
+      receipt: 5f8f7d828557d13fc1f5f734b64a668d46434e4d
+    SOURCE_PASS: false
+    BUILD_PASS: false
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: CORRECTED_PENDING_EXACT_HEAD_GATES
+    watch_video_lifecycle: PENDING
+    defects:
+      P0: []
+      P1:
+        - GCG_WHITEBOX_MECHANICS_OMITTED_CORRECTED_PENDING_GATE
+        - INTERACTIONS_TOO_COSMETIC_OPEN
+      P2:
+        - TEMPERATURE_ZERO_CAUSAL_OVERCLAIM_CORRECTED_PENDING_GATE
+    next_action: >-
+      Run Security02 source guard self-test and strict ES/EN in the next coherent local/integration
+      cluster; redesign the first explicit pedagogical mechanism before any pixel/pedagogy PASS.
+
+unreviewed_remaining_in_series:
+  - series/seguridad-ia/03-envenenamiento.md
+  - series/seguridad-ia/04-red-teaming.md
+  - series/seguridad-ia/05-controles-produccion.md
+
+next_batch:
+  - close Security02 source-guard execution and first pedagogical mechanism
+  - audit Security02 visual-video metadata/key moments without voice dependency
+  - begin Security03 ES/EN source/parity/pedagogy audit without waiting for Security02 GOLDEN
