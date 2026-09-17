@@ -1,4 +1,4 @@
-schema_version: 51
+schema_version: 52
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -26,22 +26,26 @@ catalogue:
   discovery_requires_presentation: false
 
 latest_verified_technical_diagnostic:
-  receipt: quality/series-requalification/security-00-01-revision93.yml
-  revision: 93
-  audited_head: d7beff89f002814d002bc3c25f6e34f47d99b4db
+  receipt: quality/series-requalification/security-00-01-revision94.yml
+  revision: 94
+  audited_head: 978e042b76cf82f9703ea81e9625b9000c64dc6f
   main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
-  action: 35216067912
+  action: 35225664150
   action_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-  artifact_id: 10495727292
-  artifact_size_bytes: 167231
+  artifact_id: 10499887253
+  artifact_size_bytes: 166922
   artifact_retention_days: 1
-  artifact_digest: sha256:72da8c637d44c24e205c99d492a55c17a740039f8ae6940da700959a7097d47b
+  artifact_digest: sha256:dc48fe02bb493b3f7dd00a0ce02d0a83b6c59220cc4ae926f828416947272102
+  negative_regression_fixtures: PASS
+  curriculum_video_mutation_fixtures: PASS
+  publication_discovery_tests: PASS
+  reviewed_source_guard: PASS_CURRENT_SITE_BYTES
   strict_es: PASS
   strict_en: PASS
   publication_discovery: PASS
   publication_contract: PASS
   native_media_probe_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
-  structured_metadata: PASS_SOURCE_DERIVED_DATES
+  structured_metadata: PASS
   article_watch_contract: PASS
   reviewed_media_metadata_and_claim_parity: PASS
   complete_rendered_html_audit_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
@@ -56,6 +60,23 @@ latest_verified_technical_diagnostic:
   global_336_browser_repeated: false
   final_enforcement: FAIL_EXPECTED_REAL_DEBT
 
+latest_exact_head_capture:
+  capture_revision: 84
+  action: 35226187175
+  captured_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  action_conclusion: SUCCESS_TECHNICAL_CAPTURE_ONLY
+  artifact_id: 10499387634
+  artifact_size_bytes: 53854453
+  artifact_retention_days: 1
+  artifact_digest: sha256:a9adb27b1e71af7c40e2f1f748b291a95dda4440d57ea38a528d7d77be7efdd7
+  whole_article_and_per_asset_contexts: PASS_16_OF_16
+  semantic_trace_contexts: PASS_16_OF_16
+  prompt_visual_states_normal_reduced: PASS
+  video_lifecycle_poster_play_pause_seek_end_next: PASS_16_OF_16
+  security00_watch_summary_capture: PASS
+  technical_failures: 0
+  technical_capture_is_not_editorial_certification: true
+
 post_rev93_source_fix:
   receipt: quality/series-requalification/security-00-influence-impact-boundary-fix.yml
   finding: P2_SECURITY00_MODEL_INFLUENCE_VS_EXECUTION_IMPACT_CONFLATION
@@ -65,13 +86,15 @@ post_rev93_source_fix:
   primary_sources_revalidated: true
   deterministic_guard: scripts/validate_security_source_claims.py
   negative_mutations_added: true
-  guard_executed_on_current_head: false
-  strict_es_current_head: PENDING
-  strict_en_current_head: PENDING
-  browser_current_head: PENDING
-  exact_current_head_pixel_review: false
-  exact_current_head_pedagogy_review: false
-  prior_rev92_manual_review_inherited_to_new_site_bytes: false
+  guard_executed_on_current_site_bytes: true
+  guard_result: PASS_REV94
+  strict_es_current_site_bytes: PASS
+  strict_en_current_site_bytes: PASS
+  focused_browser_current_site_bytes: PASS
+  exact_current_head_pixel_review_security00: PASS_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  exact_current_head_pedagogy_review_security00: PASS_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  review_independent: false
+  security01_inherits_security00_editorial_review: false
   article_golden: false
 
 curriculum_inventory:
@@ -143,11 +166,11 @@ shared_gate_coverage:
     guards_bounded_software_injection_claim: true
     guards_security01_direct_indirect_impact_scope: true
     guards_security00_model_influence_vs_execution_impact: true
-    latest_exact_head_execution: PENDING_AFTER_POST_REV93_SITE_CHANGE
+    latest_exact_head_execution: PASS_REV94
 
 current_global_gates:
   SOURCE_PASS: false
-  BUILD_PASS: false
+  BUILD_PASS: true
   RENDERED_PASS: false
   BROWSER_PASS: false
   MEDIA_PASS: false
@@ -155,16 +178,40 @@ current_global_gates:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  note: post_rev93_site_facing_source_change_invalidates_exact_head_build_browser_pixel_pedagogy_evidence_until_revalidated; independent_video_media_and_catalogue_debt_also_remains
+  note: active Security00 current site-facing bytes pass reviewed source guard, strict ES/EN, focused browser and same-orchestrator manual pixel/pedagogy review; global catalogue, rendered and media debt remain fail-closed, and no independent ARTICLE_GOLDEN review is claimed
 
 editorial:
   latest_site_facing_change_receipt: quality/series-requalification/security-00-influence-impact-boundary-fix.yml
-  latest_manual_security00_review_revision: 92
+  latest_manual_security00_capture_revision: 84
+  latest_manual_security00_capture_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
   latest_manual_security00_review_scope: content_scoped_same_orchestrator
   latest_manual_security00_review_independent: false
-  latest_manual_security00_review_current_for_new_site_bytes: false
+  latest_manual_security00_review_current_for_site_bytes: true
+  security00_pixel_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  security00_pedagogy_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
   security01_manual_pedagogy_pass_claimed: false
   technical_gates_do_not_equal_editorial_pass: true
+  inspected_locales:
+    - es
+    - en
+  inspected_viewports:
+    - desktop_approx_1440
+    - mobile_390
+  inspected_motion_modes:
+    - normal
+    - reduced
+  inspected_lifecycle_states:
+    - poster
+    - play
+    - pause
+    - seek
+    - end_reset
+    - next
+  observed_material_clipping_overlap_or_global_horizontal_overflow: false
+  observed_visible_raw_tex_html_or_macros: false
+  observed_broken_visual_assets: false
+  mobile_requires_giant_horizontal_canvas: false
+  reduced_motion_has_equivalent_teaching_state: true
   target_mechanism: untrusted_input_to_model_influence_to_authorization_boundary_to_action
   bounded_path_outcome: BLOCKED
   broad_permission_counterexample_outcome: EFFECT
@@ -190,7 +237,9 @@ sources_and_locales:
 release_and_concurrency:
   main_last_checked: e2f301e3fe346a4328cb773c46fa49ca34388a12
   repair_branch: quality/post-datacenters-requalification
-  branch_ahead_main_before_status_write: 447
+  branch_head_before_receipt_and_status_writes: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  branch_ahead_main_before_receipt_write: 450
+  branch_ahead_main_before_status_write: 451
   branch_behind_main_last_checked: 0
   merge_base_is_current_main: true
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
@@ -219,11 +268,7 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - RUN_SECURITY_SOURCE_GUARD_AND_NEGATIVE_MUTATIONS_ON_CURRENT_HEAD
-    - RUN_STRICT_ES_EN_ON_CURRENT_HEAD
-    - RUN_FOCUSED_SECURITY00_EXACT_HEAD_BROWSER_CAPTURE_ONLY_WHEN_CLUSTER_JUSTIFIES_CI
-    - MANUALLY_REINSPECT_SECURITY00_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_NEW_SITE_FACING_TEXT
-    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_FOR_NEXT_CONCRETE_DEFECT
     - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
     - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
