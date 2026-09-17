@@ -1,4 +1,4 @@
-schema_version: 48
+schema_version: 49
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -25,81 +25,84 @@ catalogue:
   public_pages: 75
   discovery_requires_presentation: false
 
-rev86:
-  receipt: quality/series-requalification/security-00-01-revision86.yml
-  action: 35181006570
-  audited_head: 1ccc56e80a35f4607d8aae9200e5286b00b137b2
+rev88_capture81:
+  receipt: quality/series-requalification/security-00-01-revision88.yml
+  audited_head: ff19aa74d1bfeb2055b714dfe022dabc8be8e54c
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  action: 35192375338
+  action_conclusion: SUCCESS
+  exact_head_manual_pixel_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  exact_head_manual_pedagogy_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  manual_review_independent: false
+  manual_review_scope_inherits_to_security01: false
+  current_head_inherits_rev88_manual_pass: false
+  historical_only: true
+
+rev89:
+  receipt: quality/series-requalification/security-00-01-revision89.yml
+  finding: P2_SECURITY00_INDIRECT_INJECTION_SEVERITY_OVERCLAIM
+  correction: unconditional_severity_ranking_replaced_with_conditioned_tools_data_privileged_actions_risk_in_es_and_en
+  es_en_material_parity_after_fix: true
+  primary_sources_revalidated: true
+  exact_current_head_pixel_review: false
+  exact_current_head_pedagogy_review: false
+  article_golden: false
+
+rev90:
+  receipt: quality/series-requalification/security-00-01-revision90.yml
+  action: 35203598471
+  audited_head: 6bfe07e68aaf39c41fd9d7f329af5f18fd8e5b89
   scope: focused_security_00_01
   conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10489326722
+  artifact_size_bytes: 167224
+  artifact_retention_days: 1
+  mutation_tests_series_experience: 38_of_38_PASS
+  mutation_tests_video_curriculum: 7_of_7_PASS
+  publication_discovery_tests: 5_of_5_PASS
   strict_es: PASS
   strict_en: PASS
   publication_discovery: PASS
   publication_contract: PASS
   structured_metadata: PASS
   article_watch_contract: PASS
-  shared_security_plus_reference_browser: PASS
+  security_reviewed_source_parity: PASS
+  shared_security_plus_reference_browser: PASS_64_OF_64_CONTEXTS
+  shared_browser_classifier_mutations: 20_PASS
   focused_security_browser: PASS
-  contrast_and_text_visibility: PASS
+  contrast: PASS_128_STATE_CONTEXT_RECORDS
+  text_visibility: PASS_8_CONTEXTS_X_4_STATES
   video_lifecycle: PASS
   real_mobile_touch: PASS
   prompt_visual_states_technical: PASS
   keyboard_focus: PASS
-  runtime_listener_lifetime: PASS
-  full_catalogue_browser_repeated: false
-  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
-
-rev88_capture81:
-  receipt: quality/series-requalification/security-00-01-revision88.yml
-  audited_head: ff19aa74d1bfeb2055b714dfe022dabc8be8e54c
-  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
-  action: 35192375338
-  workflow: Security capture direct execution
-  action_conclusion: SUCCESS
-  site_facing_bytes_changed: true
-  corrections:
-    - security00_en_video_summary_material_parity_repaired
-    - security00_en_contents_heading_changed_to_table_of_contents
-    - watch_capture_separates_header_summary_from_three_takeaways
-  strict_es: PASS
-  strict_en: PASS
-  editorial_contexts: 16
-  editorial_failures: 0
-  trace_contexts: 16
-  trace_checkpoints: 64
-  trace_failures: 0
-  prompt_state_contexts: 8
-  prompt_state_failures: 0
-  lifecycle_technical_contexts: 16
-  lifecycle_technical_failures: 0
-  lifecycle_pixel_contexts: 8
-  lifecycle_retained_jpegs: 48
-  watch_contexts: 8
-  watch_failures: 0
-  runtime_unexpected_total: 0
-  exact_head_manual_pixel_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
-  exact_head_manual_pedagogy_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
-  manual_review_independent: false
-  manual_review_scope_inherits_to_security01: false
-  current_head_inherits_rev88_manual_pass: false
-  global_pixel_review: false
-  global_pedagogy_review: false
-  media_pass: false
+  runtime_listener_lifetime: PASS_16_OF_16_CONTEXTS
+  source_outcome: FAIL_REAL_VIDEO_SOURCE_DEBT
+  video_curriculum_inventory_outcome: FAIL_CLOSED
+  video_schema_contract_outcome: FAIL_CLOSED_92_GT_91
+  media_probe_outcome: FAIL_VOICE_AND_ACCESSIBILITY_DEBT
+  rendered_outcome: FAIL_VIDEO_NOT_RENDERED_DEBT
+  global_336_browser_repeated: false
+  global_336_browser_skip_reason: focused_iteration
+  pixel_review: PENDING_MANUAL
+  pedagogy_review: PENDING_MANUAL
   article_golden: false
 
-rev89:
-  receipt: quality/series-requalification/security-00-01-revision89.yml
-  site_facing_content_head_after_fix: 8363efe67741da6c6299e4a4157d2ff6fabd5929
-  main_at_start: e2f301e3fe346a4328cb773c46fa49ca34388a12
-  finding: P2_SECURITY00_INDIRECT_INJECTION_SEVERITY_OVERCLAIM
-  correction: unconditional_severity_ranking_replaced_with_conditioned_tools_data_privileged_actions_risk_in_es_and_en
-  es_en_material_parity_after_fix: true
-  primary_sources_revalidated: true
-  changed_assets_or_media: false
-  exact_current_head_ci_run: false
-  exact_current_head_ci_skip_reason: small_source_parity_fix_not_yet_meaningful_ci_integration_milestone
+current_post_rev90_source_fix:
+  receipt: quality/series-requalification/security-00-source-boundary-fix.yml
+  finding: P2_SECURITY00_SOFTWARE_CODE_DATA_BOUNDARY_OVERGENERALIZATION
+  old_claim_es: "si separas bien el código de los datos, las clases de ataque principales quedan acotadas"
+  old_claim_en: "if code and data are cleanly separated, the main attack classes are easier to bound"
+  correction: bounded_injection_interpreter_mechanism_with_explicit_non_universality_in_es_and_en
+  es_en_material_parity: true
+  deterministic_guard: scripts/validate_security_source_claims.py
+  canonical_guard_entrypoint: scripts/validate_security_media_metadata_parity.py
+  negative_mutations_added: true
+  current_bytes_were_in_rev90_checkout: false
+  exact_current_head_ci: false
   exact_current_head_pixel_review: false
   exact_current_head_pedagogy_review: false
-  historical_rev88_editorial_pass_inherited: false
+  rev90_technical_or_editorial_pass_inherited: false
   article_golden: false
 
 curriculum_inventory:
@@ -127,7 +130,7 @@ source_and_rendered_debt:
   VIDEO_SUMMARY_MISSING: 18
   VIDEO_TITLE_MISSING: 9
   VIDEO_NOT_RENDERED: 60
-  RAW_TEX_RENDERED: 0
+  raw_tex_last_full_catalogue_visible: 0
 
 last_full_browser_catalogue:
   revision: 75
@@ -144,11 +147,12 @@ security_media:
   state: FAIL_VOICE_MISSING
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
-  security00_es_declared_duration: PT1M0S
-  security00_es_binary_seconds: 60.400
-  security00_en_declared_duration: PT48S
-  security00_en_binary_seconds: 47.967
-  native_locale_duration_metadata_drift: false
+  rev90_security00_es_declared_duration: PT1M0S
+  rev90_security00_es_binary_seconds: 60.3
+  rev90_security00_en_declared_duration: PT48S
+  rev90_security00_en_binary_seconds: 47.566667
+  rev90_security01_es_binary_seconds: 60.333333
+  rev90_security01_en_binary_seconds: 47.566667
   missing_audio_streams: 4
   missing_captions: 4
   missing_transcripts: 4
@@ -168,16 +172,18 @@ shared_gate_coverage:
     final_enforcement_includes_gate_outcome: true
     state: REAL_ACCESSIBILITY_DEBT_EXCEEDS_LEGACY_BUDGET
     failure: "Captions/transcript debt increased: 92 surfaces exceed the legacy budget 91. New video surfaces must not silently expand accessibility debt."
-  security_media_metadata_parity:
-    source: scripts/validate_security_media_metadata_parity.py
+  security_reviewed_source_parity:
+    canonical_entrypoint: scripts/validate_security_media_metadata_parity.py
+    delegated_claim_guard: scripts/validate_security_source_claims.py
     canonical_requalification_diagnostic_executes_gate: true
     final_enforcement_includes_gate_outcome: true
-    reviewed_security00_01_contract: true
+    guards_rev89_conditional_severity_claim: true
+    guards_current_bounded_software_injection_claim: true
     negative_mutations: true
 
-global_gates:
+current_global_gates:
   SOURCE_PASS: false
-  BUILD_PASS: true
+  BUILD_PASS: false
   RENDERED_PASS: false
   BROWSER_PASS: false
   MEDIA_PASS: false
@@ -185,9 +191,10 @@ global_gates:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
+  note: current_exact_head_changed_after_rev90_so_build_and_browser_are_not_inherited
 
 editorial:
-  latest_site_facing_content_head: 8363efe67741da6c6299e4a4157d2ff6fabd5929
+  latest_site_facing_change_receipt: quality/series-requalification/security-00-source-boundary-fix.yml
   latest_exact_head_security00_manual_pixel_review: false
   latest_exact_head_security00_manual_pedagogy_review: false
   previous_rev88_manual_review_preserved_as_historical: true
@@ -202,19 +209,23 @@ editorial:
 sources_and_locales:
   revalidated_on: 2026-09-17
   current_primary_sources:
+    - OWASP Injection Prevention Cheat Sheet
+    - MITRE CWE-74 Improper Neutralization of Special Elements in Output Used by a Downstream Component
     - OWASP LLM Prompt Injection Prevention Cheat Sheet
     - OWASP AI Agent Security Cheat Sheet
     - OWASP RAG Security Cheat Sheet
   security00_unconditional_indirect_injection_severity_ranking_removed: true
   security00_conditioned_risk_claim_supported: true
-  security00_es_en_material_claim_parity_after_rev89: true
-  security00_en_summary_now_materially_matches_es: true
+  security00_broad_software_attack_class_generalization_removed: true
+  security00_bounded_interpreter_injection_claim_supported: true
+  security00_es_en_material_claim_parity: true
+  security00_en_summary_materially_matches_es: true
   security00_en_table_of_contents_heading_repaired: true
 
 release_and_concurrency:
-  main_at_rev89_start: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  main_last_checked: e2f301e3fe346a4328cb773c46fa49ca34388a12
   repair_branch: quality/post-datacenters-requalification
-  branch_behind_main_after_site_fix: 0
+  branch_behind_main_last_checked: 0
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
   production_merge: false
@@ -225,8 +236,11 @@ release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
   pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
   pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  main_es_blob_last_verified: 63591a3989937ea7c4dc84c39dd0666f52ad4efb
+  main_en_blob_last_verified: 3b6a0075c7e211caac3a46237d974797d26d8648
   material_change_to_310: false
   seventy_two_hour_clock_restarted: false
+  fresh_no_cache_live_verification_obtained_this_run: false
   linkedin_action_by_this_lane: false
   queue_activation_publish: false
   preserve_279: true
@@ -236,9 +250,9 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - ADD_FAIL_CLOSED_ES_EN_SOURCE_CLAIM_REGRESSION_MUTATION_FOR_REMOVED_UNCONDITIONAL_SEVERITY_RANKING
+    - RUN_CURRENT_EXACT_HEAD_SOURCE_GUARD_STRICT_ES_EN_AND_FOCUSED_CAPTURE_AT_NEXT_JUSTIFIED_INTEGRATION_MILESTONE
+    - MANUALLY_INSPECT_CURRENT_EXACT_HEAD_ES_EN_ARTICLE_AND_WATCH_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_POST_REV90_SITE_TEXT_CHANGE
     - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
-    - RUN_ONE_FOCUSED_EXACT_HEAD_CAPTURE_AFTER_SOURCE_PARITY_FIX_CLUSTER_REACHES_A_MEANINGFUL_INTEGRATION_MILESTONE
     - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
     - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
