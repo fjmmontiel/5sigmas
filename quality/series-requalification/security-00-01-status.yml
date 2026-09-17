@@ -1,4 +1,4 @@
-schema_version: 47
+schema_version: 48
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -80,9 +80,26 @@ rev88_capture81:
   exact_head_manual_pedagogy_result: PASS_CURRENT_HEAD_CAPTURE81_CONTENT_SCOPED_SAME_ORCHESTRATOR
   manual_review_independent: false
   manual_review_scope_inherits_to_security01: false
+  current_head_inherits_rev88_manual_pass: false
   global_pixel_review: false
   global_pedagogy_review: false
   media_pass: false
+  article_golden: false
+
+rev89:
+  receipt: quality/series-requalification/security-00-01-revision89.yml
+  site_facing_content_head_after_fix: 8363efe67741da6c6299e4a4157d2ff6fabd5929
+  main_at_start: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  finding: P2_SECURITY00_INDIRECT_INJECTION_SEVERITY_OVERCLAIM
+  correction: unconditional_severity_ranking_replaced_with_conditioned_tools_data_privileged_actions_risk_in_es_and_en
+  es_en_material_parity_after_fix: true
+  primary_sources_revalidated: true
+  changed_assets_or_media: false
+  exact_current_head_ci_run: false
+  exact_current_head_ci_skip_reason: small_source_parity_fix_not_yet_meaningful_ci_integration_milestone
+  exact_current_head_pixel_review: false
+  exact_current_head_pedagogy_review: false
+  historical_rev88_editorial_pass_inherited: false
   article_golden: false
 
 curriculum_inventory:
@@ -127,6 +144,11 @@ security_media:
   state: FAIL_VOICE_MISSING
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
+  security00_es_declared_duration: PT1M0S
+  security00_es_binary_seconds: 60.400
+  security00_en_declared_duration: PT48S
+  security00_en_binary_seconds: 47.967
+  native_locale_duration_metadata_drift: false
   missing_audio_streams: 4
   missing_captions: 4
   missing_transcripts: 4
@@ -165,32 +187,34 @@ global_gates:
   SERIES_GOLDEN: false
 
 editorial:
-  current_exact_head: ff19aa74d1bfeb2055b714dfe022dabc8be8e54c
-  exact_head_security00_manual_pixel_review: PASS_CONTENT_SCOPED_SAME_ORCHESTRATOR
-  exact_head_security00_manual_pedagogy_review: PASS_CONTENT_SCOPED_SAME_ORCHESTRATOR
-  inspected_locales: [es, en]
-  inspected_viewports: [desktop_approx_1440, mobile_approx_390]
-  inspected_motion_modes: [normal, reduced]
-  inspected_surfaces: [full_article, full_watch, semantic_start_intermediate_final, video_poster_play_pause_seek_end_next]
+  latest_site_facing_content_head: 8363efe67741da6c6299e4a4157d2ff6fabd5929
+  latest_exact_head_security00_manual_pixel_review: false
+  latest_exact_head_security00_manual_pedagogy_review: false
+  previous_rev88_manual_review_preserved_as_historical: true
+  previous_rev88_manual_review_inherited_to_current_head: false
   no_independent_review_claimed: true
   security01_inherits_security00_review: false
   technical_gates_do_not_equal_editorial_pass: true
-  observed_mechanism: untrusted_input_to_influence_to_authorization_boundary_to_action
+  target_mechanism: untrusted_input_to_influence_to_authorization_boundary_to_action
   bounded_path_outcome: BLOCKED
   broad_permission_counterexample_outcome: EFFECT
 
 sources_and_locales:
+  revalidated_on: 2026-09-17
   current_primary_sources:
     - OWASP LLM Prompt Injection Prevention Cheat Sheet
     - OWASP AI Agent Security Cheat Sheet
-  material_security00_claim_change_required_after_revalidation: false
+    - OWASP RAG Security Cheat Sheet
+  security00_unconditional_indirect_injection_severity_ranking_removed: true
+  security00_conditioned_risk_claim_supported: true
+  security00_es_en_material_claim_parity_after_rev89: true
   security00_en_summary_now_materially_matches_es: true
   security00_en_table_of_contents_heading_repaired: true
 
 release_and_concurrency:
-  main_at_rev88_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  main_at_rev89_start: e2f301e3fe346a4328cb773c46fa49ca34388a12
   repair_branch: quality/post-datacenters-requalification
-  branch_behind_main_before_persistence: 0
+  branch_behind_main_after_site_fix: 0
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
   production_merge: false
@@ -212,8 +236,10 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
+    - ADD_FAIL_CLOSED_ES_EN_SOURCE_CLAIM_REGRESSION_MUTATION_FOR_REMOVED_UNCONDITIONAL_SEVERITY_RANKING
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
+    - RUN_ONE_FOCUSED_EXACT_HEAD_CAPTURE_AFTER_SOURCE_PARITY_FIX_CLUSTER_REACHES_A_MEANINGFUL_INTEGRATION_MILESTONE
     - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
-    - CONTINUE_NEXT_NON_MEDIA_SECURITY00_SOURCE_PARITY_PEDAGOGY_DEFECT_SEARCH_WITHOUT_ADVANCING_ARTICLE
     - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
   external_media_completion_when_valid_inputs_exist:
