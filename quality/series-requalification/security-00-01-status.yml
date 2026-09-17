@@ -1,4 +1,4 @@
-schema_version: 44
+schema_version: 45
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -25,35 +25,29 @@ catalogue:
   public_pages: 75
   discovery_requires_presentation: false
 
-rev83:
-  receipt: quality/series-requalification/security-00-01-revision83.yml
-  action: 35173792560
-  audited_head: 772da24947424abbe3dab07d4463935933a91af0
+rev85:
+  receipt: quality/series-requalification/security-00-01-revision85.yml
+  action: 35177739154
+  audited_head: caca2050fe1d7069012496ff2777208e8902eda7
   scope: focused_security_00_01
   conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-  artifact_id: 10477393657
-  artifact_bytes: 167364
-  artifact_files: 13
+  artifact_id: 10478978090
+  artifact_bytes: 167031
   artifact_retention_days: 1
-  core_mutation_tests: 38
-  curriculum_inventory_mutation_tests: 6
   strict_es: PASS
   strict_en: PASS
   publication_discovery: PASS
   publication_contract: PASS
   structured_metadata: PASS
   article_watch_contract: PASS
-  shared_security_plus_reference_contexts: 64
-  shared_security_plus_reference_mutations: 20
-  shared_security_plus_reference_failures: 0
+  shared_security_plus_reference_browser: PASS
   focused_security_browser: PASS
   contrast_and_text_visibility: PASS
   video_lifecycle: PASS
   real_mobile_touch: PASS
   prompt_visual_states_technical: PASS
   keyboard_focus: PASS
-  runtime_listener_lifetime_contexts: 16
-  runtime_listener_lifetime_failures: 0
+  runtime_listener_lifetime: PASS
   full_catalogue_browser_repeated: false
   full_catalogue_browser_skip_reason: published_site_bytes_unchanged
 
@@ -107,6 +101,17 @@ security_media:
   es_media_used_as_en_fallback: false
   fabricated_transcript_or_timings: false
 
+shared_gate_coverage:
+  main_video_accessibility_contract:
+    source: scripts/test_video_schema_contract.py
+    exact_locale_video_surfaces_on_repair_branch: 92
+    legacy_missing_captions_transcript_budget: 91
+    debt_budget_raised: false
+    reconciled_with_main_pr_328: true
+    canonical_requalification_diagnostic_executes_gate: false
+    state: P1_GATE_COVERAGE_GAP
+    next_action: WIRE_SHARED_VIDEO_ACCESSIBILITY_CONTRACT_FAIL_CLOSED_INTO_DIAGNOSTIC
+
 global_gates:
   SOURCE_PASS: false
   BUILD_PASS: true
@@ -119,9 +124,9 @@ global_gates:
   SERIES_GOLDEN: false
 
 editorial:
-  published_site_bytes_changed_in_rev83: false
-  new_manual_pixel_review_in_rev83: false
-  new_manual_pedagogy_review_in_rev83: false
+  published_site_bytes_changed_in_rev85: false
+  new_manual_pixel_review_in_rev85: false
+  new_manual_pedagogy_review_in_rev85: false
   preserved_security00_evidence: rev78_same_orchestrator_revision_scoped
   security01_inherits_security00_review: false
   technical_gates_do_not_equal_editorial_pass: true
@@ -131,14 +136,14 @@ sources_and_locales:
     - OWASP LLM Prompt Injection Prevention Cheat Sheet
     - OWASP AI Agent Security Cheat Sheet
   material_security00_claim_change_required: false
-  rev83_content_or_claim_change: false
+  rev85_content_or_claim_change: false
 
 release_and_concurrency:
-  main_at_rev83: 27ee187e47c3caaaf0e3c157431046d0083e4fd2
+  main_at_rev85: 7d9e7ac35946b3989874d47b28afceb2f708a906
   repair_branch: quality/post-datacenters-requalification
-  repair_branch_was_behind_main_before_rev83_writes: false
+  repair_branch_was_behind_main_before_rev85_receipt: false
+  main_pr_328: MERGED_VIDEO_ACCESSIBILITY_INVENTORY
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
-  pr_328: OPEN_TEST_ONLY_NOT_MERGED
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
@@ -161,6 +166,8 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
+    - WIRE_SCRIPTS_TEST_VIDEO_SCHEMA_CONTRACT_INTO_CANONICAL_DIAGNOSTIC_WITH_FAIL_CLOSED_OUTCOME
+    - KEEP_EXACT_VIDEO_SURFACE_INVENTORY_92_AND_LEGACY_DEBT_BUDGET_91_SEPARATE
     - CONTINUE_NON_MEDIA_SECURITY00_REMEDIATION_WITHOUT_ADVANCING_ARTICLE
     - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
