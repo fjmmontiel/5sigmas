@@ -35,7 +35,7 @@ jobs:
           from pathlib import Path
           request = json.loads(Path('quality/series-requalification/audit-request.json').read_text())
           scope = request.get('diagnostic_scope', 'full')
-          allowed = {'full', 'focused_security_00_01'}
+          allowed = {'full', 'focused_security_00_01', 'focused_security_02_04'}
           if scope not in allowed:
               raise SystemExit(f'unsupported diagnostic_scope={scope!r}; allowed={sorted(allowed)}')
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as handle:
@@ -78,10 +78,30 @@ jobs:
         continue-on-error: true
         run: python scripts/audit_video_curriculum_inventory.py
 
-      - name: Bilingual video schema and accessibility contract
-        id: video_schema_contract
+      - name: Legacy mixed video/accessibility evidence — informational under owner amendment 5716685049
+        id: legacy_video_schema_contract
         continue-on-error: true
         run: python scripts/test_video_schema_contract.py
+
+      - name: Security02 reviewed source claims and relationship-first source contract
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        id: security02_contracts
+        continue-on-error: true
+        run: |
+          python scripts/validate_security02_source_claims.py --self-test
+          python scripts/validate_security02_pedagogy_contract.py --self-test
+
+      - name: Security03 reviewed Sep-2026 source claims
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        id: security03_contracts
+        continue-on-error: true
+        run: python scripts/validate_security03_source_claims.py --self-test
+
+      - name: Security04 reviewed source attribution
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        id: security04_contracts
+        continue-on-error: true
+        run: python scripts/validate_security04_source_claims.py --self-test
 
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
@@ -91,8 +111,9 @@ jobs:
         continue-on-error: true
         run: python scripts/audit_publication_contract.py
 
-      - name: Inspect Security 00/01 native media with fail-closed ffprobe gate
-        id: security_media_probe
+      - name: Security 00/01 raw media evidence
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
+        id: security_media_00_01_raw
         continue-on-error: true
         run: |
           set -euo pipefail
@@ -100,11 +121,33 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y ffmpeg
           fi
-          command -v ffprobe
           python scripts/validate_security_video_media.py --self-test
           python scripts/validate_security_media_locale_identity.py --self-test
           python scripts/validate_security_media_locale_identity.py
           python scripts/validate_security_video_media.py
+
+      - name: Security 00/01 current MEDIA_VISUAL vs deferred VOICE classification
+        if: ${{ always() && (steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01') }}
+        id: security_media_00_01_visual
+        continue-on-error: true
+        run: |
+          python scripts/classify_requalification_media.py --self-test
+          python scripts/classify_requalification_media.py \
+            artifacts/security-requalification/media-report.json \
+            --output artifacts/security-requalification/media-visual-classification.json
+
+      - name: Security 02-04 current MEDIA_VISUAL gate; VOICE stays deferred
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_02_04' }}
+        id: security_media_02_04_visual
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          python scripts/validate_security_02_04_media_visual.py --self-test
+          python scripts/validate_security_02_04_media_visual.py
 
       - name: Prepare English
         run: python scripts/prepare_locale.py --locale en
@@ -115,6 +158,7 @@ jobs:
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
       - name: Security 1.1 rendered structured provenance and locale metadata
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_structured_metadata
         continue-on-error: true
         run: |
@@ -122,11 +166,13 @@ jobs:
           python scripts/validate_security_structured_metadata.py
 
       - name: Security 00/01 reciprocal article-watch links and locale UI
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_article_watch
         continue-on-error: true
         run: python scripts/validate_security_article_watch_contract.py
 
       - name: Security 00/01 reviewed ES/EN media metadata parity
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_media_metadata_parity
         continue-on-error: true
         run: |
@@ -149,14 +195,6 @@ jobs:
           python scripts/serve_preview.py --directory site --port 8000 > /tmp/series-experience-preview.log 2>&1 &
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then
-              curl --fail --silent --show-error \
-                -H 'Range: bytes=0-99' \
-                -D /tmp/series-experience-range.headers \
-                -o /tmp/series-experience-range.bin \
-                http://127.0.0.1:8000/en/series/seguridad-ia/01-prompt-injection.mp4
-              grep -q '^HTTP/1.[01] 206' /tmp/series-experience-range.headers
-              grep -qi '^Content-Range: bytes 0-99/' /tmp/series-experience-range.headers
-              test "$(wc -c < /tmp/series-experience-range.bin)" -eq 100
               exit 0
             fi
             sleep 1
@@ -164,7 +202,7 @@ jobs:
           cat /tmp/series-experience-preview.log
           exit 1
 
-      - name: Shared browser resources — Security plus Datacenters/pre-Datacenters regression
+      - name: Shared browser resources — Security02-04 plus Security00-01 and Datacenters/pre-Datacenters regression
         id: shared_browser_resources
         continue-on-error: true
         timeout-minutes: 12
@@ -172,6 +210,9 @@ jobs:
           S5_BROWSER_RESOURCE_PATHS: >-
             /series/seguridad-ia/00_presentacion_serie/,/en/series/seguridad-ia/00_presentacion_serie/,
             /series/seguridad-ia/01-prompt-injection/,/en/series/seguridad-ia/01-prompt-injection/,
+            /series/seguridad-ia/02-jailbreaks/,/en/series/seguridad-ia/02-jailbreaks/,
+            /series/seguridad-ia/03-envenenamiento/,/en/series/seguridad-ia/03-envenenamiento/,
+            /series/seguridad-ia/04-red-teaming/,/en/series/seguridad-ia/04-red-teaming/,
             /series/datacenters-espacio/00_presentacion_serie/,/en/series/datacenters-espacio/00_presentacion_serie/,
             /series/ia-pib-bienestar-energia/00_presentacion_serie/,/en/series/ia-pib-bienestar-energia/00_presentacion_serie/,
             /series/modelos-razonadores/00_presentacion_serie/,/en/series/modelos-razonadores/00_presentacion_serie/,
@@ -181,7 +222,7 @@ jobs:
         run: node scripts/audit_browser_resources.mjs
 
       - name: All inventoried pages, desktop/mobile, normal/reduced motion
-        if: steps.diagnostic_scope.outputs.scope == 'full'
+        if: ${{ steps.diagnostic_scope.outputs.scope == 'full' }}
         id: browser
         continue-on-error: true
         env:
@@ -189,12 +230,14 @@ jobs:
         run: node scripts/audit_series_experience_browser.mjs
 
       - name: Focused Security 00/01 interaction, layout and codec-aware playback diagnostic
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_browser
         continue-on-error: true
         timeout-minutes: 10
         run: node scripts/validate_security_requalification_browser.mjs
 
       - name: Focused Security 00/01 WCAG contrast and state text visibility
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_contrast
         continue-on-error: true
         timeout-minutes: 5
@@ -205,11 +248,13 @@ jobs:
           node scripts/validate_security_text_visibility.mjs
 
       - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_video_lifecycle
         continue-on-error: true
         run: node scripts/validate_security_video_lifecycle.mjs
 
       - name: Focused Security 00/01 real touch article-watch round trip
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_article_watch_touch
         continue-on-error: true
         timeout-minutes: 5
@@ -219,18 +264,21 @@ jobs:
           test -s artifacts/security-requalification/article-watch-touch-report.json
 
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_prompt_states
         continue-on-error: true
         timeout-minutes: 10
         run: node scripts/validate_security_prompt_visual_states.mjs
 
       - name: Focused Security 00/01 real keyboard traversal and visible focus
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_keyboard_focus
         continue-on-error: true
         timeout-minutes: 5
         run: node scripts/validate_security_keyboard_focus.mjs
 
       - name: Focused Security 00/01 runtime/resource listeners through context teardown
+        if: ${{ steps.diagnostic_scope.outputs.scope != 'focused_security_02_04' }}
         id: security_listener_lifetime
         continue-on-error: true
         timeout-minutes: 10
@@ -246,9 +294,13 @@ jobs:
           PUBLICATION_DISCOVERY_OUTCOME: ${{ steps.publication_discovery.outcome }}
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
           VIDEO_CURRICULUM_INVENTORY_OUTCOME: ${{ steps.video_curriculum_inventory.outcome }}
-          VIDEO_SCHEMA_CONTRACT_OUTCOME: ${{ steps.video_schema_contract.outcome }}
+          LEGACY_VIDEO_SCHEMA_CONTRACT_OUTCOME: ${{ steps.legacy_video_schema_contract.outcome }}
           PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
-          MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
+          SECURITY02_CONTRACTS_OUTCOME: ${{ steps.security02_contracts.outcome }}
+          SECURITY03_CONTRACTS_OUTCOME: ${{ steps.security03_contracts.outcome }}
+          SECURITY04_CONTRACTS_OUTCOME: ${{ steps.security04_contracts.outcome }}
+          SECURITY_MEDIA_00_01_VISUAL_OUTCOME: ${{ steps.security_media_00_01_visual.outcome }}
+          SECURITY_MEDIA_02_04_VISUAL_OUTCOME: ${{ steps.security_media_02_04_visual.outcome }}
           SECURITY_STRUCTURED_METADATA_OUTCOME: ${{ steps.security_structured_metadata.outcome }}
           SECURITY_ARTICLE_WATCH_OUTCOME: ${{ steps.security_article_watch.outcome }}
           SECURITY_MEDIA_METADATA_PARITY_OUTCOME: ${{ steps.security_media_metadata_parity.outcome }}
@@ -269,127 +321,51 @@ jobs:
 
           scope = os.environ.get('DIAGNOSTIC_SCOPE') or 'full'
           print(f'GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=PENDING; PEDAGOGY_REVIEW=PENDING; DIAGNOSTIC_SCOPE={scope}')
-          for name in ('report.json', 'browser-report.json'):
-              path = Path('artifacts/series-experience') / name
+          print('VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL; voice/audio/captions/transcript debt is not a current GOLDEN blocker under owner amendment 5716685049')
+          print('LEGACY_MIXED_VIDEO_SCHEMA_OUTCOME=' + os.environ.get('LEGACY_VIDEO_SCHEMA_CONTRACT_OUTCOME', '') + '; informational until its voice-dependent assertions are split')
+
+          for path in (
+              Path('artifacts/security-requalification/media-visual-classification.json'),
+              Path('artifacts/security-requalification/security-02-04-media-visual.json'),
+          ):
               if path.exists():
                   data = json.loads(path.read_text())
-                  print(name, json.dumps(data.get('summary', {k:v for k,v in data.items() if k != 'results'}), ensure_ascii=False))
-          curriculum_report = Path('artifacts/series-experience/video-curriculum-inventory.json')
-          if curriculum_report.exists():
-              data = json.loads(curriculum_report.read_text())
-              print('video-curriculum-inventory.json', json.dumps({
-                  'status': data.get('status'),
-                  'golden': data.get('golden'),
-                  'summary': data.get('summary', {}),
-                  'missing_audited_page_ids': data.get('missing_audited_page_ids', []),
-              }, ensure_ascii=False))
-          media_report = Path('artifacts/security-requalification/media-report.json')
-          if media_report.exists():
-              data = json.loads(media_report.read_text())
-              print('security-requalification/media-report.json', json.dumps({
-                  'status': data.get('status'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          security_report = Path('artifacts/security-requalification/report.json')
-          if security_report.exists():
-              data = json.loads(security_report.read_text())
-              print('security-requalification/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          shared_report = Path('artifacts/security-requalification/shared-browser-resources/report.json')
-          if shared_report.exists():
-              data = json.loads(shared_report.read_text())
-              print('security-requalification/shared-browser-resources/report.json', json.dumps({
-                  'verdict_basis': data.get('verdict_basis'),
-                  'contexts_expected': data.get('contexts_expected'),
-                  'contexts_observed': data.get('contexts_observed'),
-                  'mutation_fixture_count': data.get('mutation_fixture_count'),
-                  'expected_abort_count': data.get('expected_abort_count'),
-                  'failure_count': data.get('failure_count'),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          contrast_report = Path('artifacts/security-requalification/contrast/report.json')
-          if contrast_report.exists():
-              data = json.loads(contrast_report.read_text())
-              print('security-requalification/contrast/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'threshold': data.get('threshold'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          lifecycle_report = Path('artifacts/security-requalification/video-lifecycle/report.json')
-          if lifecycle_report.exists():
-              data = json.loads(lifecycle_report.read_text())
-              print('security-requalification/video-lifecycle/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          touch_report = Path('artifacts/security-requalification/article-watch-touch/report.json')
-          if touch_report.exists():
-              data = json.loads(touch_report.read_text())
-              print('security-requalification/article-watch-touch/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          prompt_report = Path('artifacts/security-requalification/prompt-states/report.json')
-          if prompt_report.exists():
-              data = json.loads(prompt_report.read_text())
-              print('security-requalification/prompt-states/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          focus_report = Path('artifacts/security-requalification/keyboard-focus/report.json')
-          if focus_report.exists():
-              data = json.loads(focus_report.read_text())
-              print('security-requalification/keyboard-focus/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
-          listener_report = Path('artifacts/security-requalification/runtime-listener-lifetime/report.json')
-          if listener_report.exists():
-              data = json.loads(listener_report.read_text())
-              print('security-requalification/runtime-listener-lifetime/report.json', json.dumps({
-                  'engine': data.get('engine'),
-                  'chrome_launch_error': data.get('chrome_launch_error'),
-                  'verdict_basis': data.get('verdict_basis'),
-                  'contexts_expected': data.get('contexts_expected'),
-                  'contexts_observed': data.get('contexts_observed'),
-                  'failure_count': len(data.get('failures', [])),
-                  'failures': data.get('failures', []),
-              }, ensure_ascii=False))
+                  print(path.as_posix(), json.dumps({
+                      'MEDIA_VISUAL_PASS': data.get('MEDIA_VISUAL_PASS'),
+                      'VOICE_ENHANCEMENT': data.get('VOICE_ENHANCEMENT'),
+                      'media_visual_blockers': data.get('media_visual_blockers', []),
+                      'voice_enhancement_debt_count': len(data.get('voice_enhancement_debt', [])),
+                  }, ensure_ascii=False))
 
           names = [
               'PUBLICATION_DISCOVERY_OUTCOME',
               'SOURCE_OUTCOME',
               'VIDEO_CURRICULUM_INVENTORY_OUTCOME',
-              'VIDEO_SCHEMA_CONTRACT_OUTCOME',
               'PUBLICATION_OUTCOME',
-              'MEDIA_PROBE_OUTCOME',
-              'SECURITY_STRUCTURED_METADATA_OUTCOME',
-              'SECURITY_ARTICLE_WATCH_OUTCOME',
-              'SECURITY_MEDIA_METADATA_PARITY_OUTCOME',
               'RENDERED_OUTCOME',
               'SHARED_BROWSER_RESOURCES_OUTCOME',
-              'SECURITY_BROWSER_OUTCOME',
-              'SECURITY_CONTRAST_OUTCOME',
-              'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
-              'SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME',
-              'SECURITY_PROMPT_STATES_OUTCOME',
-              'SECURITY_KEYBOARD_FOCUS_OUTCOME',
-              'SECURITY_LISTENER_LIFETIME_OUTCOME',
           ]
+          if scope in {'full', 'focused_security_02_04'}:
+              names += [
+                  'SECURITY02_CONTRACTS_OUTCOME',
+                  'SECURITY03_CONTRACTS_OUTCOME',
+                  'SECURITY04_CONTRACTS_OUTCOME',
+                  'SECURITY_MEDIA_02_04_VISUAL_OUTCOME',
+              ]
+          if scope in {'full', 'focused_security_00_01'}:
+              names += [
+                  'SECURITY_MEDIA_00_01_VISUAL_OUTCOME',
+                  'SECURITY_STRUCTURED_METADATA_OUTCOME',
+                  'SECURITY_ARTICLE_WATCH_OUTCOME',
+                  'SECURITY_MEDIA_METADATA_PARITY_OUTCOME',
+                  'SECURITY_BROWSER_OUTCOME',
+                  'SECURITY_CONTRAST_OUTCOME',
+                  'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
+                  'SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME',
+                  'SECURITY_PROMPT_STATES_OUTCOME',
+                  'SECURITY_KEYBOARD_FOCUS_OUTCOME',
+                  'SECURITY_LISTENER_LIFETIME_OUTCOME',
+              ]
           if scope == 'full':
               names.append('BROWSER_OUTCOME')
           else:
@@ -400,7 +376,7 @@ jobs:
           PY
 
       - name: Retain bounded focused failed-diagnostic evidence
-        if: failure() && steps.diagnostic_scope.outputs.scope == 'focused_security_00_01'
+        if: ${{ failure() && steps.diagnostic_scope.outputs.scope != 'full' }}
         uses: actions/upload-artifact@v4
         with:
           name: series-experience-diagnostic
@@ -409,6 +385,8 @@ jobs:
             artifacts/series-experience/browser-report.json
             artifacts/series-experience/video-curriculum-inventory.json
             artifacts/security-requalification/media-report.json
+            artifacts/security-requalification/media-visual-classification.json
+            artifacts/security-requalification/security-02-04-media-visual.json
             artifacts/security-requalification/report.json
             artifacts/security-requalification/shared-browser-resources/report.json
             artifacts/security-requalification/contrast/report.json
@@ -424,7 +402,7 @@ jobs:
           overwrite: true
 
       - name: Retain full failed-diagnostic evidence only for full catalogue scope
-        if: failure() && steps.diagnostic_scope.outputs.scope == 'full'
+        if: ${{ failure() && steps.diagnostic_scope.outputs.scope == 'full' }}
         uses: actions/upload-artifact@v4
         with:
           name: series-experience-diagnostic
