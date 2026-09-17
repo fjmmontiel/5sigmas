@@ -1,0 +1,114 @@
+schema_version: 1
+revision: 83
+status: CHANGES_REQUIRED
+published_state: PUBLISHED_UNCERTIFIED
+golden: false
+article_golden: false
+series_golden: false
+active_series: seguridad-ia
+active_article: 00_presentacion_serie
+technical_companion: 01-prompt-injection
+next_article_blocked: 02-jailbreaks
+
+action:
+  run_id: 35173792560
+  exact_head: 772da24947424abbe3dab07d4463935933a91af0
+  scope: focused_security_00_01
+  conclusion: failure_expected_fail_closed
+  artifact_id: 10477393657
+  artifact_bytes: 167364
+  artifact_files: 13
+  retention_days: 1
+
+integration:
+  curriculum_inventory_canonical: true
+  core_mutation_tests: 38
+  curriculum_mutation_tests: 6
+  curriculum_self_test: pass
+
+inventory:
+  expected_locale_video_obligations: 84
+  audited_obligations: 84
+  missing_audited_pages: 0
+  page_states:
+    video_declared_source_contract_incomplete: 24
+    video_required_undeclared: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  h2_states:
+    blocked_curated_key_moments_missing: 154
+    blocked_video_undeclared: 1044
+
+source_findings:
+  video_declaration_missing: 60
+  video_captions_missing: 24
+  video_transcript_missing: 24
+  video_chapters_missing: 24
+  video_section_map_missing: 24
+  video_summary_missing: 18
+  video_title_missing: 9
+
+rendered_findings:
+  video_not_rendered: 60
+  raw_tex_rendered: 0
+
+security_media:
+  native_locale_binaries_distinct: true
+  required_locales: [es, en]
+  required_pages: [00_presentacion_serie, 01-prompt-injection]
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  voice_status: VOICE_MISSING
+  generated_cloned_substituted_voice: false
+
+reference_regression:
+  contexts: 64
+  mutation_fixtures: 20
+  failures: 0
+
+listener_lifetime:
+  contexts: 16
+  failures: 0
+
+gates:
+  source_pass: false
+  build_pass: true
+  rendered_pass: false
+  browser_pass: false
+  media_pass: false
+  pixel_review: false
+  pedagogy_review: false
+  publication_discovery: pass
+  publication_contract: pass
+  structured_metadata: pass
+  article_watch: pass
+  shared_reference_browser_regression: pass
+  focused_security_browser: pass
+  focused_contrast_text_visibility: pass
+  focused_video_lifecycle: pass
+  focused_real_touch: pass
+  focused_prompt_states: pass
+  focused_keyboard_focus: pass
+  focused_listener_lifetime: pass
+  global_browser_sweep: not_run_unchanged_published_bytes
+
+editorial:
+  new_published_pixels_this_revision: false
+  pixel_pedagogy_recertified: false
+  preserved_manual_evidence: security00_rev78_same_orchestrator_revision_scoped
+
+release:
+  main_at_request: 27ee187e47c3caaaf0e3c157431046d0083e4fd2
+  production_pr: null
+  merged: false
+  deployed: false
+  linkedin_touched: false
+
+next_gap: >-
+  Stay on Security00. No ARTICLE_GOLDEN while VOICE_MISSING or MEDIA_PASS=false.
+  Continue independent non-media remediation without advancing to Security02; retain all
+  1198 H2 obligations fail-closed and never fabricate narration, timings, captions,
+  transcripts, chapters or key moments.
