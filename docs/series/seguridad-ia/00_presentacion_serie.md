@@ -3,7 +3,7 @@ title: Seguridad en IA — ataques y defensas
 description: "Una serie sobre cómo una orden escondida en un documento puede influir en un sistema con IA, cómo puede conservarse ese riesgo y qué controles limitan las acciones."
 keywords: seguridad IA, prompt injection, jailbreak LLM, agentes IA, RAG security, OWASP LLM, red teaming IA
 date: 2026-08-06
-date_modified: 2026-09-16
+date_modified: 2026-09-17
 tags:
   - IA
   - Seguridad
@@ -33,7 +33,7 @@ La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. 
 
 ### 1. **Una orden escondida en un documento puede cambiar lo que hace el sistema**
 - Qué se rompe exactamente cuando un LLM procesa el plano de control y el plano de datos en el mismo canal.
-- Por qué la inyección indirecta en RAG y agentes es más grave que el caso de chat aislado.
+- Por qué la inyección indirecta puede ser más grave cuando el sistema conecta contenido no confiable con herramientas, datos o acciones con privilegios.
 - Qué defensas cambian de verdad la forma del sistema.
 
 ### 2. **Pedir al modelo que ignore sus límites**
