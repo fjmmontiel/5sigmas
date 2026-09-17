@@ -1,0 +1,117 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  active_series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  diagnostic_scope: focused_security_00_01
+
+revision85:
+  action: 35177739154
+  audited_head: caca2050fe1d7069012496ff2777208e8902eda7
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10478978090
+  artifact_bytes: 167031
+  artifact_retention_days: 1
+  started_at_utc: 2026-09-17T03:19:33Z
+  completed_at_utc: 2026-09-17T03:32:42Z
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
+
+passed_technical_steps:
+  negative_regression_fixtures: PASS
+  curriculum_video_inventory_mutation_fixtures: PASS
+  publication_discovery: PASS
+  independent_source_coverage_audit_executed: true
+  curriculum_video_inventory_executed: true
+  strict_es: PASS
+  publication_contract: PASS
+  security_media_probe_executed_fail_closed: true
+  strict_en: PASS
+  structured_metadata: PASS
+  article_watch_locale_contract: PASS
+  rendered_html_audit_executed: true
+  shared_security_plus_datacenters_pre_datacenters_browser: PASS
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  video_lifecycle_normal_reduced: PASS
+  real_mobile_touch: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_listener_lifetime: PASS
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  curriculum_video_obligations: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+
+source_rendered_debt:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+security_media:
+  status: FAIL_VOICE_MISSING
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  native_es_en_mp4_distinct: true
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+concurrency:
+  main_at_run: 7d9e7ac35946b3989874d47b28afceb2f708a906
+  main_change: "PR #328 merged: deterministic video accessibility debt inventory"
+  repair_branch_was_behind_main_at_receipt: false
+  branch_ahead_by_before_receipt: 397
+  branch_behind_by_before_receipt: 0
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  pr_328: MERGED
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  force_push: false
+
+new_gate_finding:
+  code: VIDEO_ACCESSIBILITY_SHARED_GATE_NOT_IN_CANONICAL_DIAGNOSTIC
+  severity: P1_GATE_COVERAGE
+  detail: "main now runs scripts/test_video_schema_contract.py in normal visual/release workflows and the requalification branch reconciles its exact 92-surface inventory, but series-experience-diagnostic.yml does not execute that shared contract. Revision 85 therefore does not prove the new shared accessibility regression is covered by the canonical requalification diagnostic."
+  whitening_forbidden: true
+  next_action: "Wire scripts/test_video_schema_contract.py into series-experience-diagnostic.yml as a named fail-closed outcome, preserving EXPECTED_VIDEO_LOCALE_SURFACES=92 and LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91; add it to final enforcement. Do not raise the debt budget."
+
+editorial:
+  published_site_bytes_changed_in_revision85: false
+  new_manual_pixel_review: false
+  new_manual_pedagogy_review: false
+  preserved_security00_evidence: rev78_same_orchestrator_revision_scoped
+  security01_inherits_security00_review: false
+
+release_contract_281_310:
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
