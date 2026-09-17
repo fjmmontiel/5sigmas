@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 86,
+  "diagnostic_revision": 87,
   "diagnostic_scope": "focused_security_00_01",
-  "published_content_base": "7d9e7ac35946b3989874d47b28afceb2f708a906",
-  "requested_head_parent": "8abbcd04556dc72a7db3fe52dab2497dd590c47e",
-  "reason": "Focused integration milestone after wiring scripts/test_video_schema_contract.py into the canonical requalification diagnostic as an explicit fail-closed outcome. Preserve the exact bilingual inventory at EXPECTED_VIDEO_LOCALE_SURFACES=92 while keeping LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91 unchanged: the new incomplete Security00 ES video surface must remain visible as debt rather than being normalized away. No published article/media byte changed in this iteration. Re-run strict ES/EN, publication/source/rendered/media, the new video schema/accessibility contract, Security plus Datacenters/pre-Datacenters regression and focused Security gates. Do not repeat the 336-context global sweep and never infer PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from this technical run.",
+  "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
+  "requested_head_parent": "5470028add0bf62daca5b0cffaeb7ca5b385bdd0",
+  "reason": "Focused integration milestone after adding validate_security_media_metadata_parity.py as an explicit canonical diagnostic outcome and final-enforcement dependency. Verify the repaired Security00 EN video_summary against the reviewed ES/EN mechanism contract while preserving all existing fail-closed video debt, including EXPECTED_VIDEO_LOCALE_SURFACES=92 versus LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET=91. Re-run strict ES/EN, source/publication/rendered/media/video-schema checks, Security plus Datacenters/pre-Datacenters regression and focused Security browser/lifecycle/accessibility/listener gates. Do not repeat the 336-context global sweep in this focused iteration and never infer PIXEL_REVIEW, PEDAGOGY_REVIEW, ARTICLE_GOLDEN or SERIES_GOLDEN from the technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
