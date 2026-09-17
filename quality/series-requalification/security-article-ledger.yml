@@ -1,9 +1,9 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 iteration_count_epoch: owner_amendment_5716685049
 pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
-updated_at_utc: 2026-09-17T16:20:00Z
+updated_at_utc: 2026-09-17T17:00:00Z
 series: seguridad-ia
 series_state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
 article_golden_requires_voice: false
@@ -144,12 +144,15 @@ articles:
 
   - route: series/seguridad-ia/02-jailbreaks.md
     locale: es
-    iteration_count: 1
+    iteration_count: 2
     state: QA
     evidence_revision:
       source_fix: c60f6f7e088bd56adcfb2862855064d9d67ee001
-      guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
-      receipt: 5f8f7d828557d13fc1f5f734b64a668d46434e4d
+      source_guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
+      adaptive_visual_source: f8797ff406470552afb0e457fe160096f3d645de
+      adaptive_visual_i18n: 747e62f57a7a49a7eba4da8a696c5ad1e41957ea
+      adaptive_visual_gate: 225008687c0c524be4593a255516188a8631ee25
+      exact_head_gates: PENDING
     SOURCE_PASS: false
     BUILD_PASS: false
     BROWSER_PASS: false
@@ -163,21 +166,83 @@ articles:
       P0: []
       P1:
         - GCG_WHITEBOX_MECHANICS_OMITTED_CORRECTED_PENDING_GATE
-        - INTERACTIONS_TOO_COSMETIC_OPEN
+        - FIRST_ADAPTIVE_SEARCH_MECHANISM_REDESIGNED_PENDING_RENDER_AND_EDITORIAL_INSPECTION
+        - REMAINING_SECURITY02_INTERACTIONS_REQUIRE_RELATIONSHIP_FIRST_REVIEW
       P2:
         - TEMPERATURE_ZERO_CAUSAL_OVERCLAIM_CORRECTED_PENDING_GATE
     next_action: >-
-      Run Security02 source guard self-test and strict ES/EN in the next coherent local/integration
-      cluster; redesign the first explicit pedagogical mechanism before any pixel/pedagogy PASS.
+      Execute source-claim and adaptive-search mutation self-tests plus strict ES/EN on one coherent
+      exact-head milestone; render the redesigned search trace at ~1440/~390 normal/reduced and inspect
+      actual pixels/interaction before PEDAGOGY_REVIEW. Then review attack-budget and outcome-ladder.
 
   - route: series/seguridad-ia/02-jailbreaks.md
+    locale: en
+    iteration_count: 2
+    state: QA
+    evidence_revision:
+      source_fix: d7c1979a3fbc99186a608df8d06734f07d388e05
+      source_guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
+      adaptive_visual_source: f8797ff406470552afb0e457fe160096f3d645de
+      adaptive_visual_i18n: 747e62f57a7a49a7eba4da8a696c5ad1e41957ea
+      adaptive_visual_gate: 225008687c0c524be4593a255516188a8631ee25
+      exact_head_gates: PENDING
+    SOURCE_PASS: false
+    BUILD_PASS: false
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: CORRECTED_PENDING_EXACT_HEAD_GATES
+    watch_video_lifecycle: PENDING
+    defects:
+      P0: []
+      P1:
+        - GCG_WHITEBOX_MECHANICS_OMITTED_CORRECTED_PENDING_GATE
+        - FIRST_ADAPTIVE_SEARCH_MECHANISM_REDESIGNED_PENDING_RENDER_AND_EDITORIAL_INSPECTION
+        - REMAINING_SECURITY02_INTERACTIONS_REQUIRE_RELATIONSHIP_FIRST_REVIEW
+      P2:
+        - TEMPERATURE_ZERO_CAUSAL_OVERCLAIM_CORRECTED_PENDING_GATE
+    next_action: >-
+      Execute source-claim and adaptive-search mutation self-tests plus strict ES/EN on one coherent
+      exact-head milestone; render the redesigned search trace at ~1440/~390 normal/reduced and inspect
+      actual pixels/interaction before PEDAGOGY_REVIEW. Then review attack-budget and outcome-ladder.
+
+  - route: series/seguridad-ia/03-envenenamiento.md
+    locale: es
+    iteration_count: 1
+    state: QA
+    evidence_revision:
+      source_refresh: 0b5bbb0bd76a31b1cee9eb17cb0600d3212c8e41
+      freshness_guard: a1d29ddb32e62a4c13fc79613533000e69a91370
+      exact_head_gates: PENDING
+    SOURCE_PASS: false
+    BUILD_PASS: false
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    parity_factual_source: UPDATED_WITH_2026_09_PRIMARY_EVIDENCE_PENDING_EXACT_HEAD_GATES
+    watch_video_lifecycle: PENDING
+    defects:
+      P0: []
+      P1: []
+      P2:
+        - STALE_LATEST_EVIDENCE_MEMSECBENCH_CORRECTED_WITH_SEP_2026_PMPA_PENDING_GATE
+    next_action: >-
+      Execute Security03 freshness mutation self-test and strict ES/EN; independently inspect all four
+      teaching visuals for causal/relationship-first pedagogy, then audit native video/watch metadata,
+      lifecycle and honest non-voice key moments before any pixel/pedagogy/media PASS.
+
+  - route: series/seguridad-ia/03-envenenamiento.md
     locale: en
     iteration_count: 1
     state: QA
     evidence_revision:
-      source_fix: d7c1979a3fbc99186a608df8d06734f07d388e05
-      guard: 4840f280f78dd8ba7cc7ab6df91a43ae9c1fc97f
-      receipt: 5f8f7d828557d13fc1f5f734b64a668d46434e4d
+      source_refresh: 1d7dfa316b8ce0ee91df22aa86e060cc44d308e6
+      freshness_guard: a1d29ddb32e62a4c13fc79613533000e69a91370
+      exact_head_gates: PENDING
     SOURCE_PASS: false
     BUILD_PASS: false
     BROWSER_PASS: false
@@ -185,25 +250,24 @@ articles:
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    parity_factual_source: CORRECTED_PENDING_EXACT_HEAD_GATES
+    parity_factual_source: UPDATED_WITH_2026_09_PRIMARY_EVIDENCE_PENDING_EXACT_HEAD_GATES
     watch_video_lifecycle: PENDING
     defects:
       P0: []
-      P1:
-        - GCG_WHITEBOX_MECHANICS_OMITTED_CORRECTED_PENDING_GATE
-        - INTERACTIONS_TOO_COSMETIC_OPEN
+      P1: []
       P2:
-        - TEMPERATURE_ZERO_CAUSAL_OVERCLAIM_CORRECTED_PENDING_GATE
+        - STALE_LATEST_EVIDENCE_MEMSECBENCH_CORRECTED_WITH_SEP_2026_PMPA_PENDING_GATE
     next_action: >-
-      Run Security02 source guard self-test and strict ES/EN in the next coherent local/integration
-      cluster; redesign the first explicit pedagogical mechanism before any pixel/pedagogy PASS.
+      Execute Security03 freshness mutation self-test and strict ES/EN; independently inspect all four
+      teaching visuals for causal/relationship-first pedagogy, then audit native video/watch metadata,
+      lifecycle and honest non-voice key moments before any pixel/pedagogy/media PASS.
 
 unreviewed_remaining_in_series:
-  - series/seguridad-ia/03-envenenamiento.md
   - series/seguridad-ia/04-red-teaming.md
   - series/seguridad-ia/05-controles-produccion.md
 
 next_batch:
-  - close Security02 source-guard execution and first pedagogical mechanism
-  - audit Security02 visual-video metadata/key moments without voice dependency
-  - begin Security03 ES/EN source/parity/pedagogy audit without waiting for Security02 GOLDEN
+  - execute one coherent Security02+03 source/build integration milestone without redundant CI
+  - render and inspect Security02 redesigned adaptive-search mechanism in ES/EN desktop/mobile normal/reduced
+  - inspect Security03 visuals and media-visual contract
+  - begin Security04 ES/EN source/parity/pedagogy audit without waiting for Security02/03 GOLDEN
