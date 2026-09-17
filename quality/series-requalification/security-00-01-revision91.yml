@@ -1,0 +1,216 @@
+schema_version: 1
+revision: 91
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  diagnostic_scope: focused_security_00_01
+  manual_editorial_scope: security_00_only
+  full_catalogue_browser_sweep_repeated: false
+  full_catalogue_browser_skip_reason: focused_exact_head_integration_no_published_bytes_changed_since_prior_global_sweep
+
+exact_head:
+  audited_head: af52c8aa6161201181702317d197a46167acc7ba
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  branch_behind_main: 0
+  branch_ahead_main_before_receipt_write: 433
+  post_rev90_source_boundary_fix_in_checkout: true
+
+technical_diagnostic:
+  action: 35209447553
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  final_enforcement_failure_is_real_debt: true
+  artifact:
+    id: 10491244018
+    name: series-experience-diagnostic
+    size_bytes: 167543
+    retention_days: 1
+    digest: sha256:3c426ab566cc7ad6e954ac750c9d7148331ca68f5ebd630e25af3d37a38dfd98
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  security_reviewed_source_parity: PASS_CURRENT_EXACT_HEAD
+  shared_security_plus_reference_browser: PASS
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  video_lifecycle_technical: PASS
+  real_mobile_touch: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_listener_lifetime: PASS_THROUGH_CONTEXT_TEARDOWN
+  global_336_browser_repeated: false
+
+technical_fail_closed_outcomes:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  reason:
+    - required_video_source_contract_remains_incomplete
+    - required_video_curriculum_obligations_remain_open
+    - video_accessibility_contract_remains_92_gt_91
+    - voice_captions_transcripts_and_curated_key_moments_remain_missing
+    - 60_required_locale_videos_remain_not_rendered
+
+coverage:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  expected_locale_video_obligations: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE: 24
+  VIDEO_REQUIRED_UNDECLARED: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  BLOCKED_CURATED_KEY_MOMENTS_MISSING: 154
+  BLOCKED_VIDEO_UNDECLARED: 1044
+  findings:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SECTION_MAP_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_NOT_RENDERED: 60
+  raw_tex_last_full_catalogue_visible: 0
+
+video_accessibility_contract:
+  locale_surfaces: 92
+  missing_captions_transcript_surfaces: 92
+  legacy_missing_captions_transcript_budget: 91
+  debt_budget_raised: false
+  result: FAIL_CLOSED_92_GT_91
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_video_identity: PASS_DISTINCT_BINARIES
+  format: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+capture:
+  action: 35209447474
+  conclusion: SUCCESS
+  artifact:
+    id: 10491618692
+    name: security-capture-direct-report
+    size_bytes: 53301464
+    retention_days: 1
+    digest: sha256:738522f153699e7bb9ee4bdcaf6e4be08592b8a2832f632b3b03ba85daf08143
+  retained_evidence:
+    whole_article_contexts_security00: 8
+    whole_watch_contexts_security00: 8
+    semantic_trace_contexts_security00: 8
+    semantic_trace_checkpoints_per_context: 4
+    semantic_trace_screenshots_security00: 32
+    lifecycle_contexts_security00: 8
+    lifecycle_states_per_context: 6
+    lifecycle_screenshots_security00: 48
+    locales: [es, en]
+    desktop_mobile: true
+    normal_reduced_motion: true
+
+manual_pixel_review:
+  reviewer: same_orchestrator
+  independent: false
+  exact_head: af52c8aa6161201181702317d197a46167acc7ba
+  scope: security_00_article_watch_mechanism_and_video_lifecycle
+  inspected:
+    - es_en_full_article_desktop_1440_normal_reduced
+    - es_en_full_article_mobile_390_normal_reduced
+    - es_en_full_watch_desktop_1440_normal_reduced
+    - es_en_full_watch_mobile_390_normal_reduced
+    - semantic_start_intermediate_bounded_final_unbounded_final_all_8_security00_contexts
+    - poster_play_pause_seek_end_next_all_8_security00_contexts
+  defects_observed:
+    raw_tex_or_uncomposed_math: 0
+    accidental_html_or_macro_text: 0
+    global_overflow: 0
+    clipping_or_overlap: 0
+    materially_illegible_primary_labels: 0
+    broken_primary_visual_resources: 0
+    mobile_giant_horizontal_canvas_required: false
+  result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  global_PIXEL_REVIEW: false
+  reason_global_false: one_active_article_review_does_not_recertify_the_seven_series_catalogue
+
+manual_pedagogy_review:
+  reviewer: same_orchestrator
+  independent: false
+  exact_head: af52c8aa6161201181702317d197a46167acc7ba
+  target_mechanism: untrusted_input_to_influence_to_authorization_boundary_to_action
+  bounded_path_result: BLOCKED
+  broad_permissions_counterexample_result: EFFECT
+  observed_model_change:
+    - signal_position_progresses_across_the_path
+    - authorization_boundary_changes_the_terminal_state
+    - broad_permissions_change_the_path_to_an_external_effect
+    - mobile_representation_changes_geometry_from_horizontal_to_vertical_without_hiding_the_relation
+    - reduced_motion_preserves_equivalent_semantic_states
+  result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  security01_inherits_this_manual_review: false
+  global_PEDAGOGY_REVIEW: false
+  reason_global_false: one_active_article_review_does_not_recertify_the_seven_series_catalogue
+
+sources_and_locales:
+  primary_sources_revalidated_on: 2026-09-17
+  sources:
+    - OWASP Injection Prevention Cheat Sheet
+    - OWASP LLM Prompt Injection Prevention Cheat Sheet
+    - OWASP AI Agent Security Cheat Sheet
+    - OWASP RAG Security Cheat Sheet
+  security00_es_en_material_claim_parity: PASS_CURRENT_SOURCE_REVIEW
+  post_rev90_bounded_injection_claim_guard: PASS_CURRENT_EXACT_HEAD
+  unconditional_indirect_injection_severity_ranking_absent: true
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  linkedin_action: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+
+editorial_truth:
+  article_golden: false
+  reason: MEDIA_PASS_false_and_global_conjunctive_gate_not_satisfied
+  current_head_security00_pixel_evidence_is_current: true
+  current_head_security00_pedagogy_evidence_is_current: true
+  independent_review_claimed: false
+  security01_manual_review_inherited: false
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate:
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
+    - DO_NOT_FABRICATE_CHAPTER_TIMINGS_FROM_INSUFFICIENT_VIDEO_EVIDENCE
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true
