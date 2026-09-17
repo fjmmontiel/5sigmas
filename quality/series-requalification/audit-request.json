@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 99,
+  "diagnostic_revision": 100,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "47e1b9b760b456c1093edbc594ba9f8e034671b8",
-  "reason": "Retry the coherent Security02-05 integration milestone only after fixing three deterministic validator/localization defects exposed by revision98: Security03 persistence reachability token matched the actual modeled state and gained a negative mutation; Security04 EN forbidden-token guard no longer self-matches valid English and the regression graph now has explicit guarded node geometry; Security05 HOLD-path self-test now mutates the actual output path and visibility contract. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and this run still does not certify manual PIXEL_REVIEW or PEDAGOGY_REVIEW.",
+  "requested_head_parent": "1c305b03ea53dd12ce4eb98a226741474afd2787",
+  "reason": "Capture six deterministic frames from each exact native Security02-05 ES/EN MP4 during the existing focused MEDIA_VISUAL milestone. These frames are evidence for manual video pixel/content inspection and honest non-voice chapter/key-moment curation; they do not auto-certify PIXEL_REVIEW or PEDAGOGY_REVIEW. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
