@@ -6,6 +6,10 @@ import copy
 import unittest
 
 from audit_video_curriculum_inventory import build_inventory
+from test_video_schema_contract import (
+    assert_accessibility_fail_closed_contract,
+    audit_published_accessibility_inventory,
+)
 
 
 class VideoCurriculumInventoryTest(unittest.TestCase):
@@ -110,6 +114,13 @@ class VideoCurriculumInventoryTest(unittest.TestCase):
         )
         self.assertEqual([x["key_moment"] for x in en["section_obligations"]], ["Mechanism", "Mechanism"])
         self.assertEqual(inventory["status"], "FAIL_CLOSED")  # Spanish obligation is still missing video.
+
+    def test_bilingual_accessibility_assets_fail_closed(self) -> None:
+        """The requalification diagnostic must exercise both locale asset paths, not ES only."""
+        assert_accessibility_fail_closed_contract()
+        inventory = audit_published_accessibility_inventory()
+        self.assertEqual(inventory["locale_surfaces"], 91)
+        self.assertEqual(inventory["partial_declarations"], 0)
 
 
 if __name__ == "__main__":
