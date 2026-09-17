@@ -1,4 +1,4 @@
-schema_version: 49
+schema_version: 50
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -88,7 +88,7 @@ rev90:
   pedagogy_review: PENDING_MANUAL
   article_golden: false
 
-current_post_rev90_source_fix:
+post_rev90_source_fix:
   receipt: quality/series-requalification/security-00-source-boundary-fix.yml
   finding: P2_SECURITY00_SOFTWARE_CODE_DATA_BOUNDARY_OVERGENERALIZATION
   old_claim_es: "si separas bien el código de los datos, las clases de ataque principales quedan acotadas"
@@ -99,10 +99,51 @@ current_post_rev90_source_fix:
   canonical_guard_entrypoint: scripts/validate_security_media_metadata_parity.py
   negative_mutations_added: true
   current_bytes_were_in_rev90_checkout: false
-  exact_current_head_ci: false
-  exact_current_head_pixel_review: false
-  exact_current_head_pedagogy_review: false
   rev90_technical_or_editorial_pass_inherited: false
+  superseded_as_current_evidence_by: rev91
+  article_golden: false
+
+rev91:
+  receipt: quality/series-requalification/security-00-01-revision91.yml
+  audited_head: af52c8aa6161201181702317d197a46167acc7ba
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  diagnostic_action: 35209447553
+  diagnostic_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  diagnostic_artifact_id: 10491244018
+  diagnostic_artifact_size_bytes: 167543
+  diagnostic_artifact_retention_days: 1
+  direct_capture_action: 35209447474
+  direct_capture_conclusion: SUCCESS
+  direct_capture_artifact_id: 10491618692
+  direct_capture_artifact_size_bytes: 53301464
+  direct_capture_artifact_retention_days: 1
+  exact_head_source_guard: PASS
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  reviewed_media_metadata_and_claim_parity: PASS_CURRENT_EXACT_HEAD
+  shared_security_plus_reference_browser: PASS
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  video_lifecycle_technical: PASS
+  real_mobile_touch: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_listener_lifetime: PASS_THROUGH_CONTEXT_TEARDOWN
+  source_outcome: FAIL_REAL_VIDEO_SOURCE_DEBT
+  video_curriculum_inventory_outcome: FAIL_CLOSED
+  video_schema_contract_outcome: FAIL_CLOSED_92_GT_91
+  media_probe_outcome: FAIL_VOICE_AND_ACCESSIBILITY_DEBT
+  rendered_outcome: FAIL_VIDEO_NOT_RENDERED_DEBT
+  global_336_browser_repeated: false
+  global_336_browser_skip_reason: focused_exact_head_integration_no_published_bytes_changed_since_prior_global_sweep
+  security00_manual_pixel_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  security00_manual_pedagogy_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  manual_review_independent: false
+  security01_inherits_security00_manual_review: false
   article_golden: false
 
 curriculum_inventory:
@@ -147,12 +188,12 @@ security_media:
   state: FAIL_VOICE_MISSING
   native_es_en_mp4_distinct: true
   codec: H264_1920X1080_YUV420P
-  rev90_security00_es_declared_duration: PT1M0S
-  rev90_security00_es_binary_seconds: 60.3
-  rev90_security00_en_declared_duration: PT48S
-  rev90_security00_en_binary_seconds: 47.566667
-  rev90_security01_es_binary_seconds: 60.333333
-  rev90_security01_en_binary_seconds: 47.566667
+  rev91_security00_es_declared_duration: PT1M0S
+  rev91_security00_es_binary_seconds: 60.3
+  rev91_security00_en_declared_duration: PT48S
+  rev91_security00_en_binary_seconds: 47.566667
+  rev91_security01_es_binary_seconds: 60.333333
+  rev91_security01_en_binary_seconds: 47.566667
   missing_audio_streams: 4
   missing_captions: 4
   missing_transcripts: 4
@@ -178,12 +219,13 @@ shared_gate_coverage:
     canonical_requalification_diagnostic_executes_gate: true
     final_enforcement_includes_gate_outcome: true
     guards_rev89_conditional_severity_claim: true
-    guards_current_bounded_software_injection_claim: true
+    guards_post_rev90_bounded_software_injection_claim: true
+    rev91_exact_head_result: PASS
     negative_mutations: true
 
 current_global_gates:
   SOURCE_PASS: false
-  BUILD_PASS: false
+  BUILD_PASS: true
   RENDERED_PASS: false
   BROWSER_PASS: false
   MEDIA_PASS: false
@@ -191,12 +233,18 @@ current_global_gates:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  note: current_exact_head_changed_after_rev90_so_build_and_browser_are_not_inherited
+  note: exact_head_build_and_focused_browser_are_current_but_global_conjunctive_video_media_and_catalogue_editorial_gates_remain_open
 
 editorial:
   latest_site_facing_change_receipt: quality/series-requalification/security-00-source-boundary-fix.yml
-  latest_exact_head_security00_manual_pixel_review: false
-  latest_exact_head_security00_manual_pedagogy_review: false
+  latest_exact_head_security00_manual_pixel_review: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  latest_exact_head_security00_manual_pedagogy_review: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  latest_exact_head_security00_manual_review_head: af52c8aa6161201181702317d197a46167acc7ba
+  manual_review_contexts:
+    full_article_es_en_desktop_mobile_normal_reduced: 8
+    full_watch_es_en_desktop_mobile_normal_reduced: 8
+    semantic_trace_security00_screenshots: 32
+    lifecycle_security00_screenshots: 48
   previous_rev88_manual_review_preserved_as_historical: true
   previous_rev88_manual_review_inherited_to_current_head: false
   no_independent_review_claimed: true
@@ -205,6 +253,8 @@ editorial:
   target_mechanism: untrusted_input_to_influence_to_authorization_boundary_to_action
   bounded_path_outcome: BLOCKED
   broad_permission_counterexample_outcome: EFFECT
+  mobile_primary_relation_requires_giant_horizontal_canvas: false
+  reduced_motion_preserves_static_semantic_equivalence: true
 
 sources_and_locales:
   revalidated_on: 2026-09-17
@@ -225,6 +275,7 @@ sources_and_locales:
 release_and_concurrency:
   main_last_checked: e2f301e3fe346a4328cb773c46fa49ca34388a12
   repair_branch: quality/post-datacenters-requalification
+  repair_branch_ahead_main_before_rev91_receipt_write: 433
   branch_behind_main_last_checked: 0
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
   production_pr_created_by_requalification: false
@@ -250,12 +301,11 @@ historical_receipts_preserved: true
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - RUN_CURRENT_EXACT_HEAD_SOURCE_GUARD_STRICT_ES_EN_AND_FOCUSED_CAPTURE_AT_NEXT_JUSTIFIED_INTEGRATION_MILESTONE
-    - MANUALLY_INSPECT_CURRENT_EXACT_HEAD_ES_EN_ARTICLE_AND_WATCH_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_POST_REV90_SITE_TEXT_CHANGE
     - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
     - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
     - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
     - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
+    - DO_NOT_FABRICATE_CHAPTER_TIMINGS_FROM_INSUFFICIENT_VIDEO_EVIDENCE
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
     - CAPTIONS
