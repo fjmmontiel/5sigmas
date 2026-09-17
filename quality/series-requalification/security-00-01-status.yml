@@ -1,4 +1,4 @@
-schema_version: 43
+schema_version: 44
 program: 5sigmas_GOLDEN_requalification
 owner_priority_date: 2026-09-13
 contract_issue: 305
@@ -25,7 +25,89 @@ catalogue:
   public_pages: 75
   discovery_requires_presentation: false
 
-global_gate_state:
+rev83:
+  receipt: quality/series-requalification/security-00-01-revision83.yml
+  action: 35173792560
+  audited_head: 772da24947424abbe3dab07d4463935933a91af0
+  scope: focused_security_00_01
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10477393657
+  artifact_bytes: 167364
+  artifact_files: 13
+  artifact_retention_days: 1
+  core_mutation_tests: 38
+  curriculum_inventory_mutation_tests: 6
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  shared_security_plus_reference_contexts: 64
+  shared_security_plus_reference_mutations: 20
+  shared_security_plus_reference_failures: 0
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  video_lifecycle: PASS
+  real_mobile_touch: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_listener_lifetime_contexts: 16
+  runtime_listener_lifetime_failures: 0
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
+
+curriculum_inventory:
+  canonical_workflow_gate: true
+  expected_locale_video_obligations: 84
+  audited_obligations: 84
+  missing_audited_pages: 0
+  page_states:
+    VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE: 24
+    VIDEO_REQUIRED_UNDECLARED: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  h2_states:
+    BLOCKED_CURATED_KEY_MOMENTS_MISSING: 154
+    BLOCKED_VIDEO_UNDECLARED: 1044
+  fabricated_media_or_timings: false
+
+source_and_rendered_debt:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+last_full_browser_catalogue:
+  revision: 75
+  action: 35134585450
+  contexts_expected: 336
+  contexts_observed: 336
+  raw_tex_visible: 0
+  browser_context_timeout: 0
+  dom_subprobe_timeout: 0
+  browser_pass: false
+  reason: browser_visible_video_media_failures_remain
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+global_gates:
   SOURCE_PASS: false
   BUILD_PASS: true
   RENDERED_PASS: false
@@ -35,246 +117,32 @@ global_gate_state:
   PEDAGOGY_REVIEW: false
   ARTICLE_GOLDEN: false
   SERIES_GOLDEN: false
-  source_debt_rev79:
-    VIDEO_DECLARATION_MISSING: 60
-    VIDEO_CAPTIONS_MISSING: 24
-    VIDEO_TRANSCRIPT_MISSING: 24
-    VIDEO_CHAPTERS_MISSING: 24
-    VIDEO_SECTION_MAP_MISSING: 24
-    VIDEO_SUMMARY_MISSING: 18
-    VIDEO_TITLE_MISSING: 9
-  rendered_debt_rev79:
-    VIDEO_NOT_RENDERED: 60
-    RAW_TEX_RENDERED: 0
-  browser_last_authoritative_completed_full_run_rev75:
-    action: 35134585450
-    exact_head: 2ad5776cb00e27c5ba48de9510981fcda19b7804
-    contexts_expected: 336
-    contexts_observed: 336
-    REQUEST_FAILED: 96
-    VIDEO_PLAYBACK_ERROR: 96
-    VIDEO_NOT_RENDERED: 240
-    RAW_TEX_VISIBLE: 0
-    BROWSER_CONTEXT_TIMEOUT: 0
-    DOM_SUBPROBE_TIMEOUT: 0
-    browser_timeout_hardening_verified: true
-    browser_pass: false
-    browser_pass_reason: browser-visible video/media failures remain
-
-shared_gate_hardening:
-  publication_discovery_all_seven_target_series: PASS
-  raw_tex_renderer_and_browser_visibility: PASS_ZERO_VISIBLE_TEX_REV75
-  browser_listener_lifetime_through_teardown: PASS
-  dom_subprobe_timeout_fail_closed: PASS
-  shared_security_plus_datacenters_pre_datacenters_regression: PASS_REV79
-  reference_content_modified: false
-  current_thresholds_relaxed_to_hide_defect: false
-  video_curriculum_section_mapping_rev79:
-    every_h2_on_declared_video_page_requires_mapping: true
-    section_must_match_locale_native_h2: true
-    key_moment_must_exist_in_video_chapters: true
-    multiple_h2s_may_share_one_key_moment: true
-    one_mp4_per_h2_required: false
-    missing_mapping_fails_closed: true
-    mutation_fixtures: PASS
-
-rev76_exact_head_integration:
-  action: 35139328045
-  exact_head: 89f1483cde45ba9f962bf5df49943df73995bf47
-  state: COMPLETED_FAIL_CLOSED_ON_KNOWN_SOURCE_RENDERED_MEDIA_DEBT
-  strict_es: PASS
-  strict_en: PASS
-  publication_discovery: PASS
-  publication_contract: PASS
-  negative_regression_fixtures: PASS
-  security_structured_metadata: PASS
-  security_article_watch_contract_and_negative_locale_parity_guard: PASS
-  shared_security_plus_reference_contexts: 64
-  shared_security_plus_reference_classifier_mutations: 20
-  shared_security_plus_reference_failures: 0
-  focused_security_browser: PASS
-  contrast_and_legibility: PASS
-  text_visibility_desktop_mobile_normal_reduced: PASS
-  real_mobile_touch: PASS
-  keyboard_and_focus: PASS
-  prompt_injection_visual_states: PASS
-  video_lifecycle_technical: PASS
-  runtime_listener_lifetime_through_teardown: PASS
-  full_catalogue_browser_repeated: false
-  final_enforcement_reason: known required video declaration/caption/transcript/chapter and media-audio debt
-
-rev79_exact_head_integration:
-  action: 35156245155
-  exact_head: bc3d33de4d378e7489a8481daaeb99f7e2673439
-  state: COMPLETED_FAIL_CLOSED_ON_SOURCE_AND_MEDIA_CONTRACT_DEBT
-  result: FAILURE_EXPECTED_FAIL_CLOSED
-  artifact_id: 10471221980
-  artifact_digest: sha256:eea7d5badf63dc2341cf2464973bcac288c183f277bdc27e59431b24e43190db
-  artifact_retention_days: 1
-  strict_es: PASS
-  strict_en: PASS
-  publication_discovery: PASS
-  publication_contract: PASS
-  negative_regression_fixtures: PASS
-  source_inventory_pages_per_locale: 42
-  source_inventory_locale_pages: 84
-  rendered_html_audited: true
-  shared_security_plus_reference_contexts_expected: 64
-  shared_security_plus_reference_contexts_observed: 64
-  shared_security_plus_reference_classifier_mutations: 20
-  shared_security_plus_reference_failures: 0
-  focused_security_browser_contexts_expected: 16
-  focused_security_browser_contexts_observed: 16
-  focused_security_browser_failures: 0
-  contrast_and_legibility: PASS
-  text_visibility_desktop_mobile_normal_reduced: PASS
-  real_mobile_touch: PASS
-  keyboard_and_focus: PASS
-  prompt_injection_visual_states: PASS
-  video_lifecycle_contexts_expected: 16
-  video_lifecycle_contexts_observed: 16
-  video_lifecycle_failures: 0
-  runtime_listener_lifetime_contexts_expected: 16
-  runtime_listener_lifetime_contexts_observed: 16
-  runtime_listener_lifetime_failures: 0
-  full_catalogue_browser_repeated: false
-  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
-  final_enforcement_reason: source and media contract debt including missing curriculum section to key-moment mappings
-
-security00_locale_parity:
-  defect: ES presentation omitted the related-series and all-series navigation present in EN
-  repaired: true
-  repair_commit: 77c4eacb7d758e73f6ec3e45a430f1bf9552f14c
-  deterministic_guard_commit: e106e789a5cebbcea220ce911a2921dd15371057
-  guard_file: scripts/validate_security_article_watch_contract.py
-  exact_integration_validation: PASS_REV79
-  current_head_pixel_validation: PASS_CONTENT_SCOPED_REV78
-  article_golden_effect: STILL_FALSE
-
-media:
-  state: FAIL_VOICE_MISSING
-  blocker_count: 16
-  blockers:
-    VIDEO_AUDIO_STREAM_MISSING: 4
-    VIDEO_CAPTIONS_MISSING: 4
-    VIDEO_TRANSCRIPT_MISSING: 4
-    VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
-  native_es_en_mp4_distinct: true
-  codec: H264_1920X1080_YUV420P
-  security00_es_actual_duration_seconds: 60.3
-  security00_es_declared_duration: PT1M0S
-  security00_en_actual_duration_seconds: 47.566667
-  security00_en_declared_duration: PT48S
-  generated_cloned_or_substituted_francisco_voice: false
-  es_media_used_as_en_fallback: false
-  fabricated_transcript_or_timings: false
 
 editorial:
-  PIXEL_REVIEW: FAIL_CLOSED_REQUIRED_MEDIA_CONTENT_INCOMPLETE
-  PEDAGOGY_REVIEW: FAIL_CLOSED_REQUIRED_MEDIA_CONTENT_INCOMPLETE
-  security00_manual_rev77:
-    reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
-    whole_page_contexts_inspected: 8
-    semantic_viewport_checkpoints_inspected: 32
-    desktop: true
-    mobile: true
-    normal_motion: true
-    reduced_motion: true
-    static_and_interactive_pixel_review: PASS_CURRENT_HEAD_CONTENT_SCOPED
-    interactive_pedagogy_review: PASS_CURRENT_HEAD_CONTENT_SCOPED
-    new_visible_p0_p1_p2_found: 0
-  rev78_current_head_capture:
-    action: 35151129732
-    exact_head: 63b2741bf37dabe20edf97fdaf538e21e157317a
-    result: SUCCESS
-    artifact_id: 10468524974
-    artifact_digest: sha256:f08b9958ebee4dfc4c7acb2bc5f50345b1e8b60669e1a0ab571f62dec052d5c0
-    artifact_retention_days: 1
-    strict_es: PASS
-    strict_en: PASS
-    shared_tooltip_negative_mutation: PASS
-    whole_article_and_per_asset_capture: PASS
-    semantic_trace_capture: PASS
-    prompt_state_gate: PASS
-    canonical_video_lifecycle_gate: PASS
-    canonical_video_lifecycle_contexts_expected: 16
-    canonical_video_lifecycle_contexts_observed: 16
-    canonical_video_lifecycle_failures: 0
-    lifecycle_state_contexts_expected: 8
-    lifecycle_state_contexts_observed: 8
-    lifecycle_state_screenshots_observed: 48
-    lifecycle_state_failures: 0
-    site_facing_bytes_changed: false
-  security00_manual_rev78_lifecycle:
-    reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
-    lifecycle_pixel_contexts_manually_inspected: 8
-    lifecycle_state_images_manually_inspected: 48
-    locales: [es, en]
-    desktop_1440: true
-    mobile_390: true
-    normal_motion: true
-    reduced_motion: true
-    states: [poster, playing, paused, seeked, ended_reset, next_article]
-    pixel_review: PASS_CURRENT_HEAD_REV78_LIFECYCLE_SURFACE_CONTENT_SCOPED
-    pedagogy_review: PASS_CURRENT_HEAD_REV78_LIFECYCLE_SURFACE_CONTENT_SCOPED
-    new_visible_p0_p1_p2_found: 0
-    observations:
-      - poster text and diagrams are legible without clipping or overlap in both locales and viewports
-      - playing, paused and seeked states show coherent native video frames and controls without broken-resource surfaces or accidental markup
-      - ended state restores the localized poster cleanly
-      - next navigation visibly reaches the localized Prompt Injection article
-      - normal and reduced motion preserve the same lifecycle semantics
-      - ES and EN retain distinct native video artwork/content with no visible cross-locale media fallback
-      - mobile lifecycle surface does not require a giant horizontal canvas or global horizontal scrolling
-    limitations:
-      - visual capture is muted for deterministic browser interaction and provides no evidence for audio/narration
-      - authorized narration, captions, transcript and curated key moments remain missing
-      - Security01 does not inherit Security00 editorial review
-      - same-orchestrator review is not represented as independent review
-    global_pixel_review_after_rev78: false
-    global_pedagogy_review_after_rev78: false
-  rev79_editorial_scope:
-    published_site_bytes_changed: false
-    new_manual_pixel_review: false
-    new_manual_pedagogy_review: false
-    carry_forward_only_revision_scoped_security00_evidence: rev78
-  technical_browser_gates_do_not_equal_editorial_pass: true
+  published_site_bytes_changed_in_rev83: false
+  new_manual_pixel_review_in_rev83: false
+  new_manual_pedagogy_review_in_rev83: false
+  preserved_security00_evidence: rev78_same_orchestrator_revision_scoped
+  security01_inherits_security00_review: false
+  technical_gates_do_not_equal_editorial_pass: true
 
 sources_and_locales:
-  security00_primary_sources_rechecked_2026_09_16:
+  current_primary_sources:
     - OWASP LLM Prompt Injection Prevention Cheat Sheet
     - OWASP AI Agent Security Cheat Sheet
   material_security00_claim_change_required: false
-  current_claim_basis:
-    - instructions and untrusted data can share the model input medium
-    - indirect prompt injection can arrive through external content
-    - external content should be treated as untrusted
-    - least privilege and explicit authorization constrain high-impact actions
-  security00_es_en_text_secpath_and_navigation_manual_parity: PASS_CONTENT_SCOPED
-  rev79_content_or_claim_change: false
-  rev79_new_factual_source_recertification: false
+  rev83_content_or_claim_change: false
 
 release_and_concurrency:
-  main_at_last_read: 376af1b8002c3ebff33a4d637d88b38ec7533d9d
+  main_at_rev83: 27ee187e47c3caaaf0e3c157431046d0083e4fd2
   repair_branch: quality/post-datacenters-requalification
-  main_reconciliation_current_run:
-    branch_was_diverged: true
-    main_only_commits_before_reconcile: 24
-    main_only_scope: bilingual_tool_SEO_GEO_shell
-    overlapping_paths_with_requalification: 0
-    merge_commit: e04c850f0eb10c5e75910431b994ee93e300d3a5
-    merge_parents:
-      - f73f304fcca0da127c42ccb285d73cc362389b60
-      - 376af1b8002c3ebff33a4d637d88b38ec7533d9d
-    force_push: false
-    branch_behind_main_after_merge: 0
-    datacenters_or_pre_datacenters_content_modified: false
-  rev79_audited_head: bc3d33de4d378e7489a8481daaeb99f7e2673439
-  branch_head_before_this_status_write: 32a0bdb28aa221277992a9e258ebf32d00dd91ee
+  repair_branch_was_behind_main_before_rev83_writes: false
   draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  pr_328: OPEN_TEST_ONLY_NOT_MERGED
   production_pr_created_by_requalification: false
   production_merge: false
   deployed: false
+  force_push: false
 
 release_contract_281_310:
   state: CHANGES_REQUIRED_BLOCKED
@@ -284,50 +152,22 @@ release_contract_281_310:
   current_main_en_blob_matches_reviewed_revision: 3b6a0075c7e211caac3a46237d974797d26d8648
   material_change_to_310: false
   seventy_two_hour_clock_restarted: false
-  fresh_uncached_live_verification_this_run: NOT_AVAILABLE_FROM_RUNTIME
-  cached_web_used_as_production_evidence: false
   linkedin_action_by_this_lane: false
   queue_activation_publish: false
   preserve_279: true
 
-historical_receipts_preserved:
-  - quality/series-requalification/security-00-01-revision46.yml
-  - quality/series-requalification/security-00-01-revision47.yml
-  - quality/series-requalification/security-00-01-revision49.yml
-  - quality/series-requalification/security-00-01-revision50.yml
-  - quality/series-requalification/security-00-01-revision53.yml
-  - quality/series-requalification/security-00-01-revision54.yml
-  - quality/series-requalification/security-00-01-revision55.yml
-  - quality/series-requalification/security-00-01-revision56.yml
-  - quality/series-requalification/security-00-01-revision57.yml
-  - quality/series-requalification/security-00-01-revision58.yml
-  - quality/series-requalification/security-00-01-revision59.yml
-  - quality/series-requalification/security-00-01-revision60.yml
-  - quality/series-requalification/security-00-01-revision61.yml
-  - quality/series-requalification/security-00-01-revision66.yml
-  - quality/series-requalification/security-00-01-revision68.yml
-  - quality/series-requalification/security-00-01-revision69.yml
-  - quality/series-requalification/security-00-01-revision74.yml
-  - quality/series-requalification/security-00-01-revision75.yml
-  - quality/series-requalification/security-00-01-revision77.yml
-  - quality/series-requalification/security-00-01-revision78.yml
-  - quality/series-requalification/security-00-01-revision79.yml
-  - quality/series-requalification/dom-inspection-diagnosis.yml
-  - quality/series-requalification/full-browser-timeout-diagnosis.yml
-  - quality/series-requalification/full-browser-abort-hardening.yml
-  - quality/series-requalification/math-rendering-repair.yml
-  - quality/series-requalification/security-00-01-shared-browser-resource-hardening.yml
+historical_receipts_preserved: true
 
 next_gap:
   stay_on: seguridad-ia/00_presentacion_serie
   immediate_independent:
-    - BUILD_EXPLICIT_LOCALE_NATIVE_H2_TO_CURATED_KEY_MOMENT_INVENTORY_FOR_DECLARED_VIDEO_PAGES_WITHOUT_FABRICATING_TIMINGS_OR_CONTENT
-    - CONTINUE_FAIL_CLOSED_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_FOR_60_UNDECLARED_LOCALE_PAGES_WITHOUT_ADVANCING_THE_ACTIVE_ARTICLE
-    - RECHECK_AUTHORIZED_EXISTING_NARRATION_INPUTS_ONLY_WHEN_NEW_EVIDENCE_OR_STORAGE_SURFACE_EXISTS; DO_NOT_SYNTHESIZE_CLONE_OR_SUBSTITUTE_VOICE
+    - CONTINUE_NON_MEDIA_SECURITY00_REMEDIATION_WITHOUT_ADVANCING_ARTICLE
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
   external_media_completion_when_valid_inputs_exist:
     - AUTHORIZED_NATIVE_ES_EN_NARRATION
     - CAPTIONS
-    - TRANSCRIPT
-    - CURATED_KEY_MOMENTS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
   do_not_advance_to: 02-jailbreaks
   article_golden_forbidden: true
