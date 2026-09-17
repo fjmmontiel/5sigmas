@@ -8,6 +8,9 @@ tags:
   - Seguridad
   - LLMs
 video: "02-jailbreaks.mp4"
+video_poster: "02-jailbreaks.jpg"
+video_title: "Jailbreaks"
+video_summary: "Cómo los intentos repetidos y adaptativos cambian la superficie de ataque y por qué la autorización y los límites de intentos siguen importando después de una negativa."
 video_duration: "PT1M0S"
 ---
 
