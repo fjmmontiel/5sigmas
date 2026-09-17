@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 96,
-  "diagnostic_scope": "focused_security_02_04",
+  "diagnostic_revision": 97,
+  "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "19ade9fe6d4a840f77c8420adeea9398c08c8b49",
-  "reason": "Owner-current integration milestone for Security02-04 after PROGRAM AMENDMENT 5716685049: execute the reviewed source/mutation contracts for Jailbreaks, Poisoning and Red Teaming; strict ES/EN builds; publication/discovery and complete rendered audits; shared browser-resource regression including Security02-04 plus Datacenters/pre-Datacenters references; and the new MEDIA_VISUAL gate that preserves audio/captions/transcript as VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL rather than a current GOLDEN blocker. This focused milestone deliberately does not certify PIXEL_REVIEW or PEDAGOGY_REVIEW and does not run the global all-page browser sweep. Known relationship-first visual defects remain fail-closed in the per-article ledger until real desktop/mobile normal/reduced pixel review is completed.",
+  "requested_head_parent": "ce94f70901702463ce15e9f59799d9e74ac9fcc6",
+  "reason": "Owner-current integration milestone for Security02-05 after PROGRAM AMENDMENT 5716685049: execute Security02 source/pedagogy mutations, Security03 source plus persistence pedagogy mutations, Security04 attribution mutations, Security05 CC++ source plus release-gate pedagogy mutations, strict ES/EN builds, publication/discovery and rendered audits, shared browser-resource regression through Security05 plus Datacenters/pre-Datacenters references, and MEDIA_VISUAL 02-05 while preserving narration/audio/captions/transcript as VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL. This focused milestone deliberately does not certify PIXEL_REVIEW or PEDAGOGY_REVIEW and does not run the global all-page browser sweep.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
