@@ -63,7 +63,7 @@ jobs:
         run: node scripts/diagnose_dom_inspection_stall.mjs
 
       - name: Upload focused JSON diagnostic only
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: dom-inspection-diagnostic
