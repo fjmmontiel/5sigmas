@@ -9,6 +9,7 @@ on:
       - 'motion/src/**'
       - 'motion/theme/**'
       - 'motion/scripts/render.py'
+      - 'motion/scripts/validate_render_package.py'
       - '.github/workflows/video-motion-final-render.yml'
   workflow_dispatch:
 
@@ -60,12 +61,13 @@ jobs:
           extra=()
           if [ "${{ matrix.orientation }}" = vertical ]; then extra+=(--portrait); fi
           python scripts/render.py "content/modelos-razonadores/${{ matrix.spec }}.json" --out dist --fps 60 "${extra[@]}"
-          test -s dist/*.mp4
-          test -s dist/*-validation.json
-          test -s dist/*-chapters.json
-          test -s dist/*-transcript.md
-          test -s dist/*-captions.vtt
-          ffprobe -v error -show_entries stream=codec_name,pix_fmt,width,height,r_frame_rate -show_entries format=duration -of json dist/*.mp4 > dist/ffprobe.json
+      - name: Validate media, captions, chapters and transcript from one source of truth
+        working-directory: motion
+        run: |
+          python scripts/validate_render_package.py \
+            "content/modelos-razonadores/${{ matrix.spec }}.json" \
+            --out dist \
+            --orientation "${{ matrix.orientation }}" | tee dist/package-validation.json
       - name: Upload final review media
         uses: actions/upload-artifact@v4
         with:
