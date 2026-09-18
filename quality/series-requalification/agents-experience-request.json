@@ -1,0 +1,12 @@
+{
+  "series": "agentes-ia",
+  "revision": 1,
+  "requested_parent_head": "1dbb1f851c402a616864f1fe5c95595a5eff14e5",
+  "scope": "all_6_articles_es_en_desktop_mobile_normal_reduced",
+  "browser_gate": "full_interaction_lifecycle_keyboard_touch_focus_playback_teardown",
+  "pixel_evidence": "full_page_start_and_final_exact_revision",
+  "pedagogy_review": "manual_required_after_artifact_inspection",
+  "voice_enhancement": "DEFERRED_OWNER_LOCAL",
+  "owner_amendments": [5716685049, 5727362172],
+  "purpose": "single justified integration milestone after SOURCE/BUILD/MEDIA_VISUAL/INDEXABILITY and browser-resource smoke passed"
+}
