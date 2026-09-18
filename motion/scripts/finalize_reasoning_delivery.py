@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 from pathlib import Path
@@ -40,6 +41,22 @@ LEGACY_TTC_STEPS = {
     "Verify and stage reviewed English TTC media for browser QA",
     "Save reviewed English TTC media cache",
 }
+
+
+def install_artifact(src: Path, dst: Path) -> None:
+    """Materialize a validated artifact without needlessly recopying huge MP4s.
+
+    GitHub Actions extracts renderer artifacts onto the same runner filesystem as
+    the checkout. A hardlink is therefore the safest fast path: consumers see a
+    normal file with identical bytes while staging remains essentially O(1).
+    Cross-device or restricted filesystems transparently fall back to copy2.
+    """
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        dst.unlink(missing_ok=True)
+        os.link(src, dst)
+    except OSError:
+        shutil.copy2(src, dst)
 
 
 def replace_or_add_frontmatter_field(path: Path, key: str, value: str, *, after: str = "video") -> None:
@@ -128,7 +145,7 @@ def stage(artifacts: Path) -> None:
                 src = source / f"{stem}{ext}"
                 if not src.is_file() or src.stat().st_size == 0:
                     raise FileNotFoundError(f"missing final {locale} artifact: {src}")
-                shutil.copy2(src, destination / src.name)
+                install_artifact(src, destination / src.name)
             if locale == "es":
                 replace_or_add_frontmatter_field(destination / doc, "video_poster", f"{stem}.jpg")
                 replace_or_add_frontmatter_field(destination / doc, "video_captions", f"{stem}.vtt", after="video_poster")
