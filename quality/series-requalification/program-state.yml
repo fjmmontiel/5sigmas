@@ -55,7 +55,7 @@ series_status:
     pixel: PENDING
     pedagogy: PENDING
     note: Work may continue while Security release checks/deploy complete; no partial Agents release is authorized.
-    current_branch_head: 686f73ef14cd4ea50084d86393f8f2e701631803
+    current_site_gate_head: 686f73ef14cd4ea50084d86393f8f2e701631803
     current_run_source_snippet_inspection:
       agents03_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
       agents04_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
