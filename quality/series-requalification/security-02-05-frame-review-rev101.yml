@@ -1,0 +1,117 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+source_action_run: 35290297406
+source_exact_head: d587069de62a4499e8fdba1f5f4bdca63e913eca
+artifact:
+  id: 10526305098
+  name: series-experience-diagnostic
+  digest_sha256: 9423ac93ad32aba8cdeeb86f91cd581d6a50f69e882cca1c8a49ada204fb72d8
+  expires_at_utc: 2026-09-19T00:17:39Z
+  retained_video_frames: 48
+review_scope:
+  routes: [Security02, Security03, Security04, Security05]
+  locales: [es, en]
+  samples_per_video: 6
+  purpose: MANUAL_VIDEO_CONTENT_AND_KEY_MOMENT_EVIDENCE_ONLY
+  not_certified: [ARTICLE_PIXEL_REVIEW, ARTICLE_PEDAGOGY_REVIEW, CONTINUOUS_VIDEO_PLAYBACK]
+media_binary_evidence:
+  all_8_native_mp4: H264_1920x1080_YUV420P
+  es_duration_seconds_actual: 60.333333
+  en_duration_seconds_actual: 47.566667
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  voice_is_blocker: false
+manual_frame_review:
+  security02:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Una negativa no es una garantía de seguridad
+        - Búsqueda sobre múltiples variantes
+        - Optimización adversaria y transferencia
+        - Presupuesto Best-of-N
+        - Bajar aleatoriedad no elimina la vulnerabilidad
+        - La autorización sigue siendo la frontera para tools
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - A refusal is one observation, not a guarantee
+        - Search explores prompt variants
+        - Optimize the attack, then test transfer
+        - Higher attack budgets increase exposure
+        - Stable output is not a security boundary
+  security03:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - La persistencia amplía el riesgo más allá del turno
+        - Una instrucción almacenada puede reaparecer
+        - Persistir memoria contaminada crea superficie de ataque
+        - Comportamiento latente puede esperar un disparador
+        - La procedencia de la memoria debe ser visible
+        - La memoria debe poder revocarse
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Persistence extends beyond one turn
+        - State writes create hidden attack surfaces
+        - Trust and provenance on every write
+        - Retention is part of the control plane
+        - Observability and revocation close the loop
+  security04:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Pasar un test no demuestra ausencia de vulnerabilidad
+        - Separar capacidades de acciones
+        - Mantener evaluación fija y presión adaptativa separadas
+        - El evaluador también puede fallar
+        - Cada paso debe dejar evidencia
+        - Deployment necesita riesgo medido antes del incidente
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Test reachable harm, not only prompts
+        - The attack path has multiple gates
+        - Coverage is a matrix, not a prompt list
+        - Evaluators need calibration and observability
+        - Release depends on evidence, not confidence
+  security05:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Producción segura no depende de que el modelo nunca falle
+        - Lectores no confiables no deben poseer tools privilegiadas
+        - Mínimo privilegio por herramienta
+        - MCP estandariza integración, no confianza
+        - Observabilidad y kill path cierran el ciclo
+        - Acciones irreversibles necesitan confirmación
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Assume a defensive layer will fail
+        - Separate untrusted reading from privileged action
+        - Least privilege for every tool
+        - MCP standardizes integration, not trust
+        - Observability and stop mechanisms close the loop
+chapter_curation_state:
+  status: EVIDENCE_READY_NOT_YET_EMBEDDED
+  current_media_visual_blockers: 8
+  blocker_code: VIDEO_CHAPTERS_MISSING_ES_EN_SECURITY02_03_04_05
+  rule: Chapter timestamps/titles may be curated only from the observed visual timeline; do not derive them from future narration.
+new_gate_defect_found:
+  component: scripts/validate_security03_pedagogy_contract.py
+  action_run: 35290297406
+  defect: Runtime-vs-weights negative mutation changed a selector token instead of reliably breaking the causal state transition, so the mutation test could fail to prove its intended invariant.
+  repair_commit: d9b2913dba16f984ef01c3335b28d173ea9c5e45
+  repair: Mutate weights='clean' to weights='sleeper' and require the missing causal transition to be rejected.
+article_iterations_after_real_review:
+  Security02: 7
+  Security03: 7
+  Security04: 5
+  Security05: 5
+next_actions:
+  - Re-run focused Security02-05 exact-head guards to verify the repaired Security03 mutation.
+  - Embed curated non-voice chapters/key moments in ES/EN from this reviewed visual evidence.
+  - Re-run MEDIA_VISUAL exact-head gate.
+  - Perform real article browser/pixel/pedagogy review separately; frame sampling cannot certify it.
