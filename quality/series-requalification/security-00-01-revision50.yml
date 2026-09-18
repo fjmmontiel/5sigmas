@@ -1,0 +1,83 @@
+schema_version: 1
+program_contract:
+  issue: 305
+  amendment: 5655569434
+state: REQUALIFICATION_QA
+article_golden: false
+active:
+  series: seguridad-ia
+  routes:
+    - 00_presentacion_serie
+    - 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+exact_qa:
+  revision: 50
+  action_run: 35006430159
+  exact_head: 166f91cdd8de87b779fda7e52d823b88ff987cc7
+  scope: focused_security_00_01
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+  artifact_id: 10412346090
+  artifact_files: 171
+  artifact_bytes: 44470688
+  artifact_retention_days: 1
+results:
+  negative_regression_fixtures: PASS_26_OF_26
+  publication_discovery_fixtures: PASS_5_OF_5
+  build_es_strict: PASS
+  build_en_strict: PASS
+  publication_contract: PASS
+  public_series: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+  structured_metadata_provenance_locale: PASS
+  article_watch_static_contract: PASS
+  focused_browser: PASS
+  contrast_text_legibility: PASS_128_STATE_CONTEXT_RECORDS_MIN_4_5
+  text_visibility: PASS_8_CONTEXTS_X_4_STATES
+  video_lifecycle: PASS
+  article_watch_real_touch: PASS
+  prompt_visual_states: PASS_TECHNICAL
+  keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  runtime_listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
+  article_watch_touch_classifier_repair: VERIFIED_EXACT_QA
+fail_closed_global:
+  source_pass: false
+  rendered_pass: false
+  media_pass: false
+  raw_tex_rendered: 28
+  video_declaration_missing: 60
+  video_not_rendered: 60
+  video_captions_missing: 24
+  video_transcript_missing: 24
+  video_chapters_missing: 24
+  video_summary_missing: 18
+  video_title_missing: 9
+security_media:
+  status: FAIL
+  voice_state: VOICE_MISSING
+  blockers: 16
+  audio_stream_missing: 4
+  captions_missing: 4
+  transcripts_missing: 4
+  curated_chapters_key_moments_missing: 4
+  voice_generation_or_substitution_performed: false
+editorial_review:
+  site_facing_bytes_changed_since_revision_43: false
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  new_manual_review_this_revision: false
+  independent_review: false
+  article_golden_authorized: false
+specialized_gate_debt:
+  capture_security_visuals:
+    state: IMPLEMENTED_PENDING_DIRECT_EXECUTION
+  focused_artifact_size:
+    state: COST_DEFECT_OPEN
+    detail: revision_50_uploaded_171_files_44470688_bytes_despite_focused_technical_scope
+next_gap:
+  - directly_execute_capture_security_visuals_on_stable_exact_site_bytes
+  - bound_future_focused_artifacts_to_minimal_evidence_before_next_ci
+  - authorized_narration_audio_then_captions_transcript_curated_key_moments
+  - remain_on_security_00_01_and_do_not_start_02_jailbreaks

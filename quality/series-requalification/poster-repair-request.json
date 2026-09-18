@@ -1,0 +1,8 @@
+{
+  "revision": 66,
+  "scope": "seguridad-ia/00_presentacion_serie",
+  "defect": "ES authored poster clips the final headline line at 1920x1080",
+  "operation": "regenerate_from_tracked_deterministic_source",
+  "expected_output": "docs/series/seguridad-ia/00_presentacion_serie.jpg",
+  "golden": false
+}

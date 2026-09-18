@@ -1,0 +1,72 @@
+name: Focused DOM inspection stall diagnostic
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/dom-inspection-request.json']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dom-inspection-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Record exact diagnostic revision
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/dom-inspection-request.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install existing site dependencies
+        run: pip install -r requirements.txt
+
+      - name: Prepare and strictly build English only
+        run: |
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install existing Playwright version
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve exact built revision
+        run: |
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/dom-inspection-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/dom-inspection-preview.log
+          exit 1
+
+      - name: Profile canonical timeout route serial and two-worker
+        run: node scripts/diagnose_dom_inspection_stall.mjs
+
+      - name: Upload focused JSON diagnostic only
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dom-inspection-diagnostic
+          path: artifacts/dom-inspection-diagnostic.json
+          if-no-files-found: error
+          retention-days: 1

@@ -1,0 +1,165 @@
+schema_version: 1
+revision: 77
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  active_series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  catalogue_locale_pages: 84
+
+rev76_exact_head_technical_integration:
+  action: 35139328045
+  exact_head: 89f1483cde45ba9f962bf5df49943df73995bf47
+  conclusion: FAIL_CLOSED_ON_KNOWN_SOURCE_RENDERED_MEDIA_DEBT
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  security_structured_metadata: PASS
+  security_article_watch_contract_and_negative_locale_parity_guard: PASS
+  shared_security_plus_datacenters_pre_datacenters_browser_regression:
+    contexts: 64
+    classifier_mutations: 20
+    failures: 0
+  focused_security_browser: PASS
+  contrast_and_legibility: PASS
+  text_visibility_desktop_mobile_normal_reduced: PASS
+  real_mobile_touch: PASS
+  keyboard_and_focus: PASS
+  prompt_injection_visual_states: PASS
+  video_lifecycle_technical: PASS
+  runtime_listener_lifetime_through_teardown: PASS
+  full_catalogue_sweep_repeated: false
+  source_debt:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+  rendered_debt:
+    VIDEO_NOT_RENDERED: 60
+    RAW_TEX_RENDERED: 0
+
+rev77_current_head_editorial_capture:
+  action: 35145128901
+  exact_head: 337248d0531e28330335a846791b4ba9b6de8440
+  conclusion: SUCCESS
+  site_facing_content_equal_to_rev76_head: true
+  rev77_only_changed_capture_request_from_rev76: true
+  strict_es: PASS
+  strict_en: PASS
+  shared_tooltip_negative_mutation: PASS
+  editorial_capture_contexts_expected: 16
+  editorial_capture_contexts_observed: 16
+  editorial_capture_failures: 0
+  editorial_capture_runtime_unexpected: 0
+  semantic_trace_contexts_expected: 16
+  semantic_trace_contexts_observed: 16
+  semantic_trace_checkpoints: 64
+  semantic_trace_failures: 0
+  semantic_trace_runtime_unexpected: 0
+  prompt_state_contexts: 8
+  prompt_state_failures: 0
+  artifact:
+    id: 10466797070
+    name: security-capture-direct-report
+    digest: sha256:25ec37cae1698a8e6c1204653a5810b6756969eb4a2a416cfab0fa43a5c924cf
+    retention_days: 1
+
+manual_security00_review_rev77:
+  reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
+  whole_page_contexts_inspected: 8
+  semantic_viewport_checkpoints_inspected: 32
+  isolated_secpath_state_images_available: 40
+  locales:
+    - es
+    - en
+  desktop: true
+  mobile: true
+  normal_motion: true
+  reduced_motion: true
+  static_and_interactive_pixel_review: PASS_CURRENT_HEAD_REV77_CONTENT_SCOPED
+  interactive_pedagogy_review: PASS_CURRENT_HEAD_REV77_CONTENT_SCOPED
+  new_visible_p0_p1_p2_found: 0
+  findings:
+    - ES footer parity repair is visibly present, localized and aligned with EN: related-series links plus all-series navigation.
+    - The repaired Spanish poster headline is fully visible on desktop and mobile.
+    - No raw TeX or accidental HTML, global horizontal overflow, clipping, visible overlap or broken-resource artifact was found in the inspected Security00 article/visual pixels.
+    - Mobile secpath is vertical rather than a giant horizontal canvas and remains readable at approximately 390px.
+    - Normal and reduced motion preserve the same causal states and outcomes.
+    - The bounded path stops at the external authorization boundary with BLOCKED; the unbounded path reaches External effect/EFFECT.
+    - The interaction changes path geometry/progress, active stage, boundary state and outcome, rather than merely recoloring or relabeling controls.
+    - Real-viewport semantic checkpoints keep the inspected target clear of sticky chrome.
+  pedagogy_model:
+    input: hostile content entering through email_web_document_or_memory
+    mechanism: retrieval_to_context_to_proposal
+    external_control: least_privilege_plus_per_operation_authorization
+    counterexample: broad_permissions_without_effective_boundary
+    observable_output_bounded: proposal_stops_before_external_effect
+    observable_output_unbounded: external_effect_executes
+  limitation:
+    - This content-scoped PASS does not certify the incomplete video/media surface.
+    - Poster_to_play_pause_seek_end_next player pixels were not manually re-reviewed in rev77.
+    - Security01 does not inherit this Security00 editorial PASS.
+    - Same-orchestrator review is recorded honestly and is not represented as independent review.
+
+canonical_gate_effect:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+  reason: global article certification remains fail-closed on required native media completeness and its playback/pixel/pedagogy review
+
+media:
+  state: FAIL_VOICE_MISSING
+  blocker_count: 16
+  VIDEO_AUDIO_STREAM_MISSING: 4
+  VIDEO_CAPTIONS_MISSING: 4
+  VIDEO_TRANSCRIPT_MISSING: 4
+  VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
+  native_es_en_mp4_distinct: true
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+
+sources_and_locales:
+  primary_sources_rechecked_2026_09_16:
+    - OWASP LLM Prompt Injection Prevention Cheat Sheet
+    - OWASP AI Agent Security Cheat Sheet
+  material_claim_change_required: false
+  es_en_sequence_and_claim_parity_manual_read: PASS_FOR_SECURITY00_TEXT_AND_SECPATH
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  current_main_es_blob_matches_reviewed_revision: 63591a3989937ea7c4dc84c39dd0666f52ad4efb
+  current_main_en_blob_matches_reviewed_revision: 3b6a0075c7e211caac3a46237d974797d26d8648
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  fresh_uncached_live_verification: still_required_by_release_contract
+  linkedin_action_by_this_lane: false
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  independent_work:
+    - EXTEND_CURRENT_HEAD_MEDIA_QA_TO_RETAIN_AND_MANUALLY_REVIEW_POSTER_PLAY_PAUSE_SEEK_END_NEXT_PIXELS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_WITHOUT_PRETENDING_MISSING_AUDIO_CAPTIONS_TRANSCRIPT_KEY_MOMENTS_ARE_ACCEPTABLE
+    - CONTINUE_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_WITHOUT_ADVANCING_ARTICLE
+  external_completion:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks

@@ -1,0 +1,113 @@
+schema_version: 1
+revision: 74
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED_NO_GOLDEN
+active_article: seguridad-ia/00_presentacion_serie
+next_article_blocked: 02-jailbreaks
+
+canonical_browser_hardening:
+  implementation_commit: f8a71c17df0f5444cf554c9d3346713814c10f9f
+  file: scripts/audit_series_experience_browser.mjs
+  prior_problem: one monolithic page.evaluate could nondeterministically stall and only surface as BROWSER_CONTEXT_TIMEOUT
+  global_context_budget_ms: 25000
+  worker_count: 2
+  per_dom_subprobe_budget_ms: 5000
+  retry_added: false
+  threshold_raised: false
+  named_subprobes:
+    - root-summary
+    - text-scan
+    - snippet-scan
+    - svg-label-geometry
+    - pannable-geometry
+    - image-scan
+    - animation-scan
+    - control-scan
+  preserved_assertions:
+    - article presence
+    - locale identity
+    - rendered video presence
+    - raw TeX visibility
+    - escaped snippet or macro visibility
+    - page horizontal overflow
+    - broken images
+    - SVG label review candidates
+    - pannable visual inventory
+    - animation count
+    - visual control count
+    - inline video technical lifecycle
+  new_failure_code: DOM_SUBPROBE_TIMEOUT
+  negative_fixture:
+    deliberate_stalled_subprobe: PASS_LOCAL_HELPER_SEMANTICS
+    expected_behavior: FAIL_CLOSED_NO_RETRY
+  local_validation:
+    node_syntax_check: PASS
+    playwright_runtime: UNAVAILABLE_IN_AUTOMATION_CONTAINER
+  runtime_regression_status: PENDING_FOCUSED_SECURITY_AND_IMMUTABLE_REFERENCE_ACTION
+  full_catalogue_rerun_status: NOT_RUN_UNTIL_FOCUSED_REGRESSION
+
+last_authoritative_full_catalogue_evidence:
+  revision: 72
+  pages: 84
+  browser_contexts: 336
+  strict_es: PASS
+  strict_en: PASS
+  raw_tex_visible: 0
+  browser_pass: false
+  findings:
+    REQUEST_FAILED: 96
+    VIDEO_PLAYBACK_ERROR: 96
+    VIDEO_NOT_RENDERED: 239
+    BROWSER_CONTEXT_TIMEOUT: 1
+  timeout_context: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/ [desktop-reduced]
+  timeout_phase: dom-inspection
+
+focused_rev73_diagnosis:
+  action: 35126652537
+  contexts: 16
+  anomalies: 0
+  max_context_ms: 2251.98
+  max_dom_inspection_ms: 167.99
+  max_named_subprobe_ms: 20.67
+  conclusion: route complexity did not reproduce the rev72 monolithic DOM stall
+
+media:
+  MEDIA_PASS: false
+  state: VOICE_MISSING
+  security_00_01_native_es_en_mp4_distinct: true
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+
+editorial:
+  PIXEL_REVIEW: PENDING_NO_NEW_FORMAL_REVIEW_REV74
+  PEDAGOGY_REVIEW: PENDING_NO_NEW_FORMAL_REVIEW_REV74
+  last_complete_security00_manual_evidence: REV66_SAME_AGENT_ONLY
+  security01_inherits: false
+
+release:
+  main: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  repair_branch: quality/post-datacenters-requalification
+  branch_behind_main: 0
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  remediation_merge: false
+  remediation_deploy: false
+
+release_contract_281_310:
+  pr_310_author_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_this_revision: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_write_queue_activation: false
+  preserve_279: true
+
+next_exact_gap:
+  - RUN_FOCUSED_SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_REGRESSION_ON_REV74
+  - IF_FOCUSED_REGRESSION_PASSES_RUN_ONE_FULL_84_PAGE_X4_SWEEP_ON_BOUNDED_SUBPROBES
+  - KEEP_SECURITY00_ACTIVE_UNTIL_MEDIA_AND_EDITORIAL_GATES_PASS

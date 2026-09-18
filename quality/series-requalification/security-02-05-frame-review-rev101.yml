@@ -1,0 +1,176 @@
+schema_version: 2
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+source_action_run: 35290297406
+source_exact_head: d587069de62a4499e8fdba1f5f4bdca63e913eca
+artifact:
+  id: 10526305098
+  name: series-experience-diagnostic
+  digest_sha256: 9423ac93ad32aba8cdeeb86f91cd581d6a50f69e882cca1c8a49ada204fb72d8
+  expires_at_utc: 2026-09-19T00:17:39Z
+  retained_video_frames: 48
+review_scope:
+  routes: [Security02, Security03, Security04, Security05]
+  locales: [es, en]
+  samples_per_video: 6
+  purpose: MANUAL_VIDEO_CONTENT_AND_KEY_MOMENT_EVIDENCE_ONLY
+  not_certified: [ARTICLE_PIXEL_REVIEW, ARTICLE_PEDAGOGY_REVIEW, CONTINUOUS_VIDEO_PLAYBACK]
+media_binary_evidence:
+  all_8_native_mp4: H264_1920x1080_YUV420P
+  es_duration_seconds_actual: 60.333333
+  en_duration_seconds_actual: 47.566667
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  voice_is_blocker: false
+manual_frame_review:
+  security02:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Una negativa no es una garantía de seguridad
+        - Búsqueda sobre múltiples variantes
+        - Optimización adversaria y transferencia
+        - Presupuesto Best-of-N
+        - Bajar aleatoriedad no elimina la vulnerabilidad
+        - La autorización sigue siendo la frontera para tools
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - A refusal is one observation, not a guarantee
+        - Search explores prompt variants
+        - Optimize the attack, then test transfer
+        - Higher attack budgets increase exposure
+        - Stable output is not a security boundary
+  security03:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - La persistencia amplía el riesgo más allá del turno
+        - Una instrucción almacenada puede reaparecer
+        - Persistir memoria contaminada crea superficie de ataque
+        - Comportamiento latente puede esperar un disparador
+        - La procedencia de la memoria debe ser visible
+        - La memoria debe poder revocarse
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Persistence extends beyond one turn
+        - State writes create hidden attack surfaces
+        - Trust and provenance on every write
+        - Retention is part of the control plane
+        - Observability and revocation close the loop
+  security04:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Pasar un test no demuestra ausencia de vulnerabilidad
+        - Separar capacidades de acciones
+        - Mantener evaluación fija y presión adaptativa separadas
+        - El evaluador también puede fallar
+        - Cada paso debe dejar evidencia
+        - Deployment necesita riesgo medido antes del incidente
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Test reachable harm, not only prompts
+        - The attack path has multiple gates
+        - Coverage is a matrix, not a prompt list
+        - Evaluators need calibration and observability
+        - Release depends on evidence, not confidence
+  security05:
+    es:
+      sample_seconds: [0.0, 12.067, 24.133, 36.2, 48.267, 59.127]
+      observed_sequence:
+        - Producción segura no depende de que el modelo nunca falle
+        - Lectores no confiables no deben poseer tools privilegiadas
+        - Mínimo privilegio por herramienta
+        - MCP estandariza integración, no confianza
+        - Observabilidad y kill path cierran el ciclo
+        - Acciones irreversibles necesitan confirmación
+    en:
+      sample_seconds: [0.0, 9.513, 19.027, 28.54, 38.053, 46.615]
+      observed_sequence:
+        - Assume a defensive layer will fail
+        - Separate untrusted reading from privileged action
+        - Least privilege for every tool
+        - MCP standardizes integration, not trust
+        - Observability and stop mechanisms close the loop
+verification_after_gate_repair:
+  action_run: 35291147066
+  exact_head: d11c3ad2928104a20e54104b0e79419b2ba00a00
+  diagnostic_revision: 102
+  result: EXPECTED_FAIL_CLOSED
+  technical_steps_passed:
+    - SECURITY02_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY03_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY04_SOURCE_ATTRIBUTION
+    - SECURITY05_SOURCE_AND_RELEASE_GATE_MUTATIONS
+    - STRICT_ES_BUILD
+    - PUBLICATION_CONTRACT
+    - SECURITY02_05_MEDIA_VISUAL_GATE_EXECUTED
+    - STRICT_EN_BUILD
+    - COMPLETE_RENDERED_HTML_AUDIT
+    - SHARED_BROWSER_RESOURCES_SECURITY00_05_PLUS_REFERENCES
+  final_failure_reason: ENFORCEMENT_REMAINS_FAIL_CLOSED_AND_DOES_NOT_CERTIFY_PIXEL_OR_PEDAGOGY
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_SCOPE
+chapter_curation_state:
+  status: EMBEDDED_PENDING_EXACT_RERUN
+  source_site_facing_head_before_receipt: 64e2fd9db034b574437609b50c809309018b6867
+  prior_blockers_closed_at_source_level: 8
+  expected_current_media_visual_blockers_after_embedding: 0_PENDING_EXACT_RERUN
+  derivation_rule: CURATED_ONLY_FROM_MANUALLY_REVIEWED_VISUAL_TIMELINE_NEVER_FROM_FUTURE_NARRATION
+  curated:
+    security02:
+      es:
+        - {name: "De una negativa a una búsqueda", start: 0, end: 24}
+        - {name: "Optimización, transferencia y presupuesto", start: 24, end: 48}
+        - {name: "Aleatoriedad y autorización como fronteras distintas", start: 48, end: 60}
+      en:
+        - {name: "From one refusal to search", start: 0, end: 19}
+        - {name: "Optimization, transfer and attack budget", start: 19, end: 38}
+        - {name: "Stable output is not an authorization boundary", start: 38, end: 48}
+    security03:
+      es:
+        - {name: "Persistencia y reentrada de memoria", start: 0, end: 24}
+        - {name: "Estado contaminado y comportamiento latente", start: 24, end: 48}
+        - {name: "Procedencia y revocación verificable", start: 48, end: 60}
+      en:
+        - {name: "Persistence beyond one turn", start: 0, end: 19}
+        - {name: "Trust, provenance and retention", start: 19, end: 38}
+        - {name: "Observability and revocation", start: 38, end: 48}
+    security04:
+      es:
+        - {name: "Del test a la cadena de ataque", start: 0, end: 24}
+        - {name: "Cobertura adaptativa y validez del evaluador", start: 24, end: 48}
+        - {name: "Evidencia y gate de release", start: 48, end: 60}
+      en:
+        - {name: "Test reachable harm across the path", start: 0, end: 19}
+        - {name: "Coverage and evaluator calibration", start: 19, end: 38}
+        - {name: "Evidence-bound release decisions", start: 38, end: 48}
+    security05:
+      es:
+        - {name: "Separar lectura y acción privilegiada", start: 0, end: 24}
+        - {name: "Mínimo privilegio y fronteras MCP", start: 24, end: 48}
+        - {name: "Observabilidad, kill path y confirmación", start: 48, end: 60}
+      en:
+        - {name: "Separate untrusted reading from action", start: 0, end: 19}
+        - {name: "Least privilege and MCP trust boundaries", start: 19, end: 38}
+        - {name: "Observability and stop mechanisms", start: 38, end: 48}
+voice_accessibility_debt:
+  status: DEFERRED_OWNER_LOCAL
+  current_golden_blocker: false
+  do_not_fabricate: [NARRATION, CAPTIONS_FROM_MISSING_NARRATION, TRANSCRIPT_FROM_MISSING_NARRATION, NARRATION_TIMINGS]
+new_gate_defect_found:
+  component: scripts/validate_security03_pedagogy_contract.py
+  action_run: 35290297406
+  defect: Runtime-vs-weights negative mutation changed a selector token instead of reliably breaking the causal state transition.
+  repair_commit: d9b2913dba16f984ef01c3335b28d173ea9c5e45
+  repair_verified_by_action: 35291147066
+article_iterations_after_this_run:
+  Security02: 8
+  Security03: 8
+  Security04: 6
+  Security05: 6
+next_actions:
+  - Run one focused exact-head Security02-05 source/build/MEDIA_VISUAL milestone against the embedded chapter declarations.
+  - Keep PIXEL_REVIEW and PEDAGOGY_REVIEW false until real article desktop/mobile normal/reduced and interaction-state inspection.
+  - Do not treat future voice/accessibility work as a blocker for current GOLDEN.

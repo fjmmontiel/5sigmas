@@ -2,7 +2,7 @@
 title: Prompt injection — cuando un documento puede cambiar lo que hace el sistema
 description: "Cómo una orden escondida en un documento puede entrar en un sistema con IA y qué controles separan la lectura de una acción."
 date: 2026-05-26
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: prompt injection, seguridad LLM, indirect prompt injection, RAG security, agentes IA seguridad, dual LLM pattern
 tags:
   - IA
@@ -10,12 +10,25 @@ tags:
   - LLMs
   - Agentes
 video: "01-prompt-injection.mp4"
+video_poster: "01-prompt-injection.jpg"
+video_title: "Prompt injection"
+video_summary: "Cómo una orden escondida en un documento puede entrar en un sistema con IA y qué controles separan la lectura de una acción."
 video_duration: "PT1M0S"
+video_chapters:
+  - name: "Del documento al contexto"
+    start: 0
+    end: 24
+  - name: "Datos e instrucciones compiten por el control"
+    start: 24
+    end: 48
+  - name: "Separar lectura de acción y registrar permisos"
+    start: 48
+    end: 60
 ---
 
 # Capítulo 1 — Prompt injection
 
-Este capítulo explica por qué el prompt injection nace de cómo están construidos los sistemas con LLMs. Al terminarlo, el lector entenderá qué se rompe cuando instrucciones y datos comparten el mismo canal, por qué la inyección indirecta en RAG y agentes cambia el nivel de gravedad, qué límites tienen los filtros y guardrails de post-proceso, y qué arquitectura defensiva tiene sentido si el sistema puede leer contenido externo y actuar sobre herramientas.
+Este capítulo explica por qué el prompt injection nace de cómo están construidos los sistemas con LLMs. Al terminarlo, el lector entenderá qué se rompe cuando instrucciones y datos comparten el mismo canal, por qué la inyección indirecta en RAG y agentes puede aumentar el impacto cuando contenido no confiable alcanza herramientas, datos o acciones con privilegios, qué límites tienen los filtros y guardrails de post-proceso, y qué arquitectura defensiva tiene sentido si el sistema puede leer contenido externo y actuar sobre herramientas.
 
 En seguridad clásica solemos vivir de una separación. El programa tiene un plano de control, donde se decide qué hacer, y un plano de datos, donde vive lo que el programa procesa. Cuando esa frontera se conserva, muchas defensas son razonables porque el sistema sabe, al menos de forma aproximada, qué parte del input debe ejecutarse y cuál solo debe interpretarse.
 
@@ -43,7 +56,7 @@ La consecuencia práctica es simple: si el sistema lee contenido no confiable, d
 
 ## 2. La orden puede aparecer en una búsqueda de documentos
 
-En un chat simple el atacante todavía habla directamente con el modelo. Eso ya es un problema, pero el riesgo sigue bastante contenido: la entrada maliciosa y el efecto quedan dentro de la misma interacción.
+En un chat sin herramientas ni acceso a datos privilegiados, el efecto de una inyección directa puede quedar limitado a la propia interacción. Esa limitación no es universal: si el mismo chat dispone de herramientas, secretos o acciones externas, una inyección directa también puede producir efectos privilegiados.
 
 La situación cambia cuando el sistema recupera documentos externos o coordina varios pasos antes de responder. En RAG, un agente puede leer un correo, una wiki interna, un PDF o una nota de soporte y tratar ese contenido como material de trabajo legítimo. Si ahí va embebida una instrucción hostil, el ataque ya no entra por la caja del usuario. Entra por la cadena de suministro del propio contexto.
 
@@ -53,7 +66,7 @@ Ese es el motivo por el que la literatura reciente insiste en la "retrieval barr
 
 El dato operativo da la medida del riesgo. En esa línea de trabajo se muestran fragmentos de unos diez tokens capaces de forzar recuperación casi perfecta en distintos embeddings y benchmarks, con costes muy bajos por consulta objetivo. En el experimento más llamativo, un solo email envenenado consigue que un flujo multiagente con GPT-4o termine exfiltrando claves SSH en más del 80% de los intentos.
 
-La lectura del riesgo cambia por dos motivos. El atacante ya no necesita una sesión interactiva privilegiada con el modelo. Le basta con contaminar una fuente que el sistema ya considera relevante. Además, la recuperación y la orquestación multiplican el daño. El agente que ejecuta una herramienta puede no ver el texto original del ataque. Solo ve la instrucción ya normalizada por otro agente o por el retrieval. En ese punto la orden parece venir de una parte "confiable" del pipeline.
+La lectura del riesgo cambia por dos motivos. El atacante ya no necesita una sesión interactiva privilegiada con el modelo. Le basta con contaminar una fuente que el sistema ya considera relevante. Además, la recuperación y la orquestación pueden ampliar el daño cuando propagan la instrucción hacia componentes con más privilegios, datos sensibles o capacidad de acción. El agente que ejecuta una herramienta puede no ver el texto original del ataque. Solo ve la instrucción ya normalizada por otro agente o por el retrieval. En ese punto la orden parece venir de una parte "confiable" del pipeline.
 
 Los sistemas multiagente suelen verse mejor en la demo que en la auditoría. La separación funcional entre agentes da sensación de orden, pero también introduce canales donde una observación o un resumen pasan a tratarse como autoridad local. Si una de esas observaciones está contaminada, el resto del sistema hereda la contaminación con menos contexto para cuestionarla.
 
@@ -91,7 +104,7 @@ La tercera es estructurar los límites entre pasos. El output de retrieval, OCR,
 
 La cuarta es observabilidad. Los guardrails son útiles sobre todo cuando dejan rastro: qué aprobaron, qué bloquearon, qué tool call abortaron, cómo cambió la tasa de alertas y en qué ruta del pipeline ocurrió el desvío. Sin esa telemetría, el sistema no aprende nada de sus intentos fallidos y el bypass siguiente vuelve a parecer una sorpresa.
 
-Aquí entran también los clasificadores especializados. El trabajo de Anthropic sobre Constitutional Classifiers es relevante porque muestra una dirección pragmática: monitores de entrada y salida capaces de operar en *streaming*, con un coste adicional medible, y combinados como una capa más dentro de un modelo de defensa en profundidad. Su aportación tiene sentido dentro de un sistema más ancho, no como promesa de que el problema ya está resuelto.
+También entran aquí los clasificadores especializados, pero la referencia útil ya no es sólo el diseño de 2025. Anthropic publicó en enero de 2026 una segunda generación después de comprobar que los clasificadores separados de entrada y salida seguían expuestos a ataques de reconstrucción y ofuscación de salida. El sistema evolucionó hacia un clasificador de intercambio que evalúa la salida junto con su entrada y, después, hacia una arquitectura en cascada que combina un *probe* ligero con clasificadores más costosos sólo para los casos escalados. Anthropic reporta para su configuración final de producción un overhead aproximado del 1% si se aplica a tráfico de Claude Opus 4.0, tras más de 1.700 horas acumuladas de red teaming sobre 198.000 intentos. Es una capa de defensa en profundidad, no una prueba de que el prompt injection esté resuelto.
 
 ---
 
@@ -112,15 +125,15 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 ## 6. Referencias
 
 <details markdown="1">
-<summary><strong>Fuentes base</strong></summary>
+<summary><strong>Fuentes y evidencia adyacente</strong></summary>
 
 | Clave | Fuente | Descripción breve |
 | --- | --- | --- |
-| R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
-| R2 | **Chang et al. (2025)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
-| R3 | **OWASP Top 10 for LLM Applications 2025** | Marco operativo para prompt injection, excessive agency, tool misuse y otras vulnerabilidades de aplicaciones con LLMs. |
-| R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defensa con clasificadores de entrada y salida, predicción en streaming y miles de horas de red teaming. |
-| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Muestra que un comportamiento malicioso activado por disparadores puede persistir tras entrenamiento de seguridad estándar. |
+| R1 | **OWASP** — [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
+| R2 | **Chang et al. (2026)** — [*Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems*](https://www.usenix.org/conference/usenixsecurity26/presentation/chang-hongyan) | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
+| R3 | [**OWASP GenAI LLM Top 10 2026**](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) + [**Top 10 for Agentic Applications 2026**](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) | Marcos vigentes para prompt injection y excessive agency y, en sistemas agénticos, goal hijack, tool misuse e identity/privilege abuse. |
+| R4 | **Anthropic (2026)** — [*Next-generation Constitutional Classifiers*](https://www.anthropic.com/research/next-generation-constitutional-classifiers) | Evolución hacia clasificación de intercambios y una arquitectura en cascada/probe que reduce el coste manteniendo defensa adaptativa por capas. |
+| R5 | **Hubinger et al. (2024)** — [*Sleeper Agents*](https://arxiv.org/abs/2401.05566) | Evidencia adyacente sobre backdoors de entrenamiento: muestra que comportamientos condicionados por un trigger pueden persistir tras SFT, RL y entrenamiento adversarial. No estudia prompt injection, RAG ni autorización de herramientas en runtime. |
 
 </details>
 
@@ -131,8 +144,8 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 **¿Es correcto decir que el prompt injection es "como SQL injection"?**
 Solo en un sentido muy general: en ambos casos datos no confiables alteran el comportamiento del sistema. Pero la diferencia práctica importa. En SQL injection el exploit vive dentro de una gramática formal y suele resolverse con separación estricta entre consulta y parámetros. En LLMs el problema es semántico: instrucciones y datos ya comparten el mismo medio, y el modelo no tiene una frontera dura entre ambos.
 
-**¿Por qué la inyección indirecta es más peligrosa que el prompt injection directo?**
-Porque el ataque deja de depender de una interacción frontal con el usuario y pasa a esconderse en una fuente que el sistema ya considera relevante: un correo, un documento, una página recuperada o la memoria escrita por otro agente. En ese punto la orden hostil viaja dentro de la propia cadena de contexto del sistema.
+**¿Cuándo puede tener más impacto la inyección indirecta que el prompt injection directo?**
+Cuando el contenido hostil entra por una fuente externa que el sistema recupera y después se propaga hacia datos sensibles, herramientas o acciones con más privilegios. No es una jerarquía universal: una inyección directa también puede tener alto impacto si el flujo expone esas mismas capacidades. La diferencia es que la variante indirecta puede ocultarse dentro de la propia cadena de contexto y alcanzar el modelo sin una interacción frontal del atacante.
 
 **¿Sirven los guardrails basados en otro LLM?**
 Sirven como una capa adicional, no como sustituto de arquitectura. Un guardrail puede bloquear casos obvios y mejorar cobertura, pero sigue siendo un modelo que procesa lenguaje natural y, por tanto, comparte parte de la misma superficie de ataque. Si el sistema sigue dando privilegios amplios al actor principal, el guardrail solo reduce parte del riesgo.

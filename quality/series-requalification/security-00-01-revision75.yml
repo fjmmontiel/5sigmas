@@ -1,0 +1,132 @@
+schema_version: 2
+revision: 75
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED_NO_GOLDEN
+active_article: seguridad-ia/00_presentacion_serie
+next_article_blocked: 02-jailbreaks
+
+catalogue:
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  publication_discovery: PASS
+  chapter_first_series: 5
+  presentation_requirement_for_discovery: false
+
+rev75_full_integration:
+  action: 35134585450
+  exact_head: 2ad5776cb00e27c5ba48de9510981fcda19b7804
+  conclusion: FAILURE_FAIL_CLOSED_ON_KNOWN_SOURCE_MEDIA_RENDERED_BROWSER_VIDEO_DEBT
+  final_artifact_harvested: true
+  final_enforcement_completed: true
+  expected_contexts: 336
+  observed_contexts: 336
+  global_context_budget_ms: 25000
+  canonical_worker_count: 2
+  dom_subprobe_budget_ms: 5000
+  retries_added: false
+  thresholds_raised: false
+  dom_subprobe_policy: NAMED_FAIL_CLOSED_SUBPROBES_NO_RETRY_GLOBAL_CONTEXT_BUDGET_UNCHANGED
+  browser_findings:
+    REQUEST_FAILED: 96
+    VIDEO_PLAYBACK_ERROR: 96
+    VIDEO_NOT_RENDERED: 240
+    RAW_TEX_VISIBLE: 0
+    BROWSER_CONTEXT_TIMEOUT: 0
+    DOM_SUBPROBE_TIMEOUT: 0
+  browser_timeout_hardening_verified: true
+  browser_pass: false
+  browser_pass_reason: browser-visible video/media failures remain; timeout/stall defect is closed
+  source_outcome: FAIL
+  build_es: PASS
+  build_en: PASS
+  publication_contract: PASS
+  rendered_outcome: FAIL
+  media_outcome: FAIL_VOICE_MISSING
+  shared_security_plus_reference_browser_regression:
+    contexts_expected: 64
+    contexts_observed: 64
+    classifier_mutations: 20
+    failures: 0
+    reference_content_modified: false
+  focused_security_technical_outcomes:
+    browser: PASS
+    contrast_and_text_visibility: PASS
+    video_lifecycle: PASS
+    real_touch_article_watch_round_trip: PASS
+    prompt_visual_states: PASS_TECHNICAL_ONLY
+    keyboard_focus: PASS
+    runtime_listener_lifetime: PASS
+    structured_metadata: PASS
+    article_watch_contract: PASS
+  can_certify_pixel_or_pedagogy: false
+  can_override_known_media_or_source_debt: false
+
+source_findings:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+
+rendered_findings:
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+security_media:
+  status: FAIL_VOICE_MISSING
+  total_failures: 16
+  VIDEO_AUDIO_STREAM_MISSING: 4
+  VIDEO_CAPTIONS_MISSING: 4
+  VIDEO_TRANSCRIPT_MISSING: 4
+  VIDEO_CHAPTERS_MISSING: 4
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  security00_es_actual_duration_seconds: 60.3
+  security00_es_declared_duration: PT1M0S
+  security00_en_actual_duration_seconds: 47.566667
+  security00_en_declared_duration: PT48S
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+editorial:
+  PIXEL_REVIEW: PENDING
+  PEDAGOGY_REVIEW: PENDING
+  current_run_manual_rev75_whole_page_contexts_inspected: 8
+  current_run_manual_rev75_primary_visual_detailed_captures_inspected: 5
+  current_run_manual_visible_p0_p1_p2_found: 0
+  current_run_manual_review_limit: rev75 predates the current-head Security00 footer parity repair and did not re-inspect every interactive intermediate/playback state
+  last_complete_security00_manual_evidence: REV66_SAME_AGENT_ONLY
+  security01_inherits: false
+  technical_browser_gates_do_not_equal_editorial_pass: true
+
+security00_locale_parity_after_rev75:
+  rev75_predates_fix: true
+  repair_commit: 77c4eacb7d758e73f6ec3e45a430f1bf9552f14c
+  deterministic_guard_commit: e106e789a5cebbcea220ce911a2921dd15371057
+  exact_head_validation: PENDING_FOCUSED_REV76
+
+release:
+  main: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  repair_branch: quality/post-datacenters-requalification
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  remediation_merge: false
+  remediation_deploy: false
+
+release_contract_281_310:
+  pr_310_author_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  material_change_this_revision: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_write_queue_activation: false
+  preserve_279: true
+
+next_exact_gap:
+  - RUN_ONE_FOCUSED_EXACT_HEAD_QA_FOR_SECURITY00_ES_EN_NAVIGATION_REPAIR_AND_NEGATIVE_PARITY_GUARD
+  - REQUIRE_STRICT_ES_EN_SHARED_REFERENCE_REGRESSION_AND_ALL_FOCUSED_SECURITY_TECHNICAL_GATES
+  - REINSPECT_CURRENT_HEAD_SECURITY00_PIXELS_AFTER_THE_FOOTER_PARITY_REPAIR_WITHOUT_INHERITING_REV75_EDITORIAL_EVIDENCE
+  - CONTINUE_SOURCE_MEDIA_COVERAGE_REPAIR_INDEPENDENT_OF_MISSING_VOICE
+  - MEDIA_PASS_REMAINS_BLOCKED_UNTIL_AUTHORIZED_NATIVE_ES_EN_NARRATION_CAPTIONS_TRANSCRIPT_AND_CURATED_KEY_MOMENTS_EXIST

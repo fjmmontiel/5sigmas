@@ -5,237 +5,405 @@ const baseUrl = process.env.S5_PREVIEW_URL ?? 'http://127.0.0.1:8000';
 const outputDir = process.env.S5_SECURITY_SCREENSHOT_DIR ?? 'artifacts/visual-review/security';
 await mkdir(outputDir, { recursive: true });
 
-const routes = [
-  { slug: '00-presentacion', path: '/series/seguridad-ia/00_presentacion_serie/', roots: ['.secpath'] },
-  { slug: '01-prompt-injection', path: '/series/seguridad-ia/01-prompt-injection/', roots: ['.ctxmix', '.ragtrace', '.defsim'] },
-  { slug: 'topic-prompt-injection-es', path: '/temas/prompt-injection/', lang: 'es', roots: ['.ctxmix', '.ragtrace', '.defsim'], expectText: ['La frontera se pierde dentro del contexto', 'La barrera real está antes del modelo', 'No necesitas que todas las capas sean perfectas'], forbidText: ['The boundary disappears inside the context', 'The first real barrier is retrieval', 'You do not need every layer to be perfect'] },
-  { slug: 'topic-prompt-injection-en', path: '/en/temas/prompt-injection/', lang: 'en', roots: ['.ctxmix', '.ragtrace', '.defsim'], expectText: ['The boundary disappears inside the context', 'The first real barrier is retrieval', 'You do not need every layer to be perfect'], forbidText: ['La frontera se pierde dentro del contexto', 'La barrera real está antes del modelo', 'No necesitas que todas las capas sean perfectas'] },
-  { slug: '02-jailbreaks', path: '/series/seguridad-ia/02-jailbreaks/', roots: ['.jbsearch', '.jbbudget', '.jbladder'] },
-  { slug: '03-envenenamiento', path: '/series/seguridad-ia/03-envenenamiento/', roots: ['.memlife', '.memgov', '.memprop', '.memlayers'] },
-  { slug: '04-red-teaming', path: '/series/seguridad-ia/04-red-teaming/', roots: ['.threatbuild', '.uplift3', '.causalrt', '.regloop'] },
-  { slug: '05-controles-produccion', path: '/series/seguridad-ia/05-controles-produccion/', roots: ['.proddef', '.mcpbound', '.killpath', '.releasegate'] },
+const chapters = [
+  { slug: '00-presentacion', source: '00_presentacion_serie', roots: ['.secpath'] },
+  { slug: '01-prompt-injection', source: '01-prompt-injection', roots: ['.ctxmix', '.ragtrace', '.defsim'] },
+  { slug: '02-jailbreaks', source: '02-jailbreaks', roots: ['.jbsearch', '.jbbudget', '.jbladder'] },
+  { slug: '03-envenenamiento', source: '03-envenenamiento', roots: ['.memlife', '.memgov', '.memprop', '.memlayers'] },
+  { slug: '04-red-teaming', source: '04-red-teaming', roots: ['.threatbuild', '.uplift3', '.causalrt', '.regloop'] },
+  { slug: '05-controles-produccion', source: '05-controles-produccion', roots: ['.proddef', '.mcpbound', '.killpath', '.releasegate'] },
 ];
+
+const routes = [];
+for (const locale of ['es', 'en']) {
+  const prefix = locale === 'en' ? '/en' : '';
+  for (const chapter of chapters) {
+    routes.push({
+      ...chapter,
+      locale,
+      path: `${prefix}/series/seguridad-ia/${chapter.source}/`,
+    });
+  }
+}
+routes.push(
+  { slug: 'topic-prompt-injection', locale: 'es', path: '/temas/prompt-injection/', roots: ['.ctxmix', '.ragtrace', '.defsim'] },
+  { slug: 'topic-prompt-injection', locale: 'en', path: '/en/temas/prompt-injection/', roots: ['.ctxmix', '.ragtrace', '.defsim'] },
+);
 
 const viewports = [
   { name: 'desktop', viewport: { width: 1440, height: 1100 }, mobile: false },
   { name: 'mobile', viewport: { width: 390, height: 844 }, mobile: true },
 ];
-
-const isTransientExternalFontUrl = (url) => {
-  if (!url) return false;
-  try {
-    return new URL(url).hostname === 'fonts.gstatic.com';
-  } catch {
-    return false;
-  }
-};
-
-const isTransientExternalFontFailure = (url, resourceType) => (
-  resourceType === 'font' && isTransientExternalFontUrl(url)
-);
+const motionModes = [
+  { name: 'normal', reducedMotion: 'no-preference' },
+  { name: 'reduced', reducedMotion: 'reduce' },
+];
 
 const previewHost = (() => {
-  try {
-    return new URL(baseUrl).hostname;
-  } catch {
-    return '';
-  }
+  try { return new URL(baseUrl).hostname; } catch { return ''; }
 })();
 const isLocalPreview = previewHost === '127.0.0.1' || previewHost === 'localhost';
-
-// Material's instant-navigation bundle probes a sitemap relative to its configured
-// production base even while this QA runs against a localhost build. Search/SEO
-// gates validate the real sitemap separately, so do not let that preview-only XHR
-// obscure first-party visual/runtime failures.
-const isPreviewOnlyHostedSitemapProbe = (url, resourceType) => {
-  if (!isLocalPreview || resourceType !== 'xhr' || !url) return false;
+const isPreviewOnlySitemapProbe = (url, type) => {
+  if (!isLocalPreview || type !== 'xhr') return false;
   try {
     const parsed = new URL(url);
     return parsed.hostname === '5sigmas.com' && parsed.pathname.endsWith('/sitemap.xml');
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 };
-
-// Chromium emits a second, URL-less console error for failed resources. HTTP and
-// request failures are audited separately below with the exact URL, status and type,
-// so retaining this duplicate would turn an allowed third-party font failure into a
-// false positive while adding no coverage for first-party resources.
 const isGenericResourceConsoleError = (text) => (
   /^Failed to load resource: the server responded with a status of \d+/.test(text)
   || /^Failed to load resource: net::ERR_/.test(text)
 );
 
+function isExpectedTeardownCancellation(event) {
+  return event.type === 'requestfailed'
+    && event.phase === 'teardown'
+    && String(event.detail || '').includes('ERR_ABORTED');
+}
+
+function classifyRuntime(events) {
+  return {
+    unexpected: events.filter(event => !isExpectedTeardownCancellation(event)),
+    expectedTeardownCancellations: events.filter(isExpectedTeardownCancellation),
+  };
+}
+
+function runRuntimeMutationSelfTest() {
+  const cases = [
+    {
+      name: 'teardown ERR_ABORTED is expected context cancellation',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_ABORTED' },
+      expected: true,
+    },
+    {
+      name: 'visual-interaction ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'visual-interaction', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'full-page-scroll ERR_ABORTED remains fatal',
+      event: { type: 'requestfailed', phase: 'full-page-scroll', detail: 'net::ERR_ABORTED' },
+      expected: false,
+    },
+    {
+      name: 'teardown non-abort request failure remains fatal',
+      event: { type: 'requestfailed', phase: 'teardown', detail: 'net::ERR_FAILED' },
+      expected: false,
+    },
+    {
+      name: 'teardown pageerror remains fatal',
+      event: { type: 'pageerror', phase: 'teardown', detail: 'late exception' },
+      expected: false,
+    },
+    {
+      name: 'teardown console error remains fatal',
+      event: { type: 'console', phase: 'teardown', detail: 'late console error' },
+      expected: false,
+    },
+    {
+      name: 'teardown HTTP failure remains fatal',
+      event: { type: 'http', phase: 'teardown', status: 500, url: 'https://example.invalid/fail' },
+      expected: false,
+    },
+  ];
+  const broken = cases.filter(item => isExpectedTeardownCancellation(item.event) !== item.expected);
+  if (broken.length) {
+    throw new Error(`Security visual runtime classification mutation self-test failed: ${broken.map(item => item.name).join(', ')}`);
+  }
+}
+
+runRuntimeMutationSelfTest();
+
 const browser = await chromium.launch({ headless: true });
 const report = [];
+const failures = [];
+const fail = (message) => failures.push(message);
 
-const visible = async (locator) => await locator.evaluate((node) => {
-  const style = getComputedStyle(node);
-  return style.display !== 'none' && style.visibility !== 'hidden' && node.getClientRects().length > 0;
-});
-
-async function exerciseVisual(page, selector) {
-  const matches = page.locator(selector);
-  const matchCount = await matches.count();
-  if (matchCount !== 1) throw new Error(`expected exactly one ${selector}, found ${matchCount}`);
-  const root = matches.first();
-  if (!await visible(root)) throw new Error(`visual ${selector} is not visible`);
-
-  const box = await root.boundingBox();
-  if (!box || box.width < 240 || box.height < 80) {
-    throw new Error(`visual ${selector} has invalid bounds ${JSON.stringify(box)}`);
+async function checkCtxmix(page, root, route, mode, motion) {
+  const context = `${route.locale}/${route.slug}/${mode.name}/${motion.name}`;
+  const requiredNodes = [
+    'policy-source', 'user-source', 'external-source', 'context',
+    'model-proposal', 'authorization-gate', 'execution-result',
+  ];
+  for (const name of requiredNodes) {
+    if (await root.locator(`[data-node="${name}"]`).count() !== 1) fail(`${context}: ctxmix missing data-node=${name}`);
   }
 
-  const diagnostics = await root.evaluate((node) => {
-    const styleNode = node.querySelector('style');
-    let cssRules = [];
+  const expectedTitle = route.locale === 'es'
+    ? 'El modelo propone; el runtime decide qué puede ejecutarse'
+    : 'The model proposes; the runtime decides what may execute';
+  if (!(await root.innerText()).includes(expectedTitle)) fail(`${context}: ctxmix localized title missing`);
+
+  const buttons = root.locator('[data-state-btn]');
+  if (await buttons.count() !== 4) fail(`${context}: ctxmix requires four mechanism steps`);
+
+  for (const state of ['1', '2', '3', '4']) {
+    const button = root.locator(`[data-state-btn="${state}"]`);
     try {
-      cssRules = styleNode?.sheet ? [...styleNode.sheet.cssRules].map((rule) => rule.cssText.slice(0, 180)) : [];
+      if (mode.mobile) await button.tap(); else await button.click();
+      await page.waitForTimeout(motion.name === 'normal' ? 520 : 40);
     } catch (error) {
-      cssRules = [`CSSOM_ERROR: ${error.message}`];
+      fail(`${context}: cannot activate ctxmix state ${state}: ${error.message}`);
+      continue;
     }
-    const descendants = [...node.querySelectorAll('[class]')].slice(0, 24).map((child) => {
-      const style = getComputedStyle(child);
-      const bounds = child.getBoundingClientRect();
-      return {
-        className: child.className,
-        display: style.display,
-        position: style.position,
-        gridTemplateColumns: style.gridTemplateColumns,
-        flexDirection: style.flexDirection,
-        width: Math.round(bounds.width),
-        height: Math.round(bounds.height),
-      };
-    });
-    return { cssRuleCount: cssRules.length, cssRules, descendants };
-  });
+    const current = await root.getAttribute('data-state');
+    if (current !== state) fail(`${context}: requested ctxmix state ${state}, got ${current}`);
+    const pressed = await button.getAttribute('aria-pressed');
+    if (pressed !== 'true') fail(`${context}: state ${state} does not expose aria-pressed=true`);
 
-  const buttons = root.locator('button');
-  const count = await buttons.count();
-  for (let index = 0; index < count; index += 1) {
-    const button = buttons.nth(index);
-    if (!await button.isVisible() || await button.isDisabled()) continue;
-    await button.click();
-    await page.waitForTimeout(90);
+    if (state === '3') {
+      const proposal = root.locator('[data-node="model-proposal"]');
+      const text = await proposal.innerText();
+      if (!text.includes('send_credentials')) fail(`${context}: state 3 does not expose the influenced tool proposal`);
+      if (!await proposal.isVisible()) fail(`${context}: state 3 proposal is not visible`);
+    }
+    if (state === '4') {
+      const gate = root.locator('[data-node="authorization-gate"]');
+      const result = root.locator('[data-node="execution-result"]');
+      if (!await gate.isVisible() || !await result.isVisible()) fail(`${context}: authorization/result must be visible in state 4`);
+      const resultText = await result.innerText();
+      const expected = route.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
+      if (!resultText.includes(expected)) fail(`${context}: state 4 missing ${expected}`);
+    }
+
+    if (motion.name === 'normal') {
+      await root.screenshot({ path: `${outputDir}/${route.locale}-${route.slug}-${mode.name}-ctxmix-state-${state}.png`, animations: 'allow' });
+    }
   }
 
-  const pressed = await root.locator('button[aria-pressed]').count();
-  const labels = await root.locator('button').evaluateAll((nodes) => nodes.map((node) => ({
-    text: (node.textContent || '').trim(),
-    aria: node.getAttribute('aria-label'),
+  const rootOverflow = await root.evaluate((node) => ({ scrollWidth: node.scrollWidth, clientWidth: node.clientWidth }));
+  if (rootOverflow.scrollWidth > rootOverflow.clientWidth + 2) fail(`${context}: ctxmix horizontal overflow ${JSON.stringify(rootOverflow)}`);
+
+  const meaningfulSizes = await root.locator('.ctxmix__source strong,.ctxmix__segment,.ctxmix__proposal-item,.ctxmix__check,.ctxmix__principle,.ctxmix__explain p').evaluateAll((nodes) => nodes.map((node) => ({
+    text: (node.textContent || '').trim().slice(0, 80),
+    px: Number.parseFloat(getComputedStyle(node).fontSize),
   })));
-  for (const item of labels) {
-    if (!item.text && !item.aria) throw new Error(`unlabelled control inside ${selector}`);
+  for (const item of meaningfulSizes) {
+    if (item.px < 11) fail(`${context}: ctxmix meaningful text below 11px (${item.px}px) ${JSON.stringify(item.text)}`);
   }
 
-  return {
-    selector,
-    buttons: count,
-    ariaPressedControls: pressed,
-    width: Math.round(box.width),
-    height: Math.round(box.height),
-    diagnostics,
-  };
+  const animated = await root.evaluate((node) => [node, ...node.querySelectorAll('*')].filter((el) => {
+    const style = getComputedStyle(el);
+    const durations = `${style.transitionDuration},${style.animationDuration}`.split(',').map((value) => Number.parseFloat(value) || 0);
+    return durations.some((value) => value > 0);
+  }).length);
+  if (motion.name === 'normal' && animated === 0) fail(`${context}: normal-motion mechanism has no progressive transition`);
+  if (motion.name === 'reduced' && animated !== 0) fail(`${context}: reduced-motion ctxmix still has ${animated} animated elements`);
+}
+
+async function exerciseGenericVisual(page, selector, route, mode, motion) {
+  const context = `${route.locale}/${route.slug}/${mode.name}/${motion.name}`;
+  const matches = page.locator(selector);
+  const count = await matches.count();
+  if (count !== 1) {
+    fail(`${context}: expected exactly one ${selector}, found ${count}`);
+    return null;
+  }
+  const root = matches.first();
+  if (!await root.isVisible()) {
+    fail(`${context}: visual ${selector} is not visible`);
+    return null;
+  }
+  const box = await root.boundingBox();
+  if (!box || box.width < 240 || box.height < 80) fail(`${context}: visual ${selector} invalid bounds ${JSON.stringify(box)}`);
+
+  if (selector === '.ctxmix') await checkCtxmix(page, root, route, mode, motion);
+  else {
+    const buttons = root.locator('button:visible:not([disabled])');
+    for (let index = 0; index < await buttons.count(); index += 1) {
+      const button = buttons.nth(index);
+      const label = ((await button.innerText()) || '').trim() || await button.getAttribute('aria-label');
+      if (!label) fail(`${context}: unlabelled control inside ${selector}`);
+      try {
+        if (mode.mobile) await button.tap(); else await button.click();
+        await page.waitForTimeout(motion.name === 'normal' ? 120 : 30);
+      } catch (error) {
+        fail(`${context}: ${selector} control ${index} cannot be activated: ${error.message}`);
+      }
+    }
+  }
+
+  return { selector, width: Math.round(box?.width ?? 0), height: Math.round(box?.height ?? 0) };
 }
 
 try {
   for (const route of routes) {
     for (const mode of viewports) {
-      const context = await browser.newContext({
-        viewport: mode.viewport,
-        isMobile: mode.mobile,
-        deviceScaleFactor: 1,
-        colorScheme: 'light',
-        reducedMotion: 'no-preference',
-      });
-      const page = await context.newPage();
-      const runtimeErrors = [];
-      page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
-      page.on('console', (message) => {
-        if (message.type() !== 'error') return;
-        const text = message.text();
-        if (isGenericResourceConsoleError(text)) return;
-        const location = message.location();
-        if (isTransientExternalFontUrl(location?.url)) return;
-        const where = location?.url
-          ? ` @ ${location.url}${Number.isInteger(location.lineNumber) ? `:${location.lineNumber}:${location.columnNumber}` : ''}`
-          : '';
-        runtimeErrors.push(`console: ${text}${where}`);
-      });
-      page.on('response', (response) => {
-        if (response.status() < 400) return;
-        const request = response.request();
-        if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
-        if (isPreviewOnlyHostedSitemapProbe(response.url(), request.resourceType())) return;
-        runtimeErrors.push(`http ${response.status()}: ${response.url()} [type=${request.resourceType()}]`);
-      });
-      page.on('requestfailed', (request) => {
-        if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
-        if (isPreviewOnlyHostedSitemapProbe(request.url(), request.resourceType())) return;
-        runtimeErrors.push(
-          `request failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown error'}) [type=${request.resourceType()}]`,
-        );
-      });
+      for (const motion of motionModes) {
+        const context = await browser.newContext({
+          viewport: mode.viewport,
+          isMobile: mode.mobile,
+          hasTouch: mode.mobile,
+          deviceScaleFactor: 1,
+          colorScheme: 'light',
+          reducedMotion: motion.reducedMotion,
+        });
+        const page = await context.newPage();
+        const runtimeEvents = [];
+        let phase = 'navigation';
+        let seq = 0;
+        let nextRequestId = 1;
+        const requestIds = new WeakMap();
+        const requestId = request => {
+          if (!requestIds.has(request)) requestIds.set(request, nextRequestId++);
+          return requestIds.get(request);
+        };
+        const pushRuntime = event => runtimeEvents.push({ seq: ++seq, phase, ...event });
 
-      const response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
-      if (!response?.ok()) throw new Error(`${route.path} returned ${response?.status() ?? 'no response'}`);
-      await page.evaluate(() => document.fonts.ready);
+        page.on('pageerror', (error) => pushRuntime({ type: 'pageerror', detail: String(error) }));
+        page.on('console', (message) => {
+          if (message.type() !== 'error') return;
+          const text = message.text();
+          if (isGenericResourceConsoleError(text)) return;
+          const location = message.location();
+          const where = location?.url ? ` @ ${location.url}:${location.lineNumber ?? 0}:${location.columnNumber ?? 0}` : '';
+          pushRuntime({ type: 'console', detail: `${text}${where}` });
+        });
+        page.on('response', (response) => {
+          if (response.status() < 400) return;
+          const request = response.request();
+          if (isPreviewOnlySitemapProbe(response.url(), request.resourceType())) return;
+          pushRuntime({
+            type: 'http',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            status: response.status(),
+            url: response.url(),
+          });
+        });
+        page.on('requestfailed', (request) => {
+          if (isPreviewOnlySitemapProbe(request.url(), request.resourceType())) return;
+          pushRuntime({
+            type: 'requestfailed',
+            requestId: requestId(request),
+            resourceType: request.resourceType(),
+            url: request.url(),
+            detail: request.failure()?.errorText ?? 'unknown',
+          });
+        });
 
-      if (route.lang) {
-        const htmlLang = await page.locator('html').getAttribute('lang');
-        if (htmlLang !== route.lang) throw new Error(`${route.path} html lang=${JSON.stringify(htmlLang)} expected ${route.lang}`);
-      }
-      const body = await page.locator('body').innerText();
-      for (const expected of route.expectText ?? []) {
-        if (!body.includes(expected)) throw new Error(`${route.path} missing visual teaching anchor ${JSON.stringify(expected)}`);
-      }
-      for (const forbidden of route.forbidText ?? []) {
-        if (body.includes(forbidden)) throw new Error(`${route.path} locale leakage ${JSON.stringify(forbidden)}`);
-      }
+        const runLabel = `${route.locale}/${route.slug}/${mode.name}/${motion.name}`;
+        let response;
+        let navigationError = null;
+        try {
+          phase = 'navigation';
+          response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
+        } catch (error) {
+          navigationError = error.message;
+          fail(`${runLabel}: navigation failed: ${error.message}`);
+        }
 
-      const initial = await page.evaluate(() => ({
-        viewportWidth: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-        scrollHeight: document.documentElement.scrollHeight,
-        brokenImages: [...document.images].filter((img) => img.complete && img.naturalWidth === 0).map((img) => img.currentSrc || img.src),
-      }));
-      if (initial.scrollWidth - initial.viewportWidth > 4) {
-        throw new Error(`${route.slug}/${mode.name} has ${initial.scrollWidth - initial.viewportWidth}px horizontal overflow`);
-      }
-      if (initial.brokenImages.length) {
-        throw new Error(`${route.slug}/${mode.name} has broken images: ${initial.brokenImages.join(', ')}`);
-      }
+        if (navigationError) {
+          phase = 'teardown';
+          try {
+            await context.close();
+          } catch (error) {
+            pushRuntime({ type: 'context-close', detail: String(error) });
+          }
+          const finalRuntime = runtimeEvents.map(event => ({ ...event }));
+          const runtimeVerdict = classifyRuntime(finalRuntime);
+          if (runtimeVerdict.unexpected.length) fail(`${runLabel}: browser errors after navigation failure: ${JSON.stringify(runtimeVerdict.unexpected)}`);
+          report.push({
+            route: route.path,
+            locale: route.locale,
+            viewport: mode.name,
+            motion: motion.name,
+            navigationError,
+            runtimeEvents: finalRuntime,
+            runtimeUnexpected: runtimeVerdict.unexpected,
+            expectedTeardownCancellations: runtimeVerdict.expectedTeardownCancellations,
+            verdictBasis: 'POST_CONTEXT_TEARDOWN',
+          });
+          continue;
+        }
 
-      const visualMetrics = [];
-      for (const selector of route.roots) visualMetrics.push(await exerciseVisual(page, selector));
-      await page.waitForTimeout(350);
+        if (!response?.ok()) fail(`${runLabel}: HTTP ${response?.status() ?? 'no response'}`);
+        phase = 'font-settle';
+        await page.evaluate(() => document.fonts.ready);
+        const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
+        if (!htmlLang.startsWith(route.locale)) fail(`${runLabel}: html lang=${JSON.stringify(htmlLang)}`);
 
-      const after = await page.evaluate(() => ({
-        viewportWidth: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth,
-        scrollHeight: document.documentElement.scrollHeight,
-      }));
-      if (after.scrollWidth - after.viewportWidth > 4) {
-        throw new Error(`${route.slug}/${mode.name} develops ${after.scrollWidth - after.viewportWidth}px overflow after interaction`);
-      }
-      if (runtimeErrors.length) {
-        throw new Error(`${route.slug}/${mode.name} emitted browser errors:\n${runtimeErrors.join('\n')}`);
-      }
+        phase = 'initial-layout';
+        const initial = await page.evaluate(() => ({
+          viewportWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          scrollHeight: document.documentElement.scrollHeight,
+          brokenImages: [...document.images].filter((img) => img.complete && img.naturalWidth === 0).map((img) => img.currentSrc || img.src),
+        }));
+        if (initial.scrollWidth > initial.viewportWidth + 4) fail(`${runLabel}: page horizontal overflow ${JSON.stringify(initial)}`);
+        if (initial.brokenImages.length) fail(`${runLabel}: broken images ${initial.brokenImages.join(', ')}`);
 
-      const stem = `${route.slug}-${mode.name}`;
-      await page.screenshot({ path: `${outputDir}/${stem}-full.png`, fullPage: true, animations: 'disabled' });
-      for (const selector of route.roots) {
-        const safeName = selector.replace(/^[.#]/, '').replace(/[^a-z0-9-]+/gi, '-');
-        const root = page.locator(selector).first();
-        await root.screenshot({ path: `${outputDir}/${stem}-${safeName}.png`, animations: 'disabled' });
+        phase = 'visual-interaction';
+        const visuals = [];
+        for (const selector of route.roots) {
+          const result = await exerciseGenericVisual(page, selector, route, mode, motion);
+          if (result) visuals.push(result);
+        }
+
+        phase = 'full-page-scroll';
+        await page.evaluate(async () => {
+          for (let y = 0; y < document.documentElement.scrollHeight; y += Math.max(280, innerHeight * .7)) {
+            scrollTo(0, y);
+            await new Promise((resolve) => setTimeout(resolve, 25));
+          }
+          scrollTo(0, document.documentElement.scrollHeight);
+        });
+        await page.waitForTimeout(250);
+
+        phase = 'post-interaction-layout';
+        const after = await page.evaluate(() => ({
+          viewportWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          scrollHeight: document.documentElement.scrollHeight,
+          brokenImages: [...document.images].filter((img) => img.complete && img.naturalWidth === 0).map((img) => img.currentSrc || img.src),
+        }));
+        if (after.scrollWidth > after.viewportWidth + 4) fail(`${runLabel}: overflow after full-page interaction ${JSON.stringify(after)}`);
+        if (after.brokenImages.length) fail(`${runLabel}: broken images after scroll ${after.brokenImages.join(', ')}`);
+
+        if (motion.name === 'normal') {
+          phase = 'screenshot';
+          await page.screenshot({ path: `${outputDir}/${route.locale}-${route.slug}-${mode.name}-full.png`, fullPage: true, animations: 'allow' });
+        }
+
+        phase = 'settle';
+        await page.waitForTimeout(150);
+        phase = 'teardown';
+        try {
+          await context.close();
+        } catch (error) {
+          pushRuntime({ type: 'context-close', detail: String(error) });
+        }
+
+        const finalRuntime = runtimeEvents.map(event => ({ ...event }));
+        const runtimeVerdict = classifyRuntime(finalRuntime);
+        if (runtimeVerdict.unexpected.length) {
+          fail(`${runLabel}: browser errors: ${JSON.stringify(runtimeVerdict.unexpected)}`);
+        }
+
+        report.push({
+          route: route.path,
+          locale: route.locale,
+          viewport: mode.name,
+          motion: motion.name,
+          initial,
+          after,
+          visuals,
+          runtimeEvents: finalRuntime,
+          runtimeUnexpected: runtimeVerdict.unexpected,
+          expectedTeardownCancellations: runtimeVerdict.expectedTeardownCancellations,
+          verdictBasis: 'POST_CONTEXT_TEARDOWN',
+        });
       }
-      const entry = { route: route.path, viewport: mode.name, initial, after, visuals: visualMetrics };
-      report.push(entry);
-      await writeFile(`${outputDir}/${stem}.json`, JSON.stringify(entry, null, 2));
-      await context.close();
     }
   }
-  await writeFile(`${outputDir}/report.json`, JSON.stringify(report, null, 2));
 } finally {
   await browser.close();
 }
+
+await writeFile(`${outputDir}/report.json`, JSON.stringify({ report, failures }, null, 2));
+if (failures.length) {
+  console.error(`Seguridad visual QA failed (${failures.length})`);
+  for (const message of failures) console.error(`- ${message}`);
+  process.exit(1);
+}
+console.log(`Seguridad visual QA PASS: ${routes.length} ES/EN routes × desktop/mobile × normal/reduced motion, with real touch on mobile and prompt-injection influence/authorization states.`);

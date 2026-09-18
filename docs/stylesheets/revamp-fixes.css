@@ -85,6 +85,65 @@
   text-underline-offset: .2em;
 }
 
+/*
+ * Material 9.7.7 mounts inline title/permalink tooltips lazily. In the built
+ * site an inactive tooltip can otherwise keep a viewport-wide inner block at
+ * a 1rem inline offset, making document.scrollWidth exceed the viewport after
+ * real scrolling/hover. Keep informational tooltips shrink-wrapped while
+ * preserving Material's positioning, transitions and pointer semantics.
+ */
+.md-tooltip2[role="tooltip"] > .md-tooltip2__inner {
+  inline-size: fit-content;
+  max-inline-size: min(calc(100vw - 2rem), 25rem);
+  box-sizing: border-box;
+}
+
+/*
+ * MathJax AssistiveMML is semantic AT-only content. Chromium can retain the
+ * intrinsic width of that visually hidden MathML subtree on narrow viewports,
+ * inflating document.scrollWidth even when the visible formula is responsive.
+ * Remove only the assistive subtree's layout contribution while preserving it
+ * in the accessibility tree; the visible mjx-container remains untouched.
+ */
+.md-typeset mjx-assistive-mml {
+  position: absolute !important;
+  inline-size: 1px !important;
+  block-size: 1px !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+/*
+ * The pre-Datacenters Chapter 5 agent-loop visual is a release-regression
+ * reference. Keep its mobile grid items shrinkable so a long translated detail
+ * cannot contribute its intrinsic width to document.scrollWidth. This is a
+ * containment fix only: desktop geometry and the teaching topology are unchanged.
+ */
+@media (max-width: 620px) {
+  .md-typeset .agc-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .md-typeset .agc-wrap .agc-main,
+  .md-typeset .agc-wrap .agc-loop-wrap,
+  .md-typeset .agc-wrap .agc-details,
+  .md-typeset .agc-wrap .agc-detail,
+  .md-typeset .agc-wrap .agc-detail-body {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 800px) {
   .s5-landing,
   .s5-landing > * { width: 100%; }

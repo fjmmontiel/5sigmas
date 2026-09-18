@@ -54,6 +54,11 @@
 - [Datacenters en el espacio](https://5sigmas.com/series/datacenters-espacio/00_presentacion_serie/index.html.md): viabilidad física y huella material del cómputo orbital.
 - [Seguridad en IA](https://5sigmas.com/series/seguridad-ia/00_presentacion_serie/index.html.md): prompt injection, jailbreaks, envenenamiento, red-teaming y controles de producción.
 - [Agentes de IA](https://5sigmas.com/series/agentes-ia/00_presentacion_serie/index.html.md): autonomía acotada, tools, memoria, estado, evaluación, seguridad y operación en producción.
+- [Agentes de voz en tiempo real](https://5sigmas.com/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/index.html.md): arquitecturas, turn-taking, latencia, tools, telefonía y evaluación para sistemas conversacionales de voz.
+- [Coding agents y agent harnesses](https://5sigmas.com/series/coding-agents-agent-harnesses/01-que-es-agent-harness/index.html.md): contexto de repositorio, aislamiento, contratos de tarea, permisos, verificación, recuperación y observabilidad.
+- [Context engineering, memoria y MCP](https://5sigmas.com/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/index.html.md): ensamblado de contexto, presupuestos, memoria, retrieval, MCP, extensiones y aislamiento.
+- [Ingeniería y economía de inferencia de LLMs](https://5sigmas.com/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/index.html.md): prefill, decode, KV cache, cuantización, optimizaciones, routing y benchmarking de serving.
+- [Evaluar sistemas de IA en producción](https://5sigmas.com/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/index.html.md): fronteras de evaluación, eval sets, jueces, trayectorias, experimentación online y feedback loops de producción.
 
 ## Ingeniería de sistemas de IA
 

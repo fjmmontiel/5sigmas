@@ -1,0 +1,197 @@
+schema_version: 1
+scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  locales: [es, en]
+  status: REQUALIFICATION_QA
+  article_golden: false
+
+exact_qa:
+  revision: 49
+  exact_head: 8d734702c0e5674393dedf70efbef9a399544994
+  run_id: 34999765129
+  conclusion: FAILURE_EXPECTED_TOUCH_CLASSIFIER_PLUS_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
+  artifact_id: 10409756114
+  artifact_retention_days: 1
+  artifact_expires_at: '2026-09-16T17:22:59Z'
+  artifact_sha256: 5e3ed34fea191fe0fd0d29f66309526578febb71d18ade2a9452dbb12ccfdc4a
+  site_facing_bytes_changed: false
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
+
+technical_results:
+  negative_regression_fixtures:
+    status: PASS
+    count: 26
+  publication_discovery_regression:
+    status: PASS
+    count: 5
+  strict_es_build: PASS
+  strict_en_build: PASS
+  publication_contract:
+    status: PASS
+    public_series: 13
+    presentation_series: 8
+    chapter_first_series: 5
+    public_chapters: 67
+    public_pages: 75
+    errors: 0
+  structured_provenance_locale_metadata: PASS
+  reciprocal_article_watch_locale_ui: PASS
+  focused_browser:
+    status: PASS
+    verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
+  contrast:
+    status: PASS
+    state_context_records: 128
+    normal_text_threshold: 4.5
+    failure_count: 0
+    verdict_basis: POST_CONTEXT_TEARDOWN
+  text_visibility:
+    status: PASS
+    contexts: 8
+    states_per_context: 4
+    failure_count: 0
+    verdict_basis: POST_CONTEXT_TEARDOWN
+  video_lifecycle:
+    status: PASS
+    verdict_basis: POST_CONTEXT_TEARDOWN_REQUEST_CORRELATED_MEDIA_LIFECYCLE
+  prompt_visual_states:
+    status: PASS
+    source_listener_repair_included: true
+  keyboard_focus:
+    status: PASS
+    contexts: 8
+    real_tab_focus_visible_enter: true
+    source_listener_repair_included: true
+  runtime_listener_lifetime:
+    status: PASS
+    expected_contexts: 16
+    observed_contexts: 16
+    failure_count: 0
+    verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
+  article_watch_touch:
+    status: FAIL_EXACT_QA_EIGHT_MEDIA_ABORT_CLASSIFICATIONS
+    contexts: 8
+    failure_contexts: 8
+    common_event:
+      type: requestfailed
+      detail: net::ERR_ABORTED
+      resource_type: media
+      request_id: req-1
+    failures:
+      - { context: es/presentation/mobile/no-preference, phase: watch-interaction, media: 'https://5sigmas.com/series/seguridad-ia/00_presentacion_serie.mp4' }
+      - { context: es/presentation/mobile/reduce, phase: watch-interaction, media: 'https://5sigmas.com/series/seguridad-ia/00_presentacion_serie.mp4' }
+      - { context: en/presentation/mobile/no-preference, phase: watch-interaction, media: 'https://5sigmas.com/en/series/seguridad-ia/00_presentacion_serie.mp4' }
+      - { context: en/presentation/mobile/reduce, phase: watch-interaction, media: 'https://5sigmas.com/en/series/seguridad-ia/00_presentacion_serie.mp4' }
+      - { context: es/prompt/mobile/no-preference, phase: watch-interaction, media: 'https://5sigmas.com/series/seguridad-ia/01-prompt-injection.mp4' }
+      - { context: es/prompt/mobile/reduce, phase: article-to-watch, media: 'https://5sigmas.com/series/seguridad-ia/01-prompt-injection.mp4' }
+      - { context: en/prompt/mobile/no-preference, phase: watch-interaction, media: 'https://5sigmas.com/en/series/seguridad-ia/01-prompt-injection.mp4' }
+      - { context: en/prompt/mobile/reduce, phase: watch-interaction, media: 'https://5sigmas.com/en/series/seguridad-ia/01-prompt-injection.mp4' }
+
+fail_closed_global_debt:
+  source_audit:
+    status: FAIL
+    target_series: 7
+    routes_per_locale: 42
+    locale_pages: 84
+    findings:
+      VIDEO_CAPTIONS_MISSING: 24
+      VIDEO_CHAPTERS_MISSING: 24
+      VIDEO_DECLARATION_MISSING: 60
+      VIDEO_SUMMARY_MISSING: 18
+      VIDEO_TITLE_MISSING: 9
+      VIDEO_TRANSCRIPT_MISSING: 24
+  rendered_audit:
+    status: FAIL
+    findings:
+      RAW_TEX_RENDERED: 28
+      VIDEO_CAPTIONS_MISSING: 24
+      VIDEO_CHAPTERS_MISSING: 24
+      VIDEO_DECLARATION_MISSING: 60
+      VIDEO_NOT_RENDERED: 60
+      VIDEO_SUMMARY_MISSING: 18
+      VIDEO_TITLE_MISSING: 9
+      VIDEO_TRANSCRIPT_MISSING: 24
+  media:
+    status: FAIL
+    narration_status: VOICE_MISSING
+    exact_blocker_count: 16
+    blockers:
+      VIDEO_AUDIO_STREAM_MISSING: 4
+      VIDEO_CAPTIONS_MISSING: 4
+      VIDEO_TRANSCRIPT_MISSING: 4
+      VIDEO_CHAPTERS_MISSING: 4
+    mp4s: H264_1920x1080_YUV420P_DISTINCT_ES_EN_SILENT
+    forbidden_substitution_performed: false
+
+revision_49_touch_diagnosis_and_repair:
+  diagnosis: >-
+    The previous article-watch gate treated every pre-teardown ERR_ABORTED as fatal. Revision 49 proved that real mobile
+    article↔watch navigation and watch-page native media loading legitimately cancel the exact native media request while the
+    navigation contract itself succeeds. Seven failures were emitted during watch-interaction and one during article-to-watch.
+    A blanket allow-list would be equally incorrect, so the repair is evidence-correlated rather than phase-only.
+  repair_commit: 9800bc818901d28b9d8bdae3dfbcb53af7a3b76b
+  repair_status: IMPLEMENTED_PENDING_EXACT_QA
+  repair_policy:
+    - context-close ERR_ABORTED may be expected only during actual teardown
+    - navigation media cancellation requires resourceType=media, exact expected native media URL, explicit article-to-watch or watch-to-article phase, and successful destination navigation
+    - watch-interaction range cancellation requires exact native media URL, prior HTTP 200/206 for the same Request before cancellation, watch page reached, source match, readyState>=1, and no media.error
+    - wrong URL, non-media requests, failed destination, missing response proof, different request, response after abort, unhealthy player, non-abort failures, pageerror, console errors and HTTP errors remain fatal
+  local_verification:
+    node_syntax_check: PASS
+    classifier_self_test: PASS
+    positive_cases: 4
+    negative_mutations: 12
+    browser_exact_qa_after_repair: NOT_RUN_THIS_CHECKPOINT
+    reason: GROUP_CI_TO_NEXT_USEFUL_INTEGRATION_MILESTONE
+
+other_gate_repairs_this_checkpoint:
+  keyboard_focus:
+    commit: d57b30ead67605c6cb9921f469bd57779ec51908
+    revision_49_exact_qa: PASS
+    listener_lifetime: THROUGH_CONTEXT_TEARDOWN
+    verdict_basis: POST_CONTEXT_TEARDOWN
+    blanket_err_aborted: false
+  prompt_visual_states:
+    concurrent_commit_reused: 0f4e27c03d429d64a84392235f326f173bdfb463
+    revision_49_exact_qa: PASS
+  capture_security_visuals:
+    commit: 377731a886aca18619fa477a9aceca428b302743
+    status: IMPLEMENTED_PENDING_DIRECT_EXECUTION
+    listener_lifetime: THROUGH_CONTEXT_TEARDOWN
+    verdict_basis: POST_CONTEXT_TEARDOWN
+    blanket_err_aborted: false
+
+editorial_review:
+  new_manual_pixel_review_performed: false
+  new_manual_pedagogy_review_performed: false
+  reason: SITE_FACING_BYTES_UNCHANGED
+  prior_same_agent_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  prior_same_agent_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  independent_editorial_review: false
+  article_golden: false
+
+sources_and_locale:
+  material_claims_changed: false
+  new_factual_research_required_by_gate_only_changes: false
+  strict_es_en: PASS_REVISION_49
+  structured_provenance_locale_metadata: PASS_REVISION_49
+
+release_contract_281:
+  status: CHANGES_REQUIRED_FRESH_UNCACHED_LIVE_VERIFICATION
+  latest_known_receipt_comment: 5683127656
+  linkedin_lane_touched: false
+  linkedin_write_queue_activation: false
+  seventy_two_hour_clock_restarted: false
+  preserve_issue_279: true
+
+next_gap:
+  stay_on_series: seguridad-ia
+  stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
+  do_not_start: 02-jailbreaks
+  immediate: >-
+    Exact-QA the repaired article-watch touch classifier together with direct execution of capture_security_visuals on the same
+    stable gate revision. Keep SOURCE, RENDERED, MEDIA, PIXEL_REVIEW and PEDAGOGY_REVIEW fail-closed where current evidence is
+    absent; do not inherit prior technical success as editorial certification.
+  first_external_blocker: AUTHORIZED_NARRATION_AUDIO
+  dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]

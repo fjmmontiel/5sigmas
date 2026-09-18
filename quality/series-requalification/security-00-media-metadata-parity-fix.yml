@@ -1,0 +1,82 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  active_series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+finding:
+  severity: P2
+  code: SECURITY00_ES_EN_VIDEO_SUMMARY_CLAIM_DRIFT
+  source_es: docs/series/seguridad-ia/00_presentacion_serie.md
+  source_en_media: locales/en/media.yml
+  explanation: >-
+    The Spanish native video summary teaches untrusted input -> influence ->
+    authorization boundary -> action, while the English native video summary
+    previously introduced persistence and generic controls instead of preserving
+    the authorization-boundary mechanism. Both locales declared media, so simple
+    declaration parity did not detect the claim drift.
+
+repair:
+  en_media_commit: e39e9584406a28058de10304f53b3a81d3f9f7a6
+  en_summary_after: >-
+    How untrusted input can influence an AI system and which authorization
+    boundaries limit whether that influence becomes an action.
+  security01_checked_as_control: true
+  security01_summary_claims_aligned: true
+  datacenters_or_pre_datacenters_modified: false
+
+regression_guard:
+  script: scripts/validate_security_media_metadata_parity.py
+  commit: 0b839f0d3d8eb45ed30758e27d4612c668a39471
+  positive_contract: SECURITY00_AND_SECURITY01_REVIEWED_ES_EN_TITLES_AND_SUMMARIES
+  negative_mutations:
+    - STALE_SECURITY00_EN_SUMMARY
+    - MISSING_SECURITY01_EN_SUMMARY
+  local_logic_self_test: PASS
+  canonical_diagnostic_wired: false
+  state: PENDING_CANONICAL_INTEGRATION_FAIL_CLOSED
+
+editorial_effect:
+  published_branch_metadata_changed: true
+  article_body_claims_changed: false
+  video_binary_changed: false
+  pixel_review_current_head: false
+  pedagogy_review_current_head: false
+  reason: >-
+    The English watch/video summary text is site-facing; exact-head rendered
+    desktop/mobile normal/reduced review must be repeated before any editorial PASS.
+
+existing_blockers_preserved:
+  video_schema_accessibility_92_gt_91: true
+  voice_missing: true
+  missing_security_audio_streams: 4
+  missing_security_captions: 4
+  missing_security_transcripts: 4
+  missing_security_curated_chapter_sets: 4
+  global_h2_obligations: 1198
+  no_threshold_whitening: true
+  no_generated_cloned_or_substituted_francisco_voice: true
+
+integration:
+  github_action_launched_for_this_patch: false
+  reason: >-
+    First persist the source repair and deterministic negative guard; wire the
+    guard into the existing diagnostic before one justified focused integration run.
+  production_pr: false
+  production_merge: false
+  deployed: false
+
+next_gap:
+  - WIRE_SECURITY_MEDIA_METADATA_PARITY_INTO_CANONICAL_DIAGNOSTIC_AND_FINAL_ENFORCEMENT
+  - RUN_ONE_FOCUSED_SECURITY_INTEGRATION_ON_EXACT_HEAD
+  - RERENDER_AND_MANUALLY_INSPECT_SECURITY00_EN_ARTICLE_WATCH_SUMMARY_DESKTOP_MOBILE_NORMAL_REDUCED
+  - KEEP_92_GT_91_AND_VOICE_MISSING_FAIL_CLOSED
+  - DO_NOT_ADVANCE_TO_SECURITY02

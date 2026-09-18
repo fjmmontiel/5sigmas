@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "contract_issue": 305,
+  "amendment_comment": 5655569434,
+  "excluded_through": "datacenters-espacio",
+  "media_policy": {
+    "video_required_for_every_target_route": true,
+    "native_video_required_per_locale": true,
+    "video_opt_out_allowed": false,
+    "required_locales": ["es", "en"]
+  },
+  "series": {
+    "seguridad-ia": [
+      "00_presentacion_serie.md", "01-prompt-injection.md", "02-jailbreaks.md", "03-envenenamiento.md", "04-red-teaming.md", "05-controles-produccion.md"
+    ],
+    "agentes-ia": [
+      "00_presentacion_serie.md", "01-que-es-un-agente.md", "02-anatomia-de-un-agente.md", "03-como-evaluar-un-agente.md", "04-seguridad-agentes.md", "05-de-la-demo-a-produccion.md"
+    ],
+    "agentes-voz-tiempo-real": [
+      "01-arquitecturas-de-voz.md", "02-turn-taking.md", "03-presupuesto-latencia.md", "04-tools-estado-acciones-asincronas.md", "05-webrtc-sip-telefonia-red.md", "06-evaluacion-observabilidad-reliability.md"
+    ],
+    "coding-agents-agent-harnesses": [
+      "01-que-es-agent-harness.md", "02-contexto-workspace-sandboxing-aislamiento.md", "03-specs-planificacion-task-decomposition-checkpoints.md", "04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md", "05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md", "06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md"
+    ],
+    "context-engineering-memory-mcp": [
+      "01-context-engineering-vs-prompt-engineering.md", "02-context-budgets-prioritisation-compaction-provenance.md", "03-memory-architectures-working-episodic-semantic-persistent-state.md", "04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md", "05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md", "06-skills-plugins-subagents-hooks-context-isolation-evaluation.md"
+    ],
+    "llm-inference-engineering-economics": [
+      "01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md", "02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md", "03-quantization-parallelism-memory-quality-tradeoffs.md", "04-speculative-decoding-prefix-caching-latency-optimisations.md", "05-model-routing-fallback-caching-workload-aware-serving.md", "06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md"
+    ],
+    "evaluating-ai-systems-production": [
+      "01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md", "02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md", "03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md", "04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md", "05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md", "06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md"
+    ]
+  }
+}

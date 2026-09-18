@@ -1,0 +1,164 @@
+schema_version: 1
+revision: 93
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  diagnostic_scope: focused_security_00_01
+  full_catalogue_browser_sweep_repeated: false
+  full_catalogue_browser_skip_reason: focused_gate_repair_no_new_catalogue_wide_published_byte_change
+
+exact_head:
+  audited_head: d7beff89f002814d002bc3c25f6e34f47d99b4db
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  branch_behind_main: 0
+  branch_ahead_main_before_receipt_write: 442
+  structured_metadata_gate_repair_in_checkout: true
+
+technical_diagnostic:
+  action: 35216067912
+  workflow_run_number: 78
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  final_enforcement_failure_is_real_debt: true
+  started_at_utc: 2026-09-17T11:30:44Z
+  completed_at_utc: 2026-09-17T11:43:54Z
+  artifact:
+    id: 10495727292
+    name: series-experience-diagnostic
+    size_bytes: 167231
+    retention_days: 1
+    digest: sha256:72da8c637d44c24e205c99d492a55c17a740039f8ae6940da700959a7097d47b
+  negative_regression_fixtures: PASS
+  curriculum_video_inventory_mutation_fixtures: PASS
+  publication_discovery_regression: PASS
+  independent_source_coverage_audit_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  curriculum_video_current_state_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  bilingual_video_schema_accessibility_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  native_media_probe_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  structured_metadata: PASS_SOURCE_DERIVED_DATES
+  article_watch_contract: PASS
+  reviewed_media_metadata_and_claim_parity: PASS
+  complete_rendered_html_audit_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  shared_security_plus_datacenters_pre_datacenters_regression: PASS
+  focused_security_interaction_layout_playback: PASS
+  contrast_and_text_visibility: PASS
+  lifecycle_keyboard_touch_normal_reduced: PASS
+  real_touch_article_watch_round_trip: PASS
+  prompt_injection_visual_states: PASS
+  keyboard_focus: PASS
+  runtime_resource_listeners_through_context_teardown: PASS
+  final_enforcement: FAIL_EXPECTED_REAL_DEBT
+  global_336_browser_repeated: false
+
+technical_fail_closed_outcomes:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  reason:
+    - required_video_source_contract_remains_incomplete
+    - required_video_curriculum_obligations_remain_open
+    - video_accessibility_contract_remains_92_gt_91
+    - voice_captions_transcripts_and_curated_key_moments_remain_missing
+    - required_locale_videos_remain_not_rendered
+    - technical_green_steps_do_not_substitute_for_catalogue_editorial_pixel_or_pedagogy_review
+
+coverage:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  expected_locale_video_obligations: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE: 24
+  VIDEO_REQUIRED_UNDECLARED: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  BLOCKED_CURATED_KEY_MOMENTS_MISSING: 154
+  BLOCKED_VIDEO_UNDECLARED: 1044
+  findings:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SECTION_MAP_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+    VIDEO_NOT_RENDERED: 60
+  raw_tex_last_full_catalogue_visible: 0
+
+video_accessibility_contract:
+  locale_surfaces: 92
+  missing_captions_transcript_surfaces: 92
+  legacy_missing_captions_transcript_budget: 91
+  debt_budget_raised: false
+  result: FAIL_CLOSED_92_GT_91
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_video_identity: PASS_DISTINCT_BINARIES
+  format: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+editorial_evidence_boundary:
+  new_manual_pixel_review_for_rev93: false
+  new_manual_pedagogy_review_for_rev93: false
+  rev92_security00_manual_evidence_preserved_as_site_byte_scoped_history: true
+  security01_manual_pedagogy_pass_claimed: false
+  global_PIXEL_REVIEW: false
+  global_PEDAGOGY_REVIEW: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  linkedin_action: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  fresh_no_cache_live_verification_obtained_in_rev93: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate:
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_WITHOUT_ADVANCING_ARTICLE
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
+    - DO_NOT_FABRICATE_CHAPTER_TIMINGS_FROM_INSUFFICIENT_VIDEO_EVIDENCE
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

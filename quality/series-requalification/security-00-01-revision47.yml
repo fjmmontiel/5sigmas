@@ -1,0 +1,159 @@
+schema_version: 1
+scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  locales: [es, en]
+  status: REQUALIFICATION_QA_NO_GOLDEN
+  article_golden: false
+
+exact_qa:
+  revision: 47
+  run_id: 34961682456
+  exact_head: afe6a46e109c3105064a8baa32c8073246fa33e1
+  artifact_id: 10394042416
+  artifact_retention_days: 1
+  workflow_status: COMPLETED_FAILURE_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_DEBT
+  diagnostic_scope: focused_security_00_01
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
+
+runtime_listener_lifetime:
+  status: PASS_EXACT_QA
+  verdict_basis: POST_CONTEXT_TEARDOWN_CORRELATED_REQUEST_LIFECYCLE_V2
+  expected_contexts: 16
+  observed_contexts: 16
+  failure_count: 0
+  dimensions: ES_EN_X_PRESENTATION_PROMPT_X_DESKTOP_1440_MOBILE_390_X_NORMAL_REDUCED
+  classification: >-
+    Generic request failures remain fatal. A media-seek net::ERR_ABORTED cancellation is accepted only when it is
+    same-source and correlated to the exact request identity with successful 200/206 response headers on that request
+    before cancellation or a later same-source successful replacement response, the seek has settled, readyState is at
+    least 2, media.error is absent, and post-seek playback advances. The final verdict is computed only after context
+    teardown.
+  negative_mutations:
+    generic_abort_fatal: PASS
+    unrelated_request_id_fatal: PASS
+    missing_response_proof_fatal: PASS
+    wrong_source_fatal: PASS
+    unsettled_seek_fatal: PASS
+    media_error_fatal: PASS
+    non_advancing_post_seek_playback_fatal: PASS
+    non_err_aborted_failure_fatal: PASS
+
+technical_active_set:
+  negative_regression_fixtures: PASS
+  public_series_discovery_regression: PASS
+  independent_source_coverage_audit: FAIL_CLOSED_GLOBAL_DEBT
+  strict_es_build: PASS
+  publication_contract: PASS
+  security_native_media_probe: FAIL_CLOSED_ACTIVE_MEDIA_DEBT
+  strict_en_build: PASS
+  structured_provenance_locale_metadata: PASS
+  reciprocal_article_watch_locale_ui: PASS
+  rendered_html_audit: FAIL_CLOSED_GLOBAL_DEBT
+  focused_browser_layout_playback: PASS
+  wcag_contrast_and_text_visibility: PASS_TECHNICAL_CURRENT_GATE_VERSION_AT_EXACT_HEAD
+  lifecycle_normal_reduced: PASS
+  real_touch_article_watch: PASS
+  prompt_visual_states: PASS
+  real_keyboard_focus: PASS
+  runtime_listener_lifetime: PASS_EXACT_QA
+  conjunctive_enforcement: FAIL_EXPECTED_SOURCE_RENDERED_GLOBAL_AND_MEDIA_DEBT
+
+specialized_gate_followup:
+  status: IN_PROGRESS_NOT_CERTIFIED
+  discovery: >-
+    After revision 47 proved the request-correlated sentinel, a source audit confirmed that several specialized Security
+    browser gates still use blanket ERR_ABORTED filtering and/or compute their runtime verdict before context.close().
+    Their green technical result therefore cannot by itself satisfy the reinforced listener-lifetime contract.
+  affected_gates:
+    - scripts/validate_security_requalification_browser.mjs
+    - scripts/validate_security_video_lifecycle.mjs
+    - scripts/validate_security_article_watch_touch.mjs
+    - scripts/validate_security_prompt_visual_states.mjs
+    - scripts/validate_security_contrast.mjs
+    - scripts/validate_security_text_visibility.mjs
+    - scripts/validate_security_keyboard_focus.mjs
+    - scripts/capture_security_visuals.mjs
+  first_repair:
+    file: scripts/validate_security_contrast.mjs
+    commit: 99107ba02cbcfe72fcf37b117ffadb29863f9faf
+    status: IMPLEMENTED_PENDING_EXACT_QA
+    site_facing_bytes_changed: false
+    repair: >-
+      Removed blanket pre-teardown ERR_ABORTED filtering from the contrast gate, added explicit navigation/interaction/
+      teardown phases plus console/pageerror/requestfailed/HTTP retention, computes runtime failure only after
+      context.close(), and permits only teardown-phase ERR_ABORTED as expected teardown cancellation. Added deterministic
+      self-test mutations proving interaction aborts and every non-abort teardown error remain fatal. WCAG threshold 4.5
+      and teaching-text opacity threshold are unchanged.
+  next_gate: scripts/validate_security_text_visibility.mjs
+
+editorial_review:
+  new_manual_review_performed_this_revision: false
+  reason: SITE_FACING_BYTES_UNCHANGED
+  site_facing_head: b44a3e9d25893cb2618d78f1d1203045bec896d3
+  reviewer_independence: SAME_AGENT
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  prior_review_artifact: 10383286488
+  note: >-
+    Revision 47 and the pending specialized-gate repair change QA harness/evidence only. No new PIXEL_REVIEW or
+    PEDAGOGY_REVIEW is claimed and the revision-43 same-agent review is not independent certification or ARTICLE_GOLDEN.
+
+media:
+  status: FAIL
+  narration_status: VOICE_MISSING
+  voice_policy: AUTHORIZED_EXISTING_NARRATION_ONLY
+  exact_blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  locale_identity: PASS_DISTINCT_ES_EN_MEDIA
+  media_probe_summary: H264_1920x1080_YUV420P_DISTINCT_ES_EN_SILENT
+  forbidden_substitutions:
+    - generated_or_cloned_Francisco_voice
+    - alternate_voice_as_fallback
+    - fabricated_captions_transcript_or_key_moment_timing
+
+catalogue_requalification:
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  publication_discovery:
+    public_series: 13
+    presentation_series: 8
+    chapter_first_series: 5
+    public_chapters: 67
+    public_pages: 75
+    errors: 0
+  current_open_counts:
+    RAW_TEX_RENDERED: 28
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+
+sources_and_locale:
+  material_claims_changed: false
+  primary_source_research_required_by_this_revision: false
+  strict_es_en: PASS
+  structured_provenance_locale: PASS
+  note: No material claim, number, formula, caveat, reference or locale copy changed in revision 47 or the pending gate-only repair.
+
+release:
+  pr_created: false
+  merged: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified: false
+  linkedin_lane_modified: false
+
+next_gap:
+  exact: >-
+    Continue harmonizing specialized Security gates, next validate_security_text_visibility.mjs, so blanket ERR_ABORTED
+    filtering is removed and verdicts include teardown. Do not spend another CI run until a useful integration milestone.
+    After deterministic gate debt is closed, the external active-set blocker remains authorized narration/audio -> captions
+    -> transcript -> curated chapters/key moments. Do not start 02-jailbreaks and do not grant ARTICLE_GOLDEN.

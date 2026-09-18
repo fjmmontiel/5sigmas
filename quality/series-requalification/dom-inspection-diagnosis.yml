@@ -1,0 +1,83 @@
+schema: 1
+program_state: REQUALIFICATION
+certification: PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+active_series: seguridad-ia
+active_article: 00_presentacion_serie
+
+rev72_source:
+  action_run: 35118349682
+  audited_head: 7911817e165bb8352efecf67768895194d685f0f
+  catalog_pages: 84
+  browser_contexts: 336
+  browser_context_timeout_count: 1
+  timeout_context:
+    locale: en
+    route: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+    width: 1440
+    motion: reduce
+    phase: dom-inspection
+    observed_phase_ms: 23149
+  same_route_non_timeout_dom_ms_min: 6.5
+  same_route_non_timeout_dom_ms_max: 13.79
+  next_worst_completed_catalog_dom_ms: 92.14
+
+rev73_focused_diagnostic:
+  action_run: 35126652537
+  audited_head: c8e26e4770074b35d85a6c4b6e4036de76285ac4
+  artifact_id: 10458874725
+  artifact_retention_days: 1
+  route: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+  canonical_context_budget_ms: 25000
+  per_probe_diagnostic_budget_ms: 5000
+  contexts: 16
+  serial_contexts: 8
+  parallel2_contexts: 8
+  repetitions_per_context: 2
+  anomalies: 0
+  max_total_context_ms: 2251.98
+  max_dom_inspection_host_ms: 167.99
+  max_subprobe_host_ms:
+    text_scan: 20.67
+    snippet_scan: 11.67
+    svg_label_geometry: 6.05
+    pannable_geometry: 7.02
+    document_geometry: 4.89
+    image_scan: 4.85
+    animation_scan: 4.91
+    control_scan: 9.13
+  conclusion: >-
+    The rev72 23.149 s event is not reproducible as intrinsic route complexity and is not
+    reproduced by the same two-worker concurrency. The current monolithic browser-side DOM
+    inspection is therefore a nondeterministic renderer/protocol stall candidate. Do not
+    increase the 25 s canonical context budget and do not add a permissive retry.
+
+required_hardening:
+  - Split the canonical monolithic DOM inspection into named bounded host-observed subprobes.
+  - Preserve every existing assertion and the overall 25000 ms context budget.
+  - Fail closed with a specific DOM_SUBPROBE_TIMEOUT rather than silently retrying or skipping.
+  - Add negative fixtures for a deliberately stalled subprobe and for leaked raw TeX outside protected math roots.
+  - Re-run Security plus Datacenters/pre-Datacenters regression before the next 84-page full sweep.
+
+media_blocker:
+  status: VOICE_MISSING
+  media_pass: false
+  note: Security00/01 ES and EN native videos remain without authorized narration, captions, transcript, and curated key moments.
+
+editorial_scope:
+  rev72_security00_pixel_review_this_run: PARTIAL_FRESH_INSPECTION
+  inspected: >-
+    Eight Security00 whole-page ES/EN desktop/mobile normal/reduced captures were inspected in
+    full-page tiled form, plus all eight corresponding primary visual viewport captures.
+  observed_new_p0_p1_p2: none
+  formal_pixel_review_pass: false
+  reason: Playback/intermediate interactive states were not manually re-reviewed end-to-end in this run.
+  pedagogy_review_pass: false
+  prior_evidence: Security00 rev66 same-agent editorial review remains the last complete manual pedagogy evidence; Security01 inherits nothing.
+
+release:
+  merged: false
+  deployed: false
+  linkedin_write: false
+  pr_310_material_change: false
