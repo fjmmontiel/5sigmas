@@ -10,8 +10,9 @@ receipt derived independently from future narration.
 
 Owner amendment 5727362172 additionally makes technical INDEXABILITY a separate
 current GOLDEN gate. When rendered ``site`` bytes are supplied, this facade runs
-the dedicated Security indexability validator and keeps its result distinct from
-SOURCE/MEDIA. Google selection/index state is never inferred here.
+the dedicated Security indexability validator (including its negative mutation
+fixtures) and keeps its result distinct from SOURCE/MEDIA. Google selection or
+index state is never inferred here.
 """
 from __future__ import annotations
 
@@ -84,7 +85,6 @@ def _recount(report: dict) -> Counter:
 
 def _security_current_blockers(report: dict) -> list[dict]:
     blockers: list[dict] = []
-    # Global structural findings (scope/nav reconciliation) remain blockers.
     for item in report.get("findings", []):
         if isinstance(item, dict) and item.get("code"):
             blockers.append({"scope": "global", **item})
@@ -100,13 +100,7 @@ def _security_current_blockers(report: dict) -> list[dict]:
             code = str(item["code"])
             if code in DEFERRED_VOICE_CODES:
                 continue
-            blockers.append(
-                {
-                    "route": route,
-                    "locale": str(page.get("locale") or ""),
-                    **item,
-                }
-            )
+            blockers.append({"route": route, "locale": str(page.get("locale") or ""), **item})
     return blockers
 
 
@@ -120,13 +114,7 @@ def _indexability_blockers(indexability_report: dict | None) -> list[dict]:
         if not isinstance(row, dict):
             continue
         for item in row.get("blockers", []):
-            blockers.append(
-                {
-                    "route": row.get("route"),
-                    "locale": row.get("locale"),
-                    "detail": str(item),
-                }
-            )
+            blockers.append({"route": row.get("route"), "locale": row.get("locale"), "detail": str(item)})
     return blockers
 
 
@@ -143,20 +131,15 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
             continue
         locale_maps = maps.get(locale) if isinstance(maps.get(locale), dict) else {}
         section_map = locale_maps.get(route) if isinstance(locale_maps, dict) else None
-        # Missing supplemental editorial evidence must stay fail-closed through
-        # the legacy VIDEO_SECTION_MAP_MISSING finding.
         if not isinstance(section_map, list) or not section_map:
             continue
         video = page.get("video") if isinstance(page.get("video"), dict) else {}
         findings = [
-            item
-            for item in page.get("findings", [])
+            item for item in page.get("findings", [])
             if not (isinstance(item, dict) and item.get("code") in SECTION_MAP_CODES)
         ]
         map_findings, normalized = legacy._video_section_map_findings(
-            list(page.get("sections", [])),
-            list(video.get("video_chapters", [])),
-            section_map,
+            list(page.get("sections", [])), list(video.get("video_chapters", [])), section_map
         )
         findings.extend(map_findings)
         page["findings"] = findings
@@ -164,19 +147,16 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
         page["video"] = video
 
     counts = _recount(report)
-    voice_counts = {
-        code: count for code, count in sorted(counts.items()) if code in DEFERRED_VOICE_CODES
-    }
+    voice_counts = {code: count for code, count in sorted(counts.items()) if code in DEFERRED_VOICE_CODES}
     blockers = _security_current_blockers(report)
 
     indexability_report: dict | None = None
     if site is not None:
+        security_indexability._self_test()
         indexability_report = security_indexability.audit_indexability(root, site)
     indexability_blockers = _indexability_blockers(indexability_report)
     indexability_pass: bool | None = (
-        bool(indexability_report.get("INDEXABILITY_PASS"))
-        if isinstance(indexability_report, dict)
-        else None
+        bool(indexability_report.get("INDEXABILITY_PASS")) if isinstance(indexability_report, dict) else None
     )
 
     report["voice_enhancement"] = {
@@ -185,16 +165,12 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
         "owner_amendment_comment": OWNER_AMENDMENT,
         "legacy_findings": voice_counts,
     }
-    report["indexability"] = (
-        indexability_report
-        if indexability_report is not None
-        else {
-            "owner_amendment_comment": INDEXABILITY_AMENDMENT,
-            "INDEXABILITY_PASS": None,
-            "status": "PENDING_RENDERED_SITE",
-            "meaning": "technical indexability only; Google selection/index state is separate",
-        }
-    )
+    report["indexability"] = indexability_report if indexability_report is not None else {
+        "owner_amendment_comment": INDEXABILITY_AMENDMENT,
+        "INDEXABILITY_PASS": None,
+        "status": "PENDING_RENDERED_SITE",
+        "meaning": "technical indexability only; Google selection/index state is separate",
+    }
     report["owner_current_gate"] = {
         "owner_amendment_comment": OWNER_AMENDMENT,
         "indexability_amendment_comment": INDEXABILITY_AMENDMENT,
@@ -202,9 +178,7 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
         "status": "PASS" if not blockers and indexability_pass is not False else "FAIL",
         "blockers": blockers,
         "INDEXABILITY_PASS": indexability_pass,
-        "indexability_status": (
-            "PASS" if indexability_pass is True else "FAIL" if indexability_pass is False else "PENDING_RENDERED_SITE"
-        ),
+        "indexability_status": "PASS" if indexability_pass is True else "FAIL" if indexability_pass is False else "PENDING_RENDERED_SITE",
         "indexability_blockers": indexability_blockers,
         "voice_enhancement": "DEFERRED_OWNER_LOCAL",
         "media_visual_and_voice_are_separate": True,
@@ -233,11 +207,7 @@ def main() -> int:
     root = args.root.resolve()
     scope_path = args.scope if args.scope.is_absolute() else root / args.scope
     try:
-        report = audit(
-            root,
-            json.loads(scope_path.read_text(encoding="utf-8")),
-            args.site.resolve() if args.site else None,
-        )
+        report = audit(root, json.loads(scope_path.read_text(encoding="utf-8")), args.site.resolve() if args.site else None)
     except (OSError, ValueError, json.JSONDecodeError, legacy.yaml.YAMLError) as exc:
         print(f"EXPERIENCE_AUDIT_ERROR: {exc}")
         return 2
