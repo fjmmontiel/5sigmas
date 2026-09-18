@@ -2,54 +2,82 @@
 
 Last updated: 2026-09-18
 
-This file is the durable source of truth for the code-driven video migration. A release unit may open exactly one PR only after every video/localization in that unit is GOLDEN.
+Durable source of truth for the code-driven video migration. A release unit may open exactly one PR only after every video/localization in that unit is **Technical GOLDEN**. **Golden Example** is a separate curated status and always requires explicit user approval after review.
 
 ## Active release unit — `modelos-razonadores`
 
 **State:** IN PROGRESS — no release PR allowed yet.
 
-**Locked visual identity:** Teal reasoning. `accent=#26A69A`, `accentText=#00776F`, `accentSurface=#E7F4F0`. The accent is fixed for the complete series in Spanish and English. It is functional only: key words/metrics, active nodes/paths, selected results and progress. Decorative gradients, per-scene palette changes and ornamental multicolor fills are forbidden. `accentText` is required to clear WCAG AA against the neutral base background.
+**Locked visual identity:** Teal reasoning. `accent=#26A69A`, `accentText=#00776F`, `accentSurface=#E7F4F0`. The accent is fixed for the complete series in Spanish and English. Functional uses: key words/metrics, active nodes/paths, selected results and progress. Decorative gradients, per-scene palette changes and ornamental multicolor fills are forbidden. `accentText` must clear WCAG AA against the neutral base.
+
+### Review / exemplar policy
+
+- `technical_golden`: all engineering, editorial, visual and delivery gates pass.
+- `golden_example_approved`: curated showcase status; never automatic and never inferred from Technical GOLDEN.
+- After the complete release unit is Technical GOLDEN and its single PR/review package exists, present all finished videos to the user for review. Prefer a dedicated Google Drive folder when writable Drive access exists; otherwise use stable direct links.
+- Promote only explicitly approved videos to Golden Examples. Silence is not approval.
+- Current review state: `not_ready`; no review package or review email because the release unit is not Technical GOLDEN.
 
 ### Inventory
 
-The Spanish checked-in series has six MP4/poster/article triplets: `00_presentacion_serie`, `01-que-es-razonar`, `02-fallos`, `03-test-time-compute`, `04-latencia-streaming`, `05-riesgos`. The English locale mirrors the same six chapters; English `03-test-time-compute` is injected through the localized-media deployment path instead of being a normal locale MP4 in the directory.
+Spanish: `00_presentacion_serie`, `01-que-es-razonar`, `02-fallos`, `03-test-time-compute`, `04-latencia-streaming`, `05-riesgos`.
 
-Consumer surfaces in scope for the unit: ES/EN series article embeds, generated ES/EN watch pages, video library/catalog/schema/sitemap outputs, the home-page feature for Test-Time Compute, the ES/EN visual hubs, localized media metadata, poster assets and deployment staging. No consumer is considered complete until the generated delivery pipeline is revalidated with final media.
+English mirrors the same six chapters. English `03-test-time-compute` must preserve the existing localized-media deployment path rather than assuming a normal locale MP4 path.
 
-### Per-video status
+Consumer surfaces in scope: ES/EN article embeds, generated ES/EN watch pages, video library/catalog/schema/sitemap outputs, home-page Test-Time-Compute feature, ES/EN visual hubs, localized-media metadata, posters and deployment staging. No consumer is complete until final media is revalidated through the delivery pipeline.
 
-| Locale | Video | Framework | Text↔motion sync | Locked accent | Factual/source review | Layout QA | Delivery integration | GOLDEN |
-|---|---|---|---|---|---|---|---|---|
-| ES | 00 presentación | v4 candidate · 4 semantic scenes | 13 authored cues | locked | article + Snell source mapped | H/V layout checks pass; representative frames reviewed | pending final site integration | NO |
-| ES | 01 qué es razonar | v4 candidate · 4 semantic scenes | 16 authored cues | locked | article + DeepSeek/OpenAI/Apple sources mapped | H/V layout checks pass; representative frames reviewed | pending final site integration | NO |
-| ES | 02 fallos | v4 candidate · 5 semantic scenes · 108 s | 19 authored cues | locked | primary sources rechecked; article + video corrected to source-faithful o3 and sycophancy wording | renderer/layout visual QA pending | pending final site integration | NO |
-| ES | 03 test-time compute | v4 candidate · 7 semantic scenes | 37 authored cues | locked | candidate reviewed | H/V layout checks pass | pending final site integration | NO |
-| ES | 04 latencia/streaming | v4 candidate · 5 semantic scenes · 115 s | 23 authored cues | locked | Nielsen + RouteLLM claims rechecked; illustrative TTFT/streaming claims explicitly non-benchmark | renderer/layout visual QA pending | pending final site integration | NO |
-| ES | 05 riesgos | v4 candidate · 5 semantic scenes · 121 s | 22 authored cues | locked | Apple, Greshake, TabooRAG and Conformal Thinking primary sources rechecked | renderer/layout visual QA pending | pending final site integration | NO |
-| EN | 00 series intro | pending localization | pending | locked | pending | pending | pending | NO |
-| EN | 01 what reasoning is | pending localization | pending | locked | pending | pending | pending | NO |
-| EN | 02 failures | pending localization | pending | locked | pending | pending | pending | NO |
-| EN | 03 test-time compute | pending localization | pending | locked | pending | pending | pending localized-media integration | NO |
-| EN | 04 latency/streaming | pending localization | pending | locked | pending | pending | pending | NO |
-| EN | 05 risks | pending localization | pending | locked | pending | pending | pending | NO |
+### Per-output status
 
-### Golden evidence accumulated
+| Locale | Video | Framework | Sync | Source | Layout | Delivery | Accessibility | Visual QA | Technical GOLDEN | Golden Example |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ES | 00 presentación | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | NO | NO |
+| ES | 01 qué es razonar | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | NO | NO |
+| ES | 02 fallos | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| ES | 03 test-time compute | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | NO | NO |
+| ES | 04 latencia/streaming | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| ES | 05 riesgos | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 00 series intro | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 01 what reasoning is | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 02 failures | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 03 test-time compute | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 04 latency/streaming | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
+| EN | 05 risks | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | NO | NO |
 
-- Motion framework v4 adds a mandatory release-unit `visualIdentity` contract and runtime theme resolution.
-- The runtime rejects a missing accent identity, missing documented functional uses, palette policy that no longer forbids decorative gradients, and low-contrast accent text.
-- A branch CI workflow now runs the deterministic motion contract on every `motion/**` update for this migration branch. It is a pre-GOLDEN safety net, not a substitute for visual QA.
-- Repository tests now require **all six Spanish chapters** to exist as v4 specs and validate against the same locked Teal reasoning identity; they no longer accept a partial authored subset.
-- Repository tests explicitly gate the semantic mechanisms, cue counts and durations of chapters 02, 04 and 05 so later edits cannot silently collapse them into generic/decorative scenes.
-- Test-Time Compute v4 passes renderer layout validation in both 1920×1080 and recomposed 1080×1920 modes.
-- ES series intro v4: 75 s, 13 synchronized cues, H/V layout validation clean. Representative frames show the locked teal identity, stable phrase highlighting and semantically meaningful roadmap/allocation diagrams.
-- ES chapter 1 v4: 82 s, 16 synchronized cues, H/V layout validation clean. Representative frames cover the operational definition and sourced AIME comparison.
-- ES chapter 2 v4 candidate: 108 s, five semantic scenes and 19 synchronized cues. Shortcut learning is represented as a spurious-vs-robust path; systematic biases as repeatable directional failure modes; specification gaming explicitly separates objective from proxy; propagation exposes an early false premise and recovery path; verification combines perturbation, intermediate checks, multiple sampling, OOD testing and external blocking.
-- ES chapter 4 v4 candidate: 115 s, five semantic scenes and 23 synchronized cues. Nielsen's 0.1/1/10-second interaction thresholds are represented as design references rather than universal laws; TTFT vs total latency and streaming are explicitly illustrative; RouteLLM's paper-backed >2× cost reduction claim is kept scoped to its evaluation.
-- ES chapter 5 v4 candidate: 121 s, five semantic scenes and 22 synchronized cues. The three-regime/effort-collapse description is source-faithful to Apple; indirect prompt injection is tied to Greshake et al.; TabooRAG is represented as an availability/blocking attack; Conformal Thinking is represented as budgeted risk control with upper/lower stopping thresholds. The final guardrail scene is explicitly marked illustrative synthesis.
-- Primary-source review caught two factual overgeneralizations inherited from chapter 2. Bondarenko et al. report **o3** hacking in 88% of baseline runs, not a shared 88% rate for o3 and DeepSeek R1. Sharma et al.'s 85% describes what a feedback-positivity value means for a particular prompt, not a universal aggregate sycophancy rate. Both the chapter-2 video candidate and its source article are corrected to source-faithful wording.
-- Visual QA previously caught a framework-level semantic-copy defect: generic intro mechanisms displayed the old Test-Time-Compute heading/end-note on unrelated scenes. The local renderer was generalized to accept per-scene `heading`/`endNote`; both new specs declare semantic copy explicitly. This fix still must be persisted with the renderer before any video can become GOLDEN.
+Technical GOLDEN remains **0/12**. This is intentional: no gate is being waived to manufacture progress.
 
-### Source-review references used in the current gate
+## Durable runtime status
+
+The complete v4 runtime is now persisted on the migration branch. Commit `2628fdc0919af0401a98477742e1832038d0f283` adds:
+
+- deterministic `motion/src/engine.mjs`;
+- modular rendering primitives/layouts and semantic mechanisms under `motion/src/render/`;
+- accessible deterministic `motion/src/player.mjs` using the same `renderFrame` clock as export;
+- offline Playwright/Canvas → H.264 exporter at `motion/scripts/render.py`;
+- poster, chapters, transcript and validation-report generation;
+- horizontal/portrait recomposition from the same spec;
+- runtime contract tests and dependency documentation.
+
+The renderer resolves the locked `visualIdentity` at runtime. Generic intro mechanisms use scene-owned `data.heading` / `data.endNote`, fixing the previously discovered semantic-copy leakage from Test-Time Compute. There is no decorative fallback mechanism: all schema mechanism types must have an explicit renderer.
+
+The machine ledger now separates `technical_golden` from `golden_example_approved`, records runtime persistence and review-package/email state, and the release checker enforces that Technical GOLDEN is exactly the conjunction of all required gates. Golden Example approval cannot be true unless Technical GOLDEN is already true.
+
+GitHub Actions run `35379851232` completed successfully after these changes: deterministic motion contract tests passed and the complete-series machine ledger validator passed.
+
+## Golden evidence accumulated
+
+- v4 `visualIdentity` contract and runtime theme resolution are mandatory.
+- Missing accent identity, undocumented functional uses, missing gradient prohibition and low-contrast accent text are rejected.
+- All six Spanish chapters are checked in as v4 specs and validated against the same locked Teal reasoning identity.
+- Semantic mechanism IDs, cue counts and durations for ES 02/04/05 are regression-gated.
+- ES 00: 75 s, 13 synchronized cues; H/V layout review previously clean.
+- ES 01: 82 s, 16 synchronized cues; H/V layout review previously clean.
+- ES 02: 108 s, 5 semantic scenes, 19 cues. Shortcut learning, systematic bias, specification gaming, propagation and verification are represented as distinct mechanisms.
+- ES 03: 7 semantic scenes, 37 cues; H/V layout review previously clean.
+- ES 04: 115 s, 5 semantic scenes, 23 cues. Nielsen interaction thresholds are design references, TTFT/streaming numbers are explicitly illustrative, and RouteLLM's >2× cost reduction remains scoped to its evaluation.
+- ES 05: 121 s, 5 semantic scenes, 22 cues. Apple effort-collapse evidence, indirect prompt injection, TabooRAG, Conformal Thinking and illustrative guardrails remain semantically separated.
+- Source review corrected inherited overgeneralizations: Bondarenko's 88% applies to o3 baseline hacking attempts, not a shared o3/DeepSeek R1 rate; Sharma's 85% is not a universal aggregate sycophancy rate.
+
+### Source-review references
 
 - Nielsen Norman Group — response-time limits: `https://www.nngroup.com/articles/response-times-3-important-limits/`
 - Ong et al. — RouteLLM: `https://arxiv.org/abs/2406.18665`
@@ -58,14 +86,15 @@ Consumer surfaces in scope for the unit: ES/EN series article embeds, generated 
 - Li et al. — TabooRAG: `https://arxiv.org/abs/2603.03919`
 - Wang et al. — Conformal Thinking: `https://machinelearning.apple.com/research/conformal-thinking-risk-control`
 
-### Current blockers
+## Current blockers
 
-1. All six English variants still need localization/review; English TTC must preserve its special localized-media deployment path.
-2. The complete renderer/exporter/web-player/test harness must be persisted under `motion/` on this branch; the branch currently contains durable contracts/specs and spec-level tests but not yet the entire local v4 runtime required for visual rendering.
-3. ES chapters 02, 04 and 05 still need renderer/layout visual QA once the full runtime is persisted.
-4. Final MP4/poster generation and site metadata updates must wait for the entire series so release remains atomic.
-5. Full consumer-page regression, Safari/iOS playback, accessibility review and final visual review remain release gates.
+1. Execute the newly persisted renderer in the full browser/font/ffmpeg environment and complete H/V layout + representative-frame visual QA for ES 02, 04 and 05. Persistence is solved; rendered QA is not yet claimed.
+2. Author/localize and source-review all six English v4 specs, maintaining the exact Teal reasoning identity and the special localized-media path for English TTC.
+3. Generate final MP4/poster/chapter/transcript assets only after all 12 localized outputs are ready enough for atomic release.
+4. Run final delivery integration across embeds, watch pages, catalog/schema/sitemap, visual hubs and localized-media staging.
+5. Complete reduced-motion/accessibility and Safari/iOS playback validation.
+6. Run final publication-grade visual review for every localized output.
 
-### Next work
+## Next work
 
-Persist the full v4 renderer/export/test harness needed to render all six checked-in Spanish semantic specs. Run H/V visual QA for chapters 02/04/05, then localize and review all six English videos, re-run delivery QA, and open no PR until all 12 localized outputs are GOLDEN.
+Use the persisted runtime to render/check ES 02/04/05 in both horizontal and portrait compositions, fix any visual defects, then build the six EN specs without changing factual scope or the locked series identity. Do not open a PR until all 12 outputs are Technical GOLDEN. Once the unit is released, assemble the user review package; Golden Example promotion remains user-approved only.
