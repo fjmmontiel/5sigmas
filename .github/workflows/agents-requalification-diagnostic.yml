@@ -120,7 +120,7 @@ jobs:
             /videos/series/agentes-ia/03-como-evaluar-un-agente/,/en/videos/series/agentes-ia/03-como-evaluar-un-agente/,
             /videos/series/agentes-ia/04-seguridad-agentes/,/en/videos/series/agentes-ia/04-seguridad-agentes/,
             /videos/series/agentes-ia/05-de-la-demo-a-produccion/,/en/videos/series/agentes-ia/05-de-la-demo-a-produccion/
-        run: node scripts/audit_browser_resources.mjs
+        run: node scripts/audit_agents_browser_resources.mjs
 
       - name: Enforce current Agents technical milestone; never certify PIXEL or PEDAGOGY automatically
         if: always()
@@ -140,6 +140,7 @@ jobs:
           for path in (
               Path('artifacts/agents-requalification/agents-media-visual.json'),
               Path('artifacts/agents-requalification/indexability/report.json'),
+              Path('artifacts/agents-requalification/browser-resource-proof.json'),
           ):
               if path.exists():
                   data = json.loads(path.read_text())
@@ -150,6 +151,8 @@ jobs:
                       'media_visual_blocker_count': len(data.get('media_visual_blockers', [])),
                       'voice_enhancement_debt_count': len(data.get('voice_enhancement_debt', [])),
                       'blocker_count': len(data.get('blockers', [])),
+                      'reclassified_abort_count': data.get('reclassified_abort_count'),
+                      'unresolved_failure_count': data.get('unresolved_failure_count'),
                   }, ensure_ascii=False))
           names = [
               'RELATIONSHIP_OUTCOME',
@@ -171,6 +174,7 @@ jobs:
           path: |
             artifacts/agents-requalification/
             artifacts/browser-resources/
+            artifacts/security-requalification/shared-browser-resources/report.json
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
