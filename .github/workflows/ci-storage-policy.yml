@@ -66,12 +66,16 @@ jobs:
 
           def is_failure_only(expression):
               expression = expression.split('#', 1)[0].strip()
-              if expression.startswith('${{') and expression.endswith('}}'):
-                  expression = expression[3:-2].strip()
-              # Allow an additional conjunct that narrows failure evidence by scope. This still
-              # cannot run on success and avoids forcing duplicate artifacts for mutually
-              # exclusive diagnostic scopes. Reject OR/always/success/cancelled and negation.
-              return bool(re.fullmatch(r'failure\(\)(?:\s*&&\s*[^|]+)?', expression))
+              # Build the GitHub-expression delimiters at runtime so Actions does not
+              # evaluate them while expanding this policy's own shell heredoc.
+              wrapper_open = '$' + '{{'
+              wrapper_close = '}' + '}'
+              if expression.startswith(wrapper_open) and expression.endswith(wrapper_close):
+                  expression = expression[len(wrapper_open):-len(wrapper_close)].strip()
+              # Allow one or more AND-conjuncts that only narrow failure evidence by
+              # diagnostic scope. Anything with OR, always/success/cancelled or a leading
+              # predicate other than failure() stays rejected.
+              return bool(re.fullmatch(r'failure\(\)(?:\s*&&\s*[^|]+)*', expression))
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
