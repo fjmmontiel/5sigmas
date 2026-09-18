@@ -1,0 +1,85 @@
+name: Agents full experience review
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/agents-experience-request.json']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agents-full-experience-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Record exact review revision
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/agents-experience-request.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install build dependencies
+        run: pip install -r requirements.txt
+
+      - name: Strict Spanish build
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and strictly build English
+        run: |
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate focused review script syntax
+        run: node --check scripts/validate_agents_full_experience.mjs
+
+      - name: Install codec-capable browser QA runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve exact built preview with byte-range media support
+        run: |
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/agents-experience-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/series/agentes-ia/00_presentacion_serie/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/agents-experience-preview.log
+          exit 1
+
+      - name: Full Agents interaction, lifecycle, keyboard/touch and responsive evidence
+        timeout-minutes: 24
+        env:
+          S5_BROWSER_CHANNEL: chrome
+        run: node scripts/validate_agents_full_experience.mjs
+
+      - name: Retain exact full-page evidence for manual PIXEL and PEDAGOGY review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-full-experience-review
+          path: artifacts/agents-experience/
+          if-no-files-found: warn
+          retention-days: 1
+          overwrite: true
