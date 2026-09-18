@@ -1,4 +1,4 @@
-schema_version: 2
+schema_version: 3
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -24,47 +24,52 @@ series_status:
     indexability: PASS_12_OF_12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0_p1_p2: 0
-    release_branch: release/security-golden-requalification
     release_pr: 330
-    release_head: c5cc9c21de1c131b46613f5832dc9361ea6579ed
-    release_checks: IN_PROGRESS_AFTER_EXACT_REFERENCE_REGRESSION_REPAIRS
-    state: RELEASE_READY_PR_CHECKS_IN_PROGRESS_NOT_YET_PRODUCTION_SERIES_GOLDEN
-    finalization: MERGE_ONLY_EXACT_HEAD_GREEN_THEN_DEPLOY_AND_VERIFY_LIVE_ES_EN_BEFORE_SERIES_GOLDEN
-    previous_exact_head_failure_79a2ca58:
-      english_history_05_mobile_overflow: REAL_SHARED_NO_REGRESSION_FAILURE
-      coding_agents_ch4_authority_predicate: MATHJAX_RENDER_TEXT_FALSE_NEGATIVE
-      security_content_or_indexability_failure: false
-    release_gate_repairs_2026_09_18:
-      - HISTORICAL_92_GT_91_CAPTIONS_TRANSCRIPT_DEBT_PRESERVED_AS_VOICE_DEFERRED_NOT_GOLDEN_BLOCKER
-      - ENGLISH_SECURITY_PRESENTATION_VALIDATOR_ALIGNED_TO_CURRENT_RELATIONSHIP_FIRST_SOURCE
-      - CODING_AGENT_MATHJAX_RENDER_ARTIFACT_NORMALIZED_WITH_NFKC_WITHOUT_WEAKENING_T_P_S_C_R_A_PREDICATE
-      - PRE_DATACENTERS_CH5_AGENT_LOOP_MOBILE_INTRINSIC_WIDTH_CONTAINED_WITH_SCOPED_SHARED_CSS
-      - GENERIC_ACTIONS_ARTIFACTS_FAILURE_ONLY_WITH_SCOPE_CONJUNCTION_SUPPORTED
-      - VIDEO_INDEXING_AUDIT_ACCEPTS_EITHER_AUTOMATIC_SEEKTOACTION_OR_CURATED_CLIP_KEY_MOMENTS
-    new_release_ci_runs:
-      english_mirror_quality: 35384835909
-      coding_agents_golden_pr_gate: 35384835867
-      coding_agents_release_qa: 35384835975
-      status_at_checkpoint: QUEUED
+    release_head: 729d824d00d3d21b6b3521abf5553fe81a6c8968
+    merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    deploy_run: 35392652259
+    deploy_build: PASS
+    deploy: PASS
+    live_qa: PASS
+    state: SERIES_GOLDEN
+    production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: QA_ACTIVE
+    state: QA_ACTIVE_CHANGES_REQUIRED
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    media_visual: PENDING
-    indexability: PENDING_12_ROUTE_LOCALE_PAIRS
-    pixel: PENDING
-    pedagogy: PENDING
-    note: Work may continue while Security release checks/deploy complete; no partial Agents release is authorized.
-    current_site_gate_head: 686f73ef14cd4ea50084d86393f8f2e701631803
-    current_run_source_snippet_inspection:
-      agents03_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
-      agents04_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
-      deterministic_relationship_guard: PRESENT_WITH_4_NEGATIVE_MUTATIONS_PENDING_COHERENT_INTEGRATION_EXECUTION
-      article_iteration_counts_changed: false
-      current_run_article_inspection_changed: false
-      reason: THIS_RUN_REPAIRED_SHARED_RELEASE_GATES_AND_DID_NOT_PERFORM_A_NEW_FULL_ROUTE_LOCALE_ARTICLE_REVIEW
-    inherited_shared_release_repairs:
-      coding_ch4_mathjax_predicate_normalization: PRESENT
-      pre_datacenters_ch5_mobile_containment: PRESENT
+    current_exact_evidence_head: 520c8a339229e21c4399d48dd1014cb6d27ed6d1
+    technical_milestone_run: 35393484578
+    relationship_guard_agents03_04: PASS
+    strict_es_build: PASS
+    strict_en_build: PASS
+    publication_contract: PASS
+    indexability: PASS_12_OF_12
+    article_watch_browser_resource_runtime_smoke: PASS_24_ROUTES
+    media_visual: FAIL_33_NONVOICE_METADATA_BLOCKERS
+    media_visual_blockers: {poster_missing: 6, title_missing: 5, summary_missing: 10, chapters_missing: 12}
+    native_video_frames_manually_reviewed: 72
+    native_video_visual_review: PASS_REAL_NATIVE_NONPLACEHOLDER_READABLE
+    pixel: PENDING_FULL_PAGE
+    pedagogy: PENDING_FULL_PAGE
+    browser: PENDING_FULL_INTERACTION_LIFECYCLE
+    source: PENDING_PER_ARTICLE_MATERIAL_CLAIM_CONTRACTS
+    article_golden: 0/6
+    next_action: CURATE_NONVOICE_VIDEO_METADATA_FROM_INSPECTED_FRAMES_FOR_ALL_12_ROUTE_LOCALE_OBLIGATIONS_THEN_REEXECUTE_MEDIA_VISUAL_AND_CONTINUE_MULTI_ARTICLE_PIXEL_PEDAGOGY_BROWSER_SOURCE_QA
+  agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 
-no_linkedin_write_from_this_program: true
+shared_branch:
+  name: quality/post-datacenters-requalification
+  synchronized_with_security_main_merge_without_force_push: true
+  security_release_receipt: quality/series-requalification/security-series-release.yml
+  agents_ledger: quality/series-requalification/agents-article-ledger.yml
+
+linkedin:
+  writes_from_this_program: 0
+  queues_from_this_program: 0
+  activations_from_this_program: 0
+  release_contract_281_ownership_preserved: true
+  issue_279_preserved: true
