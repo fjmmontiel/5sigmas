@@ -44,11 +44,14 @@
       },
       "result": "Spanish frontmatter and English localized-media duration metadata synchronized from v4 specs"
     },
-    "horizontal_visual_review": {
+    "visual_review": {
       "render_workflow_run": 35383323465,
-      "sample_strategy": "12 evenly distributed frames per full rendered video",
-      "reviewed": [
+      "sample_strategy": "12 evenly distributed frames per full rendered video in both horizontal and portrait compositions, combined with automated 24/24 layout validation",
+      "reviewed_outputs": [
+        "es:00_presentacion_serie",
+        "es:01-que-es-razonar",
         "es:02-fallos",
+        "es:03-test-time-compute",
         "es:04-latencia-streaming",
         "es:05-riesgos",
         "en:00_presentacion_serie",
@@ -58,8 +61,8 @@
         "en:04-latencia-streaming",
         "en:05-riesgos"
       ],
-      "checks": ["editorial hierarchy", "accent consistency", "semantic diagrams", "text stability", "progressive reveal", "transition samples", "source/footer legibility"],
-      "result": "horizontal review passed; visualQa remains false until corresponding portrait review is explicitly completed"
+      "checks": ["editorial hierarchy", "locked Teal reasoning identity", "semantic diagrams", "text stability", "progressive reveal", "transition samples", "source/footer legibility", "portrait recomposition", "no clipping/overlap", "no decorative gradients or palette drift"],
+      "result": "pass for all 12 localized outputs; horizontal and portrait review complete"
     }
   },
   "review": {
@@ -80,15 +83,15 @@
   "outputs": {
     "es:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
     "es:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
     "es:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false}
+    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false}
   }
 }
