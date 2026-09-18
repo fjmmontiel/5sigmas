@@ -309,19 +309,52 @@ series/agentes-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: AI Agents
+  video_summary: "A visual map of what turns a model that answers into a system that chooses actions: loops, evaluation, security, and bounded operation."
   video_duration: PT32S
+  video_chapters:
+    - name: "From answering to acting"
+      start: 0
+      end: 11
+    - name: "System boundary and five design questions"
+      start: 11
+      end: 22
+    - name: "Bounded, observable, interruptible autonomy"
+      start: 22
+      end: 32
 
 series/agentes-ia/01-que-es-un-agente.md:
   video: 01-que-es-un-agente.mp4
   video_poster: 01-que-es-un-agente.jpg
   video_title: What an AI agent is—and is not
+  video_summary: "Contrasts an answer, a workflow, and a bounded agent, showing how state, tool limits, supervision, and stopping conditions define useful autonomy."
   video_duration: PT32S
+  video_chapters:
+    - name: "Answer, workflow, and agent"
+      start: 0
+      end: 11
+    - name: "State visibility and tool boundaries"
+      start: 11
+      end: 22
+    - name: "Contracts and stopping conditions"
+      start: 22
+      end: 32
 
 series/agentes-ia/02-anatomia-de-un-agente.md:
   video: 02-anatomia-de-un-agente.mp4
   video_poster: 02-anatomia-de-un-agente.jpg
   video_title: The anatomy of an agent
+  video_summary: "Separates what the model proposes from what the runtime decides, then maps tool contracts, memory, state, context, and termination."
   video_duration: PT32S
+  video_chapters:
+    - name: "Model proposal versus runtime execution"
+      start: 0
+      end: 11
+    - name: "Tool contracts, memory, and state"
+      start: 11
+      end: 22
+    - name: "Context, permissions, and termination"
+      start: 22
+      end: 32
 
 series/agentes-ia/03-como-evaluar-un-agente.md:
   video: 03-como-evaluar-un-agente.mp4
@@ -329,15 +362,47 @@ series/agentes-ia/03-como-evaluar-un-agente.md:
   video_title: "Tutorial: how to evaluate an AI agent"
   video_summary: "A practical tutorial for evaluating the agent's whole task: outcome, trajectory, permissions, cost, recovery, and abstention. A correct final answer is not enough."
   video_duration: PT32S
+  video_chapters:
+    - name: "Outcome and trajectory"
+      start: 0
+      end: 11
+    - name: "Evaluation dimensions and counterexamples"
+      start: 11
+      end: 22
+    - name: "Evidence for safe autonomy"
+      start: 22
+      end: 32
 
 series/agentes-ia/04-seguridad-agentes.md:
   video: 04-seguridad-agentes.mp4
   video_poster: 04-seguridad-agentes.jpg
   video_title: Agent security
+  video_summary: "Shows how untrusted content can influence actions and why provenance, capability, authorization, and policy need independent enforcement outside the prompt."
   video_duration: PT32S
+  video_chapters:
+    - name: "From untrusted input to attempted action"
+      start: 0
+      end: 11
+    - name: "Independent provenance and authorization barriers"
+      start: 11
+      end: 22
+    - name: "Blocked paths and defense in depth"
+      start: 22
+      end: 32
 
 series/agentes-ia/05-de-la-demo-a-produccion.md:
   video: 05-de-la-demo-a-produccion.mp4
   video_poster: 05-de-la-demo-a-produccion.jpg
   video_title: From demo to production
+  video_summary: "Shows what makes an agent operable under failure: budgets, retries, idempotency, traces, explicit closure, and when a deterministic workflow is the safer design."
   video_duration: PT32S
+  video_chapters:
+    - name: "From demo to service"
+      start: 0
+      end: 11
+    - name: "Failure containment and observable traces"
+      start: 11
+      end: 22
+    - name: "Production contracts and when not to use an agent"
+      start: 22
+      end: 32
