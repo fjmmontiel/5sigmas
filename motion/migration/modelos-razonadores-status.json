@@ -1,0 +1,28 @@
+{
+  "unit": "modelos-razonadores",
+  "updated": "2026-09-18",
+  "accent": "#26A69A",
+  "requiredGates": [
+    "framework",
+    "sync",
+    "source",
+    "layout",
+    "delivery",
+    "accessibility",
+    "visualQa"
+  ],
+  "outputs": {
+    "es:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
+    "es:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
+    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "es:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
+    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:00_presentacion_serie": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:01-que-es-razonar": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:02-fallos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:03-test-time-compute": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:04-latencia-streaming": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
+    "en:05-riesgos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false}
+  }
+}
