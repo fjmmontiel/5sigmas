@@ -15,6 +15,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 MOTION = ROOT / "motion"
+SERIES = MOTION / "content/modelos-razonadores"
 
 
 def free_port() -> int:
@@ -70,6 +71,22 @@ def configure(page, spec: dict, theme: dict) -> None:
     page.evaluate("([spec,theme])=>document.querySelector('#player').configure(spec,theme)", [spec, theme])
 
 
+def expected_controls(locale: str) -> dict[str, str]:
+    if locale == "en":
+        return {
+            "play": "Play", "prev": "Previous", "next": "Next",
+            "timeLabel": "Playback time", "cuePrev": "Previous sentence",
+            "cueNext": "Next sentence", "allText": "Show all text",
+            "summary": "Read the explanation and sources",
+        }
+    return {
+        "play": "Reproducir", "prev": "Anterior", "next": "Siguiente",
+        "timeLabel": "Tiempo de reproducción", "cuePrev": "Frase anterior",
+        "cueNext": "Frase siguiente", "allText": "Ver todo el texto",
+        "summary": "Leer la explicación y las fuentes",
+    }
+
+
 def assert_common(snapshot: dict, spec: dict) -> None:
     if snapshot["lang"] != spec["locale"]:
         raise AssertionError(f"lang mismatch: {snapshot['lang']} != {spec['locale']}")
@@ -88,11 +105,25 @@ def assert_common(snapshot: dict, spec: dict) -> None:
         raise AssertionError("source links must isolate new browsing contexts")
     if spec["title"] not in snapshot["canvasLabel"]:
         raise AssertionError("canvas accessible name must include the localized title")
+    for key, value in expected_controls(spec["locale"]).items():
+        if snapshot[key] != value:
+            raise AssertionError(f"{spec['locale']} control {key}: {snapshot[key]!r} != {value!r}")
+    prefix = "Source " if spec["locale"] == "en" else "Fuente "
+    if any(not link["text"].startswith(prefix) for link in snapshot["sourceLinks"]):
+        raise AssertionError(f"{spec['locale']} evidence links are not localized")
+
+
+def load_specs() -> list[dict]:
+    paths = sorted(SERIES.glob("*.json"))
+    if len(paths) != 12:
+        raise AssertionError(f"accessibility gate expects the complete 12-output series, found {len(paths)}")
+    return [json.loads(path.read_text()) for path in paths]
 
 
 def run(browser_name: str) -> dict:
-    es = json.loads((MOTION / "content/modelos-razonadores/03-test-time-compute.es.json").read_text())
-    en = json.loads((MOTION / "content/modelos-razonadores/03-test-time-compute.en.json").read_text())
+    specs = load_specs()
+    es = json.loads((SERIES / "03-test-time-compute.es.json").read_text())
+    en = json.loads((SERIES / "03-test-time-compute.en.json").read_text())
     theme = json.loads((MOTION / "theme/5sigmas.json").read_text())
     port = free_port()
     server = subprocess.Popen(
@@ -113,40 +144,27 @@ def run(browser_name: str) -> dict:
             page.wait_for_function("window.playerReady !== undefined")
             page.evaluate("()=>window.playerReady")
 
-            configure(page, es, theme)
-            es_state = state(page)
-            assert_common(es_state, es)
-            expected_es = {
-                "play": "Reproducir", "prev": "Anterior", "next": "Siguiente",
-                "timeLabel": "Tiempo de reproducción", "cuePrev": "Frase anterior",
-                "cueNext": "Frase siguiente", "allText": "Ver todo el texto",
-                "summary": "Leer la explicación y las fuentes",
-            }
-            for key, value in expected_es.items():
-                if es_state[key] != value:
-                    raise AssertionError(f"Spanish control {key}: {es_state[key]!r} != {value!r}")
+            # The accessibility contract is series-wide, not just a representative video:
+            # every localized output must configure successfully, expose its complete
+            # transcript/sources, share the deterministic duration and localize controls.
+            checked: list[str] = []
+            for spec in specs:
+                configure(page, spec, theme)
+                assert_common(state(page), spec)
+                checked.append(spec["id"])
 
+            # Exercise stateful controls on both locales using the same video/mechanisms.
+            configure(page, es, theme)
+            assert_common(state(page), es)
             configure(page, en, theme)
-            en_state = state(page)
-            assert_common(en_state, en)
-            expected_en = {
-                "play": "Play", "prev": "Previous", "next": "Next",
-                "timeLabel": "Playback time", "cuePrev": "Previous sentence",
-                "cueNext": "Next sentence", "allText": "Show all text",
-                "summary": "Read the explanation and sources",
-            }
-            for key, value in expected_en.items():
-                if en_state[key] != value:
-                    raise AssertionError(f"English control {key}: {en_state[key]!r} != {value!r}")
-            if any(not link["text"].startswith("Source ") for link in en_state["sourceLinks"]):
-                raise AssertionError("English evidence links are not localized")
+            assert_common(state(page), en)
 
             # Toggle exposes explicit state for assistive technology.
             page.evaluate("()=>document.querySelector('#player').shadowRoot.querySelector('.alltext').click()")
             if state(page)["allTextPressed"] != "true":
                 raise AssertionError("show-all-text control must expose aria-pressed=true")
 
-            # Reduced motion must disable autoplay-style motion while retaining deterministic navigation.
+            # Reduced motion disables autoplay-style motion while retaining deterministic navigation.
             page.emulate_media(reduced_motion="reduce")
             page.evaluate("()=>document.querySelector('#player').draw()")
             reduced = state(page)
@@ -161,11 +179,20 @@ def run(browser_name: str) -> dict:
             if after <= before:
                 raise AssertionError("scene navigation must remain usable under reduced motion")
 
-            # Keyboard-focusable interactive surface: every control can receive focus and has a name.
+            # Restore normal motion before testing focusability. A native disabled button
+            # is intentionally not focusable; testing it while reduced-motion is active
+            # would incorrectly fail the keyboard contract.
+            page.emulate_media(reduced_motion="no-preference")
+            page.evaluate("()=>document.querySelector('#player').draw()")
+            if state(page)["playDisabled"]:
+                raise AssertionError("Play must be keyboard-available when reduced motion is not requested")
+
+            # Keyboard-focusable interactive surface: every enabled control can receive focus and has a name.
             unnamed = page.evaluate(
                 """() => {
                   const r=document.querySelector('#player').shadowRoot;
                   return [...r.querySelectorAll('button,input')].filter(el=>{
+                    if (el.disabled) return false;
                     el.focus();
                     const name=(el.textContent||el.getAttribute('aria-label')||'').trim();
                     return r.activeElement!==el || !name;
@@ -177,7 +204,6 @@ def run(browser_name: str) -> dict:
 
             # Narrow viewport must retain the controls/transcript while the shared renderer recomposes portrait.
             page.set_viewport_size({"width": 390, "height": 844})
-            page.emulate_media(reduced_motion="no-preference")
             page.evaluate("()=>document.querySelector('#player').draw()")
             narrow = page.evaluate(
                 """() => {const h=document.querySelector('#player'),r=h.shadowRoot,c=r.querySelector('canvas');return {clientWidth:h.clientWidth,canvasWidth:c.width,canvasHeight:c.height,controls:r.querySelectorAll('button,input').length,article:r.querySelector('article').textContent.length}}"""
@@ -190,7 +216,16 @@ def run(browser_name: str) -> dict:
             if page_errors:
                 raise AssertionError(f"browser page errors: {page_errors}")
             browser.close()
-            return {"browser": browser_name, "es": "localized", "en": "localized", "reduced_motion": "pass", "keyboard_names": "pass", "narrow_portrait": "pass"}
+            return {
+                "browser": browser_name,
+                "outputs_checked": len(checked),
+                "es": "localized",
+                "en": "localized",
+                "transcripts_and_sources": "pass",
+                "reduced_motion": "pass",
+                "keyboard_names": "pass",
+                "narrow_portrait": "pass",
+            }
     finally:
         server.terminate()
         with contextlib.suppress(Exception):
