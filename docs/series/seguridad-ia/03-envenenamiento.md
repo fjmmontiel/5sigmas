@@ -14,6 +14,16 @@ video_poster: "03-envenenamiento.jpg"
 video_title: "Envenenamiento"
 video_summary: "Cómo una entrada no confiable puede convertirse en memoria persistente, reaparecer en una decisión futura y sobrevivir a un borrado incompleto mediante estado derivado."
 video_duration: "PT1M0S"
+video_chapters:
+  - name: "Persistencia y reentrada de memoria"
+    start: 0
+    end: 24
+  - name: "Estado contaminado y comportamiento latente"
+    start: 24
+    end: 48
+  - name: "Procedencia y revocación verificable"
+    start: 48
+    end: 60
 ---
 
 # Capítulo 3 — Envenenamiento
