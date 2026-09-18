@@ -69,7 +69,13 @@ Machine evidence in `motion/migration/modelos-razonadores-status.json` currently
 
 Delivery workflow run `35391283137` rendered all 12 final horizontal packages successfully. Its `integrate-and-gate` job was then cancelled by the job-level **30 minute timeout** while executing `Stage canonical ES/EN media and remove TTC one-off delivery path`; the job reached the timeout before any downstream delivery checks could run. This was a capacity/runtime timeout, not a Technical GOLDEN failure and not a reason to weaken the gate.
 
-Remediation commit `f1002160b3688aed63cedb996f3ab1ee8e192353` increases only the integration job budget from 30 to **120 minutes**, preserving every delivery, build, browser, checksum and Golden check unchanged. The replacement delivery workflow run is `35395812427`.
+The remediation keeps every quality check intact while removing avoidable I/O:
+
+- `f1002160b3688aed63cedb996f3ab1ee8e192353`: integration runtime budget raised from 30 to **120 minutes**;
+- `b8f0742b879daaf139429a91eead701e257e0dc4`: validated MP4/poster/VTT packages are materialized into canonical locale paths with same-filesystem hardlinks where possible, with safe `copy2` fallback;
+- `0bcb6ee302022535163aaee116ae96432f87251d`: R2/same-origin validation now runs the full declaration/hash contract without redundantly copying the entire public video corpus into a second staging tree; the machine-readable manifest is still generated for evidence/review.
+
+The current replacement delivery workflow is run `35396056045` on `0bcb6ee302022535163aaee116ae96432f87251d`. Its render matrix is active; no gate has been waived or marked passed early.
 
 The release policy remains fail-closed: `delivery=true` and `technical_golden=true` may only be persisted after the same validated renderer packages are staged into the canonical ES/EN trees, metadata stays derived from v4 specs, R2/same-origin contracts pass, strict ES and EN builds pass, native EN video hub/watch-page QA passes, and every built consumer is byte-verified against the validated package.
 
@@ -79,7 +85,7 @@ The migration branch has accumulated substantial divergence from `main` while ot
 
 ## Current blockers
 
-1. Let the replacement delivery gate complete with the corrected integration runtime budget.
+1. Complete replacement delivery workflow `35396056045` with the optimized, fail-closed integration path.
 2. Fix any real delivery/integration defect surfaced after staging; do not convert a failing delivery check into a waiver.
 3. Reconcile the complete migration unit with current `main` and rerun the relevant release gates on the combined state before opening the single series PR.
 4. Only after **12/12 Technical GOLDEN**: create exactly one PR for the complete series, assemble the complete user review package, place it in Google Drive when writable Drive access is available, and send the review email through Gmail.
@@ -87,4 +93,4 @@ The migration branch has accumulated substantial divergence from `main` while ot
 
 ## Next work
 
-Do not author more copy or alter the visual identity. The next iteration should inspect workflow run `35395812427`. If delivery passes, verify the machine ledger was atomically promoted to 12/12 Technical GOLDEN and that the review artifact exists; then reconcile against current `main` before creating the single release PR. If delivery fails, repair the exact failing integration contract and rerun without relaxing any Golden criterion.
+Do not author more copy or alter the visual identity. Inspect workflow run `35396056045`. If delivery passes, verify the machine ledger was atomically promoted to 12/12 Technical GOLDEN and that the review artifact exists; then reconcile against current `main` before creating the single release PR. If delivery fails, repair the exact failing integration contract and rerun without relaxing any Golden criterion.
