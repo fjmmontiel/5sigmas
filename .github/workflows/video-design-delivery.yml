@@ -1,0 +1,102 @@
+name: Video design review package
+on:
+  push:
+    branches: [design/video-minimal-audit-20260918]
+    paths: [.github/workflows/video-design-delivery.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow playwright
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-inter
+      - uses: actions/download-artifact@v4
+        with:
+          name: video-design-bilingual-coverage
+          run-id: 35322596500
+          github-token: ${{ github.token }}
+          path: coverage-input
+      - name: Render full semantic pilot and package audit
+        run: |
+          python design/video-minimal-20260918/pilot.py --output review
+          python design/video-minimal-20260918/package_review.py --coverage coverage-input --output review
+          cp design/video-minimal-20260918/REPORT.md review/INFORME.md
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('review/comparador.html')
+          s=p.read_text().replace('Texto accesible de la escena','Texto accesible de la propuesta').replace('el texto de la escena que aparece debajo','el texto de la propuesta que aparece debajo')
+          p.write_text(s)
+          forbidden=[str(p) for p in Path('review').rglob('*') if p.suffix.lower() in {'.ttf','.otf','.woff','.woff2'}]
+          assert not forbidden,forbidden
+          PY
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify comparison playback and responsive controls
+        run: |
+          python - <<'PY'
+          import asyncio,json,pathlib
+          from playwright.async_api import async_playwright
+          O=pathlib.Path('review');checks=[]
+          async def main():
+            async with async_playwright() as pw:
+              b=await pw.chromium.launch()
+              for width,height in [(1440,1000),(390,844)]:
+                p=await b.new_page(viewport={'width':width,'height':height});errors=[]
+                p.on('pageerror',lambda e:errors.append(str(e)))
+                await p.goto((O/'comparador.html').resolve().as_uri(),wait_until='load')
+                await p.wait_for_function("document.querySelector('#v1').readyState>=2")
+                await p.locator('[data-time="27.4"]').click()
+                await p.evaluate("document.querySelector('#v1').currentTime=34")
+                await p.wait_for_timeout(300)
+                before=float(await p.locator('#v1').evaluate('(v)=>v.currentTime'))
+                await p.locator('#before').click()
+                after=float(await p.locator('#v0').evaluate('(v)=>v.currentTime'))
+                assert abs(before-after)<.15,(before,after)
+                await p.locator('#after').click()
+                await p.locator('#v1').evaluate('(v)=>v.play()')
+                await p.wait_for_timeout(500)
+                played=float(await p.locator('#v1').evaluate('(v)=>v.currentTime'))
+                assert played>after+.2,played
+                await p.locator('#v1').evaluate('(v)=>v.pause()')
+                overflow=await p.evaluate('document.documentElement.scrollWidth>innerWidth+2')
+                assert not overflow
+                assert not errors,errors
+                await p.screenshot(path=str(O/f'comparador-{width}px.png'),full_page=True)
+                checks.append({'width':width,'height':height,'version_switch_preserves_time':True,'playback_advances':True,'horizontal_overflow':False,'javascript_errors':errors})
+                await p.close()
+              await b.close()
+          asyncio.run(main());(O/'browser-validation.json').write_text(json.dumps(checks,indent=2));print(json.dumps(checks))
+          PY
+      - name: Create compact archive
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          root=Path('review')
+          with zipfile.ZipFile('5sigmas-revision-videos.zip','w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
+            for p in root.rglob('*'):
+              if p.is_file() and p.suffix.lower() not in {'.ttf','.otf','.woff','.woff2'}:z.write(p,p.relative_to(root))
+          print('Review package bytes',Path('5sigmas-revision-videos.zip').stat().st_size)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 5sigmas-video-review-files
+          path: review/
+          retention-days: 14
+          compression-level: 6
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 5sigmas-video-review-archive
+          path: 5sigmas-revision-videos.zip
+          retention-days: 14
