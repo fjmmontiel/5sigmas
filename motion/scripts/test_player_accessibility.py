@@ -71,6 +71,16 @@ def configure(page, spec: dict, theme: dict) -> None:
     page.evaluate("([spec,theme])=>document.querySelector('#player').configure(spec,theme)", [spec, theme])
 
 
+def open_harness(context, port: int):
+    page = context.new_page()
+    errors: list[str] = []
+    page.on("pageerror", lambda exc: errors.append(str(exc)))
+    page.goto(f"http://127.0.0.1:{port}/motion/web/player-test.html", wait_until="networkidle")
+    page.wait_for_function("window.playerReady !== undefined")
+    page.evaluate("()=>window.playerReady")
+    return page, errors
+
+
 def expected_controls(locale: str) -> dict[str, str]:
     if locale == "en":
         return {
@@ -137,12 +147,10 @@ def run(browser_name: str) -> dict:
         with sync_playwright() as p:
             browser_type = getattr(p, browser_name)
             browser = browser_type.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1100, "height": 900})
-            page_errors: list[str] = []
-            page.on("pageerror", lambda exc: page_errors.append(str(exc)))
-            page.goto(f"http://127.0.0.1:{port}/motion/web/player-test.html", wait_until="networkidle")
-            page.wait_for_function("window.playerReady !== undefined")
-            page.evaluate("()=>window.playerReady")
+
+            # Normal-motion context validates the complete localized surface.
+            context = browser.new_context(viewport={"width": 1100, "height": 900}, reduced_motion="no-preference")
+            page, page_errors = open_harness(context, port)
 
             # The accessibility contract is series-wide, not just a representative video:
             # every localized output must configure successfully, expose its complete
@@ -164,30 +172,10 @@ def run(browser_name: str) -> dict:
             if state(page)["allTextPressed"] != "true":
                 raise AssertionError("show-all-text control must expose aria-pressed=true")
 
-            # Reduced motion disables autoplay-style motion while retaining deterministic navigation.
-            page.emulate_media(reduced_motion="reduce")
-            page.evaluate("()=>document.querySelector('#player').draw()")
-            reduced = state(page)
-            if not reduced["playDisabled"] or "Reduced motion" not in reduced["notice"]:
-                raise AssertionError("reduced-motion mode must disable Play and announce the navigation alternative")
-            page.evaluate("()=>document.querySelector('#player').play()")
-            if state(page)["playing"]:
-                raise AssertionError("play() must be a no-op under prefers-reduced-motion")
-            before = state(page)["time"]
-            page.evaluate("()=>document.querySelector('#player').step(1)")
-            after = state(page)["time"]
-            if after <= before:
-                raise AssertionError("scene navigation must remain usable under reduced motion")
-
-            # Restore normal motion before testing focusability. A native disabled button
-            # is intentionally not focusable; testing it while reduced-motion is active
-            # would incorrectly fail the keyboard contract.
-            page.emulate_media(reduced_motion="no-preference")
-            page.evaluate("()=>document.querySelector('#player').draw()")
+            # Every enabled control must be keyboard-focusable and have an accessible name.
+            # Play is intentionally enabled in this normal-motion context.
             if state(page)["playDisabled"]:
                 raise AssertionError("Play must be keyboard-available when reduced motion is not requested")
-
-            # Keyboard-focusable interactive surface: every enabled control can receive focus and has a name.
             unnamed = page.evaluate(
                 """() => {
                   const r=document.querySelector('#player').shadowRoot;
@@ -212,9 +200,32 @@ def run(browser_name: str) -> dict:
                 raise AssertionError(f"narrow player did not recompose portrait: {narrow}")
             if narrow["controls"] < 7 or narrow["article"] < 100:
                 raise AssertionError("narrow player lost controls or transcript")
-
             if page_errors:
                 raise AssertionError(f"browser page errors: {page_errors}")
+            context.close()
+
+            # Reduced motion is an OS/browser preference. Validate it in a fresh context
+            # where the preference is present before the custom element connects. This is
+            # stable in Chromium and WebKit and mirrors a real user session more closely
+            # than mutating matchMedia after the page has already mounted.
+            reduced_context = browser.new_context(viewport={"width": 1100, "height": 900}, reduced_motion="reduce")
+            reduced_page, reduced_errors = open_harness(reduced_context, port)
+            configure(reduced_page, en, theme)
+            reduced = state(reduced_page)
+            if not reduced["playDisabled"] or "Reduced motion" not in reduced["notice"]:
+                raise AssertionError("reduced-motion mode must disable Play and announce the navigation alternative")
+            reduced_page.evaluate("()=>document.querySelector('#player').play()")
+            if state(reduced_page)["playing"]:
+                raise AssertionError("play() must be a no-op under prefers-reduced-motion")
+            before = state(reduced_page)["time"]
+            reduced_page.evaluate("()=>document.querySelector('#player').step(1)")
+            after = state(reduced_page)["time"]
+            if after <= before:
+                raise AssertionError("scene navigation must remain usable under reduced motion")
+            if reduced_errors:
+                raise AssertionError(f"reduced-motion browser page errors: {reduced_errors}")
+            reduced_context.close()
+
             browser.close()
             return {
                 "browser": browser_name,
