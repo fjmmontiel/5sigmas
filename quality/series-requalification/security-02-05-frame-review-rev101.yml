@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 source_action_run: 35290297406
@@ -94,24 +94,83 @@ manual_frame_review:
         - Least privilege for every tool
         - MCP standardizes integration, not trust
         - Observability and stop mechanisms close the loop
+verification_after_gate_repair:
+  action_run: 35291147066
+  exact_head: d11c3ad2928104a20e54104b0e79419b2ba00a00
+  diagnostic_revision: 102
+  result: EXPECTED_FAIL_CLOSED
+  technical_steps_passed:
+    - SECURITY02_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY03_SOURCE_AND_RELATIONSHIP_MUTATIONS
+    - SECURITY04_SOURCE_ATTRIBUTION
+    - SECURITY05_SOURCE_AND_RELEASE_GATE_MUTATIONS
+    - STRICT_ES_BUILD
+    - PUBLICATION_CONTRACT
+    - SECURITY02_05_MEDIA_VISUAL_GATE_EXECUTED
+    - STRICT_EN_BUILD
+    - COMPLETE_RENDERED_HTML_AUDIT
+    - SHARED_BROWSER_RESOURCES_SECURITY00_05_PLUS_REFERENCES
+  final_failure_reason: ENFORCEMENT_REMAINS_FAIL_CLOSED_AND_DOES_NOT_CERTIFY_PIXEL_OR_PEDAGOGY
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_SCOPE
 chapter_curation_state:
-  status: EVIDENCE_READY_NOT_YET_EMBEDDED
-  current_media_visual_blockers: 8
-  blocker_code: VIDEO_CHAPTERS_MISSING_ES_EN_SECURITY02_03_04_05
-  rule: Chapter timestamps/titles may be curated only from the observed visual timeline; do not derive them from future narration.
+  status: EMBEDDED_PENDING_EXACT_RERUN
+  source_site_facing_head_before_receipt: 64e2fd9db034b574437609b50c809309018b6867
+  prior_blockers_closed_at_source_level: 8
+  expected_current_media_visual_blockers_after_embedding: 0_PENDING_EXACT_RERUN
+  derivation_rule: CURATED_ONLY_FROM_MANUALLY_REVIEWED_VISUAL_TIMELINE_NEVER_FROM_FUTURE_NARRATION
+  curated:
+    security02:
+      es:
+        - {name: "De una negativa a una búsqueda", start: 0, end: 24}
+        - {name: "Optimización, transferencia y presupuesto", start: 24, end: 48}
+        - {name: "Aleatoriedad y autorización como fronteras distintas", start: 48, end: 60}
+      en:
+        - {name: "From one refusal to search", start: 0, end: 19}
+        - {name: "Optimization, transfer and attack budget", start: 19, end: 38}
+        - {name: "Stable output is not an authorization boundary", start: 38, end: 48}
+    security03:
+      es:
+        - {name: "Persistencia y reentrada de memoria", start: 0, end: 24}
+        - {name: "Estado contaminado y comportamiento latente", start: 24, end: 48}
+        - {name: "Procedencia y revocación verificable", start: 48, end: 60}
+      en:
+        - {name: "Persistence beyond one turn", start: 0, end: 19}
+        - {name: "Trust, provenance and retention", start: 19, end: 38}
+        - {name: "Observability and revocation", start: 38, end: 48}
+    security04:
+      es:
+        - {name: "Del test a la cadena de ataque", start: 0, end: 24}
+        - {name: "Cobertura adaptativa y validez del evaluador", start: 24, end: 48}
+        - {name: "Evidencia y gate de release", start: 48, end: 60}
+      en:
+        - {name: "Test reachable harm across the path", start: 0, end: 19}
+        - {name: "Coverage and evaluator calibration", start: 19, end: 38}
+        - {name: "Evidence-bound release decisions", start: 38, end: 48}
+    security05:
+      es:
+        - {name: "Separar lectura y acción privilegiada", start: 0, end: 24}
+        - {name: "Mínimo privilegio y fronteras MCP", start: 24, end: 48}
+        - {name: "Observabilidad, kill path y confirmación", start: 48, end: 60}
+      en:
+        - {name: "Separate untrusted reading from action", start: 0, end: 19}
+        - {name: "Least privilege and MCP trust boundaries", start: 19, end: 38}
+        - {name: "Observability and stop mechanisms", start: 38, end: 48}
+voice_accessibility_debt:
+  status: DEFERRED_OWNER_LOCAL
+  current_golden_blocker: false
+  do_not_fabricate: [NARRATION, CAPTIONS_FROM_MISSING_NARRATION, TRANSCRIPT_FROM_MISSING_NARRATION, NARRATION_TIMINGS]
 new_gate_defect_found:
   component: scripts/validate_security03_pedagogy_contract.py
   action_run: 35290297406
-  defect: Runtime-vs-weights negative mutation changed a selector token instead of reliably breaking the causal state transition, so the mutation test could fail to prove its intended invariant.
+  defect: Runtime-vs-weights negative mutation changed a selector token instead of reliably breaking the causal state transition.
   repair_commit: d9b2913dba16f984ef01c3335b28d173ea9c5e45
-  repair: Mutate weights='clean' to weights='sleeper' and require the missing causal transition to be rejected.
-article_iterations_after_real_review:
-  Security02: 7
-  Security03: 7
-  Security04: 5
-  Security05: 5
+  repair_verified_by_action: 35291147066
+article_iterations_after_this_run:
+  Security02: 8
+  Security03: 8
+  Security04: 6
+  Security05: 6
 next_actions:
-  - Re-run focused Security02-05 exact-head guards to verify the repaired Security03 mutation.
-  - Embed curated non-voice chapters/key moments in ES/EN from this reviewed visual evidence.
-  - Re-run MEDIA_VISUAL exact-head gate.
-  - Perform real article browser/pixel/pedagogy review separately; frame sampling cannot certify it.
+  - Run one focused exact-head Security02-05 source/build/MEDIA_VISUAL milestone against the embedded chapter declarations.
+  - Keep PIXEL_REVIEW and PEDAGOGY_REVIEW false until real article desktop/mobile normal/reduced and interaction-state inspection.
+  - Do not treat future voice/accessibility work as a blocker for current GOLDEN.
