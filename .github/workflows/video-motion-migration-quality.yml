@@ -29,3 +29,39 @@ jobs:
       - name: Validate complete-series Golden ledger
         working-directory: motion
         run: npm run gate
+
+  renderer-layout-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install renderer dependencies and required fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Validate every Spanish v4 composition in horizontal and portrait
+        working-directory: motion
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-layout
+          for spec in content/modelos-razonadores/*.es.json; do
+            python scripts/render.py "$spec" --out qa-layout --check-only
+            python scripts/render.py "$spec" --out qa-layout --portrait --check-only
+          done
+      - name: Upload layout validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelos-razonadores-layout-validation
+          path: motion/qa-layout/*-validation.json
+          if-no-files-found: warn
+          retention-days: 7
