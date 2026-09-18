@@ -1,0 +1,63 @@
+name: Security02-05 fast bounded browser review
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/browser-review-fast-request.json']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-02-05-browser-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-review-fast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact revision/request
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/browser-review-fast-request.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax gate
+        run: node --check scripts/validate_security_02_05_browser_fast.mjs
+      - name: Strict ES + EN build
+        run: |
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Install browser
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve preview
+        run: |
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/security-browser-fast-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/security-browser-fast-preview.log
+          exit 1
+      - name: Real Security02-05 browser matrix
+        run: node scripts/validate_security_02_05_browser_fast.mjs
+      - name: Retain exact screenshots/report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-02-05-browser-review-fast
+          path: artifacts/security-requalification/security-02-05-browser-fast/
+          retention-days: 1
+          if-no-files-found: error
+          overwrite: true
