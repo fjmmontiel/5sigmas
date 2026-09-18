@@ -203,6 +203,16 @@ series/seguridad-ia/00_presentacion_serie.md:
   video_title: AI Security
   video_summary: "How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action."
   video_duration: PT48S
+  video_chapters:
+    - name: "Control and data share one channel"
+      start: 0
+      end: 19
+    - name: "Search and persistence expand the attack surface"
+      start: 19
+      end: 38
+    - name: "Production controls limit effects"
+      start: 38
+      end: 48
 
 series/seguridad-ia/01-prompt-injection.md:
   video: 01-prompt-injection.mp4
@@ -210,6 +220,16 @@ series/seguridad-ia/01-prompt-injection.md:
   video_title: Prompt Injection
   video_summary: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
   video_duration: PT48S
+  video_chapters:
+    - name: "Control and data share one channel"
+      start: 0
+      end: 19
+    - name: "Retrieval and filters remain part of the security boundary"
+      start: 19
+      end: 38
+    - name: "Separate reading from action"
+      start: 38
+      end: 48
 
 series/seguridad-ia/02-jailbreaks.md:
   video: 02-jailbreaks.mp4
