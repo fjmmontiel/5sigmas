@@ -127,9 +127,16 @@ def self_test(texts: dict[str, tuple[str, str]]) -> None:
         raise AssertionError("persistence residual-reachability mutation was not rejected")
     runtime_html, runtime_i18n = texts["runtime_vs_weights"]
     mutated = dict(texts)
-    mutated["runtime_vs_weights"] = (runtime_html.replace('data-intervention="swap-model"', 'data-intervention="highlight-model"', 1), runtime_i18n)
-    if not any("swap-model" in item for item in failures(mutated)):
-        raise AssertionError("runtime-vs-weights causal intervention mutation was not rejected")
+    # Mutate the actual causal state transition, not the button selector. The
+    # selector text can legitimately occur more than once (DOM + JS), which
+    # made the earlier mutation too weak and able to leave the behavior intact.
+    mutated["runtime_vs_weights"] = (
+        runtime_html.replace("weights='clean'", "weights='sleeper'"),
+        runtime_i18n,
+    )
+    runtime_failures = failures(mutated)
+    if not any("weights='clean'" in item for item in runtime_failures):
+        raise AssertionError("runtime-vs-weights causal state-transition mutation was not rejected")
     propagation_html, propagation_i18n = texts["propagation"]
     mutated = dict(texts)
     mutated["propagation"] = (propagation_html.replace("const reachable=s.propagated&&s.derivatives", "const reachable=s.propagated", 1), propagation_i18n)
