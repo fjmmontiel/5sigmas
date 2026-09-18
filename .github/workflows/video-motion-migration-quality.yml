@@ -47,7 +47,7 @@ jobs:
           fc-cache -f
           python -m pip install -r motion/requirements.txt
           python -m playwright install --with-deps chromium
-      - name: Validate every authored v4 composition in horizontal and portrait
+      - name: Validate every authored v4 composition and render representative visual QA sheets
         working-directory: motion
         shell: bash
         run: |
@@ -61,7 +61,7 @@ jobs:
               extra=()
               if [ "$orientation" = portrait ]; then extra+=(--portrait); fi
               log="qa-layout/${base}-${orientation}.log"
-              if python scripts/render.py "$spec" --out qa-layout --check-only "${extra[@]}" >"$log" 2>&1; then
+              if python scripts/render.py "$spec" --out qa-layout --review-sheet "${extra[@]}" >"$log" 2>&1; then
                 echo "PASS ${base} ${orientation}" | tee -a qa-layout/results.txt
               else
                 echo "FAIL ${base} ${orientation}" | tee -a qa-layout/results.txt
@@ -71,7 +71,7 @@ jobs:
           done
           cat qa-layout/results.txt
           exit "$failed"
-      - name: Upload layout validation reports and diagnostics
+      - name: Upload layout validation and visual QA sheets
         if: always()
         uses: actions/upload-artifact@v4
         with:
