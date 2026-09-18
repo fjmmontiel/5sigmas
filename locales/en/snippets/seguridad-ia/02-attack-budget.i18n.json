@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/02-attack-budget.html",
-  "source_blob_sha": "9467b72e145d4449c4de90e076c4b04e097e1188",
+  "source_blob_sha": "dbf00db841539c80ba3226f6cb1e1e1548d6a3d9",
   "replacements": {
     "Una afirmación de seguridad necesita declarar el presupuesto": "A security claim needs to declare the budget",
     "El presupuesto cambia cuánto espacio puede explorar el atacante. En modo fijo, cada intento parte del mismo origen. En modo adaptativo, el resultado anterior cambia la trayectoria del siguiente intento.": "The budget changes how much of the space an attacker can explore. In fixed mode, every attempt starts from the same origin. In adaptive mode, the previous result changes the trajectory of the next attempt.",

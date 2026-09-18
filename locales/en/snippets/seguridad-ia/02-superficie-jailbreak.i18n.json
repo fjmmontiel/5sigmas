@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/02-superficie-jailbreak.html",
-  "source_blob_sha": "58560b3314d13ed7ee7e6445597563b5cc4fb3e7",
+  "source_blob_sha": "f970076d81483b24d551d3b0b92c23a4add36b74",
   "replacements": {
     "Un jailbreak automatizado es una búsqueda adaptativa": "An automated jailbreak is an adaptive search",
     "Cada intento produce una señal de evaluación. Si el atacante puede observarla, el siguiente candidato depende del resultado anterior: la trayectoria cambia, no solo el contador de intentos.": "Each attempt produces an evaluation signal. If the attacker can observe it, the next candidate depends on the previous result: the trajectory changes, not just the attempt counter.",

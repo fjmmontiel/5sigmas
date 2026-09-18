@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/03-propagation-map.html",
-  "source_blob_sha": "d215f817f31afd52201928b7b7c015917902bc3e",
+  "source_blob_sha": "82965dc6c71e8b0706444d0c77cf9121f131b97d",
   "replacements": {
     "Revocar exige cortar el grafo de linaje, no solo borrar el origen": "Revocation requires cutting the lineage graph, not just deleting the origin",
     "Una escritura puede generar embeddings, resúmenes, caches y checkpoints. El experimento muestra por qué DELETE memory_id no prueba olvido cuando un derivado sigue siendo recuperable.": "A write can generate embeddings, summaries, caches and checkpoints. The experiment shows why DELETE memory_id does not prove forgetting while a derivative remains retrievable.",

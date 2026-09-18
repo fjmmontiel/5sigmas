@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/04-regression-loop.html",
-  "source_blob_sha": "211b44f6635f5fcd4a4043634a862183d85fae23",
+  "source_blob_sha": "f36b6a0d686e32bb135ddc8eada5cf016acc817f",
   "replacements": {
     "Un hallazgo sólo protege una release si cambia el gate": "A finding protects a release only if it changes the gate",
     "Modifica tres evidencias. El gate sólo permite desplegar cuando el ataque es reproducible, la mitigación corta esa misma trayectoria y el caso legítimo sigue funcionando.": "Change three pieces of evidence. The gate allows deployment only when the attack is reproducible, the mitigation cuts that same trajectory, and the legitimate case still works.",

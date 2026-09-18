@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/02-outcome-ladder.html",
-  "source_blob_sha": "582dfa14434212c89d39c035f9b2b1173b26eed0",
+  "source_blob_sha": "0e71abb8a1658af597e8023e65136b2e4410e815",
   "replacements": {
     "Un jailbreak textual no equivale a un efecto externo": "A textual jailbreak is not the same as an external effect",
     "Cambia tres condiciones del producto. La trayectoria sólo avanza mientras la salida sea accionable, exista una ruta de escritura y la autorización independiente permita ejecutarla.": "Change three product conditions. The trajectory advances only while the output is actionable, a write path exists, and independent authorization allows execution.",

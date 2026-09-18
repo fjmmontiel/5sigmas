@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/03-runtime-vs-weights.html",
-  "source_blob_sha": "2ff5129ee4bb608e97abaedddc3b865140e11c34",
+  "source_blob_sha": "094ced4648a1973ab5378b980fcd658e0b167b70",
   "replacements": {
     "La misma salida puede venir de dos persistencias distintas": "The same output can come from two different kinds of persistence",
     "El diagnóstico útil no pregunta solo «¿sigue ocurriendo?». Aplica una intervención que corte un camino y observa qué camino causal sigue alcanzando la decisión.": "A useful diagnosis does not ask only “does it still happen?”. Apply an intervention that cuts one path and observe which causal path can still reach the decision.",
