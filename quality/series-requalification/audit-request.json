@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 110,
+  "diagnostic_revision": 111,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "ddb4c7d622b5fe0c04578aadeb39105fc68d55a2",
-  "reason": "Owner amendment 5727362172 makes INDEXABILITY_PASS a mandatory conjunctive GOLDEN gate. Reopen Security00-05 fail-closed, build exact ES+EN rendered output, execute scripts/validate_security_indexability.py including negative noindex/canonical/H1/sitemap-hreflang/orphan fixtures through the rendered audit, and verify all 12 article route×locale plus their watch surfaces for self canonical, no accidental noindex, localized search-document fundamentals, sitemap/video-sitemap inclusion, reciprocal sitemap hreflang, crawlable internal discovery, and article↔watch links. Authenticated GSC 2026-09-18 observations are separate selection evidence and must not fail this gate absent deterministic technical defects. Site-facing bytes are unchanged, so reuse existing exact pixel/pedagogy/browser evidence and do not spend the full-catalogue browser sweep in this focused indexability milestone. VOICE remains DEFERRED_OWNER_LOCAL and non-blocking under amendment 5716685049.",
+  "requested_head_parent": "13bb439096e4bf320d16603d6896d83cbf868814",
+  "reason": "Causal reproduction only after run 35334463849: Security INDEXABILITY itself passed exactly (12/12 route-locale pairs, zero indexability blockers) and strict ES/EN, media visual, rendered audit and Security guards passed; the run failed only because shared browser resources observed one fatal lazy-media abort on the unchanged pre-Datacenters reference /en/series/from-cave-to-agi/00_presentacion_serie/ desktop-normal. Repeat the same focused stack once, unchanged site-facing bytes and unchanged thresholds, to determine whether that single no-regression signal is reproducible before classifying it as a real shared regression versus transient runtime/harness event. Preserve fail-closed enforcement, the full request/response sequence-proof classifier, owner amendment 5727362172 INDEXABILITY gate and owner amendment 5716685049 VOICE deferral. Do not run the 336-context full-catalogue sweep in this causal diagnostic.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
