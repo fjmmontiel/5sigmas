@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 /**
- * Bounded manual-review evidence capture for the active Security00 article.
+ * Bounded manual-review evidence capture for Security00 and Security01.
  *
- * This is deliberately NOT a MEDIA_PASS or BROWSER_PASS gate. The canonical
- * validate_security_video_lifecycle.mjs gate runs separately and owns strict
- * request-cancellation classification. This capture keeps error/resource
- * listeners alive through poster -> play -> pause -> seek -> end -> next and
- * retains small current-head JPEGs for human pixel/pedagogy inspection.
+ * This is deliberately NOT a MEDIA_VISUAL_PASS or BROWSER_PASS gate. Canonical
+ * validators run separately. This capture keeps error/resource listeners alive
+ * through poster -> play -> pause -> seek -> end -> next and retains current-head
+ * JPEGs for manual pixel/pedagogy review. It also samples six VISUAL video states
+ * per locale/article so non-voice key moments can be curated from actual frames.
  *
- * The videos are muted only so browser policy cannot block deterministic visual
- * lifecycle capture. Muting is not audio evidence and cannot satisfy the
- * narration/captions/transcript requirements.
+ * Videos are muted only so browser policy cannot block deterministic visual
+ * lifecycle capture. Muting is not audio evidence. No narration, transcript,
+ * captions, or narration-derived timings are inferred here. Voice remains
+ * DEFERRED_OWNER_LOCAL under owner amendment 5716685049.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -22,15 +23,17 @@ const shotDir = path.join(out, 'screenshots');
 await fs.mkdir(shotDir, { recursive: true });
 
 const routes = [
-  { locale: 'es', route: '/series/seguridad-ia/00_presentacion_serie/', next: '/series/seguridad-ia/01-prompt-injection/' },
-  { locale: 'en', route: '/en/series/seguridad-ia/00_presentacion_serie/', next: '/en/series/seguridad-ia/01-prompt-injection/' },
+  { chapter: '00', locale: 'es', route: '/series/seguridad-ia/00_presentacion_serie/', next: '/series/seguridad-ia/01-prompt-injection/' },
+  { chapter: '00', locale: 'en', route: '/en/series/seguridad-ia/00_presentacion_serie/', next: '/en/series/seguridad-ia/01-prompt-injection/' },
+  { chapter: '01', locale: 'es', route: '/series/seguridad-ia/01-prompt-injection/', next: '/series/seguridad-ia/02-jailbreaks/' },
+  { chapter: '01', locale: 'en', route: '/en/series/seguridad-ia/01-prompt-injection/', next: '/en/series/seguridad-ia/02-jailbreaks/' },
 ];
 const widths = [1440, 390];
 const motions = ['no-preference', 'reduce'];
+const visualSampleFractions = [0.02, 0.2, 0.4, 0.6, 0.8, 0.98];
 const failures = [];
 const contexts = [];
 const check = (ok, message, detail = null) => { if (!ok) failures.push({ message, detail }); };
-const slug = (value) => String(value).replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-|-$/g, '');
 
 async function launchBrowser() {
   try {
@@ -45,14 +48,15 @@ async function jpeg(locator, file) {
 }
 
 async function captureRoot(root, record, state) {
-  const filename = `${record.locale}-${record.mobile ? 'mobile' : 'desktop'}-${record.motion}-${state}.jpg`;
+  const filename = `security${record.chapter}-${record.locale}-${record.mobile ? 'mobile' : 'desktop'}-${record.motion}-${state}.jpg`;
   const target = path.join(shotDir, filename);
   await jpeg(root, target);
   record.screenshots.push({ state, path: path.relative(out, target) });
+  return path.relative(out, target);
 }
 
 async function captureViewport(page, record, state) {
-  const filename = `${record.locale}-${record.mobile ? 'mobile' : 'desktop'}-${record.motion}-${state}.jpg`;
+  const filename = `security${record.chapter}-${record.locale}-${record.mobile ? 'mobile' : 'desktop'}-${record.motion}-${state}.jpg`;
   const target = path.join(shotDir, filename);
   await page.screenshot({ path: target, type: 'jpeg', quality: 72, fullPage: false, animations: 'disabled' });
   record.screenshots.push({ state, path: path.relative(out, target) });
@@ -82,7 +86,25 @@ async function snapshotMedia(video) {
     readyState: node.readyState,
     networkState: node.networkState,
     errorCode: node.error?.code ?? null,
+    videoWidth: Number(node.videoWidth || 0),
+    videoHeight: Number(node.videoHeight || 0),
   }));
+}
+
+async function seekPaused(video, target) {
+  return video.evaluate(async (node, t) => {
+    node.pause();
+    let observed = false;
+    await Promise.race([
+      new Promise(resolve => {
+        node.addEventListener('seeked', () => { observed = true; resolve(); }, { once: true });
+        node.currentTime = t;
+      }),
+      new Promise(resolve => setTimeout(resolve, 3000)),
+    ]);
+    await new Promise(resolve => setTimeout(resolve, 80));
+    return { observed, currentTime: Number(node.currentTime || 0), paused: Boolean(node.paused), errorCode: node.error?.code ?? null };
+  }, target);
 }
 
 const launched = await launchBrowser();
@@ -92,7 +114,7 @@ try {
     for (const width of widths) {
       for (const motion of motions) {
         const mobile = width === 390;
-        const ctx = `${item.locale}/${mobile ? 'mobile' : 'desktop'}/${motion}`;
+        const ctx = `security${item.chapter}/${item.locale}/${mobile ? 'mobile' : 'desktop'}/${motion}`;
         const record = {
           ...item,
           width,
@@ -101,9 +123,12 @@ try {
           engine: launched.engine,
           chrome_launch_error: launched.chromeError || null,
           screenshots: [],
+          video_frame_samples: [],
           runtime_events: [],
-          verdict_basis: 'MANUAL_REVIEW_EVIDENCE_ONLY_CANONICAL_LIFECYCLE_GATE_RUNS_SEPARATELY',
+          verdict_basis: 'MANUAL_REVIEW_EVIDENCE_ONLY_CANONICAL_GATES_RUN_SEPARATELY',
           muted_for_visual_capture: true,
+          voice_enhancement: 'DEFERRED_OWNER_LOCAL',
+          narration_or_transcript_inference: false,
         };
         const context = await browser.newContext({
           viewport: { width, height: mobile ? 844 : 1000 },
@@ -177,6 +202,7 @@ try {
           await page.waitForTimeout(150);
           record.playing = await snapshotMedia(video);
           check(!record.playing.paused && record.playing.currentTime > 0 && record.playing.errorCode == null, `${ctx}: playing state invalid`, record.playing);
+          check(record.playing.videoWidth > 0 && record.playing.videoHeight > 0, `${ctx}: decoded video dimensions missing`, record.playing);
           await captureRoot(root, record, '02-playing');
 
           phase = 'pause';
@@ -192,22 +218,26 @@ try {
           const duration = record.paused.duration;
           check(Number.isFinite(duration) && duration > 1, `${ctx}: invalid decoded duration`, record.paused);
           const seekTarget = Math.min(Math.max(0.5, duration * 0.25), duration - 0.5);
-          const seekObserved = await video.evaluate(async (node, target) => {
-            let observed = false;
-            await Promise.race([
-              new Promise(resolve => {
-                node.addEventListener('seeked', () => { observed = true; resolve(); }, { once: true });
-                node.currentTime = target;
-              }),
-              new Promise(resolve => setTimeout(resolve, 3000)),
-            ]);
-            return observed;
-          }, seekTarget);
-          record.seeked = await snapshotMedia(video);
-          record.seeked.target = seekTarget;
-          record.seeked.eventObserved = seekObserved;
-          check(seekObserved && Math.abs(record.seeked.currentTime - seekTarget) <= 1.0 && record.seeked.paused, `${ctx}: seek state invalid`, record.seeked);
+          const seekState = await seekPaused(video, seekTarget);
+          record.seeked = { ...(await snapshotMedia(video)), target: seekTarget, eventObserved: seekState.observed };
+          check(seekState.observed && Math.abs(record.seeked.currentTime - seekTarget) <= 1.0 && record.seeked.paused, `${ctx}: seek state invalid`, record.seeked);
           await captureRoot(root, record, '04-seeked');
+
+          phase = 'visual-sampling';
+          for (let sampleIndex = 0; sampleIndex < visualSampleFractions.length; sampleIndex++) {
+            const fraction = visualSampleFractions[sampleIndex];
+            const target = Math.min(Math.max(0.05, duration * fraction), Math.max(0.05, duration - 0.15));
+            const state = await seekPaused(video, target);
+            check(state.observed && state.errorCode == null, `${ctx}: visual frame seek failed`, { fraction, target, state });
+            const label = `frame-${String(sampleIndex).padStart(2, '0')}-${String(Math.round(fraction * 100)).padStart(2, '0')}pct`;
+            const screenshot = await captureRoot(root, record, label);
+            record.video_frame_samples.push({
+              fraction,
+              requested_second: target,
+              observed_second: state.currentTime,
+              screenshot,
+            });
+          }
 
           phase = 'end';
           const endTarget = Math.max(0, duration - Math.min(0.35, duration / 4));
@@ -300,15 +330,21 @@ try {
 
 const report = {
   captured_at: new Date().toISOString(),
-  scope: 'security-00-video-lifecycle-state-pixels',
+  scope: 'security-00-01-video-lifecycle-and-nonvoice-visual-key-moment-evidence',
+  owner_amendment_comment: 5716685049,
   engine: launched.engine,
   chrome_launch_error: launched.chromeError || null,
   expected_contexts: routes.length * widths.length * motions.length,
   contexts_observed: contexts.length,
-  expected_screenshots_per_context: 6,
+  expected_screenshots_per_context: 12,
   screenshots_observed: contexts.reduce((sum, row) => sum + row.screenshots.length, 0),
+  expected_visual_samples_per_context: visualSampleFractions.length,
+  visual_samples_observed: contexts.reduce((sum, row) => sum + row.video_frame_samples.length, 0),
   media_audio_evidence: false,
-  media_pass: false,
+  voice_enhancement: 'DEFERRED_OWNER_LOCAL',
+  voice_is_blocker: false,
+  narration_or_transcript_inference: false,
+  media_visual_review: 'PENDING_MANUAL_INSPECTION_OF_NATIVE_VIDEO_FRAMES_AND_METADATA',
   pixel_review: 'PENDING_MANUAL_INSPECTION',
   pedagogy_review: 'PENDING_MANUAL_INSPECTION',
   failures,
@@ -317,8 +353,8 @@ const report = {
 await fs.writeFile(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
 
 if (failures.length) {
-  console.error(`Security00 lifecycle state capture FAILED (${failures.length}) using ${launched.engine}`);
+  console.error(`Security00/01 lifecycle + visual sampling FAILED (${failures.length}) using ${launched.engine}`);
   for (const failure of failures) console.error(`- ${failure.message}${failure.detail ? ` :: ${JSON.stringify(failure.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security00 lifecycle state capture PASS: ${contexts.length} contexts, ${report.screenshots_observed} retained JPEGs; manual PIXEL/PEDAGOGY review still required; MEDIA_PASS remains false.`);
+console.log(`Security00/01 lifecycle + visual sampling PASS: ${contexts.length} contexts, ${report.screenshots_observed} retained JPEGs, ${report.visual_samples_observed} non-voice video samples; manual MEDIA_VISUAL/PIXEL/PEDAGOGY review still required; VOICE stays DEFERRED_OWNER_LOCAL.`);
