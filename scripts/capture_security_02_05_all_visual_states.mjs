@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 /**
  * Exhaustive rendered-state evidence for every Security02-05 teaching visual.
- * Captures each visual root at its initial state and after every visible control,
- * in ES/EN × desktop/mobile × normal/reduced. This is evidence only: manual
- * PIXEL_REVIEW/PEDAGOGY_REVIEW remains required.
+ * Captures each visual root at its initial state and after every visible teaching
+ * control, in ES/EN × desktop/mobile × normal/reduced. Fullscreen/open-shell
+ * controls are presentation chrome rather than teaching state and are excluded
+ * from the state walk; their lifecycle is covered by the focused browser gate.
+ * This is evidence only: manual PIXEL_REVIEW/PEDAGOGY_REVIEW remains required.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -62,30 +64,41 @@ for (const item of routes) {
       const visualRecords = [];
       for (let i=0;i<rootCount;i++) {
         const root = roots.nth(i);
-        const identity = await root.evaluate((node,index) => ({index,id:node.id||null,classes:[...node.classList],tag:node.tagName.toLowerCase()}),i);
-        const key = identity.id || identity.classes[0] || `visual-${i}`;
-        const captures = [];
-        let file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-start.png`);
-        await capture(root,file); captures.push(path.relative(process.cwd(),file));
-        const buttons = root.locator('button:visible');
-        const buttonCount = await buttons.count();
-        if (buttonCount) {
-          for (let j=0;j<buttonCount;j++) {
-            const button = buttons.nth(j);
-            const label = ((await button.getAttribute('aria-label')) || (await button.textContent()) || `button-${j}`).replace(/\s+/g,' ').trim().slice(0,60);
-            await activate(button,spec.mobile);
-            file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-after-${String(j).padStart(2,'0')}-${safe(label)}.png`);
+        let identity = {index:i,id:null,classes:[],tag:'unknown'};
+        try {
+          identity = await root.evaluate((node,index) => ({index,id:node.id||null,classes:[...node.classList],tag:node.tagName.toLowerCase()}),i);
+          const key = identity.id || identity.classes[0] || `visual-${i}`;
+          const captures = [];
+          let file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-start.png`);
+          await capture(root,file); captures.push(path.relative(process.cwd(),file));
+
+          // `data-anim-shell-open` only changes presentation chrome by moving the
+          // same visual into the fullscreen modal. It is not a pedagogical state
+          // and would intercept pointer events for the real controls underneath.
+          const excludedUiButtons = await root.locator('button[data-anim-shell-open]:visible').count();
+          const buttons = root.locator('button:not([data-anim-shell-open]):visible');
+          const buttonCount = await buttons.count();
+          if (buttonCount) {
+            for (let j=0;j<buttonCount;j++) {
+              const button = buttons.nth(j);
+              const label = ((await button.getAttribute('aria-label')) || (await button.textContent()) || `button-${j}`).replace(/\s+/g,' ').trim().slice(0,60);
+              await activate(button,spec.mobile);
+              file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-after-${String(j).padStart(2,'0')}-${safe(label)}.png`);
+              await capture(root,file); captures.push(path.relative(process.cwd(),file));
+            }
+          } else {
+            await page.waitForTimeout(spec.reducedMotion==='reduce'?120:700);
+            file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-mid.png`);
+            await capture(root,file); captures.push(path.relative(process.cwd(),file));
+            await page.waitForTimeout(spec.reducedMotion==='reduce'?120:1000);
+            file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-final.png`);
             await capture(root,file); captures.push(path.relative(process.cwd(),file));
           }
-        } else {
-          await page.waitForTimeout(spec.reducedMotion==='reduce'?120:700);
-          file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-mid.png`);
-          await capture(root,file); captures.push(path.relative(process.cwd(),file));
-          await page.waitForTimeout(spec.reducedMotion==='reduce'?120:1000);
-          file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-final.png`);
-          await capture(root,file); captures.push(path.relative(process.cwd(),file));
+          visualRecords.push({...identity,key,buttonCount,excludedUiButtons,captures});
+        } catch (error) {
+          failures.push({ctx,type:'visual_exception',visual:identity,detail:String(error?.stack||error)});
+          visualRecords.push({...identity,error:String(error?.stack||error)});
         }
-        visualRecords.push({...identity,key,buttonCount,captures});
       }
       const geometry = await page.evaluate(() => ({viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth}));
       if (geometry.scrollWidth>geometry.viewport+2 || geometry.bodyWidth>geometry.viewport+2) failures.push({ctx,type:'overflow',geometry});
@@ -98,7 +111,7 @@ for (const item of routes) {
   }
 }
 await browser.close();
-await fs.writeFile(path.join(out,'all-visual-states-report.json'),JSON.stringify({generated_at:new Date().toISOString(),contract:'all teaching visual roots × all visible controls or timed initial/mid/final states; manual PIXEL/PEDAGOGY required',contexts:records.length,failures,records},null,2));
+await fs.writeFile(path.join(out,'all-visual-states-report.json'),JSON.stringify({generated_at:new Date().toISOString(),contract:'all teaching visual roots × all visible teaching controls or timed initial/mid/final states; fullscreen shell chrome excluded; manual PIXEL/PEDAGOGY required',contexts:records.length,failures,records},null,2));
 console.log(`SECURITY02_05_ALL_VISUAL_STATES contexts=${records.length} failures=${failures.length}`);
 if (failures.length) { for (const f of failures) console.error('FAIL',JSON.stringify(f)); process.exit(1); }
 console.log('PASS exhaustive Security02-05 teaching-visual state capture.');
