@@ -31,7 +31,9 @@ jobs:
         with:
           node-version: '22'
       - name: Syntax gate
-        run: node --check scripts/validate_security_02_05_browser_fast.mjs
+        run: |
+          node --check scripts/validate_security_02_05_browser_fast.mjs
+          node --check scripts/diagnose_security_02_05_styles.mjs
       - name: Strict ES + EN build
         run: |
           mkdocs build --clean --strict
@@ -52,6 +54,9 @@ jobs:
           exit 1
       - name: Real Security02-05 browser matrix
         run: node scripts/validate_security_02_05_browser_fast.mjs
+      - name: Rendered style diagnostics
+        if: always()
+        run: node scripts/diagnose_security_02_05_styles.mjs
       - name: Retain exact screenshots/report
         if: always()
         uses: actions/upload-artifact@v4
