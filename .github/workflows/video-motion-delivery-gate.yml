@@ -131,23 +131,46 @@ jobs:
 
       - name: Validate same-origin and R2 media staging contracts
         run: |
-          python scripts/prepare_video_media.py --output .video-media-gate
+          python scripts/prepare_video_media.py --check
           python scripts/audit_media_magic.py
           python scripts/test_video_schema_contract.py
           python - <<'PY'
+          import importlib.util
           import json
           from pathlib import Path
-          manifest=json.loads(Path('.video-media-gate/manifest.json').read_text(encoding='utf-8'))
-          keys={row['key'] for row in manifest['objects']}
+
+          path = Path('scripts/prepare_video_media.py')
+          spec = importlib.util.spec_from_file_location('prepare_video_media_gate', path)
+          module = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          spec.loader.exec_module(module)
+          pages, objects, errors = module.collect()
+          if errors:
+              raise SystemExit('Video media manifest validation failed: ' + '; '.join(errors))
+          counts = {}
+          for page in pages:
+              counts[page['locale']] = counts.get(page['locale'], 0) + 1
+          manifest = {
+              'version': 2,
+              'object_count': len(objects),
+              'total_bytes': sum(row['bytes'] for row in objects),
+              'locale_page_counts': counts,
+              'pages': pages,
+              'objects': objects,
+          }
+          out = Path('.video-media-gate')
+          out.mkdir(parents=True, exist_ok=True)
+          (out / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          keys={row['key'] for row in objects}
           stems=('00_presentacion_serie','01-que-es-razonar','02-fallos','03-test-time-compute','04-latencia-streaming','05-riesgos')
           required={f'{prefix}series/modelos-razonadores/{stem}{ext}' for prefix in ('','en/') for stem in stems for ext in ('.mp4','.jpg','.vtt')}
           missing=sorted(required-keys)
           if missing:
               raise SystemExit(f'R2 staging is missing reasoning media: {missing}')
-          counts=manifest.get('locale_page_counts') or {}
           if counts.get('es',0)<6 or counts.get('en',0)<6:
               raise SystemExit(f'Locale video-page coverage is incomplete: {counts}')
-          print(f'R2 staging covers all {len(required)} reasoning media objects; locale pages={counts}')
+          print(f'R2 manifest covers all {len(required)} reasoning media objects; locale pages={counts}')
           PY
 
       - name: Build and audit Spanish consumers strictly
