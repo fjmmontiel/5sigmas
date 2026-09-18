@@ -1,11 +1,13 @@
 {
-  "capture_revision": 85,
-  "scope": "security_00_01_prevention_vs_impact_exact_head",
+  "capture_revision": 86,
+  "scope": "security_00_01_exact_head_nonvoice_media_pixel_pedagogy",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "f98acf3697d6feff6bc7e614e87fa15f5171815f",
-  "site_facing_bytes_changed": true,
-  "reason": "Fresh editorial evidence capture for the latest Security00 prevention-vs-impact-control site-facing bytes after the owner clarified MEDIA_DEFERRED/VOICE_PENDING sequencing. Capture ES/EN at desktop~1440/mobile~390 under normal/reduced motion: complete article, every active Security00 asset, semantic start/intermediate/bounded-final/broad-permission-final checkpoints, real touch/keyboard states, watch surface, and poster-play-pause-seek-end-next lifecycle while runtime listeners remain through teardown. Capture success is evidence only; PIXEL_REVIEW and PEDAGOGY_REVIEW require manual pixel inspection and must not be inferred from the workflow. VOICE_MISSING remains fail-closed only for MEDIA_PASS/ARTICLE_GOLDEN, not for CONTENT_REQUALIFIED progression once all non-media gates are proven.",
+  "requested_head_parent": "d61c1385e79547370437ed92504596c41044e50d",
+  "site_facing_bytes_changed": false,
+  "reason": "Fresh exact-head evidence under owner amendment 5716685049. Re-capture Security00/01 ES/EN at desktop~1440/mobile~390 under normal/reduced motion: complete article and teaching assets, semantic start/intermediate/final states, keyboard/touch/focus, watch surface and poster-play-pause-seek-end-next lifecycle. The lifecycle evidence now also samples six real VISUAL video states for BOTH Security00 and Security01 so missing non-voice key moments can be curated from the actual native MP4 timeline. Do not infer narration, transcript, captions or narration timing. VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL and is not a current GOLDEN blocker. Capture success is evidence only; manual MEDIA_VISUAL, PIXEL_REVIEW and PEDAGOGY_REVIEW remain explicit decisions.",
   "contract_issue": 305,
-  "amendment_comment": 5655569434,
-  "owner_clarification_comment": 5716742417
+  "owner_amendment_comment": 5716685049,
+  "voice_enhancement": "DEFERRED_OWNER_LOCAL",
+  "voice_is_blocker": false,
+  "narration_or_transcript_inference": false
 }
