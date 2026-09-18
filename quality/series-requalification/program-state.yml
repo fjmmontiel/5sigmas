@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -26,8 +26,16 @@ series_status:
     known_p0_p1_p2: 0
     release_branch: release/security-golden-requalification
     release_pr: 330
+    release_head: 79a2ca58d578eb9892134655c0786abf089be5ff
+    release_checks: IN_PROGRESS_AFTER_FAIL_CLOSED_GATE_DRIFT_REPAIRS
     state: RELEASE_READY_PR_CHECKS_IN_PROGRESS_NOT_YET_PRODUCTION_SERIES_GOLDEN
     finalization: MERGE_ONLY_EXACT_HEAD_GREEN_THEN_DEPLOY_AND_VERIFY_LIVE_ES_EN_BEFORE_SERIES_GOLDEN
+    release_gate_repairs_2026_09_18:
+      - HISTORICAL_92_GT_91_CAPTIONS_TRANSCRIPT_DEBT_PRESERVED_AS_VOICE_DEFERRED_NOT_GOLDEN_BLOCKER
+      - ENGLISH_SECURITY_PRESENTATION_VALIDATOR_ALIGNED_TO_CURRENT_RELATIONSHIP_FIRST_SOURCE
+      - CODING_AGENT_MATHJAX_RENDER_ARTIFACT_NORMALIZED_WITHOUT_WEAKENING_PREDICATE
+      - GENERIC_ACTIONS_ARTIFACTS_FAILURE_ONLY_WITH_SCOPE_CONJUNCTION_SUPPORTED
+      - VIDEO_INDEXING_AUDIT_ACCEPTS_EITHER_AUTOMATIC_SEEKTOACTION_OR_CURATED_CLIP_KEY_MOMENTS
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
     state: QA_ACTIVE
@@ -37,5 +45,12 @@ series_status:
     pixel: PENDING
     pedagogy: PENDING
     note: Work may continue while Security release checks/deploy complete; no partial Agents release is authorized.
+    current_branch_head: cd173c4e29022615465e02ad06405a33ce378592
+    current_run_source_snippet_inspection:
+      agents03_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
+      agents04_es_en_relationship_visual: INSPECTED_SOURCE_STRUCTURE_STILL_FAIL_CLOSED_PENDING_EXECUTION_RENDER_PIXEL_PEDAGOGY
+      deterministic_relationship_guard: PRESENT_WITH_4_NEGATIVE_MUTATIONS_PENDING_COHERENT_INTEGRATION_EXECUTION
+      article_iteration_counts_changed: false
+      reason: ONLY_SNIPPET_AND_GATE_INSPECTION_PERFORMED_NOT_FULL_ROUTE_LOCALE_ARTICLE_REVIEW
 
 no_linkedin_write_from_this_program: true
