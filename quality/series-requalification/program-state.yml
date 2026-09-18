@@ -1,4 +1,4 @@
-schema_version: 5
+schema_version: 6
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -35,7 +35,7 @@ series_status:
     production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: QA_ACTIVE
+    state: ARTICLE_GOLDEN_6_OF_6_AWAITING_FRESH_ZERO_BASED_SERIES_AUDIT
     voice_enhancement: DEFERRED_OWNER_LOCAL
     technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
     technical_milestone_run: 35402872378
@@ -57,11 +57,19 @@ series_status:
     browser_media_aborts_unresolved: 0
     causal_abort_proof_mutations: 8
     causal_abort_proof_constraints: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_200_206_BEFORE_ABORT_PLUS_FINAL_HEALTH_REQUIRED; UNPROVEN_ABORTS_REMAIN_FATAL; LISTENERS_REMAIN_ACTIVE_THROUGH_TEARDOWN
-    pixel: PENDING_FULL_PAGE
-    pedagogy: PENDING_FULL_PAGE
-    browser: PENDING_FULL_INTERACTION_LIFECYCLE
-    article_golden: 0/6
-    next_action: FULL_MULTI_ARTICLE_BROWSER_INTERACTION_LIFECYCLE_PLUS_REAL_FULL_PAGE_PIXEL_PEDAGOGY_DESKTOP_MOBILE_NORMAL_REDUCED
+    full_experience_head: 68dc7739e7855d3f78e7394d775af904c55b4e69
+    full_experience_run: 35405478586
+    full_experience: PASS_48_OF_48
+    full_experience_artifact_id: 10571993843
+    full_experience_artifact_sha256: 9a8cedad7adebe228ba15235be731c0f013f87c08ed63c1df8ff3ecc6cb4d6cc
+    browser: PASS_12_OF_12
+    pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+    pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+    known_p0_p1_p2: 0
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    series_golden: false
+    next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_FINAL_RELEASE_PR_DEPLOY_LIVE_QA
   agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
