@@ -1,8 +1,8 @@
 {
   "contract": "OWNER_AMENDMENT_5716685049",
-  "scope": "security02_05_inline_css_repair_verification",
-  "requested_parent_head": "aaa4bcae031da22ce4864c806f57be275fa7f158",
+  "scope": "security02_05_strict_build_failure_diagnosis",
+  "requested_parent_head": "20fb4bb0a786b7aad7d13a07f00bd5da21ec0ff4",
   "matrix": "ES_EN_x_1440_390_x_normal_reduced_x_keyboard_touch_focus",
   "voice_enhancement": "DEFERRED_OWNER_LOCAL",
-  "purpose": "Verify the systemic inline-CSS parser repair, explicit focus visibility, hidden SVG topology, responsive rendering and interactions on the exact repaired Security02-05 head."
+  "purpose": "Capture exact strict ES/EN build logs fail-closed; if builds pass, continue the bounded real-browser matrix and retain screenshots/report."
 }
