@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 103,
-  "diagnostic_scope": "focused_security_02_05",
+  "diagnostic_revision": 104,
+  "diagnostic_scope": "full",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "648e5f8988e1622c0e1636433c1fe629e0cad163",
-  "reason": "Verify the eight Security02-05 ES/EN chapter/key-moment declarations curated only from the manually reviewed 48-frame visual evidence retained in rev101. Re-run exact source/pedagogy mutations, strict ES/EN, publication/rendered/shared browser-resource regression and current MEDIA_VISUAL. The expected non-voice chapter blockers are now closed at source level but must fail closed until this exact-head run confirms them. Article PIXEL_REVIEW/PEDAGOGY_REVIEW remain pending and are not certified by frame sampling or this focused technical milestone. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049; no narration-derived captions/transcripts/timings are fabricated.",
+  "requested_head_parent": "183ec52c5c1720f27edd06eed8373c27a0438e23",
+  "reason": "All six seguridad-ia routes are now individually GOLDEN under owner amendment 5716685049 with VOICE_ENHANCEMENT explicitly deferred and nonblocking. Run one justified zero-based full experience audit before any SERIES_GOLDEN claim: rediscover the complete 84-page ES/EN catalogue, rerun independent source/publication/curriculum-video/current MEDIA_VISUAL contracts, strict ES/EN, rendered audit, full browser/resource matrix and shared-regression coverage. This is a series release milestone, not cadence CI. Do not treat legacy narration/caption/transcript debt as a current blocker and do not fabricate narration-derived artifacts.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
