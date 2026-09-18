@@ -96,16 +96,68 @@ def update_en_media_caption(text: str, doc: str, caption: str) -> str:
     return text[:start] + block + text[end:]
 
 
+def _indent_width(line: str) -> int:
+    return len(line) - len(line.lstrip(" "))
+
+
 def remove_reasoning_override() -> None:
+    """Remove only the historical English TTC override without touching sibling config.
+
+    The previous regex used DOTALL inside a repeated ``.*`` group. Besides being
+    unnecessarily expensive, it could consume unrelated ``extra`` keys after the
+    target block. This line-oriented parser keeps the operation bounded and exact.
+    """
     text = MKDOCS_EN.read_text(encoding="utf-8")
-    pattern = re.compile(
-        r"(?ms)^  locale_video_pages:\s*\n"
-        r"    series/modelos-razonadores/03-test-time-compute\.md:\s*\n"
-        r"(?:      .*\n)+?(?=^  [A-Za-z_][A-Za-z0-9_-]*:)",
+    lines = text.splitlines(keepends=True)
+    parent = "  locale_video_pages:"
+    target = "    series/modelos-razonadores/03-test-time-compute.md:"
+
+    parent_index = next((i for i, line in enumerate(lines) if line.rstrip("\r\n") == parent), None)
+    if parent_index is None:
+        if target.strip() in text:
+            raise ValueError("mkdocs.en.yml contains the TTC override outside locale_video_pages")
+        return
+
+    parent_end = parent_index + 1
+    while parent_end < len(lines):
+        line = lines[parent_end]
+        if line.strip() and _indent_width(line) <= 2:
+            break
+        parent_end += 1
+
+    target_index = next(
+        (i for i in range(parent_index + 1, parent_end) if lines[i].rstrip("\r\n") == target),
+        None,
     )
-    updated, count = pattern.subn("", text, count=1)
-    if count == 0 and "series/modelos-razonadores/03-test-time-compute.md:" in text:
-        raise ValueError("mkdocs.en.yml still contains an unrecognized reasoning locale_video_pages override")
+    if target_index is None:
+        if target.strip() in text:
+            raise ValueError("mkdocs.en.yml contains an unrecognized reasoning locale_video_pages override")
+        return
+
+    target_end = target_index + 1
+    while target_end < parent_end:
+        line = lines[target_end]
+        if line.strip() and _indent_width(line) <= 4:
+            break
+        target_end += 1
+    del lines[target_index:target_end]
+
+    parent_end = parent_index + 1
+    while parent_end < len(lines):
+        line = lines[parent_end]
+        if line.strip() and _indent_width(line) <= 2:
+            break
+        parent_end += 1
+    has_other_pages = any(
+        line.strip() and _indent_width(line) == 4
+        for line in lines[parent_index + 1:parent_end]
+    )
+    if not has_other_pages:
+        del lines[parent_index]
+
+    updated = "".join(lines)
+    if target.strip() in updated:
+        raise ValueError("mkdocs.en.yml still contains the reasoning locale_video_pages override")
     MKDOCS_EN.write_text(updated, encoding="utf-8")
 
 
@@ -143,19 +195,23 @@ def stage(artifacts: Path) -> None:
             if locale == "es":
                 replace_or_add_frontmatter_field(destination / doc, "video_poster", f"{stem}.jpg")
                 replace_or_add_frontmatter_field(destination / doc, "video_captions", f"{stem}.vtt", after="video_poster")
+        print(f"Staged canonical {locale} media for {len(ROWS)} videos", flush=True)
 
     media = EN_MEDIA.read_text(encoding="utf-8")
     for stem, doc, _ in ROWS:
         media = update_en_media_caption(media, doc, f"{stem}.vtt")
     EN_MEDIA.write_text(media, encoding="utf-8")
+    print("Updated English caption metadata", flush=True)
 
     remove_reasoning_override()
+    print("Removed historical English TTC override", flush=True)
 
     for workflow in (
         ROOT / ".github" / "workflows" / "deploy-pages.yml",
         ROOT / ".github" / "workflows" / "pr-visual-review.yml",
     ):
         remove_named_steps(workflow)
+    print("Removed historical TTC workflow injection steps", flush=True)
 
     migration = json.loads(MIGRATION.read_text(encoding="utf-8"))
     migration.pop("localizedMediaTargets", None)
@@ -169,6 +225,7 @@ def stage(artifacts: Path) -> None:
         "Technical GOLDEN remains machine-gated until delivery integration passes for every ES/EN consumer surface.",
     ]
     MIGRATION.write_text(json.dumps(migration, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print("Reasoning delivery staging complete", flush=True)
 
 
 def _assert_contains(path: Path, tokens: list[str]) -> None:
