@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic Canvas -> H.264, poster, chapters, transcript and validation report."""
+"""Deterministic Canvas -> H.264, poster, chapters, transcript, captions and validation report."""
 from __future__ import annotations
 import argparse,base64,hashlib,io,json,math,os,re,shutil,subprocess
 from pathlib import Path
@@ -43,6 +43,19 @@ def review_sheet(page,spec,target):
     sheet.save(target,quality=90,optimize=True)
     return [{'scene':scene_id,'phase':phase,'time':round(t,4)} for scene_id,phase,t,_ in tiles]
 
+def vtt_time(seconds):
+    milliseconds=max(0,round(float(seconds)*1000));hours,milliseconds=divmod(milliseconds,3600000);minutes,milliseconds=divmod(milliseconds,60000);secs,milliseconds=divmod(milliseconds,1000)
+    return f'{hours:02d}:{minutes:02d}:{secs:02d}.{milliseconds:03d}'
+
+def captions_vtt(spec):
+    rows=['WEBVTT',''];offset=0.0;index=1
+    for scene in spec['scenes']:
+        for cue in scene.get('cues',[]):
+            rows.extend([str(index),f"{vtt_time(offset+cue['at'])} --> {vtt_time(offset+cue['end'])}",cue['text'],''])
+            index+=1
+        offset+=scene['duration']
+    return '\n'.join(rows)
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('spec',type=Path);ap.add_argument('--out',type=Path,default=ROOT/'dist');ap.add_argument('--fps',type=int,default=60);ap.add_argument('--portrait',action='store_true');ap.add_argument('--check-only',action='store_true');ap.add_argument('--review-sheet',action='store_true');ap.add_argument('--still',type=float);args=ap.parse_args()
     if args.fps not in (24,25,30,50,60):ap.error('Supported fps: 24,25,30,50,60')
@@ -76,5 +89,5 @@ def main():
         partial.replace(target);probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_format','-show_streams','-of','json',str(target)]));report.update({'frames':frames,'fps':args.fps,'duration':float(probe['format']['duration']),'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'streams':probe['streams'],'audio':'No audio added; narration is optional and not a release gate.'})
         image=page.evaluate('(t)=>window.frame(t)',max(.5,total-1));(args.out/(stem+'.jpg')).write_bytes(base64.b64decode(image));chapters=[];offset=0
         for s in spec['scenes']:chapters.append({'id':s['id'],'name':' '.join(s['title']),'start':offset,'end':offset+s['duration']});offset+=s['duration']
-        report['chapters']=chapters;(args.out/(stem+'-validation.json')).write_text(json.dumps(report,ensure_ascii=False,indent=2));(args.out/(stem+'-chapters.json')).write_text(json.dumps(chapters,ensure_ascii=False,indent=2));transcript='\n\n'.join('## '+' '.join(s['title'])+'\n\n'+'\n\n'.join(s['paragraphs'])+'\n\n'+s.get('source','') for s in spec['scenes']);(args.out/(stem+'-transcript.md')).write_text('# '+spec['title']+'\n\n'+transcript);browser.close();print(json.dumps({'file':str(target),'duration':report['duration'],'frames':frames,'layout_issues':0},ensure_ascii=False))
+        report['chapters']=chapters;(args.out/(stem+'-validation.json')).write_text(json.dumps(report,ensure_ascii=False,indent=2));(args.out/(stem+'-chapters.json')).write_text(json.dumps(chapters,ensure_ascii=False,indent=2));transcript='\n\n'.join('## '+' '.join(s['title'])+'\n\n'+'\n\n'.join(s['paragraphs'])+'\n\n'+s.get('source','') for s in spec['scenes']);(args.out/(stem+'-transcript.md')).write_text('# '+spec['title']+'\n\n'+transcript);(args.out/(stem+'-captions.vtt')).write_text(captions_vtt(spec));browser.close();print(json.dumps({'file':str(target),'duration':report['duration'],'frames':frames,'layout_issues':0},ensure_ascii=False))
 if __name__=='__main__':main()
