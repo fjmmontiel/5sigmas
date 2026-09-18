@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 105,
-  "diagnostic_scope": "full",
+  "diagnostic_revision": 106,
+  "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "76996446fe21d59483243acc418874c4f837388a",
-  "reason": "Regression milestone for the shared full-catalogue browser harness discovered by zero-based Security series audit 35307911914. The generic audit previously launched Playwright bundled Chromium and misclassified H.264 playback incapability as 96 product REQUEST_FAILED/VIDEO_PLAYBACK_ERROR findings. The harness now requires codec-capable system Chrome and fails explicitly as BROWSER_AUDIT_RUNTIME_UNAVAILABLE rather than falling back. Rerun the same 84-page x desktop/mobile x normal/reduced matrix without weakening thresholds. Preserve the genuine later-series findings, especially the agentes-voz-tiempo-real/05 ES mobile reduced lazy-traversal timeout, and keep VOICE_ENHANCEMENT deferred/nonblocking under owner amendment 5716685049.",
+  "requested_head_parent": "b036cc0bb6ad44bceb1fcb3dab14dab6dc261bb0",
+  "reason": "Focused continuation of the fresh zero-based Security series audit after run 35315313292 completed the shared all-inventoried browser/resource/lifecycle sweep but was cancelled before the Security00/01-specific browser, contrast, lifecycle, article-watch touch, prompt-state, keyboard-focus, listener-lifetime and final enforcement/evidence steps. Do not repeat the expensive full-catalogue browser matrix. Complete only the remaining Security00/01 technical evidence on the same repair lineage, preserve all current thresholds, keep PIXEL_REVIEW/PEDAGOGY_REVIEW separate from nominal browser gates, and keep VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL nonblocking under owner amendment 5716685049.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
