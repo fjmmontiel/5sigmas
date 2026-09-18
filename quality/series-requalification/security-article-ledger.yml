@@ -1,11 +1,11 @@
-schema_version: 14
+schema_version: 15
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_precedence_restatement_comment: 5719162654
 iteration_count_epoch: owner_amendment_5716685049
 pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
 series: seguridad-ia
-series_state: REQUALIFICATION_QA_H2_KEY_MOMENT_GATE_REPAIRED_EXACT_VERIFICATION_PENDING
+series_state: REQUALIFICATION_QA_ALL_ARTICLES_CURRENT_SERIES_AUDIT_PENDING
 article_golden_requires_voice: false
 series_golden_requires_voice: false
 history_preserved_in_git_and_issue_305: true
@@ -27,7 +27,7 @@ shared_current_contract:
 
 preserved_prior_article_evidence:
   security00_01:
-    evidence_head: e5d186c2c2af0c5b5e9d3d020a764bce6da08ed5
+    site_facing_evidence_head: e5d186c2c2af0c5b5e9d3d020a764bce6da08ed5
     action_run: 35306912345
     strict_es_en: PASS
     browser_article_contexts: PASS
@@ -36,7 +36,7 @@ preserved_prior_article_evidence:
     pedagogy_review: PASS
     reviewer_scope: SAME_ORCHESTRATOR_NO_INDEPENDENCE_CLAIM
   security02_05:
-    evidence_head: 78dbfee5481ca80d3826fd727f463a2a0b3bfe46
+    site_facing_evidence_head: 78dbfee5481ca80d3826fd727f463a2a0b3bfe46
     action_run: 35304844058
     strict_es_en: PASS
     browser_matrix_32_contexts: PASS
@@ -47,17 +47,39 @@ preserved_prior_article_evidence:
 
 current_requalification:
   discovered_gap: H2_TO_CURATED_KEY_MOMENT_MAPPING_WAS_BINDING_BUT_NOT_PERSISTED_OR_ENFORCED_IN_ARTICLE_GOLDEN_RECEIPTS
-  classification: P1_SHARED_GATE_AND_EVIDENCE_GAP
+  classification: P1_SHARED_GATE_AND_EVIDENCE_GAP_CLOSED
   voice_related: false
   editorial_map_receipt: quality/series-requalification/security-video-section-maps.yml
   editorial_map_commit: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3
   mapped_security_locale_h2: 82
-  mapping_validation: EXACT_H2_AND_EXISTING_CURATED_KEY_MOMENT_NAMES_LOCALLY_RECONCILED
+  mapping_validation: EXACT_H2_AND_EXISTING_CURATED_KEY_MOMENT_NAMES_RECONCILED
   owner_current_gate_facade_commit: 8e32fc4bb016adb8e023f4995d82d13c6afd58bd
-  exact_verification_head: f4700eada64cb1508d382dd08fbdcd729f68af9a
-  exact_verification_action: 35321687271
-  exact_verification_status: RUNNING
-  rationale: Focused Security gates retain global/future-series debt in evidence while only narration-dependent caption/transcript findings are deferred under owner amendment 5716685049. All non-voice Security findings remain fail-closed.
+  security00_01_exact_gate:
+    evidence_head: f4700ead9025881245db836897907130624b12b6
+    action_run: 35321687271
+    status: PASS
+    source_build_media_visual: PASS
+    browser_interaction_lifecycle: PASS
+  security02_05_first_exact_gate:
+    evidence_head: 99588a56df73f62b695dbfdf714d20e203c017e9
+    action_run: 35322940400
+    status: FAIL_CLOSED
+    defect: SECURITY05_PEDAGOGY_VALIDATOR_STALE_TOKENS_AFTER_REAL_TOPOLOGY_FIX
+    classification: P1_GATE_CODE_DRIFT_NON_SITE_FACING
+  security05_validator_repair:
+    commit: f4b0fdb20acb87aea95739fd7eb6054e1a4ad97f
+    change: REQUIRE_AND_NEGATIVELY_MUTATE_TOGGLEATTRIBUTE_DEPLOY_HOLD_TOPOLOGY
+    thresholds_lowered: false
+  security02_05_exact_gate:
+    evidence_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2
+    action_run: 35323539593
+    status: PASS
+    source_relationship_guards: PASS
+    strict_es_en: PASS
+    media_visual: PASS
+    rendered_html: PASS
+    shared_browser_resources: PASS
+  rationale: Current article gates are green after closing the narration-independent H2-to-curated-key-moment receipt gap and Security05 validator drift. Site-facing bytes did not change during the validator/receipt repair, so previously inspected browser/pixel/pedagogy evidence remains the exact site-facing evidence. A fresh zero-based series audit is still required before SERIES_GOLDEN.
 
 coverage_last_full_verified:
   locale_pages: 84
@@ -69,21 +91,21 @@ coverage_last_full_verified:
   note: These full-catalogue counts predate targeted Security remediation; do not rewrite global counts until a new full sweep.
 
 articles:
-  - {route: series/seguridad-ia/00_presentacion_serie.md, locale: es, iteration_count: 4, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/00_presentacion_serie.md, locale: en, iteration_count: 4, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/01-prompt-injection.md, locale: es, iteration_count: 4, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/01-prompt-injection.md, locale: en, iteration_count: 4, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/02-jailbreaks.md, locale: es, iteration_count: 11, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/02-jailbreaks.md, locale: en, iteration_count: 11, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/03-envenenamiento.md, locale: es, iteration_count: 11, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/03-envenenamiento.md, locale: en, iteration_count: 11, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/04-red-teaming.md, locale: es, iteration_count: 9, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/04-red-teaming.md, locale: en, iteration_count: 9, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/05-controles-produccion.md, locale: es, iteration_count: 9, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
-  - {route: series/seguridad-ia/05-controles-produccion.md, locale: en, iteration_count: 9, last_reviewed_head: cecaf4387de1e65c0a1d2b47a8a75a143effb0f3, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: true, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_PENDING_EXACT_GATE, watch_video_lifecycle: PASS_UNCHANGED_SITE_BYTES, evidence_revision: f4700eada64cb1508d382dd08fbdcd729f68af9a, next_action: EXACT_HEAD_CURRENT_SOURCE_MEDIA_GATE}
+  - {route: series/seguridad-ia/00_presentacion_serie.md, locale: es, iteration_count: 4, last_reviewed_head: f4700ead9025881245db836897907130624b12b6, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: f4700ead9025881245db836897907130624b12b6, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/00_presentacion_serie.md, locale: en, iteration_count: 4, last_reviewed_head: f4700ead9025881245db836897907130624b12b6, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: f4700ead9025881245db836897907130624b12b6, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/01-prompt-injection.md, locale: es, iteration_count: 4, last_reviewed_head: f4700ead9025881245db836897907130624b12b6, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: f4700ead9025881245db836897907130624b12b6, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/01-prompt-injection.md, locale: en, iteration_count: 4, last_reviewed_head: f4700ead9025881245db836897907130624b12b6, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: f4700ead9025881245db836897907130624b12b6, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/02-jailbreaks.md, locale: es, iteration_count: 11, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/02-jailbreaks.md, locale: en, iteration_count: 11, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/03-envenenamiento.md, locale: es, iteration_count: 11, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/03-envenenamiento.md, locale: en, iteration_count: 11, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/04-red-teaming.md, locale: es, iteration_count: 9, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/04-red-teaming.md, locale: en, iteration_count: 9, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/05-controles-produccion.md, locale: es, iteration_count: 9, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
+  - {route: series/seguridad-ia/05-controles-produccion.md, locale: en, iteration_count: 9, last_reviewed_head: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, state: GOLDEN, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS, watch_video_lifecycle: PASS, evidence_revision: ac625ed07506ab23c1c238c4ec7e8fa062d6b7d2, next_action: FRESH_ZERO_BASED_SERIES_AUDIT}
 
 next_batch:
-  - Harvest Action 35321687271 and repair any concrete non-voice Security00/01 blocker without weakening thresholds.
-  - Run the same owner-current source/media verification for Security02-05 only if Security00/01 proves the gate facade honest.
-  - Then perform the fresh zero-based seguridad-ia series audit before declaring SERIES_GOLDEN.
+  - Repair the known full-series harness timeout without lowering any quality threshold; prior full audit 35315313292 completed the 336-context browser sweep but was cancelled before the remaining required steps could finish under the 35-minute job timeout.
+  - Trigger one fresh zero-based seguridad-ia series audit after the harness runtime repair; do not declare SERIES_GOLDEN before every non-deferred series gate completes.
+  - If that audit is green, persist SERIES_GOLDEN and move active work to agentes-ia in canonical order.
   - Keep VOICE_ENHANCEMENT deferred and outside the current GOLDEN blocker set.
