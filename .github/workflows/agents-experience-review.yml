@@ -47,6 +47,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Prepare fail-closed sequential interaction probe
+        run: python scripts/prepare_agents_experience_validator.py
+
       - name: Validate focused review script syntax
         run: node --check scripts/validate_agents_full_experience.mjs
 
