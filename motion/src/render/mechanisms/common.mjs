@@ -16,7 +16,7 @@ export function intro(P,s,t) {
     });
     if(q>0&&q<1)P.circle(108,y+28,36,T.background,T.accent,1);
   });
-  P.enter(s.cues?motionValue(s,t,'intro.reveal')*4:t,2.9,0,0,()=>{P.path([[77,717],[910,717]],T.rule,1.5);P.text(s.data.endNote||P.l('introEnd'),75,748,27,T.accentText,500,'left',855);});
+  P.enter(s.cues?motionValue(s,t,'intro.reveal')*4:t,2.9,0,0,()=>{P.path([[77,717],[910,717]],T.rule,1.5);P.wrap(s.data.endNote||P.l('introEnd'),75,748,855,25,T.accentText,500,1.2,'left');});
 }
 export function pipeline(P,s,t) {
   const T=P.T,items=s.data.items,n=items.length,gap=34,cardW=(930-gap*(n-1))/n;
@@ -58,7 +58,7 @@ export function steps(P,s,t) {
     if(active&&progress>i+.25)P.check(925,y+32);
     P.c.restore();
   });
-  if(s.data.note)P.text(s.data.note,500,761,25,T.muted,400,'center',970);
+  if(s.data.note)P.wrap(s.data.note,500,744,970,23,T.muted,400,1.22,'center');
 }
 export function duration(P,s,t) {
   const T=P.T,d=s.data,total=d.stages.reduce((a,x)=>a+x.amount,0),progress=s.cues?motionValue(s,t,'duration.accumulate'):phase(t,1.1,Math.max(6,s.duration*.52));
