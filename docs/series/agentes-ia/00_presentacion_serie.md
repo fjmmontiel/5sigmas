@@ -9,7 +9,20 @@ tags:
   - Tool Calling
   - Arquitectura
 video: "00_presentacion_serie.mp4"
+video_poster: "00_presentacion_serie.jpg"
+video_title: "Agentes de IA"
+video_summary: "Mapa visual de qué convierte un modelo que responde en un sistema que decide acciones: bucle, evaluación, seguridad y operación con límites."
 video_duration: "PT60S"
+video_chapters:
+  - name: "Del modelo que responde al agente que actúa"
+    start: 0
+    end: 20
+  - name: "Bucle, evaluación y límites de autonomía"
+    start: 20
+    end: 40
+  - name: "Seguridad, evidencia y operación"
+    start: 40
+    end: 60
 hide:
   - toc
 ---
