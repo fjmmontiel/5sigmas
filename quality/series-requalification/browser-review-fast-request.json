@@ -1,8 +1,8 @@
 {
   "contract": "OWNER_AMENDMENT_5716685049",
-  "scope": "security02_05_browser_failure_repairs",
-  "requested_parent_head": "390cd76aa3d19c311a9c8c914933e914e9832cb9",
+  "scope": "security02_05_complete_state_capture",
+  "requested_parent_head": "4d9e03241e6cb2f7d7d499f42628b4702e65ffa6",
   "matrix": "ES_EN_x_1440_390_x_normal_reduced_x_keyboard_touch_focus",
   "voice_enhancement": "DEFERRED_OWNER_LOCAL",
-  "purpose": "Re-run the exact bounded browser matrix after fixing Security03 focus visibility and Security05 SVG DEPLOY/HOLD topology toggling; strict ES/EN must remain green and screenshots/report must be retained."
+  "purpose": "Capture and retain every meaningful start/intermediate/final interaction state for Security02-05 after the browser gate is green, so manual PIXEL_REVIEW and PEDAGOGY_REVIEW can be performed on exact evidence without treating technical assertions as editorial certification."
 }
