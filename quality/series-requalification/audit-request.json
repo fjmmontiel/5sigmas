@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 108,
+  "diagnostic_revision": 109,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "cca131626b55c1919be0b084396a8545c3fd4ab1",
-  "reason": "Owner-amendment integration milestone after Security00/01 passed the repaired H2-to-curated-key-moment current gate on Action 35321687271. Revalidate Security02-05 on the same persisted 82-H2 narration-independent editorial mapping, running their source/relationship mutation guards, strict ES/EN, current MEDIA_VISUAL, rendered audit and shared Security/Datacenters/pre-Datacenters resource regression. Preserve full-catalogue and historical voice/accessibility debt in evidence; defer only narration-dependent audio/captions/transcript/timings under amendment 5716685049. Do not rerun the expensive full-catalogue browser matrix in this focused milestone; preserved exact browser/pixel/pedagogy evidence remains valid only because the H2 mapping receipt does not change site-facing article/visual bytes.",
+  "requested_head_parent": "f4b0fdb20acb87aea95739fd7eb6054e1a4ad97f",
+  "reason": "Exact verification of the Security05 non-voice gate repair after Action 35322940400 exposed stale pedagogy-contract tokens. The article visual already uses toggleAttribute('hidden', ...) so the validator was updated to require and negatively mutate the actual DEPLOY/HOLD topology switching rather than obsolete .hidden assignments. Re-run Security02-05 source/relationship guards, strict ES/EN, current MEDIA_VISUAL, rendered audit and shared Security/Datacenters/pre-Datacenters resources. Voice/audio/captions/transcript/timings remain DEFERRED_OWNER_LOCAL under amendment 5716685049 and are not blockers. No site-facing article/visual bytes changed, so do not spend the full-catalogue browser sweep in this focused repair verification.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
