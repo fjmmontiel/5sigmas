@@ -1,0 +1,33 @@
+name: Video motion complete-series release gate
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'motion/**'
+      - 'docs/series/modelos-razonadores/**'
+      - 'docs/en/series/modelos-razonadores/**'
+      - '.github/workflows/video-motion-release-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  modelos-razonadores-golden:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run deterministic contracts
+        working-directory: motion
+        run: npm test
+      - name: Require every localized output to be GOLDEN
+        working-directory: motion
+        run: npm run gate:release
