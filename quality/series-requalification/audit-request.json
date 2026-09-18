@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 111,
-  "diagnostic_scope": "focused_security_02_05",
+  "diagnostic_revision": 112,
+  "diagnostic_scope": "full",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "13bb439096e4bf320d16603d6896d83cbf868814",
-  "reason": "Causal reproduction only after run 35334463849: Security INDEXABILITY itself passed exactly (12/12 route-locale pairs, zero indexability blockers) and strict ES/EN, media visual, rendered audit and Security guards passed; the run failed only because shared browser resources observed one fatal lazy-media abort on the unchanged pre-Datacenters reference /en/series/from-cave-to-agi/00_presentacion_serie/ desktop-normal. Repeat the same focused stack once, unchanged site-facing bytes and unchanged thresholds, to determine whether that single no-regression signal is reproducible before classifying it as a real shared regression versus transient runtime/harness event. Preserve fail-closed enforcement, the full request/response sequence-proof classifier, owner amendment 5727362172 INDEXABILITY gate and owner amendment 5716685049 VOICE deferral. Do not run the 336-context full-catalogue sweep in this causal diagnostic.",
+  "requested_head_parent": "234f57aa3cd48a8c6516f1018a26f3ee242c13db",
+  "reason": "Fresh zero-based seguridad-ia SERIES_GOLDEN audit after repairing the diagnostic harness runtime budget from 35 to 65 minutes. Execute the complete fail-closed stack on the exact current repair head: negative fixtures, publication discovery independent of presentations, full source and curriculum-video inventory, Security02-05 source/pedagogy contracts, strict ES/EN builds, Security00-05 MEDIA_VISUAL with VOICE kept DEFERRED_OWNER_LOCAL under owner amendment 5716685049, rendered audit with mandatory Security INDEXABILITY under owner amendment 5727362172, shared Datacenters/pre-Datacenters no-regression browser resources, all 84-page desktop/mobile normal/reduced contexts, and Security00/01 interaction/contrast/lifecycle/touch/focus/listener checks. No quality threshold or gate is removed or weakened. This Action is the single justified integration milestone needed to decide whether seguridad-ia can close SERIES_GOLDEN; CI does not substitute for the already-recorded real PIXEL/PEDAGOGY inspections and must not fabricate them.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
