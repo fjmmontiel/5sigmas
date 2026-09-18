@@ -13,6 +13,7 @@ on:
       - 'motion/scripts/validate_render_package.py'
       - 'motion/scripts/finalize_reasoning_delivery.py'
       - 'motion/scripts/update_reasoning_locale_manifest.py'
+      - 'scripts/prepare_video_media.py'
       - '.github/workflows/video-motion-delivery-gate.yml'
   workflow_dispatch:
 
@@ -128,11 +129,26 @@ jobs:
       - name: Require metadata to remain derived from v4 specs
         run: python motion/scripts/sync_release_metadata.py --check
 
-      - name: Validate Spanish media declarations and binary signatures
+      - name: Validate same-origin and R2 media staging contracts
         run: |
-          python scripts/prepare_video_media.py --check
+          python scripts/prepare_video_media.py --output .video-media-gate
           python scripts/audit_media_magic.py
           python scripts/test_video_schema_contract.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('.video-media-gate/manifest.json').read_text(encoding='utf-8'))
+          keys={row['key'] for row in manifest['objects']}
+          stems=('00_presentacion_serie','01-que-es-razonar','02-fallos','03-test-time-compute','04-latencia-streaming','05-riesgos')
+          required={f'{prefix}series/modelos-razonadores/{stem}{ext}' for prefix in ('','en/') for stem in stems for ext in ('.mp4','.jpg','.vtt')}
+          missing=sorted(required-keys)
+          if missing:
+              raise SystemExit(f'R2 staging is missing reasoning media: {missing}')
+          counts=manifest.get('locale_page_counts') or {}
+          if counts.get('es',0)<6 or counts.get('en',0)<6:
+              raise SystemExit(f'Locale video-page coverage is incomplete: {counts}')
+          print(f'R2 staging covers all {len(required)} reasoning media objects; locale pages={counts}')
+          PY
 
       - name: Build and audit Spanish consumers strictly
         run: |
@@ -218,6 +234,7 @@ jobs:
           path: |
             .delivery-artifacts/package/
             .delivery-artifacts/review/
+            .video-media-gate/manifest.json
             motion/migration/modelos-razonadores.json
             motion/migration/modelos-razonadores-status.json
           if-no-files-found: error
