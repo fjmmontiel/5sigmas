@@ -1,12 +1,13 @@
 {
-  "diagnostic_revision": 112,
+  "diagnostic_revision": 113,
   "diagnostic_scope": "full",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "234f57aa3cd48a8c6516f1018a26f3ee242c13db",
-  "reason": "Fresh zero-based seguridad-ia SERIES_GOLDEN audit after repairing the diagnostic harness runtime budget from 35 to 65 minutes. Execute the complete fail-closed stack on the exact current repair head: negative fixtures, publication discovery independent of presentations, full source and curriculum-video inventory, Security02-05 source/pedagogy contracts, strict ES/EN builds, Security00-05 MEDIA_VISUAL with VOICE kept DEFERRED_OWNER_LOCAL under owner amendment 5716685049, rendered audit with mandatory Security INDEXABILITY under owner amendment 5727362172, shared Datacenters/pre-Datacenters no-regression browser resources, all 84-page desktop/mobile normal/reduced contexts, and Security00/01 interaction/contrast/lifecycle/touch/focus/listener checks. No quality threshold or gate is removed or weakened. This Action is the single justified integration milestone needed to decide whether seguridad-ia can close SERIES_GOLDEN; CI does not substitute for the already-recorded real PIXEL/PEDAGOGY inspections and must not fabricate them.",
+  "requested_head_parent": "e3f725660f20b853307d2ca2543e93300392b2f6",
+  "reason": "Re-run the fresh zero-based seguridad-ia SERIES_GOLDEN audit after repairing a stale gate-reconciliation defect exposed by run 35338715384. That exact run completed every substantive current Security gate successfully, including strict ES/EN, MEDIA_VISUAL, INDEXABILITY 12/12, the full 336-context browser sweep and all focused interaction/lifecycle/focus/listener checks, but the final enforcement still treated known future-series global catalogue debt as an active Security blocker. The owner-aware source/rendered and curriculum-video facades now preserve the whole-program TECHNICAL_FAIL/FAIL_CLOSED debt in their artifacts while returning the explicit owner_current_gate for the active seguridad-ia series. No future-series debt is deleted or whitened, no threshold/gate/browser context is removed, VOICE remains DEFERRED_OWNER_LOCAL, and INDEXABILITY remains conjunctive under amendment 5727362172. This is one justified integration milestone to verify the repaired reconciliation end to end; CI still does not substitute for the previously completed real PIXEL/PEDAGOGY inspections on unchanged site-facing bytes.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
   "owner_indexability_amendment_comment": 5727362172,
-  "owner_precedence_receipt_comment": 5719162654
+  "owner_precedence_receipt_comment": 5719162654,
+  "causal_predecessor_run": 35338715384
 }
