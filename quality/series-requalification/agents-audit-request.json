@@ -1,6 +1,6 @@
 {
-  "revision": 1,
+  "revision": 2,
   "series": "agentes-ia",
-  "requested_at": "2026-09-18T20:50:00Z",
-  "intent": "relationship guards + native MEDIA_VISUAL evidence + strict ES/EN + INDEXABILITY + article/watch browser-resource smoke; PIXEL/PEDAGOGY remain manual and VOICE deferred"
+  "requested_at": "2026-09-18T22:23:59Z",
+  "intent": "validate curated native MEDIA_VISUAL metadata for all 12 route-locale pairs plus relationship guards, strict ES/EN, INDEXABILITY and article/watch browser-resource smoke; PIXEL/PEDAGOGY remain manual, full BROWSER remains pending, and VOICE remains DEFERRED_OWNER_LOCAL"
 }
