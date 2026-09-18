@@ -1,6 +1,6 @@
 {
-  "revision": 3,
+  "revision": 4,
   "series": "agentes-ia",
-  "requested_at": "2026-09-18T22:32:51Z",
-  "intent": "re-run the exact Agents multi-article technical milestone after diagnosing browser-resource failures as media ERR_ABORTED events; require causal same-request/prior-range response plus final healthy media proof, preserve fatal handling for unproven aborts, keep relationship/publication/MEDIA_VISUAL/INDEXABILITY gates unchanged, PIXEL/PEDAGOGY manual, full BROWSER pending, and VOICE DEFERRED_OWNER_LOCAL"
+  "requested_at": "2026-09-18T23:36:00Z",
+  "intent": "fresh zero-based SERIES_GOLDEN audit after 12/12 route-locale ARTICLE_GOLDEN: rerun relationship guards and negative mutations, strict ES/EN builds, publication discovery across mkdocs nav + series hub + llms + JSON-LD + sitemap + Markdown mirrors, MEDIA_VISUAL with native ES/EN video evidence, INDEXABILITY with canonical/hreflang/sitemap/internal discovery/robots-noindex, and article/watch browser-resource lifecycle. Reconcile manual PIXEL/PEDAGOGY evidence from exact unchanged site-facing bytes captured by successful full-experience run 35405478586 at 68dc7739e7855d3f78e7394d775af904c55b4e69. VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL and non-blocking. Do not certify series on this request alone without final evidence reconciliation and release/live verification."
 }
