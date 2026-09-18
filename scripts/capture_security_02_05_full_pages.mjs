@@ -26,10 +26,11 @@ const specs = [
 ];
 const failures = [], records = [];
 const safe = s => s.replace(/[^a-zA-Z0-9_-]+/g, '-');
+const browser = await chromium.launch({ headless:true });
 for (const item of routes) {
   for (const spec of specs) {
     const ctx = `${item.locale}-security${item.chapter}-${spec.name}`;
-    const context = await (await chromium.launch({ headless:true })).newContext({
+    const context = await browser.newContext({
       viewport:{ width:spec.width, height:spec.height }, hasTouch:spec.mobile, isMobile:spec.mobile,
       reducedMotion:spec.reducedMotion, colorScheme:'light'
     });
@@ -49,8 +50,7 @@ for (const item of routes) {
       if (geometry.scrollWidth > geometry.viewport + 2 || geometry.bodyWidth > geometry.viewport + 2) failures.push({ctx, type:'overflow', geometry});
       const file = path.join(shots, `${safe(ctx)}-full-page.png`);
       await page.screenshot({path:file, fullPage:true, animations:'disabled'});
-      const fatal = runtime.filter(e => !(e.type==='requestfailed' && String(e.detail).includes('ERR_ABORTED')));
-      if (fatal.length) failures.push({ctx, type:'runtime', fatal});
+      if (runtime.length) failures.push({ctx, type:'runtime', runtime});
       records.push({...item, ...spec, ctx, geometry, screenshot:path.relative(process.cwd(),file), runtime});
     } catch (error) {
       failures.push({ctx, type:'exception', detail:String(error?.stack||error)});
@@ -58,7 +58,8 @@ for (const item of routes) {
     await context.close();
   }
 }
-await fs.writeFile(path.join(out,'fullpage-report.json'), JSON.stringify({generated_at:new Date().toISOString(), contract:'whole-article exact pixel evidence only; manual PIXEL/PEDAGOGY required', contexts:records.length, failures, records}, null, 2));
+await browser.close();
+await fs.writeFile(path.join(out,'fullpage-report.json'), JSON.stringify({generated_at:new Date().toISOString(), contract:'whole-article exact pixel evidence only; all pre-teardown runtime/resource failures fail closed; manual PIXEL/PEDAGOGY required', contexts:records.length, failures, records}, null, 2));
 console.log(`SECURITY02_05_FULLPAGE contexts=${records.length} failures=${failures.length}`);
 if (failures.length) { for (const f of failures) console.error('FAIL', JSON.stringify(f)); process.exit(1); }
 console.log('PASS exact whole-article captures for Security02-05.');
