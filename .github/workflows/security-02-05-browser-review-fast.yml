@@ -15,7 +15,7 @@ concurrency:
 jobs:
   browser-review-fast:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
       - name: Exact revision/request
@@ -34,6 +34,7 @@ jobs:
         run: |
           python scripts/validate_security_requalification_inline_css.py
           node --check scripts/validate_security_02_05_browser_fast.mjs
+          node --check scripts/capture_security_02_05_full_pages.mjs
           node --check scripts/diagnose_security_02_05_styles.mjs
       - name: Strict ES + EN build
         shell: bash
@@ -58,6 +59,8 @@ jobs:
           exit 1
       - name: Real Security02-05 browser matrix
         run: node scripts/validate_security_02_05_browser_fast.mjs
+      - name: Whole-article Security02-05 pixel captures
+        run: node scripts/capture_security_02_05_full_pages.mjs
       - name: Rendered style diagnostics
         if: always()
         run: node scripts/diagnose_security_02_05_styles.mjs
