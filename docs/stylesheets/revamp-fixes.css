@@ -98,6 +98,30 @@
   box-sizing: border-box;
 }
 
+/*
+ * The pre-Datacenters Chapter 5 agent-loop visual is a release-regression
+ * reference. Keep its mobile grid items shrinkable so a long translated detail
+ * cannot contribute its intrinsic width to document.scrollWidth. This is a
+ * containment fix only: desktop geometry and the teaching topology are unchanged.
+ */
+@media (max-width: 620px) {
+  .md-typeset .agc-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .md-typeset .agc-wrap .agc-main,
+  .md-typeset .agc-wrap .agc-loop-wrap,
+  .md-typeset .agc-wrap .agc-details,
+  .md-typeset .agc-wrap .agc-detail,
+  .md-typeset .agc-wrap .agc-detail-body {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 800px) {
   .s5-landing,
   .s5-landing > * { width: 100%; }

@@ -171,10 +171,12 @@ try {
       const articleText = (await page.locator('main').innerText()).toLocaleLowerCase();
       for (const token of ['tool_available', 'policy_authority', 'approval_subject', 'arguments_digest', 'credential_identity', 'credential_value_logged', 'network_destination', 'verification_head_sha']) check(articleText.includes(token), `${testCase.route}: ${viewport.name} production invariant missing ${token}`);
       check(articleText.includes('post-hook != preventive control'), `${testCase.route}: ${viewport.name} hook timing invariant missing`);
-      // MathJax inserts Unicode function-application/invisible-times characters and spacing
-      // into rendered formula text. Normalize only those renderer artifacts so the browser
-      // gate continues to verify the exact T/P/S/C/R/A predicate rather than stale typography.
-      const normalizedMathText = articleText.replace(/[\s\u2061-\u2064]/gu, '');
+      // MathJax may expose mathematical italic Unicode plus invisible function-application
+      // characters in rendered text. NFKC restores compatibility letters (for example
+      // mathematical T/a -> ASCII T/a); the second normalization removes only whitespace
+      // and MathJax invisible separators. The semantic T/P/S/C/R/A conjunction is still
+      // required in full, so this does not weaken the authority predicate.
+      const normalizedMathText = articleText.normalize('NFKC').replace(/[\s\u2061-\u2064]/gu, '');
       check(normalizedMathText.includes('t(a)') && normalizedMathText.includes('p(a)') && normalizedMathText.includes('s(a)') && normalizedMathText.includes('c(a)') && normalizedMathText.includes('r(a)') && normalizedMathText.includes('a(a)'), `${testCase.route}: ${viewport.name} executable authority predicate incomplete`);
 
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
