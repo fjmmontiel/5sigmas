@@ -17,7 +17,29 @@ const jobs = inventory.pages.flatMap(item =>
   ),
 );
 const results = [];
-const browser = await chromium.launch({ headless: true });
+
+async function launchAuditBrowser() {
+  const requestedChannel = process.env.S5_BROWSER_CHANNEL || 'chrome';
+  try {
+    const browser = await chromium.launch({ headless: true, channel: requestedChannel });
+    return {
+      browser,
+      runtime: {
+        requested_channel: requestedChannel,
+        actual_channel: requestedChannel,
+        fallback: false,
+        version: browser.version(),
+      },
+    };
+  } catch (error) {
+    throw new Error(
+      `BROWSER_AUDIT_RUNTIME_UNAVAILABLE: full-catalogue playback audit requires the codec-capable ${requestedChannel} channel; refusing bundled-Chromium fallback that can misclassify H.264 product media. ${String(error)}`,
+    );
+  }
+}
+
+const { browser, runtime: browserRuntime } = await launchAuditBrowser();
+console.log('BROWSER_AUDIT_RUNTIME ' + JSON.stringify(browserRuntime));
 let next = 0;
 
 const JOB_TIMEOUT_MS = Number(process.env.S5_BROWSER_JOB_TIMEOUT_MS || 25000);
@@ -694,6 +716,7 @@ const report = {
   scope: inventory.scope,
   contexts: results.length,
   expected_contexts: jobs.length,
+  browser_runtime: browserRuntime,
   worker_count: WORKER_COUNT,
   context_timeout_ms: JOB_TIMEOUT_MS,
   dom_subprobe_timeout_ms: DOM_SUBPROBE_TIMEOUT_MS,
