@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
  * Exhaustive rendered-state evidence for every Security02-05 teaching visual.
- * Captures each visual root at its initial state and after every visible teaching
- * control, in ES/EN × desktop/mobile × normal/reduced. Fullscreen/open-shell
- * controls are presentation chrome rather than teaching state and are excluded
- * from the state walk; their lifecycle is covered by the focused browser gate.
+ * Captures each innermost teaching visual at its initial state and after every
+ * meaningful teaching control, in ES/EN × desktop/mobile × normal/reduced.
+ * Fullscreen shell controls are presentation chrome and are excluded. Stateful
+ * controls whose action disables siblings (for example the kill path) are
+ * captured as independent scenarios instead of one destructive cumulative walk.
  * This is evidence only: manual PIXEL_REVIEW/PEDAGOGY_REVIEW remains required.
  */
 import fs from 'node:fs/promises';
@@ -32,17 +33,55 @@ const specs = [
   { name:'mobile-reduced', width:390, height:844, mobile:true, reducedMotion:'reduce' },
 ];
 const failures = [], records = [];
-const safe = s => s.replace(/[^a-zA-Z0-9_-]+/g, '-');
+const safe = s => String(s).replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-|-$/g,'');
 async function capture(root, file) {
   await root.evaluate(node => node.scrollIntoView({block:'center', inline:'nearest'}));
-  await new Promise(r => setTimeout(r, 40));
+  await new Promise(r => setTimeout(r, 50));
   await root.screenshot({path:file, animations:'disabled'});
 }
 async function activate(button, mobile) {
   await button.scrollIntoViewIfNeeded();
   if (mobile) await button.tap({timeout:3000}); else await button.click({timeout:3000});
-  await new Promise(r => setTimeout(r, 80));
+  await new Promise(r => setTimeout(r, 100));
 }
+async function visualRoots(page) {
+  // animation-shell wraps the real visual in another data-anim-fullscreen node.
+  // Keep only the innermost node so each pedagogical mechanism is counted once.
+  return page.locator('article [data-anim-fullscreen="on"]:not(:has([data-anim-fullscreen="on"]))');
+}
+async function rootIdentity(root, index) {
+  return root.evaluate((node,i) => ({index:i,id:node.id||null,classes:[...node.classList],tag:node.tagName.toLowerCase()}),index);
+}
+async function captureKillPath(page, rootIndex, ctx, spec, key, captures) {
+  // Each kill action is a separate counterfactual from a fresh active run.
+  // Clicking one kill control intentionally disables its siblings, so a generic
+  // cumulative button walk would miss valid states.
+  const scenarios = ['credential','cancel','readonly','rollback'];
+  for (const scenario of scenarios) {
+    await page.reload({waitUntil:'networkidle',timeout:20000});
+    const roots = await visualRoots(page);
+    const root = roots.nth(rootIndex);
+    const start = root.locator('[data-start]').first();
+    const target = root.locator(`[data-kill="${scenario}"]`).first();
+    if (!(await start.count()) || !(await target.count())) throw new Error(`kill-path scenario controls missing: ${scenario}`);
+    await activate(start,spec.mobile);
+    await page.waitForTimeout(100);
+    if (!(await target.isEnabled())) throw new Error(`kill-path target did not enable: ${scenario}`);
+    await activate(target,spec.mobile);
+    const file = path.join(shots,`${safe(ctx)}-${String(rootIndex).padStart(2,'0')}-${safe(key)}-kill-${scenario}.png`);
+    await capture(root,file); captures.push(path.relative(process.cwd(),file));
+  }
+  // A no-intervention run is the counterexample: allow it to reach commit.
+  await page.reload({waitUntil:'networkidle',timeout:20000});
+  const roots = await visualRoots(page);
+  const root = roots.nth(rootIndex);
+  const start = root.locator('[data-start]').first();
+  await activate(start,spec.mobile);
+  await page.waitForTimeout(spec.reducedMotion==='reduce'?3900:4100);
+  const file = path.join(shots,`${safe(ctx)}-${String(rootIndex).padStart(2,'0')}-${safe(key)}-commit-without-kill.png`);
+  await capture(root,file); captures.push(path.relative(process.cwd(),file));
+}
+
 const browser = await chromium.launch({headless:true});
 for (const item of routes) {
   for (const spec of specs) {
@@ -58,30 +97,37 @@ for (const item of routes) {
       const response = await page.goto(new URL(item.route,base).href,{waitUntil:'networkidle',timeout:20000});
       if (!response?.ok()) failures.push({ctx,type:'navigation',status:response?.status()});
       await page.locator('article').waitFor({state:'visible',timeout:5000});
-      const roots = page.locator('article [data-anim-fullscreen="on"]');
+      let roots = await visualRoots(page);
       const rootCount = await roots.count();
       if (!rootCount) failures.push({ctx,type:'no_visual_roots'});
       const visualRecords = [];
       for (let i=0;i<rootCount;i++) {
-        const root = roots.nth(i);
+        roots = await visualRoots(page);
+        let root = roots.nth(i);
         let identity = {index:i,id:null,classes:[],tag:'unknown'};
         try {
-          identity = await root.evaluate((node,index) => ({index,id:node.id||null,classes:[...node.classList],tag:node.tagName.toLowerCase()}),i);
+          identity = await rootIdentity(root,i);
           const key = identity.id || identity.classes[0] || `visual-${i}`;
           const captures = [];
           let file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-start.png`);
           await capture(root,file); captures.push(path.relative(process.cwd(),file));
 
-          // `data-anim-shell-open` only changes presentation chrome by moving the
-          // same visual into the fullscreen modal. It is not a pedagogical state
-          // and would intercept pointer events for the real controls underneath.
           const excludedUiButtons = await root.locator('button[data-anim-shell-open]:visible').count();
-          const buttons = root.locator('button:not([data-anim-shell-open]):visible');
-          const buttonCount = await buttons.count();
-          if (buttonCount) {
+          const isKillPath = identity.classes.includes('killpath');
+          let buttonCount = await root.locator('button:not([data-anim-shell-open]):visible').count();
+          if (isKillPath) {
+            await captureKillPath(page,i,ctx,spec,key,captures);
+            roots = await visualRoots(page);
+            root = roots.nth(i);
+          } else if (buttonCount) {
+            const buttons = root.locator('button:not([data-anim-shell-open]):visible');
             for (let j=0;j<buttonCount;j++) {
               const button = buttons.nth(j);
               const label = ((await button.getAttribute('aria-label')) || (await button.textContent()) || `button-${j}`).replace(/\s+/g,' ').trim().slice(0,60);
+              if (!(await button.isEnabled())) {
+                failures.push({ctx,type:'disabled_teaching_control_unhandled',visual:key,control:label});
+                continue;
+              }
               await activate(button,spec.mobile);
               file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-after-${String(j).padStart(2,'0')}-${safe(label)}.png`);
               await capture(root,file); captures.push(path.relative(process.cwd(),file));
@@ -94,7 +140,7 @@ for (const item of routes) {
             file = path.join(shots,`${safe(ctx)}-${String(i).padStart(2,'0')}-${safe(key)}-final.png`);
             await capture(root,file); captures.push(path.relative(process.cwd(),file));
           }
-          visualRecords.push({...identity,key,buttonCount,excludedUiButtons,captures});
+          visualRecords.push({...identity,key,buttonCount,excludedUiButtons,scenarioMode:isKillPath?'independent-kill-counterfactuals':'standard',captures});
         } catch (error) {
           failures.push({ctx,type:'visual_exception',visual:identity,detail:String(error?.stack||error)});
           visualRecords.push({...identity,error:String(error?.stack||error)});
@@ -111,7 +157,7 @@ for (const item of routes) {
   }
 }
 await browser.close();
-await fs.writeFile(path.join(out,'all-visual-states-report.json'),JSON.stringify({generated_at:new Date().toISOString(),contract:'all teaching visual roots × all visible teaching controls or timed initial/mid/final states; fullscreen shell chrome excluded; manual PIXEL/PEDAGOGY required',contexts:records.length,failures,records},null,2));
+await fs.writeFile(path.join(out,'all-visual-states-report.json'),JSON.stringify({generated_at:new Date().toISOString(),contract:'each innermost teaching visual × every meaningful control/counterfactual or timed initial/mid/final; fullscreen presentation chrome excluded; destructive controls captured independently; manual PIXEL/PEDAGOGY required',contexts:records.length,failures,records},null,2));
 console.log(`SECURITY02_05_ALL_VISUAL_STATES contexts=${records.length} failures=${failures.length}`);
 if (failures.length) { for (const f of failures) console.error('FAIL',JSON.stringify(f)); process.exit(1); }
 console.log('PASS exhaustive Security02-05 teaching-visual state capture.');
