@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/05-release-gate.html",
-  "source_blob_sha": "57859e35e14813e322c413e2d5cbe49f57e8b988",
+  "source_blob_sha": "8b858ef9534c865072681471f7f735c2c648f56b",
   "replacements": {
     "Un release gate decide con evidencia, no con casillas marcadas": "A release gate decides from evidence, not checked boxes",
     "Cada frontera aporta un artefacto verificable. Rompe una evidencia y observa cómo cambia la ruta: el gate desvía la release a HOLD en lugar de dejarla llegar a producción.": "Each boundary contributes a verifiable artifact. Break one piece of evidence and watch the route change: the gate diverts the release to HOLD instead of letting it reach production.",
