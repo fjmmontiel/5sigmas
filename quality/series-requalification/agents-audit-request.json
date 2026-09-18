@@ -1,6 +1,6 @@
 {
-  "revision": 2,
+  "revision": 3,
   "series": "agentes-ia",
-  "requested_at": "2026-09-18T22:23:59Z",
-  "intent": "validate curated native MEDIA_VISUAL metadata for all 12 route-locale pairs plus relationship guards, strict ES/EN, INDEXABILITY and article/watch browser-resource smoke; PIXEL/PEDAGOGY remain manual, full BROWSER remains pending, and VOICE remains DEFERRED_OWNER_LOCAL"
+  "requested_at": "2026-09-18T22:32:51Z",
+  "intent": "re-run the exact Agents multi-article technical milestone after diagnosing browser-resource failures as media ERR_ABORTED events; require causal same-request/prior-range response plus final healthy media proof, preserve fatal handling for unproven aborts, keep relationship/publication/MEDIA_VISUAL/INDEXABILITY gates unchanged, PIXEL/PEDAGOGY manual, full BROWSER pending, and VOICE DEFERRED_OWNER_LOCAL"
 }
