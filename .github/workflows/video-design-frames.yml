@@ -1,0 +1,54 @@
+name: Video design original frames
+on:
+  push:
+    branches: [design/video-minimal-audit-20260918]
+    paths: [.github/workflows/video-design-frames.yml]
+permissions:
+  contents: read
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Preserve pilot originals
+        run: |
+          mkdir -p pilot-original/es pilot-original/en
+          cp docs/series/modelos-razonadores/03-test-time-compute.mp4 pilot-original/es/
+          cp locales/en/series/modelos-razonadores/03-test-time-compute.mp4 pilot-original/en/ || true
+          cp docs/series/modelos-razonadores/03-test-time-compute.jpg pilot-original/es/ || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-design-pilot-original
+          path: pilot-original/
+          retention-days: 3
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Sample existing videos
+        run: |
+          python - <<'PY'
+          import concurrent.futures,hashlib,json,pathlib,subprocess
+          O=pathlib.Path('video-frames');O.mkdir()
+          files=[pathlib.Path(p) for p in subprocess.check_output(['git','ls-files','*.mp4'],text=True).splitlines()]
+          def sample(p):
+            key=hashlib.sha1(str(p).encode()).hexdigest()[:12]
+            row={'path':str(p),'id':key,'samples':[]}
+            try:
+              probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_format','-show_streams','-of','json',str(p)],timeout=20))
+              dur=float(probe['format']['duration']);row['duration']=dur;row['streams']=[{k:s[k] for k in ['codec_type','codec_name','width','height','r_frame_rate'] if k in s} for s in probe['streams']]
+              for j,f in enumerate([.12,.38,.68,.88]):
+                out=O/f'{key}-{j}.jpg';t=round(dur*f,3)
+                subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-y','-ss',str(t),'-i',str(p),'-frames:v','1','-vf','scale=1280:-2','-q:v','3',str(out)],check=True,timeout=30)
+                row['samples'].append({'time':t,'file':out.name})
+            except Exception as e:row['error']=str(e)
+            return row
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:rows=list(pool.map(sample,files))
+          (O/'manifest.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2));print('Sampled',len(rows),'files')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-design-original-frames
+          path: video-frames/
+          retention-days: 3
