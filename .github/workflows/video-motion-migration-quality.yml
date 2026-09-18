@@ -26,3 +26,6 @@ jobs:
       - name: Run deterministic motion contract tests
         working-directory: motion
         run: npm test
+      - name: Validate complete-series Golden ledger
+        working-directory: motion
+        run: npm run gate
