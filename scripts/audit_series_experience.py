@@ -238,7 +238,7 @@ def main() -> int:
             json.loads(scope_path.read_text(encoding="utf-8")),
             args.site.resolve() if args.site else None,
         )
-    except (OSError, ValueError, json.JSONDecodeError, legacy.yaml.YAMLError, ET.ParseError) as exc:
+    except (OSError, ValueError, json.JSONDecodeError, legacy.yaml.YAMLError) as exc:
         print(f"EXPERIENCE_AUDIT_ERROR: {exc}")
         return 2
     output = args.output if args.output.is_absolute() else root / args.output
