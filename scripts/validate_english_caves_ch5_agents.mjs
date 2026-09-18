@@ -56,8 +56,32 @@ try {
       }
     }
 
-    const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
-    if (scrollWidth > clientWidth + 2) failures.push(`${viewport.name}: horizontal overflow ${scrollWidth - clientWidth}px`);
+    const overflow = await page.evaluate(() => {
+      const root = document.documentElement;
+      const clientWidth = root.clientWidth;
+      const offenders = [...document.querySelectorAll('body *')]
+        .map((node) => {
+          const rect = node.getBoundingClientRect();
+          const style = getComputedStyle(node);
+          return {
+            tag: node.tagName.toLowerCase(),
+            id: node.id || '',
+            className: typeof node.className === 'string' ? node.className.trim().replace(/\s+/g, '.') : '',
+            dataDemo: node.getAttribute('data-demo') || '',
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            width: Math.round(rect.width),
+            clientWidth: node.clientWidth,
+            scrollWidth: node.scrollWidth,
+            overflowX: style.overflowX,
+          };
+        })
+        .filter((item) => item.right > clientWidth + 2 || (item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX)))
+        .sort((a, b) => Math.max(b.right - clientWidth, b.scrollWidth - b.clientWidth) - Math.max(a.right - clientWidth, a.scrollWidth - a.clientWidth))
+        .slice(0, 12);
+      return { clientWidth, scrollWidth: root.scrollWidth, offenders };
+    });
+    if (overflow.scrollWidth > overflow.clientWidth + 2) failures.push(`${viewport.name}: horizontal overflow ${overflow.scrollWidth - overflow.clientWidth}px; offenders=${JSON.stringify(overflow.offenders)}`);
 
     if (viewport.name === 'desktop') {
       await page.screenshot({ path: path.join(outDir, 'english-history-05-canonical-agents.png'), fullPage: true, animations: 'disabled' });
