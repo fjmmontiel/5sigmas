@@ -1,0 +1,125 @@
+name: Video design audit evidence
+on:
+  push:
+    branches: [design/video-minimal-audit-20260918]
+    paths: [.github/workflows/video-design-audit.yml]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 playwright pillow pyyaml
+      - run: python -m playwright install --with-deps chromium
+      - name: Collect source, crawl public pages, inspect rendered styles
+        run: |
+          mkdir -p audit-evidence
+          cat > /tmp/audit.py <<'PY'
+          import asyncio, concurrent.futures, hashlib, json, pathlib, shutil, subprocess, time, urllib.parse, xml.etree.ElementTree as ET
+          import requests
+          from bs4 import BeautifulSoup
+          from playwright.async_api import async_playwright
+          O=pathlib.Path('audit-evidence'); BASE='https://5sigmas.com'
+          def savejson(p,d):
+            (O/p).parent.mkdir(parents=True,exist_ok=True); (O/p).write_text(json.dumps(d,ensure_ascii=False,indent=2))
+          tracked=subprocess.check_output(['git','ls-files'],text=True).splitlines()
+          source=[]
+          for f in tracked:
+            p=pathlib.Path(f)
+            if p.suffix.lower() in {'.md','.html','.css','.js','.json','.py','.yml','.yaml','.svg','.woff','.woff2','.ttf'} or p.name in {'requirements.txt','package.json'}:
+              if p.exists() and p.stat().st_size<3000000:
+                q=O/'source'/p; q.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(p,q); source.append(f)
+          savejson('source_inventory.json',source)
+          urls=set(); maps=[]
+          def sitemap(u):
+            if u in maps: return
+            maps.append(u)
+            r=requests.get(u,timeout=40); r.raise_for_status()
+            (O/('sitemap-'+str(len(maps))+'.xml')).write_text(r.text)
+            root=ET.fromstring(r.content)
+            for loc in root.findall('.//{*}loc'):
+              v=loc.text.strip()
+              if root.tag.endswith('sitemapindex'): sitemap(v)
+              elif urllib.parse.urlsplit(v).netloc=='5sigmas.com': urls.add(v)
+          sitemap(BASE+'/sitemap.xml')
+          for u in [BASE+'/',BASE+'/en/',BASE+'/videos/',BASE+'/en/videos/',BASE+'/visuales/',BASE+'/herramientas/']: urls.add(u)
+          def crawl(u):
+            try:
+              r=requests.get(u,timeout=35); soup=BeautifulSoup(r.text,'html.parser')
+              slug=hashlib.sha1(u.encode()).hexdigest()[:12]
+              (O/'html').mkdir(exist_ok=True); (O/'html'/f'{slug}.html').write_text(r.text)
+              main=soup.select_one('main') or soup
+              return {'url':u,'id':slug,'status':r.status_code,'final_url':r.url,'title':soup.title.get_text(' ',strip=True) if soup.title else '', 'h1':[x.get_text(' ',strip=True) for x in soup.select('h1')], 'canonical':(soup.select_one('link[rel=canonical]') or {}).get('href'), 'videos':[{'src':v.get('src') or ((v.find('source') or {}).get('src')),'poster':v.get('poster'),'controls':v.has_attr('controls')} for v in soup.select('video')], 'images':[{'src':x.get('src'),'alt':x.get('alt')} for x in main.select('img')], 'iframes':[x.get('src') for x in main.select('iframe')], 'links':sorted(set(urllib.parse.urljoin(u,x.get('href')) .split('#')[0] for x in main.select('a[href]'))), 'css':[urllib.parse.urljoin(u,x.get('href')) for x in soup.select('link[rel=stylesheet][href]')], 'text':main.get_text(' ',strip=True)}
+            except Exception as e: return {'url':u,'error':str(e),'id':hashlib.sha1(u.encode()).hexdigest()[:12]}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex: rows=list(ex.map(crawl,sorted(urls)))
+          savejson('pages.json',rows)
+          # Download all unique declared public posters plus the featured TTC pilot.
+          media=set()
+          for r in rows:
+            for v in r.get('videos',[]):
+              if v.get('poster'): media.add(urllib.parse.urljoin(r['url'],v['poster']))
+              if v.get('src') and '03-test-time-compute' in v['src']: media.add(urllib.parse.urljoin(r['url'],v['src']))
+          media_records=[]
+          def getmedia(u):
+            try:
+              r=requests.get(u,timeout=90);r.raise_for_status()
+              name=hashlib.sha1(u.encode()).hexdigest()[:12]+'-'+urllib.parse.urlsplit(u).path.rsplit('/',1)[-1]
+              q=O/'media'/name;q.parent.mkdir(exist_ok=True);q.write_bytes(r.content)
+              return {'url':u,'file':'media/'+name,'bytes':len(r.content),'sha256':hashlib.sha256(r.content).hexdigest()}
+            except Exception as e:return {'url':u,'error':str(e)}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex: media_records=list(ex.map(getmedia,sorted(media)))
+          savejson('media.json',media_records)
+          # Source copies of existing pilot and image assets, without changing publication.
+          for f in tracked:
+            p=pathlib.Path(f)
+            if p.suffix.lower()=='.mp4' and '03-test-time-compute' in f:
+              q=O/'source'/p;q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+          rendered=[]
+          async def run():
+            async with async_playwright() as pw:
+              browser=await pw.chromium.launch()
+              sem=asyncio.Semaphore(8)
+              async def inspect(r):
+                if r.get('status')!=200:return
+                async with sem:
+                  context=await browser.new_context(viewport={'width':1440,'height':1000},device_scale_factor=1,reduced_motion='reduce')
+                  page=await context.new_page()
+                  await page.route('**/*',lambda route: route.abort() if route.request.resource_type=='media' else route.continue_())
+                  entry={'url':r['url'],'id':r['id']}
+                  try:
+                    await page.goto(r['url'],wait_until='domcontentloaded',timeout=45000)
+                    await page.wait_for_timeout(250)
+                    await page.evaluate('document.fonts.ready')
+                    entry['desktop']=await page.evaluate('''() => {const main=document.querySelector('main')||document.body;const visible=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0};const es=[...main.querySelectorAll('*')].filter(visible);return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,body:{bg:getComputedStyle(document.body).backgroundColor,font:getComputedStyle(document.body).fontFamily,color:getComputedStyle(document.body).color},h1:[...document.querySelectorAll('h1')].map(e=>({text:e.innerText,font:getComputedStyle(e).fontFamily,size:getComputedStyle(e).fontSize})),gradients:es.filter(e=>getComputedStyle(e).backgroundImage.includes('gradient')).map(e=>({tag:e.tagName,cls:e.className,background:getComputedStyle(e).backgroundImage,text:e.innerText.slice(0,100)})).slice(0,60),players:[...document.querySelectorAll('video')].map(e=>({src:e.currentSrc||e.querySelector('source')?.src||e.src,poster:e.poster,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,bg:getComputedStyle(e).backgroundColor,radius:getComputedStyle(e).borderRadius})),overflow:es.filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+2&&r.left>=0}).slice(0,10).map(e=>({tag:e.tagName,cls:e.className}))}}''')
+                    (O/'screens').mkdir(exist_ok=True)
+                    await page.screenshot(path=str(O/'screens'/f"{r['id']}-desktop.jpg"),type='jpeg',quality=60,full_page=True,animations='disabled',timeout=20000)
+                    first=page.locator('video').first
+                    if await first.count():
+                      await first.screenshot(path=str(O/'screens'/f"{r['id']}-player.jpg"),type='jpeg',quality=85,timeout=10000)
+                    await page.set_viewport_size({'width':390,'height':844})
+                    await page.wait_for_timeout(150)
+                    entry['mobile']=await page.evaluate('''() => ({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,videoWidths:[...document.querySelectorAll('video')].map(e=>e.getBoundingClientRect().width)})''')
+                    await page.screenshot(path=str(O/'screens'/f"{r['id']}-mobile.jpg"),type='jpeg',quality=55,full_page=False,animations='disabled',timeout=15000)
+                  except Exception as e:entry['error']=str(e)
+                  finally:rendered.append(entry);await context.close()
+              await asyncio.gather(*(inspect(r) for r in rows))
+              await browser.close()
+          asyncio.run(run());savejson('rendered.json',rendered)
+          savejson('summary.json',{'base_sha':'e2f301e3fe346a4328cb773c46fa49ca34388a12','sitemaps':maps,'urls':len(rows),'http_200':sum(r.get('status')==200 for r in rows),'rendered':len(rendered),'render_errors':sum('error' in r for r in rendered),'pages_with_video':sum(bool(r.get('videos')) for r in rows),'distinct_video_srcs':len({urllib.parse.urljoin(r['url'],v['src']) for r in rows for v in r.get('videos',[]) if v.get('src')}),'media_downloads':len(media_records),'time_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())})
+          print((O/'summary.json').read_text())
+          PY
+          python /tmp/audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-design-audit-evidence
+          path: audit-evidence/
+          retention-days: 3
+          compression-level: 6
