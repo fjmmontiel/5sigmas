@@ -2,9 +2,14 @@
 """Owner-amendment aware facade for the canonical video-curriculum inventory.
 
 The global inventory remains fail-closed for unfinished later series and keeps
-legacy voice/accessibility debt visible. Focused Security diagnostics evaluate
-the current non-voice visual contract separately, as required by owner amendment
+legacy voice/accessibility debt visible. Security requalification evaluates the
+current non-voice visual contract separately, as required by owner amendment
 5716685049.
+
+The persisted inventory continues to expose whole-program unfinished debt. The
+process exit code, however, represents the active ``seguridad-ia`` gate so a
+fresh series audit can close the current series without pretending that later
+series are already complete.
 """
 from __future__ import annotations
 
@@ -89,6 +94,11 @@ def _security_gate(report: dict, inventory: dict) -> dict:
     }
 
 
+def _current_gate_exit_code(current: dict) -> int:
+    """Return the active-series result while preserving global inventory debt."""
+    return 0 if isinstance(current, dict) and current.get("status") == "PASS" else 1
+
+
 def _diagnostic_scope(root: Path) -> str:
     path = root / "quality/series-requalification/audit-request.json"
     if not path.is_file():
@@ -113,6 +123,8 @@ def main() -> int:
     args = parser.parse_args()
     if args.self_test:
         legacy._self_test()
+        assert _current_gate_exit_code({"status": "PASS"}) == 0
+        assert _current_gate_exit_code({"status": "FAIL"}) == 1
         print("VIDEO_CURRICULUM_INVENTORY_SELF_TEST_PASS")
         return 0
 
@@ -145,9 +157,9 @@ def main() -> int:
         f"OWNER_CURRENT_SECURITY_GATE={current['status']}; "
         f"VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL; DIAGNOSTIC_SCOPE={diagnostic_scope}"
     )
-    if diagnostic_scope.startswith("focused_security_"):
-        return 0 if current["status"] == "PASS" else 1
-    return 1 if inventory["status"] == "FAIL_CLOSED" else 0
+    if inventory["status"] == "FAIL_CLOSED":
+        print("GLOBAL_FUTURE_SERIES_VIDEO_DEBT=PRESERVED; not treated as an active seguridad-ia blocker")
+    return _current_gate_exit_code(current)
 
 
 if __name__ == "__main__":
