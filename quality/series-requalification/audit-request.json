@@ -1,11 +1,12 @@
 {
-  "diagnostic_revision": 109,
+  "diagnostic_revision": 110,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "f4b0fdb20acb87aea95739fd7eb6054e1a4ad97f",
-  "reason": "Exact verification of the Security05 non-voice gate repair after Action 35322940400 exposed stale pedagogy-contract tokens. The article visual already uses toggleAttribute('hidden', ...) so the validator was updated to require and negatively mutate the actual DEPLOY/HOLD topology switching rather than obsolete .hidden assignments. Re-run Security02-05 source/relationship guards, strict ES/EN, current MEDIA_VISUAL, rendered audit and shared Security/Datacenters/pre-Datacenters resources. Voice/audio/captions/transcript/timings remain DEFERRED_OWNER_LOCAL under amendment 5716685049 and are not blockers. No site-facing article/visual bytes changed, so do not spend the full-catalogue browser sweep in this focused repair verification.",
+  "requested_head_parent": "ddb4c7d622b5fe0c04578aadeb39105fc68d55a2",
+  "reason": "Owner amendment 5727362172 makes INDEXABILITY_PASS a mandatory conjunctive GOLDEN gate. Reopen Security00-05 fail-closed, build exact ES+EN rendered output, execute scripts/validate_security_indexability.py including negative noindex/canonical/H1/sitemap-hreflang/orphan fixtures through the rendered audit, and verify all 12 article route×locale plus their watch surfaces for self canonical, no accidental noindex, localized search-document fundamentals, sitemap/video-sitemap inclusion, reciprocal sitemap hreflang, crawlable internal discovery, and article↔watch links. Authenticated GSC 2026-09-18 observations are separate selection evidence and must not fail this gate absent deterministic technical defects. Site-facing bytes are unchanged, so reuse existing exact pixel/pedagogy/browser evidence and do not spend the full-catalogue browser sweep in this focused indexability milestone. VOICE remains DEFERRED_OWNER_LOCAL and non-blocking under amendment 5716685049.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
+  "owner_indexability_amendment_comment": 5727362172,
   "owner_precedence_receipt_comment": 5719162654
 }
