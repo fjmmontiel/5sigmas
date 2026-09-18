@@ -32,6 +32,7 @@ jobs:
           node-version: '22'
       - name: Syntax gate
         run: |
+          python scripts/validate_security_requalification_inline_css.py
           node --check scripts/validate_security_02_05_browser_fast.mjs
           node --check scripts/diagnose_security_02_05_styles.mjs
       - name: Strict ES + EN build
