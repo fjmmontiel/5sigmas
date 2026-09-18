@@ -8,7 +8,7 @@ tags:
   - LLMs
   - Razonamiento
 video: "02-fallos.mp4"
-video_duration: "PT1M29S"
+video_duration: "PT1M48S"
 ---
 
 # Capítulo 2 — Cómo se ven los fallos de los modelos razonadores

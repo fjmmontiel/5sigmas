@@ -9,7 +9,7 @@ tags:
   - LLMs
   - Razonamiento
 video: "05-riesgos.mp4"
-video_duration: "PT1M15S"
+video_duration: "PT2M1S"
 ---
 
 # Capítulo 5 — Riesgos: overthinking, coste, ataques y alineamiento
