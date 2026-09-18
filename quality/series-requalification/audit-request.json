@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 100,
+  "diagnostic_revision": 101,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "1c305b03ea53dd12ce4eb98a226741474afd2787",
-  "reason": "Capture six deterministic frames from each exact native Security02-05 ES/EN MP4 during the existing focused MEDIA_VISUAL milestone. These frames are evidence for manual video pixel/content inspection and honest non-voice chapter/key-moment curation; they do not auto-certify PIXEL_REVIEW or PEDAGOGY_REVIEW. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049.",
+  "requested_head_parent": "ec607dd62cc84d6ba6e1d0ba83f47d5bb39a6d44",
+  "reason": "Re-run the focused Security02-05 milestone after retaining the six deterministic frames from each exact native ES/EN MP4 in the bounded one-day failure artifact. Use those retained frames only for manual video pixel/content inspection and honest non-voice chapter/key-moment curation; they do not auto-certify PIXEL_REVIEW or PEDAGOGY_REVIEW. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
