@@ -64,6 +64,15 @@ jobs:
 
               return '\n'.join(lines[start:end])
 
+          def is_failure_only(expression):
+              expression = expression.split('#', 1)[0].strip()
+              if expression.startswith('${{') and expression.endswith('}}'):
+                  expression = expression[3:-2].strip()
+              # Allow an additional conjunct that narrows failure evidence by scope. This still
+              # cannot run on success and avoids forcing duplicate artifacts for mutually
+              # exclusive diagnostic scopes. Reject OR/always/success/cancelled and negation.
+              return bool(re.fullmatch(r'failure\(\)(?:\s*&&\s*[^|]+)?', expression))
+
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
               for index, line in enumerate(lines):
@@ -85,8 +94,8 @@ jobs:
                           'add if: failure()'
                       )
                   else:
-                      expression = if_match.group(1).split('#', 1)[0].strip()
-                      if expression != 'failure()':
+                      expression = if_match.group(1).strip()
+                      if not is_failure_only(expression):
                           errors.append(
                               f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
                               f'found if: {expression}'

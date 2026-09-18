@@ -246,7 +246,7 @@ jobs:
           PY
 
       - name: Retain bounded active-article evidence for manual pixel and pedagogy review
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: security-capture-direct-report
