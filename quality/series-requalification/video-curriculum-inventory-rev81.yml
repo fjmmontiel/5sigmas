@@ -1,0 +1,69 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+source_action: 35165542722
+source_exact_head: 35d2404ac9d4bec88f983837d1633dcbb583f7d2
+source_artifact_id: 10475087573
+source_artifact_digest: sha256:4b4a8fd97cd55fa5441f1e8a3cd72ad65d8aa97c5d6e692f8707fbdc8d620d89
+state: FAIL_CLOSED
+not_a_golden_certificate: true
+
+obligation_matrix:
+  expected_route_locale_video_obligations: 84
+  audited_obligations: 84
+  missing_audited_pages: 0
+  video_declared_source_contract_incomplete: 24
+  video_required_undeclared: 60
+
+curriculum_h2:
+  total_locale_native_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  mapped_to_curated_key_moment: 0
+  blocked_curated_key_moments_missing: 154
+  blocked_video_undeclared: 1044
+  fabricated_key_moments_or_timings: false
+
+by_series:
+  seguridad-ia:
+    locale_video_obligations: 12
+    page_state: VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE
+    locale_native_h2_obligations: 82
+    h2_state: BLOCKED_CURATED_KEY_MOMENTS_MISSING
+  agentes-ia:
+    locale_video_obligations: 12
+    page_state: VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE
+    locale_native_h2_obligations: 72
+    h2_state: BLOCKED_CURATED_KEY_MOMENTS_MISSING
+  agentes-voz-tiempo-real:
+    locale_video_obligations: 12
+    page_state: VIDEO_REQUIRED_UNDECLARED
+    locale_native_h2_obligations: 178
+    h2_state: BLOCKED_VIDEO_UNDECLARED
+  coding-agents-agent-harnesses:
+    locale_video_obligations: 12
+    page_state: VIDEO_REQUIRED_UNDECLARED
+    locale_native_h2_obligations: 222
+    h2_state: BLOCKED_VIDEO_UNDECLARED
+  context-engineering-memory-mcp:
+    locale_video_obligations: 12
+    page_state: VIDEO_REQUIRED_UNDECLARED
+    locale_native_h2_obligations: 200
+    h2_state: BLOCKED_VIDEO_UNDECLARED
+  llm-inference-engineering-economics:
+    locale_video_obligations: 12
+    page_state: VIDEO_REQUIRED_UNDECLARED
+    locale_native_h2_obligations: 246
+    h2_state: BLOCKED_VIDEO_UNDECLARED
+  evaluating-ai-systems-production:
+    locale_video_obligations: 12
+    page_state: VIDEO_REQUIRED_UNDECLARED
+    locale_native_h2_obligations: 198
+    h2_state: BLOCKED_VIDEO_UNDECLARED
+
+interpretation:
+  - Missing video never erases its locale-native H2 curriculum obligations.
+  - A declared video without curated chapters/key moments keeps every H2 blocked.
+  - The inventory does not add one defect per H2 to the primary source-gate counts; it is an explanatory obligation ledger.
+  - No media completeness, pixel quality, pedagogy quality, playback quality or GOLDEN status is inferred from this inventory.

@@ -1,0 +1,158 @@
+schema_version: 2
+scope: seguridad-ia/00+01
+status: REQUALIFICATION_QA_CHANGES_REQUIRED
+article_golden: false
+site_facing_bytes_changed: false
+
+revision_46:
+  exact_head: 2fe19ec0ac7cb2760ce4ec4a8fb969f192c1d519
+  run_id: 34958785679
+  artifact_id: 10391894548
+  artifact_digest: sha256:790428db5e32bcd765735337df26c8c7a4ef23eb3bb88e0adadf6b8df8f13914
+  artifact_retention_days: 1
+  artifact_expires_at: '2026-09-16T10:46:28Z'
+  workflow_conclusion: FAILURE_EXPECTED_GLOBAL_DEBT_PLUS_UNRESOLVED_SECURITY_RUNTIME_P1
+  runtime_listener_lifetime:
+    contexts_expected: 16
+    contexts_observed: 16
+    failures: 8
+    failing_locale: es
+    failing_kinds: [presentation, prompt]
+    failing_widths: [1440, 390]
+    failing_motion: [no-preference, reduce]
+    en_failures: 0
+    event_type: requestfailed
+    error: net::ERR_ABORTED
+    resource_type: media
+    phase: media-seek
+    teardown_appended_runtime_errors: 0
+
+artifact_root_cause_evidence:
+  presentation_es:
+    response_seq: 55
+    response_phase: media-start
+    response_status: 206
+    content_range: bytes 0-6261581/6261582
+    content_length: 6261582
+    abort_seq: 56
+    abort_phase: media-seek
+    seeked: true
+    ready_state: 4
+    network_state: 1
+    duration_seconds: 60.3
+    seek_target_seconds: 12.06
+    settled_current_time_seconds: 12.06
+  prompt_es:
+    response_seq: 56
+    response_phase: media-start
+    response_status: 206
+    content_range: bytes 0-6147970/6147971
+    content_length: 6147971
+    abort_seq: 57
+    abort_phase: media-seek
+    seeked: true
+    ready_state: 4
+    network_state: 1
+    duration_seconds: 60.333333
+    seek_target_seconds: 12.0666666
+    settled_current_time_seconds: 12.066666
+  replicated_contexts: 8
+  interpretation: >-
+    Revision 46 disproves the candidate classifier assumption that a legitimate seek cancellation must be followed by a
+    later 200/206 response. In all eight ES contexts the only media response is already observed immediately before the
+    requestfailed event: response seq N is 206 for the exact same source, then requestfailed seq N+1 occurs during the
+    explicit media-seek. The seek nevertheless settles exactly at the requested target with readyState=4 and
+    networkState=1. Playwright response fires on successful response headers and requestfailed can later fire if that
+    request body is cancelled, so URL-only "later response" correlation is not a valid request-lifecycle proof for this
+    observed pattern. The revision-46 harness did not retain request identity, so it could not prove that the preceding
+    206 and later ERR_ABORTED belonged to the same Request object. No whitelist is granted from revision-46 evidence alone.
+
+candidate_gate_repair:
+  commit: 88cc6c2bc898fe11514d7efc57ce5eaa8a241e4d
+  status: IMPLEMENTED_PENDING_EXACT_QA
+  site_facing_bytes_changed: false
+  changes:
+    - assign stable request_id values to Playwright Request objects and retain them in media response and requestfailed evidence
+    - classify a media-seek ERR_ABORTED as expected only when same-source and either the same failed request already produced 200/206 headers or a later same-source 200/206 response supersedes it
+    - require settled seek near the requested target, readyState >= 2, non-NETWORK_NO_SOURCE state, media.error=null and advancing post-seek playback
+    - add deterministic negative mutations for generic abort, unrelated prior response/request_id, no response proof, wrong source, unsettled seek, failed post-seek playback, media error and non-ERR_ABORTED failure
+    - retain verdict computation after context teardown
+  verification_this_checkpoint:
+    syntax_check: PASS_LOCAL_NODE_CHECK
+    self_test_runtime_execution: NOT_RUN_LOCAL_PLAYWRIGHT_PACKAGE_UNAVAILABLE
+    exact_qa: PENDING_NEXT_MEANINGFUL_CI_HIT
+  note: >-
+    The candidate changes are intentionally not represented as PASS until one exact workflow run observes real request IDs,
+    seek/post-seek state and final post-teardown runtime arrays. No second Action was launched in this checkpoint.
+
+next_after_candidate_exact_pass:
+  - harmonize specialized Security gates that still blanket-ignore ERR_ABORTED or compute verdicts before context teardown
+  - add equivalent negative mutations before relying on those specialized gates
+  - preserve all global SOURCE/RENDERED/MEDIA failures fail-closed
+  - remain on Security 00+01 until all blockers including authorized narration/captions/transcript/key moments are closed
+
+technical_active_set:
+  negative_regression_fixtures: PASS
+  public_series_discovery_regression: PASS
+  independent_source_coverage_audit: EXECUTED_FAIL_CLOSED_GLOBAL_DEBT
+  strict_es_build: PASS
+  publication_contract: PASS
+  security_native_media_probe: EXECUTED_FAIL_CLOSED_MEDIA_DEBT
+  strict_en_build: PASS
+  structured_provenance_locale_metadata: PASS
+  reciprocal_article_watch_locale_ui: PASS
+  rendered_html_audit: EXECUTED_FAIL_CLOSED_GLOBAL_DEBT
+  focused_browser_layout_playback: PASS
+  wcag_contrast_and_text_visibility: PASS
+  lifecycle_normal_reduced: PASS
+  real_touch_article_watch: PASS
+  prompt_visual_states: PASS
+  real_keyboard_focus: PASS
+  runtime_listener_lifetime: FAIL_REVISION_46_CANDIDATE_REPAIR_PENDING_EXACT_QA
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN_CANNOT_CERTIFY_GLOBAL_CATALOGUE
+  conjunctive_enforcement: FAIL_EXPECTED_GLOBAL_SOURCE_RENDERED_MEDIA_PLUS_RUNTIME_P1
+
+editorial_review:
+  new_manual_pixel_review_this_revision: false
+  new_manual_pedagogy_review_this_revision: false
+  reason: SITE_FACING_BYTES_UNCHANGED
+  retained_pixel_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  retained_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_FROM_REVISION_43
+  independent_review: false
+
+media:
+  status: FAIL
+  narration_status: VOICE_MISSING
+  exact_blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  forbidden_substitutions:
+    - generated_or_cloned_Francisco_voice
+    - alternate_voice_as_fallback
+    - fabricated_captions_transcript_or_key_moment_timing
+
+catalogue_requalification:
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  public_series: 13
+  presentation_series: 8
+  chapter_first_series: 5
+  current_open_counts:
+    RAW_TEX_RENDERED: 28
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+
+release:
+  pr: null
+  merge: null
+  deploy: null
+  linkedin_action: NONE

@@ -1,0 +1,94 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+series: seguridad-ia
+route: series/seguridad-ia/05-controles-produccion.md
+iteration_count: 1
+state: QA
+inspected_head_parent: aab5bdbabd730b53bc992f882d0e7e762603b16b
+inspected_at_utc: 2026-09-17T19:18:00Z
+
+current_gates:
+  SOURCE_PASS: false
+  BUILD_PASS: false
+  BROWSER_PASS: false
+  MEDIA_VISUAL_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+
+source_review:
+  es_source: docs/series/seguridad-ia/05-controles-produccion.md
+  en_source: locales/en/series/seguridad-ia/05-controles-produccion.md
+  es_en_semantic_parity: REVIEWED_AT_SOURCE_LEVEL_NO_PASS_YET
+  current_primary_evidence:
+    - name: OWASP AI Agent Security Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+      supports: least privilege, independent authorization, adversarial validation, CI/CD and release gates
+    - name: Constitutional Classifiers++ - Efficient Production-Grade Defenses against Universal Jailbreaks
+      url: https://arxiv.org/abs/2601.04603
+      date: 2026-01-08
+      supports: full-exchange context classifiers, two-stage classifier cascade, linear-probe ensemble and setup-specific production efficiency/refusal measurements
+  finding: >-
+    The existing Constitutional Classifiers paragraph is not false, but it stops at the 2025
+    input/output-classifier architecture. The Jan-2026 CC++ primary is material production evidence:
+    it evaluates exchanges in full conversational context and uses a two-stage cascade plus efficient
+    probes/ensembles. Its reported 40x cost reduction, 0.05% refusal rate and >1700 red-team hours are
+    setup-specific paper results and must not be generalized to arbitrary products.
+
+pedagogy_source_review:
+  visuals:
+    - path: docs/snippets/seguridad-ia/05-defense-depth.html
+      assessment: >-
+        Mechanism-bearing: changing reader permission mutates the permission matrix and reachable deploy
+        consequence while holding the hostile input fixed. Requires real render/accessibility review.
+    - path: docs/snippets/seguridad-ia/05-mcp-boundary.html
+      assessment: >-
+        Explicit three-control conjunction changes poisoned-context/result state, but the browser/pixel
+        review must determine whether the relationship is actually observable rather than mostly copy/color.
+    - path: docs/snippets/seguridad-ia/05-kill-path.html
+      assessment: >-
+        Mechanism-bearing source: time advances execution stages; external kill controls mutate credentials,
+        execution, mode and resulting external state. Requires real normal/reduced desktop/mobile review.
+    - path: docs/snippets/seguridad-ia/05-release-gate.html
+      assessment: FAIL_PEDAGOGY_SOURCE_P1
+      reason: >-
+        Three checkbox buttons primarily change check styling, a generic progress bar, badge/copy and deploy
+        highlight. This is the exact cosmetic interaction pattern forbidden by the current owner gate; it does
+        not model a release artifact, evidence dependency or failure propagation.
+
+media_visual_source_review:
+  es:
+    declared_video: 05-controles-produccion.mp4
+    declared_duration: PT1M0S
+    source_frontmatter_missing_explicit:
+      - video_poster
+      - video_title
+      - video_summary
+      - video_chapters
+  en:
+    mapping: locales/en/media.yml
+    declared_video: 05-controles-produccion.mp4
+    declared_poster: 05-controles-produccion.jpg
+    declared_title: Production Controls
+    declared_duration: PT48S
+    mapping_missing_explicit:
+      - video_summary
+      - video_chapters
+  note: >-
+    Voice/audio/captions/transcript are intentionally excluded from current blockers. Binary identity,
+    codec/dimensions/duration, poster and honest non-voice key moments still require current-gate validation.
+
+defects:
+  P0: []
+  P1:
+    - RELEASE_GATE_INTERACTION_IS_CHECKBOX_PROGRESS_BADGE_HIGHLIGHT_NOT_A_MODELED_RELEASE_MECHANISM
+    - MEDIA_VISUAL_METADATA_AND_NONVOICE_KEY_MOMENTS_REQUIRE_EXACT_GATE
+  P2:
+    - PRODUCTION_GUARDRAIL_SECTION_MISSING_MATERIAL_2026_CCPLUSPLUS_ARCHITECTURE_UPDATE
+
+next_action: >-
+  Update ES/EN guardrail section with the narrow Jan-2026 CC++ production-architecture delta and a
+  deterministic source mutation guard; redesign 05-release-gate around evidence-bearing release state and
+  failed-control propagation rather than checkbox/progress cosmetics; then run exact ES/EN source/build and
+  MEDIA_VISUAL gates followed by real ~1440/~390 normal/reduced pixel, keyboard and touch review.

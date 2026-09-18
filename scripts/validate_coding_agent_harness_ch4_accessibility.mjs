@@ -168,10 +168,17 @@ try {
       check(overflow.scrollWidth <= overflow.clientWidth + 1, `${testCase.route}: ${viewport.name} horizontal page overflow ${JSON.stringify(overflow)}`);
       await assertTables(page, testCase, viewport);
 
-      const articleText = (await page.locator('main').innerText()).toLocaleLowerCase();
+      const articleTextRaw = await page.locator('main').innerText();
+      const articleText = articleTextRaw.toLocaleLowerCase();
       for (const token of ['tool_available', 'policy_authority', 'approval_subject', 'arguments_digest', 'credential_identity', 'credential_value_logged', 'network_destination', 'verification_head_sha']) check(articleText.includes(token), `${testCase.route}: ${viewport.name} production invariant missing ${token}`);
       check(articleText.includes('post-hook != preventive control'), `${testCase.route}: ${viewport.name} hook timing invariant missing`);
-      check(articleText.includes('t(a)') && articleText.includes('p(a)') && articleText.includes('s(a)') && articleText.includes('c(a)') && articleText.includes('r(a)') && articleText.includes('a(a)'), `${testCase.route}: ${viewport.name} executable authority predicate incomplete`);
+      // MathJax may expose mathematical italic Unicode plus invisible function-application
+      // characters in rendered text. Normalize compatibility letters before lowercasing:
+      // lowercasing first can leave NFKC-produced ASCII capitals (for example 𝑇 -> T)
+      // after the case-folding step. Then remove only whitespace and MathJax invisible
+      // separators. The semantic T/P/S/C/R/A conjunction remains required in full.
+      const normalizedMathText = articleTextRaw.normalize('NFKC').toLocaleLowerCase().replace(/[\s\u2061-\u2064]/gu, '');
+      check(normalizedMathText.includes('t(a)') && normalizedMathText.includes('p(a)') && normalizedMathText.includes('s(a)') && normalizedMathText.includes('c(a)') && normalizedMathText.includes('r(a)') && normalizedMathText.includes('a(a)'), `${testCase.route}: ${viewport.name} executable authority predicate incomplete`);
 
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
       for (const error of consoleErrors.filter((entry) => !/favicon|Failed to load resource.*404/i.test(entry))) failures.push(`${testCase.route}: ${viewport.name} console error: ${error}`);

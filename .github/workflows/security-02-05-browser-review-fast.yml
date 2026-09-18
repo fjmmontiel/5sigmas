@@ -1,0 +1,78 @@
+name: Security02-05 fast bounded browser review
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/browser-review-fast-request.json']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-02-05-browser-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-review-fast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact revision/request
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/browser-review-fast-request.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax gate
+        run: |
+          python scripts/validate_security_requalification_inline_css.py
+          node --check scripts/validate_security_02_05_browser_fast.mjs
+          node --check scripts/capture_security_02_05_full_pages.mjs
+          node --check scripts/capture_security_02_05_all_visual_states.mjs
+          node --check scripts/diagnose_security_02_05_styles.mjs
+      - name: Strict ES + EN build
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts/security-requalification/security-02-05-browser-fast/build-logs
+          mkdocs build --clean --strict 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/es-strict.log
+          python scripts/prepare_locale.py --locale en 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/en-prepare.log
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/en-strict.log
+      - name: Install browser
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve preview
+        run: |
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/security-browser-fast-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/security-browser-fast-preview.log
+          exit 1
+      - name: Real Security02-05 browser matrix
+        run: node scripts/validate_security_02_05_browser_fast.mjs
+      - name: Whole-article Security02-05 pixel captures
+        run: node scripts/capture_security_02_05_full_pages.mjs
+      - name: Every Security02-05 teaching-visual state
+        run: node scripts/capture_security_02_05_all_visual_states.mjs
+      - name: Rendered style diagnostics
+        if: always()
+        run: node scripts/diagnose_security_02_05_styles.mjs
+      - name: Retain exact screenshots/report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-02-05-browser-review-fast
+          path: artifacts/security-requalification/security-02-05-browser-fast/
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true

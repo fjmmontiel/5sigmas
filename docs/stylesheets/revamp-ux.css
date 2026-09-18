@@ -57,6 +57,62 @@
   display: none !important;
 }
 
+/*
+ * Security 00/1.1 is under the reinforced GOLDEN article↔watch contract. Keep
+ * that navigation explicit and keyboard-reachable without changing the older
+ * reference series that intentionally retain the compact inline-player UI.
+ */
+article:has(.secpath) .s5-video-embed__watch,
+article:has(.ctxmix) .s5-video-embed__watch {
+  display: block !important;
+}
+
+/*
+ * The stateful Security control-vs-data mechanism used whole-container opacity
+ * to de-emphasise future stages. That also fades explanatory text and can make
+ * it unreadable even when the foreground/background colours independently pass
+ * WCAG. Keep teaching text fully rendered and signal the active stage with a
+ * structural outline instead. The final verdict is genuinely absent from the
+ * visual state until the authorization decision is reached, rather than shown
+ * as low-contrast ghost text.
+ */
+.md-typeset .ctxmix[data-state] .ctxmix__context,
+.md-typeset .ctxmix[data-state] .ctxmix__mechanism,
+.md-typeset .ctxmix[data-state] .ctxmix__runtime,
+.md-typeset .ctxmix[data-state] .ctxmix__proposal,
+.md-typeset .ctxmix[data-state] .ctxmix__runtime small {
+  opacity: 1 !important;
+}
+
+.md-typeset .ctxmix[data-state] .ctxmix__verdict {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.md-typeset .ctxmix[data-state="1"] .ctxmix__sources {
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 12%, transparent);
+}
+
+.md-typeset .ctxmix[data-state="2"] .ctxmix__context {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 16%, transparent);
+}
+
+.md-typeset .ctxmix[data-state="3"] .ctxmix__proposal {
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 10%, transparent);
+}
+
+.md-typeset .ctxmix[data-state="4"] .ctxmix__runtime {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
+}
+
+.md-typeset .ctxmix[data-state="4"] .ctxmix__verdict {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
 /* Long-form reading should prioritise the article over the complete site tree. */
 @media (min-width: 76.25em) {
   .md-main__inner:not(:has(.s5-landing)) .md-sidebar--primary {

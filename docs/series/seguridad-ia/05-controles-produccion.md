@@ -2,7 +2,7 @@
 title: Controles de producción — limitar las acciones cuando el modelo falla
 description: "Qué controles limitan el daño cuando un sistema con IA lee contenido externo, usa herramientas y una defensa falla."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: seguridad producción LLM, mínimo privilegio, dual LLM, guardrails, MCP security, tool poisoning, observabilidad agentes
 tags:
   - IA
@@ -10,7 +10,20 @@ tags:
   - Producción
   - Agentes
 video: "05-controles-produccion.mp4"
+video_poster: "05-controles-produccion.jpg"
+video_title: "Controles de producción"
+video_summary: "Cómo mínimo privilegio, autorización independiente, kill paths, observabilidad y gates ligados a evidencia limitan el daño cuando el modelo falla."
 video_duration: "PT1M0S"
+video_chapters:
+  - name: "Separar lectura y acción privilegiada"
+    start: 0
+    end: 24
+  - name: "Mínimo privilegio y fronteras MCP"
+    start: 24
+    end: 48
+  - name: "Observabilidad, kill path y confirmación"
+    start: 48
+    end: 60
 ---
 
 # Capítulo 5 — Controles de producción
@@ -83,13 +96,15 @@ OWASP recomienda validar y sanear datos antes de persistirlos, aislar memoria en
 
 Eso sugiere una regla útil: **escribir memoria es una acción privilegiada**. No necesariamente tan sensible como enviar un pago, pero sí lo bastante importante como para tener procedencia, scope y revocación.
 
-## Clasificar el texto mientras se genera
+## Clasificar intercambios con una cascada, no solo texto aislado
 
-Constitutional Classifiers presenta clasificadores de entrada y salida que pueden evaluar la secuencia mientras se genera. Si aparece contenido peligroso, el sistema puede cortar la generación sin esperar al final.
+La primera generación de *Constitutional Classifiers* usaba clasificadores de entrada y salida para detectar contenido peligroso. En enero de 2026, *Constitutional Classifiers++* cambió de forma material la arquitectura de producción: evalúa el **intercambio completo** en contexto, usa una **cascada de dos etapas** y combina *linear probes* baratos con clasificadores externos más costosos. El primer nivel filtra todo el tráfico y solo escala los intercambios sospechosos al segundo nivel ([Anthropic, *Next-generation Constitutional Classifiers*](https://www.anthropic.com/research/next-generation-constitutional-classifiers); [Cunningham et al., 2026](https://arxiv.org/abs/2601.04603)).
 
-Eso mejora tiempo de respuesta y experiencia, pero no sustituye el resto de la arquitectura. Un guardrail sigue siendo un modelo o un componente que necesita evaluación. También añade coste, latencia y una nueva señal que monitorizar.
+El paper reporta una reducción de **40× en coste computacional frente a su baseline de exchange classifier**, una tasa de rechazo de **0,05% en tráfico de producción** y más de **1.700 horas acumuladas de red-teaming**. Son resultados del sistema y de los harnesses evaluados por Anthropic, no cifras universales para cualquier guardrail, modelo o distribución de tráfico. La propia publicación señala que las defensas no son perfectas y describe ataques de reconstrucción y ofuscación como superficies que motivaron el rediseño.
 
-Los clasificadores son más útiles cuando el control que ejercen está conectado con el riesgo. Una conversación de bajo impacto puede usar una comprobación barata. Una tool call sensible puede exigir una capa especializada, validación determinista y aprobación humana.
+La lección de arquitectura es más útil que memorizar esas cifras: una señal barata puede decidir **qué tráfico merece una evaluación más cara**, mientras la decisión final conserva contexto suficiente para detectar relaciones entre la petición y la respuesta. Eso permite conectar coste, latencia y riesgo de forma explícita en lugar de poner el mismo clasificador pesado delante de cada token.
+
+Aun así, un guardrail sigue siendo un modelo o componente que necesita evaluación y puede fallar. Los clasificadores son más útiles cuando el control que ejercen está conectado con el riesgo. Una conversación de bajo impacto puede usar una comprobación barata. Una tool call sensible puede exigir una capa especializada, validación determinista y aprobación humana.
 
 El error es poner el guardrail únicamente delante del texto visible y dejar una ruta equivalente abierta por una herramienta. **Bloquear la respuesta y permitir la acción no es una mitigación.**
 
@@ -137,6 +152,8 @@ Un gate de seguridad para un agente puede ser pequeño y específico:
 
 {{ include_html("snippets/seguridad-ia/05-release-gate.html") }}
 
+El gate no debería limitarse a contar checks. Cada condición necesita **evidencia ligada a la revisión que se quiere desplegar**: una policy y sus scopes, una baseline de schemas/estado y una prueba end-to-end de ataque y recuperación. Si uno de esos artefactos falta, está obsoleto o ya no describe el sistema desplegable, la ruta correcta es `HOLD`, aunque los otros controles estén verdes.
+
 OWASP incorpora explícitamente adversarial validation, CI/CD y release gates dentro de sus recomendaciones para seguridad de agentes. La idea importante no es adoptar una cifra universal, sino hacer que el criterio de aceptación sea reproducible y esté conectado con el threat model del producto ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
 ## El diseño que queda
@@ -166,4 +183,6 @@ La serie termina con una regla poco espectacular y muy útil. **Cuanto más pode
 - OWASP, [*MCP Tool Poisoning*](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning).
 - OWASP, [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html).
 - Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- Anthropic (2026), [*Next-generation Constitutional Classifiers: More efficient protection against universal jailbreaks*](https://www.anthropic.com/research/next-generation-constitutional-classifiers).
+- Cunningham et al. (2026), [*Constitutional Classifiers++: Efficient Production-Grade Defenses against Universal Jailbreaks*](https://arxiv.org/abs/2601.04603).
 - NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).

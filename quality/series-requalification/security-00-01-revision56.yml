@@ -1,0 +1,164 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+revision: 56
+state: REQUALIFICATION_QA_NO_GOLDEN
+active_scope: seguridad-ia_00_plus_01
+article_golden: false
+next_article_blocked: 02-jailbreaks
+site_facing_bytes_changed: false
+
+canonical_contract_read:
+  issue_305_body_and_all_comments: true
+  amendment_5655569434_applied: true
+  issue_281_body_and_all_current_comments: true
+  linkedin_write_queue_activation_publish: false
+
+exact_qa:
+  run_id: 35040683005
+  job_id: 104619617705
+  exact_head: 5c609314bb3b65d7168774381499e12391015422
+  conclusion: FAIL_CLOSED
+  requested_matrix:
+    routes: 16
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    contexts: 64
+    includes_security: true
+    includes_datacenters_and_pre_datacenters_regression: true
+  focused_security_gates:
+    strict_es: PASS
+    strict_en: PASS
+    publication_discovery: PASS
+    publication_contract: PASS
+    structured_provenance_locale: PASS
+    article_watch_contract: PASS
+    focused_browser: PASS
+    contrast: PASS
+    text_visibility: PASS
+    video_lifecycle: PASS
+    real_mobile_touch: PASS
+    prompt_states: PASS_TECHNICAL_ONLY
+    keyboard_focus: PASS
+    listener_lifetime: PASS_POST_CONTEXT_TEARDOWN
+  shared_browser_resources:
+    state: FAIL
+    contexts_expected: 64
+    contexts_observed: 64
+    mutation_fixture_count: 11
+    failure_count: 64
+    expected_abort_count: 0
+    common_signature: FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO
+    per_context_shape: ONE_MEDIA_ERR_ABORTED_DURING_LAZY_LOAD_ZERO_DIRECT_FAILURES_ONE_VIDEO
+    interpretation: >-
+      The revision-55 correlation repair did not close the deterministic harness false positive. All 64 contexts still saw one
+      native-media ERR_ABORTED during lazy-load, and the classifier rejected it before response-proof evaluation because the final
+      page video snapshot was not yet healthy. This is not evidence that 64 published contexts have broken media: the focused
+      Security playback/lifecycle gates on the same exact head passed real playback, seek and post-teardown resource checks.
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN
+  source: FAIL
+  rendered: FAIL
+  media: FAIL
+  golden: false
+
+artifact:
+  id: 10426070817
+  compressed_bytes: 124619
+  retention_days: 1
+  expires_at: 2026-09-17T01:01:27Z
+  archive_inspection:
+    json_only: true
+    files: 11
+    uncompressed_bytes: 2737041
+  p2_cost_verdict: CLOSED_FOR_FOCUSED_FAILURE_PATH
+  comparison_revision55_bytes: 44518360
+
+new_diagnosis:
+  defect: MEDIA_METADATA_EXERCISE_STILL_SELF_CANCELS
+  cause: >-
+    exerciseLazyResources changed preload from none to metadata and then synchronously called video.load() whenever networkState was
+    still NETWORK_EMPTY. Chromium can queue resource selection from the preload change before networkState updates; load() in the
+    same task then resets/cancels that valid request. The NETWORK_EMPTY guard therefore did not remove the race exposed in revision 55.
+  evidence:
+    - REVISION56_64_OF_64_SAME_LAZY_LOAD_ABORT_SIGNATURE
+    - REVISION56_SHARED_REPORT_EXPECTED_ABORTS_0
+    - SAME_HEAD_FOCUSED_SECURITY_REAL_PLAYBACK_GATES_PASS
+
+repair_after_revision56:
+  commit: f270ca0d37a526993ff7f8af41fea139444c6454
+  path: scripts/audit_browser_resources.mjs
+  state: IMPLEMENTED_PENDING_EXACT_QA
+  changes:
+    - REMOVE_DIRECT_VIDEO_LOAD_FROM_METADATA_EXERCISE
+    - PRELOAD_METADATA_THEN_ALLOW_TWO_ANIMATION_FRAMES_FOR_RESOURCE_SELECTION
+    - REQUIRE_EACH_EXISTING_VIDEO_TO_REACH_HEALTHY_METADATA_STATE
+    - RETAIN_REQUEST_RESPONSE_CORRELATION_AND_POST_CONTEXT_CLOSE_VERDICT
+    - INCLUDE_FINAL_VIDEO_HEALTH_AND_SUCCESSFUL_MEDIA_RESPONSE_COUNT_IN_JSON_REPORT
+  thresholds_lowered: false
+  blanket_err_aborted_allowlist: false
+  source_or_site_facing_change: false
+  local_syntax_check: PASS_NODE_CHECK
+  action_triggered_by_repair_commit: false
+
+coverage:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  open_debt:
+    RAW_TEX_RENDERED: 28
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+
+security_media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blockers: 16
+  audio_streams_missing: 4
+  captions_missing: 4
+  transcripts_missing: 4
+  curated_key_moment_maps_missing: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+pixel_pedagogy:
+  new_whole_article_review_this_revision: false
+  latest_applicable_whole_active_set_revision: 43
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT_HISTORICAL
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_HISTORICAL
+  independent_reviewer: false
+  grants_article_golden: false
+
+sources_locales:
+  material_claims_changed: false
+  factual_research_reopened: false
+  strict_es: PASS_REVISION56
+  strict_en: PASS_REVISION56
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  linkedin_action_by_this_lane: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+release:
+  pr: 0
+  merge: 0
+  deploy: 0
+  datacenters_or_pre_datacenters_modified: false
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_METADATA_EXERCISE_WITHOUT_SELF_RESET
+  required_regression_matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+  do_not_advance_to: 02-jailbreaks
+  whole_article_pixel_and_pedagogy_recertification_required_before_golden: true
+  first_external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO
+  dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  golden_forbidden_until_all_conjunctive_gates_pass: true

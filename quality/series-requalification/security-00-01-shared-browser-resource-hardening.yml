@@ -1,0 +1,69 @@
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+active_scope: seguridad-ia_00_plus_01
+state: REQUALIFICATION_QA
+article_golden: false
+next_article_blocked: 02-jailbreaks
+
+change:
+  path: scripts/audit_browser_resources.mjs
+  repair_commit: 770f782cc4ba3cd6ccc1eee060660102d78b1590
+  classification: SHARED_GATE_REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+  site_facing_bytes_changed: false
+  thresholds_lowered: false
+  findings_before_repair:
+    desktop_only: true
+    reduced_motion_only: true
+    pageerror_missing: true
+    console_error_missing: true
+    lazy_resource_exercise_missing: true
+  implemented:
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    listener_lifetime: THROUGH_CONTEXT_CLOSE
+    verdict: POST_CONTEXT_TEARDOWN
+    runtime_signals: [pageerror, console_error, http_gte_400, requestfailed]
+    lazy_page_scroll: true
+    video_metadata_load_exercise: true
+    err_aborted_blanket_allowlist: false
+    deterministic_classifier_mutations: 5
+  limits:
+    exact_browser_execution_this_checkpoint: NOT_RUN
+    browser_pass_claimed: false
+    real_touch_claimed_by_shared_gate: false
+    whole_article_pixel_review: NOT_PERFORMED
+    whole_article_pedagogy_review: NOT_PERFORMED
+
+unchanged_fail_closed_state:
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  MEDIA_PASS: false
+  ARTICLE_GOLDEN: false
+  RAW_TEX_RENDERED: 28
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_NOT_RENDERED: 60
+  security_voice_missing_blockers: 16
+
+media:
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+release:
+  pr_created: false
+  merged: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified: false
+
+next_gap:
+  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_AUDIT_HARDENING
+  stay_on: seguridad-ia_00_plus_01
+  do_not_advance_to: 02-jailbreaks
+  external_media_after_deterministic_gate: [AUTHORIZED_NARRATION_AUDIO, CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  golden_forbidden_until_all_conjunctive_gates_pass: true

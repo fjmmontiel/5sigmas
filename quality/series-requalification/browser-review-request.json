@@ -1,0 +1,9 @@
+{
+  "browser_review_revision": 1,
+  "scope": "security_02_05",
+  "owner_amendment_comment": 5716685049,
+  "owner_precedence_receipt_comment": 5719162654,
+  "baseline_integration_run": 35292790154,
+  "baseline_verified_site_head": "5ccb9da88deb63fbb67796c0974f39176aee8e42",
+  "reason": "Execute the outstanding real article browser interaction review for Security02-05 in ES/EN at desktop/mobile and normal/reduced motion. Exercise keyboard/touch/focus and the tracked relationship-first intermediate/final states, retain exact screenshots for manual PIXEL_REVIEW/PEDAGOGY_REVIEW, and keep VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL nonblocking. This request does not itself certify pixel or pedagogy."
+}

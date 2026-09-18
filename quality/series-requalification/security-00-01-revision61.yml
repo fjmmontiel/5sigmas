@@ -1,0 +1,127 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+revision: 61
+state: REQUALIFICATION_QA_CHANGES_REQUIRED
+article_golden: false
+series_golden: false
+active_scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  next_article_blocked: 02-jailbreaks
+
+exact_capture:
+  run_id: 35067385838
+  head: 2acea24cdb903757c90e801aeef304999588decb
+  conclusion: success
+  browser: CHROME_152_0_7977_82
+  strict_es: PASS
+  strict_en: PASS
+  editorial_contexts_expected: 16
+  editorial_contexts_observed: 16
+  editorial_failure_count: 0
+  post_context_teardown_contexts: 16
+  runtime_unexpected_total: 0
+  prompt_state_contexts: 8
+  prompt_state_failures: 0
+  retained_screenshots: 176
+  artifact:
+    id: 10434608568
+    compressed_bytes: 40771919
+    retention_days: 1
+    expires_at: 2026-09-17T07:17:26Z
+
+manual_review_performed:
+  whole_page_contexts_inspected: 16
+  asset_state_screenshots_inspected: 160
+  locales: [es, en]
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  security_00_01_global_horizontal_overflow_observed: false
+  raw_tex_or_accidental_html_observed_in_security_00_01: false
+  obvious_document_level_clipping_observed: false
+  ctxmix_mechanism_review: PASS_TARGETED
+  defsim_mechanism_review: PASS_TARGETED
+  secpath_static_and_scenario_review: PASS_TARGETED
+  ragtrace_static_and_scenario_review: PASS_TARGETED
+  independent_reviewer: false
+
+new_fail_closed_findings:
+  SEMANTIC_TRACE_CHECKPOINT_EVIDENCE_MISSING:
+    severity: P1_GATE
+    state: REPAIR_IMPLEMENTED_PENDING_EXACT_QA
+    affected_visuals: [secpath, ragtrace]
+    reason: >-
+      Revision 61 generic-control evidence captured only one frame about 50 ms in reduced motion or 180 ms in normal motion after Play.
+      secpath advances on a 650 ms interval and ragtrace advances on a 700 ms interval, so those retained Play screenshots cannot prove
+      semantic start/intermediate/final states required by the GOLDEN contract.
+    false_pass_forbidden: true
+    repair:
+      script: scripts/capture_security_trace_checkpoints.mjs
+      workflow: .github/workflows/security-capture-direct.yml
+      viewport_chrome_hidden: false
+      expected_contexts: 16
+      semantic_checkpoints_per_context: 4
+      listeners_through_context_close: true
+      sticky_chrome_overlap_fail_closed: true
+  EDITORIAL_EVIDENCE_ARTIFACT_SIZE:
+    severity: P2_COST
+    state: OPEN_OPTIMIZATION_AFTER_REQUIRED_EVIDENCE_IS_PRESERVED
+    compressed_bytes: 40771919
+    retention_days: 1
+    note: Do not delete or down-quality evidence merely to make CI small; deduplicate future capture states where the semantic checkpoint harness replaces redundant generic Play frames.
+
+pixel_review: CHANGES_REQUIRED_PENDING_SEMANTIC_VIEWPORT_EXACT_QA
+pedagogy_review: CHANGES_REQUIRED_PENDING_SEMANTIC_START_INTERMEDIATE_FINAL_EXACT_QA
+
+unchanged_global_debt:
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  RAW_TEX_RENDERED: 28
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_NOT_RENDERED: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+
+media:
+  state: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+site_facing_bytes_changed_this_revision: false
+material_claims_changed_this_revision: false
+factual_research_reopened_this_revision: false
+
+concurrency_note:
+  observed_after_revision61:
+    - commit: a0b71143842d2f3c6c42cdb8370178095a78429f
+      purpose: sticky-chrome-isolated-capture adjustment
+    - commit: 6dc53806dab14ae2454566683a51cde785c633f8
+      purpose: revision62 capture request
+  acceptance: >-
+    These concurrent changes do not close the semantic checkpoint gap because the underlying generic Play capture still samples before the 650/700 ms scripted transitions.
+    They were not overwritten; the semantic checkpoint repair was added orthogonally.
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified_this_revision: false
+  linkedin_action: false
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: EXACT_QA_OF_REAL_VIEWPORT_SEMANTIC_TRACE_CHECKPOINTS_THEN_MANUAL_REVIEW
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

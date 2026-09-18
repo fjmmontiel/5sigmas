@@ -1,0 +1,217 @@
+schema_version: 2
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+status: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+active_series: seguridad-ia
+active_article: 00_presentacion_serie
+article_golden: false
+series_golden: false
+
+purpose: >-
+  Diagnose the full-catalogue browser-context timeouts without increasing thresholds,
+  weakening fail-closed behavior, or treating a technical diagnostic as pixel/pedagogy approval.
+
+artifact_evidence:
+  revision_67:
+    action_run: 35089095977
+    exact_head: e6f908ecf662b6dde03f305a5764c7f5dafc70bc
+    contexts_expected: 336
+    contexts_observed: 336
+    timeout_count: 1
+    timeout:
+      route: /en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
+      locale: en
+      width: 1440
+      motion: reduce
+      timeout_ms: 25000
+  revision_68:
+    action_run: 35094186406
+    exact_head: 0e0210996be7b605441c3b8c32d85a9ec8ac3776
+    contexts_expected: 336
+    contexts_observed: 336
+    timeout_count: 2
+    timeouts:
+      - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+        locale: es
+        width: 390
+        motion: reduce
+        phase: lazy-load
+        timeout_ms: 25000
+      - route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/
+        locale: es
+        width: 1440
+        motion: reduce
+        phase: lazy-load
+        timeout_ms: 25000
+  revision_70:
+    action_run: 35107507352
+    exact_head: b7a531f0e5edb452dd1d93e9255b09f4501f5664
+    artifact_id: 10451857596
+    artifact_digest: sha256:15a9d163bafb784245499012987d1b2b2b86a392caf49fa12e454af7e7bc2062
+    contexts_expected: 336
+    contexts_observed: 336
+    worker_count: 2
+    timeout_ms: 25000
+    timeout_count: 3
+    timeouts:
+      - route: /series/seguridad-ia/01-prompt-injection/
+        locale: es
+        width: 390
+        motion: reduce
+        phase: lazy-load
+        phase_timing_ms:
+          navigation: 753.43
+          lazy-load: 24313.73
+          teardown: 32.35
+        healthy_peer_lazy_ms:
+          es_390_normal: 855.65
+          en_390_reduce: 876.70
+          es_1440_reduce: 804.08
+      - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+        locale: es
+        width: 390
+        motion: reduce
+        phase: lazy-load
+        phase_timing_ms:
+          navigation: 1127.84
+          lazy-load: 23922.97
+          teardown: 9.86
+        healthy_peer_lazy_ms:
+          es_390_normal: 1053.28
+          en_390_reduce: 971.51
+          es_1440_reduce: 880.67
+      - route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/
+        locale: es
+        width: 390
+        motion: reduce
+        phase: lazy-load
+        phase_timing_ms:
+          navigation: 821.14
+          lazy-load: 24239.58
+          teardown: 4.84
+        healthy_peer_lazy_ms:
+          es_390_normal: 1064.46
+          en_390_reduce: 993.47
+          es_1440_reduce: 941.98
+    es_390_reduce_lazy_distribution_ms:
+      contexts: 42
+      median: 1258.4
+      p90: 1509.2
+      max: 24313.73
+    en_390_reduce_lazy_distribution_ms:
+      contexts: 42
+      median: 1026.7
+      p90: 1247.9
+      max: 1418.6
+    independent_findings:
+      REQUEST_FAILED: 95
+      VIDEO_PLAYBACK_ERROR: 95
+      VIDEO_NOT_RENDERED: 238
+      RAW_TEX_VISIBLE: 111
+
+revision_67_to_68_delta:
+  published_content_changed: false
+  changed_files:
+    - quality/series-requalification/audit-request.json
+    - quality/series-requalification/full-browser-abort-hardening.yml
+    - scripts/audit_series_experience_browser.mjs
+  implication: >-
+    The timeout target moved to unrelated routes while the published page content was unchanged.
+    This is evidence against treating either timeout as a stable page-specific defect.
+
+revision_70_reconciliation:
+  worker_reduction_eliminated_timeout_class: false
+  all_rev70_timeouts_share_profile:
+    locale: es
+    width: 390
+    motion: reduce
+    phase: lazy-load
+  same_routes_other_profiles_completed: true
+  matching_peer_lazy_load_is_roughly_one_second: true
+  classification: AUDITOR_LAZY_TRAVERSAL_SCHEDULING_DEFECT_SUSPECTED
+  proven_page_defect_from_timeout_alone: false
+  do_not_waive: true
+  implementation_fact: >-
+    The current full-page lazy traversal runs viewport-sized scroll steps inside page.evaluate
+    and waits 20 ms between steps with an in-page setTimeout while two contexts execute concurrently.
+  leading_hypothesis_not_yet_certified: >-
+    Renderer-side timer throttling or scheduling during that in-page traversal explains the
+    approximately 24 second outliers better than page length or route-specific content. This is
+    a hypothesis until the traversal is replaced and the focused reproduction reruns cleanly.
+
+auditor_observation:
+  navigation_completed_before_rev70_timeouts: true
+  timeout_phase: lazy-load
+  worker_concurrency: 2
+  wall_clock_budget_per_context_ms: 25000
+  same_rev70_timeout_routes_other_profiles_completed: true
+  classification: AUDITOR_SIDE_LAZY_TRAVERSAL_DEFECT_TO_REPAIR
+  proven_page_defect: false
+  do_not_waive: true
+
+required_fix:
+  - KEEP_CONTEXT_TIMEOUT_AT_25000_MS
+  - REPLACE_RENDERER_TIMED_LAZY_SCROLL_WITH_HOST_CONTROLLED_VIEWPORT_SCROLL_STEPS
+  - SPLIT_LAZY_LOAD_TELEMETRY_INTO_FONT_TRAVERSAL_POST_SCROLL_AND_DOM_INSPECTION_SUBPHASES
+  - KEEP_COMPLETE_DOCUMENT_LAZY_LOAD_COVERAGE
+  - KEEP_REQUEST_FAILURE_LISTENERS_ACTIVE_THROUGH_TEARDOWN
+  - DO_NOT_RAISE_TIMEOUT_OR_DROP_REDUCED_MOTION_TO_HIDE_FAILURES
+
+required_validation:
+  - RUN_FOCUSED_ES_390_REDUCED_REPRODUCTIONS_FOR_THE_THREE_REV70_TIMEOUT_ROUTES_FIRST
+  - REQUIRE_ZERO_CONTEXT_TIMEOUTS_ON_FOCUSED_REPRODUCTIONS_WITH_25000_MS_UNCHANGED
+  - KEEP_64_CONTEXT_SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_REGRESSION_MATRIX
+  - ONLY_AFTER_FOCUSED_PASS_RUN_ONE_EXACT_HEAD_FULL_336_CONTEXT_SWEEP
+  - REQUIRE_ZERO_BROWSER_CONTEXT_TIMEOUT_BEFORE_BROWSER_PASS
+  - RECONCILE_RAW_TEX_VIDEO_AND_REQUEST_FAILURE_FINDINGS_INDEPENDENTLY
+  - PIXEL_REVIEW_REMAINS_EDITORIAL_AND_REVISION_SCOPED
+  - PEDAGOGY_REVIEW_REMAINS_EDITORIAL_AND_REVISION_SCOPED
+
+known_independent_blockers_unchanged:
+  source_pass: false
+  rendered_pass: false
+  browser_pass: false
+  media_pass: false
+  raw_tex_locale_pages: 28
+  raw_tex_article_routes: 14
+  media_state: VOICE_MISSING
+  security_00_01_audio_stream_missing: 4
+  security_00_01_captions_missing: 4
+  security_00_01_transcript_missing: 4
+  security_00_01_key_moments_missing: 4
+
+manual_editorial_evidence:
+  new_pixel_review_this_diagnosis: false
+  new_pedagogy_review_this_diagnosis: false
+  retained_scoped_evidence:
+    revision: 66
+    article: seguridad-ia/00_presentacion_serie
+    pixel_review: PASS_SAME_AGENT_REV66_ONLY
+    pedagogy_review: PASS_SAME_AGENT_REV66_ONLY
+    security01_inherits: false
+
+release_boundary:
+  repair_branch: quality/post-datacenters-requalification
+  rev70_head_before_receipt: b7a531f0e5edb452dd1d93e9255b09f4501f5664
+  main_at_diagnosis: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  linkedin_write: false
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate:
+    - REPAIR_HOST_CONTROLLED_LAZY_TRAVERSAL_AND_SUBPHASE_TIMING
+    - RUN_FOCUSED_THREE_ROUTE_ES_390_REDUCED_REPRODUCTION
+    - THEN_RUN_ONE_EXACT_HEAD_FULL_SWEEP_IF_FOCUSED_CLEAN
+    - THEN_REPAIR_SYSTEMIC_RAW_TEX_WITH_REFERENCE_REGRESSION
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+    - ARTICLE_WATCH_POSTER_PLAY_PAUSE_SEEK_END_NEXT
+  do_not_advance_to: 02-jailbreaks

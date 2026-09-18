@@ -2,7 +2,7 @@
 title: Red-teaming — probar el camino completo antes del incidente
 description: "Cómo probar desde el documento que entra hasta la acción que el sistema puede ejecutar, antes de que ocurra un incidente."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: red teaming IA, evaluación de seguridad, uplift humano, attack budget, agentes IA, benchmarks LLM
 tags:
   - IA
@@ -10,7 +10,20 @@ tags:
   - Evaluación
   - LLMs
 video: "04-red-teaming.mp4"
+video_poster: "04-red-teaming.jpg"
+video_title: "Red-teaming"
+video_summary: "Cómo probar la cadena causal completa desde una entrada adversaria hasta autorización, efecto externo, recuperación y una regresión reproducible de release."
 video_duration: "PT1M0S"
+video_chapters:
+  - name: "Del test a la cadena de ataque"
+    start: 0
+    end: 24
+  - name: "Cobertura adaptativa y validez del evaluador"
+    start: 24
+    end: 48
+  - name: "Evidencia y gate de release"
+    start: 48
+    end: 60
 ---
 
 # Capítulo 4 — Red-teaming
@@ -63,7 +76,7 @@ Ese detalle también importa para regresiones. Si una nueva versión cambia el s
 
 ## Automatizar ataques también puede engañar a la evaluación
 
-*Constitutional Classifiers* describe un pipeline de red-teaming automático que genera ataques largos y de varios turnos. Un modelo de ataque propone una estructura, la rellena con variantes y usa los resultados para producir nuevos intentos ([Anthropic, 2025](https://www.anthropic.com/research/constitutional-classifiers)).
+Un ejemplo más preciso para agentes de larga duración es *Strengthening Red Teams: A Modular Scaffold for Control Evaluations*. En SHADE-Arena, el trabajo descompone una política de ataque en modelado de sospecha, selección del momento de ataque, planificación, ejecución y sutileza, y ajusta componentes del scaffold con un modelo probabilístico calibrado a partir de trayectorias reales. Ese scaffold pertenece al harness de evaluación: no demuestra que el modelo base tenga por sí solo esa capacidad ni que sus parámetros se transfieran a otros entornos ([Anthropic, 2025](https://alignment.anthropic.com/2025/strengthening-red-teams/)).
 
 La automatización aumenta la cobertura, pero también introduce un riesgo de métrica. Si el grader premia palabras concretas o respuestas extensas, el atacante puede aprender a jugar con la rúbrica sin encontrar una ruta útil.
 
@@ -148,5 +161,5 @@ Ese es el papel del red-teaming en esta serie: convertir un miedo abstracto en u
 
 - OWASP (2026), [*AI Security Solutions Landscape for AI and Agentic Red Teaming Q2 2026*](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/).
 - OWASP (2026), [*Top 10 for Agentic Applications*](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
-- Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- Anthropic (2025), [*Strengthening Red Teams: A Modular Scaffold for Control Evaluations*](https://alignment.anthropic.com/2025/strengthening-red-teams/).
 - NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).

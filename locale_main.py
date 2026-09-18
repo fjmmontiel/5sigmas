@@ -16,6 +16,7 @@ from pathlib import Path
 _READING_WPM = 230
 _REPO_ROOT = Path(__file__).resolve().parent
 _CANONICAL_MIRROR_MARKER = "<!-- 5sigmas-canonical-mirror -->"
+_SECURITY_ANIMATION_PREFIX = "snippets/seguridad-ia/"
 
 
 def _locale() -> str:
@@ -47,6 +48,108 @@ def _render_template(html: str, context: dict[str, object]) -> str:
         return str(context.get(key, match.group(0)))
 
     return re.sub(r"\{\{\s*([a-zA-Z0-9_]+)\s*\}\}", repl, html)
+
+
+def _normalize_on_off(value: object | None, default: str = "off") -> str:
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("on", "true", "1", "yes"):
+        return "on"
+    if normalized in ("off", "false", "0", "no"):
+        return "off"
+    return default
+
+
+def _normalize_shell_mode(value: object | None, default: str = "auto") -> str:
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("auto", "on", "off"):
+        return normalized
+    if normalized in ("true", "1", "yes"):
+        return "on"
+    if normalized in ("false", "0", "no"):
+        return "off"
+    return default
+
+
+def _normalize_contrast_mode(value: object | None, default: str = "force") -> str:
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("force", "auto", "off"):
+        return normalized
+    return default
+
+
+def _resolve_fullscreen_mode(html: str, explicit_value: object | None = None) -> str:
+    if explicit_value is not None:
+        return _normalize_on_off(explicit_value, default="on")
+    if re.search(r'data-anim-fullscreen\s*=\s*["\']?(off|false|0)["\']?', html, flags=re.IGNORECASE):
+        return "off"
+    if re.search(r'data-anim-fullscreen\s*=\s*["\']?(on|true|1)["\']?', html, flags=re.IGNORECASE):
+        return "on"
+    return "on"
+
+
+def _resolve_contrast_mode(html: str, explicit_value: object | None = None) -> str:
+    if explicit_value is not None:
+        return _normalize_contrast_mode(explicit_value, default="force")
+    match = re.search(r'data-anim-contrast\s*=\s*["\']?([a-z]+)["\']?', html, flags=re.IGNORECASE)
+    if match:
+        return _normalize_contrast_mode(match.group(1), default="force")
+    return "force"
+
+
+def _has_existing_shell(html: str) -> bool:
+    return any(
+        marker in html
+        for marker in (
+            "data-anim-shell",
+            'class="anim-brand-shell',
+            "class='anim-brand-shell",
+        )
+    )
+
+
+def _should_wrap_locale_shell(path: str, html: str, shell_mode: object | None = "auto") -> bool:
+    """Match the Spanish animation shell only for the requalified Security scope.
+
+    The previous locale renderer returned raw snippets, which made ES and EN render
+    different interaction/chrome for the same visual. Scope this repair to Security
+    so Datacenters and earlier reference series remain untouched while requalification
+    proceeds series by series.
+    """
+    mode = _normalize_shell_mode(shell_mode, default="auto")
+    if mode == "off" or _has_existing_shell(html):
+        return False
+    if mode == "on":
+        return True
+    normalized = str(path or "").strip().replace("\\", "/")
+    return normalized.startswith(_SECURITY_ANIMATION_PREFIX) and normalized.endswith(".html")
+
+
+def _wrap_animation_shell(
+    html: str,
+    variant: object = "default",
+    fullscreen: object = "off",
+    contrast: object = "force",
+) -> str:
+    safe_variant = re.sub(r"[^a-zA-Z0-9_-]", "", str(variant or "default")) or "default"
+    safe_fullscreen = _normalize_on_off(fullscreen, default="off")
+    safe_contrast = _normalize_contrast_mode(contrast, default="force")
+    button_hidden_attr = "" if safe_fullscreen == "on" else " hidden"
+    return (
+        f'<section class="anim-brand-shell" data-anim-shell data-anim-variant="{safe_variant}" '
+        f'data-anim-fullscreen="{safe_fullscreen}" data-anim-contrast="{safe_contrast}">'
+        '<div class="anim-brand-shell__toolbar">'
+        f'<button type="button" class="anim-brand-shell__btn" data-anim-shell-open '
+        f'aria-label="Open animation in fullscreen"{button_hidden_attr}>Fullscreen</button>'
+        "</div>"
+        f'<div class="anim-brand-shell__viewport">{html}</div>'
+        "</section>"
+    )
 
 
 def _git_blob_sha(payload: bytes) -> str:
@@ -168,7 +271,12 @@ def render_include_html(path: str, **kwargs: object) -> str:
         html = _render_canonical_mirror(path, snippet_path)
     else:
         html = raw
+
     context = dict(kwargs)
+    anim_variant = context.pop("anim_variant", "default")
+    anim_fullscreen = context.pop("anim_fullscreen", None)
+    anim_shell = context.pop("anim_shell", "auto")
+    anim_contrast = context.pop("anim_contrast", None)
 
     if "series_dir" in context:
         done, total, duration = _series_stats(str(context["series_dir"]))
@@ -182,7 +290,15 @@ def render_include_html(path: str, **kwargs: object) -> str:
         context.setdefault("count_label", f"{total} chapters")
         context.setdefault("extra_rows", "")
 
-    return _render_template(html, context)
+    rendered = _render_template(html, context)
+    if _should_wrap_locale_shell(path, rendered, shell_mode=anim_shell):
+        return _wrap_animation_shell(
+            rendered,
+            variant=anim_variant,
+            fullscreen=_resolve_fullscreen_mode(rendered, explicit_value=anim_fullscreen),
+            contrast=_resolve_contrast_mode(rendered, explicit_value=anim_contrast),
+        )
+    return rendered
 
 
 def define_env(env) -> None:

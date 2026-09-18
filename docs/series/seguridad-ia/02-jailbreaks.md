@@ -8,7 +8,20 @@ tags:
   - Seguridad
   - LLMs
 video: "02-jailbreaks.mp4"
+video_poster: "02-jailbreaks.jpg"
+video_title: "Jailbreaks"
+video_summary: "Cómo los intentos repetidos y adaptativos cambian la superficie de ataque y por qué la autorización y los límites de intentos siguen importando después de una negativa."
 video_duration: "PT1M0S"
+video_chapters:
+  - name: "De una negativa a una búsqueda"
+    start: 0
+    end: 24
+  - name: "Optimización, transferencia y presupuesto"
+    start: 24
+    end: 48
+  - name: "Aleatoriedad y autorización como fronteras distintas"
+    start: 48
+    end: 60
 ---
 
 # Capítulo 2 — Jailbreaks
@@ -21,7 +34,7 @@ En los primeros casos bastaba con una ocurrencia humana. Un personaje, una histo
 
 Los modelos generativos no ejecutan una política de seguridad como un parser que devuelve siempre el mismo error. Generan tokens condicionados por el contexto. El entrenamiento de seguridad cambia la distribución de respuestas, pero no añade una barrera formal que vuelva imposibles todas las continuaciones indeseadas.
 
-Eso explica por qué la temperatura cero no resuelve el problema. Si la entrada adversaria ya ha llevado al modelo a una región no deseada de su distribución, decodificar de forma determinista solo hace más repetible el resultado.
+Reducir la temperatura tampoco convierte esa política en una frontera formal. OWASP resume la evidencia de Best-of-N indicando que bajar la temperatura ofrece una protección mínima incluso a temperatura 0; puede cambiar la variabilidad del muestreo, pero no elimina la superficie adversaria ([OWASP Prompt Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)).
 
 {{ include_html("snippets/seguridad-ia/02-superficie-jailbreak.html") }}
 
@@ -31,7 +44,7 @@ Para evaluar un sistema hay que observar qué ocurre cuando una persona persiste
 
 El trabajo sobre ataques universales y transferibles popularizó una idea importante. Un sufijo adversario puede optimizarse para aumentar la probabilidad de que el modelo empiece con una respuesta afirmativa y después transferirse a otras consultas y modelos.
 
-El método GCG trata los tokens como variables discretas y busca sustituciones que mejoren el objetivo. No necesita que el atacante entienda cada detalle del modelo. Necesita una función de evaluación, capacidad de probar variantes y una ruta para observar el resultado ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
+El método GCG trata los tokens como variables discretas, pero su optimización original es de caja blanca: usa gradientes del modelo para priorizar sustituciones de tokens y después evalúa los candidatos. El atacante no necesita diseñar manualmente cada sufijo, pero sí necesita acceso al modelo y a sus gradientes durante esa fase de optimización. La transferencia posterior de los sufijos encontrados es lo que permite probarlos contra modelos de caja negra ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
 
 La transferencia no significa que exista una llave maestra universal para todos los modelos. Significa que una defensa evaluada en una sola formulación puede estar midiendo una superficie demasiado estrecha. El atacante optimiza sobre la familia de entradas y el sistema debería evaluar sobre esa misma familia.
 
