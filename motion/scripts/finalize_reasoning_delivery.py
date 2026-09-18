@@ -44,13 +44,7 @@ LEGACY_TTC_STEPS = {
 
 
 def install_artifact(src: Path, dst: Path) -> None:
-    """Materialize a validated artifact without needlessly recopying huge MP4s.
-
-    GitHub Actions extracts renderer artifacts onto the same runner filesystem as
-    the checkout. A hardlink is therefore the safest fast path: consumers see a
-    normal file with identical bytes while staging remains essentially O(1).
-    Cross-device or restricted filesystems transparently fall back to copy2.
-    """
+    """Materialize a validated artifact without needlessly recopying huge MP4s."""
     dst.parent.mkdir(parents=True, exist_ok=True)
     try:
         dst.unlink(missing_ok=True)
@@ -155,11 +149,8 @@ def stage(artifacts: Path) -> None:
         media = update_en_media_caption(media, doc, f"{stem}.vtt")
     EN_MEDIA.write_text(media, encoding="utf-8")
 
-    # locales/en/media.yml is now the sole English video metadata source.
     remove_reasoning_override()
 
-    # All six English binaries now live in the normal locale tree, so the old
-    # TTC-only Actions cache/artifact injection would overwrite the new v4 file.
     for workflow in (
         ROOT / ".github" / "workflows" / "deploy-pages.yml",
         ROOT / ".github" / "workflows" / "pr-visual-review.yml",
@@ -190,8 +181,6 @@ def _assert_contains(path: Path, tokens: list[str]) -> None:
 
 
 def verify(artifacts: Path) -> None:
-    # Source and built binaries must exist in both locales and be byte-identical
-    # to the validated renderer package used by this run.
     for locale, source_root, built_root in (
         ("es", DOCS, ROOT / "site" / "series" / SERIES),
         ("en", EN, ROOT / "site" / "en" / "series" / SERIES),
@@ -214,8 +203,6 @@ def verify(artifacts: Path) -> None:
             watch_prefix = ROOT / "site" / ("videos" if locale == "es" else "en/videos") / "series" / SERIES / stem
             _assert_contains(watch_prefix / "index.html", [f"{stem}.mp4", f"{stem}.jpg", duration])
 
-    # The old TTC override/injection must be absent, otherwise a later deploy can
-    # silently resurrect stale media or metadata.
     mkdocs_text = MKDOCS_EN.read_text(encoding="utf-8")
     if "locale_video_pages:" in mkdocs_text and "series/modelos-razonadores/03-test-time-compute.md:" in mkdocs_text:
         raise ValueError("stale English TTC config override remains")
@@ -228,19 +215,23 @@ def verify(artifacts: Path) -> None:
             raise ValueError(f"{path}: stale TTC one-off media injection remains")
 
 
-def mark_golden(run_id: str, sha: str) -> None:
+def mark_golden(run_id: str, sha: str, main_sha: str | None = None) -> None:
     status = json.loads(STATUS.read_text(encoding="utf-8"))
     for row in status["outputs"].values():
         row["delivery"] = True
         all_gates = all(bool(row[gate]) for gate in status["requiredGates"])
         row["technical_golden"] = all_gates
         row["golden"] = all_gates
-    status.setdefault("evidence", {})["delivery"] = {
+    delivery_evidence: dict[str, Any] = {
         "workflow_run": int(run_id) if str(run_id).isdigit() else run_id,
         "head_sha_before_delivery_commit": sha,
         "scope": "12 localized outputs with canonical ES/EN media, captions, article embeds, watch pages, catalog/schema/sitemaps and strict ES/EN builds",
         "result": "delivery integration passed; legacy English TTC one-off injection removed",
     }
+    if main_sha:
+        delivery_evidence["validated_main_sha"] = main_sha
+        delivery_evidence["freshness"] = "current main was merged before rendering and remained unchanged through delivery validation"
+    status.setdefault("evidence", {})["delivery"] = delivery_evidence
     if not all(row["technical_golden"] for row in status["outputs"].values()):
         blocked = [key for key, row in status["outputs"].items() if not row["technical_golden"]]
         raise ValueError(f"cannot mark unit golden; outputs still blocked: {blocked}")
@@ -249,6 +240,8 @@ def mark_golden(run_id: str, sha: str) -> None:
 
     migration = json.loads(MIGRATION.read_text(encoding="utf-8"))
     migration["status"] = "golden"
+    if main_sha:
+        migration["validatedMainSha"] = main_sha
     MIGRATION.write_text(json.dumps(migration, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -262,6 +255,7 @@ def main() -> None:
     golden_parser = sub.add_parser("mark-golden")
     golden_parser.add_argument("--run-id", required=True)
     golden_parser.add_argument("--sha", required=True)
+    golden_parser.add_argument("--main-sha")
     args = parser.parse_args()
 
     if args.command == "stage":
@@ -269,7 +263,7 @@ def main() -> None:
     elif args.command == "verify":
         verify(args.artifacts.resolve())
     else:
-        mark_golden(args.run_id, args.sha)
+        mark_golden(args.run_id, args.sha, args.main_sha)
 
 
 if __name__ == "__main__":
