@@ -1,0 +1,45 @@
+{
+  "unit": "modelos-razonadores",
+  "status": "in_progress",
+  "releasePolicy": "one_pr_after_all_locales_and_videos_are_golden",
+  "visualIdentity": {
+    "accentName": "Teal reasoning",
+    "accent": "#26A69A",
+    "accentText": "#00776F",
+    "accentSurface": "#E7F4F0",
+    "uses": [
+      "key words and metrics",
+      "active diagram nodes and selected paths",
+      "results, progress and state emphasis"
+    ],
+    "semantic": {
+      "warning": "#98600C",
+      "warningSurface": "#FBF1DF"
+    },
+    "forbidden": [
+      "decorative gradients",
+      "per-video or per-scene accent changes",
+      "ornamental multicolor fills"
+    ]
+  },
+  "spanish": [
+    "00_presentacion_serie",
+    "01-que-es-razonar",
+    "02-fallos",
+    "03-test-time-compute",
+    "04-latencia-streaming",
+    "05-riesgos"
+  ],
+  "english": [
+    "00_presentacion_serie",
+    "01-que-es-razonar",
+    "02-fallos",
+    "03-test-time-compute",
+    "04-latencia-streaming",
+    "05-riesgos"
+  ],
+  "notes": [
+    "English 03-test-time-compute is deployment-injected localized media rather than a normal checked-in locale MP4.",
+    "The release unit remains blocked until every ES/EN video and all consumer integrations pass GOLDEN."
+  ]
+}
