@@ -1,4 +1,4 @@
-schema_version: 6
+schema_version: 7
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -35,7 +35,7 @@ series_status:
     production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: ARTICLE_GOLDEN_6_OF_6_AWAITING_FRESH_ZERO_BASED_SERIES_AUDIT
+    state: RELEASE_READY_AWAITING_FINAL_PR_MERGE_DEPLOY_LIVE_QA
     voice_enhancement: DEFERRED_OWNER_LOCAL
     technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
     technical_milestone_run: 35402872378
@@ -68,8 +68,20 @@ series_status:
     known_p0_p1_p2: 0
     article_golden: 6/6
     route_locale_rows_golden: 12/12
+    fresh_zero_based_series_audit_run: 35406872463
+    fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
+    fresh_zero_based_series_audit: PASS
+    fresh_series_relationship_guards: PASS
+    fresh_series_strict_es: PASS
+    fresh_series_strict_en: PASS
+    fresh_series_publication_reconciliation: PASS
+    fresh_series_media_visual: PASS
+    fresh_series_indexability: PASS
+    fresh_series_browser_resources: PASS
+    manual_pixel_pedagogy_reused_only_for_unchanged_site_facing_bytes: true
     series_golden: false
-    next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_FINAL_RELEASE_PR_DEPLOY_LIVE_QA
+    production_verified: false
+    next_action: FINAL_FOCUSED_RELEASE_PR_EXACT_HEAD_CHECKS_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
   agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
