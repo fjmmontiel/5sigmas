@@ -10,7 +10,20 @@ tags:
   - Seguridad
   - Prompt Injection
 video: "04-seguridad-agentes.mp4"
+video_poster: "04-seguridad-agentes.jpg"
+video_title: "Seguridad de agentes"
+video_summary: "Cómo el contenido no confiable puede influir en una acción, y por qué autorización, mínimo privilegio y verificaciones independientes deben vivir fuera del prompt."
 video_duration: "PT59S"
+video_chapters:
+  - name: "Datos no confiables y prompt injection"
+    start: 0
+    end: 20
+  - name: "Policy, identidad y autorización"
+    start: 20
+    end: 40
+  - name: "Defensas múltiples y acciones irreversibles"
+    start: 40
+    end: 59
 ---
 
 # Capítulo 4 — Seguridad: cuando leer datos se convierte en actuar
