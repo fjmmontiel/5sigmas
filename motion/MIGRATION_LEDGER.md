@@ -22,7 +22,7 @@ Consumer surfaces in scope for the unit: ES/EN series article embeds, generated 
 |---|---|---|---|---|---|---|---|---|
 | ES | 00 presentación | v4 candidate · 4 semantic scenes | 13 authored cues | locked | article + Snell source mapped | H/V layout checks pass; representative frames reviewed | pending final site integration | NO |
 | ES | 01 qué es razonar | v4 candidate · 4 semantic scenes | 16 authored cues | locked | article + DeepSeek/OpenAI/Apple sources mapped | H/V layout checks pass; representative frames reviewed | pending final site integration | NO |
-| ES | 02 fallos | v4 candidate · 5 semantic scenes · 108 s | 19 authored cues | locked | primary sources mapped; o3 88% claim rechecked against Bondarenko; sycophancy wording tightened to match Sharma | renderer/layout visual QA pending | pending final site integration | NO |
+| ES | 02 fallos | v4 candidate · 5 semantic scenes · 108 s | 19 authored cues | locked | primary sources rechecked; article + video corrected to source-faithful o3 and sycophancy wording | renderer/layout visual QA pending | pending final site integration | NO |
 | ES | 03 test-time compute | v4 candidate · 7 semantic scenes | 37 authored cues | locked | candidate reviewed | H/V layout checks pass | pending final site integration | NO |
 | ES | 04 latencia/streaming | pending | pending | locked | pending | pending | pending | NO |
 | ES | 05 riesgos | pending | pending | locked | pending | pending | pending | NO |
@@ -44,7 +44,7 @@ Consumer surfaces in scope for the unit: ES/EN series article embeds, generated 
 - ES chapter 1 v4: 82 s, 16 synchronized cues, H/V layout validation clean. Representative frames cover the operational definition and sourced AIME comparison.
 - ES chapter 2 v4 candidate: 108 s, five semantic scenes and 19 synchronized cues. Shortcut learning is represented as a spurious-vs-robust path; systematic biases as repeatable directional failure modes; specification gaming explicitly separates objective from proxy; propagation exposes an early false premise and recovery path; verification combines perturbation, intermediate checks, multiple sampling, OOD testing and external blocking.
 - Authoring validation for chapter 2 passes the committed v4 schema/cue invariants: complete verbatim paragraph coverage, <=240 WPM cue speed, monotonic deterministic actions, all mechanism targets finishing at 1, tree integrity and locked-identity validation.
-- Primary-source review caught a factual overgeneralization inherited from the article draft: Bondarenko et al. report **o3** hacking in 88% of baseline runs, not a shared 88% rate for o3 and DeepSeek R1. The video candidate now uses the source-faithful o3-only claim. Sharma et al.'s 85% is an explanation of the feedback-positivity metric for a prompt, not a universal aggregate rate, so the video candidate now states the supported directional result without presenting 85% as a global rate.
+- Primary-source review caught two factual overgeneralizations inherited from the article draft. Bondarenko et al. report **o3** hacking in 88% of baseline runs, not a shared 88% rate for o3 and DeepSeek R1. Sharma et al.'s 85% describes what a feedback-positivity value means for a particular prompt, not a universal aggregate sycophancy rate. Both the chapter-2 video candidate and its source article are now corrected to source-faithful wording.
 - Visual QA previously caught a framework-level semantic-copy defect: generic intro mechanisms displayed the old Test-Time-Compute heading/end-note on unrelated scenes. The local renderer was generalized to accept per-scene `heading`/`endNote`; both new specs declare semantic copy explicitly. This fix must be persisted with the renderer before either video can become GOLDEN.
 
 ### Current blockers
@@ -52,10 +52,9 @@ Consumer surfaces in scope for the unit: ES/EN series article embeds, generated 
 1. ES `04-latencia-streaming` and `05-riesgos` still need authored semantic scene specs and cue timelines.
 2. All six English variants still need localization/review; English TTC must preserve its special localized-media deployment path.
 3. The complete renderer/exporter/web-player/test harness must be persisted under `motion/` on this branch; the branch currently contains durable contracts/specs and spec-level tests but not yet the entire local v4 runtime required for visual rendering.
-4. The source article `02-fallos.md` still contains the two quantitative overgeneralizations found during video source review (the sycophancy 85% wording and the combined o3/DeepSeek-R1 88% wording). Correct the article before chapter 2 can pass the factual GOLDEN gate.
-5. Final MP4/poster generation and site metadata updates must wait for the entire series so release remains atomic.
-6. Full consumer-page regression, Safari/iOS playback, accessibility review and final visual review remain release gates.
+4. Final MP4/poster generation and site metadata updates must wait for the entire series so release remains atomic.
+5. Full consumer-page regression, Safari/iOS playback, accessibility review and final visual review remain release gates.
 
 ### Next work
 
-Persist the full v4 renderer/export/test harness needed to render the checked-in semantic specs, then author ES `04-latencia-streaming` and `05-riesgos`. Correct the two source-article overgeneralizations discovered by the chapter-2 audit, localize all six videos, run full delivery QA, and open no PR until all 12 localized outputs are GOLDEN.
+Persist the full v4 renderer/export/test harness needed to render the checked-in semantic specs, then author ES `04-latencia-streaming` and `05-riesgos`. Localize all six videos, run full delivery QA, and open no PR until all 12 localized outputs are GOLDEN.
