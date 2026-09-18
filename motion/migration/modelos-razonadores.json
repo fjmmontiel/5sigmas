@@ -38,7 +38,16 @@
     "04-latencia-streaming",
     "05-riesgos"
   ],
+  "localizedMediaTargets": {
+    "en:03-test-time-compute": {
+      "stagingDirectory": ".localized-media/en/ttc-v1",
+      "mp4": ".localized-media/en/ttc-v1/03-test-time-compute.mp4",
+      "poster": ".localized-media/en/ttc-v1/03-test-time-compute.jpg",
+      "policy": "preserve_existing_deployment_injection_contract_and_replace_checksums_sizes_and_media_atomically_with_the_new_render"
+    }
+  },
   "notes": [
+    "All twelve ES/EN v4 motion specs are now authored on the migration branch; authoring alone is not Technical GOLDEN.",
     "English 03-test-time-compute is deployment-injected localized media rather than a normal checked-in locale MP4.",
     "The release unit remains blocked until every ES/EN video and all consumer integrations pass GOLDEN."
   ]
