@@ -1,0 +1,95 @@
+name: Video design bilingual coverage
+on:
+  push:
+    branches: [design/video-minimal-audit-20260918]
+    paths: [.github/workflows/video-design-coverage.yml]
+permissions:
+  contents: read
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Audit every canonical public route and locale alternate
+        run: |
+          mkdir -p coverage/screens coverage/html
+          cat > /tmp/coverage.py <<'PY'
+          import asyncio,concurrent.futures,hashlib,json,pathlib,time,urllib.parse,xml.etree.ElementTree as ET
+          import requests
+          from bs4 import BeautifulSoup
+          from playwright.async_api import async_playwright
+          O=pathlib.Path('coverage');BASE='https://5sigmas.com';urls=set();maps=[]
+          def dump(n,d):(O/n).write_text(json.dumps(d,ensure_ascii=False,indent=2))
+          def sitemap(u,optional=False):
+            if u in maps:return
+            r=requests.get(u,timeout=30)
+            if optional and r.status_code!=200:return
+            r.raise_for_status();maps.append(u);root=ET.fromstring(r.content)
+            (O/('sitemap-'+str(len(maps))+'.xml')).write_text(r.text)
+            for e in root.findall('.//{*}loc'):
+              if root.tag.endswith('sitemapindex'):sitemap(e.text)
+              else:urls.add(e.text.strip())
+            urls.update(e.get('href') for e in root.findall('.//{*}link') if e.get('href','').startswith(BASE+'/'))
+          sitemap(BASE+'/sitemap.xml');sitemap(BASE+'/en/sitemap.xml',True)
+          urls.update([BASE+'/',BASE+'/en/',BASE+'/videos/',BASE+'/en/videos/',BASE+'/visuales/',BASE+'/en/visuales/'])
+          def crawl(u):
+            key=hashlib.sha1(u.encode()).hexdigest()[:12]
+            try:
+              r=requests.get(u,timeout=35);s=BeautifulSoup(r.text,'html.parser');main=s.select_one('main') or s
+              (O/'html'/f'{key}.html').write_text(r.text)
+              return {'url':u,'id':key,'status':r.status_code,'final_url':r.url,'title':s.title.get_text(' ',strip=True) if s.title else '', 'canonical':(s.select_one('link[rel=canonical]') or {}).get('href'),'h1':[e.get_text(' ',strip=True) for e in s.select('h1')], 'videos':[{'src':v.get('src') or (v.find('source') or {}).get('src'),'poster':v.get('poster')} for v in s.select('video')], 'css':[urllib.parse.urljoin(u,e.get('href')) for e in s.select('link[rel=stylesheet][href]')],'links':sorted(set(urllib.parse.urljoin(u,a.get('href')).split('#')[0].split('?')[0] for a in main.select('a[href]'))),'text':main.get_text(' ',strip=True)}
+            except Exception as e:return {'url':u,'id':key,'error':str(e)}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:rows=list(ex.map(crawl,sorted(urls)))
+          # Include same-origin document links omitted from sitemaps, while excluding assets and external tools.
+          known=set(urls)
+          for depth in range(2):
+            extra={u for r in rows for u in r.get('links',[]) if u.startswith(BASE+'/') and urllib.parse.urlsplit(u).path.endswith('/') and u not in known and not any(x in u for x in ['/assets/','/snippets/','/drafts/'])}
+            if not extra:break
+            if len(extra)>350:raise RuntimeError('Unexpected crawl expansion')
+            known.update(extra)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:rows.extend(ex.map(crawl,sorted(extra)))
+          dump('pages.json',rows);rendered=[]
+          async def run():
+            async with async_playwright() as pw:
+              browser=await pw.chromium.launch();sem=asyncio.Semaphore(8)
+              async def one(r):
+                if r.get('status')!=200:return
+                async with sem:
+                  c=await browser.new_context(viewport={'width':1440,'height':1000},reduced_motion='reduce');p=await c.new_page();rec={'url':r['url'],'id':r['id']}
+                  await p.route('**/*',lambda rt:rt.abort() if rt.request.resource_type=='media' else rt.continue_())
+                  try:
+                    await p.goto(r['url'],wait_until='domcontentloaded',timeout=40000);await p.wait_for_timeout(300);await p.evaluate('document.fonts.ready')
+                    rec['desktop']=await p.evaluate('''()=>{const all=[...(document.querySelector('main')||document.body).querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0});return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,font:getComputedStyle(document.body).fontFamily,gradients:all.filter(e=>getComputedStyle(e).backgroundImage.includes('gradient')).map(e=>({cls:e.className,gradient:getComputedStyle(e).backgroundImage,text:e.innerText.slice(0,70)})),players:[...document.querySelectorAll('video')].map(e=>{const r=e.getBoundingClientRect();return {src:e.querySelector('source')?.src||e.src,poster:e.poster,width:r.width,height:r.height,visible:r.width>0&&r.height>0}})}}''')
+                    await p.screenshot(path=str(O/'screens'/f"{r['id']}-desktop.jpg"),type='jpeg',quality=56,full_page=True,animations='disabled',timeout=20000)
+                  except Exception as e:rec['desktop_error']=str(e)
+                  try:
+                    await p.set_viewport_size({'width':390,'height':844});await p.wait_for_timeout(200)
+                    rec['mobile']=await p.evaluate('''()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,videoWidths:[...document.querySelectorAll('video')].map(e=>e.getBoundingClientRect().width)})''')
+                    await p.screenshot(path=str(O/'screens'/f"{r['id']}-mobile.jpg"),type='jpeg',quality=60,full_page=True,animations='disabled',timeout=20000)
+                  except Exception as e:rec['mobile_error']=str(e)
+                  # Dark-mode representative capture on every route; computed tokens only for compact inventory.
+                  try:
+                    await p.evaluate("document.body.setAttribute('data-md-color-scheme','slate')")
+                    rec['dark']=await p.evaluate("()=>({bg:getComputedStyle(document.body).backgroundColor,text:getComputedStyle(document.body).color})")
+                    if r['url'] in [BASE+'/',BASE+'/visuales/',BASE+'/videos/series/modelos-razonadores/03-test-time-compute/',BASE+'/herramientas/kv-cache-contexto/',BASE+'/en/']:
+                      await p.set_viewport_size({'width':1440,'height':1000});await p.screenshot(path=str(O/'screens'/f"{r['id']}-dark.jpg"),type='jpeg',quality=75,full_page=True,animations='disabled')
+                  except Exception as e:rec['dark_error']=str(e)
+                  rendered.append(rec);await c.close()
+              await asyncio.gather(*(one(r) for r in rows));await browser.close()
+          asyncio.run(run());dump('rendered.json',rendered)
+          dump('summary.json',{'sitemaps':maps,'urls':len(rows),'http_200':sum(r.get('status')==200 for r in rows),'es':sum('/en/' not in r['url'] for r in rows),'en':sum('/en/' in r['url'] for r in rows),'rendered':len(rendered),'desktop_errors':sum('desktop_error' in r for r in rendered),'mobile_errors':sum('mobile_error' in r for r in rendered),'mobile_overflow':sum(r.get('mobile',{}).get('scrollWidth',0)>392 for r in rendered),'pages_with_video':sum(bool(r.get('videos')) for r in rows),'distinct_video_srcs':len({urllib.parse.urljoin(r['url'],v['src']) for r in rows for v in r.get('videos',[]) if v.get('src')}),'time_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())})
+          print((O/'summary.json').read_text())
+          PY
+          python /tmp/coverage.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-design-bilingual-coverage
+          path: coverage/
+          retention-days: 3
+          compression-level: 6
