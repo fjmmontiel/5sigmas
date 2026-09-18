@@ -3,9 +3,11 @@
 
 The v4 renderer already emits a validated Markdown transcript together with each WebVTT
 file. Delivery must preserve that pair: publishing captions without the corresponding
-transcript violates the site accessibility contract. This script runs after renderer
-artifacts are staged, promotes the validated transcripts into the canonical locale trees,
-wires their metadata, and keeps the English published-file manifest complete.
+transcript violates the site accessibility contract. The canonical site stores those
+transcripts as ``.txt`` assets rather than ``.md`` documentation pages: the watch-page
+hooks load their text directly, while MkDocs therefore cannot accidentally turn a
+transcript into a duplicate indexable article. The transcript contents remain the exact
+validated renderer output; only the delivery suffix changes.
 """
 from __future__ import annotations
 
@@ -97,7 +99,10 @@ def _stage_transcript_pairs() -> None:
         destination.mkdir(parents=True, exist_ok=True)
         for stem, doc in ROWS:
             source = _validated_transcript(locale, stem)
-            transcript_name = f"{stem}-transcript.md"
+            # .txt is intentional. Hooks read this file as UTF-8 text and embed the same
+            # Markdown content into the generated watch page, while MkDocs treats the source
+            # as an asset instead of generating a competing /-transcript/ documentation URL.
+            transcript_name = f"{stem}-transcript.txt"
             target = destination / transcript_name
             shutil.copy2(source, target)
             if locale == "es":
@@ -110,7 +115,7 @@ def _stage_transcript_pairs() -> None:
             else:
                 en_media = _update_en_media_transcript(en_media, doc, transcript_name)
     EN_MEDIA.write_text(en_media, encoding="utf-8")
-    print("Staged paired ES/EN reasoning transcripts for 12 localized outputs")
+    print("Staged paired non-page ES/EN reasoning transcripts for 12 localized outputs")
 
 
 def _update_english_manifest() -> None:
@@ -128,7 +133,7 @@ def _update_english_manifest() -> None:
         f"{SERIES}/{stem}{ext}"
         for stem in STEMS
         for ext in (".mp4", ".jpg", ".vtt")
-    ] + [f"{SERIES}/{stem}-transcript.md" for stem in STEMS]
+    ] + [f"{SERIES}/{stem}-transcript.txt" for stem in STEMS]
     existing = set(re.findall(r"(?m)^  -\s+(.+?)\s*$", body))
     missing = [item for item in required if item not in existing]
     if missing:
