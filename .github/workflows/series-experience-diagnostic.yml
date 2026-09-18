@@ -400,6 +400,7 @@ jobs:
             artifacts/security-requalification/media-report.json
             artifacts/security-requalification/media-visual-classification.json
             artifacts/security-requalification/security-02-05-media-visual.json
+            artifacts/security-requalification/security-02-05-video-frames/
             artifacts/security-requalification/report.json
             artifacts/security-requalification/shared-browser-resources/report.json
             artifacts/security-requalification/contrast/report.json
