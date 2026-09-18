@@ -18,7 +18,7 @@ export function candidates(P,s,t) {
   P.enter(t,5.2,0,0,()=>{P.text(P.l('majority'),254,516,37,T.ink,550,'center',450);P.text(P.l('frequent'),254,566,23,T.muted,400,'center',460);P.path([[254,603],[254,631]],T.accentText,2,phase(t,6.2,.5));const q=phase(t,6.45,1),count=Math.round(vote.count*q);P.rect(48,634,412,94,T.accentSurface,T.accentText,5,2);P.text(vote.tied?P.l('tie'):`${vote.value} · ${count} ${P.l('of')} ${n}`,254,656,43,T.accentText,550,'center',382);});
   P.path([[502,511],[502,731]],T.rule,1,1,[6,7]);
   P.enter(t,9.0,0,0,()=>{P.text(P.l('evaluator'),752,516,37,T.ink,550,'center',445);P.wrap(d.criterion,752,566,440,23,T.muted,400,1.3,'center');P.path([[752,604],[752,631]],T.accentText,2,phase(t,evalEnd,.5));P.rect(562,634,381,94,T.accentSurface,T.accentText,5,2);P.text(t>=evalEnd?best.value:'…',752,651,52,T.accentText,550,'center',350);if(t>=evalEnd)P.check(899,682,T.accentText,1);});
-  P.text(d.caveat,500,766,22,T.muted,400,'center',974);
+  P.wrap(d.caveat,500,754,950,20,T.muted,400,1.2,'center');
 }
 
 /** Generation, evaluation and vote use independent cue channels from the same deterministic clock. */
@@ -34,16 +34,16 @@ export function syncedCandidates(P,s,t) {
   });
   if(e>0){P.c.save();P.c.globalAlpha*=smooth(clamp(e*5));P.path([[500,451],[752,451],[752,505]],T.muted,2,clamp(e*3));P.text(P.l('evaluator'),752,516,37,T.ink,550,'center',445);P.wrap(d.criterion,752,566,440,23,T.muted,400,1.3,'center');P.path([[752,604],[752,631]],T.accentText,2,clamp(e*2));P.rect(562,634,381,94,T.accentSurface,T.accentText,5,2);P.text(e>=1?best.value:'…',752,651,52,T.accentText,550,'center',350);if(e>=1)P.check(899,682,T.accentText,1);P.c.restore();}
   if(v>0){P.c.save();P.c.globalAlpha*=smooth(clamp(v*5));P.path([[500,451],[254,451],[254,505]],T.muted,2,clamp(v*3));P.text(P.l('majority'),254,516,37,T.ink,550,'center',450);P.text(P.l('frequent'),254,566,23,T.muted,400,'center',460);P.path([[254,603],[254,631]],T.accentText,2,clamp(v*2));P.rect(48,634,412,94,T.accentSurface,T.accentText,5,2);P.text(v>=1?(vote.tied?P.l('tie'):`${vote.value} · ${vote.count} ${P.l('of')} ${n}`):(en?'Counting…':'Contando…'),254,656,v>=1?43:33,T.accentText,550,'center',382);P.path([[502,511],[502,731]],T.rule,1,1,[6,7]);P.c.restore();}
-  P.text(d.caveat,500,766,22,T.muted,400,'center',974);
+  P.wrap(d.caveat,500,754,950,20,T.muted,400,1.2,'center');
 }
 
 export function tree(P,s,t) {
   const clock=s.cues?motionValue(s,t,'tree.expand')*9:t,prune=s.cues?motionValue(s,t,'tree.prune'):phase(t,6,1.2),select=s.cues?motionValue(s,t,'tree.select'):phase(t,8,1),T=P.T,d=s.data,warning=T.semantic?.warning||T.amber,byId=new Map(d.nodes.map(n=>[n.id,n]));
   const depth=n=>n.parent?1+depth(byId.get(n.parent)):0,levels=new Map();d.nodes.forEach(n=>{const l=depth(n);if(!levels.has(l))levels.set(l,[]);levels.get(l).push(n);});
   const maxDepth=Math.max(...levels.keys()),positions=new Map();for(const [level,ns] of levels)ns.forEach((n,i)=>positions.set(n.id,{x:1000*(i+1)/(ns.length+1),y:95+level*(550/Math.max(1,maxDepth))}));
-  for(const [i,n] of d.nodes.entries())if(n.parent){const a=positions.get(n.parent),b=positions.get(n.id),q=phase(clock,.8+depth(n)*1.25+i*.12,1),selected=n.state==='selected'&&select>.01,pruned=n.state==='pruned'&&prune>.01,path=[[a.x,a.y+34],[a.x,(a.y+b.y)/2],[b.x,(a.y+b.y)/2],[b.x,b.y-34]];P.path(path,selected?T.accentText:pruned?T.rule:T.muted,selected?4:2,q);P.traveler(path,q);}
-  d.nodes.forEach((n,i)=>{const pt=positions.get(n.id),show=.25+depth(n)*1.5+i*.08;P.enter(clock,show,0,0,()=>{const pruned=n.state==='pruned'&&prune>.01,selected=n.state==='selected'&&select>.01;P.rect(pt.x-99,pt.y-35,198,72,selected?T.accentSurface:T.white,selected?T.accentText:pruned?T.rule:T.muted,5,selected?2.5:1.5);P.text(n.label,pt.x,pt.y-17,29,selected?T.accentText:pruned?T.muted:T.ink,500,'center',183);if(pruned){P.text(P.l('pruned'),pt.x,pt.y+48,19,warning,500,'center',190);P.path([[pt.x-11,pt.y-9],[pt.x+11,pt.y+13]],warning,2.5,prune);}if(selected)P.circle(pt.x+94,pt.y-31,8,T.accent);});});
-  P.text(d.criterion||'Evaluar antes de expandir',500,16,23,T.muted,450,'center',920);P.text(d.note,500,775,23,T.muted,400,'center',980);
+  for(const [i,n] of d.nodes.entries())if(n.parent){const a=positions.get(n.parent),b=positions.get(n.id),q=phase(clock,.8+depth(n)*1.25+i*.12,1),selected=n.state==='selected'&&select>.01,pruned=n.state==='pruned'&&prune>.01,path=[[a.x,a.y+42],[a.x,(a.y+b.y)/2],[b.x,(a.y+b.y)/2],[b.x,b.y-42]];P.path(path,selected?T.accentText:pruned?T.rule:T.muted,selected?4:2,q);P.traveler(path,q);}
+  d.nodes.forEach((n,i)=>{const pt=positions.get(n.id),show=.25+depth(n)*1.5+i*.08;P.enter(clock,show,0,0,()=>{const pruned=n.state==='pruned'&&prune>.01,selected=n.state==='selected'&&select>.01;P.rect(pt.x-99,pt.y-42,198,84,selected?T.accentSurface:T.white,selected?T.accentText:pruned?T.rule:T.muted,5,selected?2.5:1.5);P.wrap(n.label,pt.x,pt.y-25,174,22,selected?T.accentText:pruned?T.muted:T.ink,500,1.12,'center');if(pruned){P.text(P.l('pruned'),pt.x,pt.y+49,18,warning,500,'center',190);P.path([[pt.x-10,pt.y-8],[pt.x+10,pt.y+12]],warning,2.4,prune);}if(selected)P.circle(pt.x+94,pt.y-38,7,T.accent);});});
+  P.text(d.criterion||'Evaluar antes de expandir',500,16,23,T.muted,450,'center',920);P.wrap(d.note,500,734,940,21,T.muted,400,1.2,'center');
 }
 
 export function evidenceComparison(P,s,t,q){
