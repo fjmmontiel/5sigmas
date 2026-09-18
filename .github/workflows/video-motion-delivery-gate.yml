@@ -12,6 +12,7 @@ on:
       - 'motion/scripts/render.py'
       - 'motion/scripts/validate_render_package.py'
       - 'motion/scripts/finalize_reasoning_delivery.py'
+      - 'motion/scripts/update_reasoning_locale_manifest.py'
       - '.github/workflows/video-motion-delivery-gate.yml'
   workflow_dispatch:
 
@@ -120,7 +121,9 @@ jobs:
           merge-multiple: true
 
       - name: Stage canonical ES/EN media and remove TTC one-off delivery path
-        run: python motion/scripts/finalize_reasoning_delivery.py stage --artifacts .delivery-artifacts/package
+        run: |
+          python motion/scripts/finalize_reasoning_delivery.py stage --artifacts .delivery-artifacts/package
+          python motion/scripts/update_reasoning_locale_manifest.py
 
       - name: Require metadata to remain derived from v4 specs
         run: python motion/scripts/sync_release_metadata.py --check
@@ -195,6 +198,7 @@ jobs:
             docs/series/modelos-razonadores \
             locales/en/series/modelos-razonadores \
             locales/en/media.yml \
+            locales/en/manifest.yml \
             mkdocs.en.yml \
             .github/workflows/deploy-pages.yml \
             .github/workflows/pr-visual-review.yml \
