@@ -36,10 +36,13 @@ jobs:
           node --check scripts/validate_security_02_05_browser_fast.mjs
           node --check scripts/diagnose_security_02_05_styles.mjs
       - name: Strict ES + EN build
+        shell: bash
         run: |
-          mkdocs build --clean --strict
-          python scripts/prepare_locale.py --locale en
-          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          set -o pipefail
+          mkdir -p artifacts/security-requalification/security-02-05-browser-fast/build-logs
+          mkdocs build --clean --strict 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/es-strict.log
+          python scripts/prepare_locale.py --locale en 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/en-prepare.log
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict 2>&1 | tee artifacts/security-requalification/security-02-05-browser-fast/build-logs/en-strict.log
       - name: Install browser
         run: |
           npm install --no-save playwright@1.55.0
@@ -65,5 +68,5 @@ jobs:
           name: security-02-05-browser-review-fast
           path: artifacts/security-requalification/security-02-05-browser-fast/
           retention-days: 1
-          if-no-files-found: error
+          if-no-files-found: warn
           overwrite: true
