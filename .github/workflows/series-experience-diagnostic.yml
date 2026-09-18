@@ -232,13 +232,23 @@ jobs:
             /series/fundamentos-ia-iag/00_presentacion_serie/,/en/series/fundamentos-ia-iag/00_presentacion_serie/
         run: node scripts/audit_browser_resources.mjs
 
-      - name: All inventoried pages, desktop/mobile, normal/reduced motion
+      - name: All inventoried pages diagnostic + active Security browser gate
         if: ${{ steps.diagnostic_scope.outputs.scope == 'full' }}
         id: browser
         continue-on-error: true
         env:
           S5_BROWSER_JOB_TIMEOUT_MS: '25000'
-        run: node scripts/audit_series_experience_browser.mjs
+        run: |
+          set +e
+          node scripts/audit_series_experience_browser.mjs
+          global_browser_exit=$?
+          set -e
+          python scripts/validate_active_series_browser_gate.py --self-test
+          python scripts/validate_active_series_browser_gate.py \
+            --report artifacts/series-experience/browser-report.json \
+            --series seguridad-ia \
+            --output artifacts/series-experience/active-series-browser-gate.json
+          echo "GLOBAL_BROWSER_DIAGNOSTIC_EXIT=${global_browser_exit}; global future-series debt remains preserved in browser-report.json and does not replace the active-series gate"
 
       - name: Focused Security 00/01 interaction, layout and codec-aware playback diagnostic
         if: ${{ steps.diagnostic_scope.outputs.scope == 'full' || steps.diagnostic_scope.outputs.scope == 'focused_security_00_01' }}
@@ -348,6 +358,18 @@ jobs:
                       'media_visual_blockers': data.get('media_visual_blockers', []),
                       'voice_enhancement_debt_count': len(data.get('voice_enhancement_debt', [])),
                   }, ensure_ascii=False))
+
+          browser_gate = Path('artifacts/series-experience/active-series-browser-gate.json')
+          if browser_gate.exists():
+              data = json.loads(browser_gate.read_text())
+              print(browser_gate.as_posix(), json.dumps({
+                  'series': data.get('series'),
+                  'status': data.get('status'),
+                  'contexts': data.get('contexts'),
+                  'blocker_count': len(data.get('blockers', [])),
+                  'expected_audit_owned_media_abort_count': len(data.get('expected_audit_owned_media_aborts', [])),
+                  'global_browser_findings_preserved': data.get('global_browser_findings_preserved', {}),
+              }, ensure_ascii=False))
 
           names = [
               'PUBLICATION_DISCOVERY_OUTCOME',
