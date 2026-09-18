@@ -2,11 +2,16 @@
 """Owner-amendment aware facade over the legacy full-catalogue experience audit.
 
 The legacy report is intentionally preserved in full so future-series and
-voice/accessibility debt remain visible.  Focused Security requalification may
+voice/accessibility debt remain visible. Focused Security requalification may
 only ignore narration-dependent captions/transcript findings under owner
 amendment 5716685049; every other current source/media finding remains
-fail-closed.  Security H2→key-moment mappings are supplied by an editorial
+fail-closed. Security H2→key-moment mappings are supplied by an editorial
 receipt derived independently from future narration.
+
+Owner amendment 5727362172 additionally makes technical INDEXABILITY a separate
+current GOLDEN gate. When rendered ``site`` bytes are supplied, this facade runs
+the dedicated Security indexability validator and keeps its result distinct from
+SOURCE/MEDIA. Google selection/index state is never inferred here.
 """
 from __future__ import annotations
 
@@ -16,9 +21,11 @@ from collections import Counter
 from pathlib import Path
 
 import audit_series_experience_legacy as legacy
+import validate_security_indexability as security_indexability
 from audit_series_experience_legacy import *  # noqa: F401,F403 - compatibility for existing tests/importers
 
 OWNER_AMENDMENT = 5716685049
+INDEXABILITY_AMENDMENT = 5727362172
 DEFERRED_VOICE_CODES = {
     "VIDEO_CAPTIONS_MISSING",
     "VIDEO_CAPTIONS_FILE_MISSING",
@@ -103,6 +110,26 @@ def _security_current_blockers(report: dict) -> list[dict]:
     return blockers
 
 
+def _indexability_blockers(indexability_report: dict | None) -> list[dict]:
+    if not isinstance(indexability_report, dict):
+        return []
+    blockers: list[dict] = []
+    for item in indexability_report.get("global_errors", []):
+        blockers.append({"scope": "global", "detail": str(item)})
+    for row in indexability_report.get("rows", []):
+        if not isinstance(row, dict):
+            continue
+        for item in row.get("blockers", []):
+            blockers.append(
+                {
+                    "route": row.get("route"),
+                    "locale": row.get("locale"),
+                    "detail": str(item),
+                }
+            )
+    return blockers
+
+
 def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     report = legacy.audit(root, scope, site)
     maps = _load_security_editorial_maps(root)
@@ -141,17 +168,44 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
         code: count for code, count in sorted(counts.items()) if code in DEFERRED_VOICE_CODES
     }
     blockers = _security_current_blockers(report)
+
+    indexability_report: dict | None = None
+    if site is not None:
+        indexability_report = security_indexability.audit_indexability(root, site)
+    indexability_blockers = _indexability_blockers(indexability_report)
+    indexability_pass: bool | None = (
+        bool(indexability_report.get("INDEXABILITY_PASS"))
+        if isinstance(indexability_report, dict)
+        else None
+    )
+
     report["voice_enhancement"] = {
         "state": "DEFERRED_OWNER_LOCAL",
         "blocker": False,
         "owner_amendment_comment": OWNER_AMENDMENT,
         "legacy_findings": voice_counts,
     }
+    report["indexability"] = (
+        indexability_report
+        if indexability_report is not None
+        else {
+            "owner_amendment_comment": INDEXABILITY_AMENDMENT,
+            "INDEXABILITY_PASS": None,
+            "status": "PENDING_RENDERED_SITE",
+            "meaning": "technical indexability only; Google selection/index state is separate",
+        }
+    )
     report["owner_current_gate"] = {
         "owner_amendment_comment": OWNER_AMENDMENT,
+        "indexability_amendment_comment": INDEXABILITY_AMENDMENT,
         "series": "seguridad-ia",
-        "status": "PASS" if not blockers else "FAIL",
+        "status": "PASS" if not blockers and indexability_pass is not False else "FAIL",
         "blockers": blockers,
+        "INDEXABILITY_PASS": indexability_pass,
+        "indexability_status": (
+            "PASS" if indexability_pass is True else "FAIL" if indexability_pass is False else "PENDING_RENDERED_SITE"
+        ),
+        "indexability_blockers": indexability_blockers,
         "voice_enhancement": "DEFERRED_OWNER_LOCAL",
         "media_visual_and_voice_are_separate": True,
     }
@@ -184,12 +238,19 @@ def main() -> int:
             json.loads(scope_path.read_text(encoding="utf-8")),
             args.site.resolve() if args.site else None,
         )
-    except (OSError, ValueError, json.JSONDecodeError, legacy.yaml.YAMLError) as exc:
+    except (OSError, ValueError, json.JSONDecodeError, legacy.yaml.YAMLError, ET.ParseError) as exc:
         print(f"EXPERIENCE_AUDIT_ERROR: {exc}")
         return 2
     output = args.output if args.output.is_absolute() else root / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    indexability = report.get("indexability")
+    if isinstance(indexability, dict) and isinstance(indexability.get("rows"), list):
+        index_output = root / "artifacts/security-requalification/indexability/report.json"
+        index_output.parent.mkdir(parents=True, exist_ok=True)
+        index_output.write_text(json.dumps(indexability, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
     print(json.dumps({k: v for k, v in report.items() if k != "pages"}, ensure_ascii=False, indent=2))
     for page in report.get("pages", []):
         codes = sorted({f["code"] for f in page.get("findings", []) if isinstance(f, dict) and f.get("code")})
@@ -201,12 +262,13 @@ def main() -> int:
     print(
         "OWNER_CURRENT_SECURITY_GATE=" + current["status"]
         + "; VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL"
+        + f"; INDEXABILITY_PASS={current.get('INDEXABILITY_PASS')}"
         + f"; DIAGNOSTIC_SCOPE={diagnostic_scope}"
         + f"; GLOBAL_LEGACY_STATUS={report['status']}"
     )
     if diagnostic_scope.startswith("focused_security_"):
         return 0 if current["status"] == "PASS" else 1
-    return 1 if report["status"] == "TECHNICAL_FAIL" else 0
+    return 1 if report["status"] == "TECHNICAL_FAIL" or current["status"] != "PASS" else 0
 
 
 if __name__ == "__main__":
