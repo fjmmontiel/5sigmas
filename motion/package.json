@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Deterministic editorial motion engine for 5sigmas. Shared timeline, semantic mechanisms and locked series identities.",
   "scripts": {
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "gate": "node scripts/check_release_gate.mjs",
+    "gate:release": "node scripts/check_release_gate.mjs --require-ready"
   },
   "engines": {
     "node": ">=18"
