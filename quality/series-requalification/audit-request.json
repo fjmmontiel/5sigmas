@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 104,
+  "diagnostic_revision": 105,
   "diagnostic_scope": "full",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "183ec52c5c1720f27edd06eed8373c27a0438e23",
-  "reason": "All six seguridad-ia routes are now individually GOLDEN under owner amendment 5716685049 with VOICE_ENHANCEMENT explicitly deferred and nonblocking. Run one justified zero-based full experience audit before any SERIES_GOLDEN claim: rediscover the complete 84-page ES/EN catalogue, rerun independent source/publication/curriculum-video/current MEDIA_VISUAL contracts, strict ES/EN, rendered audit, full browser/resource matrix and shared-regression coverage. This is a series release milestone, not cadence CI. Do not treat legacy narration/caption/transcript debt as a current blocker and do not fabricate narration-derived artifacts.",
+  "requested_head_parent": "76996446fe21d59483243acc418874c4f837388a",
+  "reason": "Regression milestone for the shared full-catalogue browser harness discovered by zero-based Security series audit 35307911914. The generic audit previously launched Playwright bundled Chromium and misclassified H.264 playback incapability as 96 product REQUEST_FAILED/VIDEO_PLAYBACK_ERROR findings. The harness now requires codec-capable system Chrome and fails explicitly as BROWSER_AUDIT_RUNTIME_UNAVAILABLE rather than falling back. Rerun the same 84-page x desktop/mobile x normal/reduced matrix without weakening thresholds. Preserve the genuine later-series findings, especially the agentes-voz-tiempo-real/05 ES mobile reduced lazy-traversal timeout, and keep VOICE_ENHANCEMENT deferred/nonblocking under owner amendment 5716685049.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
