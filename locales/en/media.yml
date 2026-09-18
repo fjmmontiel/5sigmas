@@ -217,6 +217,16 @@ series/seguridad-ia/02-jailbreaks.md:
   video_title: Jailbreaks
   video_summary: "How repeated and adaptive prompt attempts change the attack surface, and why authorization and attempt limits still matter after a refusal."
   video_duration: PT48S
+  video_chapters:
+    - name: "From one refusal to search"
+      start: 0
+      end: 19
+    - name: "Optimization, transfer and attack budget"
+      start: 19
+      end: 38
+    - name: "Stable output is not an authorization boundary"
+      start: 38
+      end: 48
 
 series/seguridad-ia/03-envenenamiento.md:
   video: 03-envenenamiento.mp4
@@ -224,6 +234,16 @@ series/seguridad-ia/03-envenenamiento.md:
   video_title: Poisoning
   video_summary: "How untrusted input can become persistent memory, re-enter a later decision, and survive naive deletion through derived state."
   video_duration: PT48S
+  video_chapters:
+    - name: "Persistence beyond one turn"
+      start: 0
+      end: 19
+    - name: "Trust, provenance and retention"
+      start: 19
+      end: 38
+    - name: "Observability and revocation"
+      start: 38
+      end: 48
 
 series/seguridad-ia/04-red-teaming.md:
   video: 04-red-teaming.mp4
@@ -231,6 +251,16 @@ series/seguridad-ia/04-red-teaming.md:
   video_title: Red Teaming
   video_summary: "How to test the full causal path from adversarial input to authorization, external effect, recovery, and a reproducible release regression."
   video_duration: PT48S
+  video_chapters:
+    - name: "Test reachable harm across the path"
+      start: 0
+      end: 19
+    - name: "Coverage and evaluator calibration"
+      start: 19
+      end: 38
+    - name: "Evidence-bound release decisions"
+      start: 38
+      end: 48
 
 series/seguridad-ia/05-controles-produccion.md:
   video: 05-controles-produccion.mp4
@@ -238,6 +268,16 @@ series/seguridad-ia/05-controles-produccion.md:
   video_title: Production Controls
   video_summary: "How least privilege, independent authorization, kill paths, observability, and evidence-bound release gates limit damage when the model fails."
   video_duration: PT48S
+  video_chapters:
+    - name: "Separate untrusted reading from action"
+      start: 0
+      end: 19
+    - name: "Least privilege and MCP trust boundaries"
+      start: 19
+      end: 38
+    - name: "Observability and stop mechanisms"
+      start: 38
+      end: 48
 
 articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
   video: reactive-proactive-agent-header-demo.mp4
