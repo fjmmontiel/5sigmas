@@ -1,0 +1,220 @@
+name: Video motion delivery gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-modelos-razonadores
+    paths:
+      - 'motion/content/modelos-razonadores/**'
+      - 'motion/src/**'
+      - 'motion/theme/**'
+      - 'motion/web/**'
+      - 'motion/scripts/render.py'
+      - 'motion/scripts/validate_render_package.py'
+      - 'motion/scripts/finalize_reasoning_delivery.py'
+      - '.github/workflows/video-motion-delivery-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-motion-delivery-modelos-razonadores
+  cancel-in-progress: true
+
+jobs:
+  render-horizontal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - { spec: '00-presentacion.es', locale: 'es', site: '00_presentacion_serie' }
+          - { spec: '01-que-es-razonar.es', locale: 'es', site: '01-que-es-razonar' }
+          - { spec: '02-fallos.es', locale: 'es', site: '02-fallos' }
+          - { spec: '03-test-time-compute.es', locale: 'es', site: '03-test-time-compute' }
+          - { spec: '04-latencia-streaming.es', locale: 'es', site: '04-latencia-streaming' }
+          - { spec: '05-riesgos.es', locale: 'es', site: '05-riesgos' }
+          - { spec: '00-presentacion.en', locale: 'en', site: '00_presentacion_serie' }
+          - { spec: '01-que-es-razonar.en', locale: 'en', site: '01-que-es-razonar' }
+          - { spec: '02-fallos.en', locale: 'en', site: '02-fallos' }
+          - { spec: '03-test-time-compute.en', locale: 'en', site: '03-test-time-compute' }
+          - { spec: '04-latencia-streaming.en', locale: 'en', site: '04-latencia-streaming' }
+          - { spec: '05-riesgos.en', locale: 'en', site: '05-riesgos' }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deterministic renderer
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Render final horizontal media
+        working-directory: motion
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          python scripts/render.py "content/modelos-razonadores/${{ matrix.spec }}.json" --out dist --fps 60
+          python scripts/validate_render_package.py \
+            "content/modelos-razonadores/${{ matrix.spec }}.json" \
+            --out dist --orientation horizontal | tee dist/package-validation.json
+
+      - name: Normalize canonical release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="package/${{ matrix.locale }}"
+          review="review/${{ matrix.locale }}/${{ matrix.site }}"
+          mkdir -p "$package" "$review"
+          mp4="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal.mp4' -print -quit)"
+          jpg="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal.jpg' ! -name '*-review.jpg' -print -quit)"
+          vtt="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal-captions.vtt' -print -quit)"
+          test -n "$mp4" && test -n "$jpg" && test -n "$vtt"
+          cp "$mp4" "$package/${{ matrix.site }}.mp4"
+          cp "$jpg" "$package/${{ matrix.site }}.jpg"
+          cp "$vtt" "$package/${{ matrix.site }}.vtt"
+          cp -a motion/dist/. "$review/"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reasoning-delivery-${{ matrix.locale }}-${{ matrix.site }}
+          path: |
+            package/
+            review/
+          if-no-files-found: error
+          retention-days: 14
+
+  integrate-and-gate:
+    needs: render-horizontal
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install site dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Download exact validated renderer packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: reasoning-delivery-*
+          path: .delivery-artifacts
+          merge-multiple: true
+
+      - name: Stage canonical ES/EN media and remove TTC one-off delivery path
+        run: python motion/scripts/finalize_reasoning_delivery.py stage --artifacts .delivery-artifacts/package
+
+      - name: Require metadata to remain derived from v4 specs
+        run: python motion/scripts/sync_release_metadata.py --check
+
+      - name: Validate Spanish media declarations and binary signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Build and audit Spanish consumers strictly
+        run: |
+          mkdocs build --clean --strict
+          python scripts/audit_video_indexing.py
+          python scripts/audit_multilingual_search_foundation.py
+          python scripts/audit_priority_topic_hubs.py
+          python scripts/audit_publication_contract.py
+
+      - name: Prepare and audit English locale sources
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          python scripts/audit_english_full_parity.py --strict
+
+      - name: Build and audit English consumers strictly
+        env:
+          S5_LOCALE: en
+        run: |
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser QA runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined ES/EN site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-motion-delivery.log 2>&1 &
+          echo $! > /tmp/5sigmas-motion-delivery.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-motion-delivery.log
+          exit 1
+
+      - name: Validate native English video library and watch pages
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_english_video_hub.mjs
+
+      - name: Verify every reasoning consumer uses the exact validated media
+        run: python motion/scripts/finalize_reasoning_delivery.py verify --artifacts .delivery-artifacts/package
+
+      - name: Mark Technical GOLDEN only after delivery passed
+        run: |
+          python motion/scripts/finalize_reasoning_delivery.py mark-golden --run-id "${GITHUB_RUN_ID}" --sha "${GITHUB_SHA}"
+          node motion/scripts/check_release_gate.mjs --require-ready
+
+      - name: Persist the complete Technical GOLDEN release unit on its migration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            docs/series/modelos-razonadores \
+            locales/en/series/modelos-razonadores \
+            locales/en/media.yml \
+            mkdocs.en.yml \
+            .github/workflows/deploy-pages.yml \
+            .github/workflows/pr-visual-review.yml \
+            motion/migration/modelos-razonadores.json \
+            motion/migration/modelos-razonadores-status.json
+          if git diff --cached --quiet; then
+            echo 'Canonical delivery state already persisted.'
+          else
+            git commit -m 'feat(motion): promote complete reasoning series to technical golden'
+            git push origin HEAD:migration/video-golden-modelos-razonadores
+          fi
+
+      - name: Publish complete review package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelos-razonadores-technical-golden-review
+          path: |
+            .delivery-artifacts/package/
+            .delivery-artifacts/review/
+            motion/migration/modelos-razonadores.json
+            motion/migration/modelos-razonadores-status.json
+          if-no-files-found: error
+          retention-days: 30
