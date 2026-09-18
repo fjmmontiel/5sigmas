@@ -47,7 +47,7 @@ jobs:
           fc-cache -f
           python -m pip install -r motion/requirements.txt
           python -m playwright install --with-deps chromium
-      - name: Validate every Spanish v4 composition in horizontal and portrait
+      - name: Validate every authored v4 composition in horizontal and portrait
         working-directory: motion
         shell: bash
         run: |
@@ -55,8 +55,8 @@ jobs:
           mkdir -p qa-layout
           : > qa-layout/results.txt
           failed=0
-          for spec in content/modelos-razonadores/*.es.json; do
-            base="$(basename "$spec" .es.json)"
+          for spec in content/modelos-razonadores/*.json; do
+            base="$(basename "$spec" .json)"
             for orientation in horizontal portrait; do
               extra=()
               if [ "$orientation" = portrait ]; then extra+=(--portrait); fi
