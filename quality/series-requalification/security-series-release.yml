@@ -1,0 +1,52 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: seguridad-ia
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+state: RELEASE_CANDIDATE_AUDIT_PASS_AWAITING_PR_MERGE_DEPLOY_LIVE
+article_golden_rows: 12
+article_golden_requires_voice: false
+series_golden_requires_voice: false
+voice_enhancement: DEFERRED_OWNER_LOCAL
+indexability_required: true
+indexability_pass_rows: 12
+known_p0_p1_p2: 0
+
+zero_based_series_audit:
+  workflow_run: 35361765019
+  audited_head: 830bd55d63da1e95ea4461b0086295f9bc8c057a
+  conclusion: PASS
+  negative_regression_fixtures: PASS
+  curriculum_video_mutation_fixtures: PASS
+  publication_discovery: PASS
+  source_coverage: PASS
+  curriculum_video_inventory_active_series_gate: PASS
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  media_visual: PASS
+  rendered_html_and_indexability: PASS
+  shared_resources_regression: PASS
+  full_catalogue_browser_contexts: 336
+  active_security_browser_gate: PASS
+  security_interaction_layout_playback: PASS
+  contrast_state_text: PASS
+  lifecycle_keyboard_touch_motion: PASS
+  article_watch_round_trip: PASS
+  prompt_visual_states: PASS
+  keyboard_visible_focus: PASS
+  runtime_resource_listener_lifetime: PASS
+  final_enforcement: PASS
+  pixel_pedagogy_note: CI does not certify PIXEL/PEDAGOGY; existing exact real inspection receipts remain the authority because Security site-facing bytes were unchanged after those reviews.
+
+release_package:
+  base_main: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  source_audited_head: 830bd55d63da1e95ea4461b0086295f9bc8c057a
+  branch: release/security-golden-requalification
+  unrelated_agents_work: REVERTED_TO_MAIN_OR_EXCLUDED
+  security_site_facing_bytes_changed_after_audit: false
+  next_gate: EXACT_HEAD_PR_CHECKS_THEN_MERGE_DEPLOY_AND_LIVE_ES_EN_INDEXABILITY_VERIFICATION
+
+series_finalization_rule:
+  premerge_status: RELEASE_READY_NOT_YET_SERIES_GOLDEN_LIVE
+  series_golden_only_after: PR_EXACT_HEAD_GREEN_AND_MERGED_AND_PRODUCTION_MATCHES_VALIDATED_SOURCE
