@@ -1,0 +1,182 @@
+schema_version: 1
+owner_amendment_comment: 5716685049
+purpose: Canonical narration-independent editorial mapping from every locale-native H2 to a reviewed visual-video key moment. No narration, caption, transcript or voice timing is inferred.
+locales:
+  es:
+    series/seguridad-ia/00_presentacion_serie.md:
+    - section: Índice
+      key_moment: Control y datos comparten el canal
+    series/seguridad-ia/01-prompt-injection.md:
+    - section: 1. El problema empieza cuando un documento llega al modelo
+      key_moment: Del documento al contexto
+    - section: 2. La orden puede aparecer en una búsqueda de documentos
+      key_moment: Datos e instrucciones compiten por el control
+    - section: 3. Filtrar palabras no separa los datos de las instrucciones
+      key_moment: Datos e instrucciones compiten por el control
+    - section: 4. La protección debe separar lectura y acción
+      key_moment: Separar lectura de acción y registrar permisos
+    - section: 5. Qué cambia en producto
+      key_moment: Separar lectura de acción y registrar permisos
+    - section: 6. Referencias
+      key_moment: Separar lectura de acción y registrar permisos
+    - section: Preguntas frecuentes
+      key_moment: Separar lectura de acción y registrar permisos
+    series/seguridad-ia/02-jailbreaks.md:
+    - section: Rechazar una petición no crea una frontera perfecta
+      key_moment: De una negativa a una búsqueda
+    - section: Probar muchas variantes cambia el coste del ataque
+      key_moment: Optimización, transferencia y presupuesto
+    - section: El threat model necesita un presupuesto de ataque
+      key_moment: Optimización, transferencia y presupuesto
+    - section: Qué controles siguen siendo útiles
+      key_moment: Aleatoriedad y autorización como fronteras distintas
+    - section: Qué debe medir una prueba
+      key_moment: Aleatoriedad y autorización como fronteras distintas
+    - section: Referencias
+      key_moment: Aleatoriedad y autorización como fronteras distintas
+    series/seguridad-ia/03-envenenamiento.md:
+    - section: Guardar un dato no lo convierte en verdad
+      key_moment: Persistencia y reentrada de memoria
+    - section: La memoria persistente ya es una superficie de ataque medible
+      key_moment: Persistencia y reentrada de memoria
+    - section: Un comportamiento peligroso también puede quedar oculto en el modelo
+      key_moment: Estado contaminado y comportamiento latente
+    - section: Por qué retirar un dato es difícil
+      key_moment: Procedencia y revocación verificable
+    - section: Cómo diseñar una memoria que pueda gobernarse
+      key_moment: Procedencia y revocación verificable
+    - section: Qué debe medir una evaluación de memoria
+      key_moment: Procedencia y revocación verificable
+    - section: Qué cambia en el producto
+      key_moment: Procedencia y revocación verificable
+    - section: Referencias
+      key_moment: Procedencia y revocación verificable
+    series/seguridad-ia/04-red-teaming.md:
+    - section: El threat model viene antes que el benchmark
+      key_moment: Del test a la cadena de ataque
+    - section: Separar lo que el modelo sabe hacer de lo que el sistema ejecuta
+      key_moment: Del test a la cadena de ataque
+    - section: Probar el modelo y probar el producto son experimentos distintos
+      key_moment: Cobertura adaptativa y validez del evaluador
+    - section: Automatizar ataques también puede engañar a la evaluación
+      key_moment: Cobertura adaptativa y validez del evaluador
+    - section: La evaluación debe registrar cada paso
+      key_moment: Del test a la cadena de ataque
+    - section: Medir la cadena causal, no solo el último texto
+      key_moment: Del test a la cadena de ataque
+    - section: Probar fallos normales además de ataques perfectos
+      key_moment: Cobertura adaptativa y validez del evaluador
+    - section: Convertir el red-team en regresión
+      key_moment: Evidencia y gate de release
+    - section: Referencias
+      key_moment: Evidencia y gate de release
+    series/seguridad-ia/05-controles-produccion.md:
+    - section: Separar la lectura de documentos y las acciones
+      key_moment: Separar lectura y acción privilegiada
+    - section: Dar a cada herramienta solo los permisos que necesita
+      key_moment: Separar lectura y acción privilegiada
+    - section: 'MCP no elimina el problema: estandariza una nueva frontera de confianza'
+      key_moment: Mínimo privilegio y fronteras MCP
+    - section: La memoria también necesita políticas de escritura
+      key_moment: Mínimo privilegio y fronteras MCP
+    - section: Clasificar intercambios con una cascada, no solo texto aislado
+      key_moment: Mínimo privilegio y fronteras MCP
+    - section: Diseñar un kill path real
+      key_moment: Observabilidad, kill path y confirmación
+    - section: Registrar lo que ocurre para poder detenerlo
+      key_moment: Observabilidad, kill path y confirmación
+    - section: Convertir seguridad en un release gate
+      key_moment: Observabilidad, kill path y confirmación
+    - section: El diseño que queda
+      key_moment: Observabilidad, kill path y confirmación
+    - section: Referencias
+      key_moment: Observabilidad, kill path y confirmación
+  en:
+    series/seguridad-ia/00_presentacion_serie.md:
+    - section: Table of contents
+      key_moment: Control and data share one channel
+    series/seguridad-ia/01-prompt-injection.md:
+    - section: 1. The problem starts when a document reaches the model
+      key_moment: Control and data share one channel
+    - section: 2. The instruction can enter through retrieval
+      key_moment: Retrieval and filters remain part of the security boundary
+    - section: 3. Filtering words does not separate data from instructions
+      key_moment: Retrieval and filters remain part of the security boundary
+    - section: 4. Protection must separate reading from action
+      key_moment: Separate reading from action
+    - section: 5. What changes in product
+      key_moment: Separate reading from action
+    - section: 6. References
+      key_moment: Separate reading from action
+    - section: Frequently asked questions
+      key_moment: Separate reading from action
+    series/seguridad-ia/02-jailbreaks.md:
+    - section: Refusing a request does not create a perfect boundary
+      key_moment: From one refusal to search
+    - section: Trying many variants changes the cost of the attack
+      key_moment: Optimization, transfer and attack budget
+    - section: The threat model needs an attack budget
+      key_moment: Optimization, transfer and attack budget
+    - section: Which controls remain useful
+      key_moment: Stable output is not an authorization boundary
+    - section: What a test should measure
+      key_moment: Stable output is not an authorization boundary
+    - section: References
+      key_moment: Stable output is not an authorization boundary
+    series/seguridad-ia/03-envenenamiento.md:
+    - section: Storing data does not make it trustworthy
+      key_moment: Persistence beyond one turn
+    - section: Persistent memory is already a measurable attack surface
+      key_moment: Persistence beyond one turn
+    - section: Dangerous behavior can also remain hidden in the model
+      key_moment: Trust, provenance and retention
+    - section: Why deleting a record is not enough
+      key_moment: Observability and revocation
+    - section: How to design governable memory
+      key_moment: Observability and revocation
+    - section: What a memory evaluation should measure
+      key_moment: Observability and revocation
+    - section: What changes in the product
+      key_moment: Observability and revocation
+    - section: References
+      key_moment: Observability and revocation
+    series/seguridad-ia/04-red-teaming.md:
+    - section: The threat model comes before the benchmark
+      key_moment: Test reachable harm across the path
+    - section: Separate what the model can do from what the system executes
+      key_moment: Test reachable harm across the path
+    - section: Testing the model and testing the product are different experiments
+      key_moment: Coverage and evaluator calibration
+    - section: Automating attacks can also mislead the evaluation
+      key_moment: Coverage and evaluator calibration
+    - section: The evaluation should record every step
+      key_moment: Test reachable harm across the path
+    - section: Measure the causal chain, not only the final text
+      key_moment: Test reachable harm across the path
+    - section: Test ordinary failures as well as idealized attacks
+      key_moment: Coverage and evaluator calibration
+    - section: Turn red-team findings into regression tests
+      key_moment: Evidence-bound release decisions
+    - section: References
+      key_moment: Evidence-bound release decisions
+    series/seguridad-ia/05-controles-produccion.md:
+    - section: Separate document reading from actions
+      key_moment: Separate untrusted reading from action
+    - section: Give every tool only the permissions it needs
+      key_moment: Separate untrusted reading from action
+    - section: 'MCP does not eliminate the problem: it standardizes a new trust boundary'
+      key_moment: Least privilege and MCP trust boundaries
+    - section: Memory also needs write policies
+      key_moment: Least privilege and MCP trust boundaries
+    - section: Classify exchanges with a cascade, not isolated text alone
+      key_moment: Least privilege and MCP trust boundaries
+    - section: Design a real kill path
+      key_moment: Observability and stop mechanisms
+    - section: Record what happens so it can be stopped
+      key_moment: Observability and stop mechanisms
+    - section: Turn security into a release gate
+      key_moment: Observability and stop mechanisms
+    - section: The resulting design
+      key_moment: Observability and stop mechanisms
+    - section: References
+      key_moment: Observability and stop mechanisms
