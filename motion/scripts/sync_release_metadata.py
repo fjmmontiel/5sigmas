@@ -64,7 +64,7 @@ def sync_frontmatter(path: Path, duration: str) -> tuple[str, bool]:
     if end < 0:
         raise ValueError(f"{path}: malformed YAML frontmatter")
     head, tail = text[:end], text[end:]
-    pattern = re.compile(r'(?m)^video_duration:\s*["\']?[^\n"\']+["\']?\s*$')
+    pattern = re.compile(r'(?m)^video_duration:[ \t]*["\']?[^\n"\']+["\']?[ \t]*$')
     if not pattern.search(head):
         raise ValueError(f"{path}: video_duration missing")
     updated_head = pattern.sub(f'video_duration: "{duration}"', head, count=1)
@@ -72,20 +72,43 @@ def sync_frontmatter(path: Path, duration: str) -> tuple[str, bool]:
     return updated, updated != text
 
 
+def repair_block_separators(text: str) -> str:
+    """Repair only the historical malformed joins produced by the first sync run.
+
+    The bad pattern joined an ISO duration directly to the following top-level key,
+    e.g. ``PT1M15Sseries/...``. Normal YAML never has a top-level key immediately
+    after a duration scalar, so this normalization is narrow and deterministic.
+    """
+    return re.sub(
+        r"(video_duration:[ \t]*PT(?:\d+M)?\d+S)(?=series/)",
+        r"\1\n\n",
+        text,
+    )
+
+
 def sync_en_media(text: str, doc: str, duration: str) -> tuple[str, bool]:
     key = f"series/modelos-razonadores/{doc}:"
     start = text.find(key)
     if start < 0:
         raise ValueError(f"locales/en/media.yml: missing {key}")
-    next_block = re.search(r"(?m)^\S.*:\s*$", text[start + len(key):])
+    next_block = re.search(r"(?m)^\S.*:[ \t]*$", text[start + len(key):])
     end = len(text) if not next_block else start + len(key) + next_block.start()
     block = text[start:end]
-    pattern = re.compile(r"(?m)^  video_duration:\s*\S+\s*$")
+    pattern = re.compile(r"(?m)^  video_duration:[ \t]*\S+[ \t]*$")
     if not pattern.search(block):
         raise ValueError(f"locales/en/media.yml: video_duration missing in {key}")
     new_block = pattern.sub(f"  video_duration: {duration}", block, count=1)
     updated = text[:start] + new_block + text[end:]
     return updated, updated != text
+
+
+def validate_reasoning_blocks(text: str) -> None:
+    for _, doc in ROWS:
+        key = f"series/modelos-razonadores/{doc}:"
+        if not re.search(rf"(?m)^{re.escape(key)}$", text):
+            raise ValueError(f"locales/en/media.yml: {key} is not a standalone top-level YAML key")
+    if re.search(r"PT(?:\d+M)?\d+Sseries/", text):
+        raise ValueError("locales/en/media.yml: malformed duration/key join remains")
 
 
 def main() -> None:
@@ -107,9 +130,10 @@ def main() -> None:
             pending_docs[path] = updated
 
     media_text = EN_MEDIA.read_text(encoding="utf-8")
-    updated_media = media_text
+    updated_media = repair_block_separators(media_text)
     for doc, duration in durations.items():
         updated_media, _ = sync_en_media(updated_media, doc, duration)
+    validate_reasoning_blocks(updated_media)
     if updated_media != media_text:
         changes.append(str(EN_MEDIA.relative_to(ROOT)))
 
