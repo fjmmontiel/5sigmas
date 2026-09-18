@@ -2,6 +2,20 @@
   "unit": "modelos-razonadores",
   "updated": "2026-09-18",
   "accent": "#26A69A",
+  "runtime": {
+    "version": "v4",
+    "persisted": true,
+    "commit": "2628fdc0919af0401a98477742e1832038d0f283",
+    "renderer": "motion/src/engine.mjs",
+    "player": "motion/src/player.mjs",
+    "exporter": "motion/scripts/render.py"
+  },
+  "review": {
+    "review_package_location": null,
+    "review_email_sent": false,
+    "user_review_status": "not_ready",
+    "golden_example_registry_location": null
+  },
   "requiredGates": [
     "framework",
     "sync",
@@ -12,17 +26,17 @@
     "visualQa"
   ],
   "outputs": {
-    "es:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
-    "es:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
-    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "es:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false},
-    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:00_presentacion_serie": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:01-que-es-razonar": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:02-fallos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:03-test-time-compute": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:04-latencia-streaming": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false},
-    "en:05-riesgos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false}
+    "es:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": false, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:00_presentacion_serie": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:01-que-es-razonar": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:02-fallos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:03-test-time-compute": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:04-latencia-streaming": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false},
+    "en:05-riesgos": {"framework": false, "sync": false, "source": false, "layout": false, "delivery": false, "accessibility": false, "visualQa": false, "golden": false, "technical_golden": false, "golden_example_approved": false}
   }
 }
