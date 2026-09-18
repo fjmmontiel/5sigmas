@@ -51,17 +51,31 @@ jobs:
         working-directory: motion
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           mkdir -p qa-layout
+          : > qa-layout/results.txt
+          failed=0
           for spec in content/modelos-razonadores/*.es.json; do
-            python scripts/render.py "$spec" --out qa-layout --check-only
-            python scripts/render.py "$spec" --out qa-layout --portrait --check-only
+            base="$(basename "$spec" .es.json)"
+            for orientation in horizontal portrait; do
+              extra=()
+              if [ "$orientation" = portrait ]; then extra+=(--portrait); fi
+              log="qa-layout/${base}-${orientation}.log"
+              if python scripts/render.py "$spec" --out qa-layout --check-only "${extra[@]}" >"$log" 2>&1; then
+                echo "PASS ${base} ${orientation}" | tee -a qa-layout/results.txt
+              else
+                echo "FAIL ${base} ${orientation}" | tee -a qa-layout/results.txt
+                failed=1
+              fi
+            done
           done
-      - name: Upload layout validation reports
+          cat qa-layout/results.txt
+          exit "$failed"
+      - name: Upload layout validation reports and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: modelos-razonadores-layout-validation
-          path: motion/qa-layout/*-validation.json
+          path: motion/qa-layout/
           if-no-files-found: warn
           retention-days: 7
