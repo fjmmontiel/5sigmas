@@ -29,13 +29,20 @@ for(const item of routes){
     const cs=e=>e?getComputedStyle(e):null;
     const val=(e,p)=>cs(e)?.getPropertyValue(p)||null;
     const style=node.querySelector('style');
-    let cssRules=null,styleDisabled=null;
-    try{cssRules=style?.sheet?.cssRules?.length??null;styleDisabled=style?.sheet?.disabled??null;}catch(e){cssRules=`ERR:${e}`;}
+    const serializeRules=rules=>{
+      try{return Array.from(rules||[]).map((r,index)=>({index,type:r.constructor?.name||null,selector:r.selectorText||null,cssText:r.cssText||null,nested:serializeRules(r.cssRules)}));}
+      catch(e){return [{error:String(e)}];}
+    };
+    let cssRules=null,styleDisabled=null,parsedRules=[];
+    try{cssRules=style?.sheet?.cssRules?.length??null;styleDisabled=style?.sheet?.disabled??null;parsedRules=serializeRules(style?.sheet?.cssRules);}catch(e){cssRules=`ERR:${e}`;}
     const base={
       chapter,
       styleCount:node.querySelectorAll('style').length,
       styleTextLength:style?.textContent?.length||0,
+      styleTextPrefix:(style?.textContent||'').slice(0,900),
+      styleTextSuffix:(style?.textContent||'').slice(-900),
       cssRules,
+      parsedRules,
       styleDisabled,
       docScheme:document.documentElement.getAttribute('data-md-color-scheme'),
       docBg:val(document.documentElement,'--md-default-bg-color').trim(),
@@ -44,6 +51,7 @@ for(const item of routes){
       rootFgVar:val(node,'--md-default-fg-color').trim(),
       rootDisplay:val(node,'display'),
       rootBackground:val(node,'background-color'),
+      rootBackgroundImage:val(node,'background-image'),
       rootBorder:val(node,'border-top-width')+' '+val(node,'border-top-style')+' '+val(node,'border-top-color'),
     };
     if(chapter==='02'){
@@ -52,7 +60,9 @@ for(const item of routes){
     }else if(chapter==='03'){
       const lab=node.querySelector('.memlayers__lab'),graph=node.querySelector('.memlayers__graph'),n=node.querySelector('.memlayers__node'),btn=node.querySelector('button');
       const prop=document.querySelector('.memprop'),pmap=prop?.querySelector('.memprop__map'),pnode=prop?.querySelector('.memprop__node'),pbtn=prop?.querySelector('button');
-      Object.assign(base,{labDisplay:val(lab,'display'),labGrid:val(lab,'grid-template-columns'),graphPosition:val(graph,'position'),nodePosition:val(n,'position'),buttonBorder:val(btn,'border-top-width')+' '+val(btn,'border-top-style')+' '+val(btn,'border-top-color'),propStyleCount:prop?.querySelectorAll('style').length||0,propMapDisplay:val(pmap,'display'),propNodePosition:val(pnode,'position'),propButtonOutline:val(pbtn,'outline-style')+' '+val(pbtn,'outline-width')});
+      const propStyle=prop?.querySelector('style');
+      let propRules=[];try{propRules=serializeRules(propStyle?.sheet?.cssRules);}catch{}
+      Object.assign(base,{labDisplay:val(lab,'display'),labGrid:val(lab,'grid-template-columns'),graphPosition:val(graph,'position'),nodePosition:val(n,'position'),buttonBorder:val(btn,'border-top-width')+' '+val(btn,'border-top-style')+' '+val(btn,'border-top-color'),propStyleCount:prop?.querySelectorAll('style').length||0,propStyleTextPrefix:(propStyle?.textContent||'').slice(0,900),propParsedRules:propRules,propMapDisplay:val(pmap,'display'),propNodePosition:val(pnode,'position'),propButtonOutline:val(pbtn,'outline-style')+' '+val(pbtn,'outline-width')});
     }else if(chapter==='04'){
       const svg=node.querySelector('svg'),rect=node.querySelector('svg rect'),btn=node.querySelector('button');
       Object.assign(base,{svgDisplay:val(svg,'display'),rectFill:val(rect,'fill'),rectStroke:val(rect,'stroke'),buttonBorder:val(btn,'border-top-width')+' '+val(btn,'border-top-style')+' '+val(btn,'border-top-color')});
