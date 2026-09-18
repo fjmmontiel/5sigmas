@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 101,
+  "diagnostic_revision": 102,
   "diagnostic_scope": "focused_security_02_05",
   "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
-  "requested_head_parent": "ec607dd62cc84d6ba6e1d0ba83f47d5bb39a6d44",
-  "reason": "Re-run the focused Security02-05 milestone after retaining the six deterministic frames from each exact native ES/EN MP4 in the bounded one-day failure artifact. Use those retained frames only for manual video pixel/content inspection and honest non-voice chapter/key-moment curation; they do not auto-certify PIXEL_REVIEW or PEDAGOGY_REVIEW. Re-run exact source/mutations, strict ES/EN, publication/rendered/shared browser-resource regression and MEDIA_VISUAL 02-05. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049.",
+  "requested_head_parent": "f8485ca693db04f8b79a0109befe9c77e065ec28",
+  "reason": "Verify the repaired Security03 runtime-vs-weights causal-state mutation after rev101 exposed that the previous negative fixture was too weak. Re-run focused Security02-05 source/pedagogy mutations, strict ES/EN, publication/rendered/shared browser-resource regression and current MEDIA_VISUAL. The 48 retained video frames were manually reviewed and persisted in security-02-05-frame-review-rev101.yml, but article PIXEL_REVIEW/PEDAGOGY_REVIEW remain pending. Voice remains DEFERRED_OWNER_LOCAL and nonblocking under owner amendment 5716685049. The eight curated chapter/key-moment declarations remain the next MEDIA_VISUAL blocker and are not fabricated from narration.",
   "contract_issue": 305,
   "requalification_amendment_comment": 5655569434,
   "owner_amendment_comment": 5716685049,
