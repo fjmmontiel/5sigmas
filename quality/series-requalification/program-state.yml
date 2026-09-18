@@ -1,4 +1,4 @@
-schema_version: 4
+schema_version: 5
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -35,10 +35,13 @@ series_status:
     production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: QA_ACTIVE_CHANGES_REQUIRED
+    state: QA_ACTIVE
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    current_exact_evidence_head: b7be41483b4b89c0212f01ea9a7b7c25fa49e517
-    technical_milestone_run: 35401378312
+    technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
+    technical_milestone_run: 35402872378
+    technical_milestone: PASS
+    source_review_head: c042e01e40e62947dc36d827801a97bf2ae633d5
+    source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
     relationship_guard_agents03_04: PASS_WITH_4_NEGATIVE_MUTATIONS
     strict_es_build: PASS
     strict_en_build: PASS
@@ -48,22 +51,17 @@ series_status:
     indexability: PASS_12_OF_12
     native_video_frames_reviewed: 72
     native_video_visual_review: PASS_REAL_NATIVE_NONPLACEHOLDER_READABLE
-    browser_resource_runtime_smoke: FAIL_MEDIA_ERR_ABORTED_SEQUENCE_PROOF
+    browser_resource_runtime_smoke: PASS_96_CONTEXTS_CAUSAL_RANGE_RESPONSE_PROOF
     browser_resource_contexts: 96
-    browser_failure_classification: PRE_TEARDOWN_MEDIA_ABORTS_NOT_YET_CAUSALLY_PROVEN
-    causal_abort_proof_fix:
-      wrapper_commit: c7a5fe533e2ff192fd26b971e513bfcfed80e674
-      workflow_commit: cbddb9704b4d48e9015fd0dc24cc91c90e2af089
-      request_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
-      run: 35402872378
-      status_at_checkpoint: QUEUED
-      constraints: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_RANGE_RESPONSE_PLUS_FINAL_HEALTH_REQUIRED; UNPROVEN_ABORTS_REMAIN_FATAL
+    browser_media_aborts_reclassified_with_causal_proof: 51
+    browser_media_aborts_unresolved: 0
+    causal_abort_proof_mutations: 8
+    causal_abort_proof_constraints: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_200_206_BEFORE_ABORT_PLUS_FINAL_HEALTH_REQUIRED; UNPROVEN_ABORTS_REMAIN_FATAL; LISTENERS_REMAIN_ACTIVE_THROUGH_TEARDOWN
     pixel: PENDING_FULL_PAGE
     pedagogy: PENDING_FULL_PAGE
     browser: PENDING_FULL_INTERACTION_LIFECYCLE
-    source: PENDING_PER_ARTICLE_MATERIAL_CLAIM_CONTRACTS
     article_golden: 0/6
-    next_action: HARVEST_35402872378; IF_BROWSER_RESOURCE_SMOKE_PASSES_CONTINUE_MULTI_ARTICLE_SOURCE_FULL_BROWSER_PIXEL_PEDAGOGY; IF_NOT_REPAIR_THE_EXACT_UNPROVEN_RUNTIME_SEQUENCE_WITHOUT_RELAXING_LISTENERS
+    next_action: FULL_MULTI_ARTICLE_BROWSER_INTERACTION_LIFECYCLE_PLUS_REAL_FULL_PAGE_PIXEL_PEDAGOGY_DESKTOP_MOBILE_NORMAL_REDUCED
   agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
