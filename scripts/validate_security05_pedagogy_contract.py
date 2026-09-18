@@ -23,8 +23,8 @@ REQUIRED = (
     '<path class="rg-output rg-output--hold" data-output="hold"',
     "hold=root.querySelector('[data-output=\"hold\"]')",
     "e.classList.toggle('is-failed',failed)",
-    'deploy.hidden=!pass',
-    'hold.hidden=pass',
+    "deploy.toggleAttribute('hidden',!pass)",
+    "hold.toggleAttribute('hidden',pass)",
     'release-evidence.json · 3/3 current',
     'authz-policy.json · STALE',
     'state-contract.json · DRIFT',
@@ -90,9 +90,22 @@ def self_test(html: str, i18n_text: str) -> None:
     if not any('rg-output--hold' in item and 'data-output' in item for item in result):
         raise AssertionError('missing HOLD-path mutation was not rejected')
 
-    mutated = html.replace("hold.hidden=pass", "hold.hidden=true", 1)
+    mutated = html.replace(
+        "deploy.toggleAttribute('hidden',!pass)",
+        "deploy.toggleAttribute('hidden',false)",
+        1,
+    )
     result = failures(mutated, i18n_text)
-    if not any('hold.hidden=pass' in item for item in result):
+    if not any("deploy.toggleAttribute('hidden',!pass)" in item for item in result):
+        raise AssertionError('DEPLOY visibility-state mutation was not rejected')
+
+    mutated = html.replace(
+        "hold.toggleAttribute('hidden',pass)",
+        "hold.toggleAttribute('hidden',true)",
+        1,
+    )
+    result = failures(mutated, i18n_text)
+    if not any("hold.toggleAttribute('hidden',pass)" in item for item in result):
         raise AssertionError('HOLD visibility-state mutation was not rejected')
 
     mutated = html + '<div class="releasegate__meter"><div class="releasegate__bar"></div></div>'
