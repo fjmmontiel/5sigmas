@@ -1,0 +1,78 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+owner_precedence_restatement_comment: 5719162654
+iteration_count_epoch: owner_amendment_5716685049
+pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
+series: agentes-ia
+series_state: QA
+article_golden_requires_voice: false
+series_golden_requires_voice: false
+voice_enhancement_default: DEFERRED_OWNER_LOCAL
+history_preserved_in_git_and_issue_305: true
+
+preflight_revision:
+  base_head_inspected: 380925bf080df32acfe56785bde069b3bd347d18
+  source_routes_inspected_es: 6
+  source_routes_inspected_en: 6
+  native_media_inventory:
+    es_mp4_poster_pairs_present: 6
+    en_mp4_poster_pairs_present: 6
+  actual_video_frame_review: NOT_YET_PERFORMED
+  exact_render_pixel_review: NOT_YET_PERFORMED
+  exact_browser_interaction_review: NOT_YET_PERFORMED
+  primary_source_spotchecks:
+    anthropic_trustworthy_agents_2026_04_09: PASS
+    nist_ai_agent_standards_2026_02_17: PASS
+    nist_evaluation_probes_ongoing: PASS
+    nist_agent_eval_cheating: PASS
+    mcp_2026_07_28_authorization_evolution: PASS
+    openai_agents_sdk_tracing_current_docs: PASS
+  note: Primary spot-checks do not equal SOURCE_PASS; deterministic per-article source contracts still need to be added/executed where material claims are mutable.
+
+shared_confirmed_gaps:
+  media_visual:
+    es:
+      presentation_00: [poster_declaration, video_title, video_summary, video_chapters]
+      chapter_01: [poster_declaration, video_title, video_summary, video_chapters]
+      chapter_02: [poster_declaration, video_title, video_summary, video_chapters]
+      chapter_03: [poster_declaration, video_chapters]
+      chapter_04: [poster_declaration, video_title, video_summary, video_chapters]
+      chapter_05: [poster_declaration, video_title, video_summary, video_chapters]
+    en:
+      presentation_00: [video_summary, video_chapters]
+      chapter_01: [video_summary, video_chapters]
+      chapter_02: [video_summary, video_chapters]
+      chapter_03: [video_chapters]
+      chapter_04: [video_summary, video_chapters]
+      chapter_05: [video_summary, video_chapters]
+    rule: Do not invent chapter/key-moment timing from prose or future narration; inspect native video pixels first.
+  pedagogy_source_findings:
+    chapter_03:
+      severity: P1
+      finding: The only article visual serializes Objective -> Trace -> Result -> Cost as one left-to-right pipeline even though outcome, trajectory, permissions and operational economics are evaluation dimensions over the same task/trajectory, not sequential stages. Redesign into a trajectory with orthogonal evaluators before PEDAGOGY_REVIEW can pass.
+      source: docs/snippets/agentes-ia/03-evaluacion.html
+    chapter_04:
+      severity: P1
+      finding: The source->model->tool causal path is useful, but the four security controls are detached chips rather than boundaries placed on the edges they constrain. The visual does not show which control breaks which attack path. Redesign controls onto explicit trust/authorization boundaries before PEDAGOGY_REVIEW can pass.
+      source: docs/snippets/agentes-ia/04-seguridad.html
+
+articles:
+  - {route: series/agentes-ia/00_presentacion_serie.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_SOURCE_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: INSPECT_NATIVE_VIDEO_FRAMES_THEN_CURATE_NONVOICE_METADATA_AND_KEY_MOMENTS}
+  - {route: series/agentes-ia/00_presentacion_serie.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_SOURCE_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: INSPECT_NATIVE_VIDEO_FRAMES_THEN_CURATE_NONVOICE_METADATA_AND_KEY_MOMENTS}
+  - {route: series/agentes-ia/01-que-es-un-agente.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_RENDER_LOOP_VISUAL}
+  - {route: series/agentes-ia/01-que-es-un-agente.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_RENDER_LOOP_VISUAL}
+  - {route: series/agentes-ia/02-anatomia-de-un-agente.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_CURRENT_MCP_OPENAI_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_REVIEW_ANATOMY_SPECIFIC_PEDAGOGY}
+  - {route: series/agentes-ia/02-anatomia-de-un-agente.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_CURRENT_MCP_OPENAI_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_REVIEW_ANATOMY_SPECIFIC_PEDAGOGY}
+  - {route: series/agentes-ia/03-como-evaluar-un-agente.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE, EVALUATION_DIMENSIONS_MISREPRESENTED_AS_LINEAR_PIPELINE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_NIST_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: REDESIGN_EVAL_VISUAL_AS_TRAJECTORY_PLUS_ORTHOGONAL_EVALUATORS_THEN_INSPECT_VIDEO}
+  - {route: series/agentes-ia/03-como-evaluar-un-agente.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE, EVALUATION_DIMENSIONS_MISREPRESENTED_AS_LINEAR_PIPELINE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_NIST_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: REDESIGN_EVAL_VISUAL_AS_TRAJECTORY_PLUS_ORTHOGONAL_EVALUATORS_THEN_INSPECT_VIDEO}
+  - {route: series/agentes-ia/04-seguridad-agentes.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE, SECURITY_CONTROLS_NOT_MAPPED_TO_ATTACK_PATH_BOUNDARIES], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: REDESIGN_SECURITY_VISUAL_WITH_EXPLICIT_TRUST_AUTHORIZATION_BOUNDARIES_THEN_INSPECT_VIDEO}
+  - {route: series/agentes-ia/04-seguridad-agentes.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE, SECURITY_CONTROLS_NOT_MAPPED_TO_ATTACK_PATH_BOUNDARIES], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: REDESIGN_SECURITY_VISUAL_WITH_EXPLICIT_TRUST_AUTHORIZATION_BOUNDARIES_THEN_INSPECT_VIDEO}
+  - {route: series/agentes-ia/05-de-la-demo-a-produccion.md, locale: es, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_REVIEW_RETRY_IDEMPOTENCY_ASYNC_MECHANISM_COVERAGE}
+  - {route: series/agentes-ia/05-de-la-demo-a-produccion.md, locale: en, iteration_count: 1, last_reviewed_head: 380925bf080df32acfe56785bde069b3bd347d18, state: QA, SOURCE_PASS: false, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [MEDIA_VISUAL_METADATA_AND_KEY_MOMENTS_INCOMPLETE], P2: []}, parity_factual_source: TEXT_PARITY_REVIEWED_PRIMARY_SPOTCHECK_PASS_GUARD_PENDING, watch_video_lifecycle: PENDING, evidence_revision: 380925bf080df32acfe56785bde069b3bd347d18, next_action: ADD_SOURCE_CONTRACT_INSPECT_VIDEO_AND_REVIEW_RETRY_IDEMPOTENCY_ASYNC_MECHANISM_COVERAGE}
+
+next_batch:
+  - Finish the in-flight zero-based Security series audit on exact head 380925bf080df32acfe56785bde069b3bd347d18; do not rerun it by cadence.
+  - Inspect real native ES/EN Agents video frames before creating any video chapters/key moments.
+  - Redesign confirmed relationship-first P1 visuals in Agents 03 and 04; do not certify source-only changes as pixel/pedagogy PASS.
+  - Add deterministic source/parity/media contracts, then use one coherent exact-head strict/browser milestone.
