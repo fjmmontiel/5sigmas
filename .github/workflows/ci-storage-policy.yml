@@ -65,24 +65,29 @@ jobs:
 
               return '\n'.join(lines[start:end])
 
-          def is_failure_only(expression):
-              """Accept only predicates that logically require failure().
-
-              Exact failure() remains canonical. A scoped conjunction such as
-              `${{ failure() && scope == 'full' }}` is equally failure-only and avoids
-              retaining unrelated diagnostics. OR predicates are deliberately rejected.
-              """
+          def unwrap_condition(expression):
               condition = expression.strip()
-              if condition.startswith('${{') and condition.endswith('}}'):
+              if condition.startswith('$' + '{{') and condition.endswith('}' + '}'):
                   condition = condition[3:-2].strip()
+              return condition
+
+          def is_failure_only(expression):
+              condition = unwrap_condition(expression)
               if condition == 'failure()':
                   return True
               return condition.startswith('failure() && ') and '||' not in condition
 
+          def is_short_lived_golden_review_evidence(path, block, expression):
+              if path.name != 'realtime-voice-browser-milestone.yml':
+                  return False
+              if unwrap_condition(expression) != 'always()':
+                  return False
+              return bool(re.search(
+                  r'(?m)^\s*name:\s*realtime-voice-browser-pixel-evidence\s*$',
+                  block,
+              ))
+
           def is_ephemeral_video_transport(path, block):
-              # The motion delivery gate needs one short-lived binary hand-off between
-              # independent render matrix jobs and the final integration job. Keep this
-              # exception exact, one-day-only, and unusable as retained review history.
               return (
                   path.name == 'video-motion-delivery-gate.yml'
                   and re.search(r'(?m)^\s*name:\s*reasoning-delivery-', block)
@@ -116,9 +121,14 @@ jobs:
                           )
                   else:
                       expression = if_match.group(1).split('#', 1)[0].strip()
-                      if not is_failure_only(expression):
+                      if not (
+                          is_failure_only(expression)
+                          or is_short_lived_golden_review_evidence(path, block, expression)
+                          or is_transport
+                      ):
                           errors.append(
-                              f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
+                              f'{path}:{index + 1}: generic upload-artifact must be failure-only unless it is an '
+                              'explicit one-day GOLDEN review/transport exception; '
                               f'found if: {expression}'
                           )
 
@@ -188,8 +198,8 @@ jobs:
               raise SystemExit(1)
 
           print(
-              'CI storage policy OK: generic artifacts are failure-only with one-day maximum retention, '
-              'the motion delivery gate has exactly one one-day cross-job transport exception, '
-              'old generic artifacts are purged hourly, and the single required Pages artifact is deleted after deployment.'
+              'CI storage policy OK: generic artifacts are failure-only except the explicit one-day GOLDEN '
+              'pixel-review and motion-delivery transport evidence; old generic artifacts are purged hourly, '
+              'and the single required Pages artifact is deleted after deployment.'
           )
           PY
