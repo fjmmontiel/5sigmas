@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T23:32:00Z",
+  "unit": "seguridad-ia",
+  "chapter": "05",
+  "branch": "migration/video-golden-seguridad-ia",
+  "source_head": "aecca1f8615413dfee4b31d8f3a5c55a6d3c1295",
+  "state": "CHAPTER_FINAL_ENCODE_PASS_COMPLETE_PACKAGE_PENDING",
+  "technical_golden": false,
+  "owner_visual_approval": "NOT_REQUESTED",
+  "workflow_run": 35475585037,
+  "job": 105985418252,
+  "artifact": {
+    "id": 10594825626,
+    "archive_sha256": "c42b965ab611c06e7221aa9daa8c07ce796023b74385b3033ca5707d4d1d51a2",
+    "readback": "DOWNLOADED_AND_INSPECTED"
+  },
+  "outputs": [
+    {"locale":"en","orientation":"horizontal","sha256":"222427e5ea8a0a5c806b3681d86a26f55ed4c65173dce9690edb3d830ccfd844","profile":"h264 1920x1080 60/1 3600 frames","full_decode":"PASS"},
+    {"locale":"en","orientation":"vertical","sha256":"01713f59005822e999b10b76188264c701763a5fa9f311223524f5a28e52a660","profile":"h264 1080x1920 60/1 3600 frames","full_decode":"PASS"},
+    {"locale":"es","orientation":"horizontal","sha256":"8d35c186ac90ef5a86d173dba485c1afdccff42dcb11748fa4ea8fe1467bb401","profile":"h264 1920x1080 60/1 3600 frames","full_decode":"PASS"},
+    {"locale":"es","orientation":"vertical","sha256":"d7951d7cc6d49f5ff4ba62231449178ae8d186e4611a3482f32acb705503065f","profile":"h264 1080x1920 60/1 3600 frames","full_decode":"PASS"}
+  ],
+  "metadata_hash_binding": "4/4_PASS",
+  "visual_inspection": {
+    "samples": "ES/EN x H/V at 6s, 18s, 30s, 42s, 54s",
+    "result": "PASS_FOR_CHAPTER_OUTPUTS",
+    "observed": "Readable production-controls copy, native horizontal/vertical recomposition, distinct semantic mechanisms across the five scenes, and no obvious clipping or overlap in the inspected encoded samples."
+  },
+  "package_scope_note": "Chapter-level completion is not complete-series certification and does not trigger Drive review delivery or owner approval request.",
+  "next_action": "Allow the same immutable source run to finish all chapters and package gate; inspect complete-series encoded evidence before review delivery."
+}
