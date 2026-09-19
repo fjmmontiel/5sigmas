@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "series": "agentes-voz-tiempo-real",
+  "generated_for_contract": "MEDIA_VISUAL_PASS; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL",
+  "narration": "none; intentionally silent",
+  "captions_transcript": "not generated; narration-dependent lane deferred",
+  "duration_seconds": 36.0,
+  "fps": 24,
+  "chapters": [
+    {
+      "locale": "es",
+      "stem": "01-arquitecturas-de-voz",
+      "visual_family": "architecture",
+      "video": "docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4",
+      "video_sha256": "1a9a5ee8ca4e6560a36238ad19d33f225ea3c26acc1b12234f876a35306d6a6d",
+      "video_bytes": 389287,
+      "poster": "docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg",
+      "poster_sha256": "0adcd4ae92585a956d06e7275f7f5405f00e649f9fe0599b30f14b72bbc5f357",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Fronteras observables",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Modalidad",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Interacción",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "01-arquitecturas-de-voz",
+      "visual_family": "architecture",
+      "video": "locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4",
+      "video_sha256": "522715db07fa539f71c0d3ecc27e0cc6e7d0c25c58d941e3982c60e327284296",
+      "video_bytes": 384311,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg",
+      "poster_sha256": "47647655f00379b39ea4947227e7ab774bfdf23894dbda8c5910d7bc307e530f",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Observable boundaries",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Modality",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Interaction",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "stem": "02-turn-taking",
+      "visual_family": "turn_taking",
+      "video": "docs/series/agentes-voz-tiempo-real/02-turn-taking.mp4",
+      "video_sha256": "65bf70e445779b508a2c5c9ffed3ad649123fa9834bf26236efa9cccde498a5e",
+      "video_bytes": 905145,
+      "poster": "docs/series/agentes-voz-tiempo-real/02-turn-taking.jpg",
+      "poster_sha256": "00ccf7c49698fa3fa8a08c6140cd142fc9b4602f1b0bc81b6b0f1db127bd1be3",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Señal vs decisión",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Estado del turno",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Dos cancelaciones",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "02-turn-taking",
+      "visual_family": "turn_taking",
+      "video": "locales/en/series/agentes-voz-tiempo-real/02-turn-taking.mp4",
+      "video_sha256": "ed2fedb76ba4a84cbcb5ab8db682475bd28ae6d3a2e9ba8f5c59668b52e8d117",
+      "video_bytes": 901282,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/02-turn-taking.jpg",
+      "poster_sha256": "b14b14377e174ada882997c6aaeecf631d319c7944d936e44c0eda98d501a9ac",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Signal vs decision",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Turn state",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Two cancellation domains",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "stem": "03-presupuesto-latencia",
+      "visual_family": "latency",
+      "video": "docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4",
+      "video_sha256": "36dd1f8e57893425df54ad3bf667efbfeb970d4633ffa05aac2aa8c2ecc5b49a",
+      "video_bytes": 356709,
+      "poster": "docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg",
+      "poster_sha256": "b50aff0297560ef4791ac11b2b477c214b9f6975abb12a72d7abcec24c7975bd",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Camino crítico",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Un reloj",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Optimización",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "03-presupuesto-latencia",
+      "visual_family": "latency",
+      "video": "locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4",
+      "video_sha256": "9b93c3791ab0efe26594e740a0f22198ad6255980f4d9972a6d74b312f9e3410",
+      "video_bytes": 357740,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg",
+      "poster_sha256": "a50154a750729bbeddf6b8f098277f30be89a1b7fbbed376e6a9f230ae0dc757",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Critical path",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "One clock",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Optimization",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "stem": "04-tools-estado-acciones-asincronas",
+      "visual_family": "tools_state",
+      "video": "docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4",
+      "video_sha256": "d93d6207aa8046b49b29e951cfa1b0834bcbe3b800c7875804b3bc62b28b9636",
+      "video_bytes": 346066,
+      "poster": "docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg",
+      "poster_sha256": "c8b130d0c4d9dff4a9e501f261254ceb5094ba437294de81c9d699871c0e7e97",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Lifecycles distintos",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Interrupción",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Reconciliación",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "04-tools-estado-acciones-asincronas",
+      "visual_family": "tools_state",
+      "video": "locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4",
+      "video_sha256": "5831f321a8c9b24ecab5ee05f71435c39d3c175fe020c76c7776cdb4e233ea5e",
+      "video_bytes": 352504,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg",
+      "poster_sha256": "721b7d3c8575df0cf3e1aa254b60d4ad74cfbf1a459970ead7f27aaa0cec0b06",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Different lifecycles",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Interruption",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Reconciliation",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "stem": "05-webrtc-sip-telefonia-red",
+      "visual_family": "network",
+      "video": "docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4",
+      "video_sha256": "56a971eec00b156d4fc03f37ad4be6b20f5b049aabdc2152866a556b3c8294b5",
+      "video_bytes": 407264,
+      "poster": "docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg",
+      "poster_sha256": "5e0bf5f858b732fba00053873b3022f2080f1d7e0fd33b3bc8dd9f5de33b7dfc",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Topología",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Jitter",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Transcodificación",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "05-webrtc-sip-telefonia-red",
+      "visual_family": "network",
+      "video": "locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4",
+      "video_sha256": "6ba7dc0fa18e8293267a0ca39f6709bd9f215e0a918ce98391b9790fe98e3268",
+      "video_bytes": 398743,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg",
+      "poster_sha256": "2efd66db7a94963ee2697ccd8ba0d7ae516d23ab32e254b65457244afdfef7c7",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Topology",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Jitter",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Transcoding",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "stem": "06-evaluacion-observabilidad-reliability",
+      "visual_family": "evaluation",
+      "video": "docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4",
+      "video_sha256": "80d21343335017fa7aa1f75afe891578fe157597d532add81022ef363090e641",
+      "video_bytes": 489306,
+      "poster": "docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg",
+      "poster_sha256": "f58c250cc5baa402571c1dfba00f7edab2847c18dca585372bcc35294dd5567b",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Traza por turno",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Taxonomía",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Bucle de reparación",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "stem": "06-evaluacion-observabilidad-reliability",
+      "visual_family": "evaluation",
+      "video": "locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4",
+      "video_sha256": "0d2937c811996f89a591bfe6219ca0bffa8187f06c4ee02d777ac67d1025bda0",
+      "video_bytes": 478579,
+      "poster": "locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg",
+      "poster_sha256": "4becdb02a33cdc6526ca21e0f0255586910f229572be9d67fc4000d8c58aca3c",
+      "probe_duration": 36.0,
+      "key_moments": [
+        {
+          "name": "Turn trace",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "name": "Taxonomy",
+          "start": 12,
+          "end": 24
+        },
+        {
+          "name": "Repair loop",
+          "start": 24,
+          "end": 36
+        }
+      ]
+    }
+  ]
+}

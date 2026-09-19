@@ -1,0 +1,235 @@
+name: Realtime Voice browser and pixel evidence milestone
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/realtime-voice-golden
+    paths:
+      - '.github/workflows/realtime-voice-browser-milestone.yml'
+      - 'docs/series/agentes-voz-tiempo-real/**'
+      - 'docs/snippets/articulos-tecnicos/voice-*.html'
+      - 'locales/en/series/agentes-voz-tiempo-real/**'
+      - 'locales/en/snippets/articulos-tecnicos/voice-*.i18n.json'
+      - 'locales/en/media.yml'
+      - 'locales/en/manifest.yml'
+      - 'scripts/audit_browser_resources.mjs'
+      - 'scripts/validate_voice_architecture_ch1.mjs'
+      - 'scripts/validate_voice_architecture_ch1_accessibility.mjs'
+      - 'scripts/validate_voice_turn_taking_ch2_accessibility.mjs'
+      - 'scripts/validate_voice_latency_ch3_accessibility.mjs'
+      - 'scripts/validate_voice_tools_state_ch4_accessibility.mjs'
+      - 'scripts/validate_voice_network_telephony_ch5_accessibility.mjs'
+      - 'scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs'
+      - 'scripts/validate_voice_mobile_native_summaries.mjs'
+      - 'scripts/validate_voice_series_browser_milestone.mjs'
+      - 'scripts/validate_voice_indexability.py'
+      - 'scripts/validate_voice_media_visual.py'
+      - 'scripts/classify_requalification_media.py'
+      - 'scripts/audit_publication_contract.py'
+      - 'scripts/audit_multilingual_search_foundation.py'
+      - 'scripts/serve_preview.py'
+      - 'main.py'
+      - 'locale_main.py'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: realtime-voice-browser-milestone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-pixel-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build exact Spanish preview strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --strict
+
+      - name: Validate fresh series source, publication and Spanish search contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_tools_state_ch4_source.mjs
+          node scripts/validate_voice_network_telephony_ch5_source.mjs
+          node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
+
+      - name: Build exact English preview strictly into combined site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Validate current native visual media without regeneration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          python scripts/classify_requalification_media.py --self-test
+          python scripts/validate_voice_media_visual.py --output artifacts/voice-requalification/voice-media-visual.json
+
+      - name: Validate fresh rendered INDEXABILITY plus negative mutations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_voice_indexability.py --self-test
+          python scripts/validate_voice_indexability.py --site site --output artifacts/voice-requalification/indexability/report.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated video URLs for preview QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('site/videos')
+          targets = [root / 'catalog.json', *root.rglob('*.html')]
+          for target in targets:
+              if not target.is_file():
+                  continue
+              text = target.read_text(encoding='utf-8')
+              target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          en_root = Path('site/en/videos')
+          targets = [en_root / 'catalog.json', *en_root.rglob('*.html')]
+          for target in targets:
+              if not target.is_file():
+                  continue
+              text = target.read_text(encoding='utf-8')
+              target.write_text(text.replace('https://5sigmas.com/en/', '/en/').replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          PY
+
+      - name: Serve exact combined preview with byte-range support
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-voice-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-voice-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-voice-preview.log
+          exit 1
+
+      - name: Regress browser resource loading with listeners active
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate Realtime Voice chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
+
+      - name: Validate Realtime Voice chapter 1 accessibility and intermediate states
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 2 accessibility and responsive states
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 3 accessibility and responsive states
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 4 accessibility and responsive states
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 5 accessibility and responsive states
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 6 accessibility and responsive states
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+
+      - name: Validate native mobile summaries for Realtime Voice chapters 4-6
+        run: node scripts/validate_voice_mobile_native_summaries.mjs
+
+      - name: Validate all 12 article/watch media lifecycles and capture 48 full-page review frames
+        env:
+          S5_VOICE_BROWSER_CONCURRENCY: '2'
+        run: node scripts/validate_voice_series_browser_milestone.mjs
+
+      - name: Inventory exact start/intermediate/final review frames
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          roots = [Path('artifacts/voice-browser-milestone'), Path('artifacts/visual-review')]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for path in sorted(root.rglob('*')):
+                  if not path.is_file():
+                      continue
+                  if root.name == 'visual-review' and not path.name.startswith('voice-'):
+                      continue
+                  payload = path.read_bytes()
+                  files.append({
+                      'path': path.as_posix(),
+                      'bytes': len(payload),
+                      'sha256': hashlib.sha256(payload).hexdigest(),
+                  })
+
+          evidence = Path('artifacts/voice-browser-milestone/evidence-manifest.json')
+          evidence.parent.mkdir(parents=True, exist_ok=True)
+          evidence.write_text(json.dumps({
+              'head': '${{ github.sha }}',
+              'files': files,
+              'voice_visual_review_files': sum(1 for item in files if item['path'].startswith('artifacts/visual-review/voice-')),
+          }, indent=2) + '\n', encoding='utf-8')
+          print(evidence.read_text(encoding='utf-8'))
+          PY
+
+      - name: Upload short-lived exact series evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-voice-browser-pixel-evidence
+          path: |
+            artifacts/voice-browser-milestone/*
+            artifacts/visual-review/voice-*.png
+            artifacts/voice-requalification/**/*.json
+          if-no-files-found: warn
+          retention-days: 1

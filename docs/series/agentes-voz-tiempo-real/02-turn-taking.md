@@ -9,6 +9,22 @@ tags:
   - Realtime
   - Agentes
   - Producción
+video: 02-turn-taking.mp4
+video_poster: 02-turn-taking.jpg
+video_title: Turn-taking e interrupciones
+video_summary: VAD detecta actividad; endpointing decide turnos; barge-in no revierte
+  negocio.
+video_duration: PT36S
+video_chapters:
+- name: Señal vs decisión
+  start: 0
+  end: 12
+- name: Estado del turno
+  start: 12
+  end: 24
+- name: Dos cancelaciones
+  start: 24
+  end: 36
 ---
 
 # Capítulo 2 — Turn-taking: detectar voz no es decidir el turno

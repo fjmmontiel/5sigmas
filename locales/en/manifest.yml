@@ -264,6 +264,18 @@ published_files:
   - series/agentes-ia/05-de-la-demo-a-produccion.jpg
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+  - series/agentes-voz-tiempo-real/02-turn-taking.mp4
+  - series/agentes-voz-tiempo-real/02-turn-taking.jpg
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
   - series/modelos-razonadores/00_presentacion_serie.vtt
   - series/modelos-razonadores/01-que-es-razonar.vtt
   - series/modelos-razonadores/02-fallos.vtt
