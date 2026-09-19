@@ -10,6 +10,21 @@ tags:
   - Software
   - Coding agents
   - Seguridad
+video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+video_title: "Tools, permisos, approvals y trust boundaries"
+video_summary: "La intención del modelo sólo produce efectos tras cruzar validación, policy, approvals, sandbox y autoridad externa independientes."
+video_duration: PT36S
+video_chapters:
+- name: "Una tool call no es autorización"
+  start: 0
+  end: 12
+- name: "Input no confiable, capacidad limitada"
+  start: 12
+  end: 24
+- name: "Proyectar secretos sin ponerlos en contexto"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 4 — Tools, permisos, approvals, hooks, secretos y trust boundaries

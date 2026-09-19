@@ -10,6 +10,21 @@ tags:
   - Software
   - Coding agents
   - Observabilidad
+video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
+video_title: "Tareas largas, subagentes, recuperación y observabilidad"
+video_summary: "Estado durable, ownership explícito y evidencia por candidate permiten reiniciar, coordinar workers e integrar sobre un target que avanza."
+video_duration: PT36S
+video_chapters:
+- name: "Checkpoint durable y recuperación"
+  start: 0
+  end: 12
+- name: "Fan-out con ownership; fan-in con evidencia"
+  start: 12
+  end: 24
+- name: "Target avanza: integrar y revalidar"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 6 — Tareas largas, memoria, subagentes, recuperación, merge y observabilidad
