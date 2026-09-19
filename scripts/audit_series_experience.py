@@ -1,25 +1,12 @@
 #!/usr/bin/env python3
 """Owner-amendment aware facade over the legacy full-catalogue experience audit.
 
-The legacy report is intentionally preserved in full so future-series and
-voice/accessibility debt remain visible. Security requalification may only
-ignore narration-dependent captions/transcript findings under owner amendment
-5716685049; every other current Security source/media finding remains
-fail-closed. Security H2→key-moment mappings are supplied by an editorial
-receipt derived independently from future narration.
-
-Owner amendment 5727362172 additionally makes technical INDEXABILITY a separate
-current GOLDEN gate. When rendered ``site`` bytes are supplied, this facade runs
-the dedicated Security indexability validator (including its negative mutation
-fixtures) and keeps its result distinct from SOURCE/MEDIA. Google selection or
-index state is never inferred here.
-
-The process exit code represents the *active-series* requalification gate, not
-completion of all seven future series. Global legacy/future-series debt remains
-fully present in ``status``/``summary`` and in the persisted report, but it must
-not make a zero-based ``seguridad-ia`` audit impossible to close after that
-series' own current gates pass. This is the owner-contract separation between
-active-series certification and durable global backlog visibility.
+Global legacy/future-series debt is always preserved, while the process exit code
+represents the series currently owned by the GOLDEN requalification program.
+VOICE-dependent audio/captions/transcript debt is non-blocking under owner
+amendment 5716685049; visual media remains blocking when the curriculum requires
+it. Technical INDEXABILITY is a separate mandatory gate under amendment
+5727362172 and never means Google selection/index state.
 """
 from __future__ import annotations
 
@@ -27,9 +14,12 @@ import argparse
 import json
 from collections import Counter
 from pathlib import Path
+from typing import Callable
 
 import audit_series_experience_legacy as legacy
-import validate_security_indexability as security_indexability
+import validate_agents_indexability
+import validate_security_indexability
+import validate_voice_indexability
 from audit_series_experience_legacy import *  # noqa: F401,F403 - compatibility for existing tests/importers
 
 OWNER_AMENDMENT = 5716685049
@@ -48,7 +38,12 @@ SECTION_MAP_CODES = {
     "VIDEO_SECTION_MAP_UNKNOWN_KEY_MOMENT",
     "VIDEO_SECTION_MAP_DUPLICATE_SECTION",
 }
-SECURITY_PREFIX = "series/seguridad-ia/"
+
+INDEXABILITY_VALIDATORS: dict[str, object] = {
+    "seguridad-ia": validate_security_indexability,
+    "agentes-ia": validate_agents_indexability,
+    "agentes-voz-tiempo-real": validate_voice_indexability,
+}
 
 
 def _canonical_route(source: str) -> str:
@@ -58,7 +53,18 @@ def _canonical_route(source: str) -> str:
     return ""
 
 
+def _active_series(root: Path) -> str:
+    """Read the durable program owner; fail closed if it cannot be resolved."""
+    state_path = root / "quality/series-requalification/program-state.yml"
+    data = legacy.load_yaml(state_path)
+    series = str(data.get("active_series") or "").strip()
+    if not series:
+        raise ValueError("program-state.yml does not define active_series")
+    return series
+
+
 def _load_security_editorial_maps(root: Path) -> dict:
+    """Security-only independent H2→key-moment receipt; preserved after series advance."""
     path = root / "quality/series-requalification/security-video-section-maps.yml"
     if not path.is_file():
         return {}
@@ -90,16 +96,18 @@ def _recount(report: dict) -> Counter:
     return counts
 
 
-def _security_current_blockers(report: dict) -> list[dict]:
+def _current_blockers(report: dict, active_series: str) -> list[dict]:
     blockers: list[dict] = []
+    # Truly global findings remain blocking for any active series.
     for item in report.get("findings", []):
         if isinstance(item, dict) and item.get("code"):
             blockers.append({"scope": "global", **item})
+    prefix = f"series/{active_series}/"
     for page in report.get("pages", []):
         if not isinstance(page, dict):
             continue
         route = _canonical_route(str(page.get("source") or ""))
-        if not route.startswith(SECURITY_PREFIX):
+        if not route.startswith(prefix):
             continue
         for item in page.get("findings", []):
             if not isinstance(item, dict) or not item.get("code"):
@@ -125,21 +133,46 @@ def _indexability_blockers(indexability_report: dict | None) -> list[dict]:
     return blockers
 
 
+def _run_indexability(root: Path, site: Path, active_series: str) -> dict:
+    module = INDEXABILITY_VALIDATORS.get(active_series)
+    if module is None:
+        return {
+            "owner_amendment_comment": INDEXABILITY_AMENDMENT,
+            "series": active_series,
+            "INDEXABILITY_PASS": False,
+            "status": "FAIL_CLOSED_VALIDATOR_MISSING",
+            "global_errors": [f"No dedicated rendered INDEXABILITY validator registered for {active_series}"],
+            "rows": [],
+        }
+    # Every current validator exports its own negative-fixture entrypoint and
+    # audit_indexability implementation. Voice/Agents configure their series inventory first.
+    if hasattr(module, "self_test"):
+        module.self_test()
+    elif hasattr(module, "_self_test"):
+        module._self_test()
+    if hasattr(module, "configure"):
+        module.configure()
+    return module.audit_indexability(root, site)
+
+
 def _current_gate_exit_code(current: dict) -> int:
-    """Return the active-series gate result without whitening global backlog debt."""
     return 0 if isinstance(current, dict) and current.get("status") == "PASS" else 1
 
 
 def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
+    active_series = _active_series(root)
     report = legacy.audit(root, scope, site)
-    maps = _load_security_editorial_maps(root)
 
+    # Preserve the independently curated Security H2→key-moment mapping even after
+    # ownership advances, because it remains historical evidence in the global report.
+    maps = _load_security_editorial_maps(root)
+    security_prefix = "series/seguridad-ia/"
     for page in report.get("pages", []):
         if not isinstance(page, dict):
             continue
         route = _canonical_route(str(page.get("source") or ""))
         locale = str(page.get("locale") or "")
-        if not route.startswith(SECURITY_PREFIX):
+        if not route.startswith(security_prefix):
             continue
         locale_maps = maps.get(locale) if isinstance(maps.get(locale), dict) else {}
         section_map = locale_maps.get(route) if isinstance(locale_maps, dict) else None
@@ -160,12 +193,11 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
 
     counts = _recount(report)
     voice_counts = {code: count for code, count in sorted(counts.items()) if code in DEFERRED_VOICE_CODES}
-    blockers = _security_current_blockers(report)
+    blockers = _current_blockers(report, active_series)
 
     indexability_report: dict | None = None
     if site is not None:
-        security_indexability._self_test()
-        indexability_report = security_indexability.audit_indexability(root, site)
+        indexability_report = _run_indexability(root, site, active_series)
     indexability_blockers = _indexability_blockers(indexability_report)
     indexability_pass: bool | None = (
         bool(indexability_report.get("INDEXABILITY_PASS")) if isinstance(indexability_report, dict) else None
@@ -179,15 +211,19 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     }
     report["indexability"] = indexability_report if indexability_report is not None else {
         "owner_amendment_comment": INDEXABILITY_AMENDMENT,
+        "series": active_series,
         "INDEXABILITY_PASS": None,
         "status": "PENDING_RENDERED_SITE",
         "meaning": "technical indexability only; Google selection/index state is separate",
     }
+    # Rendered indexability is mandatory whenever --site is supplied. Without a rendered
+    # site this source-stage facade reports pending rather than inventing a pass.
+    gate_status = "PASS" if not blockers and indexability_pass is not False else "FAIL"
     report["owner_current_gate"] = {
         "owner_amendment_comment": OWNER_AMENDMENT,
         "indexability_amendment_comment": INDEXABILITY_AMENDMENT,
-        "series": "seguridad-ia",
-        "status": "PASS" if not blockers and indexability_pass is not False else "FAIL",
+        "series": active_series,
+        "status": gate_status,
         "blockers": blockers,
         "INDEXABILITY_PASS": indexability_pass,
         "indexability_status": "PASS" if indexability_pass is True else "FAIL" if indexability_pass is False else "PENDING_RENDERED_SITE",
@@ -229,7 +265,8 @@ def main() -> int:
 
     indexability = report.get("indexability")
     if isinstance(indexability, dict) and isinstance(indexability.get("rows"), list):
-        index_output = root / "artifacts/security-requalification/indexability/report.json"
+        active = str(report.get("owner_current_gate", {}).get("series") or "active")
+        index_output = root / f"artifacts/{active}-requalification/indexability/report.json"
         index_output.parent.mkdir(parents=True, exist_ok=True)
         index_output.write_text(json.dumps(indexability, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -242,14 +279,14 @@ def main() -> int:
     diagnostic_scope = _diagnostic_scope(root)
     current = report["owner_current_gate"]
     print(
-        "OWNER_CURRENT_SECURITY_GATE=" + current["status"]
+        f"OWNER_CURRENT_SERIES={current['series']}; OWNER_CURRENT_GATE={current['status']}"
         + "; VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL"
         + f"; INDEXABILITY_PASS={current.get('INDEXABILITY_PASS')}"
         + f"; DIAGNOSTIC_SCOPE={diagnostic_scope}"
         + f"; GLOBAL_LEGACY_STATUS={report['status']}"
     )
     if report["status"] == "TECHNICAL_FAIL":
-        print("GLOBAL_FUTURE_SERIES_DEBT=PRESERVED; not treated as an active seguridad-ia blocker")
+        print("GLOBAL_FUTURE_SERIES_DEBT=PRESERVED; not treated as unrelated active-series blockers")
     return _current_gate_exit_code(current)
 
 
