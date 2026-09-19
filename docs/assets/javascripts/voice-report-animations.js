@@ -3,11 +3,21 @@
 
   const ROOT_SELECTOR = ".s5v";
   const timers = new WeakMap();
+  const observedShells = new WeakSet();
+  const visibleShells = new Set();
+  const engagedShells = new Set();
   let focusObserver = null;
-  let activeShells = new Set();
+
+  function pruneShellSet(shells) {
+    for (const shell of shells) {
+      if (!shell.isConnected) shells.delete(shell);
+    }
+  }
 
   function syncBodyState() {
-    const active = [...activeShells].some((shell) => shell.isConnected);
+    pruneShellSet(visibleShells);
+    pruneShellSet(engagedShells);
+    const active = [...visibleShells, ...engagedShells].some((shell) => shell.isConnected);
     document.body.classList.toggle("s5-voice-animation-focus", active);
   }
 
@@ -96,20 +106,17 @@
     return entry.intersectionRect.height / visibleOpportunity;
   }
 
-  function bindFocus(shells) {
-    if (focusObserver) focusObserver.disconnect();
-    activeShells = new Set();
+  function ensureFocusObserver() {
+    if (focusObserver) return focusObserver;
 
     focusObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           // IntersectionObserver.intersectionRatio is relative to the full target.
           // Tall microlabs can fill the viewport yet never reach 0.28 by that metric,
-          // which made the site chrome reappear while the user was still inside the
-          // visual. Normalize against the smaller of shell height and usable viewport
-          // height so "28% visible" means 28% of what can actually be seen.
-          if (effectiveIntersectionRatio(entry) >= 0.28) activeShells.add(entry.target);
-          else activeShells.delete(entry.target);
+          // so normalize against the smaller of shell height and usable viewport.
+          if (effectiveIntersectionRatio(entry) >= 0.28) visibleShells.add(entry.target);
+          else visibleShells.delete(entry.target);
         }
         syncBodyState();
       },
@@ -119,17 +126,46 @@
       }
     );
 
+    return focusObserver;
+  }
+
+  function bindFocus(shells) {
+    const observer = ensureFocusObserver();
+
     shells.forEach((shell) => {
-      focusObserver.observe(shell);
+      if (!observedShells.has(shell)) {
+        observedShells.add(shell);
+        observer.observe(shell);
+      }
+
+      if (shell.dataset.s5vFocusBound === "true") return;
+      shell.dataset.s5vFocusBound = "true";
+
       shell.addEventListener("focusin", () => {
-        activeShells.add(shell);
+        engagedShells.add(shell);
         syncBodyState();
       });
+
+      shell.addEventListener("focusout", (event) => {
+        if (event.relatedTarget instanceof Node && shell.contains(event.relatedTarget)) return;
+        engagedShells.delete(shell);
+        syncBodyState();
+      });
+
+      const releasePointerEngagement = () => {
+        if (!shell.contains(document.activeElement)) engagedShells.delete(shell);
+        syncBodyState();
+      };
+
       shell.addEventListener("pointerdown", () => {
-        activeShells.add(shell);
+        engagedShells.add(shell);
         syncBodyState();
       }, { passive: true });
+      shell.addEventListener("pointerup", releasePointerEngagement, { passive: true });
+      shell.addEventListener("pointercancel", releasePointerEngagement, { passive: true });
     });
+
+    syncBodyState();
   }
 
   function bind(root = document) {
