@@ -43,6 +43,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Assert exact ES and EN visual media are persisted before validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          stems=(
+            01-que-es-agent-harness
+            02-contexto-workspace-sandboxing-aislamiento
+            03-specs-planificacion-task-decomposition-checkpoints
+            04-tools-permisos-approvals-hooks-secretos-trust-boundaries
+            05-tests-verifiers-review-diffs-stop-conditions-evaluacion
+            06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad
+          )
+          for stem in "${stems[@]}"; do
+            for ext in mp4 jpg; do
+              es="docs/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              en="locales/en/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              test -s "$es" && test -s "$en"
+              git ls-files --error-unmatch "$es" >/dev/null
+              git ls-files --error-unmatch "$en" >/dev/null
+            done
+          done
+          echo 'PASS: 24 persisted tracked media files (12 MP4 + 12 JPG), native ES/EN.'
+
       - name: Validate exact bilingual source contracts
         shell: bash
         run: |
@@ -53,8 +76,6 @@ jobs:
           node scripts/validate_coding_agent_harness_ch4_source.mjs
           node scripts/validate_coding_agent_harness_ch5_source.mjs
           node scripts/validate_coding_agent_harness_ch6_source.mjs
-          python scripts/audit_publication_contract.py
-          python scripts/audit_multilingual_search_foundation.py
 
       - name: Validate exact persisted MEDIA_VISUAL assets
         shell: bash
@@ -68,6 +89,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdocs build --clean --strict
+
+      - name: Validate publication and multilingual search contracts after render
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
 
       - name: Prepare, audit and build exact English preview strictly
         shell: bash
@@ -161,12 +189,7 @@ jobs:
           python - <<'PY'
           import hashlib, json
           from pathlib import Path
-          roots = [
-              Path('artifacts/coding-browser-milestone'),
-              Path('artifacts/coding-visual-evidence'),
-              Path('artifacts/coding-visual-review'),
-              Path('artifacts/coding-requalification'),
-          ]
+          roots = [Path('artifacts/coding-browser-milestone'), Path('artifacts/coding-visual-evidence'), Path('artifacts/coding-visual-review'), Path('artifacts/coding-requalification')]
           files = []
           for root in roots:
               if not root.exists():
