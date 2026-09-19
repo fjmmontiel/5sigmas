@@ -122,16 +122,37 @@ async function assertVisualDensity(root, label, mode) {
 }
 
 async function assertFocusIsolation(page, label) {
+  const selectors = ['.md-header', '.md-tabs', '.s5-reader-topbar', '.s5-reader-rail', '.s5-reader-direct-toggle'];
   await page.waitForFunction(() => document.body.classList.contains('s5-voice-animation-focus'), null, { timeout: 3000 });
-  const blockers = await page.evaluate(() => {
-    const selectors = ['.md-header', '.md-tabs', '.s5-reader-topbar', '.s5-reader-rail', '.s5-reader-direct-toggle'];
-    return selectors.flatMap((selector) => [...document.querySelectorAll(selector)].map((node) => {
+
+  // IntersectionObserver toggles the focus class before the browser has necessarily
+  // committed the matching CSS visibility state. Wait for the exact same fail-closed
+  // condition we assert below; never accept visible chrome or weaken its threshold.
+  try {
+    await page.waitForFunction((blockerSelectors) => (
+      document.body.classList.contains('s5-voice-animation-focus')
+      && blockerSelectors.every((selector) => [...document.querySelectorAll(selector)].every((node) => {
+        const style = getComputedStyle(node);
+        const box = node.getBoundingClientRect();
+        return box.width === 0
+          || box.height === 0
+          || style.display === 'none'
+          || style.visibility === 'hidden'
+          || Number(style.opacity) <= .05;
+      }))
+    ), selectors, { timeout: 3000 });
+  } catch {
+    // Preserve the detailed diagnostic below. A timeout is not a PASS.
+  }
+
+  const blockers = await page.evaluate((blockerSelectors) => blockerSelectors.flatMap((selector) => (
+    [...document.querySelectorAll(selector)].map((node) => {
       const style = getComputedStyle(node);
       const box = node.getBoundingClientRect();
       const visible = box.width > 0 && box.height > 0 && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > .05;
       return { selector, visible, display: style.display, visibility: style.visibility, opacity: style.opacity };
-    }));
-  });
+    })
+  )), selectors);
 
   const visible = blockers.filter((item) => item.visible);
   if (visible.length > 0) {
