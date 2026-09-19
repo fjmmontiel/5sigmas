@@ -1,4 +1,4 @@
-schema_version: 9
+schema_version: 10
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -11,27 +11,34 @@ canonical_series_order:
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
 
-active_series: agentes-voz-tiempo-real
+# Formal series transition remains blocked on Agents release merge/deploy/live verification.
+# Some Voice preflight evidence was collected ahead of transition and is preserved below,
+# but it does not change the canonical active-series pointer.
+active_series: agentes-ia
 
 series_status:
   seguridad-ia:
-    article_golden: 6/6
-    route_locale_rows_golden: 12/12
-    fresh_zero_based_audit_run: 35361765019
-    fresh_zero_based_audit_head: 830bd55d63da1e95ea4461b0086295f9bc8c057a
-    fresh_zero_based_audit: PASS
-    media_visual: PASS
-    indexability: PASS_12_OF_12
+    article_golden: 5/6_current_revision
+    route_locale_rows_golden: 10/12_current_revision
+    previous_production_series_golden: true
+    previous_merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    previous_deploy_run: 35392652259
+    previous_live_qa: PASS
+    reopened_article: 03_envenenamiento
+    reopened_locales: [es, en]
+    reopened_reason: PR_331_EXACT_HEAD_NO_REGRESSION_EXPOSED_REAL_PERSISTENCE_INTERACTION_DEFECT
+    reopened_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
+    repaired_release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    repair_mirrored_to_long_lived_branch: true
+    source_build_browser_pixel_pedagogy: RECHECK_PENDING_FOR_SECURITY03_ES_EN
+    media_visual: PASS_UNCHANGED_VIDEO_ASSETS
+    indexability: PASS_UNCHANGED_SIGNALS_REVERIFY_LIVE_AFTER_RELEASE
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    known_p0_p1_p2: 0
-    release_pr: 330
-    merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
-    deploy_run: 35392652259
-    deploy_build: PASS
-    deploy: PASS
-    live_qa: PASS
-    state: SERIES_GOLDEN
-    production_verified: true
+    known_p1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+    state: QA_REOPENED_SECURITY03_EXACT_HEAD_REVALIDATION_REQUIRED
+    production_verified: false
+    next_action: HARVEST_PR_331_EXACT_HEAD_SECURITY_INTERACTION_AND_MIRROR_CHECKS_THEN_MERGE_DEPLOY_LIVE_REVERIFY
+
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
     state: RELEASE_READY_PR_331_EXACT_HEAD_CI_IN_PROGRESS
@@ -63,26 +70,27 @@ series_status:
     fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
     fresh_zero_based_series_audit: PASS
     release_pr: 331
-    release_head: 624a037eb42530fbdca201065acb8f5648a50f48
-    exact_head_english_editorial_run: 35410444961
+    release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    exact_head_english_editorial_run: 35419298764
     exact_head_english_editorial: PASS
-    exact_head_locale_switch_run: 35410444959
+    exact_head_locale_switch_run: 35419298763
     exact_head_locale_switch: IN_PROGRESS
-    exact_head_english_mirror_run: 35410444963
+    exact_head_english_mirror_run: 35419298776
     exact_head_english_mirror: IN_PROGRESS
-    exact_head_pr_visual_run: 35410444964
+    exact_head_pr_visual_run: 35419298756
     exact_head_pr_visual: IN_PROGRESS
-    release_qa_repairs: >-
-      Visual-specific From-Caves-to-AGI Chapter 5 validators now fail closed on rendered overflow
-      inside the visual they own, while whole-page overflow remains enforced by the dedicated
-      full-series/browser gates. Zero-area hidden/SVG-definition descendants are excluded because
-      they cannot create visible overflow. No rendered overflow threshold was relaxed.
+    bounded_no_regression_repairs:
+      - historical_en_caves_ch5_literal_currency_math_overflow
+      - security03_svg_state_visibility_and_clean_revocation_order
     series_golden: false
     production_verified: false
-    next_action: WAIT_FOR_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA_IF_GREEN
+    next_action: WAIT_FOR_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_RUNTIME_QA_IF_GREEN
+
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: QA_ACTIVE_MEDIA_VISUAL_FAIL_CLOSED
+    state: PREPARED_NOT_ACTIVE_FAIL_CLOSED_MEDIA_VISUAL
+    transition_authorized: false
+    preserved_preflight_note: Evidence collected before formal transition is retained but does not advance the active-series pointer.
     baseline_main: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
     route_locale_rows: 12
     source_inventory: INSPECTED_12_SOURCE_FILES_EXIST_AND_ARE_NAV_MANIFEST_PUBLISHED
@@ -103,7 +111,8 @@ series_status:
     article_golden: 0/6
     route_locale_rows_golden: 0/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    next_action: RUN_SOURCE_MEDIA_VISUAL_INDEXABILITY_RENDERED_BROWSER_PREFLIGHT_AND_REPAIR_NONVOICE_BLOCKERS
+    next_action_after_formal_transition: RUN_SOURCE_MEDIA_VISUAL_INDEXABILITY_RENDERED_BROWSER_PREFLIGHT_AND_REPAIR_NONVOICE_BLOCKERS
+
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -111,11 +120,11 @@ series_status:
 
 shared_branch:
   name: quality/post-datacenters-requalification
-  head_after_voice_ledger_and_shared_qa_repairs: bac09a7e77481000c54a4de8ab234f08ba1245c7
-  synchronized_with_security_main_merge_without_force_push: true
   security_release_receipt: quality/series-requalification/security-series-release.yml
+  security03_reopen_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
   agents_ledger: quality/series-requalification/agents-article-ledger.yml
   voice_ledger: quality/series-requalification/voice-article-ledger.yml
+  synchronized_with_security_main_merge_without_force_push: true
 
 linkedin:
   writes_from_this_program: 0
