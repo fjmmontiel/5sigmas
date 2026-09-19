@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T18:53:29Z",
+  "unit": "modelos-razonadores",
+  "release_round": 2,
+  "branch": "migration/video-golden-modelos-razonadores",
+  "owner_visual_approval": "APPROVED",
+  "approval_reconfirmation_required": false,
+  "technical_golden": false,
+  "published": false,
+  "head_before_recovery_probe": "43079d7d4ee605898b1c50b384e0d75b78262454",
+  "recovery_probe_commit": "7abd805ec1a440a074007ffc0e3e046ae360087a",
+  "canonical_horizontal_delivery": {
+    "exact_approved_paths": 2,
+    "required_paths": 12,
+    "remaining_exact_byte_transfers": 10
+  },
+  "reachable_git_history_recovery": {
+    "workflow_run": 35462934864,
+    "job": 105949934406,
+    "result": "NO_EXACT_BYTES_IN_REACHABLE_MP4_HISTORY",
+    "recovered": 0,
+    "missing": 10,
+    "method": "Enumerated every reachable Git object previously named with an .mp4 path; candidates were filtered by exact approved byte size and then SHA-256 matched before any restoration.",
+    "technical_golden_effect": "NONE"
+  },
+  "expired_artifact_probe": {
+    "artifact_id": 10583277792,
+    "state": "UNAVAILABLE_EXPIRED",
+    "use_as_release_source": false
+  },
+  "frozen_media_integrity": {
+    "inventory": "24/24 hashes bound",
+    "horizontal_full_decode": "12/12 PASS",
+    "vertical_full_decode": "12/12 PASS"
+  },
+  "source_provenance": "NOT_VERIFIED",
+  "independent_next_unit_progress": {
+    "unit": "seguridad-ia",
+    "branch": "migration/video-golden-seguridad-ia",
+    "baseline_main": "11737ad86db9b15b1981af6fef221d7db0b82110",
+    "branch_fast_forwarded_without_force": true,
+    "public_inventory_checkpoint": "motion/migration/seguridad-ia-baseline.json",
+    "new_final_pr_created": false
+  },
+  "blockers": [
+    "Ten approved horizontal MP4 byte sequences still require an exact binary-capable transfer into their canonical repository paths.",
+    "No exact matching output-relevant source/profile has yet been recovered for the frozen approved bytes; provenance remains fail-closed NOT_VERIFIED.",
+    "PR #332 is not mergeable against the currently advanced main and must be reconciled without contaminating the frozen release snapshot."
+  ],
+  "next_action": "Transfer only the ten remaining approved MP4 bytes through a binary-capable path with SHA-256 read-back, then run the complete frozen-snapshot release gate against current main. Keep owner approval durable and source provenance fail-closed. Continue Seguridad IA implementation independently while this transport blocker remains."
+}
