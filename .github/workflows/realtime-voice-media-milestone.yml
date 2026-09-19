@@ -141,7 +141,32 @@ jobs:
             locales/en/media.yml \
             locales/en/manifest.yml \
             quality/series-requalification/voice-media-generation-2026-09-19.json
+          python - <<'PY'
+          import subprocess
+          stems = [
+              '01-arquitecturas-de-voz',
+              '02-turn-taking',
+              '03-presupuesto-latencia',
+              '04-tools-estado-acciones-asincronas',
+              '05-webrtc-sip-telefonia-red',
+              '06-evaluacion-observabilidad-reliability',
+          ]
+          expected = []
+          for root in ('docs/series/agentes-voz-tiempo-real', 'locales/en/series/agentes-voz-tiempo-real'):
+              for stem in stems:
+                  expected += [f'{root}/{stem}.mp4', f'{root}/{stem}.jpg']
+          tracked = set(subprocess.check_output(['git', 'ls-files'], text=True).splitlines())
+          missing = [path for path in expected if path not in tracked]
+          if missing:
+              raise SystemExit(f'native media generated but not durably tracked: {missing}')
+          staged = set(subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).splitlines())
+          newly_expected = [path for path in expected if path.startswith('locales/en/')]
+          unstaged = [path for path in newly_expected if path not in staged and subprocess.run(['git', 'cat-file', '-e', f'HEAD:{path}']).returncode != 0]
+          if unstaged:
+              raise SystemExit(f'localized media not present in HEAD and not staged: {unstaged}')
+          print(f'Durable native-media tracking PASS: {len(expected)} assets tracked.')
+          PY
           git diff --cached --stat
           git diff --cached --quiet && { echo 'No media changes to commit'; exit 1; }
-          git commit -m 'media(voice): add native ES EN visual videos'
+          git commit -m 'media(voice): persist native ES EN visual videos'
           git push origin HEAD:quality/post-datacenters-requalification
