@@ -78,6 +78,12 @@ for (const contract of contracts) {
   const mutated = source.replaceAll(marker, removedMarker);
   check(!mutated.includes(marker), `Voice${contract.chapter}: negative mutation did not remove native-summary marker`);
   check(source.includes(marker) && !mutated.includes(marker), `Voice${contract.chapter}: missing fail-closed mutation coverage for native mobile summary`);
+
+  if (contract.chapter === '04') {
+    check(source.includes('white-space:nowrap'), 'Voice04: source contract must keep outcome labels single-line');
+    check(source.includes('overflow-wrap:normal'), 'Voice04: source contract must disable forced outcome wrapping');
+    check(source.includes('word-break:normal'), 'Voice04: source contract must disable outcome word breaking');
+  }
 }
 
 const browser = await chromium.launch({ headless: true });
@@ -143,6 +149,62 @@ try {
           for (const token of contract.forbiddenEn) {
             check(!text.includes(token), `Voice${contract.chapter} EN: untranslated native-summary token ${JSON.stringify(token)}`);
           }
+        }
+
+        if (contract.chapter === '04') {
+          const outcomeLabels = summary.locator('.s5v-action-state-machine__mobile-outcome');
+          check((await outcomeLabels.count()) === 3, `Voice04 ${locale}: expected three external outcome labels`);
+          const labelGeometry = await outcomeLabels.evaluateAll((nodes) => nodes.map((node) => {
+            const styles = getComputedStyle(node);
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            const rects = [...range.getClientRects()].filter((rect) => rect.width > 0.5 && rect.height > 0.5);
+            const uniqueLines = [];
+            for (const rect of rects) {
+              if (!uniqueLines.some((top) => Math.abs(top - rect.top) < 1)) uniqueLines.push(rect.top);
+            }
+            return {
+              text: (node.textContent || '').trim(),
+              lineCount: uniqueLines.length,
+              scrollWidth: node.scrollWidth,
+              clientWidth: node.clientWidth,
+              fontSizePx: Number.parseFloat(styles.fontSize || '0'),
+              whiteSpace: styles.whiteSpace,
+            };
+          }));
+          for (const label of labelGeometry) {
+            check(label.lineCount === 1, `Voice04 ${locale}: outcome label wraps ${JSON.stringify(label)}`);
+            check(label.scrollWidth <= label.clientWidth + 1, `Voice04 ${locale}: outcome label overflows ${JSON.stringify(label)}`);
+            check(label.fontSizePx >= 10.5, `Voice04 ${locale}: outcome label text too small ${JSON.stringify(label)}`);
+            check(label.whiteSpace === 'nowrap', `Voice04 ${locale}: outcome label is not fail-closed nowrap ${JSON.stringify(label)}`);
+          }
+
+          // Negative geometry mutation: force COMMITTED into a narrow, wrap-enabled box and prove the gate detects >1 line.
+          const mutationDetected = await outcomeLabels.first().evaluate((node) => {
+            const previous = {
+              width: node.style.width,
+              whiteSpace: node.style.whiteSpace,
+              overflowWrap: node.style.overflowWrap,
+              wordBreak: node.style.wordBreak,
+            };
+            node.style.width = '36px';
+            node.style.whiteSpace = 'normal';
+            node.style.overflowWrap = 'anywhere';
+            node.style.wordBreak = 'break-word';
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            const rects = [...range.getClientRects()].filter((rect) => rect.width > 0.5 && rect.height > 0.5);
+            const uniqueLines = [];
+            for (const rect of rects) {
+              if (!uniqueLines.some((top) => Math.abs(top - rect.top) < 1)) uniqueLines.push(rect.top);
+            }
+            node.style.width = previous.width;
+            node.style.whiteSpace = previous.whiteSpace;
+            node.style.overflowWrap = previous.overflowWrap;
+            node.style.wordBreak = previous.wordBreak;
+            return uniqueLines.length > 1;
+          });
+          check(mutationDetected, `Voice04 ${locale}: negative wrapping mutation was not detected fail-closed`);
         }
 
         const ordering = await visual.evaluate((node, selector) => {
