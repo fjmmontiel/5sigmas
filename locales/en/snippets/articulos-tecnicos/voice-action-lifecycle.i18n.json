@@ -19,6 +19,7 @@
     "La operación termina en una de tres verdades mutuamente excluyentes.": "The operation ends in one of three mutually exclusive truths.",
     "Resultados externos posibles": "Possible external outcomes",
     "Si UNKNOWN → consultar el sistema de registro": "If UNKNOWN → query the system of record",
+    "consultar el sistema de registro": "query the system of record",
     "Si el efecto existe, persiste": "If the effect exists, persist",
     "Si no existe, reintenta sólo cuando la operación sea segura e idempotente.": "If it does not exist, retry only when the operation is safe and idempotent.",
     "Qué ocurre cuando el usuario interrumpe después de admitir una acción": "What happens when the user interrupts after an action has been admitted",
