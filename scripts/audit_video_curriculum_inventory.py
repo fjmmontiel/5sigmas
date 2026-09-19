@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 """Owner-amendment aware facade for the canonical video-curriculum inventory.
 
-The global inventory remains fail-closed for unfinished later series and keeps
-legacy voice/accessibility debt visible. Security requalification evaluates the
-current non-voice visual contract separately, as required by owner amendment
-5716685049.
-
-The persisted inventory continues to expose whole-program unfinished debt. The
-process exit code, however, represents the active ``seguridad-ia`` gate so a
-fresh series audit can close the current series without pretending that later
-series are already complete.
+The persisted inventory always preserves whole-program unfinished debt. The
+process exit code, however, represents the series currently owned by the GOLDEN
+program. VOICE-dependent audio/captions/transcript debt is non-blocking under
+owner amendment 5716685049; native visual video and non-voice curriculum mapping
+remain fail-closed.
 """
 from __future__ import annotations
 
@@ -18,25 +14,36 @@ import json
 from pathlib import Path
 
 import audit_video_curriculum_inventory_legacy as legacy
-from audit_video_curriculum_inventory_legacy import *  # noqa: F401,F403 - compatibility
 from audit_series_experience import DEFERRED_VOICE_CODES, audit
 from audit_video_curriculum_expectation import validate_video_expectation
+from audit_video_curriculum_inventory_legacy import *  # noqa: F401,F403 - compatibility
 
 OWNER_AMENDMENT = 5716685049
-SECURITY_PREFIX = "series/seguridad-ia/"
 
 
-def _security_gate(report: dict, inventory: dict) -> dict:
+def _active_series(root: Path) -> str:
+    state = legacy.load_yaml(root / "quality/series-requalification/program-state.yml")
+    series = str(state.get("active_series") or "").strip()
+    if not series:
+        raise ValueError("program-state.yml does not define active_series")
+    return series
+
+
+def _active_gate(report: dict, inventory: dict, scope: dict, active_series: str) -> dict:
     blockers: list[dict] = []
+    prefix = f"series/{active_series}/"
     records = [
         item for item in inventory.get("obligations", [])
-        if isinstance(item, dict) and str(item.get("route") or "").startswith(SECURITY_PREFIX)
+        if isinstance(item, dict) and str(item.get("route") or "").startswith(prefix)
     ]
-    expected_obligations = 12
+    configured = scope.get("series", {}).get(active_series, []) if isinstance(scope.get("series"), dict) else []
+    locales = scope.get("media_policy", {}).get("required_locales", ["es", "en"])
+    expected_obligations = len(configured) * len(locales)
     if len(records) != expected_obligations:
         blockers.append(
             {
-                "code": "SECURITY_VIDEO_OBLIGATION_COUNT_MISMATCH",
+                "code": "ACTIVE_VIDEO_OBLIGATION_COUNT_MISMATCH",
+                "series": active_series,
                 "expected": expected_obligations,
                 "actual": len(records),
             }
@@ -69,7 +76,7 @@ def _security_gate(report: dict, inventory: dict) -> dict:
             continue
         source = str(page.get("source") or "")
         route = source.removeprefix("docs/").removeprefix("locales/en/")
-        if not route.startswith(SECURITY_PREFIX):
+        if not route.startswith(prefix):
             continue
         locale = str(page.get("locale") or "")
         for finding in page.get("findings", []):
@@ -83,9 +90,10 @@ def _security_gate(report: dict, inventory: dict) -> dict:
 
     return {
         "owner_amendment_comment": OWNER_AMENDMENT,
-        "series": "seguridad-ia",
+        "series": active_series,
         "status": "PASS" if not blockers else "FAIL",
         "locale_video_obligations": len(records),
+        "expected_locale_video_obligations": expected_obligations,
         "curriculum_h2_obligations": total_h2,
         "mapped_to_curated_key_moment": mapped_h2,
         "blockers": blockers,
@@ -95,7 +103,6 @@ def _security_gate(report: dict, inventory: dict) -> dict:
 
 
 def _current_gate_exit_code(current: dict) -> int:
-    """Return the active-series result while preserving global inventory debt."""
     return 0 if isinstance(current, dict) and current.get("status") == "PASS" else 1
 
 
@@ -125,6 +132,15 @@ def main() -> int:
         legacy._self_test()
         assert _current_gate_exit_code({"status": "PASS"}) == 0
         assert _current_gate_exit_code({"status": "FAIL"}) == 1
+        fixture_scope = {
+            "media_policy": {"required_locales": ["es", "en"]},
+            "series": {"x": ["01.md", "02.md"]},
+        }
+        fixture_inventory = {"obligations": []}
+        fixture_report = {"pages": []}
+        fixture = _active_gate(fixture_report, fixture_inventory, fixture_scope, "x")
+        assert fixture["expected_locale_video_obligations"] == 4
+        assert fixture["status"] == "FAIL"
         print("VIDEO_CURRICULUM_INVENTORY_SELF_TEST_PASS")
         return 0
 
@@ -133,6 +149,7 @@ def main() -> int:
     output = args.output if args.output.is_absolute() else root / args.output
     try:
         scope = json.loads(scope_path.read_text(encoding="utf-8"))
+        active_series = _active_series(root)
         expectation = validate_video_expectation(scope)
         report = audit(root, scope)
         inventory = legacy.build_inventory(report, expectation)
@@ -140,7 +157,7 @@ def main() -> int:
         print(f"VIDEO_CURRICULUM_INVENTORY_ERROR: {exc}")
         return 2
 
-    current = _security_gate(report, inventory)
+    current = _active_gate(report, inventory, scope, active_series)
     inventory["owner_current_gate"] = current
     inventory["voice_enhancement"] = {
         "state": "DEFERRED_OWNER_LOCAL",
@@ -154,11 +171,11 @@ def main() -> int:
     diagnostic_scope = _diagnostic_scope(root)
     print(
         f"GOLDEN=NOT_CERTIFIED; GLOBAL_STATUS={inventory['status']}; "
-        f"OWNER_CURRENT_SECURITY_GATE={current['status']}; "
+        f"OWNER_CURRENT_SERIES={active_series}; OWNER_CURRENT_GATE={current['status']}; "
         f"VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL; DIAGNOSTIC_SCOPE={diagnostic_scope}"
     )
     if inventory["status"] == "FAIL_CLOSED":
-        print("GLOBAL_FUTURE_SERIES_VIDEO_DEBT=PRESERVED; not treated as an active seguridad-ia blocker")
+        print("GLOBAL_FUTURE_SERIES_VIDEO_DEBT=PRESERVED; unrelated future debt does not replace the active-series result")
     return _current_gate_exit_code(current)
 
 
