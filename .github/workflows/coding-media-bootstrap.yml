@@ -111,10 +111,6 @@ jobs:
 
       - name: Commit generated site-facing media after all gates pass
         run: |
-          if git diff --quiet -- docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml; then
-            echo 'No generated media changes to commit.'
-            exit 0
-          fi
           git config user.name '5sigmas GOLDEN Series Builder'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
           git add docs/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml
@@ -123,6 +119,10 @@ jobs:
           # build, indexability and browser gates have passed, so a fresh checkout
           # contains the same EN-native binaries that were actually validated.
           git add -f locales/en/series/coding-agents-agent-harnesses/*.mp4 locales/en/series/coding-agents-agent-harnesses/*.jpg
+          if git diff --cached --quiet; then
+            echo 'No generated media changes to commit.'
+            exit 0
+          fi
           git commit -m 'Add Coding Agents native visual videos ES and EN'
           git pull --rebase origin quality/coding-agents-requalification
           git push origin HEAD:quality/coding-agents-requalification
