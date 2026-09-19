@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-19T12:08:00+02:00",
+  "updated_at": "2026-09-19T12:11:00+02:00",
   "program_status": "IN_PROGRESS",
   "quality_contract": "motion-v4.2-review2-and-later",
   "queues": {
@@ -29,9 +29,51 @@
       "source": "explicit_user_chat",
       "scope": "all final Review Round 2 examples already presented to the owner; review-support comparison montage is excluded from primary Golden Examples",
       "requires_exact_manifest_match": true,
-      "approved_asset_hashes": [],
+      "approved_review_assets": [
+        {
+          "video_slug": "modelos-razonadores-intro",
+          "language": "es",
+          "orientation": "horizontal",
+          "asset_sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+          "duration_seconds": 75,
+          "resolution": "1920x1080",
+          "fps": 60,
+          "technical_binding": "PENDING"
+        },
+        {
+          "video_slug": "fallos-modelos-razonadores",
+          "language": "es",
+          "orientation": "horizontal",
+          "asset_sha256": "d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed",
+          "duration_seconds": 108,
+          "resolution": "1920x1080",
+          "fps": 60,
+          "technical_binding": "PENDING"
+        },
+        {
+          "video_slug": "test-time-compute",
+          "language": "es",
+          "orientation": "horizontal",
+          "asset_sha256": "e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710",
+          "duration_seconds": 129,
+          "resolution": "1920x1080",
+          "fps": 60,
+          "technical_binding": "PENDING"
+        },
+        {
+          "video_slug": "riesgos-modelos-razonadores",
+          "language": "es",
+          "orientation": "horizontal",
+          "asset_sha256": "f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381",
+          "duration_seconds": 121,
+          "resolution": "1920x1080",
+          "fps": 60,
+          "technical_binding": "PENDING"
+        }
+      ],
+      "additional_presented_examples": "approved by scope and must be bound from the verified Review Round 2 manifest before promotion",
       "golden_example_promotion": "PENDING_TECHNICAL_GOLDEN_EXACT_ASSET_HASH",
-      "notes": "Approval must bind only to exact reviewed bytes. Any material source/layout/timing/theme/render change requires renewed review of the changed asset."
+      "notes": "Approval binds exact reviewed bytes. Material source/layout/timing/theme/render changes require renewed review of the changed asset."
     }
   ],
   "throughput_policy": {
@@ -63,7 +105,7 @@
     ]
   },
   "current_evidence": {
-    "pr_head_at_checkpoint": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "pr_head_before_state_commits": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
     "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
     "review2_mp4_count": 24,
     "focused_review_tests": {
