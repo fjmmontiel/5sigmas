@@ -7,7 +7,7 @@ on:
     paths:
       - 'motion/**'
       - 'docs/series/modelos-razonadores/**'
-      - 'docs/en/series/modelos-razonadores/**'
+      - 'locales/en/series/modelos-razonadores/**'
       - '.github/workflows/video-motion-release-gate.yml'
 
 permissions:
@@ -25,6 +25,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Require exact owner-approved delivery bytes
+        run: node motion/scripts/check_modelos_approved_snapshot.mjs
       - name: Run deterministic contracts
         working-directory: motion
         run: npm test
