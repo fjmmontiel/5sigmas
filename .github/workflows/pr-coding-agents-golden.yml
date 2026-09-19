@@ -8,8 +8,11 @@ on:
       - 'docs/snippets/articulos-tecnicos/coding-agent-*.html'
       - 'locales/en/snippets/articulos-tecnicos/coding-agent-*'
       - 'scripts/validate_coding_agent_harness_ch*.mjs'
+      - 'scripts/validate_coding_indexability.py'
+      - 'scripts/validate_coding_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_direct_reader_navigation.mjs'
+      - 'locales/en/media.yml'
       - 'locales/en/manifest.yml'
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
@@ -78,6 +81,18 @@ jobs:
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
 
+      - name: Validate Coding INDEXABILITY negative fixtures
+        run: python scripts/validate_coding_indexability.py --self-test
+
+      - name: Validate Coding rendered INDEXABILITY
+        run: python scripts/validate_coding_indexability.py --site site --output artifacts/coding-requalification/indexability/report.json
+
+      - name: Validate Coding MEDIA_VISUAL/VOICE split fixture
+        run: python scripts/validate_coding_media_visual.py --self-test
+
+      - name: Validate Coding native visual media
+        run: python scripts/validate_coding_media_visual.py --output artifacts/coding-requalification/coding-media-visual.json
+
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
@@ -123,6 +138,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coding-agents-pr-gate-visual-evidence
-          path: artifacts/visual-review/coding-harness-ch*.png
+          path: |
+            artifacts/visual-review/coding-harness-ch*.png
+            artifacts/coding-requalification/indexability/report.json
+            artifacts/coding-requalification/coding-media-visual.json
           if-no-files-found: warn
           retention-days: 1
