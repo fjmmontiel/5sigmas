@@ -55,7 +55,7 @@
 
     const timer = window.setInterval(() => {
       if (root.dataset.s5vPaused === "true" || document.hidden || !root.isConnected) return;
-      const max = Number(root.dataset.s5vSteps || 1);
+      const max = Number(root.dataset.step || 1);
       const current = Number(root.dataset.step || 1);
       setStep(root, current >= max ? 1 : current + 1);
     }, interval);
@@ -87,6 +87,15 @@
     });
   }
 
+  function effectiveIntersectionRatio(entry) {
+    if (!entry.isIntersecting) return 0;
+    const shellHeight = entry.boundingClientRect.height;
+    const rootHeight = entry.rootBounds?.height || window.innerHeight;
+    const visibleOpportunity = Math.min(shellHeight, rootHeight);
+    if (!(visibleOpportunity > 0)) return 0;
+    return entry.intersectionRect.height / visibleOpportunity;
+  }
+
   function bindFocus(shells) {
     if (focusObserver) focusObserver.disconnect();
     activeShells = new Set();
@@ -94,12 +103,20 @@
     focusObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.28) activeShells.add(entry.target);
+          // IntersectionObserver.intersectionRatio is relative to the full target.
+          // Tall microlabs can fill the viewport yet never reach 0.28 by that metric,
+          // which made the site chrome reappear while the user was still inside the
+          // visual. Normalize against the smaller of shell height and usable viewport
+          // height so "28% visible" means 28% of what can actually be seen.
+          if (effectiveIntersectionRatio(entry) >= 0.28) activeShells.add(entry.target);
           else activeShells.delete(entry.target);
         }
         syncBodyState();
       },
-      { threshold: [0, .28, .55], rootMargin: "-8% 0px -8% 0px" }
+      {
+        threshold: [0, .02, .05, .1, .15, .2, .28, .4, .55, .75, 1],
+        rootMargin: "-8% 0px -8% 0px",
+      }
     );
 
     shells.forEach((shell) => {
