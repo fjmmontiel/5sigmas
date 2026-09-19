@@ -1,0 +1,70 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: agentes-voz-tiempo-real
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+recorded_at: 2026-09-19T18:58:00Z
+
+article_state:
+  article_golden: 6/6
+  route_locale_rows_golden: 12/12
+  source: PASS_12_OF_12
+  build: PASS_12_OF_12
+  browser: PASS_12_OF_12
+  media_visual: PASS_12_OF_12
+  indexability: PASS_12_OF_12_TECHNICAL_ELIGIBILITY
+  pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  known_p0_p1_p2: 0
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  iteration_counts_changed_by_release_run: false
+
+series_audit:
+  repair_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+  zero_based_run: 35451711730
+  result: PASS_ON_REPAIR_HEAD
+  exact_release_pr: 334
+  exact_release_head: 9e76be70664ee5b550a1fd6612490313a3b2fc8f
+  exact_release_checks: PASS
+  release_merge_commit: 878627846ab92184efc5057339390565bd890394
+
+shared_gate_repair:
+  issue: CI_STORAGE_POLICY_WORKFLOW_INVALID_THEN_REAL_POLICY_CONFLICT
+  initial_main_push_run: 35462054376
+  initial_failure: WORKFLOW_PARSE_STARTUP_ZERO_JOBS
+  root_cause: LITERAL_GITHUB_EXPRESSION_DELIMITERS_INSIDE_PYTHON_RUN_BLOCK
+  focused_fix_pr: 335
+  focused_fix_head: 5bf9f96d20ccfc79efdda1b9e113f1b4958954ce
+  focused_fix_ci_run: 35462431179
+  focused_fix_ci: PASS
+  policy_resolution: >-
+    Generic artifacts remain failure-only except the single explicit one-day
+    Realtime Voice pixel-review evidence artifact required for real manual GOLDEN review.
+  fix_merge_commit: 11737ad86db9b15b1981af6fef221d7db0b82110
+
+production_release:
+  current_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+  site_facing_voice_release_merge: 878627846ab92184efc5057339390565bd890394
+  final_main_diff_after_release: SHARED_WORKFLOW_ONLY_NO_SITE_CONTENT_MEDIA_CHANGE
+  pages_run: 35462469816
+  build: PASS
+  rendered_search_and_indexability_build_checks: PASS
+  deploy: PASS
+  live_qa: IN_PROGRESS
+  dedicated_realtime_voice_live_qa: PENDING_PARENT_WORKFLOW_SUCCESS
+  live_indexability_final: PENDING_LIVE_QA_COMPLETION
+  series_golden: false
+
+next_action: >-
+  Consume Pages live QA for run 35462469816. On SUCCESS consume the triggered
+  Realtime Voice Agents live QA across all 12 ES/EN routes. Persist live route/media/browser
+  verification and reconcile canonical/robots/noindex/hreflang/sitemap/internal discovery.
+  Promote SERIES_GOLDEN only when those live gates are green, then advance to
+  coding-agents-agent-harnesses.
+
+linkedin:
+  writes: 0
+  queues: 0
+  activations: 0
+  release_contract_281_ownership_preserved: true
+  issue_279_preserved: true
