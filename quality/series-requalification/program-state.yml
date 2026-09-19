@@ -1,4 +1,4 @@
-schema_version: 17
+schema_version: 18
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -54,7 +54,7 @@ series_status:
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: QA_P2_VOICE04_ES_MOBILE_OUTCOME_LABEL_WRAP
+    state: ARTICLE_GOLDEN_6_OF_6__SERIES_AUDIT_PASS_REPAIR_HEAD__CURRENT_MAIN_RELEASE_RECONCILIATION_PENDING
     transition_authorized: true
     transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     route_locale_rows: 12
@@ -62,14 +62,14 @@ series_status:
     build: PASS_12_OF_12_STRICT_ES_EN_EXACT_HEAD
     publication_contract: PASS
     search_foundation: PASS
-    media_visual: PASS_12_OF_12_INPUT_IDENTITY_UNCHANGED
+    media_visual: PASS_12_OF_12
     media_visual_blockers: 0
     media_video_contract: H264_1920x1080_YUV420P_36S_SILENT_ACCEPTED_POSTER_METADATA_KEY_MOMENTS
-    indexability: PASS_12_OF_12_RENDERED_TECHNICAL_ELIGIBILITY_INPUTS_UNCHANGED
+    indexability: PASS_12_OF_12_RENDERED_TECHNICAL_ELIGIBILITY
     indexability_negative_mutations: PASS_NOINDEX_CANONICAL_H1_SITEMAP_HREFLANG_ORPHAN_FAIL_CLOSED
     internal_graph: PASS_ES_EN_ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
-    browser_evidence_head: 5ee486686640cf57054dcfaaed4ace4c36251538
-    browser_run: 35449507057
+    browser_evidence_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    browser_run: 35451711730
     browser: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE
     browser_article_contexts: 48
     browser_watch_contexts: 48
@@ -78,24 +78,25 @@ series_status:
     browser_keyboard_touch_focus: PASS
     browser_runtime_resources_teardown: PASS
     native_mobile_summary_gate_04_05_06: PASS_WITH_FAIL_CLOSED_MUTATION
-    retained_interaction_artifact_id: 10585854484
-    retained_interaction_artifact_sha256: 9b8c36926c50237a13a69b213e2226aaf3881bb094aedee7a6f1e5c65c173d4a
-    pixel: PASS_11_OF_12__VOICE04_ES_P2_LABEL_WRAP
-    pedagogy: PASS_12_OF_12
-    closed_p1_classes: 3
+    voice04_outcome_wrap_regression: PASS_WITH_NEGATIVE_MUTATION
+    retained_interaction_artifact_id: 10587197270
+    retained_interaction_artifact_sha256: c42c5e3230acae28d355cf4008d969ed2b08100dfe3425476b38d5230bcc7330
+    pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+    pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
     known_p0: 0
     known_p1: 0
-    known_p2: 1
-    known_p2_rows: 1
-    known_p2_ids:
-      - VOICE04_ES_MOBILE_COMMITTED_BADGE_WRAP
-    article_golden: 5/6
-    route_locale_rows_golden: 11/12
+    known_p2: 0
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    fresh_zero_based_series_audit_run: 35451711730
+    fresh_zero_based_series_audit_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    fresh_zero_based_series_audit: PASS_ON_REPAIR_HEAD
+    current_main_compatibility: PENDING_CLEAN_RELEASE_RECONCILIATION
     voice_enhancement: DEFERRED_OWNER_LOCAL
     voice_future_debt: VIDEO_CAPTIONS_MISSING__VIDEO_TRANSCRIPT_MISSING__VIDEO_AUDIO_STREAM_MISSING
     live_release_verification: PENDING_NOT_RELEASED
     series_golden: false
-    next_action: FIX_VOICE04_ES_COMMITTED_BADGE_SINGLE_LINE_AT_390PX_ADD_REGRESSION_THEN_ONE_REVERIFY_AND_FRESH_SERIES_AUDIT
+    next_action: BUILD_CLEAN_CURRENT_MAIN_RELEASE_BRANCH_FOR_VOICE_ONLY__RUN_EXACT_HEAD_CHECKS__MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
 
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -107,7 +108,8 @@ release_evidence:
   pages_run: 35423089825
   deploy: PASS_FOR_PREVIOUS_RELEASED_SERIES
   live_qa: PASS_FOR_PREVIOUS_RELEASED_SERIES
-  realtime_voice_release: NOT_STARTED_SERIES_QA_ONLY
+  realtime_voice_release: CLEAN_CURRENT_MAIN_RELEASE_BRANCH_PENDING
+  realtime_voice_repair_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
   realtime_voice_current_main_compatibility: RECONCILIATION_REQUIRED_BRANCH_DIVERGED_FROM_CURRENT_MAIN
 
 shared_branch:
@@ -117,7 +119,8 @@ shared_branch:
   voice_media_indexability_milestone_persisted: true
   voice_browser_milestone_persisted: true
   voice_intermediate_pixel_evidence_persisted: true
-  last_site_evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
+  voice_final_zero_based_audit_persisted: true
+  last_site_evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
   note: LEDGER_RECEIPT_COMMITS_AFTER_EVIDENCE_DO_NOT_CHANGE_SITE_FACING_BYTES
 
 linkedin:
