@@ -23,6 +23,11 @@ on:
       - 'scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs'
       - 'scripts/validate_voice_mobile_native_summaries.mjs'
       - 'scripts/validate_voice_series_browser_milestone.mjs'
+      - 'scripts/validate_voice_indexability.py'
+      - 'scripts/validate_voice_media_visual.py'
+      - 'scripts/classify_requalification_media.py'
+      - 'scripts/audit_publication_contract.py'
+      - 'scripts/audit_multilingual_search_foundation.py'
       - 'scripts/serve_preview.py'
       - 'main.py'
       - 'locale_main.py'
@@ -32,10 +37,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: realtime-voice-browser-milestone-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   browser-pixel-evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,6 +69,36 @@ jobs:
           mkdocs build --clean --strict
           python scripts/prepare_locale.py --locale en
           S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Validate fresh series source and publication/search contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_tools_state_ch4_source.mjs
+          node scripts/validate_voice_network_telephony_ch5_source.mjs
+          node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
+
+      - name: Validate current native visual media without regeneration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          python scripts/classify_requalification_media.py --self-test
+          python scripts/validate_voice_media_visual.py --output artifacts/voice-requalification/voice-media-visual.json
+
+      - name: Validate fresh rendered INDEXABILITY plus negative mutations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_voice_indexability.py --self-test
+          python scripts/validate_voice_indexability.py --site site --output artifacts/voice-requalification/indexability/report.json
 
       - uses: actions/setup-node@v4
         with:
@@ -178,7 +217,7 @@ jobs:
           print(evidence.read_text(encoding='utf-8'))
           PY
 
-      - name: Upload short-lived exact visual evidence
+      - name: Upload short-lived exact series evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -186,5 +225,6 @@ jobs:
           path: |
             artifacts/voice-browser-milestone/*
             artifacts/visual-review/voice-*.png
+            artifacts/voice-requalification/**/*.json
           if-no-files-found: warn
           retention-days: 1
