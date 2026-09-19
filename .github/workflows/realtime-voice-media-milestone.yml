@@ -62,6 +62,32 @@ jobs:
               blocks.append(yaml.safe_dump({key: block}, allow_unicode=True, sort_keys=False, width=120).rstrip())
           if blocks:
               path.write_text(original + '\n' + '\n\n'.join(blocks) + '\n', encoding='utf-8')
+
+          manifest_path = root/'locales/en/manifest.yml'
+          manifest_text = manifest_path.read_text(encoding='utf-8')
+          manifest = yaml.safe_load(manifest_text) or {}
+          published = manifest.get('published_files')
+          if not isinstance(published, list):
+              raise SystemExit('locales/en/manifest.yml published_files must be a list')
+          expected = []
+          for ch in mod['CHAPTERS']:
+              expected.extend([
+                  f"series/{mod['SERIES']}/{ch.stem}.mp4",
+                  f"series/{mod['SERIES']}/{ch.stem}.jpg",
+              ])
+          missing = [entry for entry in expected if entry not in published]
+          if missing:
+              marker = '\ncoverage:\n'
+              if manifest_text.count(marker) != 1:
+                  raise SystemExit('cannot safely locate coverage boundary in locales/en/manifest.yml')
+              insertion = ''.join(f"  - {entry}\n" for entry in missing)
+              manifest_text = manifest_text.replace(marker, '\n' + insertion + 'coverage:\n', 1)
+              manifest_path.write_text(manifest_text, encoding='utf-8')
+          reparsed = yaml.safe_load(manifest_path.read_text(encoding='utf-8')) or {}
+          reparsed_published = reparsed.get('published_files') or []
+          absent = [entry for entry in expected if entry not in reparsed_published]
+          if absent:
+              raise SystemExit(f'EN media assets still absent from published_files: {absent}')
           PY
 
       - name: Validate owner-current media split and exact binaries
@@ -113,6 +139,7 @@ jobs:
             docs/series/agentes-voz-tiempo-real \
             locales/en/series/agentes-voz-tiempo-real \
             locales/en/media.yml \
+            locales/en/manifest.yml \
             quality/series-requalification/voice-media-generation-2026-09-19.json
           git diff --cached --stat
           git diff --cached --quiet && { echo 'No media changes to commit'; exit 1; }
