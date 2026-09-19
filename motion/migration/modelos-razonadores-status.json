@@ -19,9 +19,19 @@
     "accessibility": {
       "workflow_run": 35385714663,
       "head_sha": "5700b6cbaa09c7bef83390136dbc5fa14385eca3",
-      "browsers": ["chromium", "webkit"],
+      "browsers": [
+        "chromium",
+        "webkit"
+      ],
       "scope": "all 12 localized outputs",
-      "checks": ["localized controls", "complete transcript and evidence links", "keyboard focus and accessible names", "prefers-reduced-motion", "390x844 portrait recomposition", "browser page errors"],
+      "checks": [
+        "localized controls",
+        "complete transcript and evidence links",
+        "keyboard focus and accessible names",
+        "prefers-reduced-motion",
+        "390x844 portrait recomposition",
+        "browser page errors"
+      ],
       "result": "completed success in Chromium and WebKit"
     },
     "final_render": {
@@ -61,14 +71,33 @@
         "en:04-latencia-streaming",
         "en:05-riesgos"
       ],
-      "checks": ["editorial hierarchy", "locked Teal reasoning identity", "semantic diagrams", "text stability", "progressive reveal", "transition samples", "source/footer legibility", "portrait recomposition", "no clipping/overlap", "no decorative gradients or palette drift"],
+      "checks": [
+        "editorial hierarchy",
+        "locked Teal reasoning identity",
+        "semantic diagrams",
+        "text stability",
+        "progressive reveal",
+        "transition samples",
+        "source/footer legibility",
+        "portrait recomposition",
+        "no clipping/overlap",
+        "no decorative gradients or palette drift"
+      ],
       "result": "pass for all 12 localized outputs; horizontal and portrait review complete"
+    },
+    "delivery": {
+      "workflow_run": 35408957666,
+      "head_sha_before_delivery_commit": "c2d1f6a9ff72e8e48229b58f4f7b84608ad2dc95",
+      "scope": "12 localized outputs with canonical ES/EN media, captions, article embeds, watch pages, catalog/schema/sitemaps and strict ES/EN builds",
+      "result": "delivery integration passed; legacy English TTC one-off injection removed",
+      "validated_main_sha": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89",
+      "freshness": "current main was merged before rendering and remained unchanged through delivery validation"
     }
   },
   "review": {
     "review_package_location": null,
     "review_email_sent": false,
-    "user_review_status": "not_ready",
+    "user_review_status": "awaiting_release_package",
     "golden_example_registry_location": null
   },
   "requiredGates": [
@@ -81,17 +110,149 @@
     "visualQa"
   ],
   "outputs": {
-    "es:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "es:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:00_presentacion_serie": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:01-que-es-razonar": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:02-fallos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:03-test-time-compute": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:04-latencia-streaming": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false},
-    "en:05-riesgos": {"framework": true, "sync": true, "source": true, "layout": true, "delivery": false, "accessibility": true, "visualQa": true, "golden": false, "technical_golden": false, "golden_example_approved": false}
+    "es:00_presentacion_serie": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "es:01-que-es-razonar": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "es:02-fallos": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "es:03-test-time-compute": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "es:04-latencia-streaming": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "es:05-riesgos": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:00_presentacion_serie": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:01-que-es-razonar": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:02-fallos": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:03-test-time-compute": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:04-latencia-streaming": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    },
+    "en:05-riesgos": {
+      "framework": true,
+      "sync": true,
+      "source": true,
+      "layout": true,
+      "delivery": true,
+      "accessibility": true,
+      "visualQa": true,
+      "golden": true,
+      "technical_golden": true,
+      "golden_example_approved": false
+    }
   }
 }

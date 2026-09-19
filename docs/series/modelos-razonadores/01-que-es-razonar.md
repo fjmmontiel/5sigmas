@@ -10,6 +10,9 @@ tags:
   - LLMs
   - Razonamiento
 video: "01-que-es-razonar.mp4"
+video_poster: "01-que-es-razonar.jpg"
+video_captions: "01-que-es-razonar.vtt"
+video_transcript: "01-que-es-razonar-transcript.txt"
 video_duration: "PT1M22S"
 ---
 

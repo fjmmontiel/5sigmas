@@ -134,36 +134,48 @@ series/from-cave-to-agi/05-mas-alla.md:
 series/modelos-razonadores/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
+  video_captions: 00_presentacion_serie.vtt
+  video_transcript: 00_presentacion_serie-transcript.txt
   video_title: Reasoning Models
   video_duration: PT1M15S
 
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg
+  video_captions: 01-que-es-razonar.vtt
+  video_transcript: 01-que-es-razonar-transcript.txt
   video_title: What It Means for an LLM to Reason
   video_duration: PT1M22S
 
 series/modelos-razonadores/02-fallos.md:
   video: 02-fallos.mp4
   video_poster: 02-fallos.jpg
+  video_captions: 02-fallos.vtt
+  video_transcript: 02-fallos-transcript.txt
   video_title: How Reasoning Fails
   video_duration: PT1M48S
 
 series/modelos-razonadores/03-test-time-compute.md:
   video: 03-test-time-compute.mp4
   video_poster: 03-test-time-compute.jpg
+  video_captions: 03-test-time-compute.vtt
+  video_transcript: 03-test-time-compute-transcript.txt
   video_title: Test-Time Compute
   video_duration: PT2M9S
 
 series/modelos-razonadores/04-latencia-streaming.md:
   video: 04-latencia-streaming.mp4
   video_poster: 04-latencia-streaming.jpg
+  video_captions: 04-latencia-streaming.vtt
+  video_transcript: 04-latencia-streaming-transcript.txt
   video_title: Latency, Streaming and Product Design
   video_duration: PT1M55S
 
 series/modelos-razonadores/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
+  video_captions: 05-riesgos.vtt
+  video_transcript: 05-riesgos-transcript.txt
   video_title: Reasoning Risks and Production Controls
   video_duration: PT2M1S
 

@@ -1,0 +1,57 @@
+# Test-Time Compute
+
+## Test-Time Compute.
+
+The second scaling dimension.
+
+More steps. More candidates. Better compute decisions.
+
+
+
+## Not only train more. Think longer.
+
+One lever is training: more parameters, more data and more compute to build the model. Kaplan's scaling laws documented that relationship in 2020.
+
+But there is a second dimension. How much compute is spent on each individual answer. That is test-time compute.
+
+Kaplan et al., 2020 · Snell et al., 2024
+
+## Force the model to keep thinking.
+
+Chain-of-thought decomposes a problem into intermediate steps. Reasoning models can extend that process. A technique called budget forcing suppresses the end token and adds "Wait".
+
+In the s1-32B study, budget forcing raised AIME24 from 50% to about 57%. More steps can improve an answer; they do not guarantee it.
+
+Muennighoff et al., 2025 · s1-32B
+
+## Generate many answers. Keep the best.
+
+Best-of-N generates several answers and uses an evaluator to select the best one. Another strategy is majority voting. The selection criterion matters as much as the number of candidates.
+
+On AIME 2024, o1 went from 74% with one sample to 83% with consensus across 64 samples. That is majority-based selection.
+
+OpenAI, 2024 · AIME 2024
+
+## Explore branches. Prune weak ones.
+
+Tree search does not generate a single linear chain. It explores multiple branches, evaluates each one and prunes the least promising. Cost depends on how many branches are expanded.
+
+For complex planning, it lets the system compare alternative routes before continuing. Improvement is not automatic: it depends on the task, evaluator and search budget.
+
+Yao et al., 2023 · Tree of Thoughts
+
+## Each token waits for the previous one.
+
+In standard autoregressive decoding, each token depends on the tokens before it. At a fixed rate of 100 tokens per second, generating a 5,000-token chain takes 50 seconds.
+
+Shortening the chain or generating tokens faster reduces that wait. The sequential dependency remains. Latency is a real design constraint.
+
+Calculated example · fixed generation rate
+
+## Larger model or more time to think.
+
+Test-time compute and pretraining are complementary. On some tasks, a smaller model with more inference compute can outperform a larger model with less. Cost is no longer determined by size alone.
+
+Efficient systems adapt both the model and the budget to each problem. That decision requires task-level evaluation. That is complementary scaling.
+
+Snell et al., 2024 · per-query budget

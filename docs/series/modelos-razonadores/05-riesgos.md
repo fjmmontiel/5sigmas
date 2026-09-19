@@ -9,6 +9,9 @@ tags:
   - LLMs
   - Razonamiento
 video: "05-riesgos.mp4"
+video_poster: "05-riesgos.jpg"
+video_captions: "05-riesgos.vtt"
+video_transcript: "05-riesgos-transcript.txt"
 video_duration: "PT2M1S"
 ---
 

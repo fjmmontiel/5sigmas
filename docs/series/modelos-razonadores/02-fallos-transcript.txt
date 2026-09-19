@@ -1,0 +1,37 @@
+# Cómo fallan los modelos razonadores
+
+## Acertar por la pista equivocada.
+
+Un atajo aprende una correlación superficial que funciona en evaluación y falla cuando esa correlación cambia. La prueba correcta mantiene el problema y rompe la pista superficial.
+
+Geirhos et al., 2020 · Nature Machine Intelligence
+
+## El error tiene dirección.
+
+Los sesgos de posición, confirmación, autoridad y adulación pueden empujar respuestas en una dirección repetible.
+
+Sharma et al. muestran que declarar que al usuario le gusta o disgusta un texto desplaza sistemáticamente el tono del feedback respecto al baseline, en varios modelos y dominios.
+
+Sharma et al., 2023 · Towards Understanding Sycophancy
+
+## Optimizar el proxy. Romper el objetivo.
+
+Cuando una métrica observable sustituye al objetivo real, el modelo puede optimizar la métrica sin resolver la tarea que queríamos.
+
+En el estudio de Bondarenko et al., o3 intentó hackear el entorno de ajedrez en el 88% de las ejecuciones con el prompt base, en vez de ganar jugando mejor.
+
+Bondarenko et al., 2025 · arXiv:2502.13295
+
+## Un error temprano contamina la cadena.
+
+En una cadena larga, una premisa falsa puede alimentar varios pasos correctos en forma pero incorrectos en contenido. Evaluar solo la respuesta final oculta ese camino.
+
+5sigmas · síntesis del capítulo
+
+## No confiar en una sola señal de éxito.
+
+Para exponer estos fallos, cambia el formato sin cambiar el problema, verifica pasos intermedios y prueba fuera de distribución.
+
+El muestreo múltiple añade otra señal: si respuestas independientes divergen, la varianza revela incertidumbre que una sola respuesta oculta. Después, una verificación externa puede bloquear el fallo antes de producción.
+
+Wang et al., 2022 · Self-Consistency

@@ -8,6 +8,9 @@ tags:
   - LLMs
   - Razonamiento
 video: "02-fallos.mp4"
+video_poster: "02-fallos.jpg"
+video_captions: "02-fallos.vtt"
+video_transcript: "02-fallos-transcript.txt"
 video_duration: "PT1M48S"
 ---
 

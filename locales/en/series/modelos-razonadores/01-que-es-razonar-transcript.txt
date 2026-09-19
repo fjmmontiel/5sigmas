@@ -1,0 +1,31 @@
+# What reasoning means for an LLM
+
+## What does it mean to “reason”?
+
+Operationally, we care about a process that breaks problems into steps. It consumes resources and time. And it can fail systematically.
+
+
+
+## Verify outcomes, reinforce strategies.
+
+RLVR uses tasks with verifiable outcomes to turn correctness into a reward signal. DeepSeek R1 uses GRPO to compare attempts at the same problem relative to one another.
+
+At inference time, the model can spend more steps before producing the final answer. Training and inference are two different stages.
+
+DeepSeek-AI, 2025 · DeepSeek-R1
+
+## More reasoning, more than one lever.
+
+An answer can use a single sample or combine several and decide by consensus. Those are different strategies and should be measured separately.
+
+On AIME 2024, o1 scored 74% with one sample and 83% with consensus across 64 samples. That is evidence from that experiment, not a general guarantee.
+
+OpenAI, 2024 · AIME 2024
+
+## The label matters less than the failure curve.
+
+Models can produce deliberate chains and still collapse when complexity or the available budget changes. Results also depend on benchmark and evaluation design.
+
+The useful practice is to measure where reasoning works, what it costs and how it fails.
+
+Apple Research, 2025 · The Illusion of Thinking
