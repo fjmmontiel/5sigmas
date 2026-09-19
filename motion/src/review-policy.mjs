@@ -33,10 +33,14 @@ export function auditSeries(specs,{exceptions={}}={}){
  return {unit:'modelos-razonadores',canonicalScenes:rows.length,localizedOutputs:specs.length,repeatTarget:2,absoluteCeiling:3,families:counts,scenes:rows,structuralOnly:true,visualApproval:false};
 }
 export function checkTextMetrics(metrics,{portrait=false}={}){
- for(const k of ['bodySize','permanentLowerGap','sourceGap','intendedEmbedBodyPixels'])assert.ok(Number.isFinite(metrics[k]),`missing actual layout metric ${k}`);
+ for(const k of ['bodySize','permanentLowerGap','sourceGap'])assert.ok(Number.isFinite(metrics[k]),`missing actual layout metric ${k}`);
  assert.ok(metrics.bodySize>=(portrait?TEXT_POLICY.portraitBodyMin:TEXT_POLICY.horizontalBodyMin),'small explanatory text');
+ if(!portrait){
+  assert.ok(metrics.permanentLowerGap<=TEXT_POLICY.permanentLowerGapMax,'permanent dead lower editorial space');
+  assert.ok(metrics.sourceGap<=TEXT_POLICY.sourceGapMax,'excess source/body gap');
+ }
+ assert.ok(Number.isFinite(metrics.intendedEmbedBodyPixels),'missing actual layout metric intendedEmbedBodyPixels');
  assert.ok(metrics.intendedEmbedBodyPixels>=(portrait?TEXT_POLICY.portraitEmbedBodyPixelsMin:TEXT_POLICY.horizontalEmbedBodyPixelsMin),'explanatory text too small at intended embed size');
- if(!portrait){assert.ok(metrics.permanentLowerGap<=TEXT_POLICY.permanentLowerGapMax,'permanent dead lower editorial space');assert.ok(metrics.sourceGap<=TEXT_POLICY.sourceGapMax,'excess source/body gap');}
  return true;
 }
 export function technicallyGolden(row){return REQUIRED_GATES.every(g=>row[g]===true);}
