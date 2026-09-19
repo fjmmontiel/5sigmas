@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T23:31:00Z",
+  "unit": "seguridad-ia",
+  "chapter": "02",
+  "slug": "jailbreaks",
+  "branch": "migration/video-golden-seguridad-ia",
+  "source_head": "aecca1f8615413dfee4b31d8f3a5c55a6d3c1295",
+  "state": "CHAPTER_FINAL_ENCODE_PASS_COMPLETE_PACKAGE_PENDING",
+  "technical_golden": false,
+  "owner_visual_approval": "NOT_REQUESTED",
+  "workflow_run": 35475585037,
+  "job": 105985418310,
+  "artifact": {
+    "id": 10593284438,
+    "archive_sha256": "a810dffba38577ee4fa68fe62475b70786ecb26f406fc3a1227b3312fa40e769",
+    "readback": "DOWNLOADED_AND_INSPECTED"
+  },
+  "outputs": [
+    {
+      "locale": "en",
+      "orientation": "horizontal",
+      "sha256": "4f182866da32f32be382102bdd8a697a999102544b07ee62dcd164256de57f1e",
+      "size_bytes": 1450914,
+      "profile": "h264 1920x1080 60/1 3600 frames",
+      "full_decode": "PASS"
+    },
+    {
+      "locale": "en",
+      "orientation": "vertical",
+      "sha256": "19a14b38aae827074dc79f416079be5ce823006c1393a853710060cbf5dfea2d",
+      "size_bytes": 1392868,
+      "profile": "h264 1080x1920 60/1 3600 frames",
+      "full_decode": "PASS"
+    },
+    {
+      "locale": "es",
+      "orientation": "horizontal",
+      "sha256": "22e6b8612d3fcb0f75429ae24a0c73e2558dc8fbfb3ff01d35b959752ca502b6",
+      "size_bytes": 1512739,
+      "profile": "h264 1920x1080 60/1 3600 frames",
+      "full_decode": "PASS"
+    },
+    {
+      "locale": "es",
+      "orientation": "vertical",
+      "sha256": "0fddbc78165c48ab446e8b3f55ade4f400e9fedbb485ad02bd990fc273f8392b",
+      "size_bytes": 1442263,
+      "profile": "h264 1080x1920 60/1 3600 frames",
+      "full_decode": "PASS"
+    }
+  ],
+  "metadata_hash_binding": "4/4_PASS",
+  "visual_inspection": {
+    "samples": "ES/EN x H/V at 6s, 18s, 30s, 42s, 54s",
+    "result": "PASS_FOR_CHAPTER_OUTPUTS",
+    "observed": "Readable native H/V editorial composition; five semantically distinct Jailbreaks mechanisms are visible; ES/EN scene topology matches while copy is localized; no visible overlap or clipping in inspected samples."
+  },
+  "package_scope_note": "Chapter-level completion is not complete-series certification and does not trigger Drive review delivery or owner approval request.",
+  "next_action": "Let the other five valid chapter encodes complete without restart. Then require the complete 24-output package gate and inspect the complete ES/EN H/V contact evidence before any Drive review package is created."
+}
