@@ -1,14 +1,14 @@
-schema_version: 6
+schema_version: 7
 program: 5sigmas_GOLDEN_requalification
 series: agentes-voz-tiempo-real
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 baseline_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-reviewed_at: 2026-09-19T14:55:00Z
+reviewed_at: 2026-09-19T15:35:44Z
 content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-site_facing_repair_revision: eee743aae77f072482d8a2ea83000264e6b198bf
-exact_evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-milestone_action_run: 35449507057
+site_facing_repair_revision: 177c523ec17450d32bb2b5d415fdc17a7698efc2
+exact_evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+milestone_action_run: 35451711730
 
 inventory_contract:
   chapters: 6
@@ -20,27 +20,33 @@ inventory_contract:
   source_result: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
   build_result: PASS_12_OF_12_STRICT_ES_EN_EXACT_HEAD
   browser_result: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE_EXACT_HEAD
-  media_visual_result: PASS_12_OF_12_INPUT_IDENTITY_UNCHANGED_FROM_MEDIA_CHECKPOINT
-  indexability_result: PASS_12_OF_12_TECHNICAL_ELIGIBILITY_INPUTS_UNCHANGED
-  pixel_result: PASS_11_OF_12__VOICE04_ES_P2_LABEL_WRAP
-  pedagogy_result: PASS_12_OF_12
-  article_golden: 5/6
-  route_locale_golden: 11/12
+  media_visual_result: PASS_12_OF_12
+  indexability_result: PASS_12_OF_12_TECHNICAL_ELIGIBILITY
+  pixel_result: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  pedagogy_result: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  article_golden: 6/6
+  route_locale_golden: 12/12
+  known_p0: 0
+  known_p1: 0
+  known_p2: 0
   voice_enhancement: DEFERRED_OWNER_LOCAL
 
 source_review:
   status: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
   current_primary_revalidated: true
-  changed_site_facing_rows_this_repair: [voice04-es, voice04-en, voice05-es, voice05-en, voice06-es, voice06-en]
-  change_scope: NATIVE_MOBILE_EXPLANATORY_SUMMARIES_BEFORE_WIDE_DETAIL_CANVASES
+  es_reviewed: [voice01, voice02, voice03, voice04, voice05, voice06]
+  en_reviewed: [voice01, voice02, voice03, voice04, voice05, voice06]
+  changed_site_facing_rows_this_repair: [voice04-es, voice04-en]
+  change_scope: KEEP_VOICE04_MOBILE_OUTCOME_LABELS_SINGLE_LINE_AT_390PX
   new_external_claims: false
   note: >-
-    Voice04-06 add native mobile teaching summaries derived from the already sourced article mechanisms.
-    The summaries preserve the existing technical claims and ES/EN meaning while making the core relationship
-    legible without discovering hidden horizontal content. Voice01-03 site-facing bytes remain unchanged.
+    The final Voice04 repair changes only mobile presentation of already sourced outcome labels.
+    Voice01-06 ES/EN were freshly read and reviewed for technical meaning, pedagogy and parity on the exact
+    current repair head; no new material factual claim was introduced by this final repair.
 
 media_visual_evidence:
-  action_run: 35432607898
+  prior_generation_run: 35432607898
+  revalidated_run: 35451711730
   generated_assets: 12
   video_codec: h264
   pixel_format: yuv420p
@@ -50,19 +56,19 @@ media_visual_evidence:
   poster_required: true
   metadata_required: true
   key_moments_visual_only: true
-  relevant_inputs_changed_since_checkpoint: false
-  status: PASS_12_OF_12_PRESERVED_BY_INPUT_IDENTITY
+  status: PASS_12_OF_12
   future_voice_debt_each_row:
     - VIDEO_CAPTIONS_MISSING
     - VIDEO_TRANSCRIPT_MISSING
     - VIDEO_AUDIO_STREAM_MISSING
 
 indexability_evidence:
-  action_run: 35432607898
+  action_run: 35451711730
+  exact_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
   rendered_route_locale_pairs: 12
   passing: 12
   failing: 0
-  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
+  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
   internal_graph_es: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
   internal_graph_en: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
   negative_mutations:
@@ -71,15 +77,13 @@ indexability_evidence:
     h1: PASS_FAIL_CLOSED
     sitemap_hreflang: PASS_FAIL_CLOSED
     orphan_route: PASS_FAIL_CLOSED
-  relevant_inputs_changed_since_checkpoint: false
-  exact_head_strict_build: PASS_5EE486686640CF57054DCFAAED4ACE4C36251538
   google_selection_required: false
   live_verification: PENDING_RELEASE
   authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION_THIS_ITERATION
 
 browser_evidence:
-  action_run: 35449507057
-  exact_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+  action_run: 35451711730
+  exact_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
   conclusion: SUCCESS
   profiles: [desktop-normal, mobile-normal, desktop-reduced, mobile-reduced]
   article_contexts: 48
@@ -87,46 +91,71 @@ browser_evidence:
   playback: PASS_START_MID_FINAL_ALL_12_ARTICLE_WATCH_PAIRS
   chapter_specific_interaction_validators: PASS_01_TO_06
   native_mobile_summary_validator_04_05_06: PASS
-  negative_mutation_native_summary_marker: PASS_FAIL_CLOSED
+  voice04_outcome_wrap_regression: PASS_WITH_NEGATIVE_MUTATION
   keyboard_touch_focus: PASS
   reduced_motion: PASS
   runtime_resource_errors: PASS_NONE_UNEXPECTED
   article_watch_lifecycle: PASS_12_OF_12
   evidence_artifact:
     name: realtime-voice-browser-pixel-evidence
-    id: 10585854484
-    bytes: 156691164
-    sha256: 9b8c36926c50237a13a69b213e2226aaf3881bb094aedee7a6f1e5c65c173d4a
+    id: 10587197270
+    bytes: 156652228
+    sha256: c42c5e3230acae28d355cf4008d969ed2b08100dfe3425476b38d5230bcc7330
     retention_days: 1
-    exact_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    exact_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
 
 manual_pixel_pedagogy_review:
-  exact_artifact: 10585854484
-  repaired_rows_inspected: [voice04-es, voice04-en, voice05-es, voice05-en, voice06-es, voice06-en]
-  carried_clean_rows_from_prior_exact_manual_review: [voice01-es, voice01-en, voice02-es, voice02-en, voice03-es, voice03-en]
+  exact_artifact: 10587197270
+  review_scope: FRESH_ZERO_BASED_CORE_TEACHING_VISUALS_AND_FULL_PAGE_EVIDENCE_VOICE01_TO_06_ES_EN
+  inspected_rows:
+    - voice01-es
+    - voice01-en
+    - voice02-es
+    - voice02-en
+    - voice03-es
+    - voice03-en
+    - voice04-es
+    - voice04-en
+    - voice05-es
+    - voice05-en
+    - voice06-es
+    - voice06-en
   closed_p1:
     - VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING
     - VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING
     - VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING
+  closed_p2:
+    - VOICE04_ES_MOBILE_COMMITTED_BADGE_WRAP
   repaired_behavior:
-    voice04: NATIVE_MOBILE_ACTION_STATE_SUMMARY_PRECEDES_SCROLLABLE_DETAIL_CANVAS
+    voice04: NATIVE_MOBILE_ACTION_STATE_SUMMARY_PRECEDES_SCROLLABLE_DETAIL_CANVAS_AND_OUTCOME_LABELS_STAY_SINGLE_LINE
     voice05: NATIVE_MOBILE_WEBRTC_SIP_RTP_CARRIER_WSS_SUMMARY_PRECEDES_SCROLLABLE_DETAIL_CANVAS
     voice06: NATIVE_MOBILE_CAUSAL_EVIDENCE_CHAIN_PRECEDES_SCROLLABLE_DETAIL_CANVAS
   remaining_p0: []
   remaining_p1: []
-  remaining_p2:
-    - id: VOICE04_ES_MOBILE_COMMITTED_BADGE_WRAP
-      row: voice04-es
-      evidence: voice-mobile-native-ch04-es.png
-      finding: >-
-        The COMMITTED outcome label wraps into two lines in the three-column mobile outcome strip.
-        Meaning remains clear and the prior semantic-clipping P1 is closed, but this is a known pixel-polish
-        defect and therefore blocks ARTICLE_GOLDEN under the zero-known-P0/P1/P2 rule.
-      next_action: KEEP_OUTCOME_LABELS_SINGLE_LINE_AT_390PX_AND_ADD_REGRESSION_ASSERTION
+  remaining_p2: []
   note: >-
-    The repaired summaries are complete native mobile teaching compositions; the original wide SVGs remain
-    available as secondary detail canvases. No claim is made that a horizontally scrollable detail canvas alone
-    satisfies mobile pedagogy. The only known remaining defect is the Spanish Voice04 COMMITTED badge wrap.
+    The exact retained artifact was inspected at desktop/mobile and normal/reduced states. Core Voice01-06
+    teaching visuals, the repaired Voice04-06 native mobile summaries and representative full-page states were
+    reviewed directly. No known P0/P1/P2 remains in the inspected current revision. Horizontally scrollable
+    detail canvases remain secondary detail only and are not used as the mobile pedagogy certificate.
+
+fresh_zero_based_series_audit:
+  exact_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+  action_run: 35451711730
+  source: PASS
+  build_es: PASS
+  build_en: PASS
+  browser: PASS
+  media_visual: PASS
+  indexability: PASS
+  pixel_manual: PASS
+  pedagogy_manual: PASS
+  es_en_parity: PASS
+  known_p0_p1_p2: 0
+  result: PASS_ON_REPAIR_HEAD
+  current_main_compatibility: PENDING_CLEAN_RELEASE_RECONCILIATION
+  series_golden: false
+  reason_not_series_golden: REPAIR_BRANCH_DIVERGED_FROM_CURRENT_MAIN__FINAL_CURRENT_MAIN_COMPATIBLE_RELEASE_AND_LIVE_VERIFICATION_PENDING
 
 status_counts:
   SOURCE_PASS: 12
@@ -134,21 +163,21 @@ status_counts:
   BROWSER_PASS: 12
   MEDIA_VISUAL_PASS: 12
   INDEXABILITY_PASS: 12
-  PIXEL_REVIEW: 11
+  PIXEL_REVIEW: 12
   PEDAGOGY_REVIEW: 12
-  ARTICLE_GOLDEN: 5
-  route_locale_GOLDEN: 11
+  ARTICLE_GOLDEN: 6
+  route_locale_GOLDEN: 12
   known_p0: 0
   known_p1: 0
-  known_p2: 1
+  known_p2: 0
 
 rows:
   - id: voice01-es
     locale: es
     route: /series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -163,19 +192,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice01-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -190,19 +217,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice02-es
     locale: es
     route: /series/agentes-voz-tiempo-real/02-turn-taking/
     source: docs/series/agentes-voz-tiempo-real/02-turn-taking.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -217,19 +242,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice02-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/02-turn-taking/
     source: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -244,19 +267,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice03-es
     locale: es
     route: /series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -271,19 +292,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice03-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    iteration_count: 5
-    last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    iteration_count: 6
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -298,45 +317,42 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    pixel_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice04-es
     locale: es
     route: /series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: true
     INDEXABILITY_PASS: true
-    PIXEL_REVIEW: false
+    PIXEL_REVIEW: true
     PEDAGOGY_REVIEW: true
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     p0: []
     p1: []
-    p2: [VOICE04_ES_MOBILE_COMMITTED_BADGE_WRAP]
+    p2: []
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: KEEP_COMMITTED_BADGE_SINGLE_LINE_AT_390PX_AND_ADD_NEGATIVE_REGRESSION
-    state: QA
-
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
+    state: GOLDEN
   - id: voice04-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -351,18 +367,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_CLEAN_PAIR_WHILE_ES_PIXEL_P2_IS_REPAIRED
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice05-es
     locale: es
     route: /series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -377,18 +392,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice05-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -403,18 +417,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice06-es
     locale: es
     route: /series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -429,18 +442,17 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
-
   - id: voice06-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    iteration_count: 6
-    last_review_head: 5ee486686640cf57054dcfaaed4ace4c36251538
+    iteration_count: 7
+    last_review_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
@@ -455,27 +467,21 @@ rows:
     es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
     canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_TECHNICAL_ELIGIBILITY
     watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
-    evidence_revision: 5ee486686640cf57054dcfaaed4ace4c36251538
-    live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+    evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    live_deploy_verification: NOT_RELEASED
     authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION
-    next_action: HOLD_GOLDEN_UNTIL_SERIES_RELEASE_RECONCILIATION
+    next_action: HOLD_GOLDEN_PENDING_SERIES_RELEASE_RECONCILIATION
     state: GOLDEN
 
 article_status:
   voice01: GOLDEN
   voice02: GOLDEN
   voice03: GOLDEN
-  voice04: QA_P2_ES_MOBILE_COMMITTED_BADGE_WRAP
+  voice04: GOLDEN
   voice05: GOLDEN
   voice06: GOLDEN
 
 history:
-  previous_iteration_count_default: 5
-  repaired_rows_new_iteration_count: 6
-  increment_reason: >-
-    Voice04-06 ES/EN were genuinely re-inspected on the repaired native-mobile layouts from the exact retained
-    current artifact. Voice01-03 were not incremented because their site-facing bytes and prior inspected pixel
-    evidence are unchanged.
   prior_exact_manual_checkpoint:
     run: 35444765014
     head: 42a9b928a4329adbe87b930b6f9e35228898d537
@@ -484,9 +490,16 @@ history:
     run: 35449507057
     head: 5ee486686640cf57054dcfaaed4ace4c36251538
     artifact: 10585854484
+  final_zero_based_checkpoint:
+    run: 35451711730
+    head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+    artifact: 10587197270
+  iteration_increment_reason: >-
+    All 12 route×locale rows were genuinely re-inspected in the fresh zero-based series review. Voice01-03
+    advance 5→6; Voice04-06 advance 6→7. Counts were not changed merely because the scheduled run occurred.
   closed_p1:
     - VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING
     - VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING
     - VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING
-  newly_open_p2:
+  closed_p2:
     - VOICE04_ES_MOBILE_COMMITTED_BADGE_WRAP
