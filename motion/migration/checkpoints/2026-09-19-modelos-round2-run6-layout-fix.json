@@ -1,0 +1,83 @@
+{
+  "unit": "modelos-razonadores",
+  "review_round": 2,
+  "checkpoint_at": "2026-09-19T13:13:00+02:00",
+  "branch_head_with_fix": "9528247ee81dc65dcfc797bb9f46f8854e5e833e",
+  "main_revision": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
+  "defect": {
+    "type": "CURRENT_SOURCE_DENSE_COPY_OVERFLOW",
+    "source_revision_reproduced": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "reproduced_with": "motion/scripts/render.py --check-only on exact strengthened source",
+    "affected_examples": [
+      "test-time-compute es: steps/tree/allocation",
+      "test-time-compute en: tree",
+      "latency es/en: routing",
+      "risks es/en: overthinking/indirect-injection/guardrails"
+    ],
+    "failure_signatures": [
+      "copy-needs-recomposition",
+      "body-overflow"
+    ],
+    "conclusion": "The earlier claim of 24/24 current-source layout preflight could not be reproduced from exact f13d94 render source and was superseded by this defect reproduction."
+  },
+  "implementation": {
+    "file": "motion/src/render/layout.mjs",
+    "git_blob_after": "cf0b1c7fa3c327892c4148623cc56a5c3f322d37",
+    "changes": [
+      "Keep horizontal/portrait body hard minimum at 46 px.",
+      "Tighten explanatory leading from 1.32 to 1.22 and paragraph gap from 22 to 20 instead of shrinking text.",
+      "Give dense horizontal copy 940 px width and rebalance the mechanism area while preserving >=0.70 mechanism scale.",
+      "Move portrait mechanism start upward for dense copy while preserving pre-laid text stability."
+    ],
+    "quality_intent": "Solve dense-copy overflow by recomposition and spacing, not by reducing explanatory prominence or deleting useful explanation."
+  },
+  "validation": {
+    "node_check": "PASS",
+    "focused_runtime_and_review_tests": {
+      "passed": 70,
+      "failed": 0
+    },
+    "structural_diversity": {
+      "canonical_scenes": 30,
+      "families": 21,
+      "max_family_uses": 2,
+      "encoded_visual_approval": false
+    },
+    "all_localized_hv_check_only": {
+      "localized_specs": 12,
+      "compositions": 24,
+      "sampled_layout_frames": 1520,
+      "failures": 0,
+      "layout_issues": 0,
+      "metric_summary": {
+        "body_size_min_px": 47,
+        "body_size_max_px": 60,
+        "body_size_median_px": 54,
+        "horizontal_intended_embed_body_min_px": 26.927,
+        "portrait_body_min_px": 50,
+        "portrait_intended_embed_body_min_px": 18.056,
+        "horizontal_permanent_lower_gap_max_px": 169.52,
+        "horizontal_source_gap_max_px": 38
+      }
+    },
+    "representative_encoded_or_rendered_frame_inspection": {
+      "status": "PASS_SAMPLE_ONLY",
+      "scenes": [
+        "latencia-streaming es routing horizontal",
+        "test-time-compute es tree horizontal",
+        "riesgos es overthinking horizontal",
+        "riesgos es overthinking portrait"
+      ],
+      "note": "These formerly failing dense scenes show strong readable copy and semantic diagrams. Sample inspection does not substitute for full-series encoded-motion acceptance."
+    }
+  },
+  "release": {
+    "technical_golden": false,
+    "technical_golden_count": 0,
+    "technical_golden_total": 12,
+    "pr": 332,
+    "draft": true,
+    "golden_registry_promotions": 0
+  },
+  "next_action": "Rerender current-source Review Round 2 outputs from branch head 9528247... (or its ledger-only descendants) into a new final-candidate namespace, preserving previously owner-approved candidate bytes. Then bind exact hashes and complete full encoded motion, accessibility/player/mobile and delivery integration gates."
+}
