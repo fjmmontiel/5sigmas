@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "recorded_at_utc": "2026-09-19T14:57:30Z",
+  "last_updated_at_utc": "2026-09-19T15:10:30Z",
   "unit": "modelos-razonadores",
   "release_round": 2,
   "branch": "migration/video-golden-modelos-razonadores",
@@ -13,6 +14,32 @@
   "technical_golden": false,
   "release_state": "APPROVED_TECHNICAL_PENDING",
   "canonical_delivery": "CANONICAL_BYTES_MISMATCH",
+  "frozen_horizontal_media_integrity": {
+    "checked_count": 12,
+    "hashes_matching_manifest": 12,
+    "full_decode_ok": 12,
+    "common_profile": {
+      "codec": "h264",
+      "resolution": "1920x1080",
+      "fps": "60/1",
+      "pixel_format": "yuvj420p"
+    },
+    "assets": [
+      {"locale":"es","chapter":"00","duration_seconds":75.0,"sha256":"e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6"},
+      {"locale":"es","chapter":"01","duration_seconds":82.0,"sha256":"a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807"},
+      {"locale":"es","chapter":"02","duration_seconds":108.0,"sha256":"d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed"},
+      {"locale":"es","chapter":"03","duration_seconds":129.0,"sha256":"e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710"},
+      {"locale":"es","chapter":"04","duration_seconds":115.0,"sha256":"1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f"},
+      {"locale":"es","chapter":"05","duration_seconds":121.0,"sha256":"f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381"},
+      {"locale":"en","chapter":"00","duration_seconds":75.0,"sha256":"f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730"},
+      {"locale":"en","chapter":"01","duration_seconds":82.0,"sha256":"b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc"},
+      {"locale":"en","chapter":"02","duration_seconds":108.0,"sha256":"3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2"},
+      {"locale":"en","chapter":"03","duration_seconds":129.0,"sha256":"27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400"},
+      {"locale":"en","chapter":"04","duration_seconds":115.0,"sha256":"3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0"},
+      {"locale":"en","chapter":"05","duration_seconds":121.0,"sha256":"ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec"}
+    ],
+    "scope_note": "Engineering integrity check only; this does not broaden the owner's individual-viewing claim beyond the reviewed collection."
+  },
   "source_provenance": {
     "state": "NOT_VERIFIED",
     "historical_hint": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
