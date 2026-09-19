@@ -1,13 +1,14 @@
-schema_version: 4
+schema_version: 5
 program: 5sigmas_GOLDEN_requalification
 series: agentes-voz-tiempo-real
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 baseline_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-reviewed_at: 2026-09-19T12:06:00Z
+reviewed_at: 2026-09-19T13:18:00Z
 content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-exact_evidence_revision: e31b662a01428539728876e881c224312dbfd73b
-milestone_action_run: 35439893298
+exact_evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
+milestone_action_run: 35444765014
+
 inventory_contract:
   chapters: 6
   presentation_page: false
@@ -15,38 +16,23 @@ inventory_contract:
   es_nav: PRESENT_6_OF_6
   en_nav: PRESENT_6_OF_6
   en_manifest: PRESENT_6_OF_6_WITH_NATIVE_MEDIA
-  es_native_visual_videos: 6
-  en_native_visual_videos: 6
-  es_posters: 6
-  en_posters: 6
-  media_visual_gate: scripts/validate_voice_media_visual.py
-  indexability_gate: scripts/validate_voice_indexability.py
   media_visual_result: PASS_12_OF_12
   indexability_result: PASS_12_OF_12_TECHNICAL_ELIGIBILITY
   browser_result: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE
-  pixel_result: PENDING_MANUAL_INTERMEDIATE_STATE_REVIEW
-  pedagogy_result: PENDING_MANUAL_INTERMEDIATE_STATE_REVIEW
-  note: >-
-    Native ES/EN visual media and rendered technical indexability remain green from the
-    exact content/media checkpoint. Action 35439893298 ran on current branch head
-    e31b662a01428539728876e881c224312dbfd73b and closed the previously uninspected
-    browser interaction/lifecycle domain for all 12 route-locale rows. The only commit
-    after the content/media checkpoint was browser-evidence workflow hardening; site-facing
-    article/media bytes were unchanged. Voice remains owner-local deferred debt and is not
-    a blocker under PROGRAM AMENDMENT 5716685049.
+  pixel_result: CHANGES_REQUIRED_MOBILE_CORE_DIAGRAMS_04_05_06
+  pedagogy_result: CHANGES_REQUIRED_MOBILE_CORE_DIAGRAMS_04_05_06
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+
 source_review:
-  source_review_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
   content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-  browser_evidence_revision: e31b662a01428539728876e881c224312dbfd73b
   status: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
   current_primary_revalidated: true
-  source_content_claims_unchanged_by_browser_hardening: true
-  prior_exact_head_source_accessibility_run: 35419776376
-  changed_revision_deterministic_source_contracts: PASS
+  site_facing_bytes_changed_this_run: false
   note: >-
-    Source/factual/parity review remains valid. The browser-evidence hardening commit changed
-    only .github/workflows/realtime-voice-browser-milestone.yml concurrency and did not
-    modify reviewed article, visual, video, poster, metadata or localization bytes.
+    The only repository change before this manual review was evidence-retention workflow code.
+    Article, visual, video, poster, metadata and localization bytes are unchanged from the
+    previously reviewed content/media checkpoint, so source/factual/parity evidence remains applicable.
+
 media_visual_evidence:
   action_run: 35432607898
   generated_assets: 12
@@ -58,36 +44,35 @@ media_visual_evidence:
   poster_required: true
   metadata_required: true
   key_moments_visual_only: true
-  deterministic_frames_per_video: 6
-  manual_pixel_certification_from_frames: false
-  manual_pedagogy_certification_from_frames: false
   blockers: []
   future_voice_debt_each_row:
     - VIDEO_CAPTIONS_MISSING
     - VIDEO_TRANSCRIPT_MISSING
     - VIDEO_AUDIO_STREAM_MISSING
+
 indexability_evidence:
   action_run: 35432607898
   rendered_route_locale_pairs: 12
   passing: 12
   failing: 0
-  global_errors: []
+  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
+  internal_graph_es: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
+  internal_graph_en: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
   negative_mutations:
     noindex: PASS_FAIL_CLOSED
     canonical: PASS_FAIL_CLOSED
     h1: PASS_FAIL_CLOSED
     sitemap_hreflang: PASS_FAIL_CLOSED
     orphan_route: PASS_FAIL_CLOSED
-  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
-  internal_graph_es: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
-  internal_graph_en: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
   google_selection_required: false
   live_verification: PENDING_RELEASE
+  authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION_THIS_ITERATION
+
 browser_evidence:
-  action_run: 35439893298
-  exact_head: e31b662a01428539728876e881c224312dbfd73b
+  prior_action_run: 35439893298
+  current_action_run: 35444765014
+  exact_head: 42a9b928a4329adbe87b930b6f9e35228898d537
   conclusion: SUCCESS
-  chrome: 152.0.7977.82
   profiles:
     - desktop-normal
     - mobile-normal
@@ -95,50 +80,69 @@ browser_evidence:
     - mobile-reduced
   article_contexts: 48
   watch_contexts: 48
-  full_page_screenshots: 48
-  playback_states_each_context:
-    start_seconds: 0
-    middle_seconds: 18
-    final_seconds: 35.65
-    duration_seconds: 36
-    ready_state: 4
-  media_http_status: 206
+  playback: PASS_START_MID_FINAL_ALL_12_ARTICLE_WATCH_PAIRS
   chapter_specific_interaction_validators: PASS_01_TO_06
   keyboard_touch_focus: PASS
   reduced_motion: PASS
   runtime_resource_errors: PASS_NONE_UNEXPECTED
   article_watch_lifecycle: PASS_12_OF_12
-  artifact:
+  evidence_artifact:
     name: realtime-voice-browser-pixel-evidence
-    id: 10584205107
-    files: 49
-    bytes: 96609866
-    zip_sha256: b619f69456c2d13143f3b718d1da14f322ac326f00e7a1511c7d2fd0c0c0b748
+    id: 10585412273
+    bytes: 155229672
+    sha256: b832a3094edcc265be6f433a671fab99ec80380c128c331a853fda9cfcb1ba55
     retention_days: 1
-manual_full_page_review_checkpoint:
-  inspected_artifact: 10584205107
-  inspected_actual_encoded_full_page_screenshots: true
-  coverage: >-
-    ES and EN, desktop and mobile, normal and reduced motion, all six chapters. Review used
-    the exact 48 encoded full-page screenshots plus stratified top/intermediate/bottom crops
-    at readable scale rather than DOM-only assertions.
-  observed_final_state_p0_p1_p2: []
-  observed_notes:
-    - Typography, hierarchy, visual teaching blocks and reader progression remain readable in the inspected full-page states.
-    - Wide comparison tables remain contained to their intentional mobile scroll surface; browser validation reports no page-level horizontal overflow.
-    - ES/EN page structures and visual density remain materially parallel without locale leakage in the inspected states.
-  PIXEL_REVIEW: false
-  PEDAGOGY_REVIEW: false
+    retained_voice_visual_review_pngs: 106
+    retained_final_full_page_frames: 48
+    manifest_exact_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+
+manual_interaction_review:
+  inspected_exact_artifact: 10585412273
+  inspected_interaction_pngs: 82
+  inspected_final_full_page_frames: 48
+  coverage_note: >-
+    Manual review covered the retained chapter interaction states for ES/EN desktop/mobile and
+    the exact final full-page evidence already covering normal/reduced profiles. No claim is made
+    for uninspected pixels outside this artifact.
+  clean_in_inspected_interaction_states:
+    - voice01-es
+    - voice01-en
+    - voice02-es
+    - voice02-en
+    - voice03-es
+    - voice03-en
+  p1_findings:
+    - id: VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING
+      rows: [voice04-es, voice04-en]
+      evidence: voice-tools-ch4-*-mobile-state-machine.png
+      finding: >-
+        The initial mobile state exposes only part of the core state-machine canvas; right-side
+        operation/outcome semantics and labels are offscreen or partially clipped. Horizontal
+        scrolling works, but the primary teaching relationship is not legible as a complete
+        mobile composition without discovery of hidden content.
+      next_action: RECOMPOSE_CORE_STATE_MACHINE_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_SEMANTICS
+    - id: VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING
+      rows: [voice05-es, voice05-en]
+      evidence: voice-network-ch5-*-mobile-topology.png
+      finding: >-
+        The three network topologies extend beyond the initial mobile viewport and hide material
+        media/runtime endpoints and labels. Mid/end scroll evidence proves operability but does
+        not satisfy the mobile pedagogy contract for a core relationship diagram.
+      next_action: RECOMPOSE_TOPOLOGY_FOR_NATIVE_MOBILE_WITH_COMPLETE_RELATIONSHIPS_VISIBLE
+    - id: VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING
+      rows: [voice06-es, voice06-en]
+      evidence: voice-eval-ch6-*-mobile-evidence.png
+      finding: >-
+        The initial mobile causal/evidence view cuts off material explanatory outcome text and
+        relies on horizontal scrolling to reveal the full diagnostic relationship.
+      next_action: RECOMPOSE_CAUSAL_EVIDENCE_VIEW_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_OUTCOME_TEXT
+  pixel_review: false
+  pedagogy_review: false
   fail_closed_reason: >-
-    The retained milestone artifact contains the 48 final full-page article screenshots, but
-    does not retain every chapter-specific start/intermediate interaction screenshot produced
-    by the individual validators. The contract requires real inspection of start,
-    intermediate and final states, so automated validator success plus final-state pixels is
-    not promoted to PIXEL_REVIEW/PEDAGOGY_REVIEW yet.
-  next_action: >-
-    Retain a minimal targeted set of the already-defined chapter-specific start/intermediate/
-    final screenshots for ES/EN desktop/mobile normal/reduced, inspect those actual pixels,
-    and only then promote PIXEL_REVIEW/PEDAGOGY_REVIEW if no defect is found.
+    Real P1 mobile composition defects remain in Voice04-06. Voice01-03 were clean in the
+    inspected retained states, but the series remains QA until the affected core diagrams are
+    recomposed and their exact changed bytes are revalidated.
+
 status_counts:
   SOURCE_PASS: 12
   BUILD_PASS: 12
@@ -149,9 +153,10 @@ status_counts:
   PEDAGOGY_REVIEW: 0
   ARTICLE_GOLDEN: 0
   route_locale_GOLDEN: 0
+
 row_defaults: &row_defaults
-  iteration_count: 4
-  last_review_head: e31b662a01428539728876e881c224312dbfd73b
+  iteration_count: 5
+  last_review_head: 42a9b928a4329adbe87b930b6f9e35228898d537
   SOURCE_PASS: true
   BUILD_PASS: true
   BROWSER_PASS: true
@@ -164,111 +169,114 @@ row_defaults: &row_defaults
   canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
   watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
   content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-  evidence_revision: e31b662a01428539728876e881c224312dbfd73b
-  evidence_action_run: 35439893298
+  evidence_revision: 42a9b928a4329adbe87b930b6f9e35228898d537
+  evidence_action_run: 35444765014
   live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
   authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION_THIS_ITERATION
   p0: []
-  p1: []
   p2: []
   state: QA
-  next_action: RETAIN_AND_MANUALLY_INSPECT_TARGETED_START_INTERMEDIATE_FINAL_INTERACTION_PIXELS
+
 rows:
   - <<: *row_defaults
     id: voice01-es
     locale: es
     route: /series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    native_video: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
-    poster: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice01-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice02-es
     locale: es
     route: /series/agentes-voz-tiempo-real/02-turn-taking/
     source: docs/series/agentes-voz-tiempo-real/02-turn-taking.md
-    native_video: docs/series/agentes-voz-tiempo-real/02-turn-taking.mp4
-    poster: docs/series/agentes-voz-tiempo-real/02-turn-taking.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice02-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/02-turn-taking/
     source: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice03-es
     locale: es
     route: /series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    native_video: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
-    poster: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice03-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+    p1: []
+    next_action: HOLD_CLEAN_INSPECTED_STATE_EVIDENCE_WHILE_AFFECTED_ARTICLES_ARE_REPAIRED
   - <<: *row_defaults
     id: voice04-es
     locale: es
     route: /series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    native_video: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
-    poster: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+    p1: [VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_CORE_STATE_MACHINE_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_SEMANTICS
   - <<: *row_defaults
     id: voice04-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+    p1: [VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_CORE_STATE_MACHINE_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_SEMANTICS
   - <<: *row_defaults
     id: voice05-es
     locale: es
     route: /series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    native_video: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
-    poster: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+    p1: [VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_TOPOLOGY_FOR_NATIVE_MOBILE_WITH_COMPLETE_RELATIONSHIPS_VISIBLE
   - <<: *row_defaults
     id: voice05-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+    p1: [VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_TOPOLOGY_FOR_NATIVE_MOBILE_WITH_COMPLETE_RELATIONSHIPS_VISIBLE
   - <<: *row_defaults
     id: voice06-es
     locale: es
     route: /series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    native_video: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
-    poster: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
+    p1: [VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_CAUSAL_EVIDENCE_VIEW_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_OUTCOME_TEXT
   - <<: *row_defaults
     id: voice06-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    native_video: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
-    poster: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
-historical_transition:
-  previous_iteration_count: 3
-  current_iteration_count: 4
+    p1: [VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING]
+    next_action: RECOMPOSE_CAUSAL_EVIDENCE_VIEW_FOR_NATIVE_MOBILE_WITHOUT_HIDDEN_OUTCOME_TEXT
+
+history:
+  previous_iteration_count: 4
+  current_iteration_count: 5
   increment_reason: >-
-    All twelve route-locale rows were materially inspected by the fresh exact-head browser
-    lifecycle milestone. The milestone exercised article and watch playback at start/mid/final,
-    chapter interactions, keyboard/touch/focus, reduced motion, resources/runtime and teardown.
-    No increment is charged for ledger persistence itself.
+    All twelve route-locale rows were genuinely inspected from the newly retained exact
+    interaction evidence. The review discovered three bilingual P1 mobile composition classes
+    instead of falsely promoting nominal browser success to PIXEL/PEDAGOGY PASS.
+  prior_browser_checkpoint:
+    run: 35439893298
+    head: e31b662a01428539728876e881c224312dbfd73b
+    artifact: 10584205107
+  current_evidence_checkpoint:
+    run: 35444765014
+    head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    artifact: 10585412273
   previously_closed_p1:
     - NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
-  caveat: >-
-    Empty current p0/p1/p2 arrays mean no defect is known in the domains actually inspected
-    at this checkpoint. They do not assert defect-free manual start/intermediate-state pixel
-    or pedagogy review, which remain explicitly pending and fail closed.
