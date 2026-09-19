@@ -227,7 +227,7 @@ async function validatePoisoningVisuals(page, chapter) {
       if (!await propagation.evaluate((node) => node.classList.contains('is-propagated'))) failures.push(`${chapter.route}: propagation action did not mark derived state`);
       await revoke.click();
       await page.waitForTimeout(75);
-      if (!await propagation.evaluate((node) => node.classList.contains('is-revoking'))) failures.push(`${chapter.route}: revocation action did not enter partial-revocation state`);
+      if (!await propagation.evaluate((node) => node.classList.contains('is-revoking'))) failures.push(`${chapter.route}: propagation revocation action did not enter partial-revocation state`);
       const note = ((await propagation.locator('[data-note]').innerText()) || '').toLowerCase();
       if (!note.includes('partial revocation') || !note.includes('does not prove forgetting')) failures.push(`${chapter.route}: propagation revocation note lost canonical semantics`);
     }
@@ -402,15 +402,58 @@ async function validateProductionControlVisuals(page, chapter) {
 
   const release = page.locator('.releasegate');
   if (await release.count() === 1) {
-    const checks = release.locator('[data-check]');
-    if (await checks.count() !== 3) failures.push(`${chapter.route}: release gate must expose three verifiable operational boundaries`);
-    for (let index = 0; index < await checks.count(); index += 1) await checks.nth(index).click();
-    await page.waitForTimeout(75);
-    if (await release.locator('[data-check][aria-pressed="true"]').count() !== 3) failures.push(`${chapter.route}: release-gate checks did not all activate`);
-    if (((await release.locator('[data-badge]').textContent()) || '').trim() !== 'PASS') failures.push(`${chapter.route}: release gate did not reach PASS state`);
-    if (!await release.locator('[data-deploy]').evaluate((node) => node.classList.contains('is-ready'))) failures.push(`${chapter.route}: release gate did not enable deployment after all boundaries passed`);
-    const title = ((await release.locator('[data-title]').innerText()) || '').toLowerCase();
-    if (!title.includes('3 / 3 boundaries verified')) failures.push(`${chapter.route}: release-gate count was not localized`);
+    const modes = release.locator('[data-mode]');
+    const modeNames = await modes.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-mode')));
+    const canonicalModes = ['pass', 'authority', 'state', 'recovery'];
+    if (modeNames.length !== canonicalModes.length || new Set(modeNames).size !== canonicalModes.length || canonicalModes.some((mode) => !modeNames.includes(mode))) {
+      failures.push(`${chapter.route}: release gate must expose the four canonical pass/authority/state/recovery scenarios`);
+    }
+
+    const deploy = release.locator('[data-output="deploy"]');
+    const hold = release.locator('[data-output="hold"]');
+    if (await deploy.count() !== 1 || await hold.count() !== 1) {
+      failures.push(`${chapter.route}: release gate must expose explicit DEPLOY and HOLD output paths`);
+    } else {
+      const assertDecision = async (badge, decision, deployExpected) => {
+        if (((await release.locator('[data-badge]').textContent()) || '').trim() !== badge) failures.push(`${chapter.route}: release gate expected ${badge} badge`);
+        if (((await release.locator('[data-decision]').textContent()) || '').trim() !== decision) failures.push(`${chapter.route}: release gate expected ${decision} decision`);
+        const deployHidden = await deploy.getAttribute('hidden') !== null;
+        const holdHidden = await hold.getAttribute('hidden') !== null;
+        if (deployExpected && (deployHidden || !holdHidden)) failures.push(`${chapter.route}: PASS state must expose DEPLOY and hide HOLD`);
+        if (!deployExpected && (!deployHidden || holdHidden)) failures.push(`${chapter.route}: blocked state must hide DEPLOY and expose HOLD`);
+      };
+
+      await assertDecision('PASS', 'DEPLOY', true);
+      const passTitle = ((await release.locator('[data-title]').innerText()) || '').toLowerCase();
+      const passArtifact = ((await release.locator('[data-artifact]').innerText()) || '').toLowerCase();
+      if (!passTitle.includes('three evidence streams') || !passTitle.includes('deploy')) failures.push(`${chapter.route}: release-gate PASS title lost canonical evidence semantics`);
+      if (!passArtifact.includes('3/3 current')) failures.push(`${chapter.route}: release-gate PASS artifact lost 3/3-current evidence`);
+
+      for (const mode of ['authority', 'state', 'recovery']) {
+        const button = release.locator(`[data-mode="${mode}"]`);
+        if (await button.count() !== 1) {
+          failures.push(`${chapter.route}: release gate is missing ${mode} failure scenario`);
+          continue;
+        }
+        await button.click();
+        await page.waitForTimeout(75);
+        if (await button.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: release-gate ${mode} scenario did not activate`);
+        await assertDecision('BLOCKED', 'HOLD', false);
+        const title = ((await release.locator('[data-title]').innerText()) || '').toLowerCase();
+        const artifact = ((await release.locator('[data-artifact]').innerText()) || '').trim();
+        const failure = ((await release.locator('[data-failure]').innerText()) || '').trim();
+        if (!title.includes('hold')) failures.push(`${chapter.route}: release-gate ${mode} failure did not localize HOLD`);
+        if (!artifact || !failure || failure === 'None') failures.push(`${chapter.route}: release-gate ${mode} failure lost reproducible artifact/failure evidence`);
+      }
+
+      const pass = release.locator('[data-mode="pass"]');
+      if (await pass.count() === 1) {
+        await pass.click();
+        await page.waitForTimeout(75);
+        if (await pass.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: release-gate PASS scenario did not restore active state`);
+        await assertDecision('PASS', 'DEPLOY', true);
+      }
+    }
   }
 
   return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
