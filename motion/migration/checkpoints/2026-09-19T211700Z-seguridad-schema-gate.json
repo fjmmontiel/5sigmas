@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T21:17:00Z",
+  "unit": "seguridad-ia",
+  "branch": "migration/video-golden-seguridad-ia",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "stage": "SCHEMA_AND_RENDER_MATRIX_VALIDATED",
+  "source_head": "cce592a5a0178a5c4d57a2a5cd89708d978745a8",
+  "implementation": {
+    "schema_commit": "0b2b8da85f03e7e1f856b8aba309bb06e624db45",
+    "negative_regressions_commit": "aeded461881a400401ad5a5899d74ba258ceb78e",
+    "gate_commit": "04369eaecdf2ce4bc32e4b5be1b43a478bc47c96",
+    "contract_driven_test_commit": "cce592a5a0178a5c4d57a2a5cd89708d978745a8"
+  },
+  "render_matrix": {
+    "chapters": 6,
+    "canonical_concepts": 30,
+    "locales": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "native_jobs": 24,
+    "horizontal": "1920x1080@60",
+    "vertical": "1080x1920@60",
+    "duration_seconds_per_chapter": 60,
+    "reduced_motion_required": true,
+    "deterministic_seek_required": true
+  },
+  "workflow_evidence": {
+    "run": 35469860631,
+    "job": 105968722857,
+    "conclusion": "success",
+    "utf8_control_byte_integrity": "PASS_9_FILES",
+    "node_syntax_import_preflight": "PASS",
+    "schema_negative_regressions": "7_PASS_0_FAIL",
+    "accent_text_contrast": 8.322568356519009,
+    "accent_contrast": 5.084235297901862,
+    "horizontal_body_min_px": 46,
+    "portrait_body_min_px": 46,
+    "animation_family_repeat_cap": 2
+  },
+  "negative_regressions": [
+    "third perceptual-family use fails closed",
+    "shrunk horizontal dimensions substituted for native vertical fail closed",
+    "non-deterministic scene boundary fails closed",
+    "source binding without immutable Git blob SHA fails closed",
+    "authored unreviewed spec cannot self-certify owner approval",
+    "authored unreviewed spec cannot self-certify Technical GOLDEN"
+  ],
+  "not_claimed": [
+    "No encoded Seguridad review MP4 has been produced by this checkpoint.",
+    "No owner review package has been created or emailed.",
+    "No visual approval or Technical GOLDEN is claimed.",
+    "No publication is claimed."
+  ],
+  "next_action": "Implement the Seguridad-specific semantic renderer/registry against the validated 30-concept register, render native ES/EN H/V outputs from the single deterministic timeline, then inspect encoded motion/layout/diversity before creating the first complete review package under the stable Drive root."
+}
