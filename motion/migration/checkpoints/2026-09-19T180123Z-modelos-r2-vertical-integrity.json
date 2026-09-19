@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T18:01:23Z",
+  "unit": "modelos-razonadores",
+  "release_round": 2,
+  "owner_visual_approval": "APPROVED",
+  "approval_scope": "frozen Round 2 reviewed collection only; no claim of individual owner playback for every file",
+  "approval_reconfirmation_required": false,
+  "technical_golden": false,
+  "published": false,
+  "branch": "migration/video-golden-modelos-razonadores",
+  "pr": 332,
+  "head_before_write": "260ba4f3bb1f7f853222dfae63a76faa3a1103d5",
+  "canonical_horizontal_delivery": {
+    "state": "PARTIAL_EXACT_STAGING",
+    "exact_staged": 2,
+    "required": 12,
+    "remaining": 10
+  },
+  "frozen_media_integrity": {
+    "hash_bindings": "24/24",
+    "horizontal_full_decode": "PASS_12_OF_12_FROM_PRIOR_FROZEN_SNAPSHOT_CHECK",
+    "vertical_full_decode": "PASS_12_OF_12",
+    "vertical_profile": {
+      "codec": "h264",
+      "resolution": "1080x1920",
+      "fps": "60/1",
+      "pixel_format": "yuvj420p",
+      "color_range": "pc",
+      "color_space": "bt470bg"
+    },
+    "scope_note": "Engineering byte/integrity binding only. This does not broaden the owner's individual-viewing claim."
+  },
+  "vertical_assets": [
+    {"locale":"es","chapter":"00","duration_seconds":75.0,"size_bytes":4166691,"sha256":"76248a85470440d6d9229cb165cac14059d00b046c9ad2a381f44de960717128","full_decode":"PASS"},
+    {"locale":"es","chapter":"01","duration_seconds":82.0,"size_bytes":5071096,"sha256":"b796d47c8990413e016b6f317ded73f53078c6885ffc2add8d3a853e6c6eaf12","full_decode":"PASS"},
+    {"locale":"es","chapter":"02","duration_seconds":108.0,"size_bytes":6237984,"sha256":"26b8fffa77b981e810960576991c6be7d16b6a6d65228da8cbef56d9769157c0","full_decode":"PASS"},
+    {"locale":"es","chapter":"03","duration_seconds":129.0,"size_bytes":8416140,"sha256":"9b0df6f45642f751b63a7d004d1b18899da86169c5275be3f956128e2f3915c1","full_decode":"PASS"},
+    {"locale":"es","chapter":"04","duration_seconds":115.0,"size_bytes":7098091,"sha256":"4d3a96af2af10b2ae3f1f5552b92279f66d9d3d12a55bd498584c5165b328324","full_decode":"PASS"},
+    {"locale":"es","chapter":"05","duration_seconds":121.0,"size_bytes":7420502,"sha256":"5aac072b091ff191297620d04cd5dc40fc97f3167c1973ac230078a27a1ba4d7","full_decode":"PASS"},
+    {"locale":"en","chapter":"00","duration_seconds":75.0,"size_bytes":3892115,"sha256":"1e02a317c5dbbef75cfc1884ef89bd5f5147a3a7cc39c796421051fe543701bb","full_decode":"PASS"},
+    {"locale":"en","chapter":"01","duration_seconds":82.0,"size_bytes":4982658,"sha256":"38791b0e7c1adb184363e50c6d7dcc14081566d231b195740c96933fb8b15516","full_decode":"PASS"},
+    {"locale":"en","chapter":"02","duration_seconds":108.0,"size_bytes":5872130,"sha256":"2b8180a7aad2297e8db69d957eb002ea8aec1de70100d4ab73a44243d01c536c","full_decode":"PASS"},
+    {"locale":"en","chapter":"03","duration_seconds":129.0,"size_bytes":8346990,"sha256":"663207f29fc5ef2d3902435617046607013372315a44cc6fea79ac26ce3ae363","full_decode":"PASS"},
+    {"locale":"en","chapter":"04","duration_seconds":115.0,"size_bytes":6816382,"sha256":"9b011fabea1b19870a8eb6d11c6e243860ddce913ff1a4ccfd2dda19ebf20e06","full_decode":"PASS"},
+    {"locale":"en","chapter":"05","duration_seconds":121.0,"size_bytes":7073550,"sha256":"cfab4f9b51216ed8249593246a350eeb817768f195284adcc7d9741cad7aae49","full_decode":"PASS"}
+  ],
+  "source_provenance": {
+    "state": "NOT_VERIFIED",
+    "historical_hint": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "note": "Previously tested historical candidates did not reproduce the approved media exactly; no provenance PASS is asserted."
+  },
+  "private_drive_manifest_update": {
+    "state": "NOT_WRITTEN",
+    "reason": "The connector rejected egress of the locally generated replacement file reference. Existing Drive bytes and permissions were left unchanged rather than fabricating a successful update."
+  },
+  "release_blockers": [
+    "10/12 approved horizontal MP4s still need exact-byte staging at canonical repository paths.",
+    "Exact output-relevant source/profile provenance remains NOT_VERIFIED.",
+    "Exact frozen-release playback/accessibility/mobile/integration/current-main checks are not yet all bound as PASS."
+  ],
+  "next_action": "Continue exact-byte staging of the remaining frozen horizontal MP4s without visual changes; recover truthful per-asset provenance; run the complete frozen release gate; merge only after all mandatory technical evidence is actually PASS and then verify live consumers before publication confirmation."
+}
