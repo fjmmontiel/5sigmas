@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import subprocess
+          import subprocess, sys
           rows = [
             ('docs/series/modelos-razonadores/00_presentacion_serie.mp4',75.0,['d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437','f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af','e72c44d783df21947a043c1cd2fa8abf98c7ea52296677b133a03f5e9f553e03','35b4051de789d7418c3bec67864fe0304801395ff7ab40c0e8ccbe8499a2eab3']),
             ('docs/series/modelos-razonadores/01-que-es-razonar.mp4',82.0,['3ba0cb70ab4bc8ad200496b25cf080bc58bcfa269743a9b31189254567cd0331','0b4e6e36adf2820c6626c947475e774de69671a47afdb36a0ecbd65309823273','f727f9543de4384c3ca4e80b8d27715dcfd8de15461e01e3115f6a3a36ff1d9d','1069aed0f5802218169934534d184fe199f749505feb003b3cdf2647e7757b59']),
@@ -60,7 +60,12 @@ jobs:
               if matched != 4:
                   print('  got=' + ','.join(got))
           print(f'CANONICAL_APPROVED_VISUAL_SAMPLE_MATCHES={total}/48')
-          print('CANONICAL_VISUAL_PROFILE_MATCH=' + ('true' if total==48 else 'false'))
+          exact = total == 48
+          print('CANONICAL_VISUAL_PROFILE_MATCH=' + ('true' if exact else 'false'))
+          if not exact:
+              print('CANONICAL_VISUAL_RESULT=NOT_VERIFIED', file=sys.stderr)
+              sys.exit(1)
+          print('CANONICAL_VISUAL_RESULT=EXACT_MATCH')
           PY
 
   probe-intro-es:
@@ -101,8 +106,17 @@ jobs:
           python scripts/render.py content/modelos-razonadores/00-presentacion.es.json --out snapshot-probe
           file='snapshot-probe/modelos-razonadores-intro-es-horizontal.mp4'
           test -f "$file"
-          echo "source_ref=${{ matrix.source_ref }}"
-          echo "rendered_encoded_sha256=$(sha256sum "$file" | awk '{print $1}')"
+
+          approved_encoded='e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6'
+          rendered_encoded="$(sha256sum "$file" | awk '{print $1}')"
+          encoded_match=false
+          if [ "$rendered_encoded" = "$approved_encoded" ]; then encoded_match=true; fi
+
+          echo "SOURCE_REF=${{ matrix.source_ref }}"
+          echo "RENDERED_ENCODED_SHA256=$rendered_encoded"
+          echo "APPROVED_ENCODED_SHA256=$approved_encoded"
+          echo "APPROVED_ENCODED_MATCH=$encoded_match"
+
           expected=(
             d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437
             f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af
@@ -116,5 +130,16 @@ jobs:
             echo "sample_$i=$got expected=${expected[$i]}"
             if [ "$got" = "${expected[$i]}" ]; then matches=$((matches+1)); fi
           done
+          visual_match=false
+          if [ "$matches" -eq 4 ]; then visual_match=true; fi
           echo "APPROVED_VISUAL_SAMPLE_MATCHES=$matches/4"
-          if [ "$matches" -eq 4 ]; then echo 'APPROVED_VISUAL_PROFILE_MATCH=true'; else echo 'APPROVED_VISUAL_PROFILE_MATCH=false'; fi
+          echo "APPROVED_VISUAL_PROFILE_MATCH=$visual_match"
+
+          # Provenance evidence is fail-closed: renderer completion alone is not a
+          # match. Both the frozen encoded bytes and the approved decoded-frame
+          # fingerprints must be reproduced by the candidate source profile.
+          if [ "$encoded_match" != true ] || [ "$visual_match" != true ]; then
+            echo 'PROVENANCE_RESULT=NOT_VERIFIED' >&2
+            exit 1
+          fi
+          echo 'PROVENANCE_RESULT=EXACT_MATCH'
