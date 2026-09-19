@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-19T12:08:00+02:00",
+  "program_status": "IN_PROGRESS",
+  "quality_contract": "motion-v4.2-review2-and-later",
+  "queues": {
+    "active_migration_units": [
+      {
+        "unit": "modelos-razonadores",
+        "branch": "migration/video-golden-modelos-razonadores",
+        "pr": 332,
+        "state": "TECHNICAL_CERTIFICATION_IN_PROGRESS",
+        "review_round": 2,
+        "technical_golden": false,
+        "technical_golden_count": 0,
+        "technical_golden_total": 12
+      }
+    ],
+    "awaiting_user_review_units": [],
+    "publish_ready_units": [],
+    "golden_registry": []
+  },
+  "owner_approvals": [
+    {
+      "unit": "modelos-razonadores",
+      "review_round": 2,
+      "status": "APPROVED_PRESENTED_EXAMPLES_PENDING_EXACT_TECHNICAL_BINDING",
+      "approved_at": "2026-09-19",
+      "source": "explicit_user_chat",
+      "scope": "all final Review Round 2 examples already presented to the owner; review-support comparison montage is excluded from primary Golden Examples",
+      "requires_exact_manifest_match": true,
+      "approved_asset_hashes": [],
+      "golden_example_promotion": "PENDING_TECHNICAL_GOLDEN_EXACT_ASSET_HASH",
+      "notes": "Approval must bind only to exact reviewed bytes. Any material source/layout/timing/theme/render change requires renewed review of the changed asset."
+    }
+  ],
+  "throughput_policy": {
+    "complete_unit_only": true,
+    "one_pr_per_complete_unit": true,
+    "waiting_for_user_review_does_not_block_next_unit": true,
+    "process_pending_approvals_before_migration_work_each_run": true,
+    "publish_only_after_exact_technical_golden_and_explicit_approval": true,
+    "promote_golden_examples_only_by_exact_hash": true,
+    "partial_approval_promotes_only_approved_subset": true,
+    "silence_is_not_approval": true,
+    "next_unit_candidate_after_modelos": "seguridad-ia",
+    "revalidate_next_unit_inventory_before_work": true
+  },
+  "golden_registry_policy": {
+    "technical_golden_is_separate": true,
+    "immutable_reference_by_hash": true,
+    "required_fields": [
+      "unit",
+      "video_slug",
+      "language",
+      "orientation",
+      "asset_sha256",
+      "source_revision",
+      "renderer_revision",
+      "theme_revision",
+      "approval_source",
+      "approval_date"
+    ]
+  },
+  "current_evidence": {
+    "pr_head_at_checkpoint": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
+    "review2_mp4_count": 24,
+    "focused_review_tests": {
+      "passed": 65,
+      "failed": 0
+    },
+    "reasoning_risks_en_portrait_check": {
+      "frames_sampled": 64,
+      "layout_issues": 0
+    },
+    "technical_golden_claim": false,
+    "review_email_sent": false,
+    "review_package_final_verified": false
+  },
+  "next_action": "Bind relevant-source fingerprints and exact hashes for all current outputs; rerender only truly affected outputs; complete encoded whole-series visual/accessibility/delivery integration review; then update Technical GOLDEN state, final Review 2 package and approval/hash binding."
+}
