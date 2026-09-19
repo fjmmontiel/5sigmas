@@ -131,6 +131,8 @@ jobs:
         run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
 
       - name: Validate all 12 article/watch media lifecycles and capture 48 full-page review frames
+        env:
+          S5_VOICE_BROWSER_CONCURRENCY: '2'
         run: node scripts/validate_voice_series_browser_milestone.mjs
 
       - name: Upload short-lived exact visual evidence
