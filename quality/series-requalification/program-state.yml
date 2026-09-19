@@ -1,4 +1,4 @@
-schema_version: 10
+schema_version: 11
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -30,14 +30,16 @@ series_status:
     reopened_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
     repaired_release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
     repair_mirrored_to_long_lived_branch: true
-    source_build_browser_pixel_pedagogy: RECHECK_PENDING_FOR_SECURITY03_ES_EN
+    previous_repaired_head_english_security_gate: PASS_RUN_35419298776_STEP_36
+    previous_repaired_head_native_english_security_media: PASS_RUN_35419298776_STEP_37
+    source_build_browser_pixel_pedagogy: RECHECK_PENDING_ON_CURRENT_RELEASE_HEAD
     media_visual: PASS_UNCHANGED_VIDEO_ASSETS
     indexability: PASS_UNCHANGED_SIGNALS_REVERIFY_LIVE_AFTER_RELEASE
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    known_p1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+    known_p1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_CURRENT_EXACT_HEAD_AND_LIVE_VERIFICATION]
     state: QA_REOPENED_SECURITY03_EXACT_HEAD_REVALIDATION_REQUIRED
     production_verified: false
-    next_action: HARVEST_PR_331_EXACT_HEAD_SECURITY_INTERACTION_AND_MIRROR_CHECKS_THEN_MERGE_DEPLOY_LIVE_REVERIFY
+    next_action: HARVEST_PR_331_CURRENT_EXACT_HEAD_SECURITY_INTERACTION_AND_MIRROR_CHECKS_THEN_MERGE_DEPLOY_LIVE_REVERIFY
 
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
@@ -70,21 +72,30 @@ series_status:
     fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
     fresh_zero_based_series_audit: PASS
     release_pr: 331
-    release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    exact_head_english_editorial_run: 35419298764
+    release_head: ea23d2f57f5bf479ec07e78dd2582f011baedb89
+    exact_head_english_editorial_run: 35419776415
     exact_head_english_editorial: PASS
-    exact_head_locale_switch_run: 35419298763
+    exact_head_locale_switch_run: 35419776397
     exact_head_locale_switch: IN_PROGRESS
-    exact_head_english_mirror_run: 35419298776
+    exact_head_english_mirror_run: 35419776384
     exact_head_english_mirror: IN_PROGRESS
-    exact_head_pr_visual_run: 35419298756
+    exact_head_pr_visual_run: 35419776376
     exact_head_pr_visual: IN_PROGRESS
+    previous_head_english_mirror_failure_classification: STALE_AGENTS03_04_EN_MARKERS_NOT_SITE_CONTENT_REGRESSION
+    previous_head_english_mirror_failure_evidence: >-
+      The validator expected pre-relationship-first prose markers while the current reviewed EN pages render
+      'One task, one trajectory, four evaluators' for Agents03 and
+      'An attack only needs one complete path to an effect' for Agents04.
+    previous_head_security03_repair_validation: >-
+      Run 35419298776 passed complete English AI Security and native English Security media before reaching
+      the stale Agents marker failure.
     bounded_no_regression_repairs:
       - historical_en_caves_ch5_literal_currency_math_overflow
       - security03_svg_state_visibility_and_clean_revocation_order
+      - agents03_04_english_media_marker_expectations_aligned_to_reviewed_relationship_first_visuals
     series_golden: false
     production_verified: false
-    next_action: WAIT_FOR_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_RUNTIME_QA_IF_GREEN
+    next_action: WAIT_FOR_CURRENT_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_RUNTIME_QA_IF_GREEN
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
