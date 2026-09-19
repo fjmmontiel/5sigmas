@@ -43,20 +43,18 @@ jobs:
           cp /tmp/en-media-before.yml locales/en/media.yml
           python - <<'PY'
           from pathlib import Path
+          import runpy
           import yaml
-          import importlib.util
 
           root = Path('.')
-          spec = importlib.util.spec_from_file_location('voicegen', root/'scripts/generate_realtime_voice_visual_media.py')
-          mod = importlib.util.module_from_spec(spec)
-          spec.loader.exec_module(mod)
+          mod = runpy.run_path(str(root/'scripts/generate_realtime_voice_visual_media.py'), run_name='voicegen')
           path = root/'locales/en/media.yml'
           original = path.read_text(encoding='utf-8').rstrip() + '\n'
           parsed = yaml.safe_load(original) or {}
           blocks = []
-          for ch in mod.CHAPTERS:
-              key = f'series/{mod.SERIES}/{ch.stem}.md'
-              block = mod.media_block(ch, 'en')
+          for ch in mod['CHAPTERS']:
+              key = f"series/{mod['SERIES']}/{ch.stem}.md"
+              block = mod['media_block'](ch, 'en')
               if key in parsed:
                   if parsed[key] != block:
                       raise SystemExit(f'unexpected pre-existing EN media mapping: {key}')
