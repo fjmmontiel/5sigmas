@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T23:56:00Z",
+  "unit": "seguridad-ia",
+  "review_round": 1,
+  "branch": "migration/video-golden-seguridad-ia",
+  "source_snapshot": "aecca1f8615413dfee4b31d8f3a5c55a6d3c1295",
+  "release_pr": 336,
+  "state": "COMPLETE_REVIEW_PACKAGE_DELIVERED_PENDING_OWNER_APPROVAL",
+  "owner_visual_approval": "PENDING_EXPLICIT_DECISION",
+  "technical_golden": false,
+  "published": false,
+  "complete_encoded_package": {
+    "workflow_run": 35475585037,
+    "package_job": 105986385251,
+    "artifact_id": 10594711055,
+    "artifact_sha256": "1a27dabf35eedb0ce2f3fdfc631e713d22d0cd550bd8c91228c792ea2a0d9857",
+    "output_count": 24,
+    "chapters": 6,
+    "locales": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "duration_seconds_per_output": 60,
+    "full_decode": "24/24_PASS",
+    "es_en_parity": "12/12_PASS",
+    "encoded_motion_scene_checks": "120/120_PASS",
+    "errors": 0
+  },
+  "review_delivery": {
+    "complete_package_available_under_single_private_review_root": true,
+    "review_request_sent_once": true,
+    "private_drive_and_email_identifiers_stored_outside_public_git": true,
+    "approval_must_be_explicit": true,
+    "silence_is_not_approval": true,
+    "materially_changed_bytes_require_changed_scope_review": true
+  },
+  "release_gate": {
+    "merge_allowed_now": false,
+    "reason": "Owner visual approval has not yet been received for this exact immutable snapshot, and current-main release/integration evidence remains to be bound after approval.",
+    "pr_creation_is_not_publication": true,
+    "ci_success_is_not_publication": true
+  },
+  "next_action": "Process an explicit owner approval/rejection if received. If approved, bind approval to the immutable package hashes, complete current-main-compatible site integration and release checks, stage canonical media/metadata, merge the complete-unit PR only when mandatory technical evidence is green, and verify deployed live consumers before marking published. Continue safe independent inventory/design work for the next unit while this frozen review waits."
+}
