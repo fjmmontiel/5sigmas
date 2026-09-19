@@ -51,7 +51,15 @@ function drawZone(P, zone, q) {
   const c=P.c;c.save();c.globalAlpha*=.25+.75*q;
   const strong = ['cut','revocation','top_k'].includes(zone.role);
   P.rect(zone.x, zone.y, zone.w, zone.h, strong ? P.T.accentSurface : '#FBFAF9', strong ? P.T.accent : P.T.rule, 18, strong ? 3 : 2);
-  if (zone.label) P.text(pretty(zone.label), zone.x+22, zone.y+18, 27, strong ? P.T.accentText : P.T.muted, 650, 'left', Math.max(40,zone.w-44));
+  if (zone.label) {
+    const label=pretty(zone.label);
+    if(zone.w<160){
+      P.text(label,Math.min(960,zone.x+zone.w+12),zone.y+Math.max(0,(zone.h-24)/2),23,strong?P.T.accentText:P.T.muted,650,'left',300);
+    } else {
+      const size=zone.w<240?22:27;
+      P.text(label,zone.x+15,zone.y+Math.max(12,(zone.h-size)/2),size,strong?P.T.accentText:P.T.muted,650,'left',Math.max(80,zone.w-30));
+    }
+  }
   c.restore();
 }
 
@@ -61,7 +69,7 @@ function drawNode(P, node, q) {
   const strong=['effect','decision','authorization_result','release_state','terminal','high_privilege'].includes(node.role);
   P.circle(node.x,node.y,strong?34:28,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accentText:P.T.accent,strong?4:3);
   const label=node.label || node.role;
-  if(label) P.text(pretty(label),node.x,node.y+44,25,strong?P.T.accentText:P.T.muted,strong?650:500,'center',220);
+  if(label) P.text(pretty(label),node.x,node.y+44,23,strong?P.T.accentText:P.T.muted,strong?650:500,'center',320);
   c.restore();
 }
 
