@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-09-19T12:54:00+02:00",
+  "updated_at": "2026-09-19T13:14:00+02:00",
   "program_status": "IN_PROGRESS",
   "quality_contract": "motion-v4.2-review2-and-later",
   "queues": {
@@ -9,7 +9,7 @@
         "unit": "modelos-razonadores",
         "branch": "migration/video-golden-modelos-razonadores",
         "pr": 332,
-        "state": "CURRENT_SOURCE_RERENDER_REQUIRED",
+        "state": "CURRENT_SOURCE_LAYOUT_FIXED_RERENDER_PENDING",
         "review_round": 2,
         "technical_golden": false,
         "technical_golden_count": 0,
@@ -73,7 +73,7 @@
       ],
       "additional_presented_examples": "approved by scope; exact final-byte binding is required before promotion",
       "golden_example_promotion": "PENDING_TECHNICAL_GOLDEN_EXACT_ASSET_HASH",
-      "notes": "The reviewed candidate bytes remain approved as references. The strengthened current layout/source materially differs from the candidate render generation, so newly rendered final bytes require exact re-review/binding rather than inheriting approval by similarity."
+      "notes": "The reviewed candidate bytes remain approved as references. The current-source render layout has since materially changed, so newly rendered final bytes require exact review/binding rather than inheriting approval by similarity."
     }
   ],
   "throughput_policy": {
@@ -106,11 +106,12 @@
   },
   "current_evidence": {
     "candidate_render_source_revision": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
-    "required_render_source_revision": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
-    "branch_head_at_checkpoint": "a829918ec658eb1b5698c39e5cc3c021a0e849a8",
+    "strengthened_source_before_layout_fix": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "required_render_source_revision": "9528247ee81dc65dcfc797bb9f46f8854e5e833e",
+    "branch_head_at_checkpoint": "fc1bba88fea32d0b135a51cf2504f8b38b144c12",
     "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
     "candidate_source_binding_status": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
-    "candidate_source_binding_reason": "The 24 candidate MP4s were rendered with the pre-strengthened Review Round 2 layout. Current required source changes horizontal text width 800->760, body min 42->46, body target 50->52, portrait min 44->46, source gap max 86->64, plus a risk renderer and one canonical intro-spec correction. The global layout change affects every output and cannot be exempted by relevant-source narrowing.",
+    "candidate_source_binding_reason": "The 24 reviewed candidate MP4s were rendered with the earlier Review Round 2 layout. Strengthened source changed the global layout contract and later exact-source check-only exposed dense-copy overflow. Commit 9528247... fixes that overflow without shrinking below the 46 px hard minimum; every encoded output must therefore be regenerated from this render source (or its ledger-only descendants).",
     "candidate_review2_mp4_count": 24,
     "candidate_media_profile_qa": {
       "files_checked": 24,
@@ -118,16 +119,25 @@
       "failed": 0,
       "status": "PASS_FOR_CANDIDATE_BYTES_ONLY_NOT_CURRENT_SOURCE_CERTIFICATION"
     },
-    "focused_review_tests": {
-      "passed": 65,
+    "post_layout_fix_tests": {
+      "passed": 70,
       "failed": 0,
-      "scope": "current deterministic review contract checkpoint; not full release certification"
+      "scope": "review-round2 + runtime tests after dense-layout implementation"
     },
-    "current_source_layout_preflight": {
+    "post_layout_fix_preflight": {
+      "localized_specs": 12,
       "compositions": 24,
       "sampled_frames": 1520,
+      "failures": 0,
       "layout_issues": 0,
-      "note": "Source-layout preflight is preserved as current-source evidence, independent from stale encoded candidates."
+      "body_size_min_px": 47,
+      "body_size_max_px": 60,
+      "horizontal_intended_embed_body_min_px": 26.927,
+      "portrait_body_min_px": 50,
+      "portrait_intended_embed_body_min_px": 18.056,
+      "horizontal_permanent_lower_gap_max_px": 169.52,
+      "horizontal_source_gap_max_px": 38,
+      "evidence": "motion/migration/checkpoints/2026-09-19-modelos-round2-run6-layout-fix.json"
     },
     "series_diversity": {
       "conceptual_scenes": 30,
@@ -146,5 +156,5 @@
     "technical_golden_claim": false,
     "review_email_sent": false
   },
-  "next_action": "Rerender all 12 localized outputs in both H/V from f13d94/current branch source because layout is a global render dependency; then run exact-current-source media/profile/hash binding, complete encoded full-series perceptual review, accessibility/player/mobile and delivery/consumer integration. Final changed bytes must receive exact owner review before Golden Registry promotion."
+  "next_action": "Render all 12 localized outputs in H/V from render source 9528247... (or ledger-only descendants) into a separate current-source candidate namespace without overwriting owner-approved earlier bytes. Bind exact hashes, then complete encoded whole-series perceptual review, accessibility/player/mobile and delivery/consumer integration. Any materially changed final bytes require exact owner review before Golden Registry promotion."
 }
