@@ -1,4 +1,4 @@
-schema_version: 18
+schema_version: 19
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -11,7 +11,7 @@ canonical_series_order:
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
 
-active_series: agentes-voz-tiempo-real
+active_series: coding-agents-agent-harnesses
 
 series_status:
   seguridad-ia:
@@ -54,9 +54,8 @@ series_status:
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: ARTICLE_GOLDEN_6_OF_6__SERIES_AUDIT_PASS_REPAIR_HEAD__CURRENT_MAIN_RELEASE_RECONCILIATION_PENDING
-    transition_authorized: true
-    transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+    release_receipt: quality/series-requalification/realtime-voice-release.yml
+    state: SERIES_GOLDEN
     route_locale_rows: 12
     source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
     build: PASS_12_OF_12_STRICT_ES_EN_EXACT_HEAD
@@ -77,10 +76,6 @@ series_status:
     browser_playback: PASS_START_MID_FINAL_ALL_12_ARTICLE_WATCH_PAIRS
     browser_keyboard_touch_focus: PASS
     browser_runtime_resources_teardown: PASS
-    native_mobile_summary_gate_04_05_06: PASS_WITH_FAIL_CLOSED_MUTATION
-    voice04_outcome_wrap_regression: PASS_WITH_NEGATIVE_MUTATION
-    retained_interaction_artifact_id: 10587197270
-    retained_interaction_artifact_sha256: c42c5e3230acae28d355cf4008d969ed2b08100dfe3425476b38d5230bcc7330
     pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
     pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
     known_p0: 0
@@ -91,37 +86,66 @@ series_status:
     fresh_zero_based_series_audit_run: 35451711730
     fresh_zero_based_series_audit_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
     fresh_zero_based_series_audit: PASS_ON_REPAIR_HEAD
-    current_main_compatibility: PENDING_CLEAN_RELEASE_RECONCILIATION
+    release_pr: 334
+    release_merge_commit: 878627846ab92184efc5057339390565bd890394
+    release_current_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+    deploy_run: 35462469816
+    deploy: PASS
+    live_qa_run: 35463064615
+    live_qa: PASS_ALL_12_ES_EN_ROUTES_CHAPTERS_01_06
+    live_indexability: PASS_RENDERED_DEPLOYED_REVISION
+    live_media_browser: PASS
+    production_verified: true
+    series_golden: true
     voice_enhancement: DEFERRED_OWNER_LOCAL
     voice_future_debt: VIDEO_CAPTIONS_MISSING__VIDEO_TRANSCRIPT_MISSING__VIDEO_AUDIO_STREAM_MISSING
-    live_release_verification: PENDING_NOT_RELEASED
-    series_golden: false
-    next_action: BUILD_CLEAN_CURRENT_MAIN_RELEASE_BRANCH_FOR_VOICE_ONLY__RUN_EXACT_HEAD_CHECKS__MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
+    next_action: NONE_CURRENT_GOLDEN_PRESERVE_REGRESSIONS
 
-  coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  coding-agents-agent-harnesses:
+    ledger: quality/series-requalification/coding-article-ledger.yml
+    state: QA_ACTIVE_MEDIA_VISUAL_REQUIRED_UNDECLARED
+    current_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+    catalog: SIX_CHAPTERS_NO_PRESENTATION_ES_EN
+    route_locale_rows: 12
+    inspected_this_transition: 12_MEDIA_DECLARATION_AND_BUILD_BASELINE
+    iteration_count_rows_at_1: 12
+    source: PENDING_FRESH_PRIMARY_ES_EN_REQUALIFICATION
+    build: PASS_12_OF_12_CURRENT_MAIN_STRICT_ES_EN
+    browser: PENDING_DEDICATED_GOLDEN_ROUTE_INTERACTION_QA
+    media_visual: FAIL_0_OF_12_VIDEO_REQUIRED_UNDECLARED
+    media_visual_blockers: 12
+    indexability: PENDING_DEDICATED_PER_ROUTE_RENDERED_GATE
+    pixel: PENDING_REAL_DESKTOP_MOBILE_NORMAL_REDUCED_INSPECTION
+    pedagogy: PENDING_REAL_INSPECTION
+    known_p1: 12_VIDEO_REQUIRED_UNDECLARED
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    existing_live_release_qa_run: 35463064627
+    existing_live_release_qa: PASS_NON_GOLDEN_RELEASE_SURFACE_ONLY
+    next_action: PRODUCE_AND_DECLARE_NATIVE_ES_EN_VISUAL_VIDEO_FOR_MULTIPLE_CHAPTERS_WHILE_FRESHLY_REQUALIFYING_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 
 release_evidence:
-  current_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-  pages_run: 35423089825
-  deploy: PASS_FOR_PREVIOUS_RELEASED_SERIES
-  live_qa: PASS_FOR_PREVIOUS_RELEASED_SERIES
-  realtime_voice_release: CLEAN_CURRENT_MAIN_RELEASE_BRANCH_PENDING
-  realtime_voice_repair_head: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
-  realtime_voice_current_main_compatibility: RECONCILIATION_REQUIRED_BRANCH_DIVERGED_FROM_CURRENT_MAIN
+  current_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+  realtime_voice_release_merge: 878627846ab92184efc5057339390565bd890394
+  shared_gate_fix_merge: 11737ad86db9b15b1981af6fef221d7db0b82110
+  pages_run: 35462469816
+  deploy: PASS
+  pages_live_qa: PASS
+  realtime_voice_live_qa_run: 35463064615
+  realtime_voice_live_qa: PASS
+  realtime_voice_production_verified: true
 
 shared_branch:
   name: quality/post-datacenters-requalification
   voice_ledger: quality/series-requalification/voice-article-ledger.yml
-  voice_source_milestone_persisted: true
-  voice_media_indexability_milestone_persisted: true
-  voice_browser_milestone_persisted: true
-  voice_intermediate_pixel_evidence_persisted: true
-  voice_final_zero_based_audit_persisted: true
-  last_site_evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
-  note: LEDGER_RECEIPT_COMMITS_AFTER_EVIDENCE_DO_NOT_CHANGE_SITE_FACING_BYTES
+  voice_release_receipt: quality/series-requalification/realtime-voice-release.yml
+  coding_ledger: quality/series-requalification/coding-article-ledger.yml
+  last_realtime_voice_site_evidence_revision: e4dbdc34cf32cbef4f92cf6f2a7a0379ea741de6
+  current_production_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+  note: LEDGER_RECEIPT_COMMITS_DO_NOT_CHANGE_SITE_FACING_BYTES
 
 linkedin:
   writes_from_this_program: 0
