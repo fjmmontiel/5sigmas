@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T22:09:00Z",
+  "unit": "seguridad-ia",
+  "branch": "migration/video-golden-seguridad-ia",
+  "stage": "SEMANTIC_ENGINE_VALIDATED_NOT_RENDERED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "head_before_implementation": "12f2e8a303b34e3ca4eb1d89b9d52077dfcffe1c",
+  "implementation": {
+    "mechanism_compiler_commit": "2b2d3be5ccb05702398a6e50df5e936568b31e9c",
+    "deterministic_engine_commit": "97680ff48299155b5b08e549d990265e18e1a60f",
+    "engine_regressions_commit": "cbe5abca01729b089b35438f7b27afcc17509a92",
+    "semantic_engine_gate_commit": "c616a5a9871de9f8b44c1a0d22a6f0aa9d541a03"
+  },
+  "workflow_evidence": {
+    "run": 35472453499,
+    "job": 105975773422,
+    "conclusion": "success",
+    "utf8_control_byte_integrity": "PASS_7_FILES",
+    "syntax_import_preflight": "PASS",
+    "tests": {"total": 14, "passed": 14, "failed": 0},
+    "render_matrix": {"jobs": 24, "horizontal": 12, "vertical": 12},
+    "semantic_coverage": {"canonical_concepts": 30, "perceptual_families": 27, "max_family_use": 2, "supported_topologies": 26}
+  },
+  "verified_contracts": [
+    "Every one of the 30 canonical concepts resolves to an explicit semantic topology; unsupported generic fallback fails closed.",
+    "Each concept compiles in native horizontal and native vertical geometry.",
+    "Seek and replay state is deterministic and independent of call order.",
+    "Reduced-motion state resolves semantic content without transitional choreography.",
+    "Native vertical geometry differs from horizontal geometry rather than shrinking the horizontal canvas.",
+    "Series perceptual-family reuse remains capped at two."
+  ],
+  "not_claimed": [
+    "No encoded Seguridad MP4 was produced by this checkpoint.",
+    "No whole-series encoded visual inspection has occurred.",
+    "No Drive review package was created.",
+    "No owner approval, Technical GOLDEN, merge, deployment or publication is claimed."
+  ],
+  "next_action": "Bind the validated semantic engine to the shared canvas renderer and editorial H/V text layout, render representative scene boundary frames locally/CI, fix any real text or mechanism-space defects, then encode the complete 24-output ES/EN H/V review unit before creating the single review package under the stable Drive root."
+}
