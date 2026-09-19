@@ -7,8 +7,8 @@ const pages = [
   ['00_presentacion_serie', 'AI Agents'],
   ['01-que-es-un-agente', 'An agent is a loop with permissions'],
   ['02-anatomia-de-un-agente', 'The anatomy of an agent'],
-  ['03-como-evaluar-un-agente', 'A demo measures an output. An agent needs a trace.'],
-  ['04-seguridad-agentes', 'Incoming data can become an instruction'],
+  ['03-como-evaluar-un-agente', 'One task, one trajectory, four evaluators'],
+  ['04-seguridad-agentes', 'An attack only needs one complete path to an effect'],
   ['05-de-la-demo-a-produccion', 'Chapter 5 — From demo to an operable system'],
 ];
 const viewports = [
