@@ -4,104 +4,73 @@
   "accent": "#26A69A",
   "runtime": {
     "version": "v4.1-visual-diversity",
-    "persisted": true,
-    "commit": "5700b6cbaa09c7bef83390136dbc5fa14385eca3",
     "renderer": "motion/src/engine.mjs",
-    "player": "motion/src/player.mjs",
-    "exporter": "motion/scripts/render.py"
+    "semantic_renderer": "motion/src/render/mechanisms/editorial.mjs",
+    "semantic_renderer_blob": "d9e9b7961883e63b479da550b8e41110fecb3bf7",
+    "exporter": "motion/scripts/render.py",
+    "head_before_checkpoint": "4301a24129f89c2dd303bf0d2e09f3da9db5e5ae"
   },
-  "evidence": {
-    "layout_v1": {
-      "workflow_run": 35382435443,
-      "head_sha": "dcb2cc7359fac557571a0c887bcff2a9d404d162",
-      "result": "24/24 horizontal+portrait composition checks passed; superseded by owner visual feedback"
+  "historicalEvidence": {
+    "review_v1": {
+      "status": "SUPERSEDED_BY_OWNER_FEEDBACK",
+      "technical_golden_count_at_time": 12,
+      "review_package_location": "https://drive.google.com/drive/folders/1RmRG45Y_MaGTbEFrttNIw6KAfq3oQCzR",
+      "reason": "Owner rejected undersized left-column copy, lower-left dead space and repeated numbered/descending animation grammar."
     },
-    "accessibility": {
-      "workflow_run": 35385714663,
-      "head_sha": "5700b6cbaa09c7bef83390136dbc5fa14385eca3",
-      "browsers": ["chromium", "webkit"],
-      "scope": "all 12 localized outputs",
-      "checks": ["localized controls", "complete transcript and evidence links", "keyboard focus and accessible names", "prefers-reduced-motion", "390x844 portrait recomposition", "browser page errors"],
-      "result": "completed success in Chromium and WebKit"
-    },
-    "final_render_v1": {
-      "workflow_run": 35383323465,
-      "head_sha": "e3ff0cbb114c38092ed945e34debb2dd7a72abd4",
-      "scope": "12 localized outputs x horizontal/vertical",
-      "result": "24/24 deterministic 60fps render/package jobs passed; superseded for visual review"
-    },
-    "metadata_sync_v1": {
-      "workflow_run": 35386145253,
-      "commit": "a6f8dd58d45504e1de6e6f864f8aba1b61dedf03",
-      "source_of_truth": "motion/content/modelos-razonadores/*.json",
-      "durations": {
-        "00_presentacion_serie.md": "PT1M15S",
-        "01-que-es-razonar.md": "PT1M22S",
-        "02-fallos.md": "PT1M48S",
-        "03-test-time-compute.md": "PT2M9S",
-        "04-latencia-streaming.md": "PT1M55S",
-        "05-riesgos.md": "PT2M1S"
-      },
-      "result": "durations synchronized from v4 specs"
-    },
-    "visual_review_v1": {
-      "render_workflow_run": 35383323465,
-      "result": "REOPENED by explicit owner review: body copy too small / lower-left dead space and excessive reuse of descending numbered/step animation grammar"
-    },
-    "owner_feedback_v2": {
-      "date": "2026-09-19",
-      "source": "chat review of complete Drive package",
-      "required_changes": [
-        "increase left-column text prominence and remove unexplained lower-left dead space",
-        "do not repeat one animation family more than two times by default across the complete series; three is an exceptional semantic ceiling only",
-        "replace template repetition with scene-specific mechanisms whose geometry is justified by the concept",
-        "redo all 12 localized outputs and issue a replacement review package"
-      ],
-      "gate_status": "OPEN"
-    },
-    "delivery_v1": {
-      "workflow_run": 35408957666,
-      "head_sha_before_delivery_commit": "07167a255e8d74a22a0bd418aeeafc78189161fe",
-      "scope": "12 localized outputs with canonical ES/EN media and consumers",
-      "result": "historically passed; visual release certification reopened",
-      "validated_main_sha": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89"
-    }
+    "accessibility_v1": {"workflow_run": 35385714663, "status": "HISTORICAL_STALE_AFTER_RENDERER_CHANGE"},
+    "final_render_v1": {"workflow_run": 35383323465, "status": "HISTORICAL_STALE_AFTER_RENDERER_CHANGE"},
+    "delivery_v1": {"workflow_run": 35408957666, "validated_main_sha": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89", "status": "HISTORICAL_STALE_AFTER_RENDERER_CHANGE"}
   },
-  "release": {
-    "state": "revision_required_visual_feedback",
+  "owner_feedback_v2": {
+    "date": "2026-09-19",
+    "source": "chat review of complete Drive package",
+    "gate_status": "OPEN",
+    "required_changes": [
+      "increase left-column explanatory text prominence",
+      "remove unexplained lower-left dead space",
+      "target no more than two uses of one explanatory motion family across the complete series",
+      "use concept-specific visual mechanisms rather than renamed template variants",
+      "redo all 12 localized outputs and issue a replacement review package"
+    ]
+  },
+  "currentRevalidation": {
+    "state": "IMPLEMENTATION_REPAIRED_PENDING_TEST_AND_RENDER",
     "technical_golden_count": 0,
     "technical_golden_total": 12,
-    "previous_technical_golden_count": 12,
-    "pr_number": 332,
-    "pr_url": "https://github.com/fjmmontiel/5sigmas/pull/332",
-    "pr_state": "draft_reopened_for_review_v2",
-    "validated_main_sha_v1": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89"
-  },
-  "review": {
-    "review_package_location_v1": "https://drive.google.com/drive/folders/1RmRG45Y_MaGTbEFrttNIw6KAfq3oQCzR",
-    "review_package_es_v1": "https://drive.google.com/drive/folders/1R_t-pw6t6Jcg5YI-TOrKHhR4rxxYoJKZ",
-    "review_package_en_v1": "https://drive.google.com/drive/folders/1wZzzqtFUHZyHTxiNHHhOWxLTWaD2mevq",
-    "review_package_v1_status": "SUPERSEDED_BY_OWNER_FEEDBACK",
+    "review_round": 2,
     "review_package_location": null,
-    "review_package_version": 2,
     "review_email_sent": false,
-    "previous_review_email_message_id": "1a0b740df6b0f124",
     "user_review_status": "revision_required_v2",
-    "golden_example_registry_location": null
+    "golden_example_approved_count": 0,
+    "completed_this_checkpoint": [
+      "replaced corrupt/truncated semantic renderer with valid UTF-8 source implementing every declared visual family",
+      "added real renderers for candidate-evidence, search-tree and token-clock instead of registry-only generic exceptions",
+      "bundled semantic renderer into deterministic offline exporter",
+      "prepared stricter integrity and visual-family implementation regressions"
+    ],
+    "next": [
+      "run exact-head deterministic contracts and visual-variety tests",
+      "render representative H/V review sheets and inspect actual text/spatial balance and perceptual motion diversity",
+      "iterate any failed scenes before full 12-output export",
+      "regenerate all ES/EN assets only after representative QA passes"
+    ]
   },
-  "requiredGates": ["framework", "sync", "source", "layout", "delivery", "accessibility", "visualQa"],
+  "requiredGates": [
+    "framework", "sync", "source", "layout", "delivery", "accessibility", "visualQa",
+    "textProminence", "spatialBalance", "semanticMotion", "withinVideoVariety", "seriesMotionDiversity", "fullSeriesVisualReview", "ownerFeedbackResolved"
+  ],
   "outputs": {
-    "es:00_presentacion_serie": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "es:01-que-es-razonar": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "es:02-fallos": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "es:03-test-time-compute": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "es:04-latencia-streaming": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "es:05-riesgos": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:00_presentacion_serie": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:01-que-es-razonar": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:02-fallos": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:03-test-time-compute": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:04-latencia-streaming": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false},
-    "en:05-riesgos": {"framework":true,"sync":true,"source":true,"layout":true,"delivery":true,"accessibility":true,"visualQa":true,"golden":false,"technical_golden":false,"golden_example_approved":false}
+    "es:00_presentacion_serie": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "es:01-que-es-razonar": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "es:02-fallos": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "es:03-test-time-compute": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "es:04-latencia-streaming": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "es:05-riesgos": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:00_presentacion_serie": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:01-que-es-razonar": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:02-fallos": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:03-test-time-compute": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:04-latencia-streaming": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false},
+    "en:05-riesgos": {"source":true,"framework":false,"sync":false,"layout":false,"delivery":false,"accessibility":false,"visualQa":false,"textProminence":false,"spatialBalance":false,"semanticMotion":false,"withinVideoVariety":false,"seriesMotionDiversity":false,"fullSeriesVisualReview":false,"ownerFeedbackResolved":false,"technical_golden":false,"golden_example_approved":false}
   }
 }

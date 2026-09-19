@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
-import {visualFamilyInventory,selectEditorialRenderer} from '../src/render/mechanisms/editorial.mjs';
+import {visualFamilyInventory,selectEditorialRenderer,editorialFamilyNames} from '../src/render/mechanisms/editorial.mjs';
 import {EDITORIAL_LAYOUT_CONTRACT} from '../src/render/layout.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
@@ -19,11 +19,12 @@ export function validateVisualVariety(){
       assert.ok(row.family,`${file}:${row.scene} must declare a semantic visual family`);
       counts.set(row.family,(counts.get(row.family)||0)+1);
       const scene=spec.scenes.find(item=>item.id===row.scene);
-      const genericAllowed=new Set(['candidate-evidence','search-tree','token-clock']);
-      if(!genericAllowed.has(row.family))assert.equal(typeof selectEditorialRenderer(spec,scene),'function',`${file}:${row.scene} must have a scene-specific semantic renderer`);
+      assert.equal(typeof selectEditorialRenderer(spec,scene),'function',`${file}:${row.scene}:${row.family} must resolve to a real semantic renderer; registry labels alone cannot pass`);
       inventory.push({spec:file,scene:row.scene,family:row.family});
     }
   }
+  const implemented=new Set(editorialFamilyNames());
+  for(const family of counts.keys())assert.ok(implemented.has(family),`${family} is declared but has no implementation`);
   const repeatCap=EDITORIAL_LAYOUT_CONTRACT.animationFamilyRepeatCap;
   assert.equal(repeatCap,2,'owner feedback requires the normal animation-family cap to be two per complete series');
   for(const [family,count] of counts)assert.ok(count<=repeatCap,`${family} repeats ${count} times; cap=${repeatCap}`);
@@ -31,7 +32,7 @@ export function validateVisualVariety(){
   assert.ok(EDITORIAL_LAYOUT_CONTRACT.horizontalBodyTarget>=40,'horizontal body copy target must remain visually prominent');
   assert.ok(EDITORIAL_LAYOUT_CONTRACT.horizontalTextWidth<=800,'left copy must wrap enough to use its vertical area');
   assert.ok(EDITORIAL_LAYOUT_CONTRACT.horizontalSourceGapMax<=90,'excess bottom-left dead space is forbidden');
-  return {series:'modelos-razonadores',sceneCount:inventory.length,repeatCap,families:Object.fromEntries([...counts].sort()),inventory,layout:EDITORIAL_LAYOUT_CONTRACT};
+  return {series:'modelos-razonadores',sceneCount:inventory.length,repeatCap,families:Object.fromEntries([...counts].sort()),implementedFamilies:implemented.size,inventory,layout:EDITORIAL_LAYOUT_CONTRACT};
 }
 
 if(process.argv[1]&&fileURLToPath(import.meta.url)===resolve(process.argv[1]))console.log(JSON.stringify(validateVisualVariety(),null,2));
