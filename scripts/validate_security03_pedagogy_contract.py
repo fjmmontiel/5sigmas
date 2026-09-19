@@ -30,6 +30,8 @@ REQUIRED = {
         'data-edge="derive-index"', 'data-edge="derive-cache"', 'data-edge="index-retrieve"',
         'data-edge="cache-retrieve"', 'data-edge="decision-tool"',
         "const residual=s.index||s.cache,reaches=s.retrieved&&residual",
+        "const setHidden=(node,hidden)=>node.toggleAttribute('hidden',hidden)",
+        "if(s.revoked&&!residual)",
         "s={...s,row:false,revoked:true}", "s={...s,index:false,cache:false,retrieved:false}",
         "Borrar la fila original no prueba olvido",
         "La revocación solo es completa cuando esos derivados dejan de ser alcanzables",
@@ -125,6 +127,24 @@ def self_test(texts: dict[str, tuple[str, str]]) -> None:
     )
     if not any("retrieved&&residual" in item for item in failures(mutated)):
         raise AssertionError("persistence residual-reachability mutation was not rejected")
+    mutated = dict(texts)
+    mutated["persistence"] = (
+        persistence_html.replace(
+            "const setHidden=(node,hidden)=>node.toggleAttribute('hidden',hidden)",
+            "const setHidden=(node,hidden)=>{node.hidden=hidden}",
+            1,
+        ),
+        persistence_i18n,
+    )
+    if not any("toggleAttribute" in item for item in failures(mutated)):
+        raise AssertionError("SVG hidden-attribute regression mutation was not rejected")
+    mutated = dict(texts)
+    mutated["persistence"] = (
+        persistence_html.replace("if(s.revoked&&!residual)", "if(!s.row&&!residual)", 1),
+        persistence_i18n,
+    )
+    if not any("revoked&&!residual" in item for item in failures(mutated)):
+        raise AssertionError("complete-revocation state-order mutation was not rejected")
     runtime_html, runtime_i18n = texts["runtime_vs_weights"]
     mutated = dict(texts)
     # Mutate the actual causal state transition, not the button selector. The
