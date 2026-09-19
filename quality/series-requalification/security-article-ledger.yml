@@ -130,7 +130,7 @@ production_reconciliation:
   route_locale_rows_golden: 12/12
   known_p0_p1_p2: 0
 
- authenticated_gsc_observation:
+authenticated_gsc_observation:
   source_repository: fjmmontiel/5sigmas-tools-content
   canonical_ledger_issue: 282
   generated_at: 2026-09-18T10:41:23.954185+02:00
