@@ -1,0 +1,106 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+recorded_date: 2026-09-19
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+baseline_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+baseline_live_release_qa_run: 35463064627
+baseline_live_release_qa_status: PASS_NON_GOLDEN_RELEASE_SURFACE_ONLY
+catalog:
+  chapters: 6
+  route_locale_rows: 12
+  series_presentation: false
+article_iteration_policy:
+  iteration_count_changed_this_run: false
+  reason: shared_gate_code_changed_but_no_article_bytes_or_complete_route_review_were_promoted
+current_article_ledger:
+  BUILD_PASS: 12/12
+  SOURCE_PASS: 0/12
+  BROWSER_PASS: 0/12
+  MEDIA_VISUAL_PASS: 0/12
+  INDEXABILITY_PASS: 0/12
+  PIXEL_REVIEW: 0/12
+  PEDAGOGY_REVIEW: 0/12
+  ARTICLE_GOLDEN: 0/6
+  known_P1:
+    VIDEO_REQUIRED_UNDECLARED: 12
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocker: false
+  generated_or_cloned: false
+  narration_dependent_captions_transcript_timings_generated: false
+gate_hardening:
+  coding_indexability:
+    path: scripts/validate_coding_indexability.py
+    commit: 97a4727ab8d8241690778587750cec7bc60c9193
+    exact_series_inventory: true
+    article_and_watch_surfaces: true
+    rendered_gate_reuses: scripts/validate_security_indexability.py
+    negative_fixtures:
+      - accidental_noindex
+      - cross_locale_canonical
+      - missing_h1
+      - sitemap_hreflang_signal
+      - orphan_signal
+    google_selection_separate: true
+  coding_media_visual:
+    path: scripts/validate_coding_media_visual.py
+    commit: f431230aedb1dd1f0a840f8e507be8ebf882d0a4
+    exact_series_inventory: true
+    native_es_en_video_blocking: true
+    exact_mp4_probe: true
+    poster_metadata_duration_key_moments_blocking: true
+    deterministic_frame_samples_per_video: 6
+    voice_audio_captions_transcript_deferred: true
+    pixel_pedagogy_manual_only: true
+  pr_gate:
+    path: .github/workflows/pr-coding-agents-golden.yml
+    commit: 23f3087b053f4957f5d39abd4ddb4e2caa610887
+    indexability_mandatory: true
+    media_visual_mandatory: true
+    locales_en_media_path_watched: true
+    failure_artifacts_retention_days: 1
+source_requalification_progress:
+  chapters_inspected_for_current_contract_and_primary_surface:
+    - 01-que-es-agent-harness
+    - 02-contexto-workspace-sandboxing-aislamiento
+    - 03-specs-planificacion-task-decomposition-checkpoints
+  current_source_validators_present_for_all_six_chapters: true
+  source_pass_promoted: false
+  reason: fresh_primary_and_contract_inspection_started_but_full_per_route_source_validation_not_executed_yet
+historical_symptom_reconciliation:
+  chapter_05_acceptance_predicate:
+    current_source_contains: 'Accept(h)=C(h) AND V(h) AND D(h) AND P(h) AND F(h)'
+    source_validator_requires_all_terms: true
+    browser_validator_requires_rendered_mathjax: true
+    reopened_defect: false
+branch_state:
+  branch: quality/post-datacenters-requalification
+  head_after_gate_hardening: 23f3087b053f4957f5d39abd4ddb4e2caa610887
+  comparison_to_current_main:
+    status: diverged
+    ahead_by: 80
+    behind_by: 43
+    merge_base: ae71e576c793064d0429ec21bd3226790cc36974
+  policy:
+    force_push: false
+    merge_blind: false
+    final_pr_allowed_before_current_main_reconciliation: false
+open_pr_coordination:
+  draft_34:
+    state: open
+    draft: true
+    merged: false
+    mergeable: false
+    reused_blindly: false
+  coding_specific_open_pr_found: false
+actions:
+  newly_triggered: 0
+  reason: known_MEDIA_VISUAL_P1_would_make_final_series_gate_fail_predictably; no_cadence_CI
+next_action:
+  - reconcile_work_on_current_main_without_force_push_or_stomping_parallel_work
+  - produce_and_declare_native_es_en_visual_video_for_multiple_coding_chapters
+  - execute_fresh_source_indexability_media_browser_gates_on_exact_integrated_head
+  - retain_and_manually_inspect_pixel_pedagogy_evidence_desktop_mobile_normal_reduced
+  - persist_per_route_results_and_only_then_promote_article_golden
