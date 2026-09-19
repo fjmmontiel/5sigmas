@@ -27,6 +27,7 @@ const inspectVisualOverflow = async (visual) => visual.evaluate((root) => {
         clientWidth: node.clientWidth,
         scrollWidth: node.scrollWidth,
         overflowX: style.overflowX,
+        isHtml: node instanceof HTMLElement,
       };
     })
     .filter((item) =>
@@ -35,7 +36,11 @@ const inspectVisualOverflow = async (visual) => visual.evaluate((root) => {
       (
         item.right > rootRect.right + 2 ||
         item.left < rootRect.left - 2 ||
-        (item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX))
+        (
+          item.isHtml &&
+          item.scrollWidth > item.clientWidth + 2 &&
+          !['auto', 'scroll'].includes(item.overflowX)
+        )
       )
     )
     .slice(0, 12);
@@ -88,8 +93,8 @@ try {
       }
 
       // This validator owns this visual. Whole-page overflow remains enforced by the
-      // dedicated series/browser gates. Non-rendered zero-area descendants cannot
-      // create visible overflow and are ignored without changing the rendered threshold.
+      // dedicated series/browser gates. SVG geometry is bounded with rendered boxes;
+      // scrollWidth/clientWidth is only meaningful for HTML layout boxes.
       const overflow = await inspectVisualOverflow(visual);
       if (overflow.scrollWidth > overflow.clientWidth + 2 || overflow.offenders.length) {
         failures.push(`${viewport.name}: memory visual overflow; visual=${JSON.stringify(overflow)}`);
