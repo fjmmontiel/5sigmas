@@ -74,8 +74,8 @@ for (const route of routes) {
 
 const contentChecks = [
   ['/en/series/agentes-ia/01-que-es-un-agente/', 'An agent is a loop with permissions'],
-  ['/en/series/agentes-ia/03-como-evaluar-un-agente/', 'A demo measures an output. An agent needs a trace.'],
-  ['/en/series/agentes-ia/04-seguridad-agentes/', 'Incoming data can become an instruction'],
+  ['/en/series/agentes-ia/03-como-evaluar-un-agente/', 'One task, one trajectory, four evaluators'],
+  ['/en/series/agentes-ia/04-seguridad-agentes/', 'An attack only needs one complete path to an effect'],
 ];
 for (const [route, expected] of contentChecks) {
   await page.goto(`${base}${route}`, { waitUntil: 'domcontentloaded' });

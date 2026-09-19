@@ -1,0 +1,180 @@
+name: Agents requalification diagnostic
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/agents-audit-request.json']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agents-requalification-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Record exact audited revision
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/agents-audit-request.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install build dependencies
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Agents 03/04 relationship-first contract and mutations
+        id: relationship
+        continue-on-error: true
+        run: |
+          python scripts/validate_agents_relationship_visuals.py --self-test
+          python scripts/validate_agents_relationship_visuals.py
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Publication discovery and contract
+        id: publication
+        continue-on-error: true
+        run: |
+          python scripts/test_publication_contract_discovery.py -v
+          python scripts/audit_publication_contract.py
+
+      - name: Agents MEDIA_VISUAL evidence and native-video frames; VOICE stays deferred
+        id: media_visual
+        continue-on-error: true
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          python scripts/validate_agents_media_visual.py --self-test
+          python scripts/validate_agents_media_visual.py
+
+      - name: Prepare English
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Agents INDEXABILITY negative mutations and rendered gate
+        id: indexability
+        continue-on-error: true
+        run: |
+          python scripts/validate_agents_indexability.py --self-test
+          python scripts/validate_agents_indexability.py --site site
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve exact built preview
+        run: |
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/agents-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/agents-preview.log
+          exit 1
+
+      - name: Agents article/watch browser resources and runtime smoke
+        id: browser_resources
+        continue-on-error: true
+        timeout-minutes: 12
+        env:
+          S5_BROWSER_RESOURCE_PATHS: >-
+            /series/agentes-ia/00_presentacion_serie/,/en/series/agentes-ia/00_presentacion_serie/,
+            /series/agentes-ia/01-que-es-un-agente/,/en/series/agentes-ia/01-que-es-un-agente/,
+            /series/agentes-ia/02-anatomia-de-un-agente/,/en/series/agentes-ia/02-anatomia-de-un-agente/,
+            /series/agentes-ia/03-como-evaluar-un-agente/,/en/series/agentes-ia/03-como-evaluar-un-agente/,
+            /series/agentes-ia/04-seguridad-agentes/,/en/series/agentes-ia/04-seguridad-agentes/,
+            /series/agentes-ia/05-de-la-demo-a-produccion/,/en/series/agentes-ia/05-de-la-demo-a-produccion/,
+            /videos/series/agentes-ia/00_presentacion_serie/,/en/videos/series/agentes-ia/00_presentacion_serie/,
+            /videos/series/agentes-ia/01-que-es-un-agente/,/en/videos/series/agentes-ia/01-que-es-un-agente/,
+            /videos/series/agentes-ia/02-anatomia-de-un-agente/,/en/videos/series/agentes-ia/02-anatomia-de-un-agente/,
+            /videos/series/agentes-ia/03-como-evaluar-un-agente/,/en/videos/series/agentes-ia/03-como-evaluar-un-agente/,
+            /videos/series/agentes-ia/04-seguridad-agentes/,/en/videos/series/agentes-ia/04-seguridad-agentes/,
+            /videos/series/agentes-ia/05-de-la-demo-a-produccion/,/en/videos/series/agentes-ia/05-de-la-demo-a-produccion/
+        run: node scripts/audit_agents_browser_resources.mjs
+
+      - name: Enforce current Agents technical milestone; never certify PIXEL or PEDAGOGY automatically
+        if: always()
+        env:
+          RELATIONSHIP_OUTCOME: ${{ steps.relationship.outcome }}
+          PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
+          MEDIA_VISUAL_OUTCOME: ${{ steps.media_visual.outcome }}
+          INDEXABILITY_OUTCOME: ${{ steps.indexability.outcome }}
+          BROWSER_RESOURCES_OUTCOME: ${{ steps.browser_resources.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          print('SERIES=agentes-ia; GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=MANUAL_REQUIRED; PEDAGOGY_REVIEW=MANUAL_REQUIRED')
+          print('VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL; voice/audio/captions/transcript are non-blocking under owner amendment 5716685049')
+          for path in (
+              Path('artifacts/agents-requalification/agents-media-visual.json'),
+              Path('artifacts/agents-requalification/indexability/report.json'),
+              Path('artifacts/agents-requalification/browser-resource-proof.json'),
+          ):
+              if path.exists():
+                  data = json.loads(path.read_text())
+                  print(path.as_posix(), json.dumps({
+                      'MEDIA_VISUAL_PASS': data.get('MEDIA_VISUAL_PASS'),
+                      'VOICE_ENHANCEMENT': data.get('VOICE_ENHANCEMENT'),
+                      'INDEXABILITY_PASS': data.get('INDEXABILITY_PASS'),
+                      'media_visual_blocker_count': len(data.get('media_visual_blockers', [])),
+                      'voice_enhancement_debt_count': len(data.get('voice_enhancement_debt', [])),
+                      'blocker_count': len(data.get('blockers', [])),
+                      'reclassified_abort_count': data.get('reclassified_abort_count'),
+                      'unresolved_failure_count': data.get('unresolved_failure_count'),
+                  }, ensure_ascii=False))
+          names = [
+              'RELATIONSHIP_OUTCOME',
+              'PUBLICATION_OUTCOME',
+              'MEDIA_VISUAL_OUTCOME',
+              'INDEXABILITY_OUTCOME',
+              'BROWSER_RESOURCES_OUTCOME',
+          ]
+          outcomes = {name: os.environ.get(name, '') for name in names}
+          print('AGENTS_TECHNICAL_OUTCOMES', json.dumps(outcomes, sort_keys=True))
+          raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
+          PY
+
+      - name: Retain bounded Agents diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-requalification-diagnostic
+          path: |
+            artifacts/agents-requalification/
+            artifacts/browser-resources/
+            artifacts/security-requalification/shared-browser-resources/report.json
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true

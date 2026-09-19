@@ -1,0 +1,102 @@
+schema_version: 7
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+canonical_series_order:
+  - seguridad-ia
+  - agentes-ia
+  - agentes-voz-tiempo-real
+  - coding-agents-agent-harnesses
+  - context-engineering-memory-mcp
+  - llm-inference-engineering-economics
+  - evaluating-ai-systems-production
+
+active_series: agentes-ia
+
+series_status:
+  seguridad-ia:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    fresh_zero_based_audit_run: 35361765019
+    fresh_zero_based_audit_head: 830bd55d63da1e95ea4461b0086295f9bc8c057a
+    fresh_zero_based_audit: PASS
+    media_visual: PASS
+    indexability: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 330
+    release_head: 729d824d00d3d21b6b3521abf5553fe81a6c8968
+    merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    deploy_run: 35392652259
+    deploy_build: PASS
+    deploy: PASS
+    live_qa: PASS
+    state: SERIES_GOLDEN
+    production_verified: true
+  agentes-ia:
+    ledger: quality/series-requalification/agents-article-ledger.yml
+    state: RELEASE_READY_AWAITING_FINAL_PR_MERGE_DEPLOY_LIVE_QA
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
+    technical_milestone_run: 35402872378
+    technical_milestone: PASS
+    source_review_head: c042e01e40e62947dc36d827801a97bf2ae633d5
+    source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
+    relationship_guard_agents03_04: PASS_WITH_4_NEGATIVE_MUTATIONS
+    strict_es_build: PASS
+    strict_en_build: PASS
+    publication_contract: PASS
+    media_visual: PASS_12_OF_12
+    media_visual_blockers: 0
+    indexability: PASS_12_OF_12
+    native_video_frames_reviewed: 72
+    native_video_visual_review: PASS_REAL_NATIVE_NONPLACEHOLDER_READABLE
+    browser_resource_runtime_smoke: PASS_96_CONTEXTS_CAUSAL_RANGE_RESPONSE_PROOF
+    browser_resource_contexts: 96
+    browser_media_aborts_reclassified_with_causal_proof: 51
+    browser_media_aborts_unresolved: 0
+    causal_abort_proof_mutations: 8
+    causal_abort_proof_constraints: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_200_206_BEFORE_ABORT_PLUS_FINAL_HEALTH_REQUIRED; UNPROVEN_ABORTS_REMAIN_FATAL; LISTENERS_REMAIN_ACTIVE_THROUGH_TEARDOWN
+    full_experience_head: 68dc7739e7855d3f78e7394d775af904c55b4e69
+    full_experience_run: 35405478586
+    full_experience: PASS_48_OF_48
+    full_experience_artifact_id: 10571993843
+    full_experience_artifact_sha256: 9a8cedad7adebe228ba15235be731c0f013f87c08ed63c1df8ff3ecc6cb4d6cc
+    browser: PASS_12_OF_12
+    pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+    pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+    known_p0_p1_p2: 0
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    fresh_zero_based_series_audit_run: 35406872463
+    fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
+    fresh_zero_based_series_audit: PASS
+    fresh_series_relationship_guards: PASS
+    fresh_series_strict_es: PASS
+    fresh_series_strict_en: PASS
+    fresh_series_publication_reconciliation: PASS
+    fresh_series_media_visual: PASS
+    fresh_series_indexability: PASS
+    fresh_series_browser_resources: PASS
+    manual_pixel_pedagogy_reused_only_for_unchanged_site_facing_bytes: true
+    series_golden: false
+    production_verified: false
+    next_action: FINAL_FOCUSED_RELEASE_PR_EXACT_HEAD_CHECKS_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
+  agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+  evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+
+shared_branch:
+  name: quality/post-datacenters-requalification
+  synchronized_with_security_main_merge_without_force_push: true
+  security_release_receipt: quality/series-requalification/security-series-release.yml
+  agents_ledger: quality/series-requalification/agents-article-ledger.yml
+
+linkedin:
+  writes_from_this_program: 0
+  queues_from_this_program: 0
+  activations_from_this_program: 0
+  release_contract_281_ownership_preserved: true
+  issue_279_preserved: true

@@ -10,7 +10,20 @@ tags:
   - Arquitectura
   - Tool Calling
 video: "02-anatomia-de-un-agente.mp4"
+video_poster: "02-anatomia-de-un-agente.jpg"
+video_title: "La anatomía de un agente"
+video_summary: "Separa lo que propone el modelo de lo que decide el runtime y muestra cómo tools, memoria, estado, contexto, permisos y salida forman contratos distintos."
 video_duration: "PT60S"
+video_chapters:
+  - name: "Modelo y runtime: propuesta frente a ejecución"
+    start: 0
+    end: 20
+  - name: "Tools, memoria y estado como contratos distintos"
+    start: 20
+    end: 40
+  - name: "Contexto, permisos y condición de salida"
+    start: 40
+    end: 60
 ---
 
 # Capítulo 2 — La anatomía de un agente

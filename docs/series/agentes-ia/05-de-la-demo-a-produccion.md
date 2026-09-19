@@ -10,7 +10,20 @@ tags:
   - Producción
   - Arquitectura
 video: "05-de-la-demo-a-produccion.mp4"
+video_poster: "05-de-la-demo-a-produccion.jpg"
+video_title: "De la demo a producción"
+video_summary: "Qué hace operable a un agente bajo fallos: presupuestos, retries, idempotencia, trazas, cierres honestos y criterio para preferir un workflow determinista."
 video_duration: "PT60S"
+video_chapters:
+  - name: "Producción empieza con el fallo"
+    start: 0
+    end: 20
+  - name: "Idempotencia, retries y observabilidad"
+    start: 20
+    end: 40
+  - name: "Cierre honesto y cuándo no usar un agente"
+    start: 40
+    end: 60
 ---
 
 # Capítulo 5 — De la demo a un sistema operable

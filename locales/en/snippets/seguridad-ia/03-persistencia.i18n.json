@@ -1,6 +1,6 @@
 {
   "source": "snippets/seguridad-ia/03-persistencia.html",
-  "source_blob_sha": "babd0c7c07dcbe0f09a061a3388cf3bca77e33c0",
+  "source_blob_sha": "2363a13266c6dd284375748cc1da211ddec58247",
   "replacements": {
     "Persistir crea copias; revocar exige cortar todas las rutas": "Persistence creates copies; revocation must cut every path",
     "Este modelo separa la fila de memoria original de sus derivados. Una consulta futura puede recuperar una copia aunque el turno que la creó haya terminado, y borrar solo el origen no garantiza que la influencia desaparezca.": "This model separates the original memory row from its derivatives. A future query can retrieve a copy after the turn that created it has ended, and deleting only the source does not guarantee that the influence is gone.",
