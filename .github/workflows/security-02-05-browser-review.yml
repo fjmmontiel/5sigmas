@@ -59,8 +59,8 @@ jobs:
       - name: Security02-05 real browser interaction evidence
         id: browser
         run: node scripts/validate_security_02_05_browser.mjs
-      - name: Retain exact browser screenshots and report
-        if: always()
+      - name: Retain exact browser diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: security-02-05-browser-review
