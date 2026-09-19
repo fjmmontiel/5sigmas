@@ -205,15 +205,15 @@
 @media (max-width: 560px) {
   .mem-lane-body { grid-template-columns: minmax(0, 1fr); }
   .mem-lane-body > *, .mem-visual, .mem-props { min-width: 0; max-width: 100%; }
-  .mem-ctx-bar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; }
+  .mem-ctx-bar { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto !important; }
   .mem-ctx-seg {
     min-width: 0;
     min-height: 30px;
-    padding: 4px 6px;
-    white-space: normal;
+    padding: 4px 6px !important;
+    white-space: normal !important;
     overflow-wrap: anywhere;
     line-height: 1.15;
-    text-overflow: clip;
+    text-overflow: clip !important;
   }
 }
 
