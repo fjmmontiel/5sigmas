@@ -43,6 +43,9 @@
     "The release unit remains blocked until every ES/EN video and all consumer integrations pass GOLDEN.",
     "All twelve ES/EN v4 motion specs are authored and final horizontal media is staged through the normal ES/EN locale trees.",
     "English reasoning media no longer uses a one-off TTC artifact injection; locales/en/media.yml is the explicit metadata authority for all six videos.",
+    "Technical GOLDEN remains machine-gated until delivery integration passes for every ES/EN consumer surface.",
+    "All twelve ES/EN v4 motion specs are authored and final horizontal media is staged through the normal ES/EN locale trees.",
+    "English reasoning media no longer uses a one-off TTC artifact injection; locales/en/media.yml is the explicit metadata authority for all six videos.",
     "Technical GOLDEN remains machine-gated until delivery integration passes for every ES/EN consumer surface."
   ],
   "validatedMainSha": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89"
