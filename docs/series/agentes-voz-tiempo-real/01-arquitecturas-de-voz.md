@@ -10,6 +10,21 @@ tags:
   - Arquitectura
   - Realtime
   - Agentes
+video: 01-arquitecturas-de-voz.mp4
+video_poster: 01-arquitecturas-de-voz.jpg
+video_title: Arquitecturas de voz
+video_summary: Dónde aparece el texto y por qué full-duplex es un eje distinto.
+video_duration: PT36S
+video_chapters:
+- name: Fronteras observables
+  start: 0
+  end: 12
+- name: Modalidad
+  start: 12
+  end: 24
+- name: Interacción
+  start: 24
+  end: 36
 ---
 
 # Capítulo 1 — Arquitecturas de voz: dónde colocas la frontera de texto
