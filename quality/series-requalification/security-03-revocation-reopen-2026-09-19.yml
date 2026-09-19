@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: seguridad-ia
 article: 03-envenenamiento
@@ -8,7 +8,7 @@ release_branch: release/agents-golden-requalification
 release_fix_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
 repair_branch: quality/post-datacenters-requalification
 repair_mirror_head: 867e173625feb949ee39edb53fd7791c6f72c959
-supersedes_security03_rows_in_security_article_ledger_until_reconciled: true
+history_preserved: true
 voice_enhancement: DEFERRED_OWNER_LOCAL
 voice_is_blocker: false
 indexability_delta: NONE
@@ -19,56 +19,82 @@ fixes:
   - Replaced SVG visibility mutation with Element.toggleAttribute('hidden', ...).
   - Prioritized revoked-and-no-residual as the clean REVOKED state.
   - Added deterministic source mutations for both regressions.
+
+resolution:
+  resolved: true
+  resolved_at_release_merge: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+  exact_head_release_pr: 331
+  exact_head_interaction_run: 35419776376
+  exact_head_interaction_result: PASS_SECURITY_VISUALS_END_TO_END
+  exact_head_build_search_publication_browser_result: PASS
+  deploy_run: 35423089825
+  deploy_build: PASS
+  deploy: PASS
+  live_qa: PASS
+  live_spanish_resources: PASS
+  live_english_security_media: PASS
+  dedicated_live_security03_interaction_script_run: false
+  evidence_boundary: >-
+    Security03 interaction semantics were proven against the exact release head before merge;
+    the exact merge artifact then passed build, deployment and production resource/media QA.
+    No claim is made that validate_security_02_05_browser.mjs itself ran against production.
+  p0_p1_p2_after_reconciliation: 0
+  canonical_hreflang_sitemap_internal_discovery: PASS_UNCHANGED_AND_RELEASE_REVERIFIED
+  media_visual: PASS_UNCHANGED_AND_LIVE_ENGLISH_SECURITY_MEDIA_REVERIFIED
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+
 rows:
   - route: series/seguridad-ia/03-envenenamiento.md
     locale: es
     iteration_count: 13
-    last_reviewed_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    state: QA
-    SOURCE_PASS: PENDING_EXACT_HEAD_GATE
-    BUILD_PASS: PENDING_EXACT_HEAD_GATE
-    BROWSER_PASS: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    last_reviewed_head: ea23d2f57f5bf479ec07e78dd2582f011baedb89
+    state: GOLDEN
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
     MEDIA_VISUAL_PASS: true
     INDEXABILITY_PASS: true
-    PIXEL_REVIEW: PENDING_EXACT_HEAD_RENDER_RECHECK
-    PEDAGOGY_REVIEW: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects:
       P0: []
-      P1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+      P1: []
       P2: []
-    parity_factual_source: UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED
-    canonical_status: PASS_UNCHANGED_SIGNAL
-    hreflang_status: PASS_UNCHANGED_SIGNAL
-    sitemap_status: PASS_UNCHANGED_SIGNAL
-    internal_discovery_status: PASS_UNCHANGED_SIGNAL
-    robots_status: PASS_UNCHANGED_SIGNAL
-    watch_video_lifecycle: PASS_UNCHANGED_MEDIA
-    evidence_revision: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    next_action: HARVEST_EXACT_HEAD_ENGLISH_MIRROR_AND_RELEASE_CHECKS_THEN_RECONCILE_CANONICAL_LEDGER
+    parity_factual_source: PASS_UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED_AND_EXACT_HEAD_RELEASE_GATE
+    canonical_status: PASS_RELEASE_REVERIFIED
+    hreflang_status: PASS_RELEASE_REVERIFIED
+    sitemap_status: PASS_RELEASE_REVERIFIED
+    internal_discovery_status: PASS_RELEASE_REVERIFIED
+    robots_status: PASS_RELEASE_REVERIFIED
+    watch_video_lifecycle: PASS_UNCHANGED_MEDIA_AND_LIVE_RESOURCE_REVERIFIED
+    evidence_revision: PR331_HEAD_ea23d2f_RUN_35419776376__MERGE_e4e565c_DEPLOY_35423089825
+    live_deploy_verification: PASS_EXACT_MERGE_DEPLOY_AND_LIVE_QA
+    next_action: NONE_RECONCILED_CURRENT_GOLDEN
   - route: series/seguridad-ia/03-envenenamiento.md
     locale: en
     iteration_count: 13
-    last_reviewed_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    state: QA
-    SOURCE_PASS: PENDING_EXACT_HEAD_GATE
-    BUILD_PASS: PENDING_EXACT_HEAD_GATE
-    BROWSER_PASS: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    last_reviewed_head: ea23d2f57f5bf479ec07e78dd2582f011baedb89
+    state: GOLDEN
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
     MEDIA_VISUAL_PASS: true
     INDEXABILITY_PASS: true
-    PIXEL_REVIEW: PENDING_EXACT_HEAD_RENDER_RECHECK
-    PEDAGOGY_REVIEW: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects:
       P0: []
-      P1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+      P1: []
       P2: []
-    parity_factual_source: UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED
-    canonical_status: PASS_UNCHANGED_SIGNAL
-    hreflang_status: PASS_UNCHANGED_SIGNAL
-    sitemap_status: PASS_UNCHANGED_SIGNAL
-    internal_discovery_status: PASS_UNCHANGED_SIGNAL
-    robots_status: PASS_UNCHANGED_SIGNAL
-    watch_video_lifecycle: PASS_UNCHANGED_MEDIA
-    evidence_revision: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    next_action: HARVEST_EXACT_HEAD_ENGLISH_MIRROR_AND_RELEASE_CHECKS_THEN_RECONCILE_CANONICAL_LEDGER
+    parity_factual_source: PASS_UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED_AND_EXACT_HEAD_RELEASE_GATE
+    canonical_status: PASS_RELEASE_REVERIFIED
+    hreflang_status: PASS_RELEASE_REVERIFIED
+    sitemap_status: PASS_RELEASE_REVERIFIED
+    internal_discovery_status: PASS_RELEASE_REVERIFIED
+    robots_status: PASS_RELEASE_REVERIFIED
+    watch_video_lifecycle: PASS_UNCHANGED_MEDIA_AND_LIVE_ENGLISH_SECURITY_REVERIFIED
+    evidence_revision: PR331_HEAD_ea23d2f_RUN_35419776376__MERGE_e4e565c_DEPLOY_35423089825
+    live_deploy_verification: PASS_EXACT_MERGE_DEPLOY_AND_LIVE_QA
+    next_action: NONE_RECONCILED_CURRENT_GOLDEN
