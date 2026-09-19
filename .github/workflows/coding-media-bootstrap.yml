@@ -1,0 +1,119 @@
+name: Coding Agents media bootstrap
+
+on:
+  push:
+    branches:
+      - quality/coding-agents-requalification
+    paths:
+      - '.github/workflows/coding-media-bootstrap.yml'
+      - 'scripts/generate_coding_agent_visual_media.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coding-agents-media-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  generate-validate-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quality/coding-agents-requalification
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install generation and site dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pillow
+
+      - name: Generate locale-native silent visual media
+        run: python scripts/generate_coding_agent_visual_media.py
+
+      - name: Validate chapter source contracts
+        run: |
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+          node scripts/validate_coding_agent_harness_ch4_source.mjs
+          node scripts/validate_coding_agent_harness_ch5_source.mjs
+          node scripts/validate_coding_agent_harness_ch6_source.mjs
+
+      - name: Validate MEDIA_VISUAL owner split and exact native binaries
+        run: |
+          python scripts/validate_coding_media_visual.py --self-test
+          python scripts/validate_coding_media_visual.py --output artifacts/coding-requalification/coding-media-visual.json
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and audit English locale
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate rendered INDEXABILITY plus negative fixtures
+        run: |
+          python scripts/validate_coding_indexability.py --self-test
+          python scripts/validate_coding_indexability.py --site site --output artifacts/coding-requalification/indexability/report.json
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Validate browser resources and Coding interactions
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch5_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
+          node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Commit generated site-facing media after all gates pass
+        run: |
+          if git diff --quiet -- docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml; then
+            echo 'No generated media changes to commit.'
+            exit 0
+          fi
+          git config user.name '5sigmas GOLDEN Series Builder'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml
+          git commit -m 'Add Coding Agents native visual videos ES and EN'
+          git push origin HEAD:quality/coding-agents-requalification
