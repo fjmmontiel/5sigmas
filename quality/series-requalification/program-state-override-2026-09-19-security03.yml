@@ -1,0 +1,39 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+recorded_at: 2026-09-19T05:00:00+02:00
+active_series: agentes-ia
+precedence: TEMPORARY_OVERRIDE_UNTIL_CANONICAL_PROGRAM_STATE_RECONCILED
+reason: PR_331_EXACT_HEAD_NO_REGRESSION_DISCOVERED_AND_REPAIRED_REAL_SECURITY03_SITE_FACING_INTERACTION_DEFECT
+series:
+  seguridad-ia:
+    previous_state: SERIES_GOLDEN_PRODUCTION_VERIFIED
+    current_state: QA_REOPENED_SECURITY03_EXACT_HEAD_REVALIDATION_REQUIRED
+    unaffected_articles: [00_presentacion_serie, 01_prompt_injection, 02_jailbreaks, 04_defensas, 05_evaluacion]
+    affected_article: 03_envenenamiento
+    affected_locales: [es, en]
+    indexability_status: PASS_UNCHANGED_SIGNALS_REVERIFY_LIVE_AFTER_RELEASE
+    media_visual_status: PASS_UNCHANGED_VIDEO_ASSETS
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    production_series_golden_restoration_requires:
+      - exact_head_source_build_and_interaction_checks_green
+      - merge_to_main
+      - deployed_revision_verified
+      - live_es_en_security03_interaction_states_verified
+      - live_indexability_signals_rechecked
+  agentes-ia:
+    current_state: RELEASE_QA_6_OF_6_ARTICLE_GOLDEN_PRODUCTION_SERIES_GOLDEN_PENDING
+    article_golden: 6/6
+    route_locale_golden: 12/12
+    indexability_pass: 12/12
+    release_pr: 331
+    release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    production_series_golden_requires:
+      - exact_head_checks_green
+      - merge_to_main
+      - deploy_verified
+      - live_es_en_indexability_media_runtime_verified
+linkedin:
+  writes: 0
+  queues: 0
+  activations: 0
+  ownership: PRESERVED_RELEASE_CONTRACT_281
