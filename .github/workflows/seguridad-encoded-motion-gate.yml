@@ -1,0 +1,82 @@
+name: Seguridad IA encoded motion gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - 'motion/src/seguridad/**'
+      - 'motion/src/render/**'
+      - 'motion/web/seguridad-render.html'
+      - 'motion/scripts/seguridad_render_check.py'
+      - 'motion/scripts/seguridad_encode_motion_probe.py'
+      - 'motion/migration/seguridad-ia-content-v1.json'
+      - 'motion/migration/seguridad-ia-series-register.json'
+      - '.github/workflows/seguridad-encoded-motion-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seguridad-ia-encoded-motion-gate
+  cancel-in-progress: false
+
+jobs:
+  encoded-motion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate source before encoding
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/seguridad_render_check.py motion/scripts/seguridad_encode_motion_probe.py
+          node --check motion/src/seguridad/render.mjs
+          node --check motion/src/seguridad/engine.mjs
+          node --check motion/src/seguridad/mechanisms.mjs
+
+      - name: Install bounded encoding dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+          ffmpeg -version | head -1
+
+      - name: Encode and inspect H/V motion across all canonical concepts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/seguridad_encode_motion_probe.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('motion/dist/seguridad-ia-encoded-motion/seguridad-encoded-motion-report.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert len(d['outputs']) == 2
+          for o in d['outputs']:
+              assert o['concepts'] == 30
+              assert o['full_decode'] == 'PASS'
+              assert o['static_concepts'] == []
+              assert o['ffprobe']['codec_name'] == 'h264'
+              assert o['ffprobe']['r_frame_rate'] == '60/1'
+          print(json.dumps({
+              'state':'ENCODED_HV_MOTION_PROBE_PASS',
+              'outputs':[(o['orientation'],o['sha256'],o['frames_written']) for o in d['outputs']],
+          }))
+          PY
+
+      - name: Preserve bounded encoded-motion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: seguridad-ia-encoded-motion-${{ github.sha }}
+          path: motion/dist/seguridad-ia-encoded-motion/
+          if-no-files-found: error
+          retention-days: 1
