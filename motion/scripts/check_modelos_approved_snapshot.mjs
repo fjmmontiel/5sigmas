@@ -5,8 +5,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const motionDir = resolve(fileURLToPath(new URL('..', import.meta.url)), '..');
-const repoRoot = resolve(motionDir, '..');
+const scriptDir = fileURLToPath(new URL('.', import.meta.url));
+const repoRoot = resolve(scriptDir, '..', '..');
 
 // Exact owner-approved Round 2 horizontal delivery bytes. These hashes bind the
 // release consumer files; owner visual approval and technical certification remain
