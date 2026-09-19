@@ -1,9 +1,9 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: agentes-voz-tiempo-real
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-recorded_at: 2026-09-19T18:58:00Z
+recorded_at: 2026-09-19T19:14:00Z
 
 article_state:
   article_golden: 6/6
@@ -50,17 +50,28 @@ production_release:
   build: PASS
   rendered_search_and_indexability_build_checks: PASS
   deploy: PASS
-  live_qa: IN_PROGRESS
-  dedicated_realtime_voice_live_qa: PENDING_PARENT_WORKFLOW_SUCCESS
-  live_indexability_final: PENDING_LIVE_QA_COMPLETION
-  series_golden: false
+  pages_live_qa: PASS
+  dedicated_realtime_voice_live_qa_run: 35463064615
+  dedicated_realtime_voice_live_qa_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+  dedicated_realtime_voice_live_qa: PASS
+  live_resources_all_es_en_routes: PASS
+  live_bilingual_series_hub_and_mirror: PASS
+  live_locale_switches_and_reader_progression: PASS
+  live_chapter_01_visual_accessibility: PASS
+  live_chapter_02_visual_accessibility: PASS
+  live_chapter_03_visual_accessibility: PASS
+  live_chapter_04_visual_accessibility: PASS
+  live_chapter_05_visual_accessibility: PASS
+  live_chapter_06_visual_accessibility: PASS
+  live_indexability_final: PASS_RENDERED_DEPLOYED_REVISION
+  live_media_browser_final: PASS
+  production_verified: true
+  series_golden: true
 
 next_action: >-
-  Consume Pages live QA for run 35462469816. On SUCCESS consume the triggered
-  Realtime Voice Agents live QA across all 12 ES/EN routes. Persist live route/media/browser
-  verification and reconcile canonical/robots/noindex/hreflang/sitemap/internal discovery.
-  Promote SERIES_GOLDEN only when those live gates are green, then advance to
-  coding-agents-agent-harnesses.
+  Preserve Realtime Voice regressions and VOICE_ENHANCEMENT=DEFERRED_OWNER_LOCAL.
+  Advance the active series to coding-agents-agent-harnesses. Do not rerun expensive
+  Realtime Voice release/live checks unless site-facing bytes or shared gates materially change.
 
 linkedin:
   writes: 0
