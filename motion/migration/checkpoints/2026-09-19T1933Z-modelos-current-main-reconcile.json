@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T19:33:00Z",
+  "unit": "modelos-razonadores",
+  "release_round": 2,
+  "branch": "migration/video-golden-modelos-razonadores",
+  "pr": 332,
+  "owner_visual_approval": "APPROVED",
+  "approval_scope": "Exact final Round 2 collection already presented; unchanged bytes require no repeat approval.",
+  "technical_golden": false,
+  "published": false,
+  "current_main": "11737ad86db9b15b1981af6fef221d7db0b82110",
+  "head_before_reconcile": "90583416ae01682e346b108de994a903e69363e1",
+  "reconciled_merge_commit": "bc6849d1216129958fddb9765fd35b6900fe3eef",
+  "reconcile_workflow_run": 35464648535,
+  "reconcile_result": "SUCCESS",
+  "conflict_resolution": {
+    "observed_conflicts": [
+      ".github/workflows/ci-storage-policy.yml",
+      "locales/en/manifest.yml",
+      "locales/en/media.yml",
+      "scripts/test_video_schema_contract.py",
+      "scripts/validate_coding_agent_harness_ch5_accessibility.mjs"
+    ],
+    "ci_storage_policy": "BRANCH_RECONCILED_POLICY_PRESERVED_AFTER_MARKER_ASSERTIONS",
+    "english_manifest": "CURRENT_MAIN_ORDER_PLUS_EXACT_BRANCH_ONLY_MODELLOS_ASSET_ENTRIES",
+    "english_media": "CURRENT_MAIN_FOR_NON_MODELOS; FROZEN_MODELOS_RELEASE_METADATA_FROM_BRANCH",
+    "video_schema_contract": "CURRENT_MAIN",
+    "coding_harness_accessibility": "CURRENT_MAIN"
+  },
+  "approved_snapshot_delivery": {
+    "frozen_mp4_inventory": 24,
+    "engineering_hashes_bound": 24,
+    "full_decode_horizontal_pass": 12,
+    "full_decode_vertical_pass": 12,
+    "canonical_horizontal_exact": 2,
+    "canonical_horizontal_total": 12,
+    "canonical_horizontal_remaining": 10,
+    "source_provenance": "NOT_VERIFIED"
+  },
+  "current_head_ci_note": "The bot-authored merge commit produced action_required PR workflow shells with no jobs; this user-authored durable checkpoint intentionally establishes a new exact head so mandatory current-main-compatible checks can execute normally. No check is marked PASS until observed.",
+  "next_action": "Observe mandatory release checks on this exact user-authored head. Continue exact-byte transport for the remaining 10 approved horizontal assets without visual changes; recover truthful per-asset source/profile provenance; merge only after the complete frozen release gate is actually green and then verify deployment/live consumers."
+}
