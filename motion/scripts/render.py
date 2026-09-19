@@ -6,7 +6,7 @@ from pathlib import Path
 from PIL import Image,ImageDraw,ImageFont
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
-MODULES=['labels.mjs','cues.mjs','theme.mjs','schema.mjs','render/paint.mjs','render/layout.mjs','render/mechanisms/common.mjs','render/mechanisms/reasoning.mjs','engine.mjs']
+MODULES=['labels.mjs','cues.mjs','theme.mjs','schema.mjs','render/paint.mjs','render/layout.mjs','render/mechanisms/common.mjs','render/mechanisms/reasoning.mjs','render/mechanisms/editorial.mjs','engine.mjs']
 
 def bundled_page():
     html=(ROOT/'web/render.html').read_text();parts=[]
@@ -21,7 +21,6 @@ def bundled_page():
 def review_sheet(page,spec,target):
     samples=[];offset=0.0
     for scene in spec['scenes']:
-        # Mid-scene checks the guided-reading state; near-end checks maximum text/diagram density.
         samples.append((scene['id'],'mid',offset+max(.6,min(scene['duration']*.55,scene['duration']-.8))))
         samples.append((scene['id'],'end',offset+max(.6,scene['duration']-.65)))
         offset+=scene['duration']
