@@ -1,0 +1,60 @@
+name: Seguridad IA browser render preflight
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - 'motion/src/seguridad/**'
+      - 'motion/src/render/**'
+      - 'motion/web/seguridad-render.html'
+      - 'motion/scripts/seguridad_render_check.py'
+      - 'motion/migration/seguridad-ia-content-v1.json'
+      - 'motion/migration/seguridad-ia-series-register.json'
+      - '.github/workflows/seguridad-browser-render-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seguridad-ia-browser-render-preflight
+  cancel-in-progress: false
+
+jobs:
+  browser-render-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Python and ESM syntax before browser work
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/seguridad_render_check.py
+          node --check motion/src/seguridad/render.mjs
+          node --check motion/src/seguridad/engine.mjs
+          node --check motion/src/seguridad/mechanisms.mjs
+
+      - name: Install browser-check Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+
+      - name: Render and inspect actual H/V browser frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/seguridad_render_check.py
+          cat motion/dist/seguridad-ia-check/seguridad-render-preflight.json
+
+      - name: Preserve bounded review-support evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: seguridad-ia-browser-preflight-${{ github.sha }}
+          path: motion/dist/seguridad-ia-check/
+          if-no-files-found: error
+          retention-days: 1
