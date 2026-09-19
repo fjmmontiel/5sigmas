@@ -1,4 +1,4 @@
-schema_version: 15
+schema_version: 16
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -20,17 +20,8 @@ series_status:
     series_golden: true
     state: SERIES_GOLDEN
     production_verified: true
-    original_series_merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
-    security03_repair_release_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+    merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     deploy_run: 35423089825
-    deploy: PASS
-    live_qa: PASS
-    security03_reopen_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
-    security03_reconciled: true
-    security03_exact_head_interaction_run: 35419776376
-    security03_exact_head_interaction: PASS_SECURITY_VISUALS_END_TO_END
-    security03_live_release_evidence: PASS_EXACT_MERGE_BUILD_DEPLOY_LIVE_SPANISH_RESOURCES_AND_ENGLISH_SECURITY_MEDIA
-    security03_known_p0_p1_p2: 0
     source_build_browser_pixel_pedagogy: PASS_CURRENT_REVISION
     media_visual: PASS_12_OF_12
     indexability: PASS_12_OF_12
@@ -40,24 +31,9 @@ series_status:
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
     state: SERIES_GOLDEN
-    voice_enhancement: DEFERRED_OWNER_LOCAL
-    technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
-    technical_milestone_run: 35402872378
-    technical_milestone: PASS
     source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
-    relationship_guard_agents03_04: PASS_WITH_4_NEGATIVE_MUTATIONS
-    strict_es_build: PASS
-    strict_en_build: PASS
-    publication_contract: PASS
     media_visual: PASS_12_OF_12
-    media_visual_blockers: 0
     indexability: PASS_12_OF_12
-    native_video_frames_reviewed: 72
-    native_video_visual_review: PASS_REAL_NATIVE_NONPLACEHOLDER_READABLE
-    browser_resource_runtime_smoke: PASS_96_CONTEXTS_CAUSAL_RANGE_RESPONSE_PROOF
-    full_experience_head: 68dc7739e7855d3f78e7394d775af904c55b4e69
-    full_experience_run: 35405478586
-    full_experience: PASS_48_OF_48
     browser: PASS_12_OF_12
     pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
     pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
@@ -65,84 +41,65 @@ series_status:
     article_golden: 6/6
     route_locale_rows_golden: 12/12
     fresh_zero_based_series_audit_run: 35406872463
-    fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
     fresh_zero_based_series_audit: PASS
     release_pr: 331
-    release_head: ea23d2f57f5bf479ec07e78dd2582f011baedb89
-    exact_head_english_editorial_run: 35419776415
-    exact_head_english_editorial: PASS
-    exact_head_locale_switch_run: 35419776397
-    exact_head_locale_switch: PASS
-    exact_head_english_mirror_run: 35419776384
-    exact_head_english_mirror: PASS
-    exact_head_pr_visual_run: 35419776376
-    exact_head_pr_visual: PASS
     merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     deploy_run: 35423089825
-    deploy_build: PASS
     deploy: PASS
     live_qa: PASS
-    live_indexability_evidence: PASS_BUILD_COMBINED_SEO_CRAWL_PLUS_LIVE_EN_CANONICAL_SCHEMA_SITEMAP_LOCALE_SWITCH_AND_SERIES_MIRROR
-    live_media_runtime_evidence: PASS_LIVE_SPANISH_RESOURCES_AND_ENGLISH_AI_AGENTS_MEDIA
     series_golden: true
     production_verified: true
+    voice_enhancement: DEFERRED_OWNER_LOCAL
     next_action: NONE_SERIES_CLOSED_ADVANCE_TO_REALTIME_VOICE
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: QA_ACTIVE_PIXEL_PEDAGOGY_INTERMEDIATE_MANUAL_REVIEW_PENDING
+    state: QA_CHANGES_REQUIRED_MOBILE_CORE_DIAGRAMS
     transition_authorized: true
     transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     route_locale_rows: 12
-    source_inventory: INSPECTED_12_SOURCE_FILES_EXIST_AND_ARE_NAV_MANIFEST_PUBLISHED
-    editorial_blob_review: FRESH_2026_09_19_SOURCE_PRIMARY_REVIEW_PLUS_EXISTING_EXACT_BLOB_SOURCE_GATE
-    source_evidence_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    source_prior_exact_head_gate_run: 35419776376
+    content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
     source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
-    media_checkpoint_head: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-    media_checkpoint_run: 35432607898
-    es_series_directory_native_video_files: 6
-    en_series_directory_native_video_files: 6
-    es_series_directory_posters: 6
-    en_series_directory_posters: 6
     build: PASS_12_OF_12_STRICT_ES_EN
     publication_contract: PASS
     search_foundation: PASS
     media_visual: PASS_12_OF_12
     media_visual_blockers: 0
-    media_visual_gate: scripts/validate_voice_media_visual.py
     media_video_contract: H264_1920x1080_YUV420P_36S_SILENT_ACCEPTED_POSTER_METADATA_KEY_MOMENTS
-    media_deterministic_frames: 72_EVIDENCE_ONLY_NOT_PIXEL_PEDAGOGY_CERTIFICATION
     indexability: PASS_12_OF_12_RENDERED_TECHNICAL_ELIGIBILITY
-    indexability_gate: scripts/validate_voice_indexability.py
     indexability_negative_mutations: PASS_NOINDEX_CANONICAL_H1_SITEMAP_HREFLANG_ORPHAN_FAIL_CLOSED
     internal_graph: PASS_ES_EN_ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
-    browser_evidence_head: e31b662a01428539728876e881c224312dbfd73b
-    browser_run: 35439893298
+    browser_evidence_head: 42a9b928a4329adbe87b930b6f9e35228898d537
+    browser_run: 35444765014
     browser: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE
     browser_article_contexts: 48
     browser_watch_contexts: 48
-    browser_full_page_screenshots: 48
     browser_profiles: DESKTOP_MOBILE_X_NORMAL_REDUCED
     browser_playback: PASS_START_MID_FINAL_ALL_12_ARTICLE_WATCH_PAIRS
     browser_keyboard_touch_focus: PASS
     browser_runtime_resources_teardown: PASS
-    browser_artifact_id: 10584205107
-    browser_artifact_sha256: b619f69456c2d13143f3b718d1da14f322ac326f00e7a1511c7d2fd0c0c0b748
-    full_page_manual_review: PASS_INSPECTED_EXACT_FINAL_FULL_PAGE_SCREENSHOTS_WITH_STRATIFIED_CROPS
-    pixel: PENDING_MANUAL_START_INTERMEDIATE_STATE_PIXELS
-    pedagogy: PENDING_MANUAL_START_INTERMEDIATE_STATE_PIXELS
-    known_p0_p1_p2_in_inspected_domains: 0
-    uninspected_domains:
-      - manual_start_intermediate_state_pixel
-      - manual_start_intermediate_state_pedagogy
-    closed_p1: NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
+    retained_interaction_artifact_id: 10585412273
+    retained_interaction_artifact_sha256: b832a3094edcc265be6f433a671fab99ec80380c128c331a853fda9cfcb1ba55
+    retained_visual_review_pngs: 106
+    manually_inspected_interaction_pngs: 82
+    manually_inspected_final_full_page_frames: 48
+    clean_interaction_rows: 6/12_voice01_to_voice03
+    pixel: FAIL_CLOSED_P1_MOBILE_CORE_DIAGRAMS_04_05_06
+    pedagogy: FAIL_CLOSED_P1_MOBILE_CORE_DIAGRAMS_04_05_06
+    known_p0: 0
+    known_p1_classes: 3
+    known_p1_rows: 6
+    known_p1:
+      - VOICE04_MOBILE_CORE_STATE_MACHINE_SEMANTIC_CLIPPING
+      - VOICE05_MOBILE_TOPOLOGY_SEMANTIC_CLIPPING
+      - VOICE06_MOBILE_EVIDENCE_CAUSAL_DIAGRAM_SEMANTIC_CLIPPING
+    known_p2: 0
     article_golden: 0/6
     route_locale_rows_golden: 0/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     voice_future_debt: VIDEO_CAPTIONS_MISSING__VIDEO_TRANSCRIPT_MISSING__VIDEO_AUDIO_STREAM_MISSING
     live_release_verification: PENDING_NOT_RELEASED
-    next_action: RETAIN_AND_MANUALLY_INSPECT_MINIMAL_CHAPTER_START_INTERMEDIATE_FINAL_SCREENSHOTS_THEN_PROMOTE_PIXEL_PEDAGOGY_IF_CLEAN
+    next_action: RECOMPOSE_VOICE04_05_06_CORE_DIAGRAMS_FOR_NATIVE_MOBILE_THEN_REVALIDATE_EXACT_CHANGED_BYTES
 
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -152,29 +109,18 @@ series_status:
 release_evidence:
   current_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
   pages_run: 35423089825
-  build: PASS
   deploy: PASS
   live_qa: PASS
   realtime_voice_release: NOT_STARTED_SERIES_QA_ONLY
-  storage_policy_push_record:
-    run: 35423089359
-    conclusion: FAILURE_WITH_ZERO_JOBS
-    classification: NON_SUBSTANTIVE_NO_JOB_TRIGGER_TRANSITION_ARTIFACT
-    blocker: false
-    note: CURRENT_WORKFLOW_IS_PR_PATHS_OR_WORKFLOW_DISPATCH_ONLY; EXACT_HEAD_PR_CHECKS_AND_RELEASE_BUILD_DEPLOY_LIVE_QA_PASSED
 
 shared_branch:
   name: quality/post-datacenters-requalification
-  security_release_receipt: quality/series-requalification/security-series-release.yml
-  security03_reopen_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
-  agents_ledger: quality/series-requalification/agents-article-ledger.yml
   voice_ledger: quality/series-requalification/voice-article-ledger.yml
-  synchronized_with_security_main_merge_without_force_push: true
-  release_state_reconciled_after_agents_merge: true
   voice_source_milestone_persisted: true
   voice_media_indexability_milestone_persisted: true
   voice_browser_milestone_persisted: true
-  voice_media_generation_receipt: quality/series-requalification/voice-media-generation-2026-09-19.json
+  voice_intermediate_pixel_evidence_persisted: true
+  last_evidence_workflow_commit: 42a9b928a4329adbe87b930b6f9e35228898d537
 
 linkedin:
   writes_from_this_program: 0
