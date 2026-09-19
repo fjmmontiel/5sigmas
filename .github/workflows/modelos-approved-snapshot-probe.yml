@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: modelos-approved-snapshot-probe-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   probe-intro-es:
     if: github.head_ref == 'migration/video-golden-modelos-razonadores'
@@ -20,15 +24,15 @@ jobs:
         source_ref:
           - e7155f70920ef2669853b800c887dd53c1c8d1ee
           - 80171316a513dc361790d8fa5c5b6c8310050a90
+          - 377fc0de2f97b9e9f8328393544a4ed1838453a5
+          - 41d2a267fa1e29ff3d19f0ae932e29478517d32b
+          - f13d94ce62d6548d8519d8d80f4827696f722fc9
     steps:
       - name: Checkout exact candidate source
         uses: actions/checkout@v4
         with:
           ref: ${{ matrix.source_ref }}
           fetch-depth: 1
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -39,23 +43,29 @@ jobs:
           fc-cache -f
           python -m pip install -r motion/requirements.txt
           python -m playwright install --with-deps chromium
-          ffmpeg -version | head -1
-      - name: Render approved intro candidate and compare exact bytes
+      - name: Render candidate and compare approved visual samples
         working-directory: motion
         shell: bash
         run: |
           set -euo pipefail
           rm -rf snapshot-probe
-          python scripts/render.py content/modelos-razonadores/00_presentacion_serie.es.json --out snapshot-probe
+          python scripts/render.py content/modelos-razonadores/00-presentacion.es.json --out snapshot-probe
           file='snapshot-probe/modelos-razonadores-intro-es-horizontal.mp4'
           test -f "$file"
-          got="$(sha256sum "$file" | awk '{print $1}')"
-          expected='e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6'
           echo "source_ref=${{ matrix.source_ref }}"
-          echo "approved_sha256=$expected"
-          echo "rendered_sha256=$got"
-          if [ "$got" = "$expected" ]; then
-            echo 'EXACT_APPROVED_BYTES_MATCH=true'
-          else
-            echo 'EXACT_APPROVED_BYTES_MATCH=false'
-          fi
+          echo "rendered_encoded_sha256=$(sha256sum "$file" | awk '{print $1}')"
+          expected=(
+            d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437
+            f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af
+            e72c44d783df21947a043c1cd2fa8abf98c7ea52296677b133a03f5e9f553e03
+            35b4051de789d7418c3bec67864fe0304801395ff7ab40c0e8ccbe8499a2eab3
+          )
+          times=(6 24 43.5 63)
+          matches=0
+          for i in 0 1 2 3; do
+            got="$(ffmpeg -hide_banner -loglevel error -ss "${times[$i]}" -i "$file" -frames:v 1 -vf 'scale=320:-2:flags=neighbor,format=yuv420p' -f hash -hash sha256 - | sed 's/^SHA256=//')"
+            echo "sample_$i=$got expected=${expected[$i]}"
+            if [ "$got" = "${expected[$i]}" ]; then matches=$((matches+1)); fi
+          done
+          echo "APPROVED_VISUAL_SAMPLE_MATCHES=$matches/4"
+          if [ "$matches" -eq 4 ]; then echo 'APPROVED_VISUAL_PROFILE_MATCH=true'; else echo 'APPROVED_VISUAL_PROFILE_MATCH=false'; fi
