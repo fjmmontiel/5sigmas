@@ -30,11 +30,11 @@ The current code enforces these contracts through the shared layout, semantic me
 ## Active release unit — `modelos-razonadores` · Review Round 2
 
 **PR:** #332 (`migration/video-golden-modelos-razonadores`)  
-**Release state:** Technical certification in progress; PR remains draft.  
-**Technical GOLDEN:** **0/12** until current encoded visual/accessibility/delivery/integration evidence is fully bound.  
+**Release state:** current-source rerender required; PR remains draft.  
+**Technical GOLDEN:** **0/12** until strengthened-current-source encoded visual/accessibility/delivery/integration evidence is fully bound.  
 **Review v1:** SUPERSEDED.  
-**Owner approval:** the owner explicitly approved all final Review Round 2 examples already presented. Directly presented assets are bound by exact SHA-256 in `program-state.json`; additional presented examples are approved by scope and must be bound from the verified Round 2 manifest before promotion. The comparison montage is review evidence, not a primary Golden Example.  
-**Golden Registry promotion:** pending exact Technical GOLDEN/hash binding; no unseen or materially changed asset is implicitly approved.
+**Owner approval:** the owner explicitly approved all final Review Round 2 examples already presented. Directly presented assets are bound by exact SHA-256 in `program-state.json`; additional presented examples are approved by scope. That approval remains valid for the exact reviewed candidate bytes, but it does not transfer to materially changed final bytes. The comparison montage is review evidence, not a primary Golden Example.  
+**Golden Registry promotion:** pending exact Technical GOLDEN/hash binding and, where final bytes differ materially, exact owner review of those changed bytes.
 
 ### Locked visual identity
 
@@ -46,18 +46,34 @@ Six Spanish chapters and six English mirrors: `00_presentacion_serie`, `01-que-e
 
 Consumer scope includes ES/EN article embeds, watch pages, video library/catalog, schema/sitemaps, home-page Test-Time-Compute feature, visual hubs, localized media metadata, posters, chapters/captions/transcripts where declared, same-origin delivery and staging/review surfaces.
 
-### Current verified Round 2 checkpoint
+### Current verified Round 2 checkpoints
 
-Exact checkpoint evidence is stored in `motion/migration/checkpoints/2026-09-19-modelos-round2-run5.json`.
+Current deterministic/layout evidence remains in `motion/migration/checkpoints/2026-09-19-modelos-round2-run5.json`; the source-binding correction is recorded in `motion/migration/checkpoints/2026-09-19-modelos-round2-run6.json`.
 
-- current source syntax checks for semantic renderer modules: PASS;
-- focused review contract tests: **65/65 PASS**;
+- current-source syntax checks for semantic renderer modules: PASS;
+- focused review contract tests: **65/65 PASS** at the recorded current-source checkpoint;
 - current-source H/V layout preflight: **24/24 compositions**, **1,520 sampled frames**, **0 layout issues**;
 - structural series diversity: **30 conceptual scenes**, **21 perceptual families**, **maximum family use 2**;
-- local Review Round 2 MP4 inventory: **24**;
+- candidate Drive inventory: **24/24 MP4s** (12 ES + 12 EN, H/V complete);
+- candidate media-profile QA: **24/24 PASS** for H.264/yuv420p/60 fps/resolution/faststart/expected sidecars;
 - structural diversity deliberately reports `full_series_visual_approval=false` until encoded whole-series perceptual inspection is completed.
 
-The normalized validation audit found 7 receipts that exactly match the current full imported module graph and 17 that appear stale only because the exporter fingerprints every imported module. The observed mismatches are `rich-risk.mjs` and/or `common.mjs`. This is not permission to reuse them blindly: establish output-relevant dependency binding or rerender only truly affected outputs. Do not burn throughput rerendering unrelated chapters solely because an unused imported mechanism changed.
+### Source-binding correction — mandatory rerender
+
+The existing 24 candidate MP4s were produced from the earlier Review Round 2 render generation matching commit `e7155f70920ef2669853b800c887dd53c1c8d1ee`, not the later strengthened render source `f13d94ce62d6548d8519d8d80f4827696f722fc9`.
+
+The strengthened source materially changes a **global rendering dependency**:
+
+- horizontal text width `800 → 760`;
+- horizontal body minimum `42 → 46 px`;
+- horizontal body target `50 → 52 px`;
+- portrait body minimum `44 → 46 px`;
+- maximum source/body gap `86 → 64 px`;
+- plus `rich-risk.mjs` fixes and a canonical Spanish intro-spec correction.
+
+Therefore the existing encoded candidate files are **source-stale for Technical GOLDEN** even though their own media-profile and representative visual reviews remain useful historical candidate evidence. Output-relevant dependency narrowing cannot exclude a global `layout.mjs` change. All 12 localized outputs in both H/V must be rerendered from the strengthened current source before exact Technical GOLDEN binding.
+
+This correction explicitly invalidates any prior wording that described the existing 24 candidate MP4s as exact `f13d94...` current-source renders. It does not erase the owner's exact-byte approval of the versions actually reviewed.
 
 ### Review Round 2 visual system
 
@@ -69,12 +85,12 @@ The shared deterministic timeline remains the single clock for text reveal, visu
 
 Machine-readable queues live in `motion/migration/program-state.json`:
 
-- `active_migration_units`: currently `modelos-razonadores`;
+- `active_migration_units`: currently `modelos-razonadores` with `CURRENT_SOURCE_RERENDER_REQUIRED`;
 - `awaiting_user_review_units`: complete Technical GOLDEN units whose verified review package/email has been delivered;
 - `publish_ready_units`: exact Technical GOLDEN units with explicit exact-version approval;
 - `golden_registry`: published immutable approved reference assets keyed by exact hash.
 
-Once Modelos reaches 12/12 Technical GOLDEN, its complete Review Round 2 package is verified and delivered. Because owner approval already exists for the presented exact examples, matching approved hashes can promote immediately when technical binding is complete. The unit then releases only after exact-head/current-main release checks and live verification. Migration then continues with the next complete public-video unit even if some prior unit remains in review.
+Once Modelos reaches 12/12 Technical GOLDEN, its complete current-source Review Round 2 package is verified and delivered. Exact reviewed hashes may promote immediately only when the final Technical GOLDEN bytes are identical. Any materially changed final bytes require exact review rather than inheriting approval by similarity. The unit releases only after exact-head/current-main checks and live verification. Migration then continues with the next complete public-video unit even if prior technically-complete units remain in review.
 
 The next candidate after Modelos is `seguridad-ia`; its current public inventory and consumers must be re-derived from current `main` before editing, then one accent identity is locked before scene work.
 
@@ -84,13 +100,14 @@ Historical Round 1 evidence remains in Git history for engineering traceability:
 
 ## Current remaining work for Modelos
 
-1. Resolve output-relevant source fingerprinting without weakening invalidation and bind exact hashes for all current outputs.
-2. Rerender only outputs whose actual visual/encoding dependencies changed.
-3. Complete current encoded whole-series ES/EN motion review, text prominence/spatial balance, mobile/portrait, accessibility/reduced-motion/player and delivery/consumer integration.
-4. Persist bound evidence for every required gate and reach 12/12 Technical GOLDEN or iterate only failing outputs.
-5. Verify the complete Round 2 Drive package/read-back and send one review email only when the final manifest is exact.
-6. Release/publish only after exact-head/current-main checks remain valid; promote approved exact hashes to Golden Registry and verify live consumers.
-7. Immediately begin the next unfinished complete unit after this unit leaves active migration, without waiting idly for reviews of already-packaged units.
+1. Synchronize the render workspace to `f13d94...` / current branch source.
+2. Rerender **all 12 localized outputs in both H/V** because the global layout dependency changed materially.
+3. Bind exact current-source asset hashes and rerun media-profile/sidecar verification.
+4. Complete current encoded whole-series ES/EN motion review, text prominence/spatial balance, mobile/portrait, accessibility/reduced-motion/player and delivery/consumer integration.
+5. Persist bound evidence for every required gate and reach 12/12 Technical GOLDEN or iterate only failing outputs.
+6. Replace/verify the final Round 2 Drive package and send one review email only when the final manifest is exact; any changed bytes require exact user review before Golden Registry promotion.
+7. Release/publish only after exact-head/current-main checks remain valid and live consumers serve the validated assets.
+8. Immediately begin the next unfinished complete unit after this unit leaves active migration, without waiting idly for reviews of already-packaged units.
 
 ## Global finish condition
 
