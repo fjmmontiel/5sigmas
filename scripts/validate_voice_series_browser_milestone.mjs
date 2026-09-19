@@ -4,6 +4,10 @@ import path from 'node:path';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outputDir = path.resolve('artifacts/voice-browser-milestone');
+const requestedConcurrency = Number.parseInt(process.env.S5_VOICE_BROWSER_CONCURRENCY || '4', 10);
+const modeConcurrency = Number.isFinite(requestedConcurrency)
+  ? Math.max(1, Math.min(4, requestedConcurrency))
+  : 4;
 
 const chapters = [
   '01-arquitecturas-de-voz',
@@ -216,25 +220,16 @@ async function validateWatch(page, locale, stem, mode, evidence) {
   return { watch, article, playback, mediaStatus: range.status() };
 }
 
-await fs.rm(outputDir, { recursive: true, force: true });
-await fs.mkdir(outputDir, { recursive: true });
-const browser = await chromium.launch({ headless: true });
-const receipt = {
-  generatedAt: new Date().toISOString(),
-  series: 'agentes-voz-tiempo-real',
-  ownerVoiceAmendment: 5716685049,
-  ownerIndexabilityAmendment: 5727362172,
-  pages: [],
-};
-
-try {
-  for (const mode of modes) {
-    const context = await browser.newContext({
-      viewport: mode.viewport,
-      isMobile: mode.mobile,
-      hasTouch: mode.mobile,
-      reducedMotion: mode.reducedMotion,
-    });
+async function validateMode(browser, mode) {
+  const context = await browser.newContext({
+    viewport: mode.viewport,
+    isMobile: mode.mobile,
+    hasTouch: mode.mobile,
+    reducedMotion: mode.reducedMotion,
+  });
+  const pages = [];
+  const startedAt = Date.now();
+  try {
     for (const locale of ['es', 'en']) {
       for (const stem of chapters) {
         const articlePage = await context.newPage();
@@ -247,17 +242,56 @@ try {
         const watch = await validateWatch(watchPage, locale, stem, mode, watchEvidence);
         await watchPage.close();
 
-        receipt.pages.push({ locale, stem, mode: mode.name, article, watch });
+        pages.push({ locale, stem, mode: mode.name, article, watch });
       }
     }
+    console.log(`[voice-browser-milestone] mode=${mode.name} contexts=${pages.length * 2} screenshots=${pages.length} elapsed_ms=${Date.now() - startedAt}`);
+    return pages;
+  } finally {
     await context.close();
   }
-  receipt.articleContexts = 48;
-  receipt.watchContexts = 48;
-  receipt.fullPageScreenshots = 48;
+}
+
+async function mapWithConcurrency(items, concurrency, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  async function worker() {
+    while (true) {
+      const index = nextIndex;
+      nextIndex += 1;
+      if (index >= items.length) return;
+      results[index] = await mapper(items[index], index);
+    }
+  }
+  const workerCount = Math.min(concurrency, items.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  return results;
+}
+
+await fs.rm(outputDir, { recursive: true, force: true });
+await fs.mkdir(outputDir, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const receipt = {
+  generatedAt: new Date().toISOString(),
+  series: 'agentes-voz-tiempo-real',
+  ownerVoiceAmendment: 5716685049,
+  ownerIndexabilityAmendment: 5727362172,
+  modeConcurrency,
+  pages: [],
+};
+
+try {
+  const modePages = await mapWithConcurrency(modes, modeConcurrency, (mode) => validateMode(browser, mode));
+  receipt.pages = modePages.flat();
+  receipt.articleContexts = receipt.pages.length;
+  receipt.watchContexts = receipt.pages.length;
+  receipt.fullPageScreenshots = receipt.pages.length;
+  if (receipt.articleContexts !== 48 || receipt.watchContexts !== 48 || receipt.fullPageScreenshots !== 48) {
+    throw new Error(`incomplete milestone coverage ${JSON.stringify({ articleContexts: receipt.articleContexts, watchContexts: receipt.watchContexts, fullPageScreenshots: receipt.fullPageScreenshots })}`);
+  }
   receipt.result = 'PASS';
   await fs.writeFile(path.join(outputDir, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`);
-  console.log(JSON.stringify({ result: receipt.result, articleContexts: 48, watchContexts: 48, fullPageScreenshots: 48 }));
+  console.log(JSON.stringify({ result: receipt.result, articleContexts: 48, watchContexts: 48, fullPageScreenshots: 48, modeConcurrency }));
 } finally {
   await browser.close();
 }
