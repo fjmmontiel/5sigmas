@@ -72,9 +72,10 @@ for (const contract of contracts) {
     check(source.includes(token), `Voice${contract.chapter}: mobile-native source contract missing ${token}`);
   }
 
-  // Negative mutation: deleting the native-summary marker must make the contract fail.
+  // Negative mutation: deleting every instance of the required marker must make the source contract fail.
   const marker = contract.summary.slice(1, -1);
-  const mutated = source.replace(marker, `${marker}-REMOVED`);
+  const removedMarker = `data-removed-native-summary-${contract.chapter}`;
+  const mutated = source.replaceAll(marker, removedMarker);
   check(!mutated.includes(marker), `Voice${contract.chapter}: negative mutation did not remove native-summary marker`);
   check(source.includes(marker) && !mutated.includes(marker), `Voice${contract.chapter}: missing fail-closed mutation coverage for native mobile summary`);
 }
