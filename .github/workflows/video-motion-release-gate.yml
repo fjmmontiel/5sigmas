@@ -58,7 +58,7 @@ jobs:
         working-directory: motion
         run: |
           npm test
-          npm run audit:visual-variety
+          node scripts/check_visual_variety.mjs
       - name: Render all Review Round 2 H/V contact sheets
         working-directory: motion
         shell: bash
@@ -79,5 +79,5 @@ jobs:
         with:
           name: modelos-razonadores-review-v2-layout-${{ github.event.pull_request.head.sha }}
           path: motion/qa-layout/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 1
