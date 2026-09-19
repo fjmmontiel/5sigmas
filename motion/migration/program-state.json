@@ -1,160 +1,101 @@
 {
-  "schema_version": 2,
-  "updated_at": "2026-09-19T13:14:00+02:00",
+  "schema_version": 3,
+  "updated_at": "2026-09-19T11:48:18.723157+00:00",
   "program_status": "IN_PROGRESS",
   "quality_contract": "motion-v4.2-review2-and-later",
+  "approval_contract": "owner-approved-frozen-snapshot-v1",
   "queues": {
-    "active_migration_units": [
-      {
-        "unit": "modelos-razonadores",
-        "branch": "migration/video-golden-modelos-razonadores",
-        "pr": 332,
-        "state": "CURRENT_SOURCE_LAYOUT_FIXED_RERENDER_PENDING",
-        "review_round": 2,
-        "technical_golden": false,
-        "technical_golden_count": 0,
-        "technical_golden_total": 12
-      }
-    ],
+    "active_migration_units": [{"unit":"modelos-razonadores","branch":"migration/video-golden-modelos-razonadores","pr":332,"state":"OWNER_APPROVED_SNAPSHOT_DELIVERY_PENDING","review_round":2,"technical_golden":false,"technical_golden_count":0,"technical_golden_total":12}],
     "awaiting_user_review_units": [],
+    "approved_pending_technical_units": [{"unit":"modelos-razonadores","review_round":2,"owner_visual_approval":"APPROVED","repeat_review_required_for_identical_assets":false,"release_strategy":"VALIDATE_AND_PUBLISH_APPROVED_SNAPSHOT","technical_golden":false}],
     "publish_ready_units": [],
-    "golden_registry": []
-  },
-  "owner_approvals": [
-    {
-      "unit": "modelos-razonadores",
-      "review_round": 2,
-      "status": "APPROVED_PRESENTED_EXAMPLES_PENDING_EXACT_TECHNICAL_BINDING",
-      "approved_at": "2026-09-19",
-      "source": "explicit_user_chat",
-      "scope": "all final Review Round 2 examples already presented to the owner; review-support comparison montage is excluded from primary Golden Examples",
-      "requires_exact_manifest_match": true,
-      "approved_review_assets": [
-        {
-          "video_slug": "modelos-razonadores-intro",
-          "language": "es",
-          "orientation": "horizontal",
-          "asset_sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
-          "duration_seconds": 75,
-          "resolution": "1920x1080",
-          "fps": 60,
-          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
-        },
-        {
-          "video_slug": "fallos-modelos-razonadores",
-          "language": "es",
-          "orientation": "horizontal",
-          "asset_sha256": "d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed",
-          "duration_seconds": 108,
-          "resolution": "1920x1080",
-          "fps": 60,
-          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
-        },
-        {
-          "video_slug": "test-time-compute",
-          "language": "es",
-          "orientation": "horizontal",
-          "asset_sha256": "e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710",
-          "duration_seconds": 129,
-          "resolution": "1920x1080",
-          "fps": 60,
-          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
-        },
-        {
-          "video_slug": "riesgos-modelos-razonadores",
-          "language": "es",
-          "orientation": "horizontal",
-          "asset_sha256": "f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381",
-          "duration_seconds": 121,
-          "resolution": "1920x1080",
-          "fps": 60,
-          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
-        }
-      ],
-      "additional_presented_examples": "approved by scope; exact final-byte binding is required before promotion",
-      "golden_example_promotion": "PENDING_TECHNICAL_GOLDEN_EXACT_ASSET_HASH",
-      "notes": "The reviewed candidate bytes remain approved as references. The current-source render layout has since materially changed, so newly rendered final bytes require exact review/binding rather than inheriting approval by similarity."
-    }
-  ],
-  "throughput_policy": {
-    "complete_unit_only": true,
-    "one_pr_per_complete_unit": true,
-    "waiting_for_user_review_does_not_block_next_unit": true,
-    "process_pending_approvals_before_migration_work_each_run": true,
-    "publish_only_after_exact_technical_golden_and_explicit_approval": true,
-    "promote_golden_examples_only_by_exact_hash": true,
-    "partial_approval_promotes_only_approved_subset": true,
-    "silence_is_not_approval": true,
-    "next_unit_candidate_after_modelos": "seguridad-ia",
-    "revalidate_next_unit_inventory_before_work": true
-  },
-  "golden_registry_policy": {
-    "technical_golden_is_separate": true,
-    "immutable_reference_by_hash": true,
-    "required_fields": [
-      "unit",
-      "video_slug",
-      "language",
-      "orientation",
-      "asset_sha256",
-      "source_revision",
-      "renderer_revision",
-      "theme_revision",
-      "approval_source",
-      "approval_date"
+    "golden_registry": [
+      {"unit":"modelos-razonadores","review_round":2,"video_slug":"modelos-razonadores-intro","language":"es","orientation":"horizontal","asset_sha256":"e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6","bytes":4051574,"golden_example_approved":true,"owner_visual_approval":"APPROVED","approval_source":"explicit_user_chat_reaffirmed","approval_date":"2026-09-19","registry_state":"OWNER_APPROVED_REFERENCE_TECHNICAL_BINDING_PENDING","technical_golden":false,"published":false,"source_revision":null,"renderer_revision":null,"theme_revision":null,"provenance_state":"RECOVER_MATCHING_APPROVED_SNAPSHOT","byte_identity":"CHAT_FILE_EQUALS_DRIVE_DOWNLOAD_SHA256"},
+      {"unit":"modelos-razonadores","review_round":2,"video_slug":"fallos-modelos-razonadores","language":"es","orientation":"horizontal","asset_sha256":"d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed","bytes":5852621,"golden_example_approved":true,"owner_visual_approval":"APPROVED","approval_source":"explicit_user_chat_reaffirmed","approval_date":"2026-09-19","registry_state":"OWNER_APPROVED_REFERENCE_TECHNICAL_BINDING_PENDING","technical_golden":false,"published":false,"source_revision":null,"renderer_revision":null,"theme_revision":null,"provenance_state":"RECOVER_MATCHING_APPROVED_SNAPSHOT","byte_identity":"CHAT_FILE_EQUALS_DRIVE_DOWNLOAD_SHA256"},
+      {"unit":"modelos-razonadores","review_round":2,"video_slug":"test-time-compute","language":"es","orientation":"horizontal","asset_sha256":"e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710","bytes":7897504,"golden_example_approved":true,"owner_visual_approval":"APPROVED","approval_source":"explicit_user_chat_reaffirmed","approval_date":"2026-09-19","registry_state":"OWNER_APPROVED_REFERENCE_TECHNICAL_BINDING_PENDING","technical_golden":false,"published":false,"source_revision":null,"renderer_revision":null,"theme_revision":null,"provenance_state":"RECOVER_MATCHING_APPROVED_SNAPSHOT","byte_identity":"CHAT_FILE_EQUALS_DRIVE_DOWNLOAD_SHA256"},
+      {"unit":"modelos-razonadores","review_round":2,"video_slug":"riesgos-modelos-razonadores","language":"es","orientation":"horizontal","asset_sha256":"f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381","bytes":6724633,"golden_example_approved":true,"owner_visual_approval":"APPROVED","approval_source":"explicit_user_chat_reaffirmed","approval_date":"2026-09-19","registry_state":"OWNER_APPROVED_REFERENCE_TECHNICAL_BINDING_PENDING","technical_golden":false,"published":false,"source_revision":null,"renderer_revision":null,"theme_revision":null,"provenance_state":"RECOVER_MATCHING_APPROVED_SNAPSHOT_INCLUDING_FINAL_POLISH","byte_identity":"CHAT_FILE_EQUALS_DRIVE_DOWNLOAD_SHA256"}
     ]
   },
-  "current_evidence": {
-    "candidate_render_source_revision": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
-    "strengthened_source_before_layout_fix": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
-    "required_render_source_revision": "9528247ee81dc65dcfc797bb9f46f8854e5e833e",
-    "branch_head_at_checkpoint": "fc1bba88fea32d0b135a51cf2504f8b38b144c12",
-    "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
-    "candidate_source_binding_status": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
-    "candidate_source_binding_reason": "The 24 reviewed candidate MP4s were rendered with the earlier Review Round 2 layout. Strengthened source changed the global layout contract and later exact-source check-only exposed dense-copy overflow. Commit 9528247... fixes that overflow without shrinking below the 46 px hard minimum; every encoded output must therefore be regenerated from this render source (or its ledger-only descendants).",
-    "candidate_review2_mp4_count": 24,
-    "candidate_media_profile_qa": {
-      "files_checked": 24,
-      "passed": 24,
-      "failed": 0,
-      "status": "PASS_FOR_CANDIDATE_BYTES_ONLY_NOT_CURRENT_SOURCE_CERTIFICATION"
-    },
-    "post_layout_fix_tests": {
-      "passed": 70,
-      "failed": 0,
-      "scope": "review-round2 + runtime tests after dense-layout implementation"
-    },
-    "post_layout_fix_preflight": {
-      "localized_specs": 12,
-      "compositions": 24,
-      "sampled_frames": 1520,
-      "failures": 0,
-      "layout_issues": 0,
-      "body_size_min_px": 47,
-      "body_size_max_px": 60,
-      "horizontal_intended_embed_body_min_px": 26.927,
-      "portrait_body_min_px": 50,
-      "portrait_intended_embed_body_min_px": 18.056,
-      "horizontal_permanent_lower_gap_max_px": 169.52,
-      "horizontal_source_gap_max_px": 38,
-      "evidence": "motion/migration/checkpoints/2026-09-19-modelos-round2-run6-layout-fix.json"
-    },
-    "series_diversity": {
-      "conceptual_scenes": 30,
-      "perceptual_families": 21,
-      "maximum_family_uses": 2,
-      "full_series_visual_approval": false
-    },
-    "drive_candidate_inventory": {
-      "spanish_files": 12,
-      "english_files": 12,
-      "total_mp4": 24,
-      "complete_candidate_inventory": true,
-      "source_binding": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
-      "final_review_package_verified": false
-    },
-    "technical_golden_claim": false,
-    "review_email_sent": false
+  "owner_approvals": [{
+    "unit":"modelos-razonadores","review_round":2,"status":"APPROVED","approved_at":"2026-09-19","reaffirmed_at":"2026-09-19","source":"explicit_user_chat",
+    "scope":"All final Review Round 2 examples already presented, including the referenced candidate collection; not a claim that each file was personally played. Comparison montage is review-support only. Later unpresented replacements are excluded.",
+    "requires_exact_manifest_match":true,
+    "repeat_review_required_for_unchanged_assets":false,
+    "approval_survives_new_development_renderer":true,
+    "approved_review_assets":[
+      {"video_slug":"modelos-razonadores-intro","language":"es","orientation":"horizontal","asset_sha256":"e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6","duration_seconds":75,"resolution":"1920x1080","fps":60,"technical_binding":"APPROVED_BYTES_MATCHED_RECOVER_FROZEN_SOURCE_PROFILE"},
+      {"video_slug":"fallos-modelos-razonadores","language":"es","orientation":"horizontal","asset_sha256":"d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed","duration_seconds":108,"resolution":"1920x1080","fps":60,"technical_binding":"APPROVED_BYTES_MATCHED_RECOVER_FROZEN_SOURCE_PROFILE"},
+      {"video_slug":"test-time-compute","language":"es","orientation":"horizontal","asset_sha256":"e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710","duration_seconds":129,"resolution":"1920x1080","fps":60,"technical_binding":"APPROVED_BYTES_MATCHED_RECOVER_FROZEN_SOURCE_PROFILE"},
+      {"video_slug":"riesgos-modelos-razonadores","language":"es","orientation":"horizontal","asset_sha256":"f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381","duration_seconds":121,"resolution":"1920x1080","fps":60,"technical_binding":"APPROVED_BYTES_MATCHED_RECOVER_FROZEN_SOURCE_PROFILE"}
+    ],
+    "additional_presented_examples":"Approval applies to the presented collection. Bind each observed file's actual SHA before individual immutable registration; do not ask for approval again merely because this engineering binding was missing.",
+    "golden_example_promotion":"FOUR_EXACT_OWNER_APPROVED_REFERENCES_REGISTERED; technical release remains separate",
+    "notes":"The owner reaffirmed approval and requested publication, not another redesign. Approved bytes remain approved despite later development defaults. Technical release checks must bind the frozen snapshot and current integration; no old bytes may be falsely labeled as new-render-source output."
+  }],
+  "throughput_policy": {
+    "complete_unit_only":true,"one_pr_per_complete_unit":true,
+    "waiting_for_user_review_does_not_block_next_unit":true,
+    "waiting_for_frozen_release_checks_does_not_block_safe_next_unit_work":true,
+    "process_pending_approvals_before_migration_work_each_run":true,
+    "publish_only_after_exact_technical_golden_and_explicit_approval":true,
+    "publish_already_approved_snapshot_without_new_discretionary_redesign":true,
+    "promote_golden_examples_only_by_exact_hash":true,
+    "partial_approval_promotes_only_approved_subset":true,
+    "silence_is_not_approval":true,
+    "next_unit_candidate_after_modelos":"seguridad-ia",
+    "revalidate_next_unit_inventory_before_work":true,
+    "prevent_unfinished_next_unit_from_entering_prior_release_pr":true
   },
-  "next_action": "Render all 12 localized outputs in H/V from render source 9528247... (or ledger-only descendants) into a separate current-source candidate namespace without overwriting owner-approved earlier bytes. Bind exact hashes, then complete encoded whole-series perceptual review, accessibility/player/mobile and delivery/consumer integration. Any materially changed final bytes require exact owner review before Golden Registry promotion."
+  "golden_registry_policy": {
+    "technical_golden_is_separate":true,"immutable_reference_by_hash":true,
+    "owner_approved_references_can_be_registered_with_explicit_pending_technical_state":true,
+    "unknown_provenance_is_null_not_invented":true,
+    "required_fields":["unit","video_slug","language","orientation","asset_sha256","source_revision","renderer_revision","theme_revision","approval_source","approval_date"],
+    "technical_release_requires_verified_provenance_and_all_gates":true
+  },
+  "release_snapshot_policy": {
+    "strategy":"FREEZE_APPROVED_MEDIA_AND_MATCHING_SOURCE_PROFILE",
+    "require_latest_development_renderer":false,
+    "discretionary_redesign_allowed_after_owner_approval":false,
+    "old_revision_can_be_integrated_against_current_main":true,
+    "human_approval_is_not_a_technical_test_result":true,
+    "reopen_only_for_demonstrated_defect":true,
+    "material_visible_change_requires_changed_scope_review":true,
+    "identical_bytes_never_require_repeat_owner_review":true,
+    "one_stable_private_drive_entrypoint":true,
+    "private_review_location":"Maintained in the existing hourly task and private Drive control index, not public git"
+  },
+  "current_evidence": {
+    "inspected_head":"1072ce201be787b21f0035309554605b2faaf6d8",
+    "inspected_main":"e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
+    "owner_visual_approval":"APPROVED_FOR_PRESENTED_FROZEN_ROUND_2",
+    "candidate_render_source_hint":"e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "per_asset_source_provenance":"PENDING_VERIFIED_BINDING; include final-polish provenance, do not assume one hash fits every output",
+    "candidate_source_binding_status":"PRESERVE_APPROVED_SNAPSHOT_NOT_LATEST_HEAD_RERENDER",
+    "candidate_review2_mp4_count":24,
+    "drive_inventory":{"spanish_files":12,"english_files":12,"total_mp4":24,"no_media_replaced_in_this_reconciliation":true,"single_review_root_verified":true},
+    "exact_approved_example_readback":{"files_downloaded_and_sha256_compared":4,"identical_to_chat_approved_bytes":4,"mismatches":0,"codec":"h264","dimensions":"1920x1080","fps":60,"pixel_format":"yuvj420p","color_range":"pc","color_space":"bt470bg","browser_color_delivery":"NOT_VERIFIED_IN_THIS_CHECK"},
+    "current_head_ci":{"workflow_count":11,"successful_workflows":10,"failed_workflows":1,"in_progress_workflows":0,"release_gate_run":35439613357,"release_gate_job":105888042907,"release_gate_reason":"Current round-two ledger has no bound independent technical evidence for the proposed delivery; visualApproval=false is stale with respect to owner's reaffirmed approval of the frozen snapshot.","unit_tests_passed":87,"unit_tests_failed":0,"layout_job":105888042815,"layout_job_result":"success","does_not_certify_frozen_media_delivery":true},
+    "technical_golden_claim":false,"published":false,"new_review_requested":false,"new_review_email_sent":false
+  },
+  "historical_evidence_before_owner_freeze": {
+    "candidate_render_source_revision":"e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "strengthened_source_before_layout_fix":"f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "required_render_source_revision":"9528247ee81dc65dcfc797bb9f46f8854e5e833e",
+    "branch_head_at_checkpoint":"fc1bba88fea32d0b135a51cf2504f8b38b144c12",
+    "main_at_checkpoint":"e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
+    "candidate_source_binding_status":"STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
+    "candidate_source_binding_reason":"The 24 reviewed candidate MP4s were rendered with the earlier Review Round 2 layout. Strengthened source changed the global layout contract and later exact-source check-only exposed dense-copy overflow. Commit 9528247... fixes that overflow without shrinking below the 46 px hard minimum; every encoded output must therefore be regenerated from this render source (or its ledger-only descendants).",
+    "candidate_review2_mp4_count":24,
+    "candidate_media_profile_qa":{"files_checked":24,"passed":24,"failed":0,"status":"PASS_FOR_CANDIDATE_BYTES_ONLY_NOT_CURRENT_SOURCE_CERTIFICATION"},
+    "post_layout_fix_tests":{"passed":70,"failed":0,"scope":"review-round2 + runtime tests after dense-layout implementation"},
+    "post_layout_fix_preflight":{"localized_specs":12,"compositions":24,"sampled_frames":1520,"failures":0,"layout_issues":0,"body_size_min_px":47,"body_size_max_px":60,"horizontal_intended_embed_body_min_px":26.927,"portrait_body_min_px":50,"portrait_intended_embed_body_min_px":18.056,"horizontal_permanent_lower_gap_max_px":169.52,"horizontal_source_gap_max_px":38,"evidence":"motion/migration/checkpoints/2026-09-19-modelos-round2-run6-layout-fix.json"},
+    "series_diversity":{"conceptual_scenes":30,"perceptual_families":21,"maximum_family_uses":2,"full_series_visual_approval":false},
+    "drive_candidate_inventory":{"spanish_files":12,"english_files":12,"total_mp4":24,"complete_candidate_inventory":true,"source_binding":"STALE_REQUIRES_CURRENT_SOURCE_RERENDER","final_review_package_verified":false},
+    "technical_golden_claim":false,"review_email_sent":false,
+    "superseded_next_action":"Render all 12 localized outputs in H/V from render source 9528247... (or ledger-only descendants) into a separate current-source candidate namespace without overwriting owner-approved earlier bytes. Bind exact hashes, then complete encoded whole-series perceptual review, accessibility/player/mobile and delivery/consumer integration. Any materially changed final bytes require exact owner review before Golden Registry promotion.",
+    "historical_only":true,
+    "superseded_by":"Explicit owner reaffirmation: freeze and publish reviewed media instead of elective latest-source redesign. Historical tests retain their original scope."
+  },
+  "next_action":"Complete actual hashes/provenance for the existing approved 24-file collection, recover its matching frozen source profile, stage those SAME bytes for the complete 12-localized-output release, bind independent playback/accessibility/metadata/consumer evidence and close gate:release. Publish #332 once genuinely ready without another owner approval of identical files. Do not rerender merely to adopt newer development typography. Keep safe independent next-block work progressing while a frozen release waits."
 }
