@@ -1,0 +1,280 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+baseline_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+baseline_pages_run: 35462469816
+baseline_coding_live_release_qa_run: 35463064627
+baseline_coding_live_release_qa: PASS_NON_GOLDEN_RELEASE_SURFACE_ONLY
+catalog:
+  chapter_count: 6
+  route_locale_rows: 12
+  has_series_presentation: false
+  derived_from_current_main: true
+media_preflight:
+  curriculum_video_required_per_owner_contract: true
+  es_frontmatter_video_declarations_found: 0
+  en_media_registry_entries_found: 0
+  route_locale_video_obligations_missing_declaration: 12
+  deterministic_blocker: VIDEO_REQUIRED_UNDECLARED
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+notes:
+  - Build PASS below is inherited only from the exact current-main strict Pages ES/EN build.
+  - Browser/indexability/pixel/pedagogy remain false until dedicated per-route GOLDEN evidence is produced.
+  - SOURCE_PASS remains false until current primary references, ES/EN factual parity and source validators are freshly requalified.
+  - Missing visual video is not a VOICE blocker; native ES/EN visual video remains mandatory.
+
+rows:
+  - route: /series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: PARTIAL_CURRENT_SOURCE_INSPECTED_PRIMARY_CITATIONS_PRESENT_NOT_FRESHLY_REOPENED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
+  - route: /en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+    iteration_count: 1
+    last_review_head: 11737ad86db9b15b1981af6fef221d7db0b82110
+    SOURCE_PASS: false
+    BUILD_PASS: true
+    BROWSER_PASS: false
+    MEDIA_VISUAL_PASS: false
+    INDEXABILITY_PASS: false
+    PIXEL_REVIEW: false
+    PEDAGOGY_REVIEW: false
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: [{severity: P1, code: VIDEO_REQUIRED_UNDECLARED}]
+    factual_source_status: EXISTING_EN_SOURCE_BUILD_GREEN_NOT_FRESHLY_MANUAL_REQUALIFIED
+    parity_status: PENDING_FRESH_ES_EN_REQUALIFICATION
+    canonical_hreflang_sitemap_internal_discovery: PENDING_DEDICATED_INDEXABILITY_GATE
+    watch_video_lifecycle: REQUIRED_UNDECLARED
+    evidence_revision: 11737ad86db9b15b1981af6fef221d7db0b82110
+    next_action: DECLARE_AND_PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    state: MEDIA_VISUAL_PENDING
