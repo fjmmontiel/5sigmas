@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/coding-media-bootstrap.yml'
       - 'scripts/generate_coding_agent_visual_media.py'
+      - 'scripts/patch_coding_en_media_manifest.py'
 
 permissions:
   contents: write
@@ -42,7 +43,9 @@ jobs:
           pip install -r requirements.txt pillow
 
       - name: Generate locale-native silent visual media
-        run: python scripts/generate_coding_agent_visual_media.py
+        run: |
+          python scripts/generate_coding_agent_visual_media.py
+          python scripts/patch_coding_en_media_manifest.py
 
       - name: Validate chapter source contracts
         run: |
@@ -108,12 +111,12 @@ jobs:
 
       - name: Commit generated site-facing media after all gates pass
         run: |
-          if git diff --quiet -- docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml; then
+          if git diff --quiet -- docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml; then
             echo 'No generated media changes to commit.'
             exit 0
           fi
           git config user.name '5sigmas GOLDEN Series Builder'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
-          git add docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml
+          git add docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml
           git commit -m 'Add Coding Agents native visual videos ES and EN'
           git push origin HEAD:quality/coding-agents-requalification
