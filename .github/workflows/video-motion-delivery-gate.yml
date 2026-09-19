@@ -130,14 +130,17 @@ jobs:
           cp "$vtt" "$package/${{ matrix.site }}.vtt"
           cp -a motion/dist/. "$review/"
 
-      - uses: actions/upload-artifact@v4
+      # Explicit one-day exception: this artifact is only transport between jobs in
+      # the same release-gate run. It is not retained as review history.
+      - name: Upload one-day cross-job delivery transport
+        uses: actions/upload-artifact@v4
         with:
           name: reasoning-delivery-${{ matrix.locale }}-${{ matrix.site }}
           path: |
             package/
             review/
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1
 
   integrate-and-gate:
     needs: [sync-main, render-horizontal]
@@ -321,15 +324,15 @@ jobs:
             git push origin HEAD:migration/video-golden-modelos-razonadores
           fi
 
-      - name: Publish complete review package artifact
+      - name: Upload release diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: modelos-razonadores-technical-golden-review
+          name: modelos-razonadores-delivery-failure
           path: |
-            .delivery-artifacts/package/
             .delivery-artifacts/review/
             .video-media-gate/manifest.json
             motion/migration/modelos-razonadores.json
             motion/migration/modelos-razonadores-status.json
-          if-no-files-found: error
-          retention-days: 30
+          if-no-files-found: warn
+          retention-days: 1
