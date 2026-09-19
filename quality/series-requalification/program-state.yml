@@ -1,4 +1,4 @@
-schema_version: 8
+schema_version: 9
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -34,7 +34,7 @@ series_status:
     production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: RELEASE_READY_PR_331_EXACT_HEAD_CI_REPAIR_IN_PROGRESS
+    state: RELEASE_READY_PR_331_EXACT_HEAD_CI_IN_PROGRESS
     voice_enhancement: DEFERRED_OWNER_LOCAL
     technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
     technical_milestone_run: 35402872378
@@ -63,24 +63,30 @@ series_status:
     fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
     fresh_zero_based_series_audit: PASS
     release_pr: 331
-    release_head: ca195f66704de875f0bb768bde25cfb5ff0ca615
-    prior_exact_head: 0b6d9f0b507c1585cedc332256dcd04fa108a5bb
-    prior_exact_head_english_editorial: PASS
-    prior_exact_head_locale_switch: PASS
-    prior_exact_head_english_mirror: FAIL_UNRELATED_PAGE_LEVEL_MATHJAX_OVERFLOW_IN_VISUAL_SPECIFIC_GATE
-    english_mirror_failure_run: 35409282560
-    english_mirror_failure_job: 105805599667
-    english_mirror_failure_detail: MOBILE_PAGE_MATHJAX_301PX_OVERFLOW_OUTSIDE_AGENT_LOOP_VISUAL
-    english_mirror_repair: VISUAL_VALIDATOR_NOW_FAILS_CLOSED_ON_OWNED_VISUAL_OVERFLOW_ONLY; WHOLE_PAGE_OVERFLOW_REMAINS_OWNED_BY_PAGE_BROWSER_GATES
+    release_head: 624a037eb42530fbdca201065acb8f5648a50f48
+    exact_head_english_editorial_run: 35410444961
+    exact_head_english_editorial: PASS
+    exact_head_locale_switch_run: 35410444959
+    exact_head_locale_switch: IN_PROGRESS
+    exact_head_english_mirror_run: 35410444963
+    exact_head_english_mirror: IN_PROGRESS
+    exact_head_pr_visual_run: 35410444964
+    exact_head_pr_visual: IN_PROGRESS
+    release_qa_repairs: >-
+      Visual-specific From-Caves-to-AGI Chapter 5 validators now fail closed on rendered overflow
+      inside the visual they own, while whole-page overflow remains enforced by the dedicated
+      full-series/browser gates. Zero-area hidden/SVG-definition descendants are excluded because
+      they cannot create visible overflow. No rendered overflow threshold was relaxed.
     series_golden: false
     production_verified: false
-    next_action: WAIT_FOR_NEW_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA_IF_GREEN
+    next_action: WAIT_FOR_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA_IF_GREEN
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
     state: QA_ACTIVE_MEDIA_VISUAL_FAIL_CLOSED
     baseline_main: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
     route_locale_rows: 12
     source_inventory: INSPECTED_12_SOURCE_FILES_EXIST_AND_ARE_NAV_MANIFEST_PUBLISHED
+    editorial_blob_review: EXISTING_2026_09_11_EXACT_BLOB_CERTIFICATES_RECONCILED_BUT_FRESH_SOURCE_GATE_STILL_PENDING
     es_series_directory_native_video_files: 0
     en_series_directory_native_video_files: 0
     source: PENDING_DEEP_CURRENT_PRIMARY_REVIEW
@@ -105,7 +111,7 @@ series_status:
 
 shared_branch:
   name: quality/post-datacenters-requalification
-  head_after_voice_ledger: 6fa66134d736143eefa86901609198bc294d58cb
+  head_after_voice_ledger_and_shared_qa_repairs: bac09a7e77481000c54a4de8ab234f08ba1245c7
   synchronized_with_security_main_merge_without_force_push: true
   security_release_receipt: quality/series-requalification/security-series-release.yml
   agents_ledger: quality/series-requalification/agents-article-ledger.yml
