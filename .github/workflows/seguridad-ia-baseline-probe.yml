@@ -19,6 +19,14 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install ffprobe dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          ffprobe -version | head -n 1
+
       - name: Probe all current ES/EN MP4s deterministically
         shell: bash
         run: |
