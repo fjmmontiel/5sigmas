@@ -55,7 +55,7 @@
 
     const timer = window.setInterval(() => {
       if (root.dataset.s5vPaused === "true" || document.hidden || !root.isConnected) return;
-      const max = Number(root.dataset.step || 1);
+      const max = Number(root.dataset.s5vSteps || 1);
       const current = Number(root.dataset.step || 1);
       setStep(root, current >= max ? 1 : current + 1);
     }, interval);
