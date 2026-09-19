@@ -135,11 +135,50 @@ jobs:
           S5_VOICE_BROWSER_CONCURRENCY: '2'
         run: node scripts/validate_voice_series_browser_milestone.mjs
 
+      - name: Inventory exact start/intermediate/final review frames
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          roots = [Path('artifacts/voice-browser-milestone'), Path('artifacts/visual-review')]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for path in sorted(root.rglob('*')):
+                  if not path.is_file():
+                      continue
+                  if root.name == 'visual-review' and not path.name.startswith('voice-'):
+                      continue
+                  payload = path.read_bytes()
+                  files.append({
+                      'path': path.as_posix(),
+                      'bytes': len(payload),
+                      'sha256': hashlib.sha256(payload).hexdigest(),
+                  })
+
+          evidence = Path('artifacts/voice-browser-milestone/evidence-manifest.json')
+          evidence.parent.mkdir(parents=True, exist_ok=True)
+          evidence.write_text(json.dumps({
+              'head': '${{ github.sha }}',
+              'files': files,
+              'voice_visual_review_files': sum(1 for item in files if item['path'].startswith('artifacts/visual-review/voice-')),
+          }, indent=2) + '\n', encoding='utf-8')
+          print(evidence.read_text(encoding='utf-8'))
+          PY
+
       - name: Upload short-lived exact visual evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: realtime-voice-browser-pixel-evidence
-          path: artifacts/voice-browser-milestone/*
+          path: |
+            artifacts/voice-browser-milestone/*
+            artifacts/visual-review/voice-*.png
           if-no-files-found: warn
           retention-days: 1
