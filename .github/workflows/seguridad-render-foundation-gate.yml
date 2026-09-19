@@ -11,6 +11,10 @@ on:
       - motion/src/theme.mjs
       - motion/src/render/paint.mjs
       - motion/src/render/layout.mjs
+      - motion/src/seguridad/schema.mjs
+      - motion/tests/seguridad-schema.test.mjs
+      - motion/migration/seguridad-ia-content-v1.json
+      - motion/migration/seguridad-ia-series-register.json
   workflow_dispatch:
 
 permissions:
@@ -34,6 +38,10 @@ jobs:
               Path('motion/src/theme.mjs'),
               Path('motion/src/render/paint.mjs'),
               Path('motion/src/render/layout.mjs'),
+              Path('motion/src/seguridad/schema.mjs'),
+              Path('motion/tests/seguridad-schema.test.mjs'),
+              Path('motion/migration/seguridad-ia-content-v1.json'),
+              Path('motion/migration/seguridad-ia-series-register.json'),
           ]
           for path in paths:
               data = path.read_bytes()
@@ -53,7 +61,9 @@ jobs:
             motion/src/labels.mjs \
             motion/src/theme.mjs \
             motion/src/render/paint.mjs \
-            motion/src/render/layout.mjs; do
+            motion/src/render/layout.mjs \
+            motion/src/seguridad/schema.mjs \
+            motion/tests/seguridad-schema.test.mjs; do
             node --check "$file"
           done
           node --input-type=module <<'NODE'
@@ -62,6 +72,7 @@ jobs:
           const theme = await import('./motion/src/theme.mjs');
           await import('./motion/src/render/paint.mjs');
           const layout = await import('./motion/src/render/layout.mjs');
+          await import('./motion/src/seguridad/schema.mjs');
           const identity = {
             unit: 'seguridad-ia',
             accentName: 'security-rust',
@@ -82,3 +93,9 @@ jobs:
             layoutContract: layout.EDITORIAL_LAYOUT_CONTRACT
           }, null, 2));
           NODE
+
+      - name: Seguridad schema and negative regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test motion/tests/seguridad-schema.test.mjs
