@@ -20,6 +20,7 @@ on:
       - 'scripts/validate_voice_network_telephony_ch5_accessibility.mjs'
       - 'scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs'
       - 'scripts/validate_voice_series_browser_milestone.mjs'
+      - 'scripts/serve_preview.py'
       - 'main.py'
       - 'locale_main.py'
       - 'mkdocs.yml'
@@ -90,11 +91,12 @@ jobs:
               target.write_text(text.replace('https://5sigmas.com/en/', '/en/').replace('https://5sigmas.com/', '/'), encoding='utf-8')
           PY
 
-      - name: Serve exact combined preview
+      - name: Serve exact combined preview with byte-range support
         shell: bash
         run: |
           set -euo pipefail
-          python -m http.server 8000 --directory site > /tmp/5sigmas-voice-preview.log 2>&1 &
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-voice-preview.log 2>&1 &
           echo $! > /tmp/5sigmas-voice-preview.pid
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/ > /dev/null && \
