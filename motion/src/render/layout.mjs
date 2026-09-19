@@ -11,7 +11,7 @@ function compose(P,s,w,y,titleSize,bodySize,lh,gap){
 export function sceneLayout(P,s,portrait,design={}){
  const width=portrait?1080:1920,height=portrait?1920:1080,mode=portrait?'portrait':design.layout||'split';
  let left=portrait?58:mode==='reverse'?1050:72,textWidth=portrait?964:760; const top=163;
- const limit=portrait?1080:930,min=46,max=portrait?56:60,bodyLH=1.32,gap=22;
+ const limit=portrait?1080:930,min=46,max=portrait?56:60,bodyLH=1.22,gap=20;
  const options=[];
  for(let titleSize=84;titleSize>=60;titleSize-=2){for(let bodySize=max;bodySize>=min;bodySize--){
   if(titleSize<bodySize*1.12)continue;const built=compose(P,s,textWidth,top,titleSize,bodySize,bodyLH,gap);
@@ -20,7 +20,7 @@ export function sceneLayout(P,s,portrait,design={}){
  options.sort((a,b)=>b.score-a.score);let best=options[0],banner=false;
  // Dense explanations receive a genuinely different composition, never a smaller body.
  if(!best&&!portrait){
-  textWidth=880;left=mode==='reverse'?968:72;
+  textWidth=940;left=mode==='reverse'?908:72;
   const wholeTitle=s.title.join(' '),font=68,segments=[];let tx=72;
   if(P.measure(wholeTitle,font,600,P.T.headlineFont)<=1776){
    s.title.forEach((text,i)=>{segments.push({text,x:tx,accent:i===s.accentLine});tx+=P.measure(text+' ',font,600,P.T.headlineFont);});
@@ -32,7 +32,7 @@ export function sceneLayout(P,s,portrait,design={}){
 
  if(!best){banner=false;best={...compose(P,s,textWidth,top,60,min,bodyLH,gap),titleSize:60,bodySize:min};P.issues.push({type:'copy-needs-recomposition',scene:s.id,bottom:best.bodyBottom});}
  const {titleSize,bodySize,paragraphs,bodyBottom,titleLines,titleSegments}=best;
- const mechanism=portrait?{x:55,y:Math.max(820,bodyBottom+55),w:970,h:0}:banner?{x:mode==='reverse'?72:1024,y:270,w:824,h:665}:{x:mode==='reverse'?65:925,y:176,w:925,h:757};
+ const mechanism=portrait?{x:55,y:Math.max(720,bodyBottom+45),w:970,h:0}:banner?{x:mode==='reverse'?72:1088,y:270,w:760,h:665}:{x:mode==='reverse'?65:925,y:176,w:925,h:757};
  if(portrait)mechanism.h=1780-mechanism.y;
  mechanism.scale=Math.min(mechanism.w/1000,mechanism.h/800);
  const sourceY=portrait?1818:Math.min(956,bodyBottom+38);
