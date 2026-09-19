@@ -77,8 +77,8 @@ jobs:
           S5_BROWSER_CHANNEL: chrome
         run: node scripts/validate_agents_full_experience.mjs
 
-      - name: Retain exact full-page evidence for manual PIXEL and PEDAGOGY review
-        if: always()
+      - name: Retain exact full-page diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: agents-full-experience-review
