@@ -68,11 +68,11 @@ jobs:
               """Accept only predicates that logically require failure().
 
               Exact failure() remains canonical. A scoped conjunction such as
-              `${{ failure() && scope == 'full' }}` is equally failure-only and avoids
+              `failure() && <scope condition>` is equally failure-only and avoids
               retaining unrelated diagnostics. OR predicates are deliberately rejected.
               """
               condition = expression.strip()
-              if condition.startswith('${{') and condition.endswith('}}'):
+              if condition.startswith('$' + '{{') and condition.endswith('}' + '}'):
                   condition = condition[3:-2].strip()
               if condition == 'failure()':
                   return True
