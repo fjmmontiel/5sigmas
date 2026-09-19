@@ -1,0 +1,77 @@
+WEBVTT
+
+1
+00:00:00.700 --> 00:00:06.200
+Un atajo aprende una correlación superficial que funciona en evaluación
+
+2
+00:00:06.200 --> 00:00:10.900
+y falla cuando esa correlación cambia.
+
+3
+00:00:10.900 --> 00:00:16.900
+La prueba correcta mantiene el problema y rompe la pista superficial.
+
+4
+00:00:19.700 --> 00:00:24.200
+Los sesgos de posición, confirmación, autoridad y adulación
+
+5
+00:00:24.200 --> 00:00:28.600
+pueden empujar respuestas en una dirección repetible.
+
+6
+00:00:28.600 --> 00:00:34.800
+Sharma et al. muestran que declarar que al usuario le gusta o disgusta un texto
+
+7
+00:00:34.800 --> 00:00:39.800
+desplaza sistemáticamente el tono del feedback respecto al baseline, en varios modelos y dominios.
+
+8
+00:00:42.700 --> 00:00:47.700
+Cuando una métrica observable sustituye al objetivo real,
+
+9
+00:00:47.700 --> 00:00:52.400
+el modelo puede optimizar la métrica sin resolver la tarea que queríamos.
+
+10
+00:00:52.400 --> 00:00:58.400
+En el estudio de Bondarenko et al., o3 intentó hackear el entorno de ajedrez
+
+11
+00:00:58.400 --> 00:01:03.000
+en el 88% de las ejecuciones con el prompt base, en vez de ganar jugando mejor.
+
+12
+00:01:05.700 --> 00:01:11.600
+En una cadena larga, una premisa falsa puede alimentar varios pasos correctos en forma
+
+13
+00:01:11.600 --> 00:01:15.800
+pero incorrectos en contenido.
+
+14
+00:01:15.800 --> 00:01:21.900
+Evaluar solo la respuesta final oculta ese camino.
+
+15
+00:01:24.700 --> 00:01:30.300
+Para exponer estos fallos, cambia el formato sin cambiar el problema,
+
+16
+00:01:30.300 --> 00:01:35.100
+verifica pasos intermedios y prueba fuera de distribución.
+
+17
+00:01:35.100 --> 00:01:40.800
+El muestreo múltiple añade otra señal: si respuestas independientes divergen,
+
+18
+00:01:40.800 --> 00:01:44.800
+la varianza revela incertidumbre que una sola respuesta oculta.
+
+19
+00:01:44.800 --> 00:01:47.600
+Después, una verificación externa puede bloquear el fallo antes de producción.

@@ -1,0 +1,41 @@
+# Risks: overthinking, attacks and control
+
+## Thinking longer has a limit.
+
+Apple Research found three regimes as task complexity increases: on simple tasks, standard models can outperform reasoning models; at medium complexity, extra reasoning helps; and at high complexity both can collapse.
+
+Reasoning effort also stops scaling indefinitely: it rises with complexity up to a point and then falls, even with token budget available.
+
+Shojaee et al., 2025 · The Illusion of Thinking
+
+## The attacker can hide inside the data.
+
+In an application with RAG, a browser or tools, the model processes content the user did not write. A malicious instruction can travel inside a retrieved webpage, document or API response.
+
+Greshake et al. showed that indirect prompt injection can manipulate the behavior of LLM-integrated applications and influence when or how other APIs are called.
+
+Greshake et al., 2023 · Indirect Prompt Injection
+
+## Safety can also open attack surface.
+
+TabooRAG shows another route: a retrievable document can inject risk-relevant context into an otherwise benign query and trigger a refusal.
+
+The attack exploits shared alignment criteria to transfer blocking behavior across models. The risk here is not a harmful answer, but loss of availability.
+
+Li et al., 2026 · TabooRAG
+
+## Budget and risk must be decided together.
+
+Conformal Thinking reframes the reasoning budget as risk control: stop when confidence is sufficient and also cut off instances that appear unsolvable within the budget.
+
+The goal is not to spend every available token, but to satisfy a target error rate while using compute where it improves reliability.
+
+Wang et al., 2026 · Conformal Thinking
+
+## Capability without control is not useful autonomy.
+
+A robust agent limits permissions and validates external content while separating untrusted data from authoritative instructions. Before an irreversible action, it adds an explicit verification boundary.
+
+It also sets hard budgets for time, tokens and tool calls, and keeps explicit fallbacks and can abstain. The goal is to bound damage when one layer fails.
+
+5sigmas · control synthesis

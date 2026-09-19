@@ -1,0 +1,93 @@
+WEBVTT
+
+1
+00:00:00.700 --> 00:00:05.300
+Three classic thresholds help design waiting:
+
+2
+00:00:05.300 --> 00:00:10.200
+0.1 seconds feels immediate, 1 second preserves flow
+
+3
+00:00:10.200 --> 00:00:14.600
+and 10 seconds marks the approximate limit of continuous attention.
+
+4
+00:00:14.600 --> 00:00:18.700
+These are interaction references, not universal laws.
+
+5
+00:00:18.700 --> 00:00:22.700
+Above one second, the interface should show that work continues;
+
+6
+00:00:22.700 --> 00:00:26.400
+above ten, it needs visible progress and a clear way to interrupt.
+
+7
+00:00:27.700 --> 00:00:32.600
+TTFT measures from sending the request until the first visible token appears.
+
+8
+00:00:32.600 --> 00:00:36.200
+Total latency ends when the last token arrives.
+
+9
+00:00:36.200 --> 00:00:41.700
+Two systems with the same total time can feel different if one starts responding sooner.
+
+10
+00:00:41.700 --> 00:00:47.700
+Streaming reduces silent waiting; it does not remove the remaining work.
+
+11
+00:00:49.700 --> 00:00:55.100
+Before the first token, work can happen that the user cannot see.
+
+12
+00:00:55.100 --> 00:01:00.100
+After that, streaming delivers the answer progressively while generation continues.
+
+13
+00:01:00.100 --> 00:01:04.600
+The improvement is perceptual: the user gets a sign of life earlier.
+
+14
+00:01:04.600 --> 00:01:08.400
+Total time can still remain unchanged.
+
+15
+00:01:09.700 --> 00:01:15.500
+RouteLLM learns when to use a stronger model and when to use a weaker one to balance quality and cost.
+
+16
+00:01:15.500 --> 00:01:20.500
+In its evaluation, some routers reduced cost by more than two times without degrading measured quality.
+
+17
+00:01:20.500 --> 00:01:26.000
+In a product, that separation can map fast routes to simple queries and reserve more capacity for difficult ones.
+
+18
+00:01:26.000 --> 00:01:30.400
+Latency policy remains a system decision.
+
+19
+00:01:31.700 --> 00:01:36.600
+The robust pattern is not to always think longer,
+
+20
+00:01:36.600 --> 00:01:41.800
+but to classify the request, assign a budget and show progress before waiting looks like failure.
+
+21
+00:01:41.800 --> 00:01:47.300
+When the budget is exhausted, the system needs an explicit fallback:
+
+22
+00:01:47.300 --> 00:01:51.700
+partial answer, clarification, alternate model or recoverable error.
+
+23
+00:01:51.700 --> 00:01:54.600
+Knowing when to stop is part of the design.

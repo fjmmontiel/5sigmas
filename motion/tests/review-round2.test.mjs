@@ -1,0 +1,33 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {validateSpec,majority,evaluated} from '../src/schema.mjs';
+import {cueState,motionValue} from '../src/cues.mjs';
+import {contrastRatio} from '../src/theme.mjs';
+import {auditSeries,checkTextMetrics,technicallyGolden,REQUIRED_GATES,assertEvidence} from '../src/review-policy.mjs';
+import {designForScene,canonicalVideoKey} from '../src/render/mechanisms/editorial.mjs';
+const dir=new URL('../content/modelos-razonadores/',import.meta.url);
+const specs=readdirSync(dir).filter(n=>/\.(es|en)\.json$/.test(n)).map(n=>JSON.parse(readFileSync(new URL(n,dir),'utf8')));
+for(const spec of specs){
+ test(`${spec.id}: original full content and cues pass schema`,()=>assert.equal(validateSpec(spec).valid,true));
+ test(`${spec.id}: every scene has a semantic design, no silent generic fallback`,()=>{for(const s of spec.scenes)assert.ok(designForScene(spec,s)?.rationale);});
+ test(`${spec.id}: seeking does not depend on frame history`,()=>{for(const s of spec.scenes){const before=cueState(s,s.duration*.6);cueState(s,s.duration*.9);cueState(s,.01);assert.deepEqual(cueState(s,s.duration*.6),before);for(const q of s.cues)for(const a of q.actions){const v=motionValue(s,q.end,a.target);motionValue(s,s.duration,a.target);assert.equal(motionValue(s,q.end,a.target),v);}}});
+ test(`${spec.id}: locked series palette and contrast`,()=>{assert.equal(spec.visualIdentity.accent,'#26A69A');assert.equal(spec.visualIdentity.accentText,'#00776F');assert.equal(spec.visualIdentity.accentSurface,'#E7F4F0');assert.ok(contrastRatio('#00776F','#FCFBF8')>=4.5);});
+}
+test('full conceptual series counts ES/EN once; 30 scenes / maximum 2 uses',()=>{const a=auditSeries(specs);assert.equal(a.canonicalScenes,30);assert.ok(Math.max(...Object.values(a.families))<=2);assert.equal(a.visualApproval,false);});
+test('missing EN output is a hard failure',()=>assert.throws(()=>auditSeries(specs.slice(1)),/six/));
+test('translated video IDs resolve to the same canonical article',()=>{const pair=specs.filter(s=>s.chapter==='01');assert.equal(canonicalVideoKey(pair[0]),canonicalVideoKey(pair[1]));});
+test('unknown Modelos scene cannot render a generic numbered list',()=>assert.throws(()=>designForScene(specs[0],{id:'not-reviewed'}),/Missing semantic/));
+test('four uses of a real choreography fail even across separate chapters',()=>{const x=structuredClone(specs);for(const s of x){s.scenes[0].visualDesign={mechanism:'area',layout:'split',rationale:'Deliberately repeated area decomposition for a negative regression test.'};}assert.throws(()=>auditSeries(x),/ceiling/);});
+test('third use without semantic and pixel-review exception fails',()=>{const x=structuredClone(specs);for(const s of x.filter(s=>['01','02'].includes(s.chapter)))s.scenes[0].visualDesign={mechanism:'area',layout:'split',rationale:'Deliberate repeated area decomposition used only by a negative regression.'};assert.throws(()=>auditSeries(x),/third use/);});
+test('family metadata cannot rename a renderer to evade the series cap',()=>{const x=structuredClone(specs);for(const s of x){s.scenes[0].visualDesign={mechanism:'area',family:s.id,layout:'split',rationale:'A different label must never make identical choreography count differently.'};}assert.throws(()=>auditSeries(x),/ceiling/);});
+test('the rejected 33px body is not accepted',()=>assert.throws(()=>checkTextMetrics({bodySize:33,permanentLowerGap:20,sourceGap:40}),/small/));
+test('a large empty lower editorial area is not accepted',()=>assert.throws(()=>checkTextMetrics({bodySize:50,permanentLowerGap:350,sourceGap:40}),/dead/));
+test('missing observed metrics are not interpreted as zero',()=>assert.throws(()=>checkTextMetrics({bodySize:50}),/missing/));
+test('moving the source nearer cannot hide permanent blank space',()=>assert.throws(()=>checkTextMetrics({bodySize:50,permanentLowerGap:300,sourceGap:1}),/dead/));
+test('portrait copy has its own minimum rather than a horizontal crop',()=>assert.throws(()=>checkTextMetrics({bodySize:42,permanentLowerGap:0,sourceGap:20},{portrait:true}),/small/));
+test('each new gate is required independently',()=>{const all=Object.fromEntries(REQUIRED_GATES.map(g=>[g,true]));assert.equal(technicallyGolden(all),true);for(const g of REQUIRED_GATES)assert.equal(technicallyGolden({...all,[g]:false}),false);});
+test('historical all-seven-pass is insufficient after owner rejection',()=>assert.equal(technicallyGolden(Object.fromEntries(REQUIRED_GATES.slice(0,7).map(g=>[g,true]))),false));
+test('stale renderer or asset hashes invalidate an evidence receipt',()=>{const r={status:'PASS',sourceHash:'old',assetHash:'video',reviewedAt:'2026-09-19',method:'pixel',scope:'all scenes'};assert.throws(()=>assertEvidence(r,'new','video'),/stale source/);assert.throws(()=>assertEvidence({...r,sourceHash:'new'},'new','other'),/stale rendered/);});
+test('tie does not fabricate a winning candidate',()=>assert.equal(majority([{value:1},{value:2}]).tied,true));
+test('evaluator depends on the supplied scores',()=>assert.equal(evaluated([{id:'a',score:0},{id:'b',score:1}]).id,'b'));

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T16:52:09Z",
+  "unit": "modelos-razonadores",
+  "release_round": 2,
+  "branch": "migration/video-golden-modelos-razonadores",
+  "pr": 332,
+  "head_before_checkpoint": "f4531a0b6145505afd0c6030cfa3f2958b97f020",
+  "owner_visual_approval": "APPROVED",
+  "approval_scope": "exact frozen Round 2 reviewed collection only",
+  "repeat_approval_required_for_unchanged_assets": false,
+  "technical_golden": false,
+  "published": false,
+  "release_state": "APPROVED_TECHNICAL_PENDING",
+  "canonical_delivery": "PARTIAL_EXACT_STAGING",
+  "staged_exact_horizontal_count": 2,
+  "expected_horizontal_count": 12,
+  "workflow_implementation_commit": "da12e1a2afadd6a35511157d1c8efbeb832db4d6",
+  "transport_commit": "f4531a0b6145505afd0c6030cfa3f2958b97f020",
+  "staged_assets": [
+    {
+      "path": "docs/series/modelos-razonadores/00_presentacion_serie.mp4",
+      "sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+      "size_bytes": 4051574
+    },
+    {
+      "path": "docs/series/modelos-razonadores/01-que-es-razonar.mp4",
+      "sha256": "a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807",
+      "size_bytes": 4686122
+    }
+  ],
+  "media_integrity": {
+    "horizontal_full_decode": "PASS_12_OF_12_FROM_PRIOR_BOUND_CHECKPOINT",
+    "vertical_full_decode": "NOT_VERIFIED"
+  },
+  "source_provenance": {
+    "state": "NOT_VERIFIED",
+    "historical_hint": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "ruled_out_candidates": [
+      {
+        "source_ref": "80171316a513dc361790d8fa5c5b6c8310050a90",
+        "asset": "es/00/horizontal",
+        "rendered_sha256": "da9060198e77f0df98027543d16e64b7f424e89b536e51492f307a5b6cd2fd20",
+        "approved_sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+        "encoded_exact_match": false,
+        "approved_visual_sample_matches": "0/4"
+      }
+    ]
+  },
+  "release_blockers": [
+    "Ten remaining approved horizontal MP4s are not yet staged exactly at canonical site paths.",
+    "Per-asset source/render provenance remains NOT_VERIFIED.",
+    "Vertical full-decode/media-integrity evidence is not complete.",
+    "The complete frozen-snapshot technical release gate is not complete.",
+    "No merge, deployment or live-consumer verification has occurred."
+  ],
+  "next_action": "Continue exact-byte staging for the remaining ten horizontal assets without visual changes, then run the complete frozen-snapshot release gate against current main integration. Preserve owner approval and do not request reapproval for identical bytes."
+}

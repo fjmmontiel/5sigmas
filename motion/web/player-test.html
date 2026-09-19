@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5sigmas motion player accessibility harness</title>
+<style>body{margin:24px;max-width:1100px}</style>
+<s5-motion id="player"></s5-motion>
+<script type="module">
+  import '../src/player.mjs';
+  window.playerReady=customElements.whenDefined('s5-motion').then(()=>true);
+</script>

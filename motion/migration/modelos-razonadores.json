@@ -1,0 +1,71 @@
+{
+  "unit": "modelos-razonadores",
+  "status": "revision_required",
+  "releasePolicy": "one_pr_after_all_locales_and_videos_are_golden",
+  "visualIdentity": {
+    "accentName": "Teal reasoning",
+    "accent": "#26A69A",
+    "accentText": "#00776F",
+    "accentSurface": "#E7F4F0",
+    "uses": [
+      "key words and metrics",
+      "active diagram nodes and selected paths",
+      "results, progress and state emphasis"
+    ],
+    "semantic": {
+      "warning": "#98600C",
+      "warningSurface": "#FBF1DF"
+    },
+    "forbidden": [
+      "decorative gradients",
+      "per-video or per-scene accent changes",
+      "ornamental multicolor fills"
+    ]
+  },
+  "visualQualityGate": {
+    "revision": 2,
+    "source": "explicit owner review feedback 2026-09-19",
+    "textProminence": {
+      "horizontalBodyMinPx": 36,
+      "horizontalBodyTargetPx": 42,
+      "horizontalTextWidthMaxPx": 800,
+      "sourceGapMaxPx": 90,
+      "rule": "body copy must remain prominent and the lower-left composition may not contain unexplained dead space"
+    },
+    "motionDiversity": {
+      "animationFamilyRepeatCap": 2,
+      "absoluteExceptionalCap": 3,
+      "exceptionPolicy": "a third use requires explicit semantic necessity and review evidence; the default automated gate remains two",
+      "sceneSpecificSemanticRendererRequired": true,
+      "rule": "changing labels or timing does not create a new visual family; geometry and explanatory mechanism must materially differ"
+    },
+    "seriesReview": {
+      "required": true,
+      "rule": "review the complete series together and fail if scenes feel interchangeable, templated, or dominated by one animation grammar"
+    }
+  },
+  "spanish": [
+    "00_presentacion_serie",
+    "01-que-es-razonar",
+    "02-fallos",
+    "03-test-time-compute",
+    "04-latencia-streaming",
+    "05-riesgos"
+  ],
+  "english": [
+    "00_presentacion_serie",
+    "01-que-es-razonar",
+    "02-fallos",
+    "03-test-time-compute",
+    "04-latencia-streaming",
+    "05-riesgos"
+  ],
+  "notes": [
+    "All twelve ES/EN motion specs remain the single source of content, timing and metadata truth.",
+    "The first review package was explicitly rejected for insufficient text prominence and excessive cross-series animation repetition; its Technical GOLDEN certification is therefore reopened.",
+    "Review v2 must use scene-specific semantic motion, a maximum of two uses of the same animation family across the complete canonical series, and a stronger left-column typography/layout contract.",
+    "English reasoning media uses the normal locale media tree; locales/en/media.yml remains the metadata authority for all six videos.",
+    "Golden Example promotion remains separate and requires explicit owner approval after the replacement review package."
+  ],
+  "validatedMainSha": "2d453e473fdf56fcb82ac83ba66730ce0db3bb89"
+}

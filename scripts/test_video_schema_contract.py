@@ -34,6 +34,7 @@ EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # missing voice-dependent captions/transcripts non-blocking for the current GOLDEN gate.
 EXPECTED_VIDEO_LOCALE_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
+HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_BASELINE = 92
 
 
 def base_entry() -> dict:
@@ -246,6 +247,7 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         "captions_transcript_review": len(missing),
         "partial_declarations": 0,
         "legacy_missing_budget": LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET,
+        "historical_missing_baseline": HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_BASELINE,
         "legacy_budget_exceeded_by": debt_over_legacy_budget,
         "voice_enhancement": "DEFERRED_OWNER_LOCAL",
         "golden_blocking": False,
@@ -254,21 +256,29 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
     print("Video accessibility inventory: " + json.dumps(summary, sort_keys=True))
 
     if enforce_debt:
-        # Historical 92 > 91 remains observable as debt, but per PROGRAM AMENDMENT 5716685049
-        # it is deliberately not a blocker for current ARTICLE/SERIES GOLDEN. Never hide the
-        # excess by raising the threshold; fail-closed behavior above still rejects partial or
-        # dangling declarations and the exact-surface checkpoint still detects catalogue drift.
+        # Preserve the historical 92 > 91 observation as a baseline, not as a target that
+        # future accessibility improvements are forbidden to beat. Partial/dangling pairs
+        # still fail closed above and the exact-surface checkpoint still catches catalogue drift.
+        assert summary["historical_missing_baseline"] == HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_BASELINE
+        assert summary["captions_transcript_review"] <= HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_BASELINE
         assert summary["legacy_missing_budget"] == LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+        assert summary["legacy_budget_exceeded_by"] == max(
+            0, summary["captions_transcript_review"] - LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+        )
         assert summary["golden_blocking"] is False
     return summary
 
 
 def assert_owner_voice_deferral_contract() -> None:
-    """Regression: 92 > 91 remains visible without becoming a current GOLDEN blocker."""
+    """Regression: historical voice debt stays visible while completed pairs may reduce it."""
     summary = audit_published_accessibility_inventory(enforce_debt=True)
-    assert summary["captions_transcript_review"] == 92
-    assert summary["legacy_missing_budget"] == 91
-    assert summary["legacy_budget_exceeded_by"] == 1
+    assert summary["locale_surfaces"] == EXPECTED_VIDEO_LOCALE_SURFACES
+    assert summary["captions_transcript_complete"] + summary["captions_transcript_review"] == EXPECTED_VIDEO_LOCALE_SURFACES
+    assert summary["captions_transcript_review"] <= HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_BASELINE
+    assert summary["legacy_missing_budget"] == LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+    assert summary["legacy_budget_exceeded_by"] == max(
+        0, summary["captions_transcript_review"] - LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+    )
     assert summary["voice_enhancement"] == "DEFERRED_OWNER_LOCAL"
     assert summary["golden_blocking"] is False
 

@@ -1,0 +1,35 @@
+name: Modelos export current canonical media
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  export-current-canonical:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export current canonical Modelos media
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelos-current-canonical-${{ github.event.pull_request.head.sha }}
+          retention-days: 1
+          if-no-files-found: error
+          path: |
+            docs/series/modelos-razonadores/00_presentacion_serie.mp4
+            docs/series/modelos-razonadores/01-que-es-razonar.mp4
+            docs/series/modelos-razonadores/02-fallos.mp4
+            docs/series/modelos-razonadores/03-test-time-compute.mp4
+            docs/series/modelos-razonadores/04-latencia-streaming.mp4
+            docs/series/modelos-razonadores/05-riesgos.mp4
+            locales/en/series/modelos-razonadores/00_presentacion_serie.mp4
+            locales/en/series/modelos-razonadores/01-que-es-razonar.mp4
+            locales/en/series/modelos-razonadores/02-fallos.mp4
+            locales/en/series/modelos-razonadores/03-test-time-compute.mp4
+            locales/en/series/modelos-razonadores/04-latencia-streaming.mp4
+            locales/en/series/modelos-razonadores/05-riesgos.mp4

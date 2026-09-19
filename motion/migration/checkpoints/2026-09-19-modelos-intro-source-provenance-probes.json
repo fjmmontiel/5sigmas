@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-19T12:55:00Z",
+  "unit": "modelos-razonadores",
+  "review_round": 2,
+  "owner_visual_approval": "APPROVED_PRESENTED_ROUND_2_SCOPE",
+  "technical_golden": false,
+  "asset_probe_scope": "Spanish horizontal intro only; exact frozen approved hash e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6.",
+  "result": "NO_PROBED_SOURCE_REF_REPRODUCED_APPROVED_INTRO",
+  "probes": [
+    {
+      "source_ref": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+      "rendered_sha256": "da9060198e77f0df98027543d16e64b7f424e89b536e51492f307a5b6cd2fd20",
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false
+    },
+    {
+      "source_ref": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+      "rendered_sha256": "38d6063c4152343875ccf9e97b7bfd3d62ce53cd527cc1033738f67a9be1b6d9",
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false
+    },
+    {
+      "source_ref": "801713163330722d0ec0cdbbd5de3803491ac738",
+      "rendered_sha256": "38d6063c4152343875ccf9e97b7bfd3d62ce53cd527cc1033738f67a9be1b6d9",
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false
+    },
+    {
+      "source_ref": "41d2a267fa1e29ff3d19f0ae932e29478517d32b",
+      "rendered_sha256": "38d6063c4152343875ccf9e97b7bfd3d62ce53cd527cc1033738f67a9be1b6d9",
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false
+    },
+    {
+      "source_ref": "377fc0de2f97b9e9f8328393544a4ed1838453a5",
+      "rendered_sha256": "38d6063c4152343875ccf9e97b7bfd3d62ce53cd527cc1033738f67a9be1b6d9",
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false
+    }
+  ],
+  "evidence_interpretation": "The historical snapshot-probe workflow completed successfully even when APPROVED_VISUAL_PROFILE_MATCH=false; those green job conclusions are therefore not technical provenance passes. These negative probes do not revoke owner approval of the frozen reviewed bytes.",
+  "remaining_source_binding": "Recover the actual output-relevant source/spec/theme/timeline and render environment that produced the approved frozen assets, or preserve the exact frozen bytes as the release artifact while provenance remains explicitly unresolved. Never certify one of the disproven refs as the matching source profile."
+}

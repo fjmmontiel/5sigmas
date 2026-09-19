@@ -1,0 +1,41 @@
+# Riesgos: overthinking, ataques y control
+
+## Pensar más tiene un límite.
+
+Apple Research encontró tres regímenes al variar la complejidad: en tareas simples, los modelos estándar pueden superar a los razonadores; en dificultad media, el razonamiento extra ayuda; y en alta complejidad ambos pueden colapsar.
+
+El esfuerzo de razonamiento tampoco crece indefinidamente: aumenta con la complejidad hasta un punto y después cae, incluso con presupuesto de tokens disponible.
+
+Shojaee et al., 2025 · The Illusion of Thinking
+
+## El atacante puede estar dentro de los datos.
+
+En una aplicación con RAG, navegador o herramientas, el modelo procesa contenido que el usuario no escribió. Una instrucción maliciosa puede viajar dentro de una página, documento o respuesta de API recuperada.
+
+Greshake et al. demostraron que esta inyección indirecta puede manipular la funcionalidad de aplicaciones integradas con LLM y afectar cuándo o cómo se llaman otras APIs.
+
+Greshake et al., 2023 · Indirect Prompt Injection
+
+## La seguridad también abre superficie.
+
+TabooRAG muestra otra ruta: un documento recuperable puede introducir contexto de riesgo relevante para una consulta benigna y provocar una negativa del modelo.
+
+El ataque explota criterios de alineamiento compartidos para transferir el bloqueo entre modelos. El riesgo aquí no es una salida dañina, sino perder disponibilidad.
+
+Li et al., 2026 · TabooRAG
+
+## Presupuesto y riesgo deben decidirse juntos.
+
+Conformal Thinking replantea el presupuesto de razonamiento como control de riesgo: parar cuando la confianza es suficiente y también cortar instancias que parecen irresolubles dentro del presupuesto.
+
+El objetivo no es gastar todos los tokens disponibles, sino cumplir una tasa de error objetivo usando el cómputo donde aporta fiabilidad.
+
+Wang et al., 2026 · Conformal Thinking
+
+## Capacidad sin control no es autonomía útil.
+
+Un agente robusto limita permisos, valida contenido externo y separa los datos no confiables de las instrucciones con autoridad. Antes de una acción irreversible, añade una frontera de verificación.
+
+También fija presupuestos de tiempo, tokens y llamadas a herramientas, mantiene fallbacks explícitos y puede abstenerse. El objetivo es acotar el daño cuando una capa falla.
+
+5sigmas · síntesis de controles

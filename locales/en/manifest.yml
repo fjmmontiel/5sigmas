@@ -264,6 +264,20 @@ published_files:
   - series/agentes-ia/05-de-la-demo-a-produccion.jpg
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
+  - series/modelos-razonadores/00_presentacion_serie.vtt
+  - series/modelos-razonadores/01-que-es-razonar.vtt
+  - series/modelos-razonadores/02-fallos.vtt
+  - series/modelos-razonadores/03-test-time-compute.mp4
+  - series/modelos-razonadores/03-test-time-compute.jpg
+  - series/modelos-razonadores/03-test-time-compute.vtt
+  - series/modelos-razonadores/04-latencia-streaming.vtt
+  - series/modelos-razonadores/05-riesgos.vtt
+  - series/modelos-razonadores/00_presentacion_serie-transcript.txt
+  - series/modelos-razonadores/01-que-es-razonar-transcript.txt
+  - series/modelos-razonadores/02-fallos-transcript.txt
+  - series/modelos-razonadores/03-test-time-compute-transcript.txt
+  - series/modelos-razonadores/04-latencia-streaming-transcript.txt
+  - series/modelos-razonadores/05-riesgos-transcript.txt
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete

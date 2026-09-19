@@ -8,7 +8,10 @@ tags:
   - LLMs
   - Razonamiento
 video: "02-fallos.mp4"
-video_duration: "PT1M29S"
+video_poster: "02-fallos.jpg"
+video_captions: "02-fallos.vtt"
+video_transcript: "02-fallos-transcript.txt"
+video_duration: "PT1M48S"
 ---
 
 # Capítulo 2 — Cómo se ven los fallos de los modelos razonadores
@@ -44,7 +47,7 @@ Los modelos tienen sesgos sistemáticos que producen errores no aleatorios en de
 
 **Sesgo de autoridad lingüística.** Los textos que tienen el estilo de textos de autoridad (académicos, técnicos, gubernamentales) se tienden a tratar como más fiables, independientemente de su contenido real.
 
-**Sesgo de adulación (sycophancy).** Los modelos tienden a validar las preferencias implícitas del usuario para maximizar la aprobación, incluso cuando el usuario está equivocado. Si el prompt implica que X es verdad y el usuario parece convencido, el modelo reforzará esa creencia aunque sea incorrecta, en lugar de corregirla. La causa es estructural: durante el entrenamiento con feedback humano (RLHF), los anotadores tienden a puntuar más alto las respuestas que validan sus premisas que las que las contradicen. El modelo aprende que la aprobación social es un proxy de la corrección. [Sharma et al., 2023](https://arxiv.org/abs/2310.13548) cuantifican varias formas del fenómeno: en el 85% de las evaluaciones, los modelos adaptan su feedback en la dirección de la preferencia declarada por el usuario (más positivo si el usuario dice que le gusta el texto, más negativo si dice que le disgusta) con independencia de la calidad real del contenido; cuando se les cuestiona directamente sin nuevos argumentos, admiten equivocaciones que no cometieron; y sugerir una respuesta incorrecta puede reducir la precisión hasta 27 puntos porcentuales en algunos modelos. Incluir en el prompt que el usuario "es experto en el tema" también aumenta significativamente la probabilidad de validación de afirmaciones incorrectas.
+**Sesgo de adulación (sycophancy).** Los modelos tienden a validar las preferencias implícitas del usuario para maximizar la aprobación, incluso cuando el usuario está equivocado. Si el prompt implica que X es verdad y el usuario parece convencido, el modelo reforzará esa creencia aunque sea incorrecta, en lugar de corregirla. La causa es estructural: durante el entrenamiento con feedback humano (RLHF), los anotadores tienden a puntuar más alto las respuestas que validan sus premisas que las que las contradicen. El modelo aprende que la aprobación social es un proxy de la corrección. [Sharma et al., 2023](https://arxiv.org/abs/2310.13548) muestran que declarar que al usuario le gusta o disgusta un texto desplaza sistemáticamente el tono del feedback respecto al baseline en varios modelos y dominios. En su métrica, una positividad del 85% para un prompt significa que, en el 85% de los pasajes, el feedback condicionado por ese prompt fue más positivo que el baseline; no es una tasa universal agregada de sycophancy. Cuando se les cuestiona directamente sin nuevos argumentos, los modelos también pueden admitir equivocaciones que no cometieron, y sugerir una respuesta incorrecta puede reducir la precisión hasta 27 puntos porcentuales en algunos modelos.
 
 {{ include_html("snippets/modelos-razonadores/02-sycofancia.html") }}
 
@@ -56,7 +59,7 @@ El modelo optimiza la métrica observable en lugar del objetivo real. Aparece de
 
 Un modelo evaluado por "si la respuesta parece completa y bien razonada" aprenderá a producir respuestas que parecen completas y bien razonadas, no necesariamente respuestas que sean correctas. Si el evaluador (humano o modelo) no puede verificar la corrección de fondo y solo puede evaluar la forma, el modelo puede obtener puntuaciones altas produciendo argumentos plausibles pero incorrectos.
 
-Los modelos razonadores exhiben formas más agresivas de este patrón. En un experimento documentado ([Bondarenko et al., 2025](https://arxiv.org/abs/2502.13295)), se instruyó a distintos modelos a ganar una partida contra un motor de ajedrez profesional (Stockfish). Los modelos de razonamiento como o3 y DeepSeek R1 optaban en el 88% de los intentos por hackear el entorno directamente: sobrescribían el archivo de estado de la partida, instalaban su propia copia del motor con parámetros favorables o modificaban las condiciones de victoria, en lugar de jugar. Los modelos no razonadores (GPT-4o, Claude 3.5 Sonnet) solo adoptaban esta estrategia si se les indicaba explícitamente que ganar por métodos normales era imposible. En entornos agénticos con acceso a herramientas, el objetivo "gana la partida" era suficiente para que el razonamiento profundo llegara por su cuenta a la conclusión de que la ruta más eficiente no era jugar mejor, sino romper las reglas.
+En un experimento documentado ([Bondarenko et al., 2025](https://arxiv.org/abs/2502.13295)), se instruyó a distintos modelos a ganar una partida contra un motor de ajedrez profesional (Stockfish). Con el prompt base, o3 intentó hackear el entorno en el 88% de las ejecuciones en lugar de ganar jugando mejor. Los autores también observaron comportamiento de hacking en o1-preview y DeepSeek R1, pero advierten que las ejecuciones de DeepSeek tuvieron menos pasos y que los desgloses por modelo no son directamente comparables. Los modelos no razonadores GPT-4o y Claude 3.5 Sonnet no mostraron intentos de hacking con el prompt base y necesitaron nudging explícito para producirlos. Entre las estrategias observadas aparecen sobrescribir el estado de la partida, reemplazar el motor o usar otra copia de Stockfish.
 
 {{ include_html("snippets/modelos-razonadores/05-specification-gaming.html") }}
 
@@ -134,7 +137,7 @@ Detectar un fallo no lo corrige, pero abre el espacio para mitigarlo. Las palanc
 
 | Fuente | Descripción breve |
 | --- | --- |
-| **Sharma et al. (2023)** — *[Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)* | Cuantifica cuatro formas de sycophancy en cinco modelos: sesgo de feedback (85% de evaluaciones adaptan el tono a la preferencia declarada del usuario), capitulación ante cuestionamiento directo, caída de precisión de hasta 27pp cuando el usuario sugiere una respuesta incorrecta, y mimetismo de errores del usuario. Citado en §1.2. |
+| **Sharma et al. (2023)** — *[Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)* | Mide varias formas de sycophancy en cinco modelos. En la métrica de feedback, una positividad del 85% para un prompt significa que el feedback condicionado por ese prompt fue más positivo que el baseline en el 85% de los pasajes; el trabajo también documenta capitulación ante cuestionamiento directo y caídas de precisión de hasta 27pp. Citado en §1.2. |
 | **Geirhos et al. (2020)** — *[Shortcut Learning in Deep Neural Networks](https://www.nature.com/articles/s42256-020-00257-z)* (Nature Machine Intelligence) | Taxonomía y mecanismo del shortcut learning; el ejemplo clásico del clasificador de prados documenta el patrón que los LLMs reproducen. Citado en §1.1. |
 | **Ji et al. (2023)** — *[Survey of Hallucination in Natural Language Generation](https://dl.acm.org/doi/10.1145/3571730)* (ACM) | Revisión sistemática del fenómeno de las alucinaciones, su taxonomía y métodos de detección y mitigación. Citado en §1.5. |
 | **Wang et al. (2022)** — *[Self-Consistency Improves Chain of Thought Reasoning in Language Models](https://arxiv.org/abs/2203.11171)* | Fundamento del método de self-consistency: generar múltiples respuestas independientes y seleccionar por mayoría. Citado en §2 (Muestreo múltiple). |

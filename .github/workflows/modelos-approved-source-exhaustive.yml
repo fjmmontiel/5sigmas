@@ -1,0 +1,98 @@
+name: Modelos approved snapshot exhaustive source probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/modelos-approved-source-exhaustive.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe-intro-es-missing-history:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        source_ref:
+          - 305f2dd5c789fc95d57fea5d03249fc8beb8d391
+          - 4301a24129f89c2dd303bf0d2e09f3da9db5e5ae
+          - 550a2c4cd0bd6add054c3e73ac946738385295eb
+          - e6156079a511586f5616cea4c174fa843ef89a2d
+          - e0dae1ce126a2d91a72922dc527e6a832dda7bec
+          - 0671357e15df97dd0b0981ce0bb66a94702b4c59
+          - 1b0e33386ded69757394ff744d8c96ea92a335b2
+          - 9280e20e7f72ca73a5a14abb76a234e69e357e96
+          - 3feb2fc8d20dc65bb47fbe0b863935bb59de2388
+    steps:
+      - name: Checkout exact historical source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source_ref }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deterministic renderer dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Render historical candidate and compare frozen approved intro
+        working-directory: motion
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf snapshot-probe
+          python scripts/render.py content/modelos-razonadores/00-presentacion.es.json --out snapshot-probe
+          file='snapshot-probe/modelos-razonadores-intro-es-horizontal.mp4'
+          test -f "$file"
+
+          approved_encoded='e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6'
+          got_encoded="$(sha256sum "$file" | awk '{print $1}')"
+          encoded_match=false
+          if [ "$got_encoded" = "$approved_encoded" ]; then
+            encoded_match=true
+          fi
+
+          echo "SOURCE_REF=${{ matrix.source_ref }}"
+          echo "ENCODED_SHA256=$got_encoded"
+          echo "APPROVED_ENCODED_SHA256=$approved_encoded"
+          echo "APPROVED_ENCODED_MATCH=$encoded_match"
+
+          expected=(
+            d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437
+            f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af
+            e72c44d783df21947a043c1cd2fa8abf98c7ea52296677b133a03f5e9f553e03
+            35b4051de789d7418c3bec67864fe0304801395ff7ab40c0e8ccbe8499a2eab3
+          )
+          times=(6 24 43.5 63)
+          matches=0
+          for i in 0 1 2 3; do
+            got="$(ffmpeg -hide_banner -loglevel error -ss "${times[$i]}" -i "$file" -frames:v 1 -vf 'scale=320:-2:flags=neighbor,format=yuv420p' -f hash -hash sha256 - | sed 's/^SHA256=//')"
+            echo "sample_$i=$got expected=${expected[$i]}"
+            if [ "$got" = "${expected[$i]}" ]; then
+              matches=$((matches+1))
+            fi
+          done
+
+          visual_match=false
+          if [ "$matches" -eq 4 ]; then
+            visual_match=true
+          fi
+          echo "APPROVED_VISUAL_SAMPLE_MATCHES=$matches/4"
+          echo "APPROVED_VISUAL_PROFILE_MATCH=$visual_match"
+
+          # Fail closed. A rendered job is not provenance evidence merely because
+          # the renderer completed. This probe is accepted only when both the
+          # frozen encoded asset and all four approved visual fingerprints match.
+          if [ "$encoded_match" != true ] || [ "$visual_match" != true ]; then
+            echo 'PROVENANCE_RESULT=NOT_VERIFIED' >&2
+            exit 1
+          fi
+          echo 'PROVENANCE_RESULT=EXACT_MATCH'

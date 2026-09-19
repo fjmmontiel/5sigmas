@@ -1,0 +1,338 @@
+name: Video motion delivery gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-modelos-razonadores
+    paths:
+      - 'motion/content/modelos-razonadores/**'
+      - 'motion/src/**'
+      - 'motion/theme/**'
+      - 'motion/web/**'
+      - 'motion/scripts/render.py'
+      - 'motion/scripts/validate_render_package.py'
+      - 'motion/scripts/finalize_reasoning_delivery.py'
+      - 'motion/scripts/update_reasoning_locale_manifest.py'
+      - 'scripts/prepare_video_media.py'
+      - '.github/workflows/video-motion-delivery-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-motion-delivery-modelos-razonadores
+  cancel-in-progress: true
+
+jobs:
+  sync-main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      main_sha: ${{ steps.sync.outputs.main_sha }}
+      branch_sha: ${{ steps.sync.outputs.branch_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/video-golden-modelos-razonadores
+          fetch-depth: 0
+
+      - id: sync
+        name: Reconcile migration branch with current main before rendering
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          main_sha="$(git rev-parse origin/main)"
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "Migration branch already contains main $main_sha"
+          else
+            git merge --no-edit origin/main
+            git push origin HEAD:migration/video-golden-modelos-razonadores
+          fi
+          branch_sha="$(git rev-parse HEAD)"
+          echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
+          echo "branch_sha=$branch_sha" >> "$GITHUB_OUTPUT"
+          echo "Validated combined base: main=$main_sha branch=$branch_sha"
+
+  render-horizontal:
+    needs: sync-main
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - { spec: '00-presentacion.es', locale: 'es', site: '00_presentacion_serie' }
+          - { spec: '01-que-es-razonar.es', locale: 'es', site: '01-que-es-razonar' }
+          - { spec: '02-fallos.es', locale: 'es', site: '02-fallos' }
+          - { spec: '03-test-time-compute.es', locale: 'es', site: '03-test-time-compute' }
+          - { spec: '04-latencia-streaming.es', locale: 'es', site: '04-latencia-streaming' }
+          - { spec: '05-riesgos.es', locale: 'es', site: '05-riesgos' }
+          - { spec: '00-presentacion.en', locale: 'en', site: '00_presentacion_serie' }
+          - { spec: '01-que-es-razonar.en', locale: 'en', site: '01-que-es-razonar' }
+          - { spec: '02-fallos.en', locale: 'en', site: '02-fallos' }
+          - { spec: '03-test-time-compute.en', locale: 'en', site: '03-test-time-compute' }
+          - { spec: '04-latencia-streaming.en', locale: 'en', site: '04-latencia-streaming' }
+          - { spec: '05-riesgos.en', locale: 'en', site: '05-riesgos' }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/video-golden-modelos-razonadores
+
+      - name: Require the exact synchronized branch revision
+        shell: bash
+        env:
+          EXPECTED_BRANCH_SHA: ${{ needs.sync-main.outputs.branch_sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_BRANCH_SHA" || { echo "Expected $EXPECTED_BRANCH_SHA, got $actual"; exit 1; }
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deterministic renderer
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Render final horizontal media
+        working-directory: motion
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          python scripts/render.py "content/modelos-razonadores/${{ matrix.spec }}.json" --out dist --fps 60
+          python scripts/validate_render_package.py \
+            "content/modelos-razonadores/${{ matrix.spec }}.json" \
+            --out dist --orientation horizontal | tee dist/package-validation.json
+
+      - name: Normalize canonical release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="package/${{ matrix.locale }}"
+          review="review/${{ matrix.locale }}/${{ matrix.site }}"
+          mkdir -p "$package" "$review"
+          mp4="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal.mp4' -print -quit)"
+          jpg="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal.jpg' ! -name '*-review.jpg' -print -quit)"
+          vtt="$(find motion/dist -maxdepth 1 -type f -name '*-horizontal-captions.vtt' -print -quit)"
+          test -n "$mp4" && test -n "$jpg" && test -n "$vtt"
+          cp "$mp4" "$package/${{ matrix.site }}.mp4"
+          cp "$jpg" "$package/${{ matrix.site }}.jpg"
+          cp "$vtt" "$package/${{ matrix.site }}.vtt"
+          cp -a motion/dist/. "$review/"
+
+      # Explicit one-day exception: this artifact is only transport between jobs in
+      # the same release-gate run. It is not retained as review history.
+      - name: Upload one-day cross-job delivery transport
+        uses: actions/upload-artifact@v4
+        with:
+          name: reasoning-delivery-${{ matrix.locale }}-${{ matrix.site }}
+          path: |
+            package/
+            review/
+          if-no-files-found: error
+          retention-days: 1
+
+  integrate-and-gate:
+    needs: [sync-main, render-horizontal]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/video-golden-modelos-razonadores
+          fetch-depth: 0
+
+      - name: Fail closed if main advanced after synchronized rendering began
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: ${{ needs.sync-main.outputs.main_sha }}
+          EXPECTED_BRANCH_SHA: ${{ needs.sync-main.outputs.branch_sha }}
+        run: |
+          set -euo pipefail
+          branch_sha="$(git rev-parse HEAD)"
+          test "$branch_sha" = "$EXPECTED_BRANCH_SHA" || { echo "Migration branch moved during render: expected $EXPECTED_BRANCH_SHA got $branch_sha"; exit 1; }
+          git fetch origin main
+          current_main="$(git rev-parse origin/main)"
+          test "$current_main" = "$EXPECTED_MAIN_SHA" || { echo "main advanced during render: expected $EXPECTED_MAIN_SHA got $current_main"; exit 1; }
+          git merge-base --is-ancestor origin/main HEAD || { echo 'Current main is not contained in the validated migration branch'; exit 1; }
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install site dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Download exact validated renderer packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: reasoning-delivery-*
+          path: .delivery-artifacts
+          merge-multiple: true
+
+      - name: Stage canonical ES/EN media and remove TTC one-off delivery path
+        run: |
+          python motion/scripts/finalize_reasoning_delivery.py stage --artifacts .delivery-artifacts/package
+          python motion/scripts/update_reasoning_locale_manifest.py
+
+      - name: Require metadata to remain derived from v4 specs
+        run: python motion/scripts/sync_release_metadata.py --check
+
+      - name: Validate same-origin and R2 media staging contracts
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+          python - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          path = Path('scripts/prepare_video_media.py')
+          spec = importlib.util.spec_from_file_location('prepare_video_media_gate', path)
+          module = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          spec.loader.exec_module(module)
+          pages, objects, errors = module.collect()
+          if errors:
+              raise SystemExit('Video media manifest validation failed: ' + '; '.join(errors))
+          counts = {}
+          for page in pages:
+              counts[page['locale']] = counts.get(page['locale'], 0) + 1
+          manifest = {
+              'version': 2,
+              'object_count': len(objects),
+              'total_bytes': sum(row['bytes'] for row in objects),
+              'locale_page_counts': counts,
+              'pages': pages,
+              'objects': objects,
+          }
+          out = Path('.video-media-gate')
+          out.mkdir(parents=True, exist_ok=True)
+          (out / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          keys={row['key'] for row in objects}
+          stems=('00_presentacion_serie','01-que-es-razonar','02-fallos','03-test-time-compute','04-latencia-streaming','05-riesgos')
+          required={f'{prefix}series/modelos-razonadores/{stem}{ext}' for prefix in ('','en/') for stem in stems for ext in ('.mp4','.jpg','.vtt')}
+          missing=sorted(required-keys)
+          if missing:
+              raise SystemExit(f'R2 staging is missing reasoning media: {missing}')
+          if counts.get('es',0)<6 or counts.get('en',0)<6:
+              raise SystemExit(f'Locale video-page coverage is incomplete: {counts}')
+          print(f'R2 manifest covers all {len(required)} reasoning media objects; locale pages={counts}')
+          PY
+
+      - name: Build and audit Spanish consumers strictly
+        run: |
+          mkdocs build --clean --strict
+          python scripts/audit_video_indexing.py
+          python scripts/audit_multilingual_search_foundation.py
+          python scripts/audit_priority_topic_hubs.py
+          python scripts/audit_publication_contract.py
+
+      - name: Prepare and audit English locale sources
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          python scripts/audit_english_full_parity.py --strict
+
+      - name: Build and audit English consumers strictly
+        env:
+          S5_LOCALE: en
+        run: |
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser QA runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined ES/EN site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-motion-delivery.log 2>&1 &
+          echo $! > /tmp/5sigmas-motion-delivery.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-motion-delivery.log
+          exit 1
+
+      - name: Validate native English video library and watch pages
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_english_video_hub.mjs
+
+      - name: Verify every reasoning consumer uses the exact validated media
+        run: python motion/scripts/finalize_reasoning_delivery.py verify --artifacts .delivery-artifacts/package
+
+      - name: Mark Technical GOLDEN only after delivery passed
+        shell: bash
+        env:
+          VALIDATED_MAIN_SHA: ${{ needs.sync-main.outputs.main_sha }}
+        run: |
+          set -euo pipefail
+          validated_branch_sha="$(git rev-parse HEAD)"
+          python motion/scripts/finalize_reasoning_delivery.py mark-golden \
+            --run-id "${GITHUB_RUN_ID}" \
+            --sha "$validated_branch_sha" \
+            --main-sha "$VALIDATED_MAIN_SHA"
+          node motion/scripts/check_release_gate.mjs --require-ready
+
+      - name: Persist the complete Technical GOLDEN release unit on its migration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git merge-base --is-ancestor origin/main HEAD || { echo 'main advanced before persistence; refusing stale Technical GOLDEN'; exit 1; }
+          git add \
+            docs/series/modelos-razonadores \
+            locales/en/series/modelos-razonadores \
+            locales/en/media.yml \
+            locales/en/manifest.yml \
+            mkdocs.en.yml \
+            .github/workflows/deploy-pages.yml \
+            .github/workflows/pr-visual-review.yml \
+            motion/migration/modelos-razonadores.json \
+            motion/migration/modelos-razonadores-status.json
+          if git diff --cached --quiet; then
+            echo 'Canonical delivery state already persisted.'
+          else
+            git commit -m 'feat(motion): promote complete reasoning series to technical golden'
+            git push origin HEAD:migration/video-golden-modelos-razonadores
+          fi
+
+      - name: Upload release diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelos-razonadores-delivery-failure
+          path: |
+            .delivery-artifacts/review/
+            .video-media-gate/manifest.json
+            motion/migration/modelos-razonadores.json
+            motion/migration/modelos-razonadores-status.json
+          if-no-files-found: warn
+          retention-days: 1

@@ -1,0 +1,24 @@
+# Reasoning Models
+
+## Reasoning is a process.
+
+A complex problem can be broken into steps. Those steps consume time and compute. And they can fail.
+
+
+
+## The budget is also a choice.
+
+At inference time, you can spend more steps, samples, verification or tool interactions. On some tasks that can improve the answer, but it also increases cost and latency.
+
+Snell et al., 2024 · optimal test-time compute
+
+## One series, five questions.
+
+First: what reasoning means for an LLM. Second: how these systems fail. Third: how to use more inference-time compute. Fourth: what happens to latency and streaming. Fifth: when more reasoning introduces new risks.
+
+
+
+## Thinking longer is not free.
+
+More reasoning can improve quality on suitable tasks. It also consumes time, compute and money. And it can introduce overthinking, errors or new attack surfaces.
+

@@ -1,0 +1,41 @@
+# Tiempo físico: latencia, streaming e interacción humana
+
+## La espera también es parte del sistema.
+
+Tres umbrales clásicos ayudan a diseñar la espera: 0,1 segundos se siente inmediata, 1 segundo mantiene el flujo y 10 segundos marca el límite aproximado de atención continua.
+
+Son referencias de interacción, no leyes universales. Si la operación supera un segundo, la interfaz debe comunicar que sigue trabajando; si supera diez, necesita progreso e interrupción clara.
+
+Nielsen, 1993 · Response Times: The 3 Important Limits
+
+## Empezar pronto no es terminar pronto.
+
+TTFT mide desde que se envía la consulta hasta que aparece el primer token visible. La latencia total termina cuando llega el último token.
+
+Dos sistemas con el mismo tiempo total pueden sentirse distintos si uno empieza a responder antes. Streaming reduce la espera silenciosa; no elimina el trabajo pendiente.
+
+5sigmas · definición operacional
+
+## Hacer visible el progreso.
+
+Antes del primer token puede existir trabajo que el usuario no ve. Después, el streaming entrega la respuesta progresivamente mientras continúa la generación.
+
+La mejora es perceptual: el usuario recibe señal de vida antes. El tiempo total puede seguir siendo el mismo.
+
+5sigmas · esquema conceptual
+
+## No todas necesitan el máximo presupuesto.
+
+RouteLLM aprende a decidir cuándo usar un modelo fuerte y cuándo uno débil para equilibrar calidad y coste. En su evaluación, algunos routers redujeron el coste más de dos veces sin degradar la calidad medida.
+
+En producto, esa separación permite asociar rutas rápidas a consultas simples y reservar más capacidad para las difíciles. La política de latencia sigue siendo una decisión del sistema.
+
+Ong et al., 2024 · RouteLLM
+
+## Latencia como política, no como accidente.
+
+El patrón robusto no es pensar siempre más, sino clasificar la consulta, asignar presupuesto y mostrar progreso antes de que la espera parezca un fallo.
+
+Si el presupuesto se agota, el sistema necesita un fallback explícito: respuesta parcial, aclaración, modelo alternativo o error recuperable. Saber parar es parte del diseño.
+
+5sigmas · patrón de diseño

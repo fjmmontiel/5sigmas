@@ -1,0 +1,67 @@
+name: Modelos approved source fingerprint
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/modelos-approved-source-critical.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  match-owner-approved-runtime-source:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        source_ref:
+          - 0671357e15df97dd0b0981ce0bb66a94702b4c59
+          - e7155f70920ef2669853b800c887dd53c1c8d1ee
+          - 80171316a513dc361790d8fa5c5b6c8310050a90
+          - 1b0e33386ded69757394ff744d8c96ea92a335b2
+          - 9280e20e7f72ca73a5a14abb76a234e69e357e96
+          - 377fc0de2f97b9e9f8328393544a4ed1838453a5
+          - 41d2a267fa1e29ff3d19f0ae932e29478517d32b
+          - 3feb2fc8d20dc65bb47fbe0b863935bb59de2388
+          - f13d94ce62d6548d8519d8d80f4827696f722fc9
+    steps:
+      - name: Checkout candidate source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source_ref }}
+          fetch-depth: 1
+
+      - name: Rebuild semantic scene register
+        shell: bash
+        env:
+          EXPECTED_REGISTER_SHA256: 4a779e8b6829d5916f7f89d29e71d5426e3d63332f5933d9d37674f333b8ddd0
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
+          import {auditSeries} from './motion/src/review-policy.mjs';
+
+          const dir='./motion/content/modelos-razonadores';
+          const specs=readdirSync(dir)
+            .filter(n=>/\.(es|en)\.json$/.test(n))
+            .map(n=>JSON.parse(readFileSync(`${dir}/${n}`,'utf8')));
+          const audit=auditSeries(specs);
+          writeFileSync('/tmp/series-scene-register.json', JSON.stringify(audit,null,2)+'\n');
+          console.log(JSON.stringify({
+            canonicalScenes:audit.canonicalScenes,
+            localizedOutputs:audit.localizedOutputs,
+            maxFamilyUses:Math.max(...Object.values(audit.families))
+          }));
+          NODE
+          actual="$(sha256sum /tmp/series-scene-register.json | awk '{print $1}')"
+          echo "SOURCE_REF=${{ matrix.source_ref }}"
+          echo "EXPECTED_REGISTER_SHA256=$EXPECTED_REGISTER_SHA256"
+          echo "ACTUAL_REGISTER_SHA256=$actual"
+          if [ "$actual" != "$EXPECTED_REGISTER_SHA256" ]; then
+            echo "OWNER_APPROVED_RUNTIME_SOURCE_MATCH=false"
+            exit 1
+          fi
+          echo "OWNER_APPROVED_RUNTIME_SOURCE_MATCH=true"

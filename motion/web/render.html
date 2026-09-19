@@ -1,0 +1,15 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><title>5sigmas deterministic renderer</title>
+<style>body{margin:0}canvas{display:block;width:100%;height:auto}</style>
+<canvas id="stage" width="1920" height="1080"></canvas>
+<script type="module">
+import {renderFrame,validateLayouts} from '../src/engine.mjs';
+import {validateSpec,totalDuration} from '../src/schema.mjs';
+const canvas=document.querySelector('canvas');
+function installed(family){const c=canvas.getContext('2d');const s='mmmmmmWWWWW 0123456789';c.font='40px monospace';const a=c.measureText(s).width;c.font=`40px "${family}", monospace`;return Math.abs(c.measureText(s).width-a)>0.01;}
+window.setup=async (spec,theme,portrait=false)=>{validateSpec(spec);await document.fonts.ready;await document.fonts.load('600 76px "Noto Serif Display"');await document.fonts.load('400 33px Inter');window.S=spec;window.T=theme;window.portrait=portrait;return {duration:totalDuration(spec),fonts:[installed('Noto Serif Display'),installed('Inter')]};};
+window.draw=(t,reduce=false)=>renderFrame(canvas,window.S,t,window.T,{portrait:window.portrait,reducedMotion:reduce});
+window.frame=(t)=>{window.draw(t);return canvas.toDataURL('image/jpeg',.965).split(',')[1];};
+window.frames=(times)=>times.map(t=>window.frame(t));
+window.layoutCheck=()=>validateLayouts(canvas,window.S,window.T,window.portrait);
+window.ready=true;
+</script></html>

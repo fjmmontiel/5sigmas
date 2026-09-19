@@ -1,0 +1,41 @@
+# Physical time: latency, streaming and human interaction
+
+## Waiting is also part of the system.
+
+Three classic thresholds help design waiting: 0.1 seconds feels immediate, 1 second preserves flow and 10 seconds marks the approximate limit of continuous attention.
+
+These are interaction references, not universal laws. Above one second, the interface should show that work continues; above ten, it needs visible progress and a clear way to interrupt.
+
+Nielsen, 1993 · Response Times: The 3 Important Limits
+
+## Starting early is not finishing early.
+
+TTFT measures from sending the request until the first visible token appears. Total latency ends when the last token arrives.
+
+Two systems with the same total time can feel different if one starts responding sooner. Streaming reduces silent waiting; it does not remove the remaining work.
+
+5sigmas · operational definition
+
+## Make progress visible.
+
+Before the first token, work can happen that the user cannot see. After that, streaming delivers the answer progressively while generation continues.
+
+The improvement is perceptual: the user gets a sign of life earlier. Total time can still remain unchanged.
+
+5sigmas · conceptual diagram
+
+## Not every request needs the maximum budget.
+
+RouteLLM learns when to use a stronger model and when to use a weaker one to balance quality and cost. In its evaluation, some routers reduced cost by more than two times without degrading measured quality.
+
+In a product, that separation can map fast routes to simple queries and reserve more capacity for difficult ones. Latency policy remains a system decision.
+
+Ong et al., 2024 · RouteLLM
+
+## Latency as policy, not as an accident.
+
+The robust pattern is not to always think longer, but to classify the request, assign a budget and show progress before waiting looks like failure.
+
+When the budget is exhausted, the system needs an explicit fallback: partial answer, clarification, alternate model or recoverable error. Knowing when to stop is part of the design.
+
+5sigmas · design pattern
