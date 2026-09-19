@@ -30,9 +30,11 @@ test/*
 *.mp4
 *.webm
 !docs/series/**/*.mp4
+!locales/*/series/**/*.mp4
 # Poster frames — same rule: ignore except published series
 *.jpg
 !docs/series/**/*.jpg
+!locales/*/series/**/*.jpg
 docs/**/videos/
 docs/assets/videos/
 # Animation export artifacts
