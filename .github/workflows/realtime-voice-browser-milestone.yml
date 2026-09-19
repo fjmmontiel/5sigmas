@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - quality/post-datacenters-requalification
+      - release/realtime-voice-golden
     paths:
       - '.github/workflows/realtime-voice-browser-milestone.yml'
       - 'docs/series/agentes-voz-tiempo-real/**'
