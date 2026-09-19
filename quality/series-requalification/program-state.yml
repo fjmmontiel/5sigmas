@@ -1,4 +1,4 @@
-schema_version: 11
+schema_version: 12
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -11,39 +11,35 @@ canonical_series_order:
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
 
-# Formal series transition remains blocked on Agents release merge/deploy/live verification.
-# Some Voice preflight evidence was collected ahead of transition and is preserved below,
-# but it does not change the canonical active-series pointer.
-active_series: agentes-ia
+active_series: agentes-voz-tiempo-real
 
 series_status:
   seguridad-ia:
-    article_golden: 5/6_current_revision
-    route_locale_rows_golden: 10/12_current_revision
-    previous_production_series_golden: true
-    previous_merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
-    previous_deploy_run: 35392652259
-    previous_live_qa: PASS
-    reopened_article: 03_envenenamiento
-    reopened_locales: [es, en]
-    reopened_reason: PR_331_EXACT_HEAD_NO_REGRESSION_EXPOSED_REAL_PERSISTENCE_INTERACTION_DEFECT
-    reopened_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
-    repaired_release_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
-    repair_mirrored_to_long_lived_branch: true
-    previous_repaired_head_english_security_gate: PASS_RUN_35419298776_STEP_36
-    previous_repaired_head_native_english_security_media: PASS_RUN_35419298776_STEP_37
-    source_build_browser_pixel_pedagogy: RECHECK_PENDING_ON_CURRENT_RELEASE_HEAD
-    media_visual: PASS_UNCHANGED_VIDEO_ASSETS
-    indexability: PASS_UNCHANGED_SIGNALS_REVERIFY_LIVE_AFTER_RELEASE
+    article_golden: 6/6_current_revision
+    route_locale_rows_golden: 12/12_current_revision
+    series_golden: true
+    state: SERIES_GOLDEN
+    production_verified: true
+    original_series_merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    security03_repair_release_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+    deploy_run: 35423089825
+    deploy: PASS
+    live_qa: PASS
+    security03_reopen_checkpoint: quality/series-requalification/security-03-revocation-reopen-2026-09-19.yml
+    security03_reconciled: true
+    security03_exact_head_interaction_run: 35419776376
+    security03_exact_head_interaction: PASS_SECURITY_VISUALS_END_TO_END
+    security03_live_release_evidence: PASS_EXACT_MERGE_BUILD_DEPLOY_LIVE_SPANISH_RESOURCES_AND_ENGLISH_SECURITY_MEDIA
+    security03_known_p0_p1_p2: 0
+    source_build_browser_pixel_pedagogy: PASS_CURRENT_REVISION
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    known_p1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_CURRENT_EXACT_HEAD_AND_LIVE_VERIFICATION]
-    state: QA_REOPENED_SECURITY03_EXACT_HEAD_REVALIDATION_REQUIRED
-    production_verified: false
-    next_action: HARVEST_PR_331_CURRENT_EXACT_HEAD_SECURITY_INTERACTION_AND_MIRROR_CHECKS_THEN_MERGE_DEPLOY_LIVE_REVERIFY
+    next_action: NONE_CURRENT_GOLDEN_PRESERVE_REGRESSIONS
 
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: RELEASE_READY_PR_331_EXACT_HEAD_CI_IN_PROGRESS
+    state: SERIES_GOLDEN
     voice_enhancement: DEFERRED_OWNER_LOCAL
     technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
     technical_milestone_run: 35402872378
@@ -76,33 +72,27 @@ series_status:
     exact_head_english_editorial_run: 35419776415
     exact_head_english_editorial: PASS
     exact_head_locale_switch_run: 35419776397
-    exact_head_locale_switch: IN_PROGRESS
+    exact_head_locale_switch: PASS
     exact_head_english_mirror_run: 35419776384
-    exact_head_english_mirror: IN_PROGRESS
+    exact_head_english_mirror: PASS
     exact_head_pr_visual_run: 35419776376
-    exact_head_pr_visual: IN_PROGRESS
-    previous_head_english_mirror_failure_classification: STALE_AGENTS03_04_EN_MARKERS_NOT_SITE_CONTENT_REGRESSION
-    previous_head_english_mirror_failure_evidence: >-
-      The validator expected pre-relationship-first prose markers while the current reviewed EN pages render
-      'One task, one trajectory, four evaluators' for Agents03 and
-      'An attack only needs one complete path to an effect' for Agents04.
-    previous_head_security03_repair_validation: >-
-      Run 35419298776 passed complete English AI Security and native English Security media before reaching
-      the stale Agents marker failure.
-    bounded_no_regression_repairs:
-      - historical_en_caves_ch5_literal_currency_math_overflow
-      - security03_svg_state_visibility_and_clean_revocation_order
-      - agents03_04_english_media_marker_expectations_aligned_to_reviewed_relationship_first_visuals
-    series_golden: false
-    production_verified: false
-    next_action: WAIT_FOR_CURRENT_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_RUNTIME_QA_IF_GREEN
+    exact_head_pr_visual: PASS
+    merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+    deploy_run: 35423089825
+    deploy_build: PASS
+    deploy: PASS
+    live_qa: PASS
+    live_indexability_evidence: PASS_BUILD_COMBINED_SEO_CRAWL_PLUS_LIVE_EN_CANONICAL_SCHEMA_SITEMAP_LOCALE_SWITCH_AND_SERIES_MIRROR
+    live_media_runtime_evidence: PASS_LIVE_SPANISH_RESOURCES_AND_ENGLISH_AI_AGENTS_MEDIA
+    series_golden: true
+    production_verified: true
+    next_action: NONE_SERIES_CLOSED_ADVANCE_TO_REALTIME_VOICE
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: PREPARED_NOT_ACTIVE_FAIL_CLOSED_MEDIA_VISUAL
-    transition_authorized: false
-    preserved_preflight_note: Evidence collected before formal transition is retained but does not advance the active-series pointer.
-    baseline_main: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    state: QA_ACTIVE_FAIL_CLOSED_MEDIA_VISUAL
+    transition_authorized: true
+    transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     route_locale_rows: 12
     source_inventory: INSPECTED_12_SOURCE_FILES_EXIST_AND_ARE_NAV_MANIFEST_PUBLISHED
     editorial_blob_review: EXISTING_2026_09_11_EXACT_BLOB_CERTIFICATES_RECONCILED_BUT_FRESH_SOURCE_GATE_STILL_PENDING
@@ -122,12 +112,27 @@ series_status:
     article_golden: 0/6
     route_locale_rows_golden: 0/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    next_action_after_formal_transition: RUN_SOURCE_MEDIA_VISUAL_INDEXABILITY_RENDERED_BROWSER_PREFLIGHT_AND_REPAIR_NONVOICE_BLOCKERS
+    pretransition_browser_source_evidence_run: 35419776376
+    pretransition_browser_source_evidence: PASS_CHAPTERS_01_06_SOURCE_AND_ACCESSIBILITY_RESPONSIVE_GATES_ONLY_NOT_GOLDEN
+    next_action: RUN_MULTI_ARTICLE_SOURCE_MEDIA_VISUAL_INDEXABILITY_RENDERED_BROWSER_PREFLIGHT_AND_REPAIR_NONVOICE_BLOCKERS
 
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+
+release_evidence:
+  current_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+  pages_run: 35423089825
+  build: PASS
+  deploy: PASS
+  live_qa: PASS
+  storage_policy_push_record:
+    run: 35423089359
+    conclusion: FAILURE_WITH_ZERO_JOBS
+    classification: NON_SUBSTANTIVE_NO_JOB_TRIGGER_TRANSITION_ARTIFACT
+    blocker: false
+    note: CURRENT_WORKFLOW_IS_PR_PATHS_OR_WORKFLOW_DISPATCH_ONLY; EXACT_HEAD_PR_CHECKS_AND_RELEASE_BUILD_DEPLOY_LIVE_QA_PASSED
 
 shared_branch:
   name: quality/post-datacenters-requalification
@@ -136,6 +141,7 @@ shared_branch:
   agents_ledger: quality/series-requalification/agents-article-ledger.yml
   voice_ledger: quality/series-requalification/voice-article-ledger.yml
   synchronized_with_security_main_merge_without_force_push: true
+  release_state_reconciled_after_agents_merge: true
 
 linkedin:
   writes_from_this_program: 0
@@ -143,3 +149,5 @@ linkedin:
   activations_from_this_program: 0
   release_contract_281_ownership_preserved: true
   issue_279_preserved: true
+  release_contract_281_state: CHANGES_REQUIRED_BLOCKED_LIVE_REVALIDATION_PARTIAL
+  release_contract_281_latest_receipt: 5739263829
