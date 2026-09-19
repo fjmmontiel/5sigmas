@@ -33,6 +33,7 @@ jobs:
           upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-artifact@')
           pages_upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-pages-artifact@')
           pages_uploads = []
+          ephemeral_transport_uploads = []
 
           def step_block(lines, index):
               line = lines[index]
@@ -77,6 +78,17 @@ jobs:
               # predicate other than failure() stays rejected.
               return bool(re.fullmatch(r'failure\(\)(?:\s*&&\s*[^|]+)*', expression))
 
+          def is_ephemeral_video_transport(path, block):
+              # The motion delivery gate needs one short-lived binary hand-off between
+              # independent render matrix jobs and the final integration job. Keep this
+              # exception exact, one-day-only, and unusable as retained review history.
+              return (
+                  path.name == 'video-motion-delivery-gate.yml'
+                  and re.search(r'(?m)^\s*name:\s*reasoning-delivery-', block)
+                  and 'package/' in block
+                  and 'review/' in block
+              )
+
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
               for index, line in enumerate(lines):
@@ -87,16 +99,20 @@ jobs:
                       continue
 
                   block = step_block(lines, index)
+                  is_transport = is_ephemeral_video_transport(path, block)
+                  if is_transport:
+                      ephemeral_transport_uploads.append((path, index + 1))
 
                   if not re.search(r'(?m)^\s*retention-days:\s*1\s*(?:#.*)?$', block):
                       errors.append(f'{path}:{index + 1}: upload-artifact must set retention-days: 1')
 
                   if_match = re.search(r'(?m)^\s*if:\s*(.+?)\s*$', block)
                   if not if_match:
-                      errors.append(
-                          f'{path}:{index + 1}: generic upload-artifact is allowed only as failure evidence; '
-                          'add if: failure()'
-                      )
+                      if not is_transport:
+                          errors.append(
+                              f'{path}:{index + 1}: generic upload-artifact is allowed only as failure evidence; '
+                              'add if: failure()'
+                          )
                   else:
                       expression = if_match.group(1).strip()
                       if not is_failure_only(expression):
@@ -112,6 +128,13 @@ jobs:
                               f'{path}:{index + 1}: do not retain built site directories with upload-artifact; '
                               'validate them in-run or use upload-pages-artifact for deployment'
                           )
+
+          if len(ephemeral_transport_uploads) != 1:
+              rendered = ', '.join(f'{path}:{line}' for path, line in ephemeral_transport_uploads) or 'none'
+              errors.append(
+                  'exactly one one-day motion delivery transport upload is permitted in '
+                  f'video-motion-delivery-gate.yml; found: {rendered}'
+              )
 
           if len(pages_uploads) != 1 or pages_uploads[0][0].name != 'deploy-pages.yml':
               rendered = ', '.join(f'{path}:{line}' for path, line in pages_uploads) or 'none'
@@ -165,6 +188,7 @@ jobs:
 
           print(
               'CI storage policy OK: generic artifacts are failure-only with one-day maximum retention, '
+              'the motion delivery gate has exactly one one-day cross-job transport exception, '
               'old generic artifacts are purged hourly, and the single required Pages artifact is deleted after deployment.'
           )
           PY
