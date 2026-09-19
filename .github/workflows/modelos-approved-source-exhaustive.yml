@@ -52,15 +52,19 @@ jobs:
           python scripts/render.py content/modelos-razonadores/00-presentacion.es.json --out snapshot-probe
           file='snapshot-probe/modelos-razonadores-intro-es-horizontal.mp4'
           test -f "$file"
+
+          approved_encoded='e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6'
           got_encoded="$(sha256sum "$file" | awk '{print $1}')"
+          encoded_match=false
+          if [ "$got_encoded" = "$approved_encoded" ]; then
+            encoded_match=true
+          fi
+
           echo "SOURCE_REF=${{ matrix.source_ref }}"
           echo "ENCODED_SHA256=$got_encoded"
-          echo "APPROVED_ENCODED_SHA256=e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6"
-          if [ "$got_encoded" = 'e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6' ]; then
-            echo 'APPROVED_ENCODED_MATCH=true'
-          else
-            echo 'APPROVED_ENCODED_MATCH=false'
-          fi
+          echo "APPROVED_ENCODED_SHA256=$approved_encoded"
+          echo "APPROVED_ENCODED_MATCH=$encoded_match"
+
           expected=(
             d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437
             f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af
@@ -72,7 +76,23 @@ jobs:
           for i in 0 1 2 3; do
             got="$(ffmpeg -hide_banner -loglevel error -ss "${times[$i]}" -i "$file" -frames:v 1 -vf 'scale=320:-2:flags=neighbor,format=yuv420p' -f hash -hash sha256 - | sed 's/^SHA256=//')"
             echo "sample_$i=$got expected=${expected[$i]}"
-            if [ "$got" = "${expected[$i]}" ]; then matches=$((matches+1)); fi
+            if [ "$got" = "${expected[$i]}" ]; then
+              matches=$((matches+1))
+            fi
           done
+
+          visual_match=false
+          if [ "$matches" -eq 4 ]; then
+            visual_match=true
+          fi
           echo "APPROVED_VISUAL_SAMPLE_MATCHES=$matches/4"
-          if [ "$matches" -eq 4 ]; then echo 'APPROVED_VISUAL_PROFILE_MATCH=true'; else echo 'APPROVED_VISUAL_PROFILE_MATCH=false'; fi
+          echo "APPROVED_VISUAL_PROFILE_MATCH=$visual_match"
+
+          # Fail closed. A rendered job is not provenance evidence merely because
+          # the renderer completed. This probe is accepted only when both the
+          # frozen encoded asset and all four approved visual fingerprints match.
+          if [ "$encoded_match" != true ] || [ "$visual_match" != true ]; then
+            echo 'PROVENANCE_RESULT=NOT_VERIFIED' >&2
+            exit 1
+          fi
+          echo 'PROVENANCE_RESULT=EXACT_MATCH'
