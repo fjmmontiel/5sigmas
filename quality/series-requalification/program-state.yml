@@ -1,4 +1,4 @@
-schema_version: 13
+schema_version: 14
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -90,7 +90,7 @@ series_status:
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: QA_ACTIVE_FAIL_CLOSED_MEDIA_VISUAL
+    state: QA_ACTIVE_BROWSER_PIXEL_PEDAGOGY_PENDING
     transition_authorized: true
     transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     route_locale_rows: 12
@@ -99,24 +99,39 @@ series_status:
     source_evidence_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     source_prior_exact_head_gate_run: 35419776376
     source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
-    es_series_directory_native_video_files: 0
-    en_series_directory_native_video_files: 0
-    build: PENDING_0_OF_12
-    browser: PENDING_0_OF_12
-    media_visual: FAIL_CLOSED_0_OF_12
-    media_visual_reason: NO_NATIVE_MP4_POSTER_FILES_IN_CANONICAL_ES_OR_EN_SERIES_DIRECTORIES; FULL_CLASSIFICATION_GATE_ADDED
+    media_checkpoint_head: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+    media_checkpoint_run: 35432607898
+    es_series_directory_native_video_files: 6
+    en_series_directory_native_video_files: 6
+    es_series_directory_posters: 6
+    en_series_directory_posters: 6
+    build: PASS_12_OF_12_STRICT_ES_EN
+    publication_contract: PASS
+    search_foundation: PASS
+    media_visual: PASS_12_OF_12
+    media_visual_blockers: 0
     media_visual_gate: scripts/validate_voice_media_visual.py
-    indexability: PENDING_0_OF_12
+    media_video_contract: H264_1920x1080_YUV420P_36S_SILENT_ACCEPTED_POSTER_METADATA_KEY_MOMENTS
+    media_deterministic_frames: 72_EVIDENCE_ONLY_NOT_PIXEL_PEDAGOGY_CERTIFICATION
+    indexability: PASS_12_OF_12_RENDERED_TECHNICAL_ELIGIBILITY
     indexability_gate: scripts/validate_voice_indexability.py
-    pixel: PENDING_0_OF_12
-    pedagogy: PENDING_0_OF_12
-    known_p1_rows: 12
+    indexability_negative_mutations: PASS_NOINDEX_CANONICAL_H1_SITEMAP_HREFLANG_ORPHAN_FAIL_CLOSED
+    internal_graph: PASS_ES_EN_ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
+    browser: PENDING_0_OF_12_FRESH_INTERACTION_LIFECYCLE
+    pixel: PENDING_0_OF_12_REAL_FULL_PAGE_1440_390_NORMAL_REDUCED
+    pedagogy: PENDING_0_OF_12_REAL_FULL_PAGE_1440_390_NORMAL_REDUCED
+    known_p0_p1_p2_in_inspected_domains: 0
+    uninspected_domains:
+      - browser_interaction_lifecycle
+      - full_page_pixel
+      - full_page_pedagogy
+    closed_p1: NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
     article_golden: 0/6
     route_locale_rows_golden: 0/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    pretransition_browser_source_evidence_run: 35419776376
-    pretransition_browser_source_evidence: PASS_CHAPTERS_01_06_SOURCE_AND_ACCESSIBILITY_RESPONSIVE_GATES_ONLY_NOT_GOLDEN
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_VISUAL_INDEXABILITY_BUILD_BROWSER_WITHOUT_REPEATING_SOURCE
+    voice_future_debt: VIDEO_CAPTIONS_MISSING__VIDEO_TRANSCRIPT_MISSING__VIDEO_AUDIO_STREAM_MISSING
+    live_release_verification: PENDING_NOT_RELEASED
+    next_action: RUN_FRESH_BROWSER_LIFECYCLE_AND_FULL_PAGE_PIXEL_PEDAGOGY_1440_390_NORMAL_REDUCED_ON_EXACT_MEDIA_CHECKPOINT
 
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -129,6 +144,7 @@ release_evidence:
   build: PASS
   deploy: PASS
   live_qa: PASS
+  realtime_voice_release: NOT_STARTED_SERIES_QA_ONLY
   storage_policy_push_record:
     run: 35423089359
     conclusion: FAILURE_WITH_ZERO_JOBS
@@ -145,6 +161,8 @@ shared_branch:
   synchronized_with_security_main_merge_without_force_push: true
   release_state_reconciled_after_agents_merge: true
   voice_source_milestone_persisted: true
+  voice_media_indexability_milestone_persisted: true
+  voice_media_generation_receipt: quality/series-requalification/voice-media-generation-2026-09-19.json
 
 linkedin:
   writes_from_this_program: 0
