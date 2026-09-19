@@ -68,10 +68,11 @@ jobs:
             "content/modelos-razonadores/${{ matrix.spec }}.json" \
             --out dist \
             --orientation "${{ matrix.orientation }}" | tee dist/package-validation.json
-      - name: Upload final review media
+      - name: Upload render diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: motion-final-${{ matrix.spec }}-${{ matrix.orientation }}
+          name: motion-final-${{ matrix.spec }}-${{ matrix.orientation }}-failure
           path: motion/dist/
-          if-no-files-found: error
-          retention-days: 7
+          if-no-files-found: warn
+          retention-days: 1
