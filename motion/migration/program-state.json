@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "updated_at": "2026-09-19T12:17:00+02:00",
+  "schema_version": 2,
+  "updated_at": "2026-09-19T12:54:00+02:00",
   "program_status": "IN_PROGRESS",
   "quality_contract": "motion-v4.2-review2-and-later",
   "queues": {
@@ -9,7 +9,7 @@
         "unit": "modelos-razonadores",
         "branch": "migration/video-golden-modelos-razonadores",
         "pr": 332,
-        "state": "TECHNICAL_CERTIFICATION_IN_PROGRESS",
+        "state": "CURRENT_SOURCE_RERENDER_REQUIRED",
         "review_round": 2,
         "technical_golden": false,
         "technical_golden_count": 0,
@@ -38,7 +38,7 @@
           "duration_seconds": 75,
           "resolution": "1920x1080",
           "fps": 60,
-          "technical_binding": "PENDING"
+          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
         },
         {
           "video_slug": "fallos-modelos-razonadores",
@@ -48,7 +48,7 @@
           "duration_seconds": 108,
           "resolution": "1920x1080",
           "fps": 60,
-          "technical_binding": "PENDING"
+          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
         },
         {
           "video_slug": "test-time-compute",
@@ -58,7 +58,7 @@
           "duration_seconds": 129,
           "resolution": "1920x1080",
           "fps": 60,
-          "technical_binding": "PENDING"
+          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
         },
         {
           "video_slug": "riesgos-modelos-razonadores",
@@ -68,12 +68,12 @@
           "duration_seconds": 121,
           "resolution": "1920x1080",
           "fps": 60,
-          "technical_binding": "PENDING"
+          "technical_binding": "PENDING_CHANGED_CURRENT_SOURCE"
         }
       ],
-      "additional_presented_examples": "approved by scope and must be bound from the verified Review Round 2 manifest before promotion",
+      "additional_presented_examples": "approved by scope; exact final-byte binding is required before promotion",
       "golden_example_promotion": "PENDING_TECHNICAL_GOLDEN_EXACT_ASSET_HASH",
-      "notes": "Approval binds exact reviewed bytes. Material source/layout/timing/theme/render changes require renewed review of the changed asset."
+      "notes": "The reviewed candidate bytes remain approved as references. The strengthened current layout/source materially differs from the candidate render generation, so newly rendered final bytes require exact re-review/binding rather than inheriting approval by similarity."
     }
   ],
   "throughput_policy": {
@@ -105,17 +105,29 @@
     ]
   },
   "current_evidence": {
-    "render_source_revision": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "candidate_render_source_revision": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "required_render_source_revision": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "branch_head_at_checkpoint": "a829918ec658eb1b5698c39e5cc3c021a0e849a8",
     "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
-    "review2_local_mp4_count": 24,
+    "candidate_source_binding_status": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
+    "candidate_source_binding_reason": "The 24 candidate MP4s were rendered with the pre-strengthened Review Round 2 layout. Current required source changes horizontal text width 800->760, body min 42->46, body target 50->52, portrait min 44->46, source gap max 86->64, plus a risk renderer and one canonical intro-spec correction. The global layout change affects every output and cannot be exempted by relevant-source narrowing.",
+    "candidate_review2_mp4_count": 24,
+    "candidate_media_profile_qa": {
+      "files_checked": 24,
+      "passed": 24,
+      "failed": 0,
+      "status": "PASS_FOR_CANDIDATE_BYTES_ONLY_NOT_CURRENT_SOURCE_CERTIFICATION"
+    },
     "focused_review_tests": {
       "passed": 65,
-      "failed": 0
+      "failed": 0,
+      "scope": "current deterministic review contract checkpoint; not full release certification"
     },
     "current_source_layout_preflight": {
       "compositions": 24,
       "sampled_frames": 1520,
-      "layout_issues": 0
+      "layout_issues": 0,
+      "note": "Source-layout preflight is preserved as current-source evidence, independent from stale encoded candidates."
     },
     "series_diversity": {
       "conceptual_scenes": 30,
@@ -128,10 +140,11 @@
       "english_files": 12,
       "total_mp4": 24,
       "complete_candidate_inventory": true,
+      "source_binding": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
       "final_review_package_verified": false
     },
     "technical_golden_claim": false,
     "review_email_sent": false
   },
-  "next_action": "Bind relevant-source fingerprints and exact hashes for all current outputs; rerender only truly affected outputs; complete encoded whole-series visual/accessibility/delivery integration review; then update Technical GOLDEN state and convert the complete candidate Drive inventory into the exact final Review Round 2 package."
+  "next_action": "Rerender all 12 localized outputs in both H/V from f13d94/current branch source because layout is a global render dependency; then run exact-current-source media/profile/hash binding, complete encoded full-series perceptual review, accessibility/player/mobile and delivery/consumer integration. Final changed bytes must receive exact owner review before Golden Registry promotion."
 }
