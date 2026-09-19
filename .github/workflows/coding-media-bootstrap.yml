@@ -117,7 +117,12 @@ jobs:
           fi
           git config user.name '5sigmas GOLDEN Series Builder'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
-          git add docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml
+          git add docs/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml
+          # Locale-native media are intentionally gitignored by the generic locale rule.
+          # Force-add only the exact Coding Agents MP4/JPG outputs after all media,
+          # build, indexability and browser gates have passed, so a fresh checkout
+          # contains the same EN-native binaries that were actually validated.
+          git add -f locales/en/series/coding-agents-agent-harnesses/*.mp4 locales/en/series/coding-agents-agent-harnesses/*.jpg
           git commit -m 'Add Coding Agents native visual videos ES and EN'
           git pull --rebase origin quality/coding-agents-requalification
           git push origin HEAD:quality/coding-agents-requalification
