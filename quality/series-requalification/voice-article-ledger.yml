@@ -1,365 +1,213 @@
-schema_version: 2
+schema_version: 3
 program: 5sigmas_GOLDEN_requalification
 series: agentes-voz-tiempo-real
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 baseline_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-reviewed_at: 2026-09-19T07:36:00Z
+reviewed_at: 2026-09-19T08:35:39Z
+exact_evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+milestone_action_run: 35432607898
 inventory_contract:
   chapters: 6
   presentation_page: false
   route_locale_rows: 12
   es_nav: PRESENT_6_OF_6
   en_nav: PRESENT_6_OF_6
-  en_manifest: PRESENT_6_OF_6
-  es_series_directory_native_video_files: 0
-  en_series_directory_native_video_files: 0
+  en_manifest: PRESENT_6_OF_6_WITH_NATIVE_MEDIA
+  es_native_visual_videos: 6
+  en_native_visual_videos: 6
+  es_posters: 6
+  en_posters: 6
   media_visual_gate: scripts/validate_voice_media_visual.py
   indexability_gate: scripts/validate_voice_indexability.py
+  media_visual_result: PASS_12_OF_12
+  indexability_result: PASS_12_OF_12_TECHNICAL_ELIGIBILITY
+  browser_result: PENDING_FRESH_INTERACTION_LIFECYCLE_REVIEW
+  pixel_result: PENDING_REAL_FULL_PAGE_REVIEW
+  pedagogy_result: PENDING_REAL_FULL_PAGE_REVIEW
   note: >-
-    Current main contains the six ES and six EN article sources but no native MP4/poster
-    files in either canonical series directory. SOURCE was freshly revalidated on the exact
-    current source blobs against current primary references on 2026-09-19. MEDIA_VISUAL
-    remains fail-closed until every curriculum-required visual video obligation is repaired.
-    Future narration/audio/captions/transcript remain VOICE_ENHANCEMENT debt only.
+    The native visual-media blocker was repaired for all six chapters in ES and EN.
+    Action 35432607898 generated and validated twelve exact native MP4s and twelve posters,
+    strict-built ES and EN, and passed rendered INDEXABILITY for all 12 route-locale pairs.
+    Videos are intentionally silent under PROGRAM AMENDMENT 5716685049; narration/audio,
+    captions and transcript remain future owner-local VOICE_ENHANCEMENT debt and do not
+    block current GOLDEN. Machine frame sampling is evidence only and does not certify
+    PIXEL_REVIEW or PEDAGOGY_REVIEW.
 source_review:
-  exact_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+  source_review_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+  current_evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
   status: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
   current_primary_revalidated: true
-  exact_source_blobs_unchanged_from_pretransition_gate: true
+  source_content_claims_unchanged_by_media_generation: true
   prior_exact_head_source_accessibility_run: 35419776376
-  evidence: >-
-    Fresh review reconciled all six chapter source contracts and exact ES/EN blobs with
-    current primary documentation for OpenAI realtime models, LiveKit turn handling/tools/
-    telephony/testing/observability, Pipecat turn/tool/eval semantics, Twilio Media Streams,
-    WebRTC/RTP standards and OpenTelemetry error semantics. No deterministic source,
-    factual or ES/EN parity blocker was found.
-
+  changed_revision_deterministic_source_contracts: PASS
+  note: >-
+    Source/factual/parity review remains valid. The media checkpoint changed ES video
+    frontmatter/media mappings and binaries, not the reviewed technical claims. The
+    milestone re-ran the applicable deterministic chapter source contracts on the changed
+    revision; no source blocker was introduced.
+media_visual_evidence:
+  action_run: 35432607898
+  generated_assets: 12
+  video_codec: h264
+  pixel_format: yuv420p
+  dimensions: 1920x1080
+  duration_seconds: 36.0
+  audio_streams: 0
+  poster_required: true
+  metadata_required: true
+  key_moments_visual_only: true
+  deterministic_frames_per_video: 6
+  manual_pixel_certification_from_frames: false
+  manual_pedagogy_certification_from_frames: false
+  blockers: []
+  future_voice_debt_each_row:
+    - VIDEO_CAPTIONS_MISSING
+    - VIDEO_TRANSCRIPT_MISSING
+    - VIDEO_AUDIO_STREAM_MISSING
+indexability_evidence:
+  action_run: 35432607898
+  rendered_route_locale_pairs: 12
+  passing: 12
+  failing: 0
+  global_errors: []
+  negative_mutations:
+    noindex: PASS_FAIL_CLOSED
+    canonical: PASS_FAIL_CLOSED
+    h1: PASS_FAIL_CLOSED
+    sitemap_hreflang: PASS_FAIL_CLOSED
+    orphan_route: PASS_FAIL_CLOSED
+  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
+  google_selection_required: false
+  live_verification: PENDING_RELEASE
+status_counts:
+  SOURCE_PASS: 12
+  BUILD_PASS: 12
+  BROWSER_PASS: 0
+  MEDIA_VISUAL_PASS: 12
+  INDEXABILITY_PASS: 12
+  PIXEL_REVIEW: 0
+  PEDAGOGY_REVIEW: 0
+  ARTICLE_GOLDEN: 0
+  route_locale_GOLDEN: 0
+row_defaults: &row_defaults
+  iteration_count: 3
+  last_review_head: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  SOURCE_PASS: true
+  BUILD_PASS: true
+  BROWSER_PASS: false
+  MEDIA_VISUAL_PASS: true
+  INDEXABILITY_PASS: true
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
+  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
+  watch_video_lifecycle: MEDIA_METADATA_ARTICLE_WATCH_PASS__PLAYBACK_LIFECYCLE_PENDING_BROWSER
+  evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  evidence_action_run: 35432607898
+  live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
+  authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION_THIS_ITERATION
+  p0: []
+  p1: []
+  p2: []
+  state: QA
+  next_action: RUN_FRESH_BROWSER_LIFECYCLE_AND_FULL_PAGE_PIXEL_PEDAGOGY_1440_390_NORMAL_REDUCED
 rows:
-  - id: voice01-es
+  - <<: *row_defaults
+    id: voice01-es
     locale: es
     route: /series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    source_blob: 669e569f62484f324aae9d7fe0bb1cb3e337def3
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice01-en
+    native_video: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
+    poster: docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+  - <<: *row_defaults
+    id: voice01-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/
     source: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
-    source_blob: ac4c7a834649d47d50b97e51945f2884b6f35f2e
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice02-es
+    native_video: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+  - <<: *row_defaults
+    id: voice02-es
     locale: es
     route: /series/agentes-voz-tiempo-real/02-turn-taking/
     source: docs/series/agentes-voz-tiempo-real/02-turn-taking.md
-    source_blob: b78597cf00b0eb49bf82cc76d55a8c22e3e9000c
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice02-en
+    native_video: docs/series/agentes-voz-tiempo-real/02-turn-taking.mp4
+    poster: docs/series/agentes-voz-tiempo-real/02-turn-taking.jpg
+  - <<: *row_defaults
+    id: voice02-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/02-turn-taking/
     source: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.md
-    source_blob: 4b629d7e9eb67eb47afa91ad199c4f3372661a49
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice03-es
+    native_video: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/02-turn-taking.jpg
+  - <<: *row_defaults
+    id: voice03-es
     locale: es
     route: /series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    source_blob: 06d66e0eaf986b5e95ed4b33381c61bba54d278e
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice03-en
+    native_video: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
+    poster: docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+  - <<: *row_defaults
+    id: voice03-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/
     source: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
-    source_blob: a41a6706059903f2064bdd9aedbc440b35231d2c
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice04-es
+    native_video: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+  - <<: *row_defaults
+    id: voice04-es
     locale: es
     route: /series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    source_blob: 83ab88686bd7cec68e02bec47f22ceb2e1f88111
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice04-en
+    native_video: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
+    poster: docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+  - <<: *row_defaults
+    id: voice04-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/
     source: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
-    source_blob: 244d1c3b929d578fa8c135a6124e08dfb6e9fdcd
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice05-es
+    native_video: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+  - <<: *row_defaults
+    id: voice05-es
     locale: es
     route: /series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    source_blob: 684773859cfe9de4a0da7e10aee070c32a4d30ac
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice05-en
+    native_video: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
+    poster: docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+  - <<: *row_defaults
+    id: voice05-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/
     source: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
-    source_blob: 8704f45e6f289a0c3d6583273f4589e20f884efd
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice06-es
+    native_video: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+  - <<: *row_defaults
+    id: voice06-es
     locale: es
     route: /series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    source_blob: e6abe9de1fdbe8a5fee1facccf5e7fbbdb45e775
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-  - id: voice06-en
+    native_video: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
+    poster: docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
+  - <<: *row_defaults
+    id: voice06-en
     locale: en
     route: /en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
     source: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
-    source_blob: 41ca2e642b3fba88a4fe2d6b403ab8a888577a9a
-    iteration_count: 2
-    last_review_head: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    SOURCE_PASS: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
-    canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_GATE
-    watch_video_lifecycle: FAIL_CLOSED_MEDIA_VISUAL_PENDING
-    evidence_revision: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-    live_deploy_verification: NOT_APPLICABLE_NO_RELEASE_THIS_ITERATION
-    authenticated_gsc_observation: NONE_REQUIRED_FOR_INDEXABILITY_PASS
-    p0: []
-    p1: [NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY]
-    p2: []
-    state: MEDIA_VISUAL_PENDING
-    next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_INDEXABILITY_BUILD_BROWSER
-
-summary:
-  rows_inspected_this_iteration: 12
-  article_golden: 0/6
-  route_locale_rows_golden: 0/12
-  source_pass: 12/12
-  build_pass: 0/12
-  browser_pass: 0/12
-  media_visual_pass: 0/12
-  indexability_pass: 0/12
-  pixel_review: 0/12
-  pedagogy_review: 0/12
-  known_p1_rows: 12
-  voice_enhancement: DEFERRED_OWNER_LOCAL
-  next_action: REPAIR_NATIVE_VISUAL_MEDIA_THEN_RUN_MEDIA_VISUAL_INDEXABILITY_BUILD_BROWSER
+    native_video: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
+    poster: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
+historical_transition:
+  previous_iteration_count: 2
+  current_iteration_count: 3
+  increment_reason: >-
+    All twelve route-locale rows were materially changed and inspected in the native-media
+    milestone. The prior P1 for missing curriculum-required visual video is closed by exact
+    validated media. No additional iteration is charged for ledger persistence itself.
+  closed_p1:
+    - NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
+  caveat: >-
+    Empty current p0/p1/p2 arrays mean no defect is known in the domains actually inspected
+    at this checkpoint. They do not assert defect-free browser, full-page pixel or pedagogy
+    domains, which remain explicitly pending.
