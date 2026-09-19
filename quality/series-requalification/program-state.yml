@@ -1,4 +1,4 @@
-schema_version: 14
+schema_version: 15
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -90,7 +90,7 @@ series_status:
 
   agentes-voz-tiempo-real:
     ledger: quality/series-requalification/voice-article-ledger.yml
-    state: QA_ACTIVE_BROWSER_PIXEL_PEDAGOGY_PENDING
+    state: QA_ACTIVE_PIXEL_PEDAGOGY_INTERMEDIATE_MANUAL_REVIEW_PENDING
     transition_authorized: true
     transition_after_agents_merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
     route_locale_rows: 12
@@ -117,21 +117,32 @@ series_status:
     indexability_gate: scripts/validate_voice_indexability.py
     indexability_negative_mutations: PASS_NOINDEX_CANONICAL_H1_SITEMAP_HREFLANG_ORPHAN_FAIL_CLOSED
     internal_graph: PASS_ES_EN_ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
-    browser: PENDING_0_OF_12_FRESH_INTERACTION_LIFECYCLE
-    pixel: PENDING_0_OF_12_REAL_FULL_PAGE_1440_390_NORMAL_REDUCED
-    pedagogy: PENDING_0_OF_12_REAL_FULL_PAGE_1440_390_NORMAL_REDUCED
+    browser_evidence_head: e31b662a01428539728876e881c224312dbfd73b
+    browser_run: 35439893298
+    browser: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE
+    browser_article_contexts: 48
+    browser_watch_contexts: 48
+    browser_full_page_screenshots: 48
+    browser_profiles: DESKTOP_MOBILE_X_NORMAL_REDUCED
+    browser_playback: PASS_START_MID_FINAL_ALL_12_ARTICLE_WATCH_PAIRS
+    browser_keyboard_touch_focus: PASS
+    browser_runtime_resources_teardown: PASS
+    browser_artifact_id: 10584205107
+    browser_artifact_sha256: b619f69456c2d13143f3b718d1da14f322ac326f00e7a1511c7d2fd0c0c0b748
+    full_page_manual_review: PASS_INSPECTED_EXACT_FINAL_FULL_PAGE_SCREENSHOTS_WITH_STRATIFIED_CROPS
+    pixel: PENDING_MANUAL_START_INTERMEDIATE_STATE_PIXELS
+    pedagogy: PENDING_MANUAL_START_INTERMEDIATE_STATE_PIXELS
     known_p0_p1_p2_in_inspected_domains: 0
     uninspected_domains:
-      - browser_interaction_lifecycle
-      - full_page_pixel
-      - full_page_pedagogy
+      - manual_start_intermediate_state_pixel
+      - manual_start_intermediate_state_pedagogy
     closed_p1: NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
     article_golden: 0/6
     route_locale_rows_golden: 0/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     voice_future_debt: VIDEO_CAPTIONS_MISSING__VIDEO_TRANSCRIPT_MISSING__VIDEO_AUDIO_STREAM_MISSING
     live_release_verification: PENDING_NOT_RELEASED
-    next_action: RUN_FRESH_BROWSER_LIFECYCLE_AND_FULL_PAGE_PIXEL_PEDAGOGY_1440_390_NORMAL_REDUCED_ON_EXACT_MEDIA_CHECKPOINT
+    next_action: RETAIN_AND_MANUALLY_INSPECT_MINIMAL_CHAPTER_START_INTERMEDIATE_FINAL_SCREENSHOTS_THEN_PROMOTE_PIXEL_PEDAGOGY_IF_CLEAN
 
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -162,6 +173,7 @@ shared_branch:
   release_state_reconciled_after_agents_merge: true
   voice_source_milestone_persisted: true
   voice_media_indexability_milestone_persisted: true
+  voice_browser_milestone_persisted: true
   voice_media_generation_receipt: quality/series-requalification/voice-media-generation-2026-09-19.json
 
 linkedin:
