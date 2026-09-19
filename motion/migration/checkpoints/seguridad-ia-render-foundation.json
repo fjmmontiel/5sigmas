@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
   "unit": "seguridad-ia",
-  "stage": "REUSABLE_RENDER_FOUNDATION_BOUND",
+  "stage": "REUSABLE_RENDER_FOUNDATION_PREFLIGHT_PASS",
   "source_engine_branch": "migration/video-golden-modelos-razonadores",
   "source_engine_head_observed": "4b7a194d734452637d1175ab16fb8a797c8d0b41",
   "target_head_before": "e2e097f5b75413092bcab85cc77cfcd3472d18d4",
+  "foundation_commit": "9a0135a8dd6cb899b9c910b71d036bc4cf27e96a",
+  "gate_commit": "4e0cee933209f42ce6ad4c8bfe38495208f5fba3",
   "owner_visual_approval": "NOT_REQUESTED",
   "technical_golden": false,
   "ported_modules": [
@@ -27,5 +29,17 @@
     "content_spec":"motion/migration/seguridad-ia-content-v1.json",
     "series_register":"motion/migration/seguridad-ia-series-register.json"
   },
-  "next_action": "Implement Seguridad-specific schema/mechanism registry and engine on top of these shared deterministic primitives, validate syntax/import/layout, then render H/V from the authored 30-concept ES/EN spec."
+  "preflight": {
+    "workflow_run": 35466459676,
+    "job": 105959575103,
+    "status": "PASS",
+    "utf8_control_byte_integrity": "5/5 PASS",
+    "node_syntax_import": "5/5 PASS",
+    "accent_text_contrast_on_background": 8.322568356519009,
+    "accent_contrast_on_background": 5.084235297901862,
+    "horizontal_body_min_px": 46,
+    "portrait_body_min_px": 46,
+    "animation_family_repeat_cap": 2
+  },
+  "next_action": "Implement Seguridad-specific schema/mechanism registry and engine on top of these shared deterministic primitives, validate the authored 30-concept ES/EN content against the full series register, then render H/V and inspect encoded motion before any review package."
 }
