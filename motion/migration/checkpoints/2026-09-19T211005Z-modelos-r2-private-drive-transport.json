@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T21:10:05Z",
+  "unit": "modelos-razonadores",
+  "branch": "migration/video-golden-modelos-razonadores",
+  "head_before": "4b7a194d734452637d1175ab16fb8a797c8d0b41",
+  "main_observed": "11737ad86db9b15b1981af6fef221d7db0b82110",
+  "owner_visual_approval": "APPROVED",
+  "approval_scope": "Frozen Review Round 2 collection already presented; no claim that every file was individually played by the owner.",
+  "repeat_approval_required_for_unchanged_assets": false,
+  "technical_golden": false,
+  "published": false,
+  "canonical_horizontal_delivery": {
+    "exact": 2,
+    "total": 12,
+    "state": "PARTIAL_EXACT_STAGING"
+  },
+  "frozen_media_integrity": {
+    "horizontal_full_decode": "12/12_PASS",
+    "vertical_full_decode": "12/12_PASS"
+  },
+  "source_provenance": "NOT_VERIFIED",
+  "transport_work": [
+    {
+      "commit": "792437cf20bde32843ce547917bf8b392a961936",
+      "workflow_run": 35469181669,
+      "job": 105966900800,
+      "result": "FAILED_DEPENDENCY_PREFLIGHT",
+      "note": "Exact-byte staging workflow introduced; media stages were skipped after dependency preflight failed."
+    },
+    {
+      "commit": "ccf8bf6f172f79dd68b7aa0f61ea04f7a90dc380",
+      "workflow_run": 35469486752,
+      "job": 105967726349,
+      "result": "FAILED_FFMPEG_ABSENT",
+      "note": "gdown 5.2.0 installed successfully; hosted runner did not contain ffmpeg/ffprobe."
+    },
+    {
+      "commit": "e508b604110aa7c0c07ce71db9c76e70ee6bcdfc",
+      "workflow_run": 35469539282,
+      "job": 105967867245,
+      "result": "FAILED_PRIVATE_DRIVE_READ",
+      "dependency_install": "PASS",
+      "ffmpeg_install": "PASS",
+      "note": "Anonymous GitHub-hosted runner cannot traverse the stable private Drive root. The workflow did not reach hash binding, media replacement, commit or push."
+    }
+  ],
+  "drive_policy": {
+    "stable_root_only": "https://drive.google.com/drive/folders/1R6q481pxvf_AAKzt7xAnUWzUA17VzS-Z",
+    "sharing_expansion": "NOT_PERFORMED",
+    "public_permission_expansion": false
+  },
+  "verified_connector_capability": "The connected Google Drive integration can still read the frozen approved assets privately; the failure is specifically anonymous GitHub-runner access, not loss of the approved collection.",
+  "blocker": "The GitHub-hosted runner cannot authenticate to the private Drive root and sharing must not be expanded. Exact approved bytes therefore need a connector-authorized/content-addressed transport path for the remaining 10 canonical horizontals.",
+  "next_action": "Transport the remaining exact approved bytes through an authenticated connector/content-addressed Git object path without exposing private Drive URLs or changing sharing; then rerun exact-byte, full-decode, integration and current-main release gates. Continue Seguridad IA implementation independently while this frozen unit remains technically pending."
+}
