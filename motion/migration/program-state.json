@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-19T12:11:00+02:00",
+  "updated_at": "2026-09-19T12:17:00+02:00",
   "program_status": "IN_PROGRESS",
   "quality_contract": "motion-v4.2-review2-and-later",
   "queues": {
@@ -105,20 +105,33 @@
     ]
   },
   "current_evidence": {
-    "pr_head_before_state_commits": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+    "render_source_revision": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
     "main_at_checkpoint": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
-    "review2_mp4_count": 24,
+    "review2_local_mp4_count": 24,
     "focused_review_tests": {
       "passed": 65,
       "failed": 0
     },
-    "reasoning_risks_en_portrait_check": {
-      "frames_sampled": 64,
+    "current_source_layout_preflight": {
+      "compositions": 24,
+      "sampled_frames": 1520,
       "layout_issues": 0
     },
+    "series_diversity": {
+      "conceptual_scenes": 30,
+      "perceptual_families": 21,
+      "maximum_family_uses": 2,
+      "full_series_visual_approval": false
+    },
+    "drive_candidate_inventory": {
+      "spanish_files": 12,
+      "english_files": 12,
+      "total_mp4": 24,
+      "complete_candidate_inventory": true,
+      "final_review_package_verified": false
+    },
     "technical_golden_claim": false,
-    "review_email_sent": false,
-    "review_package_final_verified": false
+    "review_email_sent": false
   },
-  "next_action": "Bind relevant-source fingerprints and exact hashes for all current outputs; rerender only truly affected outputs; complete encoded whole-series visual/accessibility/delivery integration review; then update Technical GOLDEN state, final Review 2 package and approval/hash binding."
+  "next_action": "Bind relevant-source fingerprints and exact hashes for all current outputs; rerender only truly affected outputs; complete encoded whole-series visual/accessibility/delivery integration review; then update Technical GOLDEN state and convert the complete candidate Drive inventory into the exact final Review Round 2 package."
 }
