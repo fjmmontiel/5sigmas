@@ -79,7 +79,7 @@ def main() -> None:
             page.on("pageerror", lambda e: browser_errors.append(str(e)))
             page.set_content(bundled_page())
             page.wait_for_function("window.ready===true", timeout=15000)
-            setup = page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
+            page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
             for i in range(FPS * DURATION):
                 t = i / FPS
                 item = page.evaluate("(a)=>window.frame(a.job,a.t)", {"job": job, "t": t})
@@ -175,7 +175,7 @@ def main() -> None:
         "browser_errors": browser_errors,
         "observed_families": sorted(observed_families),
         "observed_topologies": sorted(observed_topologies),
-        "technical_golden": false,
+        "technical_golden": False,
         "owner_visual_approval": "NOT_REQUESTED",
     }
     metadata.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
