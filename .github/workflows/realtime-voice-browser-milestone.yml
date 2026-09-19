@@ -1,0 +1,123 @@
+name: Realtime Voice browser and pixel evidence milestone
+
+on:
+  push:
+    branches:
+      - quality/post-datacenters-requalification
+    paths:
+      - '.github/workflows/realtime-voice-browser-milestone.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  browser-pixel-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build exact ES and EN preview strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated video URLs for preview QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('site/videos')
+          targets = [root / 'catalog.json', *root.rglob('*.html')]
+          for target in targets:
+              if not target.is_file():
+                  continue
+              text = target.read_text(encoding='utf-8')
+              target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          en_root = Path('site/en/videos')
+          targets = [en_root / 'catalog.json', *en_root.rglob('*.html')]
+          for target in targets:
+              if not target.is_file():
+                  continue
+              text = target.read_text(encoding='utf-8')
+              target.write_text(text.replace('https://5sigmas.com/en/', '/en/').replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          PY
+
+      - name: Serve exact combined preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8000 --directory site > /tmp/5sigmas-voice-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-voice-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-voice-preview.log
+          exit 1
+
+      - name: Regress browser resource loading with listeners active
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate Realtime Voice chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
+
+      - name: Validate Realtime Voice chapter 1 accessibility and intermediate states
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 2 accessibility and responsive states
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 3 accessibility and responsive states
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 4 accessibility and responsive states
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 5 accessibility and responsive states
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+
+      - name: Validate Realtime Voice chapter 6 accessibility and responsive states
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+
+      - name: Validate all 12 article/watch media lifecycles and capture 48 full-page review frames
+        run: node scripts/validate_voice_series_browser_milestone.mjs
+
+      - name: Upload short-lived exact visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-voice-browser-pixel-evidence
+          path: artifacts/voice-browser-milestone/*
+          if-no-files-found: warn
+          retention-days: 1
