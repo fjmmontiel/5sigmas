@@ -1,18 +1,55 @@
 import {clamp,mixHex,number} from './paint.mjs';
+
+export const EDITORIAL_LAYOUT_CONTRACT=Object.freeze({
+  horizontalTextWidth:760,
+  horizontalBodyMin:36,
+  horizontalBodyTarget:42,
+  horizontalBodyMax:46,
+  horizontalSourceGapMax:86,
+  horizontalBodyBottomTarget:720,
+  animationFamilyRepeatCap:2,
+});
+
+function paragraphLayout(P,s,textWidth,top,titleSize,portrait){
+  const min=portrait?34:EDITORIAL_LAYOUT_CONTRACT.horizontalBodyMin;
+  const max=portrait?39:EDITORIAL_LAYOUT_CONTRACT.horizontalBodyMax;
+  let size=portrait?38:EDITORIAL_LAYOUT_CONTRACT.horizontalBodyTarget;
+  const lineHeight=portrait?1.39:1.42;
+  const build=current=>{
+    let y=top+s.title.length*titleSize*1.12+(portrait?34:40);
+    const paragraphs=s.paragraphs.map(text=>{
+      const lines=P.lines(text,textWidth,current);
+      const box={text,lines,y};
+      y+=lines.length*current*lineHeight+(portrait?25:30);
+      return box;
+    });
+    return {paragraphs,bodyBottom:y-(portrait?25:30)};
+  };
+  let result=build(size);
+  if(!portrait){
+    while(result.bodyBottom<620&&size<max){size+=1;result=build(size);}
+    while(result.bodyBottom>855&&size>min){size-=1;result=build(size);}
+  } else {
+    while(result.bodyBottom>1080&&size>min){size-=1;result=build(size);}
+  }
+  return {...result,bodySize:size,bodyLH:lineHeight};
+}
+
 export function sceneLayout(P,s,portrait) {
   const width=portrait?1080:1920,height=portrait?1920:1080;
-  const left=portrait?58:72,top=portrait?165:177,textWidth=portrait?964:830;
-  let titleSize=s.type==='intro'?(portrait?118:138):(portrait?73:76);
+  const left=portrait?58:72,top=portrait?165:166,textWidth=portrait?964:EDITORIAL_LAYOUT_CONTRACT.horizontalTextWidth;
+  let titleSize=s.type==='intro'?(portrait?118:132):(portrait?73:82);
   while(Math.max(...s.title.map(line=>P.measure(line,titleSize,600,P.T.headlineFont)))>textWidth&&titleSize>58)titleSize-=1;
-  let y=top+s.title.length*titleSize*1.12+34;
-  const bodySize=portrait?36:(s.type==='intro'?38:33),bodyLH=1.39;
-  const paragraphs=s.paragraphs.map(text=>{const lines=P.lines(text,textWidth,bodySize);const box={text,lines,y};y+=lines.length*bodySize*bodyLH+24;return box;});
-  const bodyBottom=y-24;
-  const mechanism=portrait?{x:55,y:Math.max(800,bodyBottom+50),w:970,h:800}:{x:965,y:183,w:883,h:735};
+  const body=paragraphLayout(P,s,textWidth,top,titleSize,portrait);
+  const {paragraphs,bodyBottom,bodySize,bodyLH}=body;
+  const mechanism=portrait?{x:55,y:Math.max(820,bodyBottom+52),w:970,h:800}:{x:900,y:175,w:948,h:744};
   if(portrait){mechanism.h=Math.min(830,1782-mechanism.y);mechanism.scale=Math.min(mechanism.w/1000,mechanism.h/800);}else mechanism.scale=Math.min(mechanism.w/1000,mechanism.h/800);
+  const sourceY=portrait?height-120:Math.min(900,Math.max(700,bodyBottom+72));
   if(mechanism.scale<0.70)P.issues.push({type:'mechanism-too-small',scale:mechanism.scale,scene:s.id});
-  if(bodyBottom>(portrait?1050:945))P.issues.push({type:'body-overflow',bottom:bodyBottom,scene:s.id});
-  return {width,height,left,top,textWidth,titleSize,bodySize,bodyLH,paragraphs,bodyBottom,mechanism,portrait};
+  if(bodyBottom>(portrait?1080:855))P.issues.push({type:'body-overflow',bottom:bodyBottom,scene:s.id});
+  if(!portrait&&bodySize<EDITORIAL_LAYOUT_CONTRACT.horizontalBodyMin)P.issues.push({type:'body-too-small',size:bodySize,scene:s.id});
+  if(!portrait&&sourceY-bodyBottom>EDITORIAL_LAYOUT_CONTRACT.horizontalSourceGapMax)P.issues.push({type:'left-dead-space',gap:sourceY-bodyBottom,scene:s.id});
+  return {width,height,left,top,textWidth,titleSize,bodySize,bodyLH,paragraphs,bodyBottom,sourceY,mechanism,portrait};
 }
 export function drawHeader(P,spec,index,time,total,L) {
   const T=P.T,margin=L.portrait?58:72,w=L.width;
@@ -64,6 +101,6 @@ export function drawText(P,s,L,alpha,state=null) {
       }
     }
   }
-  if(s.source){const y=L.portrait?L.height-120:975;P.path([[L.left,y-15],[L.left+Math.min(L.textWidth,610),y-15]],T.rule,1);P.text(s.source,L.left,y,20,T.muted,400,'left',L.portrait?964:850);}
+  if(s.source){const y=L.sourceY;P.path([[L.left,y-15],[L.left+Math.min(L.textWidth,650),y-15]],T.rule,1);P.text(s.source,L.left,y,L.portrait?20:22,T.muted,400,'left',L.portrait?964:760);}
   c.restore();
 }

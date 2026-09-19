@@ -4,17 +4,29 @@ Last updated: 2026-09-19
 
 Durable source of truth for the code-driven video migration. A release unit may open exactly one PR only after every video/localization in that unit is **Technical GOLDEN**. **Golden Example** is a separate curated status and always requires explicit user approval after review.
 
+## OWNER VISUAL QUALITY AMENDMENT — 2026-09-19
+
+The first complete `modelos-razonadores` review exposed two systemic defects that previous automated visual QA did not reject. This amendment is mandatory for **all current and future series**, not only this release unit.
+
+1. **Text prominence / composition balance.** Horizontal body copy must remain clearly readable and visually important. The layout may not leave a small text block floating at the top-left with unexplained lower-left dead space. The shared layout now targets materially larger body copy, narrower wrapping and a bounded source gap. A regression to review-v1 sizing/balance is a Technical GOLDEN failure.
+2. **Series-level motion diversity.** Changing labels or timing does not create a different animation. Each scene receives a semantic visual family based on the mechanism it explains. The normal hard gate is **maximum two uses of one animation family across the complete canonical series**. A third use is only an exceptional semantic ceiling requiring explicit justification and review evidence; the automated default remains two.
+3. **Semantic motion, not template motion.** Geometry must explain the concept: a latency threshold should look like a time scale, routing like a fork, trust boundaries like trust boundaries, propagation like propagation, confidence stopping like a band/threshold decision, etc. Generic numbered descending lists are not a default renderer.
+4. **Whole-series stranger review.** Before Technical GOLDEN, inspect the complete series together. Fail if scenes feel interchangeable, if one animation grammar dominates, or if multiple videos look like the same template with different copy.
+5. **Feedback reopens certification.** Explicit owner feedback identifying a real visual defect invalidates the affected Technical GOLDEN evidence. The release unit returns to revision, the old review package becomes superseded, and a replacement package is required.
+
+These rules are enforced in code by `motion/scripts/check_visual_variety.mjs`, the release gate, the shared layout contract, and the scene-specific semantic renderer registry.
+
 ## Release unit — `modelos-razonadores`
 
-**Release state:** TECHNICAL GOLDEN — complete-series PR open; user review package delivered.
+**Release state:** REVISION REQUIRED — owner review v1 reopened the complete series.
 
-**Technical GOLDEN:** 12/12 localized outputs.
+**Technical GOLDEN:** 0/12 current outputs. The previous 12/12 certification is historical evidence only and is superseded until review v2 is rebuilt and revalidated.
 
 **Golden Examples:** 0/12 approved. Explicit owner approval is still required; silence is never approval.
 
 ### Locked visual identity
 
-Series accent is **Teal reasoning**:
+Series accent remains **Teal reasoning**:
 
 - primary accent: `#26A69A`;
 - accent text: `#00776F`;
@@ -24,9 +36,7 @@ Series accent is **Teal reasoning**:
 - forbidden: decorative gradients, ornamental glow, arbitrary multicolor palettes, per-video/per-scene accent drift, accent-as-decoration;
 - contrast: `accentText` must clear WCAG AA against the neutral editorial base.
 
-This identity is locked across videos, posters, thumbnails, diagrams and related assets in both locales.
-
-## Inventory and consumers
+### Inventory and consumers
 
 Spanish videos:
 
@@ -39,91 +49,78 @@ Spanish videos:
 
 English mirrors the same six chapters. The release unit therefore contains **12 localized public outputs**.
 
-Consumer surfaces validated in scope: ES/EN article embeds, generated ES/EN watch pages, video library/catalog/schema/sitemap outputs, home-page Test-Time-Compute feature, ES/EN visual hubs, localized metadata, posters, captions/transcripts/chapters where declared, same-origin delivery and R2 staging.
+Consumer surfaces remain in scope: ES/EN article embeds, generated ES/EN watch pages, video library/catalog/schema/sitemap outputs, home-page Test-Time-Compute feature, ES/EN visual hubs, localized metadata, posters, captions/transcripts/chapters where declared, same-origin delivery and R2 staging.
 
-## Per-output gate state
+### Review-v1 feedback and replacement plan
 
-| Locale | Video | Framework | Sync | Source | Layout | Delivery | Accessibility | Visual QA | Technical GOLDEN | Golden Example |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| ES | 00 presentación | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| ES | 01 qué es razonar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| ES | 02 fallos | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| ES | 03 test-time compute | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| ES | 04 latencia/streaming | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| ES | 05 riesgos | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 00 series intro | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 01 what reasoning is | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 02 failures | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 03 test-time compute | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 04 latency/streaming | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
-| EN | 05 risks | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | YES | NO |
+The owner reviewed the complete Drive package and rejected the current visual closure because:
 
-## Implementation / synchronization
+- body text in the left editorial column is repeatedly too small;
+- large unused lower-left space weakens hierarchy and density;
+- the numbered/descending sequence grammar is reused so frequently that different videos feel like the same template;
+- the migration objective requires substantially richer visual vocabulary with scene geometry justified by the mechanism.
 
-Implementation version: **motion framework v4**.
+Therefore:
 
-Persisted reusable runtime:
+- PR #332 is draft again and must not merge from the v1 visual evidence;
+- review-v1 Drive package remains preserved only as superseded evidence;
+- all 12 localized outputs must be regenerated from the revised shared runtime;
+- a **review-v2** Drive package and new review email are required after the complete delivery gate passes;
+- no Golden Example promotion is allowed before explicit approval of the replacement package.
 
-- `motion/src/engine.mjs`: deterministic shared timeline / render clock;
-- reusable semantic mechanisms and layout primitives under `motion/src/render/`;
-- `motion/src/player.mjs`: browser player using the same `renderFrame` clock as export;
+### Review-v2 semantic motion plan
+
+The canonical Spanish scenes now map to explicit visual families; EN mirrors the same geometry with localized copy. Examples include:
+
+- concept orbit, budget balance, chapter map and trade-off triangle for the series introduction;
+- reasoning lenses, train-vs-inference split, candidate evidence and evaluation axes for chapter 1;
+- spurious-vs-robust paths, bias compass, proxy mismatch, contamination cascade and verification ring for chapter 2;
+- compute levers, thinking ribbon, candidate evidence, search tree, token clock and adaptive compute matrix for chapter 3;
+- latency scale, dual-clock timeline, streaming wave, routing fork and latency control loop for chapter 4;
+- complexity curve, trust-boundary flow, retrieval-poison split, confidence band and defense layers for chapter 5.
+
+No visual family exceeds the default complete-series repeat cap of two.
+
+## Historical v1 evidence — superseded for visual release
+
+The following remains useful engineering history but no longer certifies the current release after owner feedback:
+
+- layout: 24/24 horizontal + portrait composition checks passed (`35382435443`);
+- accessibility/player QA: Chromium + WebKit passed (`35385714663`);
+- deterministic render: 24/24 H/V 60 fps render-package jobs passed (`35383323465`);
+- metadata synchronization passed (`35386145253`);
+- delivery workflow `35408957666` passed canonical ES/EN media, captions, article/watch consumers, schema/sitemaps, strict builds and same-origin/R2 delivery;
+- old review package: https://drive.google.com/drive/folders/1RmRG45Y_MaGTbEFrttNIw6KAfq3oQCzR;
+- old review email id: `1a0b740df6b0f124`.
+
+Passing deterministic checks did not prevent the series-level visual repetition identified by the owner, so v2 adds the missing gate rather than treating the feedback as subjective polish.
+
+## Current implementation
+
+Implementation version: **motion framework v4.1 visual-diversity revision**.
+
+Shared runtime remains deterministic:
+
+- `motion/src/engine.mjs`: one render clock for browser playback/export;
+- `motion/src/render/layout.mjs`: shared editorial layout with explicit body-size/dead-space contract;
+- `motion/src/render/mechanisms/editorial.mjs`: scene-specific semantic visual families;
+- `motion/scripts/check_visual_variety.mjs`: complete-series family repetition and typography/layout contract gate;
+- `motion/src/player.mjs`: browser player using the same timeline;
 - `motion/scripts/render.py`: Playwright/Canvas → H.264 exporter;
-- poster, chapters, transcript/captions and validation-report generation from the same source system;
-- horizontal/portrait recomposition from the same specs;
-- content/theme/motion/metadata separation and runtime contract tests.
+- poster, chapters, transcript/captions and validation outputs continue to derive from the same source system;
+- horizontal/portrait remain true recompositions, not pixel stretching.
 
-Text fragments and their explanatory visual operations share one deterministic timeline for browser playback, seek, pause/resume, replay and export. Previously introduced text is kept spatially stable where possible and important operations retain observation time.
+## Release / review state
 
-## QA and evidence
-
-Machine ledger: `motion/migration/modelos-razonadores-status.json`.
-
-- layout: **24/24** horizontal + portrait composition checks passed (`35382435443`);
-- accessibility/player QA: Chromium + WebKit passed across all 12 localized outputs (`35385714663`), including localized controls, keyboard/accessibility names, reduced motion and 390×844 portrait behavior;
-- deterministic render: **24/24** H/V 60 fps render-package jobs passed (`35383323465`);
-- metadata: six durations synchronized from v4 specs into ES/EN metadata (`35386145253`);
-- visual QA: all 12 outputs passed representative-frame review in H/V for hierarchy, locked accent identity, semantic diagrams, progressive reveal, text stability, transitions, footer/source legibility, clipping/overlap and gradient/palette drift;
-- final delivery: workflow `35408957666` completed **success**;
-- final delivery validates canonical ES/EN media, captions, article embeds, watch pages, catalog/schema/sitemaps, strict ES/EN builds, same-origin/R2 contract and removal of the legacy English TTC one-off injection;
-- validated current `main`: `2d453e473fdf56fcb82ac83ba66730ce0db3bb89`; it remained current when the complete-series PR was opened;
-- promotion commit: `c870b44fb7686620a5d987d5719ea00a614d5fc8`.
-
-Factual/source review, synchronization, responsive layout, automated QA, accessibility and final visual QA have no unresolved blocker for this release unit.
-
-## Release
-
-Exactly one complete-series PR was created after 12/12 reached Technical GOLDEN:
-
-- PR: **#332**
-- URL: https://github.com/fjmmontiel/5sigmas/pull/332
-- base at creation: `main@2d453e473fdf56fcb82ac83ba66730ce0db3bb89`
-- head at creation: `c870b44fb7686620a5d987d5719ea00a614d5fc8`
-- no partial release PR was created.
-
-## User review package
-
-A dedicated Google Drive review package now exists:
-
-- root: https://drive.google.com/drive/folders/1RmRG45Y_MaGTbEFrttNIw6KAfq3oQCzR
-- ES: https://drive.google.com/drive/folders/1R_t-pw6t6Jcg5YI-TOrKHhR4rxxYoJKZ
-- EN: https://drive.google.com/drive/folders/1wZzzqtFUHZyHTxiNHHhOWxLTWaD2mevq
-
-Read-back verified **6 directly viewable MP4s in ES + 6 directly viewable MP4s in EN**. The root also contains a review README and SHA-256 manifest.
-
-Review email sent to the authenticated owner account. Gmail message id: `1a0b740df6b0f124`.
-
-`user_review_status=awaiting_user_review`.
-
-No video has been promoted to Golden Examples. After explicit approval, promote only the approved subset and record approval date/source and registry location.
-
-## Historical delivery blocker resolution
-
-Earlier integration attempts hit a 30-minute integration timeout and a legacy English TTC one-off delivery path. The final path retained every Golden gate while raising the integration budget, reducing redundant file copies, validating same-origin/R2 without duplicative corpus copies, and removing the TTC legacy injection. The successful final delivery run is `35408957666`; no criterion was waived.
+- PR: **#332** — https://github.com/fjmmontiel/5sigmas/pull/332
+- PR state: **draft — reopened by owner visual feedback**
+- review v1: **SUPERSEDED**
+- review v2: **pending regenerated 12/12 package**
+- current `user_review_status`: `revision_required_v2`
+- Golden Examples: **0/12**
 
 ## Remaining global migration coverage
 
-`modelos-razonadores` is technically complete as a release unit and now awaits only owner review for optional **Golden Example** curation plus normal PR lifecycle.
+The overall site migration is **not complete**. `modelos-razonadores` remains the only active release unit until review v2 reaches Technical GOLDEN and its replacement review package is delivered. Do not start or release another series while this complete unit is reopened.
 
-The overall site migration is **not complete**. On the next run, derive the remaining public-video inventory from current public `main`, video catalog/schema/sitemaps/article embeds/watch pages and select exactly the next unfinished complete series/coherent block. Lock one accent for that complete unit before migration and continue the same fail-closed Technical GOLDEN process.
-
-Do not modify `modelos-razonadores` further unless PR/review feedback reveals a regression or the owner requests changes.
+After Modelos closes, derive the next public-video unit from current `main`, catalog/schema/sitemaps/article embeds/watch pages, lock one series accent, and apply this amended visual-diversity gate from the first scene rather than retrofitting it after review.

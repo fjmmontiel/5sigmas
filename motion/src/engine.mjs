@@ -5,6 +5,7 @@ import {clamp,phase,Paint} from './render/paint.mjs';
 import {sceneLayout,drawHeader,drawText} from './render/layout.mjs';
 import {intro,pipeline,steps,duration,allocation} from './render/mechanisms/common.mjs';
 import {candidates,syncedCandidates,tree,evidenceComparison} from './render/mechanisms/reasoning.mjs';
+import {selectEditorialRenderer} from './render/mechanisms/editorial.mjs';
 
 const cache=new WeakMap();
 const layoutCache=new WeakMap();
@@ -34,7 +35,9 @@ export function renderFrame(canvas,spec,time,baseTheme,{portrait=false,reducedMo
   const m=L.mechanism;ctx.translate(m.x+(m.w-1000*m.scale)/2,m.y);ctx.scale(m.scale,m.scale);
   const evidence=s.data.evidenceComparison?motionValue(s,local,'evidence.comparison'):0;
   ctx.save();ctx.globalAlpha*=1-phase(evidence,0,.18);
-  (s.cues&&s.type==='candidates'?syncedCandidates:REGISTRY[s.type])(P,s,local);ctx.restore();
+  const editorial=selectEditorialRenderer(spec,s);
+  const renderer=editorial||(s.cues&&s.type==='candidates'?syncedCandidates:REGISTRY[s.type]);
+  renderer(P,s,local);ctx.restore();
   if(evidence>0)evidenceComparison(P,s,local,evidence);
   ctx.restore();
   return {scene:s.id,index:item.index,time:local,layout:L,issues,attention,visualIdentity:spec.visualIdentity};
@@ -42,6 +45,6 @@ export function renderFrame(canvas,spec,time,baseTheme,{portrait=false,reducedMo
 
 export function validateLayouts(canvas,spec,theme,portrait=false){
   let time=0;const results=[];
-  for(const s of spec.scenes){for(const q of [.1,.35,.7,.94]){const r=renderFrame(canvas,spec,time+s.duration*q,theme,{portrait});results.push({scene:s.id,fraction:q,issues:r.issues,bodyBottom:r.layout.bodyBottom,mechanismScale:r.layout.mechanism.scale});}time+=s.duration;}
+  for(const s of spec.scenes){for(const q of [.1,.35,.7,.94]){const r=renderFrame(canvas,spec,time+s.duration*q,theme,{portrait});results.push({scene:s.id,fraction:q,issues:r.issues,bodyBottom:r.layout.bodyBottom,bodySize:r.layout.bodySize,mechanismScale:r.layout.mechanism.scale});}time+=s.duration;}
   return results;
 }
