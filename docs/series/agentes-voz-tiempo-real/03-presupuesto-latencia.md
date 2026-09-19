@@ -9,6 +9,22 @@ tags:
   - Realtime
   - Latencia
   - Producción
+video: 03-presupuesto-latencia.mp4
+video_poster: 03-presupuesto-latencia.jpg
+video_title: Presupuesto de latencia
+video_summary: Mide el camino crítico del mismo turno y separa trabajo solapado de
+  bloqueos.
+video_duration: PT36S
+video_chapters:
+- name: Camino crítico
+  start: 0
+  end: 12
+- name: Un reloj
+  start: 12
+  end: 24
+- name: Optimización
+  start: 24
+  end: 36
 ---
 
 # Capítulo 3 — Presupuesto de latencia: medir el camino crítico, no sumar dashboards

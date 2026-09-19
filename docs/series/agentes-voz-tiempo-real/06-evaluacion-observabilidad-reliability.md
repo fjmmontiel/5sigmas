@@ -11,6 +11,22 @@ tags:
   - Observabilidad
   - Reliability
   - Producción
+video: 06-evaluacion-observabilidad-reliability.mp4
+video_poster: 06-evaluacion-observabilidad-reliability.jpg
+video_title: Evaluación, observabilidad y reliability
+video_summary: 'La unidad útil es el turno trazable: evidencia correlacionada, taxonomía
+  y bucle producción→eval→reparación.'
+video_duration: PT36S
+video_chapters:
+- name: Traza por turno
+  start: 0
+  end: 12
+- name: Taxonomía
+  start: 12
+  end: 24
+- name: Bucle de reparación
+  start: 24
+  end: 36
 ---
 
 # Capítulo 6 — Evaluar un agente de voz: evidencia por turno, observabilidad y reliability

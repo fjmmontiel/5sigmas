@@ -9,6 +9,22 @@ tags:
   - Realtime
   - Agentes
   - Producción
+video: 04-tools-estado-acciones-asincronas.mp4
+video_poster: 04-tools-estado-acciones-asincronas.jpg
+video_title: Tools, estado y acciones asíncronas
+video_summary: La conversación puede cambiar antes de que una acción termine; identidad
+  y estado evitan aplicar resultados stale.
+video_duration: PT36S
+video_chapters:
+- name: Lifecycles distintos
+  start: 0
+  end: 12
+- name: Interrupción
+  start: 12
+  end: 24
+- name: Reconciliación
+  start: 24
+  end: 36
 ---
 
 # Capítulo 4 — Tools y estado: ejecutar acciones sin romper la conversación

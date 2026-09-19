@@ -13,6 +13,13 @@ why_visual: Una lista de protocolos no muestra qué recorrido cambia cuando ICE 
     .s5v-network-topology__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--boundary)}
     .s5v-network-topology h3{margin:7px 0 0;font-size:clamp(1.7rem,3vw,2.55rem);line-height:1.02;letter-spacing:-.04em;max-width:760px}
     .s5v-network-topology__lead{max-width:490px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .s5v-network-topology__mobile{display:none}
+    .s5v-network-topology__mobile-route{padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .s5v-network-topology__mobile-route strong{display:block;margin-bottom:5px;font-size:.86rem;color:var(--ink)}
+    .s5v-network-topology__mobile-route p{margin:0;color:var(--muted);font-size:.77rem;line-height:1.43;font-weight:700}
+    .s5v-network-topology__mobile-flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px 7px;margin:8px 0 7px;font:800 .7rem/1.35 "SFMono-Regular",Consolas,monospace;color:var(--ink)}
+    .s5v-network-topology__mobile-flow span{padding:5px 7px;border:1px solid var(--line);border-radius:8px;background:var(--soft)}
+    .s5v-network-topology__mobile-flow b{color:var(--muted)}
     .s5v-network-topology__figure{margin:0;padding:18px 18px 16px;border:1px solid var(--line);border-radius:20px;background:#fff}
     .s5v-network-topology__caption{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:0 0 12px}
     .s5v-network-topology__caption strong{font-size:.95rem;letter-spacing:-.015em}
@@ -52,7 +59,7 @@ why_visual: Una lista de protocolos no muestra qué recorrido cambia cuando ICE 
     .s5v-network-topology__legend i{display:inline-block;width:34px;height:0;border-top:4px solid var(--media);border-radius:4px}
     .s5v-network-topology__legend .is-control{border-top:3px dashed var(--control)}
     .s5v-network-topology__legend .is-alt{border-top:3px dashed var(--relay)}
-    @media(max-width:720px){.s5v-network-topology__sheet{padding:20px 14px;border-radius:22px}.s5v-network-topology__head{display:grid;gap:9px}.s5v-network-topology__lead{text-align:left}.s5v-network-topology__figure{padding:15px 10px 12px}.s5v-network-topology__caption{display:grid;gap:6px}.s5v-network-topology__caption span{text-align:left}.s5v-network-topology__svg{min-width:1010px}.s5v-network-topology__callout{grid-template-columns:1fr}}
+    @media(max-width:720px){.s5v-network-topology__sheet{padding:20px 14px;border-radius:22px}.s5v-network-topology__head{display:grid;gap:9px}.s5v-network-topology__lead{text-align:left}.s5v-network-topology__mobile{display:grid;gap:9px;margin:0 0 14px;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--soft)}.s5v-network-topology__figure{padding:15px 10px 12px}.s5v-network-topology__caption{display:grid;gap:6px}.s5v-network-topology__caption span{text-align:left}.s5v-network-topology__svg{min-width:1010px}.s5v-network-topology__callout{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.s5v-network-topology *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
   </style>
 
@@ -61,6 +68,12 @@ why_visual: Una lista de protocolos no muestra qué recorrido cambia cuando ICE 
       <div><div class="s5v-network-topology__kicker">Red y media</div><h3>El protocolo visible depende de dónde termina cada frontera</h3></div>
       <p class="s5v-network-topology__lead">Las tres rutas acaban en lógica de agente, pero la aplicación no posee el mismo tramo de red, señalización ni codec en cada una.</p>
     </header>
+
+    <div class="s5v-network-topology__mobile" data-network-mobile-summary aria-label="Resumen móvil de las tres fronteras de red y media">
+      <div class="s5v-network-topology__mobile-route" data-network-mobile-route="webrtc"><strong>1 · Browser · WebRTC</strong><div class="s5v-network-topology__mobile-flow"><span>Browser</span><b>→</b><span>ICE: directo o TURN</span><b>→</b><span>Endpoint / SFU</span><b>→</b><span>Agent runtime</span></div><p>ICE decide una ruta media directa o relay. El relay cambia recorrido y dominio de fallo, no significa que la llamada haya fallado.</p></div>
+      <div class="s5v-network-topology__mobile-route" data-network-mobile-route="sip-rtp"><strong>2 · PSTN · SIP/RTP</strong><div class="s5v-network-topology__mobile-flow"><span>Llamada</span><b>→</b><span>SIP + SDP</span><b>⇣</b><span>RTP / SRTP</span><b>→</b><span>Agent runtime</span></div><p>Señalización y audio son planos distintos. Un SIP 200 OK no demuestra RTP bidireccional.</p></div>
+      <div class="s5v-network-topology__mobile-route" data-network-mobile-route="carrier-wss"><strong>3 · PSTN · Carrier WSS</strong><div class="s5v-network-topology__mobile-flow"><span>PSTN + SIP/RTP</span><b>→</b><span>Carrier gateway</span><b>→ WSS →</b><span>App / runtime</span></div><p>El carrier termina la telefonía. La aplicación recibe el contrato WSS y no posee ni termina SIP/RTP.</p></div>
+    </div>
 
     <figure class="s5v-network-topology__figure" aria-labelledby="s5v-network-title">
       <figcaption class="s5v-network-topology__caption">
