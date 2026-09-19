@@ -3,50 +3,30 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {validateVisualVariety} from './check_visual_variety.mjs';
-
+import {REQUIRED_GATES,technicallyGolden} from '../src/review-policy.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const migration=JSON.parse(readFileSync(`${root}/migration/modelos-razonadores.json`,'utf8'));
-const status=JSON.parse(readFileSync(`${root}/migration/modelos-razonadores-status.json`,'utf8'));
-const requireReady=process.argv.includes('--require-ready');
+// Historical round-one booleans are never reused as current visual evidence.
+const status=JSON.parse(readFileSync(`${root}/migration/modelos-razonadores-round2.json`,'utf8'));
 const visualPolicy=validateVisualVariety();
-const requiredGates=[
-  'framework','sync','source','layout','delivery','accessibility','visualQa',
-  'textProminence','spatialBalance','semanticMotion','withinVideoVariety',
-  'seriesMotionDiversity','fullSeriesVisualReview','ownerFeedbackResolved'
-];
-
-assert.equal(status.unit,migration.unit,'status ledger must belong to the active release unit');
-assert.equal(status.accent,migration.visualIdentity.accent,'status ledger accent must match the locked unit accent');
-assert.deepEqual(status.requiredGates,requiredGates,'owner Review v2 gates are mandatory and may not be silently dropped');
-assert.equal(status.currentRevalidation?.review_round,2,'current review round must remain v2');
-assert.equal(typeof status.currentRevalidation?.review_email_sent,'boolean','review email state must be tracked');
-assert.equal(status.historicalEvidence?.review_v1?.status,'SUPERSEDED_BY_OWNER_FEEDBACK','Review v1 must stay historical only');
-assert.equal(migration.visualQualityGate?.revision,2,'owner visual feedback v2 must remain part of the release contract');
-assert.equal(migration.visualQualityGate?.motionDiversity?.animationFamilyRepeatCap,2,'animation-family cap must remain fail-closed at two');
-assert.equal(migration.visualQualityGate?.motionDiversity?.sceneSpecificSemanticRendererRequired,true,'every scene must resolve to a real semantic renderer');
-
+assert.equal(status.unit,migration.unit,'ledger belongs to the active release unit');
+assert.equal(status.accent,migration.visualIdentity.accent,'locked unit accent must match');
+assert.deepEqual(status.requiredGates,REQUIRED_GATES,'all current gates must be enforced');
+assert.equal(status.review.round,2,'owner requested a complete second review');
 const expected=[];
 for(const [locale,videos] of [['es',migration.spanish],['en',migration.english]])for(const video of videos)expected.push(`${locale}:${video}`);
-assert.equal(expected.length,12,'Modelos Razonadores must release as 12 localized outputs');
-assert.deepEqual(Object.keys(status.outputs).sort(),expected.sort(),'machine ledger must contain every ES/EN output and no extras');
-
-const revisionOpen=migration.status!=='golden';
+assert.equal(expected.length,12,'complete unit requires all 12 localized outputs');
+assert.deepEqual(Object.keys(status.outputs).sort(),expected.sort(),'no omitted or extra outputs');
+const revisionOpen=status.ownerFeedbackResolved!==true;
 for(const [key,row] of Object.entries(status.outputs)){
-  for(const gate of requiredGates)assert.equal(typeof row[gate],'boolean',`${key}: ${gate} must be boolean`);
-  for(const field of ['technical_golden','golden_example_approved'])assert.equal(typeof row[field],'boolean',`${key}: ${field} must be boolean`);
-  const allGates=requiredGates.every(gate=>row[gate]);
-  const expectedTechnical=!revisionOpen&&allGates;
-  assert.equal(row.technical_golden,expectedTechnical,`${key}: technical_golden must remain false while owner revision is open, otherwise equal every required gate`);
-  if(row.golden_example_approved)assert.equal(row.technical_golden,true,`${key}: a Golden Example must already be technically GOLDEN`);
+ for(const gate of REQUIRED_GATES)assert.equal(typeof row[gate],'boolean',`${key}: missing gate ${gate}`);
+ assert.equal(row.technical_golden,!revisionOpen&&technicallyGolden(row),`${key}: Technical GOLDEN must equal all current gates and resolved feedback`);
+ assert.equal(row.golden,row.technical_golden,'legacy GOLDEN must mirror Technical GOLDEN');
+ if(row.golden_example_approved){assert.ok(row.technical_golden&&row.approval?.source&&row.approval?.assetHash,'explicit exact-version owner approval is required');}
+ if(row.technical_golden){for(const gate of REQUIRED_GATES){const evidence=row.evidence?.[gate];assert.ok(evidence?.reference&&evidence?.sourceHash&&evidence?.assetHash,`${key}: ${gate} needs bound evidence`);}}
 }
-
-const esSpecs=readdirSync(`${root}/content/modelos-razonadores`).filter(name=>name.endsWith('.es.json')).sort();
-assert.equal(esSpecs.length,6,'all six Spanish v4 specs must be checked in before release');
-const golden=Object.entries(status.outputs).filter(([,row])=>row.technical_golden).map(([key])=>key);
-const exemplars=Object.entries(status.outputs).filter(([,row])=>row.golden_example_approved).map(([key])=>key);
-const blocked=Object.entries(status.outputs).filter(([,row])=>!row.technical_golden).map(([key,row])=>({key,missing:revisionOpen?['owner_visual_revision_v2',...requiredGates.filter(gate=>!row[gate])]:requiredGates.filter(gate=>!row[gate])}));
-const ready=golden.length===expected.length&&migration.status==='golden';
-assert.equal(status.currentRevalidation?.technical_golden_count,golden.length,'ledger aggregate Technical GOLDEN count must match per-output state');
-assert.equal(status.currentRevalidation?.golden_example_approved_count,exemplars.length,'ledger aggregate Golden Example count must match per-output state');
-console.log(JSON.stringify({unit:migration.unit,accent:status.accent,reviewRound:status.currentRevalidation.review_round,technicalGolden:`${golden.length}/${expected.length}`,goldenExamples:exemplars,ready,visualPolicy:{sceneCount:visualPolicy.sceneCount,repeatCap:visualPolicy.repeatCap,families:visualPolicy.families,implementedFamilies:visualPolicy.implementedFamilies},blocked},null,2));
-if(requireReady&&!ready){console.error('RELEASE BLOCKED: one PR is releasable only after all 12 localized outputs pass every current Review v2 gate and migration.status is golden.');process.exit(2);}
+for(const locale of ['es','en'])assert.equal(readdirSync(`${root}/content/modelos-razonadores`).filter(n=>n.endsWith(`.${locale}.json`)).length,6,'six specs per locale');
+const golden=Object.values(status.outputs).filter(r=>r.technical_golden).length;
+const ready=golden===12&&!revisionOpen&&status.release.state==='golden'&&migration.status==='golden';
+console.log(JSON.stringify({unit:status.unit,technicalGolden:`${golden}/12`,ready,reviewRound:2,structuralVariety:visualPolicy.families,visualApproval:visualPolicy.visualApproval,blocked:Object.entries(status.outputs).filter(([,r])=>!r.technical_golden).map(([key,r])=>({key,missing:REQUIRED_GATES.filter(g=>!r[g])}))},null,2));
+if(process.argv.includes('--require-ready')&&!ready){console.error('RELEASE BLOCKED: current round-two evidence and all 12 outputs are required.');process.exit(2);}

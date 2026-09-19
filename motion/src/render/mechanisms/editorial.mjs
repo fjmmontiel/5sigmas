@@ -1,95 +1,84 @@
-import {clamp,phase,smooth,number} from '../paint.mjs';
-import {motionValue} from '../../cues.mjs';
+import {areaPartition,budgetAllocation,topicMap,tradeoffMap,algebraProof,learningPhases,evaluationMatrix} from './rich-foundations.mjs';
+import {counterfactual,framingShift,objectiveBypass,errorPropagation,verificationMatrix} from './rich-failures.mjs';
+import {computeStrategies,tokenExtension,tokenDependency,computePlane} from './rich-compute.mjs';
+import {latencyScale,dualTimeline,progressiveDelivery,routingFork,deadlineStates} from './rich-latency.mjs';
+import {complexityRegimes,trustBoundary,retrievalSubstitution,stoppingRegions,defenseLayers} from './rich-risk.mjs';
+import {syncedCandidates,tree} from './reasoning.mjs';
 
-const FAMILY_BY_SPEC=Object.freeze({
-  'modelos-razonadores-intro': Object.freeze({process:'concept-orbit',budget:'budget-balance',roadmap:'chapter-map',tradeoff:'tradeoff-triangle'}),
-  'que-es-razonar': Object.freeze({definition:'reasoning-lenses',training:'training-vs-inference',benchmark:'candidate-evidence',limits:'evaluation-axes'}),
-  'fallos-modelos-razonadores': Object.freeze({shortcut:'spurious-vs-robust','systematic-bias':'bias-compass',gaming:'proxy-mismatch',propagation:'contamination-cascade',verification:'verification-ring'}),
-  'test-time-compute': Object.freeze({intro:'compute-levers',pipeline:'training-vs-inference',steps:'thinking-ribbon',candidates:'candidate-evidence',tree:'search-tree',duration:'token-clock',allocation:'adaptive-compute-matrix'}),
-  'latencia-streaming': Object.freeze({thresholds:'latency-scale',ttft:'dual-clock-timeline',streaming:'stream-wave',routing:'router-fork',policy:'latency-control-loop'}),
-  'riesgos-modelos-razonadores': Object.freeze({overthinking:'complexity-curve','indirect-injection':'trust-boundary-flow',taborag:'retrieval-poison-split','risk-control':'confidence-band',guardrails:'defense-layers'}),
+/** Families group perceptually related choreography, NOT arbitrary component names. */
+export const MECHANISMS=Object.freeze({
+ area:{family:'area-partition',render:areaPartition,topology:'cell-grid -> two exact subareas -> equality'},
+ budget:{family:'resource-allocation',render:budgetAllocation,topology:'conserved resource tokens -> three sinks'},
+ topics:{family:'relationship-map',render:topicMap,topology:'stable central concept with satellite relations'},
+ tradeoffs:{family:'relationship-map',render:tradeoffMap,topology:'stable named vertices with relations'},
+ proof:{family:'symbolic-rewrite',render:algebraProof,topology:'expression -> factorization -> checked equality'},
+ training:{family:'phase-comparison',render:learningPhases,topology:'mutable weight grid vs frozen weight grid'},
+ experiment:{family:'evaluation-matrix',render:evaluationMatrix,topology:'conditions x probes with unknown outcomes'},
+ counterfactual:{family:'controlled-contrast',render:counterfactual,topology:'fixed shape, changed irrelevant background, contrasted outcomes'},
+ framing:{family:'controlled-contrast',render:framingShift,topology:'fixed document, opposed framing, qualitative outcome shift'},
+ proxy:{family:'objective-bypass',render:objectiveBypass,topology:'unchanged board, legal path vs bypassed win flag'},
+ propagation:{family:'symbolic-rewrite',render:errorPropagation,topology:'wrong intermediate value -> wrong result -> corrected dependency'},
+ verification:{family:'evaluation-matrix',render:verificationMatrix,topology:'test variants x responses with external verification'},
+ levers:{family:'compute-comparison',render:computeStrategies,topology:'serial, parallel and branching compute side by side'},
+ extension:{family:'token-sequence',render:tokenExtension,topology:'token sequence -> end suppressed -> continuation inserted'},
+ candidates:{family:'candidate-aggregation',render:syncedCandidates,topology:'fan-out -> evaluation and vote -> separate sourced evidence'},
+ search:{family:'branching-search',render:tree,topology:'expand -> evaluate -> prune branches -> select'},
+ dependency:{family:'token-sequence',render:tokenDependency,topology:'serial token readiness -> duration from rate'},
+ computePlane:{family:'allocation-plane',render:computePlane,topology:'model size x per-query compute conceptual decision plane'},
+ scale:{family:'log-time-scale',render:latencyScale,topology:'logarithmic time thresholds -> interaction behavior'},
+ clocks:{family:'parallel-timeline',render:dualTimeline,topology:'two first-token onsets, shared final endpoint'},
+ delivery:{family:'progressive-delivery',render:progressiveDelivery,topology:'hidden work -> progressively delivered visible response'},
+ router:{family:'branching-search',render:routingFork,topology:'query -> decision -> distinct capacity routes'},
+ deadline:{family:'deadline-state-machine',render:deadlineStates,topology:'running -> completion or timeout -> explicit fallback'},
+ regimes:{family:'qualitative-regimes',render:complexityRegimes,topology:'low, medium, high complexity with qualitative trends'},
+ injection:{family:'trust-boundary',render:trustBoundary,topology:'untrusted document crosses authority boundary -> API effect'},
+ retrieval:{family:'retrieval-substitution',render:retrievalSubstitution,topology:'retrieved document substitution -> refusal -> availability impact'},
+ stopping:{family:'stopping-regions',render:stoppingRegions,topology:'continue between boundaries -> stop above/below'},
+ barriers:{family:'trust-boundary',render:defenseLayers,topology:'distinct permission/context/action boundaries bound consequences'},
 });
 
-const CUSTOM=Object.freeze({
-  'concept-orbit':conceptOrbit,'budget-balance':budgetBalance,'chapter-map':chapterMap,'tradeoff-triangle':tradeoffTriangle,
-  'reasoning-lenses':reasoningLenses,'training-vs-inference':trainingVsInference,'candidate-evidence':candidateEvidence,'evaluation-axes':evaluationAxes,
-  'spurious-vs-robust':spuriousVsRobust,'bias-compass':biasCompass,'proxy-mismatch':proxyMismatch,'contamination-cascade':contaminationCascade,'verification-ring':verificationRing,
-  'compute-levers':computeLevers,'thinking-ribbon':thinkingRibbon,'search-tree':searchTreeEditorial,'token-clock':tokenClock,'adaptive-compute-matrix':adaptiveComputeMatrix,
-  'latency-scale':latencyScale,'dual-clock-timeline':dualClockTimeline,'stream-wave':streamWave,'router-fork':routerFork,'latency-control-loop':latencyControlLoop,
-  'complexity-curve':complexityCurve,'trust-boundary-flow':trustBoundaryFlow,'retrieval-poison-split':retrievalPoisonSplit,'confidence-band':confidenceBand,'defense-layers':defenseLayers,
+const entry=(mechanism,layout,rationale)=>Object.freeze({mechanism,layout,rationale});
+export const SERIES_SCENES=Object.freeze({
+ 'modelos-razonadores-intro':{
+  process:entry('area','split','A distributive area makes decomposition concrete; arithmetic is exact and marked illustrative.'),
+  budget:entry('budget','reverse','A finite pool visibly goes to operations rather than an invented quality curve.'),
+  roadmap:entry('topics','split','An editorial map presents related questions without implying a causal order.'),
+  tradeoff:entry('tradeoffs','reverse','Named qualitative relations show simultaneous constraints without invented metrics.')},
+ 'que-es-razonar':{
+  definition:entry('proof','split','Checkable algebra demonstrates transformations without asserting human cognition.'),
+  training:entry('training','reverse','Contrasting mutable and frozen weights distinguishes training from per-query work.'),
+  benchmark:entry('candidates','split','Sampling and voting are operations; the benchmark appears only with its evidence cue.'),
+  limits:entry('experiment','reverse','An experiment matrix keeps task, budget and verification distinct; unknowns stay unknown.')},
+ 'fallos-modelos-razonadores':{
+  shortcut:entry('counterfactual','split','Hold the shape fixed and change the background to expose a superficial cue.'),
+  'systematic-bias':entry('framing','reverse','Hold the evaluated document fixed while framing changes the qualitative feedback direction.'),
+  gaming:entry('proxy','split','The board stays unchanged while the proxy win flag changes, exposing objective mismatch.'),
+  propagation:entry('propagation','reverse','Correcting an arithmetic premise changes the dependent result, not just a colored status.'),
+  verification:entry('verification','split','Crossing perturbations with outputs reveals disagreement and unverified conditions.')},
+ 'test-time-compute':{
+  intro:entry('levers','split','Compare serial, parallel and structured compute geometrically.'),
+  pipeline:entry('training','reverse','Reuse is justified: this chapter explicitly compares training and inference budgets.'),
+  steps:entry('extension','split','Show end suppression and continuation as operations on a token stream.'),
+  candidates:entry('candidates','split','Reuse is justified: the mechanism is explicitly best-of-N vs majority voting.'),
+  tree:entry('search','reverse','Branch expansion and pruning are the mechanism itself, not a decorative list.'),
+  duration:entry('dependency','split','Token readiness expresses serial dependency; duration is computed from tokens and rate.'),
+  allocation:entry('computePlane','reverse','Independent model-size and inference-budget decisions occupy different axes.')},
+ 'latencia-streaming':{
+  thresholds:entry('scale','split','A labeled logarithmic time axis represents the stated orders of magnitude honestly.'),
+  ttft:entry('clocks','reverse','Parallel timelines keep total time constant while first-token onset differs.'),
+  streaming:entry('delivery','split','A response panel becomes readable during generation, showing perceptual progress.'),
+  routing:entry('router','reverse','A branching decision routes a query to different capacity choices.'),
+  policy:entry('deadline','split','Completion and timeout are explicit alternate states with recovery, not another checklist.')},
+ 'riesgos-modelos-razonadores':{
+  overthinking:entry('regimes','reverse','Separate qualitative regimes without inventing numerical experiment results.'),
+  'indirect-injection':entry('injection','split','Content crossing an authority boundary explains the failure route without an attack payload.'),
+  taborag:entry('retrieval','reverse','Substitution of retrieved context changes availability for a benign query.'),
+  'risk-control':entry('stopping','split','Upper/lower stopping regions explain why neither endless continuation nor blanket stopping works.'),
+  guardrails:entry('barriers','reverse','Different boundaries constrain different actions and failure consequences.')},
 });
-
-function specKey(spec){return String(spec.id||'').replace(/-(?:es|en)$/,'');}
-export function visualFamilyForScene(spec,scene){return FAMILY_BY_SPEC[specKey(spec)]?.[scene.id]||null;}
-export function visualFamilyInventory(spec){return spec.scenes.map(scene=>({scene:scene.id,family:visualFamilyForScene(spec,scene)}));}
-export function selectEditorialRenderer(spec,scene){const family=visualFamilyForScene(spec,scene);return family?CUSTOM[family]||null:null;}
-export function editorialFamilyNames(){return Object.freeze(Object.keys(CUSTOM));}
-
-function targets(s){return [...new Set((s.cues||[]).flatMap(c=>(c.actions||[]).map(a=>a.target)).filter(x=>x!=='evidence.comparison'))];}
-function progress(s,t){const ts=targets(s);return ts.length?Math.max(...ts.map(x=>motionValue(s,t,x))):phase(t,.65,Math.max(1.3,s.duration*.55));}
-function stageProgress(s,t,i,n){return clamp(progress(s,t)*n-i);}
-function alpha(P,q,draw){if(q<=0)return;P.c.save();P.c.globalAlpha*=smooth(clamp(q));draw();P.c.restore();}
-function items(s){return s.data?.items||[];}
-function nodes(s){return s.data?.nodes||[];}
-function warn(T){return T.semantic?.warning||T.amber||'#98600C';}
-function warnSurface(T){return T.semantic?.warningSurface||T.amberSurface||'#FBF1DF';}
-function title(P,text,x,y,w,size=23,color=null,align='center'){P.wrap(String(text||''),x,y,w,size,color||P.T.ink,550,1.16,align);}
-function card(P,x,y,w,h,active=false){const T=P.T;P.rect(x,y,w,h,active?T.accentSurface:T.white,active?T.accentText:T.rule,8,active?2.5:1.5);}
-function lineArrow(P,a,b,q=1,color=null){const T=P.T;P.path([a,b],color||T.accentText,3,q);if(q>.82){const x=b[0],y=b[1],ang=Math.atan2(b[1]-a[1],b[0]-a[0]),r=10;P.path([[x-r*Math.cos(ang-.55),y-r*Math.sin(ang-.55)],[x,y],[x-r*Math.cos(ang+.55),y-r*Math.sin(ang+.55)]],color||T.accentText,3);}}
-function cueLabel(s,i,fallback=''){const cue=(s.cues||[])[i];return cue?.focus||fallback;}
-
-function conceptOrbit(P,s,t){const T=P.T,a=items(s),cx=500,cy=385,R=235;P.circle(cx,cy,92,T.accentSurface,T.accentText,3);P.text('LLM',cx,cy-19,42,T.accentText,650,'center',160);P.text(P.locale.startsWith('en')?'process':'proceso',cx,cy+30,22,T.muted,500,'center',160);a.forEach((it,i)=>{const ang=-Math.PI/2+i*2*Math.PI/Math.max(3,a.length),x=cx+Math.cos(ang)*R,y=cy+Math.sin(ang)*R,p=stageProgress(s,t,i,a.length);alpha(P,p,()=>{P.path([[cx+Math.cos(ang)*92,cy+Math.sin(ang)*92],[x-Math.cos(ang)*72,y-Math.sin(ang)*72]],T.accentText,3,p);P.traveler([[cx,cy],[x,y]],clamp(p*.9),T.accent,6);P.circle(x,y,72,T.white,T.rule,2);P.text(String(i+1),x,y-51,18,T.accentText,600,'center',40);title(P,it.label,x,y-17,128,27,T.ink);P.wrap(it.detail,x,y+27,134,18,T.muted,400,1.16,'center');});});}
-
-function budgetBalance(P,s,t){const T=P.T,a=items(s),q=progress(s,t);P.text(P.locale.startsWith('en')?'COMPUTE BUDGET':'PRESUPUESTO DE CÓMPUTO',500,52,23,T.muted,550,'center',840);P.path([[500,145],[500,560]],T.ink,4);P.path([[330,560],[670,560]],T.ink,4);P.path([[250,220],[750,220]],T.ink,5);for(let i=0;i<2;i++){const it=a[i]||{},x=i?750:250,p=stageProgress(s,t,i,2),drop=30*(1-p)+(i?24:-18)*q;P.path([[x,220],[x,302+drop]],T.muted,2);P.rect(x-175,302+drop,350,220,p>.55?T.accentSurface:T.white,p>.55?T.accentText:T.rule,10,p>.55?2.5:1.5);title(P,it.label,x,335+drop,310,30,p>.55?T.accentText:T.ink);P.wrap(it.detail||'',x,397+drop,300,22,T.muted,400,1.3,'center');P.text(it.output||'',x,476+drop,25,T.accentText,550,'center',305);}P.text(P.locale.startsWith('en')?'TASK':'TAREA',500,595,20,T.muted,500,'center',180);P.circle(500,650,46,T.accentSurface,T.accentText,2);P.text('?',500,620,46,T.accentText,650,'center',80);}
-
-function chapterMap(P,s,t){const T=P.T,a=items(s),n=a.length,pts=[[105,170],[350,170],[592,315],[835,315],[592,565],[350,565]];for(let i=0;i<n;i++){const p=stageProgress(s,t,i,n),pt=pts[i]||[100+160*i,400];if(i>0)lineArrow(P,pts[i-1],pt,p,T.rule);alpha(P,p,()=>{card(P,pt[0]-92,pt[1]-58,184,116,p>.75);P.text(String(i+1).padStart(2,'0'),pt[0]-70,pt[1]-38,17,T.accentText,650,'left',40);P.wrap(a[i].label,pt[0],pt[1]-13,160,23,p>.75?T.accentText:T.ink,550,1.14,'center');});}P.wrap(s.data.note||'',500,708,860,22,T.muted,400,1.2,'center');}
-
-function tradeoffTriangle(P,s,t){const T=P.T,a=items(s),pts=[[500,125],[180,615],[820,615]];P.path([pts[0],pts[1],pts[2],pts[0]],T.rule,3);a.slice(0,3).forEach((it,i)=>{const p=stageProgress(s,t,i,3),[x,y]=pts[i];alpha(P,p,()=>{P.circle(x,y,86,p>.72?T.accentSurface:T.white,p>.72?T.accentText:T.rule,2.5);title(P,it.label,x,y-24,150,28,p>.72?T.accentText:T.ink);P.wrap(it.detail,x,y+22,176,18,T.muted,400,1.14,'center');});});const c=[[500,210],[260,565],[740,565]];c.forEach((p,i)=>lineArrow(P,p,[500,430],stageProgress(s,t,i,3),T.accentText));P.circle(500,430,70,T.accentSurface,T.accentText,2);P.wrap(s.data.endNote||'',500,406,120,22,T.accentText,550,1.12,'center');}
-
-function reasoningLenses(P,s,t){const T=P.T,a=items(s),xs=[320,500,680];a.slice(0,3).forEach((it,i)=>{const p=stageProgress(s,t,i,3);alpha(P,p,()=>{P.circle(xs[i],350,155,i===1?T.accentSurface:T.white,i===1?T.accentText:T.rule,3);P.text(String(i+1),xs[i],255,20,T.accentText,600,'center',40);title(P,it.label,xs[i],325,230,31,i===1?T.accentText:T.ink);P.wrap(it.detail,xs[i],405,235,20,T.muted,400,1.17,'center');});});P.rect(300,610,400,82,T.white,T.rule,8);P.text(P.locale.startsWith('en')?'Measure the process, not the metaphor':'Medir el proceso, no la metáfora',500,636,25,T.accentText,550,'center',355);}
-
-function trainingVsInference(P,s,t){const T=P.T,a=items(s),ys=[245,510];a.slice(0,2).forEach((it,i)=>{const p=stageProgress(s,t,i,2),y=ys[i];P.text(it.tag||'',72,y-75,19,T.muted,600,'left',250);card(P,70,y,250,110,p>.2);title(P,it.label,195,y+22,218,27,p>.2?T.accentText:T.ink);lineArrow(P,[320,y+55],[655,y+55],p,T.accentText);P.circle(485,y+55,13,T.accentSurface,T.accentText,2);P.wrap(it.detail||'',485,y+95,300,20,T.muted,400,1.17,'center');card(P,655,y,270,110,p>.78);title(P,it.output||'',790,y+29,235,27,p>.78?T.accentText:T.ink);});P.path([[500,165],[500,665]],T.rule,1,1,[6,8]);}
-
-function candidateEvidence(P,s,t){const T=P.T,d=s.data||{},a=d.candidates||[],q=progress(s,t),n=Math.max(1,a.length),w=160,g=(850-n*w)/Math.max(1,n-1);P.text(d.question||'',500,42,38,T.ink,600,'center',700);a.forEach((it,i)=>{const p=stageProgress(s,t,i,n),x=75+i*(w+g);alpha(P,p,()=>{card(P,x,180,w,155,it.score>0&&q>.45);P.text(it.label||`#${i+1}`,x+w/2,205,19,T.muted,500,'center',w-12);P.text(String(it.value??''),x+w/2,255,44,it.score>0&&q>.45?T.accentText:T.ink,650,'center',w-12);if(q>.58){P.circle(x+w/2,315,13,it.score>0?T.accentSurface:warnSurface(T),it.score>0?T.accentText:warn(T),2);if(it.score>0)P.check(x+w/2,315,T.accentText,.62);}});});if(q>.35){P.text(P.locale.startsWith('en')?'COMPARE':'COMPARAR',500,405,20,T.muted,550,'center',250);P.path([[170,450],[830,450]],T.rule,2);P.traveler([[170,450],[830,450]],clamp((q-.35)/.35),T.accent,7);}if(q>.68){const best=a.find(x=>x.score>0)||a[0];card(P,330,520,340,120,true);P.text(P.locale.startsWith('en')?'SELECTED':'SELECCIONADO',500,545,18,T.muted,600,'center',240);P.text(String(best?.value??''),500,581,42,T.accentText,650,'center',280);}P.wrap(d.caveat||'',500,700,890,19,T.muted,400,1.18,'center');}
-
-function evaluationAxes(P,s,t){const T=P.T,a=items(s).slice(0,3),cx=500,cy=390,R=245,pts=a.map((_,i)=>[cx+Math.cos(-Math.PI/2+i*2*Math.PI/3)*R,cy+Math.sin(-Math.PI/2+i*2*Math.PI/3)*R]);pts.forEach((pt,i)=>{P.path([[cx,cy],pt],T.rule,2);const p=stageProgress(s,t,i,3);alpha(P,p,()=>{P.circle(pt[0],pt[1],72,T.white,T.rule,2);title(P,a[i].label,pt[0],pt[1]-18,130,23,T.ink);});});const inner=pts.map((pt,i)=>[cx+(pt[0]-cx)*(0.34+0.42*stageProgress(s,t,i,3)),cy+(pt[1]-cy)*(0.34+0.42*stageProgress(s,t,i,3))]);P.path([...inner,inner[0]],T.accentText,4,progress(s,t));P.circle(cx,cy,36,T.accentSurface,T.accentText,2);P.text(P.locale.startsWith('en')?'TASK':'TAREA',cx,cy-10,18,T.accentText,600,'center',70);}
-
-function spuriousVsRobust(P,s,t){const T=P.T,q=progress(s,t),d=nodes(s);P.text(P.locale.startsWith('en')?'SAME TASK':'MISMA TAREA',500,55,20,T.muted,600,'center',240);card(P,390,95,220,95,true);title(P,d[0]?.label||'',500,124,190,24,T.accentText);const left=[250,300],right=[750,300];lineArrow(P,[470,190],left,q,T.rule);lineArrow(P,[530,190],right,q,T.accentText);card(P,120,300,260,130,false);card(P,620,300,260,130,q>.45);title(P,d.find(x=>/cue|pista/i.test(x.id+x.label))?.label||'Shortcut',250,336,220,25,T.ink);title(P,d.find(x=>/rule|regla/i.test(x.id+x.label))?.label||'Rule',750,336,220,25,T.accentText);if(q>.55){P.path([[250,430],[250,570]],warn(T),3);P.text('×',250,525,52,warn(T),650,'center',80);P.path([[750,430],[750,570]],T.accentText,3);P.check(750,555,T.accentText,1.3);}P.wrap(s.data.note||'',500,690,880,20,T.muted,400,1.2,'center');}
-
-function biasCompass(P,s,t){const T=P.T,a=items(s),q=progress(s,t),cx=500,cy=390,R=245;P.circle(cx,cy,R,null,T.rule,2);P.path([[cx,cy-R],[cx,cy+R]],T.rule,1);P.path([[cx-R,cy],[cx+R,cy]],T.rule,1);a.slice(0,4).forEach((it,i)=>{const ang=-Math.PI/2+i*Math.PI/2,p=stageProgress(s,t,i,4),x=cx+Math.cos(ang)*R,y=cy+Math.sin(ang)*R;alpha(P,p,()=>{P.circle(x,y,58,p>.72?T.accentSurface:T.white,p>.72?T.accentText:T.rule,2);title(P,it.label,x,y-14,108,20,p>.72?T.accentText:T.ink);});});const ang=-Math.PI/2+q*Math.PI*1.4;lineArrow(P,[cx,cy],[cx+Math.cos(ang)*150,cy+Math.sin(ang)*150],1,T.accentText);P.circle(cx,cy,26,T.accentSurface,T.accentText,2);P.text(P.locale.startsWith('en')?'directional bias':'sesgo direccional',500,705,24,T.muted,500,'center',360);}
-
-function proxyMismatch(P,s,t){const T=P.T,a=items(s),q=progress(s,t);P.text(P.locale.startsWith('en')?'REAL OBJECTIVE':'OBJETIVO REAL',245,74,19,T.muted,650,'center',260);P.text(P.locale.startsWith('en')?'OBSERVABLE PROXY':'PROXY OBSERVABLE',755,74,19,T.muted,650,'center',290);card(P,75,125,340,150,q>.1);card(P,585,125,340,150,q>.3);title(P,a[0]?.label||'',245,154,300,28,T.ink);title(P,a[1]?.label||'',755,154,300,28,T.accentText);P.path([[415,200],[585,200]],T.rule,3,1,[7,7]);P.text('≠',500,176,44,warn(T),600,'center',80);if(q>.45){card(P,330,365,340,130,true);title(P,a[2]?.label||'',500,394,305,28,T.accentText);P.path([[755,275],[755,330],[500,330],[500,365]],T.accentText,3);}const metric=s.data.evidenceMetric;if(metric&&q>.7){P.text(`${number(metric.value)}${metric.unit||''}`,500,555,92,T.accentText,650,'center',360);P.wrap(metric.label,500,660,600,23,T.muted,400,1.2,'center');}}
-
-function contaminationCascade(P,s,t){const T=P.T,d=nodes(s),pts=[[120,170],[300,260],[480,350],[660,440],[840,530]];pts.forEach((pt,i)=>{const p=stageProgress(s,t,i,pts.length),n=d[Math.min(i,d.length-1)];if(i>0)lineArrow(P,pts[i-1],pt,p,i>=2?warn(T):T.accentText);alpha(P,p,()=>{P.circle(pt[0],pt[1],54,i>=2?warnSurface(T):T.accentSurface,i>=2?warn(T):T.accentText,2.4);P.text(String(i+1),pt[0],pt[1]-15,24,i>=2?warn(T):T.accentText,650,'center',50);P.wrap(n?.label||'',pt[0],pt[1]+68,170,18,T.muted,400,1.14,'center');});});if(progress(s,t)>.62){P.path([[300,260],[300,610],[720,610]],T.rule,2,1,[8,8]);P.text(P.locale.startsWith('en')?'VERIFY EARLY':'VERIFICAR ANTES',720,590,22,T.accentText,600,'center',250);P.check(835,608,T.accentText,1);}}
-
-function verificationRing(P,s,t){const T=P.T,a=items(s),cx=500,cy=390,R=245;P.circle(cx,cy,98,T.white,T.rule,2);P.text(P.locale.startsWith('en')?'OUTPUT':'SALIDA',cx,cy-14,24,T.ink,650,'center',150);P.text(P.locale.startsWith('en')?'verify':'verificar',cx,cy+28,19,T.accentText,550,'center',150);a.forEach((it,i)=>{const ang=-Math.PI/2+i*2*Math.PI/a.length,p=stageProgress(s,t,i,a.length),x=cx+Math.cos(ang)*R,y=cy+Math.sin(ang)*R;alpha(P,p,()=>{P.circle(x,y,60,p>.7?T.accentSurface:T.white,p>.7?T.accentText:T.rule,2);P.wrap(it.label,x,y-19,105,20,p>.7?T.accentText:T.ink,550,1.12,'center');lineArrow(P,[x-Math.cos(ang)*60,y-Math.sin(ang)*60],[cx+Math.cos(ang)*98,cy+Math.sin(ang)*98],p,T.accentText);});});}
-
-function computeLevers(P,s,t){const T=P.T,a=items(s);a.forEach((it,i)=>{const p=stageProgress(s,t,i,a.length),y=155+i*190;P.text(it.label,80,y,30,p>.55?T.accentText:T.ink,600,'left',330);P.wrap(it.detail,80,y+48,310,19,T.muted,400,1.18,'left');P.path([[445,y+44],[900,y+44]],T.rule,8);const x=445+455*(.18+.72*p);P.path([[445,y+44],[x,y+44]],T.accentText,8);P.circle(x,y+44,22,T.accentSurface,T.accentText,3);P.text(`${i+1}`,x,y+30,19,T.accentText,650,'center',40);});}
-
-function thinkingRibbon(P,s,t){const T=P.T,a=items(s),q=progress(s,t),n=a.length,w=830/n;P.path([[85,365],[915,365]],T.rule,5);a.forEach((it,i)=>{const p=stageProgress(s,t,i,n),x=85+i*w;alpha(P,p,()=>{P.rect(x,285,w-12,160,p>.72?T.accentSurface:T.white,p>.72?T.accentText:T.rule,8,p>.72?2.5:1.5);P.text(String(i+1),x+18,303,17,T.accentText,650,'left',36);P.wrap(it.label,x+(w-12)/2,335,w-36,22,p>.72?T.accentText:T.ink,550,1.15,'center');P.wrap(it.detail,x+(w-12)/2,390,w-36,17,T.muted,400,1.14,'center');});});if(q>.58){const x=85+Math.min(n-1,Math.floor(q*n))*w+w/2;P.path([[x,465],[x,565],[500,565]],T.accentText,3,1,[7,7]);P.text('Wait',500,548,28,T.accentText,650,'center',160);}P.wrap(s.data.note||'',500,700,900,20,T.muted,400,1.2,'center');}
-
-function searchTreeEditorial(P,s,t){const T=P.T,d=nodes(s),by=new Map(d.map(x=>[x.id,x])),levels=[];const depth=n=>n.parent?1+depth(by.get(n.parent)):0;d.forEach(n=>{const z=depth(n);(levels[z]??=[]).push(n);});const pos=new Map();levels.forEach((row,z)=>row.forEach((n,i)=>pos.set(n.id,{x:100+(800*(i+1)/(row.length+1)),y:110+z*180})));d.forEach((n,i)=>{if(n.parent){const a=pos.get(n.parent),b=pos.get(n.id);lineArrow(P,[a.x,a.y+38],[b.x,b.y-38],stageProgress(s,t,i,d.length),n.state==='pruned'?T.rule:T.accentText);}});d.forEach((n,i)=>{const p=stageProgress(s,t,i,d.length),pt=pos.get(n.id);alpha(P,p,()=>{const selected=n.state==='selected',pruned=n.state==='pruned';P.rect(pt.x-74,pt.y-38,148,76,selected?T.accentSurface:T.white,selected?T.accentText:pruned?warn(T):T.rule,7,selected?2.5:1.5);P.wrap(n.label,pt.x,pt.y-19,130,18,pruned?T.muted:selected?T.accentText:T.ink,550,1.1,'center');});});}
-
-function tokenClock(P,s,t){const T=P.T,d=s.data||{},q=progress(s,t),total=(d.stages||[]).reduce((a,x)=>a+(x.amount||0),0),seconds=d.rate?total/d.rate:total;P.text(P.locale.startsWith('en')?'SEQUENTIAL DECODING':'DECODIFICACIÓN SECUENCIAL',500,70,21,T.muted,600,'center',500);P.circle(500,370,190,T.white,T.rule,3);for(let i=0;i<12;i++){const a=-Math.PI/2+i*Math.PI/6;P.path([[500+Math.cos(a)*160,370+Math.sin(a)*160],[500+Math.cos(a)*180,370+Math.sin(a)*180]],T.muted,2);}const ang=-Math.PI/2+q*2*Math.PI;lineArrow(P,[500,370],[500+Math.cos(ang)*130,370+Math.sin(ang)*130],1,T.accentText);P.text(d.rate?`${number(Math.round(total*q))}`:`${number(Math.round(seconds*q))}`,500,325,63,T.accentText,650,'center',300);P.text(d.rate?d.unit||'tokens':d.timeUnit||'s',500,404,24,T.muted,500,'center',200);if(d.rate){P.rect(280,630,440,85,T.accentSurface,T.accentText,7);P.text(`${number(total)} ÷ ${number(d.rate)} = ${number(seconds)} s`,500,653,31,T.accentText,600,'center',400);}}
-
-function adaptiveComputeMatrix(P,s,t){const T=P.T,a=items(s),cols=4,rows=Math.max(2,a.length);P.text(P.locale.startsWith('en')?'BUDGET':'PRESUPUESTO',760,66,20,T.muted,600,'center',240);for(let c=0;c<cols;c++)P.text(['S','M','L','XL'][c],610+c*90,115,19,T.muted,600,'center',70);a.forEach((it,r)=>{const p=stageProgress(s,t,r,rows),y=205+r*235;P.wrap(it.label,75,y,360,26,p>.55?T.accentText:T.ink,600,1.16,'left');P.wrap(it.detail,75,y+50,380,18,T.muted,400,1.16,'left');for(let c=0;c<cols;c++){const active=c<=Math.round((cols-1)*p),x=575+c*90;P.rect(x,y,64,64,active?T.accentSurface:T.white,active?T.accentText:T.rule,6,active?2.2:1.2);if(active)P.circle(x+32,y+32,7,T.accentText);}});}
-
-function latencyScale(P,s,t){const T=P.T,a=items(s),q=progress(s,t);P.text(P.locale.startsWith('en')?'LATENCY BUDGET':'PRESUPUESTO DE LATENCIA',500,70,22,T.muted,600,'center',430);P.path([[90,390],[910,390]],T.rule,8);for(let i=0;i<=4;i++){const x=90+i*205;P.path([[x,365],[x,415]],T.rule,2);P.text(`${i*500} ms`,x,435,20,T.muted,400,'center',110);}a.forEach((it,i)=>{const p=stageProgress(s,t,i,a.length),x=150+(700*(i+1)/(a.length+1));alpha(P,p,()=>{P.circle(x,390,24,p>.7?T.accentText:T.accentSurface,T.accentText,2);P.wrap(it.label,x,260,170,20,p>.7?T.accentText:T.ink,550,1.15,'center');});});P.path([[90,520],[90+820*q,520]],T.accentText,7);P.circle(90+820*q,520,14,T.accentSurface,T.accentText,2);}
-
-function dualClockTimeline(P,s,t){const T=P.T,a=items(s),rows=[245,535];for(let r=0;r<2;r++){const y=rows[r],it=a[r]||{};P.text(it.label||cueLabel(s,r,r?'model':'user'),75,y-80,26,T.ink,600,'left',260);P.path([[90,y],[910,y]],T.rule,5);P.path([[90,y],[90+820*stageProgress(s,t,r,2),y]],r?T.accentText:T.muted,6);P.circle(90+820*stageProgress(s,t,r,2),y,15,r?T.accentSurface:T.white,r?T.accentText:T.muted,2);P.wrap(it.detail||'',500,y+45,700,20,T.muted,400,1.2,'center');}P.path([[500,245],[500,535]],T.rule,1,1,[8,8]);P.text('Δ',500,366,54,T.accentText,650,'center',80);}
-
-function streamWave(P,s,t){const T=P.T,q=progress(s,t),bars=26;P.text(P.locale.startsWith('en')?'STREAMING OUTPUT':'SALIDA EN STREAMING',500,78,21,T.muted,600,'center',430);for(let i=0;i<bars;i++){const x=90+i*32,h=45+Math.abs(Math.sin(i*.88))*170,p=clamp(q*bars-i);alpha(P,p,()=>P.rect(x,390-h/2,18,h,p>.75?T.accentText:T.accentSurface,null,8));}P.path([[90,560],[910,560]],T.rule,2);P.path([[90,560],[90+820*q,560]],T.accentText,4);P.traveler([[90,560],[910,560]],q,T.accent,8);P.text(P.locale.startsWith('en')?'first visible output':'primera salida visible',90,605,21,T.muted,500,'left',300);P.text(P.locale.startsWith('en')?'complete answer':'respuesta completa',910,605,21,T.muted,500,'right',300);}
-
-function routerFork(P,s,t){const T=P.T,a=items(s),q=progress(s,t);card(P,65,315,235,120,true);P.text(P.locale.startsWith('en')?'REQUEST':'PETICIÓN',182,350,27,T.accentText,650,'center',190);const top=[760,180],bottom=[760,535];lineArrow(P,[300,375],top,clamp(q*1.4),T.accentText);lineArrow(P,[300,375],bottom,clamp((q-.25)*1.35),T.muted);P.circle(500,375,66,T.white,T.rule,3);P.text('ROUTER',500,354,22,T.ink,650,'center',115);[top,bottom].forEach((pt,i)=>{const it=a[i]||{},p=stageProgress(s,t,i,2);alpha(P,p,()=>{card(P,pt[0]-145,pt[1]-70,290,140,i===0);title(P,it.label||cueLabel(s,i,i?'deep':'fast'),pt[0],pt[1]-28,250,28,i===0?T.accentText:T.ink);P.wrap(it.detail||'',pt[0],pt[1]+24,250,18,T.muted,400,1.15,'center');});});}
-
-function latencyControlLoop(P,s,t){const T=P.T,a=items(s),pts=[[165,180],[725,180],[725,535],[165,535]],labels=a.length?a.map(x=>x.label):[P.locale.startsWith('en')?'Measure':'Medir',P.locale.startsWith('en')?'Budget':'Presupuesto',P.locale.startsWith('en')?'Route':'Enrutar',P.locale.startsWith('en')?'Observe':'Observar'];pts.forEach((pt,i)=>{const p=stageProgress(s,t,i,4);alpha(P,p,()=>{card(P,pt[0]-100,pt[1]-55,200,110,p>.7);title(P,labels[i]||'',pt[0],pt[1]-12,170,23,p>.7?T.accentText:T.ink);});const next=pts[(i+1)%4];lineArrow(P,pt,next,stageProgress(s,t,i,4),i<3?T.accentText:T.rule);});P.circle(445,357,82,T.accentSurface,T.accentText,2);P.wrap(P.locale.startsWith('en')?'latency policy':'política de latencia',445,330,130,22,T.accentText,600,1.1,'center');}
-
-function complexityCurve(P,s,t){const T=P.T,q=progress(s,t);P.path([[110,650],[110,120]],T.ink,2);P.path([[110,650],[900,650]],T.ink,2);P.text(P.locale.startsWith('en')?'task complexity':'complejidad',890,680,20,T.muted,500,'right',200);P.text(P.locale.startsWith('en')?'quality':'calidad',35,120,20,T.muted,500,'left',100);const pts=[];for(let i=0;i<=40;i++){const x=110+i*790/40,u=i/40,y=650-(430*(1-Math.exp(-4*u)))*(1-.45*Math.pow(Math.max(0,u-.68)/.32,1.5));pts.push([x,y]);}P.path(pts,T.accentText,5,q);const k=Math.min(pts.length-1,Math.floor(q*(pts.length-1))),pt=pts[k];P.circle(pt[0],pt[1],12,T.accentSurface,T.accentText,3);if(q>.7){P.path([[680,250],[680,600]],warn(T),2,1,[8,8]);P.text(P.locale.startsWith('en')?'overthinking zone':'zona de overthinking',700,270,21,warn(T),600,'left',240);}}
-
-function trustBoundaryFlow(P,s,t){const T=P.T,a=items(s),xs=[70,375,680],names=[P.locale.startsWith('en')?'UNTRUSTED':'NO CONFIABLE',P.locale.startsWith('en')?'MODEL':'MODELO',P.locale.startsWith('en')?'TOOLS':'HERRAMIENTAS'];xs.forEach((x,i)=>{P.text(names[i],x+125,92,18,T.muted,650,'center',230);if(i<2)P.path([[x+285,125],[x+285,665]],T.rule,2,1,[8,8]);});const labels=a.length?a.map(x=>x.label):['input','reason','act'];for(let i=0;i<3;i++){const p=stageProgress(s,t,i,3),x=xs[i]+25;alpha(P,p,()=>{card(P,x,300,200,120,i===1);title(P,labels[i]||'',x+100,336,170,23,i===1?T.accentText:T.ink);});if(i<2)lineArrow(P,[x+200,360],[xs[i+1]+25,360],p,i===0?warn(T):T.accentText);}if(progress(s,t)>.55)P.text('!',345,335,44,warn(T),700,'center',60);}
-
-function retrievalPoisonSplit(P,s,t){const T=P.T,q=progress(s,t),a=items(s);P.text(P.locale.startsWith('en')?'RETRIEVAL':'RECUPERACIÓN',500,70,21,T.muted,650,'center',300);card(P,390,115,220,100,true);P.text('RAG',500,147,34,T.accentText,700,'center',160);const L=[260,410],R=[740,410];lineArrow(P,[470,215],L,q,T.accentText);lineArrow(P,[530,215],R,q,warn(T));card(P,120,410,280,140,q>.25);card(P,600,410,280,140,false);P.text(P.locale.startsWith('en')?'CLEAN':'LIMPIO',260,440,23,T.accentText,650,'center',220);P.text(P.locale.startsWith('en')?'POISONED':'CONTAMINADO',740,440,23,warn(T),650,'center',220);P.wrap(a[0]?.detail||'',260,486,230,18,T.muted,400,1.15,'center');P.wrap(a[1]?.detail||'',740,486,230,18,T.muted,400,1.15,'center');if(q>.62){P.path([[740,550],[740,650]],warn(T),3);P.text('×',740,610,46,warn(T),650,'center',70);P.path([[260,550],[260,650]],T.accentText,3);P.check(260,625,T.accentText,1.1);}}
-
-function confidenceBand(P,s,t){const T=P.T,q=progress(s,t),a=items(s),y=350;P.text(P.locale.startsWith('en')?'CONFIDENCE / RISK':'CONFIANZA / RIESGO',500,70,21,T.muted,650,'center',400);P.rect(100,y,800,90,T.white,T.rule,8);P.rect(100,y,800*q,90,T.accentSurface,null,8);for(let i=0;i<=4;i++){const x=100+i*200;P.path([[x,y-18],[x,y+108]],T.rule,1);P.text(`${i*25}%`,x,y+126,19,T.muted,400,'center',80);}const x=100+800*q;P.circle(x,y+45,20,T.white,T.accentText,3);P.path([[x,y-70],[x,y]],T.accentText,2);P.text(P.locale.startsWith('en')?'decision':'decisión',x,y-108,20,T.accentText,600,'center',150);if(a[0])P.wrap(a[0].detail||a[0].label,500,600,760,22,T.muted,400,1.2,'center');}
-
-function defenseLayers(P,s,t){const T=P.T,a=items(s),cx=500,cy=390,max=Math.max(3,a.length);for(let i=max-1;i>=0;i--){const p=stageProgress(s,t,i,max),r=90+i*58;alpha(P,p,()=>{P.circle(cx,cy,r,i%2===0?T.accentSurface:T.white,i%2===0?T.accentText:T.rule,2);});}P.circle(cx,cy,62,T.white,T.ink,2);P.text(P.locale.startsWith('en')?'ACTION':'ACCIÓN',cx,cy-13,22,T.ink,700,'center',120);a.slice(0,max).forEach((it,i)=>{const ang=-Math.PI/2+i*2*Math.PI/max,r=90+i*58,x=cx+Math.cos(ang)*(r+44),y=cy+Math.sin(ang)*(r+44);P.wrap(it.label,x,y-14,150,18,i%2===0?T.accentText:T.muted,550,1.1,'center');});}
+const CANONICAL_ARTICLES=Object.freeze({'00_presentacion_serie':'modelos-razonadores-intro','01-que-es-razonar':'que-es-razonar','02-fallos':'fallos-modelos-razonadores','03-test-time-compute':'test-time-compute','04-latencia-streaming':'latencia-streaming','05-riesgos':'riesgos-modelos-razonadores'});
+export function canonicalVideoKey(spec){const path=String(spec.articlePath||'');const stem=path.split('/').at(-1)?.replace(/\.md$/,'');return CANONICAL_ARTICLES[stem]||String(spec.id||'').replace(/-(es|en)$/,'');}
+export function designForScene(spec,scene){const key=canonicalVideoKey(spec);const plan=scene.visualDesign||SERIES_SCENES[key]?.[scene.id];if(!plan){if(spec.visualIdentity?.unit==='modelos-razonadores')throw new Error(`Missing semantic design: ${key}/${scene.id}`);return null;}const mechanism=MECHANISMS[plan.mechanism];if(!mechanism)throw new Error(`Missing registered mechanism: ${plan.mechanism}`);return {...plan,family:mechanism.family,topology:mechanism.topology,concept:`${key}/${scene.id}`};}
+export function visualFamilyForScene(spec,scene){return designForScene(spec,scene)?.family||null;}
+export function visualFamilyInventory(spec){return spec.scenes.map(scene=>({scene:scene.id,...designForScene(spec,scene)}));}
+export function selectEditorialRenderer(spec,scene){const design=designForScene(spec,scene);return design?MECHANISMS[design.mechanism].render:null;}
