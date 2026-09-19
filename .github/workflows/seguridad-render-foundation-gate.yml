@@ -1,0 +1,84 @@
+name: Seguridad IA render foundation gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/workflows/seguridad-render-foundation-gate.yml
+      - motion/src/cues.mjs
+      - motion/src/labels.mjs
+      - motion/src/theme.mjs
+      - motion/src/render/paint.mjs
+      - motion/src/render/layout.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: UTF-8 and control-byte integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          paths = [
+              Path('motion/src/cues.mjs'),
+              Path('motion/src/labels.mjs'),
+              Path('motion/src/theme.mjs'),
+              Path('motion/src/render/paint.mjs'),
+              Path('motion/src/render/layout.mjs'),
+          ]
+          for path in paths:
+              data = path.read_bytes()
+              text = data.decode('utf-8')
+              bad = [(i, ord(ch)) for i, ch in enumerate(text) if ord(ch) < 32 and ch not in '\n\r\t']
+              if bad:
+                  raise SystemExit(f'{path}: control bytes {bad[:10]}')
+              print(f'PASS {path} {len(data)} bytes')
+          PY
+
+      - name: Node syntax and import graph preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            motion/src/cues.mjs \
+            motion/src/labels.mjs \
+            motion/src/theme.mjs \
+            motion/src/render/paint.mjs \
+            motion/src/render/layout.mjs; do
+            node --check "$file"
+          done
+          node --input-type=module <<'NODE'
+          await import('./motion/src/cues.mjs');
+          await import('./motion/src/labels.mjs');
+          const theme = await import('./motion/src/theme.mjs');
+          await import('./motion/src/render/paint.mjs');
+          const layout = await import('./motion/src/render/layout.mjs');
+          const identity = {
+            unit: 'seguridad-ia',
+            accentName: 'security-rust',
+            accent: '#B44B31',
+            accentText: '#7F3525',
+            accentSurface: '#F7ECE8',
+            uses: ['active causal path','policy gate','semantic focus'],
+            forbidden: ['decorative gradients','glow','textures','decorative multicolor']
+          };
+          theme.validateVisualIdentity(identity,{background:'#FCFBF8'});
+          if (layout.EDITORIAL_LAYOUT_CONTRACT.horizontalBodyMin < 46) throw new Error('horizontal body floor regressed');
+          if (layout.EDITORIAL_LAYOUT_CONTRACT.portraitBodyMin < 46) throw new Error('portrait body floor regressed');
+          if (layout.EDITORIAL_LAYOUT_CONTRACT.animationFamilyRepeatCap !== 2) throw new Error('family repeat cap regressed');
+          console.log(JSON.stringify({
+            visualIdentity: 'PASS',
+            accentTextContrast: theme.contrastRatio('#7F3525','#FCFBF8'),
+            accentContrast: theme.contrastRatio('#B44B31','#FCFBF8'),
+            layoutContract: layout.EDITORIAL_LAYOUT_CONTRACT
+          }, null, 2));
+          NODE
