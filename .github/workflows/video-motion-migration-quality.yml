@@ -71,11 +71,11 @@ jobs:
           done
           cat qa-layout/results.txt
           exit "$failed"
-      - name: Upload layout validation and visual QA sheets
-        if: always()
+      - name: Upload layout diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: modelos-razonadores-layout-validation
+          name: modelos-razonadores-layout-validation-failure
           path: motion/qa-layout/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
