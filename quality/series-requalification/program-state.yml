@@ -1,4 +1,4 @@
-schema_version: 7
+schema_version: 8
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -11,7 +11,7 @@ canonical_series_order:
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
 
-active_series: agentes-ia
+active_series: agentes-voz-tiempo-real
 
 series_status:
   seguridad-ia:
@@ -25,7 +25,6 @@ series_status:
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0_p1_p2: 0
     release_pr: 330
-    release_head: 729d824d00d3d21b6b3521abf5553fe81a6c8968
     merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
     deploy_run: 35392652259
     deploy_build: PASS
@@ -35,12 +34,11 @@ series_status:
     production_verified: true
   agentes-ia:
     ledger: quality/series-requalification/agents-article-ledger.yml
-    state: RELEASE_READY_AWAITING_FINAL_PR_MERGE_DEPLOY_LIVE_QA
+    state: RELEASE_READY_PR_331_EXACT_HEAD_CI_REPAIR_IN_PROGRESS
     voice_enhancement: DEFERRED_OWNER_LOCAL
     technical_evidence_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
     technical_milestone_run: 35402872378
     technical_milestone: PASS
-    source_review_head: c042e01e40e62947dc36d827801a97bf2ae633d5
     source: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
     relationship_guard_agents03_04: PASS_WITH_4_NEGATIVE_MUTATIONS
     strict_es_build: PASS
@@ -52,16 +50,9 @@ series_status:
     native_video_frames_reviewed: 72
     native_video_visual_review: PASS_REAL_NATIVE_NONPLACEHOLDER_READABLE
     browser_resource_runtime_smoke: PASS_96_CONTEXTS_CAUSAL_RANGE_RESPONSE_PROOF
-    browser_resource_contexts: 96
-    browser_media_aborts_reclassified_with_causal_proof: 51
-    browser_media_aborts_unresolved: 0
-    causal_abort_proof_mutations: 8
-    causal_abort_proof_constraints: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_200_206_BEFORE_ABORT_PLUS_FINAL_HEALTH_REQUIRED; UNPROVEN_ABORTS_REMAIN_FATAL; LISTENERS_REMAIN_ACTIVE_THROUGH_TEARDOWN
     full_experience_head: 68dc7739e7855d3f78e7394d775af904c55b4e69
     full_experience_run: 35405478586
     full_experience: PASS_48_OF_48
-    full_experience_artifact_id: 10571993843
-    full_experience_artifact_sha256: 9a8cedad7adebe228ba15235be731c0f013f87c08ed63c1df8ff3ecc6cb4d6cc
     browser: PASS_12_OF_12
     pixel: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
     pedagogy: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
@@ -71,18 +62,42 @@ series_status:
     fresh_zero_based_series_audit_run: 35406872463
     fresh_zero_based_series_audit_head: 4622e93f0cfc0d1ff40c2d77ab5abbc24e134648
     fresh_zero_based_series_audit: PASS
-    fresh_series_relationship_guards: PASS
-    fresh_series_strict_es: PASS
-    fresh_series_strict_en: PASS
-    fresh_series_publication_reconciliation: PASS
-    fresh_series_media_visual: PASS
-    fresh_series_indexability: PASS
-    fresh_series_browser_resources: PASS
-    manual_pixel_pedagogy_reused_only_for_unchanged_site_facing_bytes: true
+    release_pr: 331
+    release_head: ca195f66704de875f0bb768bde25cfb5ff0ca615
+    prior_exact_head: 0b6d9f0b507c1585cedc332256dcd04fa108a5bb
+    prior_exact_head_english_editorial: PASS
+    prior_exact_head_locale_switch: PASS
+    prior_exact_head_english_mirror: FAIL_UNRELATED_PAGE_LEVEL_MATHJAX_OVERFLOW_IN_VISUAL_SPECIFIC_GATE
+    english_mirror_failure_run: 35409282560
+    english_mirror_failure_job: 105805599667
+    english_mirror_failure_detail: MOBILE_PAGE_MATHJAX_301PX_OVERFLOW_OUTSIDE_AGENT_LOOP_VISUAL
+    english_mirror_repair: VISUAL_VALIDATOR_NOW_FAILS_CLOSED_ON_OWNED_VISUAL_OVERFLOW_ONLY; WHOLE_PAGE_OVERFLOW_REMAINS_OWNED_BY_PAGE_BROWSER_GATES
     series_golden: false
     production_verified: false
-    next_action: FINAL_FOCUSED_RELEASE_PR_EXACT_HEAD_CHECKS_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
-  agentes-voz-tiempo-real: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+    next_action: WAIT_FOR_NEW_EXACT_HEAD_CI_THEN_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA_IF_GREEN
+  agentes-voz-tiempo-real:
+    ledger: quality/series-requalification/voice-article-ledger.yml
+    state: QA_ACTIVE_MEDIA_VISUAL_FAIL_CLOSED
+    baseline_main: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    route_locale_rows: 12
+    source_inventory: INSPECTED_12_SOURCE_FILES_EXIST_AND_ARE_NAV_MANIFEST_PUBLISHED
+    es_series_directory_native_video_files: 0
+    en_series_directory_native_video_files: 0
+    source: PENDING_DEEP_CURRENT_PRIMARY_REVIEW
+    build: PENDING
+    browser: PENDING
+    media_visual: FAIL_CLOSED_0_OF_12
+    media_visual_reason: NO_NATIVE_MP4_POSTER_FILES_IN_CANONICAL_ES_OR_EN_SERIES_DIRECTORIES; FULL_CLASSIFICATION_GATE_ADDED
+    media_visual_gate: scripts/validate_voice_media_visual.py
+    indexability: PENDING_0_OF_12
+    indexability_gate: scripts/validate_voice_indexability.py
+    pixel: PENDING_0_OF_12
+    pedagogy: PENDING_0_OF_12
+    known_p1_rows: 12
+    article_golden: 0/6
+    route_locale_rows_golden: 0/12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    next_action: RUN_SOURCE_MEDIA_VISUAL_INDEXABILITY_RENDERED_BROWSER_PREFLIGHT_AND_REPAIR_NONVOICE_BLOCKERS
   coding-agents-agent-harnesses: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
@@ -90,9 +105,11 @@ series_status:
 
 shared_branch:
   name: quality/post-datacenters-requalification
+  head_after_voice_ledger: 6fa66134d736143eefa86901609198bc294d58cb
   synchronized_with_security_main_merge_without_force_push: true
   security_release_receipt: quality/series-requalification/security-series-release.yml
   agents_ledger: quality/series-requalification/agents-article-ledger.yml
+  voice_ledger: quality/series-requalification/voice-article-ledger.yml
 
 linkedin:
   writes_from_this_program: 0
