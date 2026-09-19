@@ -20,17 +20,17 @@ export function sceneLayout(P,s,portrait,design={}){
  options.sort((a,b)=>b.score-a.score);let best=options[0],banner=false;
  // Dense explanations receive a genuinely different composition, never a smaller body.
  if(!best&&!portrait){
-  banner=true;textWidth=880;left=mode==='reverse'?968:72;
+  textWidth=880;left=mode==='reverse'?968:72;
   const wholeTitle=s.title.join(' '),font=68,segments=[];let tx=72;
   if(P.measure(wholeTitle,font,600,P.T.headlineFont)<=1776){
    s.title.forEach((text,i)=>{segments.push({text,x:tx,accent:i===s.accentLine});tx+=P.measure(text+' ',font,600,P.T.headlineFont);});
    for(let size=54;size>=46;size--){let y=270;const ps=s.paragraphs.map(text=>{const lines=P.lines(text,textWidth,size),p={text,lines,y};y+=lines.length*size*bodyLH+gap;return p;});
-    if(y-gap<=limit){best={titleLines:[],titleSegments:segments,titleSize:font,bodySize:size,paragraphs:ps,bodyBottom:y-gap};break;}
+    if(y-gap<=limit){best={titleLines:[],titleSegments:segments,titleSize:font,bodySize:size,paragraphs:ps,bodyBottom:y-gap};banner=true;break;}
    }
   }
  }
 
- if(!best){best={...compose(P,s,textWidth,top,60,min,bodyLH,gap),titleSize:60,bodySize:min};P.issues.push({type:'copy-needs-recomposition',scene:s.id,bottom:best.bodyBottom});}
+ if(!best){banner=false;best={...compose(P,s,textWidth,top,60,min,bodyLH,gap),titleSize:60,bodySize:min};P.issues.push({type:'copy-needs-recomposition',scene:s.id,bottom:best.bodyBottom});}
  const {titleSize,bodySize,paragraphs,bodyBottom,titleLines,titleSegments}=best;
  const mechanism=portrait?{x:55,y:Math.max(820,bodyBottom+55),w:970,h:0}:banner?{x:mode==='reverse'?72:1024,y:270,w:824,h:665}:{x:mode==='reverse'?65:925,y:176,w:925,h:757};
  if(portrait)mechanism.h=1780-mechanism.y;
@@ -53,7 +53,7 @@ export function drawHeader(P,spec,index,time,total,L){const T=P.T,margin=L.portr
  for(let i=0;i<spec.scenes.length;i++){const d=spec.scenes[i].duration,q=clamp((time-start)/d);P.rect(margin+i*(stepW+gap),L.height-20,stepW,3,T.rule);if(q>0)P.rect(margin+i*(stepW+gap),L.height-20,stepW*q,3,T.accent);start+=d;}
 }
 export function drawText(P,s,L,alpha,state=null){const c=P.c,T=P.T;c.save();c.globalAlpha*=alpha;
- if(L.banner){for(const line of L.titleSegments)P.text(line.text,line.x,L.top,L.titleSize,line.accent?T.accentText:T.ink,600,'left',1776,T.headlineFont);}
+ if(L.banner&&L.titleSegments){for(const line of L.titleSegments)P.text(line.text,line.x,L.top,L.titleSize,line.accent?T.accentText:T.ink,600,'left',1776,T.headlineFont);}
  L.titleLines.forEach((line,i)=>P.text(line.text,L.left,L.top+i*L.titleSize*1.11,L.titleSize,line.accent?T.accentText:T.ink,600,'left',L.textWidth,T.headlineFont));
  for(const [pi,p] of L.paragraphs.entries()){let lineStart=0;for(const [i,line] of p.lines.entries()){
   const y=p.y+i*L.bodySize*L.bodyLH;if(!state){P.text(line,L.left,y,L.bodySize,T.ink,400,'left',L.textWidth);continue;}
