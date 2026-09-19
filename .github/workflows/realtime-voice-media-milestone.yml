@@ -1,0 +1,122 @@
+name: Realtime Voice native visual media milestone
+
+on:
+  push:
+    branches:
+      - quality/post-datacenters-requalification
+    paths:
+      - '.github/workflows/realtime-voice-media-milestone.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-validate-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install deterministic render/build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material pyyaml pillow; fi
+          pip install pillow pyyaml
+
+      - name: Generate six distinct native visual videos in ES and EN
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp locales/en/media.yml /tmp/en-media-before.yml
+          python scripts/generate_realtime_voice_visual_media.py
+          cp /tmp/en-media-before.yml locales/en/media.yml
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          import importlib.util
+
+          root = Path('.')
+          spec = importlib.util.spec_from_file_location('voicegen', root/'scripts/generate_realtime_voice_visual_media.py')
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          path = root/'locales/en/media.yml'
+          original = path.read_text(encoding='utf-8').rstrip() + '\n'
+          parsed = yaml.safe_load(original) or {}
+          blocks = []
+          for ch in mod.CHAPTERS:
+              key = f'series/{mod.SERIES}/{ch.stem}.md'
+              block = mod.media_block(ch, 'en')
+              if key in parsed:
+                  if parsed[key] != block:
+                      raise SystemExit(f'unexpected pre-existing EN media mapping: {key}')
+                  continue
+              blocks.append(yaml.safe_dump({key: block}, allow_unicode=True, sort_keys=False, width=120).rstrip())
+          if blocks:
+              path.write_text(original + '\n' + '\n\n'.join(blocks) + '\n', encoding='utf-8')
+          PY
+
+      - name: Validate owner-current media split and exact binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/classify_requalification_media.py --self-test
+          python scripts/validate_voice_media_visual.py --output artifacts/voice-requalification/voice-media-visual.json
+
+      - name: Re-run deterministic chapter source contracts on changed exact revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_tools_state_ch4_source.mjs
+          node scripts/validate_voice_network_telephony_ch5_source.mjs
+          node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+
+      - name: Build ES strictly and execute search/publication foundations
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --strict
+          python scripts/audit_multilingual_search_foundation.py
+          python scripts/audit_publication_contract.py
+
+      - name: Prepare and build EN strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Execute mandatory rendered INDEXABILITY gate plus negative mutations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_voice_indexability.py --self-test
+          python scripts/validate_voice_indexability.py --site site --output artifacts/voice-requalification/indexability/report.json
+
+      - name: Commit exact validated native media checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'fjmmontiel'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add \
+            docs/series/agentes-voz-tiempo-real \
+            locales/en/series/agentes-voz-tiempo-real \
+            locales/en/media.yml \
+            quality/series-requalification/voice-media-generation-2026-09-19.json
+          git diff --cached --stat
+          git diff --cached --quiet && { echo 'No media changes to commit'; exit 1; }
+          git commit -m 'media(voice): add native ES EN visual videos'
+          git push origin HEAD:quality/post-datacenters-requalification
