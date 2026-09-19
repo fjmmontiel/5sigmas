@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "unit": "seguridad-ia",
+  "recorded_at_utc": "2026-09-19T18:53:29Z",
+  "branch": "migration/video-golden-seguridad-ia",
+  "baseline_main": "11737ad86db9b15b1981af6fef221d7db0b82110",
+  "stage": "INVENTORY_CAPTURED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "release_state": "MIGRATION_AUTHORING_PENDING",
+  "live_delivery": "NOT_VERIFIED",
+  "scope": {
+    "localized_chapters": 12,
+    "locales": ["es", "en"],
+    "chapters_per_locale": 6,
+    "current_repo_mp4_count": 12,
+    "current_repo_poster_count": 12,
+    "current_repo_article_count": 12
+  },
+  "chapters": [
+    {"id":"00","slug":"00_presentacion_serie","topic":"presentacion"},
+    {"id":"01","slug":"01-prompt-injection","topic":"prompt-injection"},
+    {"id":"02","slug":"02-jailbreaks","topic":"jailbreaks"},
+    {"id":"03","slug":"03-envenenamiento","topic":"envenenamiento"},
+    {"id":"04","slug":"04-red-teaming","topic":"red-teaming"},
+    {"id":"05","slug":"05-controles-produccion","topic":"controles-produccion"}
+  ],
+  "current_media": [
+    {"locale":"es","chapter":"00","path":"docs/series/seguridad-ia/00_presentacion_serie.mp4","git_blob":"ad692eac263887cd4d892b5ff7db41306610b4e1","bytes":6261582},
+    {"locale":"es","chapter":"01","path":"docs/series/seguridad-ia/01-prompt-injection.mp4","git_blob":"0800e9a48c816c9bcf07d369c9cb6759fccb36c1","bytes":6147971},
+    {"locale":"es","chapter":"02","path":"docs/series/seguridad-ia/02-jailbreaks.mp4","git_blob":"7250aae7cddd3875bb2a92cd4d5112871695bb7d","bytes":6507297},
+    {"locale":"es","chapter":"03","path":"docs/series/seguridad-ia/03-envenenamiento.mp4","git_blob":"b8f7d6a826b9936f0842436272c920f848e5eb00","bytes":6451839},
+    {"locale":"es","chapter":"04","path":"docs/series/seguridad-ia/04-red-teaming.mp4","git_blob":"1d50539ef7c4334c572f33407bd67f2503dfa94d","bytes":6375288},
+    {"locale":"es","chapter":"05","path":"docs/series/seguridad-ia/05-controles-produccion.mp4","git_blob":"f7c90e315fb2f372f66d2c5a350f642b963b0c69","bytes":6369265},
+    {"locale":"en","chapter":"00","path":"locales/en/series/seguridad-ia/00_presentacion_serie.mp4","git_blob":"dc6330013dc04db224d52fb74a54ca532a89ccae","bytes":1472294},
+    {"locale":"en","chapter":"01","path":"locales/en/series/seguridad-ia/01-prompt-injection.mp4","git_blob":"4c75d26f7d4f0048d584f492a667670ceb5f4ee3","bytes":1440379},
+    {"locale":"en","chapter":"02","path":"locales/en/series/seguridad-ia/02-jailbreaks.mp4","git_blob":"0cd865266d1b30cadcd08763a1fda8748337ab4b","bytes":1395972},
+    {"locale":"en","chapter":"03","path":"locales/en/series/seguridad-ia/03-envenenamiento.mp4","git_blob":"9a90fa14e37a74730e1c29fbd771314f2c26dbc3","bytes":1421219},
+    {"locale":"en","chapter":"04","path":"locales/en/series/seguridad-ia/04-red-teaming.mp4","git_blob":"e742c2df21576404aaa2ace66462411d0bcc84d3","bytes":1385253},
+    {"locale":"en","chapter":"05","path":"locales/en/series/seguridad-ia/05-controles-produccion.mp4","git_blob":"da4f47e236e886f5be5ffc225f9c3887c2a20e37","bytes":1456280}
+  ],
+  "known_current_consumer_gates": [
+    "scripts/validate_security_keyboard_focus.mjs",
+    "scripts/validate_active_series_browser_gate.py",
+    "scripts/capture_security_video_lifecycle_states.mjs",
+    "scripts/validate_security_article_watch_touch.mjs",
+    "scripts/validate_security_02_05_browser.mjs",
+    "scripts/validate_security_prompt_visual_states.mjs",
+    "scripts/capture_security_visuals.mjs",
+    "scripts/capture_security_watch_summary.mjs",
+    "scripts/validate_security02_pedagogy_contract.py",
+    "scripts/validate_security04_pedagogy_contract.py",
+    "scripts/validate_security_contrast.mjs",
+    "scripts/validate_security_text_visibility.mjs"
+  ],
+  "observations": [
+    "The public repository currently contains one MP4, poster and article for each of six ES and six EN chapters.",
+    "ES and EN MP4 byte sizes differ materially; this inventory does not infer codec, duration, visual parity or quality from size alone.",
+    "No new migrated Seguridad IA media is owner-approved yet; existing public binaries are baseline inputs, not Golden migration outputs.",
+    "No private Drive IDs, email records or credentials are stored in this public control file."
+  ],
+  "next_actions": [
+    "Run deterministic media-profile and duration inspection for all 12 baseline MP4s without modifying them.",
+    "Recover or author the reusable versioned content/spec/theme/timeline source for the complete six-chapter ES/EN unit.",
+    "Lock one restrained series accent before visual authoring and register the whole-series semantic/perceptual diversity plan.",
+    "Render and inspect the complete review unit before creating its single final PR and review package under the stable Drive root."
+  ]
+}
