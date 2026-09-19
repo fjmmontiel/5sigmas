@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "recorded_at_utc": "2026-09-19T23:21:00Z",
+  "last_updated_at_utc": "2026-09-19T23:30:00Z",
   "unit": "seguridad-ia",
   "branch": "migration/video-golden-seguridad-ia",
   "validated_source_head": "aecca1f8615413dfee4b31d8f3a5c55a6d3c1295",
@@ -17,6 +18,7 @@
     "frames_total": 4320,
     "full_decode": "2/2_PASS",
     "static_concepts": "0/60",
+    "browser_errors": 0,
     "codec": "h264",
     "fps": "60/1",
     "horizontal": {
@@ -28,7 +30,18 @@
       "sha256": "2a2947321596d37961f2ddf60d2e64fc77eae15ac9321c1d744a375dc7881bf5"
     },
     "artifact_id": 10594605019,
-    "artifact_archive_sha256": "26cfb8c59bc6f39556b9cbb32d131ac75961e514bd09e4b089205806d7f76acc"
+    "artifact_archive_sha256": "26cfb8c59bc6f39556b9cbb32d131ac75961e514bd09e4b089205806d7f76acc",
+    "runtime_readback": "DOWNLOADED_AND_INSPECTED",
+    "encoded_visual_inspection": {
+      "scope": "before/after frame pairs for all 30 canonical concepts in both horizontal and vertical probes, plus full-size inspection of the three repaired semantics",
+      "result": "PASS_FOR_BOUNDED_MOTION_PROBE",
+      "repaired_semantics_observed": [
+        "S00-C5 graph-cut labels are placed outside the causal path/barriers without overlap",
+        "S01-C2 selected top-k candidates are visibly distinguished with the declared accent semantics",
+        "S03-C2 two-dimensional semantic axes and labels are visibly rendered"
+      ],
+      "note": "This is encoded-motion diagnostic evidence only; it does not replace complete 24-output package review or owner approval."
+    }
   },
   "complete_24_output_export": {
     "workflow_run": 35475585037,
