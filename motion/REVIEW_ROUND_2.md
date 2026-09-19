@@ -2,49 +2,65 @@
 
 ## Current authority
 
-The owner's rejection of round one overrides every previous visual certificate. The active release ledger is `migration/modelos-razonadores-round2.json`; `modelos-razonadores-status.json` is retained as historical evidence and must not re-certify a changed render. PR #332 remains draft. Do not start another series or promote a Golden Example until the applicable current gates and owner decisions permit it.
+Round 1 is `SUPERSEDED`. The owner's later explicit decision approves the exact final Review Round 2 collection that was presented. That approval is durable for those exact reviewed bytes and is independent from technical release certification.
 
-The hourly task has been updated. This is a real execution checkpoint, not merely a plan: the complete canonical ES/EN specs were recovered and their Git blob identities verified, actual Chromium renders were sampled, semantic renderers were implemented, and full 60fps exports were started locally. No Actions render was dispatched just for cadence.
+The active release ledger is `migration/modelos-razonadores-round2.json`; older status material is historical evidence only. PR #332 / `migration/video-golden-modelos-razonadores` remains the single complete-unit release path while open.
 
-## Design corrections
+Do **not** revoke Review Round 2 approval because a later renderer/layout default exists. Do **not** rerender approved media merely to move it to a newer source head. Do **not** request approval again for identical bytes. A materially changed visible asset is a new approval scope; a technical delivery/integration repair that preserves the frozen bytes is not.
 
-The 33px horizontal body is replaced by measured 42–64px explanatory text. Portrait body starts at 44px. Layouts reserve the complete text in advance, so sentence reveals do not move previous lines. Dense copy gets a full-span title and wider body region instead of shrinking below the minimum or deleting words. The source follows the body, rather than anchoring a small isolated paragraph far above the footer.
+`owner_visual_approval=APPROVED` and `technical_golden` are separate acceptances. The former is already satisfied for the exact presented Review Round 2 asset collection; the latter remains false until the frozen snapshot passes the full technical release gate and is actually published.
 
-These are editorial design budgets, not universal accessibility guarantees. Actual 390px delivery and the full player must still be reviewed; source canvas font size alone is not mobile certification.
+## Frozen approved snapshot
 
-The 30 conceptual scenes now select registered semantic mechanisms. Twenty-one perceptual families group 28 concrete renderers; no family currently exceeds two uses. The common numbered-descending template is not used by any current Modelos scene. ES/EN and H/V of one concept count once. A third use requires explicit current semantic and visual-review evidence; four is always blocked. Renaming a renderer cannot evade its family.
+The public state records SHA-256 identities, media profiles and technical status without publishing private Drive or email identifiers. The immutable byte-binding evidence is in `migration/checkpoints/2026-09-19-modelos-approved-snapshot-byte-binding.json`.
 
-The register lives in `src/render/mechanisms/editorial.mjs`. `scripts/check_visual_variety.mjs` emits scene IDs, rationale, topology, cue references and renderer fingerprints. This structural preflight does NOT grant visual approval; a complete-series encoded motion review remains independent.
+Directly owner-confirmed Spanish horizontal references include:
 
-## Actual validation and remaining gates
+- intro: `e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6`
+- fallos: `d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed`
+- test-time-compute: `e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710`
+- riesgos: `f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381`
 
-Run `node --test tests/review-round2.test.mjs`: 65 tests at this checkpoint. They include full original 12-spec schema/cue checks, deterministic seeking, palette/contrast, unknown mechanism rejection, third/fourth-use and renamed-family negative cases, 33px text, permanent blank region, missing metrics, stale evidence and independent Golden gates.
+The broader collection approval is recorded by exact asset hash only for files that were part of the presented final Round 2 collection. It is not a claim that the owner individually played every file, and it does not extend by resemblance to later unpresented renders.
 
-Real layout preflight sampled 1,520 frames across 24 H/V compositions, including sentence boundaries. It caught dense-copy overflow, which was repaired by recomposition. Pixel review also caught a counterfactual annotation overlap and a premature arithmetic correctness tick; those were fixed before the full export batch.
+Comparison/contact-sheet material is review support, not a primary exemplar and not a substitute for the approved MP4 identity.
 
-No current output is Technical GOLDEN solely from these checks. Revalidate final encoded motion, actual player/accessibility, current-main integration and delivery/consumers. Bind each passing gate to the actual source/render hashes. Old seven-boolean certificates are insufficient after this amendment.
+## Design baseline retained for future units
 
-## Reproduction
+The Review 2 implementation established the approved editorial direction: neutral flat base, strong typographic hierarchy, important body text kept visibly readable, restrained functional accent, informative semantic diagrams and purposeful motion. Modelos uses `#26A69A / #00776F / #E7F4F0`.
 
-Install repository Python requirements, Chromium, FFmpeg and the required Inter / Noto Serif Display fonts in the rendering environment. Fonts are external dependencies and must not be included in downloadable source/review bundles.
+The 33px horizontal body was replaced by measured 42–64px explanatory text and portrait body starts at 44px in the Review 2 development line. Layouts reserve complete text in advance so sentence reveals do not move previous lines. Dense copy is recomposed rather than shrunk or deleted. These development metrics remain useful diagnostics for future work; they do not retrospectively invalidate an already approved encoded asset absent a demonstrated readability/accessibility defect.
 
-```sh
-node --test tests/review-round2.test.mjs
-node scripts/check_visual_variety.mjs
-python scripts/render.py content/modelos-razonadores/02-fallos.es.json --check-only
-python scripts/render.py content/modelos-razonadores/02-fallos.es.json --review-sheet
-python scripts/render.py content/modelos-razonadores/02-fallos.es.json --out dist/review-2
-python scripts/render.py content/modelos-razonadores/02-fallos.es.json --out dist/review-2 --portrait
-```
+The 30 conceptual scenes select registered semantic mechanisms. Twenty-one perceptual families group 28 concrete renderers; no family exceeded two uses at the recorded Review 2 checkpoint. ES/EN and H/V adaptations of one concept count once. Renaming/recoloring/rotation/mirroring cannot manufacture a new family.
 
-The renderer loads separate ESM modules with an offline import map, preserving scopes and resolving new dependencies rather than concatenating a hardcoded file list. It refuses page errors, font substitution and detected layout issues. MP4s are H.264/yuv420p/fast-start; frames, duration and SHA-256 are measured after encoding. Sidecars describe the unchanged visual text; no narration was generated.
+## Recorded Review 2 validation
 
-## Continuation
+At the Review 2 implementation checkpoint, `node --test tests/review-round2.test.mjs` covered the original 12-spec schema/cue contracts, deterministic seeking, palette/contrast, unknown-mechanism rejection, family-reuse negative cases, text-size/spatial diagnostics, stale-evidence rejection and independent Golden gates.
 
-1. Finish/reconcile actual current exports; never label a partial MP4 as ready.
-2. Inspect encoded frames and motion for every chapter and both locales. Review 390px V and desktop H; do not certify only full-size screenshots.
-3. Re-run canonical repository tests and actual player tests, preserving existing quality contracts.
-4. Reconcile current main and canonical delivery; unchanged filenames/old metadata must not point to old review bytes.
-5. Save bound evidence in the round-two ledger; keep unverified gates false.
-6. Once the complete unit passes, make the SAME PR ready, upload the complete Review 2 package, read back Drive file metadata and send one verified email. Keep private email identities/decisions out of public source.
-7. Golden Examples requires explicit approval of the exact version. Silence and earlier praise of the prototype are not approval.
+Real layout preflight sampled 1,520 frames across 24 H/V compositions, including sentence boundaries. It caught dense-copy overflow that was repaired by recomposition. Pixel review also caught a counterfactual annotation overlap and a premature arithmetic correctness tick; both were repaired before the final reviewed collection.
+
+Those checks are evidence about the development line, not permission to label current delivery Technical GOLDEN without binding the frozen approved bytes to current technical evidence.
+
+## Source and render identity
+
+The release must recover the truthful source/spec/theme/timeline profile for each frozen approved asset. A historical source hint is not certification. If re-rendering a candidate revision fails to reproduce the approved encoded hash or trustworthy visual/timeline fingerprints, that revision stays `NOT_VERIFIED`.
+
+A successful renderer process, a green workflow whose assertions do not fail closed, or a later source head must never be described as provenance proof. Source evidence is accepted only when its asserted match criteria actually pass and are bound to the frozen asset identity.
+
+## Technical release gate
+
+The complete approved block can be published without another owner review only after actual evidence covers the frozen release snapshot: factual/source integrity, schema/framework, accent/contrast, body readability/spatial balance, purposeful motion, deterministic sync/seek/export, semantic diagrams and series diversity, ES/EN parity, duration/chapters/posters/transcripts/captions where declared, playback/mobile/HV, accessibility/reduced-motion, media integrity, and current-main consumer integration across catalog/schema/sitemaps/article/watch/library/hub.
+
+Missing, stale or unrun evidence is `NOT_VERIFIED`, never PASS. A genuine factual, playback, security, accessibility or delivery defect may reopen only the affected technical checks. If a required fix materially changes visible content/motion/timing, that changed version is a new approval scope while all unrelated exact approvals remain intact.
+
+## Current release procedure
+
+1. Preserve the exact approved Review Round 2 bytes; no discretionary redesign or default rerender.
+2. Recover and record truthful per-asset source/render provenance without inventing a match.
+3. Replace the canonical ES/EN public horizontal consumers with the exact approved hashes and verify them after staging.
+4. Run the complete technical release gate against those frozen bytes and current main.
+5. Keep `technical_golden=false` for every missing/stale/unverified check.
+6. Once the complete block passes, merge/publish through the existing PR, verify the live consumers serve the exact validated assets, and record promotion separately from owner approval.
+7. Only after observed live publication send publication confirmation; never send another approval request for the unchanged Round 2 collection.
+
+Historical instructions that required rerendering all Review 2 assets from the newest HEAD, uploading a replacement round, or requesting approval again are superseded by the owner-approved frozen-snapshot policy above.
