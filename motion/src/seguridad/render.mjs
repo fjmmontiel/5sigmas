@@ -53,7 +53,10 @@ function drawZone(P, zone, q) {
   P.rect(zone.x, zone.y, zone.w, zone.h, strong ? P.T.accentSurface : '#FBFAF9', strong ? P.T.accent : P.T.rule, 18, strong ? 3 : 2);
   if (zone.label) {
     const label=pretty(zone.label);
-    if(zone.w<160){
+    if(zone.w<160 && zone.h>220){
+      // Tall barriers are semantic cut-sets: keep their names off the causal path/nodes.
+      P.text(label,zone.x+zone.w/2,Math.max(48,zone.y-38),21,strong?P.T.accentText:P.T.muted,650,'center',300);
+    } else if(zone.w<160){
       P.text(label,Math.min(960,zone.x+zone.w+12),zone.y+Math.max(0,(zone.h-24)/2),23,strong?P.T.accentText:P.T.muted,650,'left',300);
     } else {
       const size=zone.w<240?22:27;
@@ -63,13 +66,26 @@ function drawZone(P, zone, q) {
   c.restore();
 }
 
-function drawNode(P, node, q) {
+function drawNode(P, node, q, {selected=false}={}) {
   if (q <= 0) return;
   const c=P.c;c.save();c.globalAlpha*=.2+.8*q;
-  const strong=['effect','decision','authorization_result','release_state','terminal','high_privilege'].includes(node.role);
-  P.circle(node.x,node.y,strong?34:28,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accentText:P.T.accent,strong?4:3);
+  const strong=selected || ['effect','decision','authorization_result','release_state','terminal','high_privilege'].includes(node.role);
+  const radius=selected?32:strong?34:28;
+  P.circle(node.x,node.y,radius,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accentText:P.T.accent,strong?4:3);
+  if(selected) P.circle(node.x,node.y,7,P.T.accentText,null,0);
   const label=node.label || node.role;
   if(label) P.text(pretty(label),node.x,node.y+44,23,strong?P.T.accentText:P.T.muted,strong?650:500,'center',320);
+  c.restore();
+}
+
+function drawAxes(P, plan) {
+  const axes=plan.geometry.axes;
+  if(!axes) return;
+  const q=Math.max(0,...plan.cueProgress.map(item=>item.progress));
+  if(q<=0)return;
+  const c=P.c;c.save();c.globalAlpha*=.35+.65*q;
+  if(axes.x) P.text(pretty(axes.x),500,690,22,P.T.muted,650,'center',520);
+  if(axes.y) P.text(pretty(axes.y),160,105,22,P.T.muted,650,'center',360);
   c.restore();
 }
 
@@ -78,8 +94,10 @@ function drawMechanism(P, plan) {
   c.save();
   for (const [i,zone] of (plan.geometry.zones ?? []).entries()) drawZone(P,zone,progressFor(plan,i));
   for (const [i,path] of (plan.geometry.paths ?? []).entries()) P.path(path,P.T.muted,3,progressFor(plan,i));
+  drawAxes(P,plan);
   for (const [i,edge] of (plan.geometry.edges ?? []).entries()) drawArrow(P,centerOf(edge.from,plan),centerOf(edge.to,plan),progressFor(plan,i),edge.role);
-  for (const [i,node] of (plan.geometry.nodes ?? []).entries()) drawNode(P,node,progressFor(plan,i));
+  const selected=new Set(plan.geometry.selected ?? []);
+  for (const [i,node] of (plan.geometry.nodes ?? []).entries()) drawNode(P,node,progressFor(plan,i),{selected:selected.has(i)});
   c.restore();
 }
 
@@ -123,6 +141,10 @@ export function renderSeguridadFrame(canvas, spec, register, jobId, timeSeconds,
     issues:Object.freeze(issues),
     family:frame.scene.perceptualFamily,
     topology:frame.scene.topology,
+    semanticAnnotations:Object.freeze({
+      axes:Boolean(frame.scene.mechanism.geometry.axes),
+      selectedCount:(frame.scene.mechanism.geometry.selected ?? []).length
+    }),
     reducedMotion
   });
 }
