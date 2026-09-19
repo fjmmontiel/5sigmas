@@ -1,0 +1,94 @@
+{
+  "unit": "modelos-razonadores",
+  "review_round": 2,
+  "checkpoint_at": "2026-09-19T12:54:00+02:00",
+  "branch_head_before": "53031ac2c6c56a8d4017d4103c307d9b2f1c5a2e",
+  "main_revision": "e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c",
+  "owner_approval": {
+    "status": "APPROVED_PRESENTED_EXAMPLES_PENDING_EXACT_TECHNICAL_BINDING",
+    "source": "explicit_user_chat",
+    "exact_hash_binding_required": true,
+    "comparison_montage_is_not_primary_example": true
+  },
+  "new_verified_findings": {
+    "candidate_drive_inventory": {
+      "es_mp4": 12,
+      "en_mp4": 12,
+      "total_mp4": 24,
+      "candidate_folder_complete": true,
+      "final_review_package_verified": false
+    },
+    "candidate_media_profile_qa": {
+      "files_checked": 24,
+      "passed": 24,
+      "failed": 0,
+      "checks": [
+        "H.264 video",
+        "yuv420p",
+        "limited TV range",
+        "60 fps",
+        "expected horizontal or vertical resolution",
+        "faststart moov-before-mdat",
+        "positive duration",
+        "no unexpected audio",
+        "validation/chapters/captions/transcript sidecars present"
+      ],
+      "technical_certification_use": "BLOCKED_BY_SOURCE_STALENESS"
+    },
+    "source_binding_audit": {
+      "candidate_render_generation": "pre-strengthened Review Round 2 source",
+      "candidate_layout_matches_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+      "candidate_layout_sha256": "9d633703d07f3a5348ebbf9428430bf8e0e72ba8e0791873e015de4edeebec97",
+      "required_render_source_revision": "f13d94ce62d6548d8519d8d80f4827696f722fc9",
+      "current_branch_head": "53031ac2c6c56a8d4017d4103c307d9b2f1c5a2e",
+      "material_changes_after_candidate_render": [
+        "motion/src/render/layout.mjs",
+        "motion/src/render/mechanisms/rich-risk.mjs",
+        "motion/src/review-policy.mjs",
+        "motion/content/modelos-razonadores/00-presentacion.es.json"
+      ],
+      "current_layout_contract": {
+        "horizontal_text_width": 760,
+        "horizontal_body_min": 46,
+        "horizontal_body_target": 52,
+        "portrait_body_min": 46,
+        "horizontal_source_gap_max": 64
+      },
+      "candidate_layout_contract": {
+        "horizontal_text_width": 800,
+        "horizontal_body_min": 42,
+        "horizontal_body_target": 50,
+        "portrait_body_min": 44,
+        "horizontal_source_gap_max": 86
+      },
+      "result": "STALE_REQUIRES_CURRENT_SOURCE_RERENDER",
+      "reason": "Layout and one canonical spec materially changed after the candidate MP4s were rendered; this affects every layout and invalidates exact-current-source Technical GOLDEN binding. Relevant-source narrowing cannot exempt a global layout change."
+    },
+    "current_remote_contract": {
+      "specs": "12 localized v4 specs required",
+      "visual_variety": "30 conceptual scenes, <=2 uses/family structural target, encoded visual approval independent",
+      "text_policy": "body min 46 px H/V, permanent lower gap <=200 px, source gap <=64 px, intended embed minima enforced"
+    }
+  },
+  "release": {
+    "technical_golden": false,
+    "technical_golden_count": 0,
+    "technical_golden_total": 12,
+    "pr": 332,
+    "draft": true,
+    "mergeable": true,
+    "review_email_sent": false,
+    "golden_registry_promotions": 0
+  },
+  "invalidated_claims": [
+    "existing 24 candidate MP4s are exact f13d94 current-source renders",
+    "existing candidate hashes may be bound directly to current Technical GOLDEN"
+  ],
+  "preserved_evidence": [
+    "owner visual approval of the exact previously presented candidate bytes",
+    "candidate media-profile QA",
+    "representative visual review as historical candidate evidence",
+    "current-source deterministic contract tests and layout preflight where their source identity is explicitly current"
+  ],
+  "next_action": "Synchronize the renderer workspace to f13d94/current head and rerender all 12 localized outputs in both H/V because layout is a global rendering dependency. Re-run exact-current-source layout/tests, encoded whole-series motion review, accessibility/player/mobile and delivery integration; bind final hashes; only then certify Technical GOLDEN and resolve whether changed final bytes require a new owner review before Golden Registry promotion."
+}
