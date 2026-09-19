@@ -14,6 +14,55 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  compare-current-canonical-to-approved-visuals:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Compare representative decoded frames for all 12 localized videos
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          rows = [
+            ('docs/series/modelos-razonadores/00_presentacion_serie.mp4',75.0,['d33d0d2f6a31bae4c7f4e4bda86822588d99e9cd54226d9e50e4f896d0a16437','f4b58adc60d552837cd31d7ffcb388c5bd37384a059d5b571163f87c197f78af','e72c44d783df21947a043c1cd2fa8abf98c7ea52296677b133a03f5e9f553e03','35b4051de789d7418c3bec67864fe0304801395ff7ab40c0e8ccbe8499a2eab3']),
+            ('docs/series/modelos-razonadores/01-que-es-razonar.mp4',82.0,['3ba0cb70ab4bc8ad200496b25cf080bc58bcfa269743a9b31189254567cd0331','0b4e6e36adf2820c6626c947475e774de69671a47afdb36a0ecbd65309823273','f727f9543de4384c3ca4e80b8d27715dcfd8de15461e01e3115f6a3a36ff1d9d','1069aed0f5802218169934534d184fe199f749505feb003b3cdf2647e7757b59']),
+            ('docs/series/modelos-razonadores/02-fallos.mp4',108.0,['4c33884aba6d8e579fc4a3da3ecca2c587ffecb2c091e6f82ec87aff6a6e8374','3365bbc4188c7ff2a910d227d6a4659ec1d57f4932006189d4cebf2f5f34c60e','192374d4cbe00304629f01f19a731afb7fb6d16d6bf5034b4af29f75ee3106c9','6fd05aaedfadc181665ab511f5625b035d1f99a43eb713a829584fcbada114e3']),
+            ('docs/series/modelos-razonadores/03-test-time-compute.mp4',129.0,['a5eb1b819aa501b70196dea27743d064e01798747f54098fc44e8e5a02e4eef0','605e4855f0e44c999dc05420dd12c2cee339b47914583c22700a05167deda62e','aa4872b7661af587703cc8443725876f11acce3a4d6ad552ae9620336e1ee058','14d365289052ef07ba0e7d9841b409acb41e0f818cfc99121aa10633aea7c1fb']),
+            ('docs/series/modelos-razonadores/04-latencia-streaming.mp4',115.0,['cf28532f3f1ed1f5ab068f8b6d602f820784eb59cba83ca07308309856f33107','639398ee95f71c7870bb67220afd38f202838768f32ae83336c09cc839b32b1e','36834b5fede5e0546a37777f9871743d52b444f1df6922057fb3638ca518d559','a1ba75ab292aa2d9153401a9765b727d73632fe7641a0d870ae703e57632bf9c']),
+            ('docs/series/modelos-razonadores/05-riesgos.mp4',121.0,['b32b7fd7977aa53661a68e666a3b6931cfe38f47f88cde6718c91bbea9d5bf7b','4603168979abfd36323666c777dde0427e85281d932e7d1524b05dff17775824','87f01346d29be4c969382f75a2bc5b05c5a3109b1e07bd1d15c59d9db9fd7d5c','cc138163c25179bebb30bbb5c95359311c51e5b36ea68ff0e3ead588681ef7b0']),
+            ('locales/en/series/modelos-razonadores/00_presentacion_serie.mp4',75.0,['bf9a6ad744420be16ef625c1f2301cecbf07347d5cc0198636871f215fdd50b7','c6e323b6f38c605e7f176e7c2d2aca16987adeb5913493e262a003377b19b91a','37ccc9e2a18642733e9ae2c3939c6c323dd0d2d6b382f0c8e92c3956d0181a5f','addb569112a8f31f8050863d56fe8e7f20f6fd225f4e71c7b6d08bad2b47b738']),
+            ('locales/en/series/modelos-razonadores/01-que-es-razonar.mp4',82.0,['0758b4232670ac076cabc4b7d2d5a2f38fa760033d7c1608e7b03bdf3ff5e096','dfadaa34c9c36d3bf309365ea77df657fa5b1692f9025e70a3b74987285522af','292b0351d5a96e5dc7a85c726a3d5ae3d06fba9b88252e68bcb5108386903d31','22779180ff5662a9090329c1c7f07ec7d928a52ea1702cbb2dff292dbaad8ec2']),
+            ('locales/en/series/modelos-razonadores/02-fallos.mp4',108.0,['a1945896e631c509255f76e282c24debccc9af7d31e35a29a37e55f990756633','702d644cf414e092e49ea3d3a6d745968aaeddc69c5a2638a6968a826289df16','14d50102e4e64b67044b41ca97ca1501dfe59870102edc386d771de04e4f2193','dd35c8de80af80af7300504135f67d068dbd3baa98360a641c60d9c4ef56a193']),
+            ('locales/en/series/modelos-razonadores/03-test-time-compute.mp4',129.0,['28fc3864ffc7338d26437ed48a4d1b256888abb59aceb44f48d0a300cb6fa6cb','e20fb0cfc9d9fdbf7d083561264178668b582c50fbd2b4688e575be5799f7a5d','772d6049c4a7a052723cc1f0b29f7938d8a3416cc882fc1f04742e321e2ee262','cc4617ac68a6aa9501e199a2b157bf04a0f7ae739c46161a69366ca8ba12bf46']),
+            ('locales/en/series/modelos-razonadores/04-latencia-streaming.mp4',115.0,['062de0f50c41c87ee33cb999a838ae0d42998b2498f6696f52c5d67c8a61f205','2004050ecc25ee260a1fb2fcd7a2e9871a52b34a4824e0d856d24174fbc92191','8ce895f9c08e425f273c0c845121bcd82948c44e92331cef4c754a67fb74e91d','7e280a2e116da88664a74c5e2e543919270dffa8174bf640c3079ca98d0c2778']),
+            ('locales/en/series/modelos-razonadores/05-riesgos.mp4',121.0,['ce2ed5ea8662e02256294411f0c672c7c42374981a316ce580a9160943a5a013','d81618480ffd89dd548fbd06dadf19c7ae271b77bb63e35451cbfd8398dff749','bbfd4cd186b171d392e6375e247830b40edaa4d9efb7b1f95f11fa63742f29a4','b1c6560f88a3f4e3456bfcbe26ed400cd58cf45f58f11d3ca478ce046ad579df']),
+          ]
+          fractions=(0.08,0.32,0.58,0.84)
+          total=0
+          for path,dur,expected in rows:
+              matched=0
+              got=[]
+              for frac,want in zip(fractions,expected):
+                  t=dur*frac
+                  p=subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-ss',f'{t:.3f}','-i',path,'-frames:v','1','-vf','scale=320:-2:flags=neighbor,format=yuv420p','-f','hash','-hash','sha256','-'],capture_output=True,text=True,check=True)
+                  h=p.stdout.strip().split('=',1)[-1]
+                  got.append(h)
+                  matched += int(h==want)
+              total += matched
+              print(f'CANONICAL_VISUAL_MATCH {path} {matched}/4')
+              if matched != 4:
+                  print('  got=' + ','.join(got))
+          print(f'CANONICAL_APPROVED_VISUAL_SAMPLE_MATCHES={total}/48')
+          print('CANONICAL_VISUAL_PROFILE_MATCH=' + ('true' if total==48 else 'false'))
+          PY
+
   probe-intro-es:
     if: github.head_ref == 'migration/video-golden-modelos-razonadores'
     runs-on: ubuntu-latest
