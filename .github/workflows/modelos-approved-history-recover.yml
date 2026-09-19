@@ -1,0 +1,103 @@
+name: Modelos approved history recovery
+
+on:
+  push:
+    branches:
+      - migration/video-golden-modelos-razonadores
+    paths:
+      - .github/workflows/modelos-approved-history-recover.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  recover-approved-media:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Search all reachable historical MP4 blobs by approved SHA-256
+        id: recover
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --tags --prune
+
+          cat > /tmp/targets.tsv <<'EOF'
+          docs/series/modelos-razonadores/02-fallos.mp4	d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed	5852621
+          docs/series/modelos-razonadores/03-test-time-compute.mp4	e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710	7897504
+          docs/series/modelos-razonadores/04-latencia-streaming.mp4	1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f	6391044
+          docs/series/modelos-razonadores/05-riesgos.mp4	f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381	6724633
+          locales/en/series/modelos-razonadores/00_presentacion_serie.mp4	f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730	3946808
+          locales/en/series/modelos-razonadores/01-que-es-razonar.mp4	b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc	4641477
+          locales/en/series/modelos-razonadores/02-fallos.mp4	3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2	5615464
+          locales/en/series/modelos-razonadores/03-test-time-compute.mp4	27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400	7580952
+          locales/en/series/modelos-razonadores/04-latencia-streaming.mp4	3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0	6128150
+          locales/en/series/modelos-razonadores/05-riesgos.mp4	ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec	6439609
+          EOF
+
+          # Enumerate every reachable historical blob that has ever had an .mp4 path.
+          git rev-list --objects --all \
+            | awk '$2 ~ /\.mp4$/ {print $1}' \
+            | sort -u > /tmp/mp4-blobs.txt
+
+          : > /tmp/blob-hashes.tsv
+          while read -r blob; do
+            type="$(git cat-file -t "$blob" 2>/dev/null || true)"
+            [ "$type" = blob ] || continue
+            size="$(git cat-file -s "$blob")"
+            # Only hash sizes that could match one of the ten frozen targets.
+            if awk -F '\t' -v s="$size" '$3 == s {found=1} END {exit found ? 0 : 1}' /tmp/targets.tsv; then
+              sha256="$(git cat-file blob "$blob" | sha256sum | awk '{print $1}')"
+              printf '%s\t%s\t%s\n' "$blob" "$sha256" "$size" >> /tmp/blob-hashes.tsv
+            fi
+          done < /tmp/mp4-blobs.txt
+
+          found=0
+          missing=0
+          : > /tmp/recovery-report.tsv
+          while IFS=$'\t' read -r target expected_sha expected_size; do
+            current_sha="$(sha256sum "$target" 2>/dev/null | awk '{print $1}' || true)"
+            if [ "$current_sha" = "$expected_sha" ]; then
+              printf '%s\tALREADY_EXACT\t%s\n' "$target" "$expected_sha" | tee -a /tmp/recovery-report.tsv
+              continue
+            fi
+            blob="$(awk -F '\t' -v h="$expected_sha" -v s="$expected_size" '$2 == h && $3 == s {print $1; exit}' /tmp/blob-hashes.tsv)"
+            if [ -n "$blob" ]; then
+              mkdir -p "$(dirname "$target")"
+              git cat-file blob "$blob" > "$target"
+              test "$(sha256sum "$target" | awk '{print $1}')" = "$expected_sha"
+              test "$(stat -c '%s' "$target")" = "$expected_size"
+              printf '%s\tRECOVERED\t%s\t%s\n' "$target" "$expected_sha" "$blob" | tee -a /tmp/recovery-report.tsv
+              found=$((found + 1))
+            else
+              printf '%s\tNOT_FOUND_IN_REACHABLE_HISTORY\t%s\n' "$target" "$expected_sha" | tee -a /tmp/recovery-report.tsv
+              missing=$((missing + 1))
+            fi
+          done < /tmp/targets.tsv
+
+          echo "recovered=$found" >> "$GITHUB_OUTPUT"
+          echo "missing=$missing" >> "$GITHUB_OUTPUT"
+          cat /tmp/recovery-report.tsv
+
+      - name: Commit any exact historical recoveries
+        if: steps.recover.outputs.recovered != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/series/modelos-razonadores/*.mp4 locales/en/series/modelos-razonadores/*.mp4
+          git commit -m "migration: recover exact approved Modelos R2 bytes from history [skip ci]"
+          git push origin HEAD:migration/video-golden-modelos-razonadores
+
+      - name: Require recovery evidence, without fabricating success
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Recovered: ${{ steps.recover.outputs.recovered }}"
+          echo "Still missing from reachable Git history: ${{ steps.recover.outputs.missing }}"
+          # This job is a recovery probe. Missing history is an observed result, not Technical GOLDEN.
