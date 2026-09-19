@@ -156,7 +156,7 @@ for (const expected of ['Ground', 'Orbit', 'Grid: 4–10 years', 'Launch mass an
 
 await page.goto(`${base}/en/series/seguridad-ia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
 const securityBody = await page.locator('body').innerText();
-for (const expected of ['Play attack', 'Hostile content', 'Crosses authorization', 'The risk is not a response. It is a path.']) {
+for (const expected of ['Trace path', 'Hostile content', 'Authorization boundary', 'Injection changes a proposal; architecture decides whether it becomes an effect']) {
   if (!securityBody.includes(expected)) failures.push(`security series: missing localized series-map text ${JSON.stringify(expected)}`);
 }
 
