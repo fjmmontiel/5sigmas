@@ -19,12 +19,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify media tools
+      - name: Install and verify media tools
         shell: bash
         run: |
           set -euo pipefail
-          command -v ffprobe
-          command -v ffmpeg
+          if ! command -v ffprobe >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffprobe -version | head -n 1
+          ffmpeg -version | head -n 1
 
       - name: Probe and fully decode all Seguridad IA baseline MP4s
         shell: bash
@@ -107,7 +111,7 @@ jobs:
               },
               'assets': assets,
               'decode_failures': failures,
-              'next_action': 'Author the complete versioned six-chapter ES/EN semantic timeline and whole-series diversity register; baseline binaries are inputs only, not migrated Golden outputs.'
+              'next_action': 'Author and render the complete versioned six-chapter ES/EN semantic timeline from the already validated series register; baseline binaries are inputs only, not migrated Golden outputs.'
           }
           os.makedirs('motion/migration/checkpoints', exist_ok=True)
           out = 'motion/migration/checkpoints/seguridad-ia-baseline-media-profile.json'
