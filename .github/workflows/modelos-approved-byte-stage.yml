@@ -34,10 +34,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --disable-pip-version-check --quiet 'gdown>=5.2,<6'
+          python -m pip --version
+          if ! python -m pip install --disable-pip-version-check 'gdown==5.2.0'; then
+            echo 'Standard pip install failed; retrying with externally-managed-environment override.' >&2
+            python -m pip install --break-system-packages --disable-pip-version-check 'gdown==5.2.0'
+          fi
           command -v ffmpeg
           command -v ffprobe
-          gdown --version
+          python -m gdown --version
 
       - name: Fetch frozen owner-approved collection from the one stable Drive root
         shell: bash
@@ -46,7 +50,7 @@ jobs:
           rm -rf /tmp/modelos-approved-root
           mkdir -p /tmp/modelos-approved-root
           # No sharing mutation is performed. This only reads the already configured root.
-          gdown --folder --remaining-ok "${DRIVE_ROOT}" -O /tmp/modelos-approved-root
+          python -m gdown --folder --remaining-ok "${DRIVE_ROOT}" -O /tmp/modelos-approved-root
           find /tmp/modelos-approved-root -type f -printf '%s\t%p\n' | sort -n
 
       - name: Bind exact approved hashes to the twelve canonical horizontal consumers
