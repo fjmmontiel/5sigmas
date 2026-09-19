@@ -8,6 +8,7 @@ const requestedConcurrency = Number.parseInt(process.env.S5_VOICE_BROWSER_CONCUR
 const modeConcurrency = Number.isFinite(requestedConcurrency)
   ? Math.max(1, Math.min(4, requestedConcurrency))
   : 4;
+const mediaEventTimeoutMs = 10000;
 
 const chapters = [
   '01-arquitecturas-de-voz',
@@ -144,20 +145,32 @@ async function validateArticle(page, locale, stem, mode, evidence) {
   await page.waitForFunction(() => {
     const node = document.querySelector('[data-s5-inline-video-player]');
     return Boolean(node && (!node.paused || node.currentTime > 0));
-  }, null, { timeout: 10000 });
+  }, null, { timeout: mediaEventTimeoutMs });
 
-  const playback = await video.evaluate(async (node) => {
+  const playback = await video.evaluate(async (node, timeoutMs) => {
+    const waitForMediaEvent = (target, eventName) => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        target.removeEventListener(eventName, onEvent);
+        reject(new Error(`timed out waiting for media event ${eventName}`));
+      }, timeoutMs);
+      const onEvent = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      target.addEventListener(eventName, onEvent, { once: true });
+    });
+
     if (!Number.isFinite(node.duration) || node.duration <= 0) {
-      await new Promise((resolve) => node.addEventListener('loadedmetadata', resolve, { once: true }));
+      await waitForMediaEvent(node, 'loadedmetadata');
     }
     const duration = node.duration;
     node.currentTime = Math.min(duration * 0.5, Math.max(1, duration - 1));
-    await new Promise((resolve) => node.addEventListener('seeked', resolve, { once: true }));
+    await waitForMediaEvent(node, 'seeked');
     const middle = node.currentTime;
     node.currentTime = Math.max(0, duration - 0.35);
-    await new Promise((resolve) => node.addEventListener('seeked', resolve, { once: true }));
+    await waitForMediaEvent(node, 'seeked');
     return { duration, middle, final: node.currentTime, paused: node.paused, readyState: node.readyState };
-  });
+  }, mediaEventTimeoutMs);
   if (!(playback.duration >= 35 && playback.duration <= 37) || playback.middle <= 0 || playback.final <= playback.middle || playback.readyState < 2) {
     throw new Error(`${label}: invalid start/intermediate/final playback evidence ${JSON.stringify(playback)}`);
   }
@@ -198,20 +211,32 @@ async function validateWatch(page, locale, stem, mode, evidence) {
   const range = await page.request.get(mediaUrl, { headers: { Range: 'bytes=0-2047' } });
   if (![200, 206].includes(range.status())) throw new Error(`${label}: range request ${range.status()} ${mediaUrl}`);
 
-  const playback = await video.evaluate(async (node) => {
+  const playback = await video.evaluate(async (node, timeoutMs) => {
+    const waitForMediaEvent = (target, eventName) => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        target.removeEventListener(eventName, onEvent);
+        reject(new Error(`timed out waiting for media event ${eventName}`));
+      }, timeoutMs);
+      const onEvent = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      target.addEventListener(eventName, onEvent, { once: true });
+    });
+
     try { await node.play(); } catch (_) {}
     const started = !node.paused || node.currentTime > 0;
     if (!Number.isFinite(node.duration) || node.duration <= 0) {
-      await new Promise((resolve) => node.addEventListener('loadedmetadata', resolve, { once: true }));
+      await waitForMediaEvent(node, 'loadedmetadata');
     }
     const duration = node.duration;
     node.currentTime = Math.min(duration * 0.5, Math.max(1, duration - 1));
-    await new Promise((resolve) => node.addEventListener('seeked', resolve, { once: true }));
+    await waitForMediaEvent(node, 'seeked');
     const middle = node.currentTime;
     node.currentTime = Math.max(0, duration - 0.35);
-    await new Promise((resolve) => node.addEventListener('seeked', resolve, { once: true }));
+    await waitForMediaEvent(node, 'seeked');
     return { started, duration, middle, final: node.currentTime, readyState: node.readyState };
-  });
+  }, mediaEventTimeoutMs);
   if (!playback.started || !(playback.duration >= 35 && playback.duration <= 37) || playback.middle <= 0 || playback.final <= playback.middle || playback.readyState < 2) {
     throw new Error(`${label}: invalid watch lifecycle evidence ${JSON.stringify(playback)}`);
   }
@@ -268,15 +293,53 @@ async function mapWithConcurrency(items, concurrency, mapper) {
   return results;
 }
 
+async function launchMilestoneBrowser() {
+  let browser;
+  try {
+    browser = await chromium.launch({ headless: true, channel: 'chrome' });
+  } catch (error) {
+    throw new Error(`H264-capable Google Chrome is required for the native MP4 lifecycle gate: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  const probe = await browser.newPage();
+  try {
+    const support = await probe.evaluate(() => {
+      const video = document.createElement('video');
+      return {
+        mp4: video.canPlayType('video/mp4'),
+        avc: video.canPlayType('video/mp4; codecs="avc1.42E01E"'),
+      };
+    });
+    if (!support.mp4 || !support.avc) {
+      throw new Error(`Google Chrome runtime does not advertise MP4/AVC support: ${JSON.stringify(support)}`);
+    }
+    return {
+      browser,
+      runtime: {
+        channel: 'chrome',
+        version: browser.version(),
+        codecSupport: support,
+      },
+    };
+  } catch (error) {
+    await browser.close();
+    throw error;
+  } finally {
+    if (!probe.isClosed()) await probe.close();
+  }
+}
+
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
-const browser = await chromium.launch({ headless: true });
+const { browser, runtime } = await launchMilestoneBrowser();
 const receipt = {
   generatedAt: new Date().toISOString(),
   series: 'agentes-voz-tiempo-real',
   ownerVoiceAmendment: 5716685049,
   ownerIndexabilityAmendment: 5727362172,
   modeConcurrency,
+  mediaEventTimeoutMs,
+  browserRuntime: runtime,
   pages: [],
 };
 
@@ -291,7 +354,7 @@ try {
   }
   receipt.result = 'PASS';
   await fs.writeFile(path.join(outputDir, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`);
-  console.log(JSON.stringify({ result: receipt.result, articleContexts: 48, watchContexts: 48, fullPageScreenshots: 48, modeConcurrency }));
+  console.log(JSON.stringify({ result: receipt.result, articleContexts: 48, watchContexts: 48, fullPageScreenshots: 48, modeConcurrency, browserRuntime: runtime }));
 } finally {
   await browser.close();
 }
