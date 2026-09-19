@@ -1,0 +1,114 @@
+name: Seguridad IA baseline media probe
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/workflows/seguridad-ia-baseline-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe-public-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Probe all current ES/EN MP4s deterministically
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v ffprobe
+          python3 - <<'PY'
+          import hashlib, json, pathlib, subprocess
+
+          root = pathlib.Path('.')
+          paths = [
+            'docs/series/seguridad-ia/00_presentacion_serie.mp4',
+            'docs/series/seguridad-ia/01-prompt-injection.mp4',
+            'docs/series/seguridad-ia/02-jailbreaks.mp4',
+            'docs/series/seguridad-ia/03-envenenamiento.mp4',
+            'docs/series/seguridad-ia/04-red-teaming.mp4',
+            'docs/series/seguridad-ia/05-controles-produccion.mp4',
+            'locales/en/series/seguridad-ia/00_presentacion_serie.mp4',
+            'locales/en/series/seguridad-ia/01-prompt-injection.mp4',
+            'locales/en/series/seguridad-ia/02-jailbreaks.mp4',
+            'locales/en/series/seguridad-ia/03-envenenamiento.mp4',
+            'locales/en/series/seguridad-ia/04-red-teaming.mp4',
+            'locales/en/series/seguridad-ia/05-controles-produccion.mp4',
+          ]
+
+          assets = []
+          for rel in paths:
+            p = root / rel
+            if not p.is_file():
+              raise SystemExit(f'missing baseline MP4: {rel}')
+            h = hashlib.sha256()
+            with p.open('rb') as fh:
+              for chunk in iter(lambda: fh.read(1024 * 1024), b''):
+                h.update(chunk)
+            raw = subprocess.check_output([
+              'ffprobe','-v','error','-select_streams','v:0',
+              '-show_entries','stream=codec_name,width,height,pix_fmt,r_frame_rate,color_range,color_space',
+              '-show_entries','format=duration,size',
+              '-of','json', str(p)
+            ], text=True)
+            info = json.loads(raw)
+            stream = (info.get('streams') or [{}])[0]
+            fmt = info.get('format') or {}
+            locale = 'en' if rel.startswith('locales/en/') else 'es'
+            chapter = pathlib.Path(rel).name[:2]
+            assets.append({
+              'locale': locale,
+              'chapter': chapter,
+              'path': rel,
+              'sha256': h.hexdigest(),
+              'bytes': p.stat().st_size,
+              'duration_seconds': float(fmt['duration']) if fmt.get('duration') else None,
+              'codec': stream.get('codec_name'),
+              'width': stream.get('width'),
+              'height': stream.get('height'),
+              'pixel_format': stream.get('pix_fmt'),
+              'fps': stream.get('r_frame_rate'),
+              'color_range': stream.get('color_range'),
+              'color_space': stream.get('color_space'),
+            })
+
+          report = {
+            'schema_version': 1,
+            'unit': 'seguridad-ia',
+            'evidence_kind': 'CURRENT_PUBLIC_BASELINE_MEDIA_PROFILE',
+            'source_commit': '${{ github.sha }}',
+            'asset_count': len(assets),
+            'technical_golden': False,
+            'owner_visual_approval': 'NOT_REQUESTED',
+            'assets': assets,
+            'notes': [
+              'This is an immutable inspection of the pre-migration public baseline, not a Golden certification.',
+              'No media bytes are modified by this probe.'
+            ]
+          }
+          out = root / 'motion/migration/seguridad-ia-media-profile.json'
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit probe evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add motion/migration/seguridad-ia-media-profile.json
+          if git diff --cached --quiet; then
+            echo 'No media-profile change.'
+            exit 0
+          fi
+          git commit -m "migration: record Seguridad IA baseline media profile [skip ci]"
+          git push origin HEAD:migration/video-golden-seguridad-ia
