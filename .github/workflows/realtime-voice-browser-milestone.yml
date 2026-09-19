@@ -8,7 +8,9 @@ on:
     paths:
       - '.github/workflows/realtime-voice-browser-milestone.yml'
       - 'docs/series/agentes-voz-tiempo-real/**'
+      - 'docs/snippets/articulos-tecnicos/voice-*.html'
       - 'locales/en/series/agentes-voz-tiempo-real/**'
+      - 'locales/en/snippets/articulos-tecnicos/voice-*.i18n.json'
       - 'locales/en/media.yml'
       - 'locales/en/manifest.yml'
       - 'scripts/audit_browser_resources.mjs'
