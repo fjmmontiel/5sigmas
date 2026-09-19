@@ -58,6 +58,9 @@ try {
       // This validator owns the canonical agent-loop visual, not unrelated page-level
       // MathJax formulas elsewhere in Chapter 5. Keep visual overflow fail-closed while
       // leaving whole-page overflow to the dedicated page/browser quality gates.
+      // Zero-area descendants are non-rendered (SVG defs / display:none inactive panels)
+      // and cannot create visible overflow, so they are excluded without changing the
+      // threshold for any rendered descendant.
       const overflow = await visual.evaluate((root) => {
         const rootRect = root.getBoundingClientRect();
         const clientWidth = root.clientWidth;
@@ -73,15 +76,20 @@ try {
               left: Math.round(rect.left),
               right: Math.round(rect.right),
               width: Math.round(rect.width),
+              height: Math.round(rect.height),
               clientWidth: node.clientWidth,
               scrollWidth: node.scrollWidth,
               overflowX: style.overflowX,
             };
           })
           .filter((item) =>
-            item.right > rootRect.right + 2 ||
-            item.left < rootRect.left - 2 ||
-            (item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX))
+            item.width > 0 &&
+            item.height > 0 &&
+            (
+              item.right > rootRect.right + 2 ||
+              item.left < rootRect.left - 2 ||
+              (item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX))
+            )
           )
           .sort((a, b) => Math.max(b.right - rootRect.right, b.scrollWidth - b.clientWidth) - Math.max(a.right - rootRect.right, a.scrollWidth - a.clientWidth))
           .slice(0, 12);
