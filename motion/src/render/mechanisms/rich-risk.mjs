@@ -1,9 +1,12 @@
 import {beat,show,text,small,caption,arrow,node,cross,clamp,tr,iconLock} from './rich-core.mjs';
-export function complexityRegimes(P,s,t){const T=P.T,qs=s.cues.map((_,i)=>beat(s,t,i));small(P,tr(P,'REGÍMENES CUALITATIVOS, NO UNA CURVA MEDIDA','QUALITATIVE REGIMES, NOT A MEASURED CURVE'),40,43);
+export function complexityRegimes(P,s,t){const T=P.T,qs=s.cues.map((_,i)=>beat(s,t,i));small(P,tr(P,'REGÍMENES DEL ESTUDIO · SIN MAGNITUDES INVENTADAS','STUDY REGIMES · NO INVENTED MEASUREMENTS'),40,43);
  const labels=tr(P,['Simple','Intermedio','Complejo'],['Simple','Intermediate','Complex']),x=[71,383,695];
- for(let i=0;i<3;i++){const q=qs[i+1]||0;P.rect(x[i],168,270,372,T.white,T.rule,8);text(P,labels[i],x[i]+135,197,245,36,T.ink,550,'center');show(P,q,()=>{const path=i===0?[[x[i]+40,417],[x[i]+222,342]]:i===1?[[x[i]+35,440],[x[i]+115,352],[x[i]+225,287]]:[[x[i]+40,290],[x[i]+102,351],[x[i]+220,449]];P.path(path,i===2?T.amber:T.accentText,5,q);if(i===2)cross(P,x[i]+220,449,13);});}
- show(P,qs[4],()=>{text(P,tr(P,'El esfuerzo también puede dejar de crecer.','Effort can stop increasing too.'),500,610,920,40,T.accentText,550,'center');});caption(P,tr(P,'Las trayectorias representan tendencias; no asignan precisión ni número de tokens.','Trajectories represent trends, not accuracy values or token counts.'));
+ const comparisons=tr(P,[['Estándar','puede superar','al razonador'],['Razonar más','puede aportar','una ventaja'],['Ambos tipos','pueden llegar','al colapso']],[['Standard models','can outperform','reasoning models'],['Extra reasoning','can provide','an advantage'],['Both types','can reach','collapse']]);
+ for(let i=0;i<3;i++){const q=qs[i+1]||0;P.rect(x[i],168,270,398,T.white,T.rule,8);text(P,labels[i],x[i]+135,197,245,36,T.ink,550,'center');
+  show(P,q,()=>{const symbol=i===0?'≥':i===1?'>':'×';P.text(symbol,x[i]+135,283,96,i===2?T.amber:T.accentText,550,'center',240);comparisons[i].forEach((line,j)=>text(P,line,x[i]+135,422+j*37,244,25,i===2?T.amber:T.ink,500,'center'));});}
+ show(P,qs[4],()=>{text(P,tr(P,'El esfuerzo también puede dejar de crecer.','Effort can stop increasing too.'),500,630,920,40,T.accentText,550,'center');});caption(P,tr(P,'Comparaciones cualitativas; los símbolos no representan medidas numéricas.','Qualitative comparisons; symbols do not represent numerical measurements.'));
 }
+
 export function trustBoundary(P,s,t){const T=P.T,a=beat(s,t,0),b=beat(s,t,1),c=beat(s,t,2),d=beat(s,t,3);small(P,tr(P,'LOS DATOS NO HEREDAN AUTORIDAD','DATA DOES NOT INHERIT AUTHORITY'),50,40);
  P.rect(40,186,388,446,T.white,T.rule,9);P.rect(569,186,388,446,T.white,T.rule,9);text(P,tr(P,'Contenido externo','External content'),234,211,360,33,T.ink,550,'center');text(P,tr(P,'Instrucciones','Instructions'),763,211,357,36,T.ink,550,'center');
  show(P,a,()=>{for(let i=0;i<5;i++)P.path([[79,307+i*44],[366-(i%2)*55,307+i*44]],T.rule,5);});
@@ -19,7 +22,7 @@ export function retrievalSubstitution(P,s,t){const T=P.T,a=beat(s,t,0),b=beat(s,
 }
 export function stoppingRegions(P,s,t){const T=P.T,a=beat(s,t,0),b=beat(s,t,1),c=beat(s,t,2),d=beat(s,t,3);small(P,tr(P,'PARAR POR SUFICIENCIA O POR AGOTAMIENTO','STOP FOR SUFFICIENCY OR EXHAUSTION'),45,42);
  P.rect(87,182,826,397,T.white,T.rule,0,1);P.rect(87,182,826,91,T.accentSurface);P.rect(87,489,826,90,T.amberSurface);P.path([[87,273],[913,273]],T.accentText,2,1,[5,7]);P.path([[87,489],[913,489]],T.amber,2,1,[5,7]);
- text(P,tr(P,'Confianza suficiente','Sufficient confidence'),500,207,784,34,T.accentText,550,'center');text(P,tr(P,'Seguir evaluando','Continue evaluating'),500,364,784,39,T.muted,500,'center');text(P,tr(P,'Caso irresoluble','Unsolvable instance'),500,514,784,34,T.amber,550,'center');
+ text(P,tr(P,'Confianza suficiente','Sufficient confidence'),790,200,228,28,T.accentText,550,'center');text(P,tr(P,'Seguir evaluando','Continue evaluating'),790,350,228,28,T.muted,500,'center');text(P,tr(P,'Caso irresoluble','Unsolvable instance'),790,500,228,28,T.amber,550,'center');
  show(P,b,()=>{P.path([[144,420],[306,394],[461,325],[613,240]],T.accentText,4,b);if(b>.98)P.check(613,240,T.accentText,1.4);});show(P,c,()=>{P.path([[144,420],[294,445],[461,466],[644,543]],T.amber,4,c);if(c>.98)cross(P,644,543,14);});
  show(P,d,()=>text(P,tr(P,'Calibrar la regla con datos de validación.','Calibrate the rule using validation data.'),500,650,928,36,T.accentText,550,'center'));caption(P,tr(P,'Señales esquemáticas: no son probabilidades ni umbrales calibrados reales.','Schematic signals: not actual calibrated probabilities or thresholds.'));
 }
