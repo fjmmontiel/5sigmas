@@ -166,8 +166,8 @@ jobs:
           raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
           PY
 
-      - name: Retain bounded Agents evidence for manual video-frame review
-        if: always()
+      - name: Retain bounded Agents diagnostics on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: agents-requalification-diagnostic
