@@ -31,3 +31,53 @@ jobs:
       - name: Require every localized output to be GOLDEN
         working-directory: motion
         run: npm run gate:release
+
+  modelos-razonadores-review-v2-layout:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install renderer dependencies and required fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Run semantic, diversity and deterministic contracts
+        working-directory: motion
+        run: |
+          npm test
+          npm run audit:visual-variety
+      - name: Render all Review Round 2 H/V contact sheets
+        working-directory: motion
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf qa-layout
+          mkdir -p qa-layout
+          : > qa-layout/results.txt
+          for spec in content/modelos-razonadores/*.json; do
+            base="$(basename "$spec" .json)"
+            python scripts/render.py "$spec" --out qa-layout --review-sheet >>qa-layout/results.txt 2>&1
+            python scripts/render.py "$spec" --out qa-layout --review-sheet --portrait >>qa-layout/results.txt 2>&1
+          done
+          cat qa-layout/results.txt
+      - name: Upload exact-head Review Round 2 contact sheets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelos-razonadores-review-v2-layout-${{ github.event.pull_request.head.sha }}
+          path: motion/qa-layout/
+          if-no-files-found: error
+          retention-days: 1
