@@ -1,12 +1,13 @@
-schema_version: 3
+schema_version: 4
 program: 5sigmas_GOLDEN_requalification
 series: agentes-voz-tiempo-real
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 baseline_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-reviewed_at: 2026-09-19T08:35:39Z
-exact_evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-milestone_action_run: 35432607898
+reviewed_at: 2026-09-19T12:06:00Z
+content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+exact_evidence_revision: e31b662a01428539728876e881c224312dbfd73b
+milestone_action_run: 35439893298
 inventory_contract:
   chapters: 6
   presentation_page: false
@@ -22,30 +23,30 @@ inventory_contract:
   indexability_gate: scripts/validate_voice_indexability.py
   media_visual_result: PASS_12_OF_12
   indexability_result: PASS_12_OF_12_TECHNICAL_ELIGIBILITY
-  browser_result: PENDING_FRESH_INTERACTION_LIFECYCLE_REVIEW
-  pixel_result: PENDING_REAL_FULL_PAGE_REVIEW
-  pedagogy_result: PENDING_REAL_FULL_PAGE_REVIEW
+  browser_result: PASS_12_OF_12_FRESH_INTERACTION_LIFECYCLE
+  pixel_result: PENDING_MANUAL_INTERMEDIATE_STATE_REVIEW
+  pedagogy_result: PENDING_MANUAL_INTERMEDIATE_STATE_REVIEW
   note: >-
-    The native visual-media blocker was repaired for all six chapters in ES and EN.
-    Action 35432607898 generated and validated twelve exact native MP4s and twelve posters,
-    strict-built ES and EN, and passed rendered INDEXABILITY for all 12 route-locale pairs.
-    Videos are intentionally silent under PROGRAM AMENDMENT 5716685049; narration/audio,
-    captions and transcript remain future owner-local VOICE_ENHANCEMENT debt and do not
-    block current GOLDEN. Machine frame sampling is evidence only and does not certify
-    PIXEL_REVIEW or PEDAGOGY_REVIEW.
+    Native ES/EN visual media and rendered technical indexability remain green from the
+    exact content/media checkpoint. Action 35439893298 ran on current branch head
+    e31b662a01428539728876e881c224312dbfd73b and closed the previously uninspected
+    browser interaction/lifecycle domain for all 12 route-locale rows. The only commit
+    after the content/media checkpoint was browser-evidence workflow hardening; site-facing
+    article/media bytes were unchanged. Voice remains owner-local deferred debt and is not
+    a blocker under PROGRAM AMENDMENT 5716685049.
 source_review:
   source_review_main: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
-  current_evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  browser_evidence_revision: e31b662a01428539728876e881c224312dbfd73b
   status: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
   current_primary_revalidated: true
-  source_content_claims_unchanged_by_media_generation: true
+  source_content_claims_unchanged_by_browser_hardening: true
   prior_exact_head_source_accessibility_run: 35419776376
   changed_revision_deterministic_source_contracts: PASS
   note: >-
-    Source/factual/parity review remains valid. The media checkpoint changed ES video
-    frontmatter/media mappings and binaries, not the reviewed technical claims. The
-    milestone re-ran the applicable deterministic chapter source contracts on the changed
-    revision; no source blocker was introduced.
+    Source/factual/parity review remains valid. The browser-evidence hardening commit changed
+    only .github/workflows/realtime-voice-browser-milestone.yml concurrency and did not
+    modify reviewed article, visual, video, poster, metadata or localization bytes.
 media_visual_evidence:
   action_run: 35432607898
   generated_assets: 12
@@ -78,12 +79,70 @@ indexability_evidence:
     sitemap_hreflang: PASS_FAIL_CLOSED
     orphan_route: PASS_FAIL_CLOSED
   canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
+  internal_graph_es: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
+  internal_graph_en: ZERO_ORPHANS_100_PERCENT_CONTEXTUAL_COVERAGE
   google_selection_required: false
   live_verification: PENDING_RELEASE
+browser_evidence:
+  action_run: 35439893298
+  exact_head: e31b662a01428539728876e881c224312dbfd73b
+  conclusion: SUCCESS
+  chrome: 152.0.7977.82
+  profiles:
+    - desktop-normal
+    - mobile-normal
+    - desktop-reduced
+    - mobile-reduced
+  article_contexts: 48
+  watch_contexts: 48
+  full_page_screenshots: 48
+  playback_states_each_context:
+    start_seconds: 0
+    middle_seconds: 18
+    final_seconds: 35.65
+    duration_seconds: 36
+    ready_state: 4
+  media_http_status: 206
+  chapter_specific_interaction_validators: PASS_01_TO_06
+  keyboard_touch_focus: PASS
+  reduced_motion: PASS
+  runtime_resource_errors: PASS_NONE_UNEXPECTED
+  article_watch_lifecycle: PASS_12_OF_12
+  artifact:
+    name: realtime-voice-browser-pixel-evidence
+    id: 10584205107
+    files: 49
+    bytes: 96609866
+    zip_sha256: b619f69456c2d13143f3b718d1da14f322ac326f00e7a1511c7d2fd0c0c0b748
+    retention_days: 1
+manual_full_page_review_checkpoint:
+  inspected_artifact: 10584205107
+  inspected_actual_encoded_full_page_screenshots: true
+  coverage: >-
+    ES and EN, desktop and mobile, normal and reduced motion, all six chapters. Review used
+    the exact 48 encoded full-page screenshots plus stratified top/intermediate/bottom crops
+    at readable scale rather than DOM-only assertions.
+  observed_final_state_p0_p1_p2: []
+  observed_notes:
+    - Typography, hierarchy, visual teaching blocks and reader progression remain readable in the inspected full-page states.
+    - Wide comparison tables remain contained to their intentional mobile scroll surface; browser validation reports no page-level horizontal overflow.
+    - ES/EN page structures and visual density remain materially parallel without locale leakage in the inspected states.
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  fail_closed_reason: >-
+    The retained milestone artifact contains the 48 final full-page article screenshots, but
+    does not retain every chapter-specific start/intermediate interaction screenshot produced
+    by the individual validators. The contract requires real inspection of start,
+    intermediate and final states, so automated validator success plus final-state pixels is
+    not promoted to PIXEL_REVIEW/PEDAGOGY_REVIEW yet.
+  next_action: >-
+    Retain a minimal targeted set of the already-defined chapter-specific start/intermediate/
+    final screenshots for ES/EN desktop/mobile normal/reduced, inspect those actual pixels,
+    and only then promote PIXEL_REVIEW/PEDAGOGY_REVIEW if no defect is found.
 status_counts:
   SOURCE_PASS: 12
   BUILD_PASS: 12
-  BROWSER_PASS: 0
+  BROWSER_PASS: 12
   MEDIA_VISUAL_PASS: 12
   INDEXABILITY_PASS: 12
   PIXEL_REVIEW: 0
@@ -91,11 +150,11 @@ status_counts:
   ARTICLE_GOLDEN: 0
   route_locale_GOLDEN: 0
 row_defaults: &row_defaults
-  iteration_count: 3
-  last_review_head: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  iteration_count: 4
+  last_review_head: e31b662a01428539728876e881c224312dbfd73b
   SOURCE_PASS: true
   BUILD_PASS: true
-  BROWSER_PASS: false
+  BROWSER_PASS: true
   MEDIA_VISUAL_PASS: true
   INDEXABILITY_PASS: true
   PIXEL_REVIEW: false
@@ -103,16 +162,17 @@ row_defaults: &row_defaults
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   es_en_parity_factual_source: PASS_CURRENT_PRIMARY_REVALIDATED_2026_09_19
   canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_CHECKPOINT
-  watch_video_lifecycle: MEDIA_METADATA_ARTICLE_WATCH_PASS__PLAYBACK_LIFECYCLE_PENDING_BROWSER
-  evidence_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
-  evidence_action_run: 35432607898
+  watch_video_lifecycle: PASS_ARTICLE_WATCH_PLAYBACK_START_MID_FINAL_TEARDOWN
+  content_media_revision: 8d181633c830c8aa2b75128b0914cc7ba47ad4e3
+  evidence_revision: e31b662a01428539728876e881c224312dbfd73b
+  evidence_action_run: 35439893298
   live_deploy_verification: NOT_RELEASED_CURRENT_BRANCH_MAIN_UNCHANGED
   authenticated_gsc_observation: SEPARATE_FROM_INDEXABILITY__NO_NEW_GSC_OBSERVATION_THIS_ITERATION
   p0: []
   p1: []
   p2: []
   state: QA
-  next_action: RUN_FRESH_BROWSER_LIFECYCLE_AND_FULL_PAGE_PIXEL_PEDAGOGY_1440_390_NORMAL_REDUCED
+  next_action: RETAIN_AND_MANUALLY_INSPECT_TARGETED_START_INTERMEDIATE_FINAL_INTERACTION_PIXELS
 rows:
   - <<: *row_defaults
     id: voice01-es
@@ -199,15 +259,16 @@ rows:
     native_video: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
     poster: locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
 historical_transition:
-  previous_iteration_count: 2
-  current_iteration_count: 3
+  previous_iteration_count: 3
+  current_iteration_count: 4
   increment_reason: >-
-    All twelve route-locale rows were materially changed and inspected in the native-media
-    milestone. The prior P1 for missing curriculum-required visual video is closed by exact
-    validated media. No additional iteration is charged for ledger persistence itself.
-  closed_p1:
+    All twelve route-locale rows were materially inspected by the fresh exact-head browser
+    lifecycle milestone. The milestone exercised article and watch playback at start/mid/final,
+    chapter interactions, keyboard/touch/focus, reduced motion, resources/runtime and teardown.
+    No increment is charged for ledger persistence itself.
+  previously_closed_p1:
     - NATIVE_VISUAL_VIDEO_OBLIGATION_UNSATISFIED_IN_CURRENT_SERIES_ASSET_INVENTORY
   caveat: >-
     Empty current p0/p1/p2 arrays mean no defect is known in the domains actually inspected
-    at this checkpoint. They do not assert defect-free browser, full-page pixel or pedagogy
-    domains, which remain explicitly pending.
+    at this checkpoint. They do not assert defect-free manual start/intermediate-state pixel
+    or pedagogy review, which remain explicitly pending and fail closed.
