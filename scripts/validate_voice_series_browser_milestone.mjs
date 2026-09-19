@@ -148,30 +148,52 @@ async function validateArticle(page, locale, stem, mode, evidence) {
   }, null, { timeout: mediaEventTimeoutMs });
 
   const playback = await video.evaluate(async (node, timeoutMs) => {
-    const waitForMediaEvent = (target, eventName) => new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        target.removeEventListener(eventName, onEvent);
-        reject(new Error(`timed out waiting for media event ${eventName}`));
-      }, timeoutMs);
-      const onEvent = () => {
-        clearTimeout(timer);
-        resolve();
+    const waitForCondition = (predicate, description) => new Promise((resolve, reject) => {
+      const startedAt = performance.now();
+      const poll = () => {
+        if (predicate()) {
+          resolve();
+          return;
+        }
+        if (performance.now() - startedAt >= timeoutMs) {
+          reject(new Error(`timed out waiting for ${description}`));
+          return;
+        }
+        setTimeout(poll, 25);
       };
-      target.addEventListener(eventName, onEvent, { once: true });
+      poll();
     });
+    const seekTo = async (target) => {
+      node.currentTime = target;
+      await waitForCondition(
+        () => !node.seeking && Math.abs(node.currentTime - target) <= 0.25,
+        `seek target ${target}`,
+      );
+      return node.currentTime;
+    };
 
     if (!Number.isFinite(node.duration) || node.duration <= 0) {
-      await waitForMediaEvent(node, 'loadedmetadata');
+      await waitForCondition(
+        () => Number.isFinite(node.duration) && node.duration > 0,
+        'loaded metadata duration',
+      );
     }
     const duration = node.duration;
-    node.currentTime = Math.min(duration * 0.5, Math.max(1, duration - 1));
-    await waitForMediaEvent(node, 'seeked');
-    const middle = node.currentTime;
-    node.currentTime = Math.max(0, duration - 0.35);
-    await waitForMediaEvent(node, 'seeked');
-    return { duration, middle, final: node.currentTime, paused: node.paused, readyState: node.readyState };
+    const startedAt = node.currentTime;
+    node.pause();
+    const middle = await seekTo(Math.min(duration * 0.5, Math.max(1, duration - 1)));
+    const final = await seekTo(Math.max(0, duration - 0.35));
+    return { duration, startedAt, middle, final, paused: node.paused, readyState: node.readyState };
   }, mediaEventTimeoutMs);
-  if (!(playback.duration >= 35 && playback.duration <= 37) || playback.middle <= 0 || playback.final <= playback.middle || playback.readyState < 2) {
+  if (
+    !(playback.duration >= 35 && playback.duration <= 37)
+    || playback.startedAt < 0
+    || playback.middle < playback.duration * 0.45
+    || playback.final < playback.duration - 1
+    || playback.final <= playback.middle
+    || !playback.paused
+    || playback.readyState < 2
+  ) {
     throw new Error(`${label}: invalid start/intermediate/final playback evidence ${JSON.stringify(playback)}`);
   }
 
@@ -212,32 +234,58 @@ async function validateWatch(page, locale, stem, mode, evidence) {
   if (![200, 206].includes(range.status())) throw new Error(`${label}: range request ${range.status()} ${mediaUrl}`);
 
   const playback = await video.evaluate(async (node, timeoutMs) => {
-    const waitForMediaEvent = (target, eventName) => new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        target.removeEventListener(eventName, onEvent);
-        reject(new Error(`timed out waiting for media event ${eventName}`));
-      }, timeoutMs);
-      const onEvent = () => {
-        clearTimeout(timer);
-        resolve();
+    const waitForCondition = (predicate, description) => new Promise((resolve, reject) => {
+      const startedAt = performance.now();
+      const poll = () => {
+        if (predicate()) {
+          resolve();
+          return;
+        }
+        if (performance.now() - startedAt >= timeoutMs) {
+          reject(new Error(`timed out waiting for ${description}`));
+          return;
+        }
+        setTimeout(poll, 25);
       };
-      target.addEventListener(eventName, onEvent, { once: true });
+      poll();
     });
+    const seekTo = async (target) => {
+      node.currentTime = target;
+      await waitForCondition(
+        () => !node.seeking && Math.abs(node.currentTime - target) <= 0.25,
+        `seek target ${target}`,
+      );
+      return node.currentTime;
+    };
 
     try { await node.play(); } catch (_) {}
+    await waitForCondition(
+      () => !node.paused || node.currentTime > 0,
+      'watch playback start',
+    );
     const started = !node.paused || node.currentTime > 0;
     if (!Number.isFinite(node.duration) || node.duration <= 0) {
-      await waitForMediaEvent(node, 'loadedmetadata');
+      await waitForCondition(
+        () => Number.isFinite(node.duration) && node.duration > 0,
+        'loaded metadata duration',
+      );
     }
     const duration = node.duration;
-    node.currentTime = Math.min(duration * 0.5, Math.max(1, duration - 1));
-    await waitForMediaEvent(node, 'seeked');
-    const middle = node.currentTime;
-    node.currentTime = Math.max(0, duration - 0.35);
-    await waitForMediaEvent(node, 'seeked');
-    return { started, duration, middle, final: node.currentTime, readyState: node.readyState };
+    const startedAt = node.currentTime;
+    node.pause();
+    const middle = await seekTo(Math.min(duration * 0.5, Math.max(1, duration - 1)));
+    const final = await seekTo(Math.max(0, duration - 0.35));
+    return { started, duration, startedAt, middle, final, paused: node.paused, readyState: node.readyState };
   }, mediaEventTimeoutMs);
-  if (!playback.started || !(playback.duration >= 35 && playback.duration <= 37) || playback.middle <= 0 || playback.final <= playback.middle || playback.readyState < 2) {
+  if (
+    !playback.started
+    || !(playback.duration >= 35 && playback.duration <= 37)
+    || playback.middle < playback.duration * 0.45
+    || playback.final < playback.duration - 1
+    || playback.final <= playback.middle
+    || !playback.paused
+    || playback.readyState < 2
+  ) {
     throw new Error(`${label}: invalid watch lifecycle evidence ${JSON.stringify(playback)}`);
   }
 
