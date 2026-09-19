@@ -62,15 +62,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Build exact ES and EN preview strictly
+      - name: Build exact Spanish preview strictly
         shell: bash
         run: |
           set -euo pipefail
           mkdocs build --clean --strict
-          python scripts/prepare_locale.py --locale en
-          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
 
-      - name: Validate fresh series source and publication/search contracts
+      - name: Validate fresh series source, publication and Spanish search contracts
         shell: bash
         run: |
           set -euo pipefail
@@ -81,6 +79,13 @@ jobs:
           node scripts/validate_voice_evaluation_observability_ch6_source.mjs
           python scripts/audit_publication_contract.py
           python scripts/audit_multilingual_search_foundation.py
+
+      - name: Build exact English preview strictly into combined site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
 
       - name: Validate current native visual media without regeneration
         shell: bash
