@@ -1,0 +1,74 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: seguridad-ia
+article: 03-envenenamiento
+recorded_at: 2026-09-19T05:00:00+02:00
+reason: EXACT_HEAD_RELEASE_NO_REGRESSION_EXPOSED_REAL_SECURITY03_PERSISTENCE_INTERACTION_DEFECT
+release_branch: release/agents-golden-requalification
+release_fix_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+repair_branch: quality/post-datacenters-requalification
+repair_mirror_head: 867e173625feb949ee39edb53fd7791c6f72c959
+supersedes_security03_rows_in_security_article_ledger_until_reconciled: true
+voice_enhancement: DEFERRED_OWNER_LOCAL
+voice_is_blocker: false
+indexability_delta: NONE
+media_visual_delta: NONE
+fixes:
+  - SVG state markers used the HTML-only hidden property path and did not reliably expose decision/tombstone state in SVG.
+  - Complete revocation evaluated the generic ephemeral branch before the revoked-clean branch, so invalidate after revoke did not reach the clean state.
+  - Replaced SVG visibility mutation with Element.toggleAttribute('hidden', ...).
+  - Prioritized revoked-and-no-residual as the clean REVOKED state.
+  - Added deterministic source mutations for both regressions.
+rows:
+  - route: series/seguridad-ia/03-envenenamiento.md
+    locale: es
+    iteration_count: 13
+    last_reviewed_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    state: QA
+    SOURCE_PASS: PENDING_EXACT_HEAD_GATE
+    BUILD_PASS: PENDING_EXACT_HEAD_GATE
+    BROWSER_PASS: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: PENDING_EXACT_HEAD_RENDER_RECHECK
+    PEDAGOGY_REVIEW: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects:
+      P0: []
+      P1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+      P2: []
+    parity_factual_source: UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED
+    canonical_status: PASS_UNCHANGED_SIGNAL
+    hreflang_status: PASS_UNCHANGED_SIGNAL
+    sitemap_status: PASS_UNCHANGED_SIGNAL
+    internal_discovery_status: PASS_UNCHANGED_SIGNAL
+    robots_status: PASS_UNCHANGED_SIGNAL
+    watch_video_lifecycle: PASS_UNCHANGED_MEDIA
+    evidence_revision: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    next_action: HARVEST_EXACT_HEAD_ENGLISH_MIRROR_AND_RELEASE_CHECKS_THEN_RECONCILE_CANONICAL_LEDGER
+  - route: series/seguridad-ia/03-envenenamiento.md
+    locale: en
+    iteration_count: 13
+    last_reviewed_head: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    state: QA
+    SOURCE_PASS: PENDING_EXACT_HEAD_GATE
+    BUILD_PASS: PENDING_EXACT_HEAD_GATE
+    BROWSER_PASS: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: PENDING_EXACT_HEAD_RENDER_RECHECK
+    PEDAGOGY_REVIEW: PENDING_EXACT_HEAD_INTERACTION_RECHECK
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects:
+      P0: []
+      P1: [SECURITY03_PERSISTENCE_INTERACTION_DEFECT_FIXED_AWAITING_EXACT_HEAD_VERIFICATION]
+      P2: []
+    parity_factual_source: UNCHANGED_CONTENT_CLAIMS_I18N_REPINNED
+    canonical_status: PASS_UNCHANGED_SIGNAL
+    hreflang_status: PASS_UNCHANGED_SIGNAL
+    sitemap_status: PASS_UNCHANGED_SIGNAL
+    internal_discovery_status: PASS_UNCHANGED_SIGNAL
+    robots_status: PASS_UNCHANGED_SIGNAL
+    watch_video_lifecycle: PASS_UNCHANGED_MEDIA
+    evidence_revision: f1e847b02b001edc68f0b2b819e7399e7b6262d8
+    next_action: HARVEST_EXACT_HEAD_ENGLISH_MIRROR_AND_RELEASE_CHECKS_THEN_RECONCILE_CANONICAL_LEDGER
