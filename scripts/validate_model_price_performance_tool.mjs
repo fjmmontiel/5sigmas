@@ -49,7 +49,12 @@ for (const spec of cases) {
     const points = await page.locator('.s5-model-point').count();
     if (points !== 5) failures.push(`${spec.route} ${viewport.name}: expected 5 chart points, got ${points}`);
     const frontierPoints = await page.locator('.s5-model-point[data-frontier="true"]').count();
-    if (frontierPoints !== 3) failures.push(`${spec.route} ${viewport.name}: expected 3 default frontier points, got ${frontierPoints}`);
+    const frontierSummary = Number((await page.locator('[data-output="frontierCount"]').textContent() || '').trim());
+    if (!Number.isInteger(frontierSummary) || frontierSummary < 1 || frontierSummary > points) {
+      failures.push(`${spec.route} ${viewport.name}: invalid computed frontier count ${frontierSummary}`);
+    } else if (frontierPoints !== frontierSummary) {
+      failures.push(`${spec.route} ${viewport.name}: chart frontier count ${frontierPoints} does not match computed summary ${frontierSummary}`);
+    }
     const anchors = await page.locator('[data-model-anchor]').count();
     const leaders = await page.locator('[data-model-leader]').count();
     if (anchors !== points || leaders !== points) failures.push(`${spec.route} ${viewport.name}: expected one anchor and leader per chart label, got ${anchors}/${leaders} for ${points} labels`);

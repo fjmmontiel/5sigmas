@@ -16,10 +16,21 @@ const close = (actual, expected, epsilon = 1e-10, label = '') => {
   assert.ok(Math.abs(actual - expected) <= epsilon, `${label}: expected ${expected}, got ${actual}`);
 };
 
+const ageDays = (isoDate) => {
+  const parsed = new Date(`${isoDate}T00:00:00Z`);
+  assert.ok(Number.isFinite(parsed.getTime()), `invalid ISO date: ${isoDate}`);
+  return Math.floor((Date.now() - parsed.getTime()) / 86_400_000);
+};
+
 assert.equal(data.schema_version, 1);
 assert.equal(data.freshness_policy?.review_interval_days, 14);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis'));
 assert.ok(data.models.length >= 5, 'expected at least five rigorously sourced comparable configurations');
+assert.ok(ageDays(data.updated_at) >= 0, `dataset updated_at is in the future: ${data.updated_at}`);
+assert.ok(
+  ageDays(data.updated_at) <= data.freshness_policy.review_interval_days,
+  `model price/performance dataset is stale: updated ${data.updated_at}; policy allows ${data.freshness_policy.review_interval_days} days`,
+);
 
 const ids = new Set();
 for (const model of data.models) {
@@ -37,6 +48,10 @@ for (const model of data.models) {
     const source = model.sources?.[key];
     assert.match(source?.url || '', /^https:\/\//, `${model.id}: ${key} URL required`);
     assert.match(source?.verified_on || '', /^2026-\d{2}-\d{2}$/, `${model.id}: ${key} verification date required`);
+    assert.ok(
+      ageDays(source.verified_on) <= data.freshness_policy.review_interval_days,
+      `${model.id}: ${key} evidence is stale (${source.verified_on})`,
+    );
   }
 }
 
@@ -60,25 +75,25 @@ for (const model of [opus, sol, terra, luna, gemini]) assert.ok(model, 'required
 }
 
 {
-  const long = api.calculateScenarioCost(sol, 300_000, 1_000, '2026-08-21T12:00:00Z');
+  const long = api.calculateScenarioCost(sol, 300_000, 1_000, '2026-09-14T12:00:00Z');
   assert.equal(long.longContextActive, true);
-  close(long.inputRate, 10, 1e-12, 'Sol long-context input rate');
-  close(long.outputRate, 45, 1e-12, 'Sol long-context output rate');
-  close(long.costPerRequest, 3.045, 1e-12, 'Sol long-context scenario cost');
+  close(long.inputRate, 8, 1e-12, 'Sol long-context input rate');
+  close(long.outputRate, 30, 1e-12, 'Sol long-context output rate');
+  close(long.costPerRequest, 2.43, 1e-12, 'Sol long-context scenario cost');
 }
 
-const rows = api.enrichModels(data.models, { inputTokens: 4_000, outputTokens: 500 }, '2026-08-21T12:00:00Z');
+const rows = api.enrichModels(data.models, { inputTokens: 4_000, outputTokens: 500 }, '2026-09-14T12:00:00Z');
 const row = (id) => rows.find((item) => item.id === id);
 close(row(opus.id).scenario.costPerRequest, 0.0325, 1e-12, 'Opus default cost');
-close(row(sol.id).scenario.costPerRequest, 0.035, 1e-12, 'Sol default cost');
+close(row(sol.id).scenario.costPerRequest, 0.026, 1e-12, 'Sol default cost');
 close(row(terra.id).scenario.costPerRequest, 0.014, 1e-12, 'Terra default cost');
 close(row(luna.id).scenario.costPerRequest, 0.0014, 1e-12, 'Luna default cost');
 close(row(gemini.id).scenario.costPerRequest, 0.004875, 1e-12, 'Gemini default cost');
 
 const frontier = rows.filter((item) => item.on_frontier).map((item) => item.id).sort();
-assert.deepEqual(frontier, [opus.id, terra.id, luna.id].sort(), 'default price/intelligence frontier changed unexpectedly');
+assert.deepEqual(frontier, [opus.id, sol.id, terra.id, luna.id].sort(), 'default price/intelligence frontier changed unexpectedly');
 
-const highQuality = api.filterModels(rows, { minIntelligence: 60 });
+const highQuality = api.filterModels(rows, { minIntelligence: 45 });
 assert.deepEqual(highQuality.map((item) => item.id).sort(), [opus.id, sol.id].sort());
 
 const lowTtft = api.filterModels(rows, { maxTtftSeconds: 30 });
@@ -92,4 +107,4 @@ assert.equal(summary.cheapest.id, luna.id);
 assert.equal(summary.fastest.id, gemini.id);
 assert.equal(summary.lowestLatency.id, gemini.id);
 
-console.log(`Model price/performance tests passed: ${data.models.length} sourced configurations; effective pricing, long-context cost, filters, sorting and Pareto frontier verified.`);
+console.log(`Model price/performance tests passed: ${data.models.length} sourced configurations; freshness, effective pricing, long-context cost, filters, sorting and Pareto frontier verified.`);
