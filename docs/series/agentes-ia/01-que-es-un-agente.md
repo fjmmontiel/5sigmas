@@ -9,7 +9,20 @@ tags:
   - Agentes
   - Tool Calling
 video: "01-que-es-un-agente.mp4"
+video_poster: "01-que-es-un-agente.jpg"
+video_title: "Qué es un agente de IA y qué no lo es"
+video_summary: "Diferencia entre respuesta, workflow y agente acotado, mostrando que la autonomía depende del sistema, los permisos, la evidencia y una condición de parada."
 video_duration: "PT60S"
+video_chapters:
+  - name: "Responder no es actuar"
+    start: 0
+    end: 20
+  - name: "Workflow frente a autonomía acotada"
+    start: 20
+    end: 40
+  - name: "Sistema, evidencia y condición de parada"
+    start: 40
+    end: 60
 ---
 
 # Capítulo 1 — Qué es un agente de IA y qué no lo es

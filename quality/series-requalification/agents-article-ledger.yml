@@ -1,0 +1,139 @@
+schema_version: 7
+program: 5sigmas_GOLDEN_requalification
+series: agentes-ia
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+iteration_count_epoch: owner_amendment_5716685049
+pre_epoch_iteration_count: UNKNOWN_NOT_RECONSTRUCTED_DO_NOT_FABRICATE
+series_state: ARTICLE_GOLDEN_6_OF_6_AWAITING_FRESH_ZERO_BASED_SERIES_AUDIT
+article_golden_requires_voice: false
+series_golden_requires_voice: false
+article_golden_requires_indexability: true
+series_golden_requires_indexability: true
+voice_enhancement_default: DEFERRED_OWNER_LOCAL
+history_preserved_in_git_and_issue_305: true
+
+current_exact_evidence:
+  technical_head: 343af9ed235b2ac55db4f26784c43de6c3c68c6f
+  technical_workflow_run: 35402872378
+  technical_workflow_conclusion: PASS
+  source_review_head: c042e01e40e62947dc36d827801a97bf2ae633d5
+  source_review: PASS_12_OF_12_CURRENT_PRIMARY_AND_ES_EN_PARITY
+  relationship_guard_agents03_04: PASS_WITH_4_NEGATIVE_MUTATIONS
+  strict_es_build: PASS
+  strict_en_build: PASS
+  publication_discovery_contract: PASS
+  build_pass_route_locale_pairs: 12
+  source_pass_route_locale_pairs: 12
+  indexability: PASS_12_OF_12
+  media_visual_contract: PASS_12_OF_12
+  media_visual_blockers: 0
+  browser_article_watch_resource_runtime_smoke: PASS_96_CONTEXTS_CAUSAL_RANGE_RESPONSE_PROOF
+  browser_resource_contexts: 96
+  browser_media_aborts_reclassified_with_causal_proof: 51
+  browser_media_aborts_unresolved: 0
+  browser_abort_proof_mutation_fixtures: 8
+  browser_abort_proof_contract: SAME_REQUEST_OR_PRIOR_SUCCESSFUL_200_206_BEFORE_ABORT_PLUS_FINAL_HEALTHY_MEDIA
+  listener_contract: ACTIVE_THROUGH_TEARDOWN
+  full_experience_head: 68dc7739e7855d3f78e7394d775af904c55b4e69
+  full_experience_workflow_run: 35405478586
+  full_experience_workflow_conclusion: PASS
+  full_experience_contexts: 48
+  full_experience_passing: 48
+  full_experience_failing: 0
+  full_experience_artifact_id: 10571993843
+  full_experience_artifact_sha256: 9a8cedad7adebe228ba15235be731c0f013f87c08ed63c1df8ff3ecc6cb4d6cc
+  full_experience_artifact_retention_days: 1
+  browser_pass: PASS_12_OF_12_DESKTOP_MOBILE_NORMAL_REDUCED_INTERACTION_LIFECYCLE_KEYBOARD_TOUCH_FOCUS_PLAYBACK
+  pixel_review: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  pedagogy_review: PASS_12_OF_12_MANUAL_EXACT_ARTIFACT
+  manual_full_page_review:
+    route_locale_pairs_reviewed: 12
+    desktop_width: 1440
+    mobile_width: 390
+    motion_modes: [normal, reduced]
+    states_reviewed: [start, final]
+    clipping_overlap_overflow: PASS
+    hierarchy_readability: PASS
+    es_en_visual_parity: PASS
+    problem_mechanism_evidence_tradeoffs_production: PASS
+    relationship_visual_agents03: PASS_ONE_TRAJECTORY_FOUR_ORTHOGONAL_EVALUATORS_AND_COUNTEREXAMPLE
+    relationship_visual_agents04: PASS_SOURCE_TO_EFFECT_WITH_CONTEXT_CAPABILITY_AUTHORIZATION_BOUNDARIES_AND_BLOCKED_COUNTEREXAMPLE
+    prior_pending_visual_review_p1: CLOSED_BY_EXACT_PIXEL_PEDAGOGY_EVIDENCE
+  voice_enhancement_debt_nonblocking:
+    VIDEO_AUDIO_STREAM_MISSING: 12
+    VIDEO_CAPTIONS_MISSING: 12
+    VIDEO_TRANSCRIPT_MISSING: 12
+  manual_native_video_frame_review:
+    frames_reviewed: 72
+    samples_per_route_locale: 6
+    result: PASS_FOR_NATIVE_REAL_NONPLACEHOLDER_VISUAL_CONTENT_AND_READABILITY
+    does_not_replace_full_page_pixel_or_pedagogy: true
+
+source_contract:
+  route_locale_pairs: 12
+  passing: 12
+  failing: 0
+  es_en_claim_parity: PASS_12_OF_12
+  chapter_00: PASS_NO_MATERIAL_EXTERNAL_QUANTITATIVE_CLAIM_CURRENT_ARCHITECTURE_CROSSCHECKED
+  chapter_01: PASS_CURRENT_PRIMARY_REACT_TOOLFORMER_NIST_ANTHROPIC
+  chapter_02: PASS_CURRENT_PRIMARY_MCP_OPENAI_AGENTS_SDK
+  chapter_03: PASS_CURRENT_PRIMARY_NIST_EVAL_PROBES_CHEATING_GUIDELINES_STANFORD_AI_INDEX
+  chapter_04: PASS_CURRENT_PRIMARY_NIST_SECURITY_IDENTITY_HIJACKING_ANTHROPIC
+  chapter_05: PASS_CURRENT_PRIMARY_NIST_IDENTITY_STANDARDS_OPENAI_ANTHROPIC
+
+indexability_contract:
+  meaning: TECHNICALLY_DISCOVERABLE_CRAWLABLE_CANONICAL_SITEMAP_HREFLANG_INTERNAL_GRAPH_NOT_GOOGLE_SELECTION
+  route_locale_pairs: 12
+  passing: 12
+  failing: 0
+  canonical: PASS_12_OF_12
+  hreflang: PASS_12_OF_12
+  sitemap: PASS_12_OF_12
+  internal_discovery: PASS_12_OF_12
+  robots_noindex: PASS_12_OF_12
+
+media_visual_contract:
+  route_locale_pairs: 12
+  passing: 12
+  failing: 0
+  native_mp4: PASS_12_OF_12
+  poster: PASS_12_OF_12
+  codec_dimensions_duration: PASS_12_OF_12
+  article_watch_identity: PASS_12_OF_12
+  six_deterministic_frames_per_route_locale: PASS_72_FRAMES
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+
+relationship_visual_work:
+  chapter_03:
+    model: ONE_TRAJECTORY_WITH_FOUR_ORTHOGONAL_EVALUATORS_AND_COUNTEREXAMPLE
+    deterministic_guard: PASS
+    full_page_pixel_pedagogy: PASS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED
+  chapter_04:
+    model: SOURCE_TO_EFFECT_PATH_WITH_CONTEXT_CAPABILITY_AUTHORIZATION_BOUNDARIES_AND_BLOCKED_COUNTEREXAMPLE
+    deterministic_guard: PASS
+    full_page_pixel_pedagogy: PASS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED
+
+article_golden:
+  chapters: 6/6
+  route_locale_rows: 12/12
+  known_p0_p1_p2: 0
+  blocker: NONE_AT_ARTICLE_GATE
+  series_golden: NOT_YET
+  series_golden_blocker: FRESH_ZERO_BASED_SERIES_AUDIT_AND_RELEASE_LIVE_VERIFICATION
+
+next_action: FRESH_ZERO_BASED_SERIES_AUDIT_RECONCILE_SITEMAP_NAV_HUB_INTERNAL_GRAPH_CANONICAL_HREFLANG_THEN_RELEASE_PR_DEPLOY_LIVE_QA
+
+articles:
+  - {route: series/agentes-ia/00_presentacion_serie.md, locale: es, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_ARCHITECTURE_CROSSCHECKED_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/00_presentacion_serie.md, locale: en, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_ARCHITECTURE_CROSSCHECKED_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/01-que-es-un-agente.md, locale: es, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_REACT_TOOLFORMER_NIST_ANTHROPIC_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/01-que-es-un-agente.md, locale: en, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_REACT_TOOLFORMER_NIST_ANTHROPIC_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/02-anatomia-de-un-agente.md, locale: es, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_MCP_OPENAI_AGENTS_SDK_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/02-anatomia-de-un-agente.md, locale: en, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_MCP_OPENAI_AGENTS_SDK_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/03-como-evaluar-un-agente.md, locale: es, iteration_count: 6, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_EVAL_ES_EN_RELATIONSHIP_GUARD, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/03-como-evaluar-un-agente.md, locale: en, iteration_count: 6, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_EVAL_ES_EN_RELATIONSHIP_GUARD, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/04-seguridad-agentes.md, locale: es, iteration_count: 6, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_SECURITY_IDENTITY_HIJACKING_ANTHROPIC_ES_EN_RELATIONSHIP_GUARD, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/04-seguridad-agentes.md, locale: en, iteration_count: 6, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_SECURITY_IDENTITY_HIJACKING_ANTHROPIC_ES_EN_RELATIONSHIP_GUARD, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/05-de-la-demo-a-produccion.md, locale: es, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_IDENTITY_STANDARDS_OPENAI_ANTHROPIC_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}
+  - {route: series/agentes-ia/05-de-la-demo-a-produccion.md, locale: en, iteration_count: 5, SOURCE_PASS: true, BUILD_PASS: true, BROWSER_PASS: true, MEDIA_VISUAL_PASS: true, INDEXABILITY_PASS: true, PIXEL_REVIEW: true, PEDAGOGY_REVIEW: true, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: {P0: [], P1: [], P2: []}, parity_factual_source: PASS_CURRENT_PRIMARY_NIST_IDENTITY_STANDARDS_OPENAI_ANTHROPIC_ES_EN, canonical_status: PASS, hreflang_status: PASS, sitemap_status: PASS, internal_discovery_status: PASS, watch_video_lifecycle: PASS_FULL_INTERACTION_LIFECYCLE, evidence_revision: FULL_EXPERIENCE_68dc773_RUN_35405478586__SOURCE_c042e0__TECHNICAL_343af9, next_action: FRESH_ZERO_BASED_SERIES_AUDIT, state: GOLDEN}

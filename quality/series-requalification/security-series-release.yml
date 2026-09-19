@@ -1,9 +1,9 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: seguridad-ia
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-state: RELEASE_CANDIDATE_AUDIT_PASS_AWAITING_PR_MERGE_DEPLOY_LIVE
+state: SERIES_GOLDEN_PRODUCTION_VERIFIED
 article_golden_rows: 12
 article_golden_requires_voice: false
 series_golden_requires_voice: false
@@ -43,10 +43,30 @@ release_package:
   base_main: e2f301e3fe346a4328cb773c46fa49ca34388a12
   source_audited_head: 830bd55d63da1e95ea4461b0086295f9bc8c057a
   branch: release/security-golden-requalification
+  pull_request: 330
+  release_head: 729d824d00d3d21b6b3521abf5553fe81a6c8968
+  merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+  merged_at_utc: 2026-09-18T20:39:19Z
   unrelated_agents_work: REVERTED_TO_MAIN_OR_EXCLUDED
   security_site_facing_bytes_changed_after_audit: false
-  next_gate: EXACT_HEAD_PR_CHECKS_THEN_MERGE_DEPLOY_AND_LIVE_ES_EN_INDEXABILITY_VERIFICATION
 
-series_finalization_rule:
-  premerge_status: RELEASE_READY_NOT_YET_SERIES_GOLDEN_LIVE
-  series_golden_only_after: PR_EXACT_HEAD_GREEN_AND_MERGED_AND_PRODUCTION_MATCHES_VALIDATED_SOURCE
+production_verification:
+  deploy_workflow_run: 35392652259
+  deployed_revision: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+  build: PASS
+  deploy: PASS
+  live_qa: PASS
+  live_spanish_resources: PASS
+  live_english_locale: PASS
+  live_english_seo_schema: PASS
+  live_route_equivalent_locale_switching: PASS
+  live_english_series_mirror: PASS
+  live_security_media: PASS
+  production_checks_completed_at_utc: 2026-09-18T20:52:10Z
+  indexability_release_evidence: BUILD_SEARCH_FOUNDATION_PLUS_COMBINED_SEO_CRAWL_PLUS_LIVE_LOCALE_SEO_MIRROR_RESOURCE_QA
+
+series_finalization:
+  status: SERIES_GOLDEN
+  rationale: ALL_CURRENT_NONDEFERRED_GATES_GREEN_PLUS_FRESH_ZERO_BASED_SERIES_AUDIT_PLUS_EXACT_RELEASE_MERGE_DEPLOY_AND_LIVE_QA
+  voice_deferred_non_blocking: true
+  linkedin_action_from_this_program: NONE

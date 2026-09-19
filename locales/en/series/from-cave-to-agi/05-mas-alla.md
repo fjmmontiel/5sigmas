@@ -110,11 +110,11 @@ In parallel, [I-JEPA](https://arxiv.org/abs/2301.08243) pursues a related idea. 
 
 ### 4.1 The thesis is already moving capital
 
-The idea is already attracting significant capital. In March 2026, Reuters reported that [AMI](https://www.reuters.com/business/ex-meta-ai-chief-yann-lecuns-ami-raises-103-billion-alternative-ai-approach-2026-03-10/), Yann LeCun's startup, raised $1.03 billion to develop systems centered on reasoning, planning and modeling the real world. A month earlier, Reuters reported that Fei-Fei Li's [World Labs](https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/) raised $1 billion to advance “spatial intelligence.”
+The idea is already attracting significant capital. In March 2026, Reuters reported that [AMI](https://www.reuters.com/business/ex-meta-ai-chief-yann-lecuns-ami-raises-103-billion-alternative-ai-approach-2026-03-10/), Yann LeCun's startup, raised \$1.03 billion to develop systems centered on reasoning, planning and modeling the real world. A month earlier, Reuters reported that Fei-Fei Li's [World Labs](https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/) raised \$1 billion to advance “spatial intelligence.”
 
 Those rounds do not show that world models are the winning approach. They do show that a significant part of the ecosystem believes the next leap will not come from scaling language alone, but from modeling the world's spatial, causal and interactive structure more effectively.
 
-The investment scale extends far beyond those two companies. In 2026 alone, OpenAI announced **$110 billion** in new investment, Anthropic closed **$30 billion**, and xAI another **$20 billion**. In parallel, large technology companies plan roughly **$635 billion** of AI capital expenditure in 2026 alone.
+The investment scale extends far beyond those two companies. In 2026 alone, OpenAI announced **\$110 billion** in new investment, Anthropic closed **\$30 billion**, and xAI another **\$20 billion**. In parallel, large technology companies plan roughly **\$635 billion** of AI capital expenditure in 2026 alone.
 
 Capital is concentrating around four concrete bottlenecks—**models, compute, energy and the physical world**—because better training alone is no longer enough.
 

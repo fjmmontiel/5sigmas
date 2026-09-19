@@ -55,6 +55,38 @@ const forbidden = [
 const failures = [];
 const browser = await chromium.launch({ headless: true });
 
+const inspectDocumentOverflow = async (page, label) => page.evaluate((label) => {
+  const root = document.documentElement;
+  const clientWidth = root.clientWidth;
+  const scrollWidth = root.scrollWidth;
+  const offenders = [...document.querySelectorAll('body *')]
+    .map((node) => {
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        tag: node.tagName.toLowerCase(),
+        id: node.id || '',
+        className: typeof node.className === 'string' ? node.className.trim().replace(/\s+/g, '.') : '',
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
+        width: Math.round(rect.width),
+        clientWidth: node.clientWidth,
+        scrollWidth: node.scrollWidth,
+        overflowX: style.overflowX,
+        display: style.display,
+        isHtml: node instanceof HTMLElement,
+      };
+    })
+    .filter((item) => item.width > 0 && (
+      item.right > clientWidth + 2 ||
+      item.left < -2 ||
+      (item.isHtml && item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX))
+    ))
+    .sort((a, b) => Math.max(b.right - clientWidth, b.scrollWidth - b.clientWidth) - Math.max(a.right - clientWidth, a.scrollWidth - a.clientWidth))
+    .slice(0, 20);
+  return { label, clientWidth, scrollWidth, delta: scrollWidth - clientWidth, offenders };
+}, label);
+
 try {
   for (const chapter of chapters) {
     for (const viewport of [
@@ -108,6 +140,8 @@ try {
       }
 
       if (chapter.slug === '05-mas-alla') {
+        if (viewport.name === 'mobile') console.error(`OVERFLOW_DIAG ${JSON.stringify(await inspectDocumentOverflow(page, 'chapter5-baseline'))}`);
+
         const world = page.locator('[data-demo="05-world-models-ecosystem"]');
         const worldText = (await world.textContent()) || '';
         for (const anchor of [
@@ -129,6 +163,7 @@ try {
         if ((await world.getAttribute('data-wm-ready')) !== '1') failures.push(`${chapter.route}: world-model runtime did not initialize`);
         await world.locator('.wm-tab[data-wtab="keys"]').click();
         if (!(await world.locator('[data-wpanel="keys"]').getAttribute('class'))?.includes('wm-panel--active')) failures.push(`${chapter.route}: world-model implication tab did not activate`);
+        if (viewport.name === 'mobile') console.error(`OVERFLOW_DIAG ${JSON.stringify(await inspectDocumentOverflow(page, 'after-world-keys'))}`);
 
         const capital = page.locator('[data-demo="05-apuestas-capital"]');
         const capitalText = (await capital.textContent()) || '';
@@ -153,6 +188,7 @@ try {
         await capital.locator('.cap-tab[data-ctab="detail"]').click();
         if (!(await capital.getAttribute('class'))?.includes('cap-wrap--detail')) failures.push(`${chapter.route}: capital detail tab did not expose concrete bets`);
         if (!(await capital.locator('.cap-bets-mini').first().isVisible())) failures.push(`${chapter.route}: capital bets remained hidden after detail-tab activation`);
+        if (viewport.name === 'mobile') console.error(`OVERFLOW_DIAG ${JSON.stringify(await inspectDocumentOverflow(page, 'after-capital-detail'))}`);
 
         const robotics = page.locator('[data-demo="05-robotica-fundacional"]');
         const roboticsText = (await robotics.textContent()) || '';
@@ -175,6 +211,7 @@ try {
         await robotics.locator('.rob-tab[data-rtab="4"]').click();
         if (!(await robotics.locator('[data-rpanel="4"]').getAttribute('class'))?.includes('rob-panel--active')) failures.push(`${chapter.route}: robotics deployment rung did not activate`);
         if ((await robotics.locator('[data-fill]').evaluate(el => el.style.width)) !== '100%') failures.push(`${chapter.route}: robotics maturity scale did not advance to 100%`);
+        if (viewport.name === 'mobile') console.error(`OVERFLOW_DIAG ${JSON.stringify(await inspectDocumentOverflow(page, 'after-robotics-rung4'))}`);
       }
 
       if (chapter.canonicalInteractions) {

@@ -65,17 +65,18 @@ jobs:
               return '\n'.join(lines[start:end])
 
           def is_failure_only(expression):
-              expression = expression.split('#', 1)[0].strip()
-              # Build the GitHub-expression delimiters at runtime so Actions does not
-              # evaluate them while expanding this policy's own shell heredoc.
-              wrapper_open = '$' + '{{'
-              wrapper_close = '}' + '}'
-              if expression.startswith(wrapper_open) and expression.endswith(wrapper_close):
-                  expression = expression[len(wrapper_open):-len(wrapper_close)].strip()
-              # Allow one or more AND-conjuncts that only narrow failure evidence by
-              # diagnostic scope. Anything with OR, always/success/cancelled or a leading
-              # predicate other than failure() stays rejected.
-              return bool(re.fullmatch(r'failure\(\)(?:\s*&&\s*[^|]+)*', expression))
+              """Accept only predicates that logically require failure().
+
+              Exact failure() remains canonical. A scoped conjunction such as
+              `${{ failure() && scope == 'full' }}` is equally failure-only and avoids
+              retaining unrelated diagnostics. OR predicates are deliberately rejected.
+              """
+              condition = expression.strip()
+              if condition.startswith('${{') and condition.endswith('}}'):
+                  condition = condition[3:-2].strip()
+              if condition == 'failure()':
+                  return True
+              return condition.startswith('failure() && ') and '||' not in condition
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
@@ -98,7 +99,7 @@ jobs:
                           'add if: failure()'
                       )
                   else:
-                      expression = if_match.group(1).strip()
+                      expression = if_match.group(1).split('#', 1)[0].strip()
                       if not is_failure_only(expression):
                           errors.append(
                               f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
