@@ -1,0 +1,61 @@
+name: Modelos approved snapshot source probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/modelos-approved-snapshot-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe-intro-es:
+    if: github.head_ref == 'migration/video-golden-modelos-razonadores'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        source_ref:
+          - e7155f70920ef2669853b800c887dd53c1c8d1ee
+          - 80171316a513dc361790d8fa5c5b6c8310050a90
+    steps:
+      - name: Checkout exact candidate source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source_ref }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deterministic renderer dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-inter fonts-noto-extra
+          fc-cache -f
+          python -m pip install -r motion/requirements.txt
+          python -m playwright install --with-deps chromium
+          ffmpeg -version | head -1
+      - name: Render approved intro candidate and compare exact bytes
+        working-directory: motion
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf snapshot-probe
+          python scripts/render.py content/modelos-razonadores/00_presentacion_serie.es.json --out snapshot-probe
+          file='snapshot-probe/modelos-razonadores-intro-es-horizontal.mp4'
+          test -f "$file"
+          got="$(sha256sum "$file" | awk '{print $1}')"
+          expected='e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6'
+          echo "source_ref=${{ matrix.source_ref }}"
+          echo "approved_sha256=$expected"
+          echo "rendered_sha256=$got"
+          if [ "$got" = "$expected" ]; then
+            echo 'EXACT_APPROVED_BYTES_MATCH=true'
+          else
+            echo 'EXACT_APPROVED_BYTES_MATCH=false'
+          fi
