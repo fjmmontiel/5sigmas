@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-19T14:37:52.082083+00:00",
+  "unit": "modelos-razonadores",
+  "review_round": 2,
+  "release_strategy": "VALIDATE_AND_PUBLISH_FROZEN_OWNER_APPROVED_SNAPSHOT",
+  "owner_visual_approval": "APPROVED",
+  "owner_approval_reopened": false,
+  "technical_golden": false,
+  "published": false,
+  "observed_repository": {
+    "pr": 332,
+    "branch": "migration/video-golden-modelos-razonadores",
+    "head_at_start": "7714f812a9b939ad774bffc50ef6d7a84aee399f",
+    "main_at_start": "48e2e2508b393cc765c78f50ebf7ad23c6b37f24",
+    "pr_mergeable_at_start": true,
+    "pr_mergeable_state_at_start": "clean"
+  },
+  "private_review_storage_readback": {
+    "single_root_policy_preserved": true,
+    "permission_expansion_performed": false,
+    "es_files_observed": 12,
+    "en_files_observed": 12,
+    "total_files_observed": 24,
+    "note": "Private Drive identifiers are intentionally not persisted in public source. Folder/file metadata was read back through the connected private Drive during this run."
+  },
+  "frozen_horizontal_runtime_validation": {
+    "asset_count": 12,
+    "sha256_exact_matches": 12,
+    "container_profile_matches": 12,
+    "expected_profile": {
+      "codec": "h264",
+      "width": 1920,
+      "height": 1080,
+      "pixel_format": "yuvj420p",
+      "fps": 60,
+      "faststart": true,
+      "durations_seconds_by_chapter": [75, 82, 108, 129, 115, 121]
+    },
+    "full_decode": {
+      "pass_observed": 7,
+      "not_completed": 5,
+      "failure_observed": 0,
+      "status": "PARTIAL_NOT_VERIFIED",
+      "reason": "Execution-runtime decode batch reached its command timeout after seven complete files. Remaining five are not reported as PASS or FAIL."
+    },
+    "assets": [
+      {"locale":"es","chapter":"00_presentacion_serie","sha256":"e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6"},
+      {"locale":"es","chapter":"01-que-es-razonar","sha256":"a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807"},
+      {"locale":"es","chapter":"02-fallos","sha256":"d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed"},
+      {"locale":"es","chapter":"03-test-time-compute","sha256":"e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710"},
+      {"locale":"es","chapter":"04-latencia-streaming","sha256":"1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f"},
+      {"locale":"es","chapter":"05-riesgos","sha256":"f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381"},
+      {"locale":"en","chapter":"00_presentacion_serie","sha256":"f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730"},
+      {"locale":"en","chapter":"01-que-es-razonar","sha256":"b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc"},
+      {"locale":"en","chapter":"02-fallos","sha256":"3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2"},
+      {"locale":"en","chapter":"03-test-time-compute","sha256":"27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400"},
+      {"locale":"en","chapter":"04-latencia-streaming","sha256":"3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0"},
+      {"locale":"en","chapter":"05-riesgos","sha256":"ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec"}
+    ]
+  },
+  "canonical_release_gate": {
+    "workflow_run_id": 35448291396,
+    "job_id": 105910943130,
+    "status": "FAIL",
+    "exact_byte_mismatches": 12,
+    "expected_assets": 12,
+    "later_deterministic_and_golden_steps_executed": false,
+    "reason": "All canonical ES/EN horizontal repository MP4 paths still differ from the frozen owner-approved SHA-256 values. This is a delivery defect, not an owner-approval defect."
+  },
+  "provenance_probe": {
+    "source_binding": "NOT_VERIFIED",
+    "historical_hint": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "verified_negative_example": {
+      "source_ref": "1b0e33386ded69757394ff744d8c96ea92a335b2",
+      "encoded_sha256": "38d6063c4152343875ccf9e97b7bfd3d62ce53cd527cc1033738f67a9be1b6d9",
+      "approved_encoded_match": false,
+      "approved_visual_sample_matches": "0/4",
+      "approved_visual_profile_match": false,
+      "historical_job_conclusion": "success",
+      "interpretation": "The previous probe workflow allowed a render-completed job to conclude success despite zero approved-match assertions. Its conclusion is not admissible provenance evidence."
+    },
+    "repair": {
+      "commit": "35857da4d864f025d7a0199f697df3a9d7982ac3",
+      "change": "Exhaustive source probe now fails closed unless both exact encoded SHA-256 and all four approved visual fingerprints match.",
+      "technical_gate_lowered": false
+    }
+  },
+  "authority_reconciliation": {
+    "review_round_2_doc_commit": "3165b37c7d9dcae10c1495de31239ab468afe4db",
+    "migration_ledger_commit": "812d1bb1ddad2b1516e3d0bfa5a994c3cadf42fb",
+    "historical_rerender_everything_instruction": "SUPERSEDED",
+    "repeat_owner_approval_request_for_identical_bytes": false
+  },
+  "blockers": [
+    "Exact approved 12 canonical horizontal media bytes are not yet committed at the public repository paths.",
+    "Per-asset source/spec/theme/timeline provenance remains NOT_VERIFIED.",
+    "Five of twelve full decode checks were not completed in the bounded local execution batch and remain NOT_VERIFIED.",
+    "Current-main playback/accessibility/reduced-motion/metadata/consumer/live delivery checks cannot certify the frozen release until canonical bytes are staged."
+  ],
+  "next_action": "Recover a safe exact-byte staging path for the 12 approved canonical horizontal MP4s, read back SHA-256 after commit, then execute the remaining technical release checks without reopening owner approval. In parallel, continue source-profile recovery using fail-closed provenance evidence."
+}
