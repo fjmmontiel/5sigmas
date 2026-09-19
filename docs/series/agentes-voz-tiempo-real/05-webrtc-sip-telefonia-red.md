@@ -10,6 +10,22 @@ tags:
   - WebRTC
   - Telefonía
   - Producción
+video: 05-webrtc-sip-telefonia-red.mp4
+video_poster: 05-webrtc-sip-telefonia-red.jpg
+video_title: WebRTC, SIP y red
+video_summary: El transporte decide dónde viven media, jitter, codecs y fronteras
+  de telefonía.
+video_duration: PT36S
+video_chapters:
+- name: Topología
+  start: 0
+  end: 12
+- name: Jitter
+  start: 12
+  end: 24
+- name: Transcodificación
+  start: 24
+  end: 36
 ---
 
 # Capítulo 5 — WebRTC, SIP y telefonía: seguir el camino real del audio
