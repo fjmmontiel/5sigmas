@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {MECHANISMS,designForScene,canonicalVideoKey} from './render/mechanisms/editorial.mjs';
 export const REQUIRED_GATES=Object.freeze(['framework','sync','source','layout','delivery','accessibility','visualQa','textProminence','spatialBalance','semanticMotion','withinVideoVariety','seriesMotionDiversity','fullSeriesVisualReview','ownerFeedbackResolved']);
-export const TEXT_POLICY=Object.freeze({horizontalBodyMin:42,portraitBodyMin:44,permanentLowerGapMax:160,sourceGapMax:86});
+export const TEXT_POLICY=Object.freeze({horizontalBodyMin:46,portraitBodyMin:46,permanentLowerGapMax:200,sourceGapMax:64,horizontalEmbedBodyPixelsMin:26,portraitEmbedBodyPixelsMin:16});
 const hash=text=>createHash('sha256').update(text).digest('hex');
 /** Structural preflight is NOT a visual approval. Perceptual review is independent. */
 export function auditSeries(specs,{exceptions={}}={}){
@@ -33,8 +33,9 @@ export function auditSeries(specs,{exceptions={}}={}){
  return {unit:'modelos-razonadores',canonicalScenes:rows.length,localizedOutputs:specs.length,repeatTarget:2,absoluteCeiling:3,families:counts,scenes:rows,structuralOnly:true,visualApproval:false};
 }
 export function checkTextMetrics(metrics,{portrait=false}={}){
- for(const k of ['bodySize','permanentLowerGap','sourceGap'])assert.ok(Number.isFinite(metrics[k]),`missing actual layout metric ${k}`);
+ for(const k of ['bodySize','permanentLowerGap','sourceGap','intendedEmbedBodyPixels'])assert.ok(Number.isFinite(metrics[k]),`missing actual layout metric ${k}`);
  assert.ok(metrics.bodySize>=(portrait?TEXT_POLICY.portraitBodyMin:TEXT_POLICY.horizontalBodyMin),'small explanatory text');
+ assert.ok(metrics.intendedEmbedBodyPixels>=(portrait?TEXT_POLICY.portraitEmbedBodyPixelsMin:TEXT_POLICY.horizontalEmbedBodyPixelsMin),'explanatory text too small at intended embed size');
  if(!portrait){assert.ok(metrics.permanentLowerGap<=TEXT_POLICY.permanentLowerGapMax,'permanent dead lower editorial space');assert.ok(metrics.sourceGap<=TEXT_POLICY.sourceGapMax,'excess source/body gap');}
  return true;
 }
