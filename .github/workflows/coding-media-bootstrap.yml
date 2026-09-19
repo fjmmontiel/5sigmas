@@ -79,8 +79,6 @@ jobs:
           node scripts/validate_coding_agent_harness_ch4_source.mjs
           node scripts/validate_coding_agent_harness_ch5_source.mjs
           node scripts/validate_coding_agent_harness_ch6_source.mjs
-          python scripts/audit_publication_contract.py
-          python scripts/audit_multilingual_search_foundation.py
 
       - name: Validate MEDIA_VISUAL owner split and exact native binaries
         run: |
@@ -89,6 +87,11 @@ jobs:
 
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
+
+      - name: Validate publication and multilingual search contracts after render
+        run: |
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
 
       - name: Prepare and audit English locale
         run: |
