@@ -19,7 +19,7 @@ concurrency:
 jobs:
   generate-validate-commit:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,7 +42,31 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pillow
 
-      - name: Generate locale-native silent visual media
+      - name: Assert locale-native media already persisted in checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          stems=(
+            01-que-es-agent-harness
+            02-contexto-workspace-sandboxing-aislamiento
+            03-specs-planificacion-task-decomposition-checkpoints
+            04-tools-permisos-approvals-hooks-secretos-trust-boundaries
+            05-tests-verifiers-review-diffs-stop-conditions-evaluacion
+            06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad
+          )
+          for stem in "${stems[@]}"; do
+            for ext in mp4 jpg; do
+              es="docs/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              en="locales/en/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              test -s "$es"
+              test -s "$en"
+              git ls-files --error-unmatch "$es" >/dev/null
+              git ls-files --error-unmatch "$en" >/dev/null
+            done
+          done
+          echo 'PASS: 6 ES + 6 EN MP4 and 6 ES + 6 EN JPG files are present and tracked before generation.'
+
+      - name: Generate locale-native silent visual media deterministically
         run: |
           python scripts/generate_coding_agent_visual_media.py
           python scripts/patch_coding_en_media_manifest.py
@@ -55,6 +79,8 @@ jobs:
           node scripts/validate_coding_agent_harness_ch4_source.mjs
           node scripts/validate_coding_agent_harness_ch5_source.mjs
           node scripts/validate_coding_agent_harness_ch6_source.mjs
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
 
       - name: Validate MEDIA_VISUAL owner split and exact native binaries
         run: |
@@ -87,9 +113,32 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Serve combined preview
+      - name: Localize generated video URLs for preview QA
+        shell: bash
         run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          for root, replacements in [
+              (Path('site/videos'), [('https://5sigmas.com/', '/')]),
+              (Path('site/en/videos'), [('https://5sigmas.com/en/', '/en/'), ('https://5sigmas.com/', '/')]),
+          ]:
+              targets = [root / 'catalog.json', *root.rglob('*.html')]
+              for target in targets:
+                  if not target.is_file():
+                      continue
+                  text = target.read_text(encoding='utf-8')
+                  for source, dest in replacements:
+                      text = text.replace(source, dest)
+                  target.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Serve combined preview with byte-range support
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
           echo $! > /tmp/5sigmas-preview.pid
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null && exit 0
@@ -109,6 +158,58 @@ jobs:
           node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
           node scripts/validate_direct_reader_navigation.mjs
 
+      - name: Validate all 12 article-watch media lifecycles and capture 48 full-page frames
+        env:
+          S5_CODING_BROWSER_CONCURRENCY: '2'
+        run: node scripts/validate_coding_series_browser_milestone.mjs
+
+      - name: Capture article visual evidence
+        run: node scripts/capture_coding_visual_evidence.mjs
+
+      - name: Capture 144 video start-intermediate-final states
+        run: node scripts/capture_coding_video_states.mjs
+
+      - name: Inventory exact evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          roots = [
+              Path('artifacts/coding-browser-milestone'),
+              Path('artifacts/coding-visual-evidence'),
+              Path('artifacts/coding-visual-review'),
+              Path('artifacts/coding-requalification'),
+          ]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for p in sorted(root.rglob('*')):
+                  if p.is_file():
+                      data = p.read_bytes()
+                      files.append({'path': p.as_posix(), 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+          out = Path('artifacts/coding-browser-milestone/evidence-manifest.json')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps({'head': '${{ github.sha }}', 'files': files}, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'head': '${{ github.sha }}', 'files': len(files)}))
+          PY
+
+      - name: Upload short-lived exact Coding evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coding-agents-browser-visual-evidence
+          path: |
+            artifacts/coding-browser-milestone/**
+            artifacts/coding-visual-evidence/**
+            artifacts/coding-visual-review/**
+            artifacts/coding-requalification/**
+          if-no-files-found: warn
+          retention-days: 1
+
       - name: Commit generated site-facing media after all gates pass
         run: |
           git config user.name '5sigmas GOLDEN Series Builder'
@@ -116,8 +217,7 @@ jobs:
           git add docs/series/coding-agents-agent-harnesses locales/en/media.yml locales/en/manifest.yml
           # Locale-native media are intentionally gitignored by the generic locale rule.
           # Force-add only the exact Coding Agents MP4/JPG outputs after all media,
-          # build, indexability and browser gates have passed, so a fresh checkout
-          # contains the same EN-native binaries that were actually validated.
+          # build, indexability, browser and visual-evidence gates have passed.
           git add -f locales/en/series/coding-agents-agent-harnesses/*.mp4 locales/en/series/coding-agents-agent-harnesses/*.jpg
           if git diff --cached --quiet; then
             echo 'No generated media changes to commit.'
