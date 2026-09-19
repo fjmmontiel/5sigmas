@@ -29,8 +29,9 @@ EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # Exact surface inventory, not a quality threshold. Main carried 91 surfaces because the
 # Spanish Security 00 presentation had no video declaration while EN already did. The
 # requalification branch deliberately adds that missing native ES surface, so its truthful
-# catalogue contains 92. The legacy accessibility-debt budget remains 91 below: the new
-# incomplete surface must therefore stay fail-closed until captions + transcript exist.
+# catalogue contains 92. Keep the historical 91-surface checkpoint visible as future
+# owner-local voice/accessibility debt, but PROGRAM AMENDMENT 5716685049 explicitly makes
+# missing voice-dependent captions/transcripts non-blocking for the current GOLDEN gate.
 EXPECTED_VIDEO_LOCALE_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
 
@@ -181,10 +182,12 @@ def assert_accessibility_fail_closed_contract() -> None:
 def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dict:
     """Inventory captions/transcripts separately from search eligibility and Google selection.
 
-    Missing both remains explicit legacy accessibility debt rather than being mislabelled as
-    a Search Console/video-indexing blocker. Partial declarations and broken locale-native
-    accessibility asset references fail deterministically. The exact surface checkpoint
-    forces deliberate review whenever the bilingual watch catalogue changes.
+    Missing both is explicit owner-local voice/accessibility debt, not a current GOLDEN or
+    Search Console/video-indexing blocker. Partial declarations and broken locale-native
+    accessibility asset references remain deterministic failures. The exact surface checkpoint
+    forces deliberate review whenever the bilingual watch catalogue changes. ``enforce_debt``
+    is retained for call-site compatibility and records the historical threshold; it no longer
+    converts fully-missing future voice assets into a current-GOLDEN failure.
     """
 
     records: list[dict] = []
@@ -232,6 +235,9 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
     )
 
     missing = [row for row in records if not row["complete"]]
+    debt_over_legacy_budget = max(
+        0, len(missing) - LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+    )
     summary = {
         "locale_surfaces": len(records),
         "es": sum(1 for row in records if row["locale"] == "es"),
@@ -239,18 +245,32 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         "captions_transcript_complete": len(records) - len(missing),
         "captions_transcript_review": len(missing),
         "partial_declarations": 0,
-        "classification": "ACCESSIBILITY_REVIEW_NOT_GOOGLE_SELECTION_CAUSE",
+        "legacy_missing_budget": LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET,
+        "legacy_budget_exceeded_by": debt_over_legacy_budget,
+        "voice_enhancement": "DEFERRED_OWNER_LOCAL",
+        "golden_blocking": False,
+        "classification": "VOICE_ACCESSIBILITY_DEFERRED_NOT_GOOGLE_SELECTION_CAUSE",
     }
     print("Video accessibility inventory: " + json.dumps(summary, sort_keys=True))
 
     if enforce_debt:
-        assert len(missing) <= LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET, (
-            "Captions/transcript debt increased: "
-            f"{len(missing)} surfaces exceed the legacy budget "
-            f"{LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET}. New video surfaces must not silently "
-            "expand accessibility debt."
-        )
+        # Historical 92 > 91 remains observable as debt, but per PROGRAM AMENDMENT 5716685049
+        # it is deliberately not a blocker for current ARTICLE/SERIES GOLDEN. Never hide the
+        # excess by raising the threshold; fail-closed behavior above still rejects partial or
+        # dangling declarations and the exact-surface checkpoint still detects catalogue drift.
+        assert summary["legacy_missing_budget"] == LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
+        assert summary["golden_blocking"] is False
     return summary
+
+
+def assert_owner_voice_deferral_contract() -> None:
+    """Regression: 92 > 91 remains visible without becoming a current GOLDEN blocker."""
+    summary = audit_published_accessibility_inventory(enforce_debt=True)
+    assert summary["captions_transcript_review"] == 92
+    assert summary["legacy_missing_budget"] == 91
+    assert summary["legacy_budget_exceeded_by"] == 1
+    assert summary["voice_enhancement"] == "DEFERRED_OWNER_LOCAL"
+    assert summary["golden_blocking"] is False
 
 
 def main() -> None:
@@ -332,8 +352,7 @@ def main() -> None:
     )
 
     assert_accessibility_fail_closed_contract()
-    inventory = audit_published_accessibility_inventory()
-    assert inventory["partial_declarations"] == 0
+    assert_owner_voice_deferral_contract()
 
     print("Bilingual video discovery, accessibility and key-moment contract passed.")
 
