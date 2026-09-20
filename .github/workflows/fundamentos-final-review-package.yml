@@ -1,17 +1,6 @@
 name: Fundamentos IA complete review package
 
 on:
-  push:
-    branches:
-      - migration/video-golden-fundamentos-ia-iag
-    paths:
-      - 'motion/migration/fundamentos-ia-iag/series-semantic-register.json'
-      - 'motion/src/fundamentos/**'
-      - 'motion/web/fundamentos-render.html'
-      - 'motion/scripts/fundamentos_render_check.py'
-      - 'motion/scripts/fundamentos_render_final.py'
-      - 'motion/scripts/fundamentos_package_final.py'
-      - '.github/workflows/fundamentos-final-review-package.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,17 +11,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  render:
-    name: render-${{ matrix.chapter }}-${{ matrix.locale }}-${{ matrix.orientation }}
+  validate-complete-review:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      max-parallel: 5
-      matrix:
-        chapter: ['00_presentacion_serie', '01-que-es-ia', '02-que-es-ia-generativa', '03-ia-vs-ia-generativa', '04-agi']
-        locale: [es, en]
-        orientation: [horizontal, vertical]
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Validate exact exporter source
@@ -50,53 +31,34 @@ jobs:
           python -m pip install --disable-pip-version-check playwright pillow
           command -v google-chrome || command -v chromium || command -v chromium-browser
           ffmpeg -version | head -1
-      - name: Render and full-decode one native final candidate
+      - name: Render and full-decode the complete native ES/EN H/V matrix
         shell: bash
         run: |
           set -euo pipefail
-          python motion/scripts/fundamentos_render_final.py --chapter '${{ matrix.chapter }}' --locale '${{ matrix.locale }}' --orientation '${{ matrix.orientation }}'
-          cat motion/dist/fundamentos-final/${{ matrix.chapter }}-${{ matrix.locale }}-${{ matrix.orientation }}.json
-      - name: Preserve exact candidate and per-output evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: fundamentos-final-${{ matrix.chapter }}-${{ matrix.locale }}-${{ matrix.orientation }}-${{ github.sha }}
-          path: |
-            motion/dist/fundamentos-final/${{ matrix.chapter }}-${{ matrix.locale }}-${{ matrix.orientation }}.mp4
-            motion/dist/fundamentos-final/${{ matrix.chapter }}-${{ matrix.locale }}-${{ matrix.orientation }}.json
-          if-no-files-found: error
-          retention-days: 1
-
-  package:
-    name: validate-and-package-20
-    needs: render
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - name: Restore all 20 exact candidate artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: fundamentos-final-*-${{ github.sha }}
-          path: motion/dist/fundamentos-final
-          merge-multiple: true
-      - name: Install package inspection dependencies
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-          python -m pip install --disable-pip-version-check pillow
+          chapters=(00_presentacion_serie 01-que-es-ia 02-que-es-ia-generativa 03-ia-vs-ia-generativa 04-agi)
+          for chapter in "${chapters[@]}"; do
+            for locale in es en; do
+              for orientation in horizontal vertical; do
+                python motion/scripts/fundamentos_render_final.py \
+                  --chapter "$chapter" \
+                  --locale "$locale" \
+                  --orientation "$orientation"
+              done
+            done
+          done
       - name: Validate 20/20, ES/EN parity, native H/V parity and encoded whole-series review support
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile motion/scripts/fundamentos_package_final.py
           python motion/scripts/fundamentos_package_final.py
           cat motion/dist/fundamentos-review-package/summary.json
-      - name: Preserve complete immutable review candidate package
-        uses: actions/upload-artifact@v4
-        with:
-          name: fundamentos-complete-review-${{ github.sha }}
-          path: motion/dist/fundamentos-review-package/
-          if-no-files-found: error
-          retention-days: 2
+          sha256sum motion/dist/fundamentos-review-package/fundamentos-ia-iag-review-candidate.zip
+          test -s motion/dist/fundamentos-review-package/fundamentos-ia-iag-review-candidate.zip
+      - name: Explain durable delivery policy
+        shell: bash
+        run: |
+          cat <<'EOF'
+          The complete package is validated in-run and is intentionally not retained as a generic GitHub Actions artifact.
+          Durable owner review delivery belongs in the single private Drive review root after exact-byte read-back.
+          Failure evidence in the browser/encoded gates remains one-day and failure-only per repository storage policy.
+          EOF
