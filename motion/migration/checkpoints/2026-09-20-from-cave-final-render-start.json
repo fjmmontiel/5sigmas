@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "unit": "from-cave-to-agi",
+  "state": "FINAL_24_OUTPUT_RENDER_IN_PROGRESS",
+  "source_snapshot": "91940c4a53ad455b920b999dd2b5c27d24ea4843",
+  "source_snapshot_commit_time_utc": "2026-09-20T04:31:11Z",
+  "implementation": {
+    "single_output_exporter": "motion/scripts/from_cave_render_final.py",
+    "package_validator": "motion/scripts/from_cave_package_final.py",
+    "workflow": ".github/workflows/from-cave-final-review-package.yml",
+    "jobs_expected": 24,
+    "chapters": 6,
+    "locales": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "fps": 60,
+    "duration_seconds_per_output": 75,
+    "frames_per_output": 4500,
+    "matrix_max_parallel": 6
+  },
+  "pre_final_evidence": {
+    "encoded_motion_source_head": "dcbebc03d34ce6892700d56caa8080960e6e3082",
+    "encoded_motion_run": 35488821406,
+    "encoded_motion_job": 106020017538,
+    "horizontal_probe_sha256": "38566e42f9feb78df40c742888671689dc7dc0940122cd6bf83b041d004361fb",
+    "vertical_probe_sha256": "d8afd31e01a7bb940bdb5d78d18818015ace33670d3959fa2ce8bb95752a18a7",
+    "probe_outputs_full_decode_pass": 2,
+    "canonical_concepts_exercised_per_orientation": 30,
+    "static_concepts": 0,
+    "families": 30,
+    "max_family_use": 1,
+    "artifact_id": 10598482490,
+    "artifact_zip_sha256": "71fe644065615c95d791143bbbdf013e290b8877aecc371f39b71856cc5ca5dc"
+  },
+  "final_render_run": {
+    "workflow_run": 35489348099,
+    "observed_head": "91940c4a53ad455b920b999dd2b5c27d24ea4843",
+    "observed_state": "IN_PROGRESS",
+    "first_wave": {
+      "in_progress": 6,
+      "queued": 18,
+      "source_validation_passed_for_running_jobs": true,
+      "dependency_install_passed_for_running_jobs": true,
+      "render_step_started": true
+    }
+  },
+  "acceptance": {
+    "owner_visual_approval": "NOT_REQUESTED",
+    "technical_golden": false,
+    "published": false
+  },
+  "next_action": "Let the immutable 91940c4 source snapshot finish all 24 native ES/EN H/V renders. Require 24/24 full decode plus ES/EN and H/V parity in the package job. Only after a complete package exists: inspect the whole-series encoded outputs, deliver beneath the single existing Drive root, create/reuse one final PR for this complete block, and send exactly one review request."
+}
