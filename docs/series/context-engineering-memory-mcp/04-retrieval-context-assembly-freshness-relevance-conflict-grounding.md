@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - Retrieval
   - RAG
+video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+video_title: "Retrieval, frescura, conflictos y grounding"
+video_summary: "Recuperar candidatos no basta: hay que ponderar relevancia y frescura, resolver conflictos y ensamblar evidencia trazable."
+video_duration: PT36S
+video_chapters:
+- name: "Relevancia y frescura son señales distintas"
+  start: 0
+  end: 12
+- name: "Resolver conflicto antes de ensamblar"
+  start: 12
+  end: 24
+- name: "Grounding mantiene evidencia y respuesta unidas"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 4 — Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding

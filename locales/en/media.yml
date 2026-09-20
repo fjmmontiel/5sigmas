@@ -134,50 +134,38 @@ series/from-cave-to-agi/05-mas-alla.md:
 series/modelos-razonadores/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_captions: 00_presentacion_serie.vtt
-  video_transcript: 00_presentacion_serie-transcript.txt
   video_title: Reasoning Models
-  video_duration: PT1M15S
+  video_duration: PT45S
 
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg
-  video_captions: 01-que-es-razonar.vtt
-  video_transcript: 01-que-es-razonar-transcript.txt
   video_title: What It Means for an LLM to Reason
-  video_duration: PT1M22S
+  video_duration: PT58S
 
 series/modelos-razonadores/02-fallos.md:
   video: 02-fallos.mp4
   video_poster: 02-fallos.jpg
-  video_captions: 02-fallos.vtt
-  video_transcript: 02-fallos-transcript.txt
   video_title: How Reasoning Fails
-  video_duration: PT1M48S
+  video_duration: PT59S
 
 series/modelos-razonadores/03-test-time-compute.md:
   video: 03-test-time-compute.mp4
   video_poster: 03-test-time-compute.jpg
-  video_captions: 03-test-time-compute.vtt
-  video_transcript: 03-test-time-compute-transcript.txt
   video_title: Test-Time Compute
-  video_duration: PT2M9S
+  video_duration: PT1M0S
 
 series/modelos-razonadores/04-latencia-streaming.md:
   video: 04-latencia-streaming.mp4
   video_poster: 04-latencia-streaming.jpg
-  video_captions: 04-latencia-streaming.vtt
-  video_transcript: 04-latencia-streaming-transcript.txt
   video_title: Latency, Streaming and Product Design
-  video_duration: PT1M55S
+  video_duration: PT59S
 
 series/modelos-razonadores/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
-  video_captions: 05-riesgos.vtt
-  video_transcript: 05-riesgos-transcript.txt
   video_title: Reasoning Risks and Production Controls
-  video_duration: PT2M1S
+  video_duration: PT1M0S
 
 series/datacenters-espacio/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
@@ -518,5 +506,209 @@ series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
     start: 12
     end: 24
   - name: Repair loop
+    start: 24
+    end: 36
+
+series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
+  video: 01-que-es-agent-harness.mp4
+  video_poster: 01-que-es-agent-harness.jpg
+  video_title: "What an agent harness adds to the model"
+  video_summary: "The harness turns model proposals into an operating trajectory with policy, tools, state, and real observations."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Proposal versus effect"
+      start: 0
+      end: 12
+    - name: "The feedback loop changes the next observation"
+      start: 12
+      end: 24
+    - name: "External control and stopping condition"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md:
+  video: 02-contexto-workspace-sandboxing-aislamiento.mp4
+  video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
+  video_title: "Workspace, worktrees, and sandboxing"
+  video_summary: "Isolation separates Git state, filesystem, processes, and resources; final integration revalidates the combined state."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One task, one observable state"
+      start: 0
+      end: 12
+    - name: "Isolate execution resources too"
+      start: 12
+      end: 24
+    - name: "Integrate against the current target"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md:
+  video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
+  video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
+  video_title: "Specs, plans, checkpoints, and stop conditions"
+  video_summary: "A contract fixes success; the plan can change with evidence; checkpoints and stop conditions make the trajectory recoverable."
+  video_duration: PT36S
+  video_chapters:
+    - name: "From request to observable contract"
+      start: 0
+      end: 12
+    - name: "Plan, evidence, checkpoint, and replan"
+      start: 12
+      end: 24
+    - name: "Done, recover, blocked, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md:
+  video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+  video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  video_title: "Tools, permissions, approvals, and trust boundaries"
+  video_summary: "Model intent creates effects only after independent validation, policy, approvals, sandbox, and external authority boundaries."
+  video_duration: PT36S
+  video_chapters:
+    - name: "A tool call is not authorization"
+      start: 0
+      end: 12
+    - name: "Untrusted input, bounded capability"
+      start: 12
+      end: 24
+    - name: "Project secrets without placing them in context"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md:
+  video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+  video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  video_title: "Tests, verifiers, and diff review"
+  video_summary: "Acceptance derives from combined, fresh evidence over the same candidate SHA; a change invalidates evidence that no longer applies."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One green signal is not enough"
+      start: 0
+      end: 12
+    - name: "Freshness bound to the candidate SHA"
+      start: 12
+      end: 24
+    - name: "Verify, repair, accept, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md:
+  video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+  video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
+  video_title: "Long-running tasks, subagents, recovery, and observability"
+  video_summary: "Durable state, explicit ownership, and candidate-bound evidence allow restart, worker coordination, and integration over a moving target."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Durable checkpoint and recovery"
+      start: 0
+      end: 12
+    - name: "Fan-out with ownership; fan-in with evidence"
+      start: 12
+      end: 24
+    - name: "Target moves: integrate and revalidate"
+      start: 24
+      end: 36
+
+series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
+  video: 01-context-engineering-vs-prompt-engineering.mp4
+  video_poster: 01-context-engineering-vs-prompt-engineering.jpg
+  video_title: "Context engineering versus prompt engineering"
+  video_summary: "Quality depends on which evidence, state, and tools enter each turn, not only on prompt wording."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Fixed prompt versus live context"
+    start: 0
+    end: 12
+  - name: "Per-turn selection and assembly"
+    start: 12
+    end: 24
+  - name: "Context changes after observation"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md:
+  video: 02-context-budgets-prioritisation-compaction-provenance.mp4
+  video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
+  video_title: "Budget, prioritization, compaction, and provenance"
+  video_summary: "A finite budget forces selection, compaction, or eviction while preserving provenance for what survives."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The window is a finite budget"
+    start: 0
+    end: 12
+  - name: "Compact without losing the source"
+    start: 12
+    end: 24
+  - name: "Priority changes with the task"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md:
+  video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+  video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+  video_title: "Memory architectures and persistent state"
+  video_summary: "Working memory, episodes, semantic knowledge, and persistent state have different write, retrieval, and expiry lifecycles."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Four memories, four lifecycles"
+    start: 0
+    end: 12
+  - name: "Writing requires a policy"
+    start: 12
+    end: 24
+  - name: "Retrieving does not mean trusting"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md:
+  video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+  video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+  video_title: "Retrieval, freshness, conflict, and grounding"
+  video_summary: "Retrieving candidates is not enough: relevance and freshness must be weighed, conflicts resolved, and traceable evidence assembled."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Relevance and freshness are different signals"
+    start: 0
+    end: 12
+  - name: "Resolve conflict before assembly"
+    start: 12
+    end: 24
+  - name: "Grounding keeps evidence and answer connected"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md:
+  video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+  video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+  video_title: "MCP: lifecycle, capabilities, and trust boundaries"
+  video_summary: "MCP separates host, clients, and servers; capability discovery does not remove authorization, validation, or trust boundaries."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Host, client, and server have different roles"
+    start: 0
+    end: 12
+  - name: "Discovering capabilities does not authorize them"
+    start: 12
+    end: 24
+  - name: "Remote data does not inherit authority"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md:
+  video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+  video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+  video_title: "Skills, plugins, subagents, and context isolation"
+  video_summary: "Extensions and subagents scale only when each worker's context, authority, and evidence remain explicit and evaluable."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Extending does not mean sharing all context"
+    start: 0
+    end: 12
+  - name: "Fan-out with isolated contexts"
+    start: 12
+    end: 24
+  - name: "Fan-in only with evaluated evidence"
     start: 24
     end: 36

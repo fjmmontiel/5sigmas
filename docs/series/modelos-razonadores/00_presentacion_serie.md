@@ -8,9 +8,6 @@ tags:
   - LLMs
   - Razonamiento
 video: "00_presentacion_serie.mp4"
-video_poster: "00_presentacion_serie.jpg"
-video_captions: "00_presentacion_serie.vtt"
-video_transcript: "00_presentacion_serie-transcript.txt"
 video_duration: "PT1M15S"
 hide:
   - toc

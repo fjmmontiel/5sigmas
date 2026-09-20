@@ -33,7 +33,6 @@ jobs:
           upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-artifact@')
           pages_upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-pages-artifact@')
           pages_uploads = []
-          ephemeral_transport_uploads = []
 
           def step_block(lines, index):
               line = lines[index]
@@ -72,28 +71,29 @@ jobs:
               return condition
 
           def is_failure_only(expression):
+              """Accept only predicates that logically require failure()."""
               condition = unwrap_condition(expression)
               if condition == 'failure()':
                   return True
               return condition.startswith('failure() && ') and '||' not in condition
 
           def is_short_lived_golden_review_evidence(path, block, expression):
-              if path.name != 'realtime-voice-browser-milestone.yml':
-                  return False
+              """Allow only named one-day artifacts used for real GOLDEN pixel review."""
               if unwrap_condition(expression) != 'always()':
                   return False
+              allowed = {
+                  'realtime-voice-browser-milestone.yml': 'realtime-voice-browser-pixel-evidence',
+                  'coding-browser-visual-milestone.yml': 'coding-agents-browser-visual-evidence',
+                  'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',
+                  'context-media-bootstrap.yml': 'context-engineering-browser-visual-evidence',
+              }
+              artifact_name = allowed.get(path.name)
+              if artifact_name is None:
+                  return False
               return bool(re.search(
-                  r'(?m)^\s*name:\s*realtime-voice-browser-pixel-evidence\s*$',
+                  rf'(?m)^\s*name:\s*{re.escape(artifact_name)}\s*$',
                   block,
               ))
-
-          def is_ephemeral_video_transport(path, block):
-              return (
-                  path.name == 'video-motion-delivery-gate.yml'
-                  and re.search(r'(?m)^\s*name:\s*reasoning-delivery-', block)
-                  and 'package/' in block
-                  and 'review/' in block
-              )
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
@@ -105,30 +105,25 @@ jobs:
                       continue
 
                   block = step_block(lines, index)
-                  is_transport = is_ephemeral_video_transport(path, block)
-                  if is_transport:
-                      ephemeral_transport_uploads.append((path, index + 1))
 
                   if not re.search(r'(?m)^\s*retention-days:\s*1\s*(?:#.*)?$', block):
                       errors.append(f'{path}:{index + 1}: upload-artifact must set retention-days: 1')
 
                   if_match = re.search(r'(?m)^\s*if:\s*(.+?)\s*$', block)
                   if not if_match:
-                      if not is_transport:
-                          errors.append(
-                              f'{path}:{index + 1}: generic upload-artifact is allowed only as failure evidence; '
-                              'add if: failure()'
-                          )
+                      errors.append(
+                          f'{path}:{index + 1}: generic upload-artifact is allowed only as failure evidence; '
+                          'add if: failure()'
+                      )
                   else:
                       expression = if_match.group(1).split('#', 1)[0].strip()
                       if not (
                           is_failure_only(expression)
                           or is_short_lived_golden_review_evidence(path, block, expression)
-                          or is_transport
                       ):
                           errors.append(
                               f'{path}:{index + 1}: generic upload-artifact must be failure-only unless it is an '
-                              'explicit one-day GOLDEN review/transport exception; '
+                              'explicit named one-day GOLDEN pixel-review evidence artifact; '
                               f'found if: {expression}'
                           )
 
@@ -139,13 +134,6 @@ jobs:
                               f'{path}:{index + 1}: do not retain built site directories with upload-artifact; '
                               'validate them in-run or use upload-pages-artifact for deployment'
                           )
-
-          if len(ephemeral_transport_uploads) != 1:
-              rendered = ', '.join(f'{path}:{line}' for path, line in ephemeral_transport_uploads) or 'none'
-              errors.append(
-                  'exactly one one-day motion delivery transport upload is permitted in '
-                  f'video-motion-delivery-gate.yml; found: {rendered}'
-              )
 
           if len(pages_uploads) != 1 or pages_uploads[0][0].name != 'deploy-pages.yml':
               rendered = ', '.join(f'{path}:{line}' for path, line in pages_uploads) or 'none'
@@ -198,8 +186,8 @@ jobs:
               raise SystemExit(1)
 
           print(
-              'CI storage policy OK: generic artifacts are failure-only except the explicit one-day GOLDEN '
-              'pixel-review and motion-delivery transport evidence; old generic artifacts are purged hourly, '
-              'and the single required Pages artifact is deleted after deployment.'
+              'CI storage policy OK: generic artifacts are failure-only except explicit named one-day '
+              'GOLDEN pixel-review evidence artifacts; old generic artifacts are purged hourly, and the single '
+              'required Pages artifact is deleted after deployment.'
           )
           PY

@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - Seguridad
   - Evaluación
+video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+video_title: "Skills, plugins, subagentes y aislamiento de contexto"
+video_summary: "Extensiones y subagentes sólo escalan bien cuando el contexto, la autoridad y la evidencia de cada worker permanecen explícitos y evaluables."
+video_duration: PT36S
+video_chapters:
+- name: "Extender no significa compartir todo el contexto"
+  start: 0
+  end: 12
+- name: "Fan-out con contextos aislados"
+  start: 12
+  end: 24
+- name: "Fan-in sólo con evidencia evaluada"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 6 — Skills, plugins, subagentes y hooks: aislamiento de contexto, autoridad y evaluación

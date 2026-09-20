@@ -1,0 +1,52 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+reviewed_on: 2026-09-20
+branch: quality/coding-agents-requalification
+review_context:
+  deterministic_contract_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+  current_branch_head_inspected: 76433fb5d0918d1f804e510197f94544cacad8b0
+  route_locale_rows_reviewed: 12
+  chapter_count: 6
+  locales: [es, en]
+result:
+  SOURCE_PASS: PASS_12_OF_12
+  deterministic_bilingual_contracts: PASS_6_OF_6
+  fresh_primary_factual_requalification: PASS_6_OF_6
+  material_stale_primary_found: false
+  material_claim_change_required: false
+  es_en_factual_parity: PASS
+  note: >-
+    Current primary-source families referenced by the six bilingual chapter source contracts were reopened and checked against their current authoritative publisher surfaces on 2026-09-20. No deterministic material contradiction or stale primary requiring an article prose change was found. This receipt certifies source/factual freshness only; it does not certify media, browser, pixel, pedagogy, deploy, or Google selection.
+chapters:
+  - id: coding01
+    route: 01-que-es-agent-harness
+    source_families: [OpenAI Codex harness_and_safety, Anthropic managed_agents_sandboxing_long_running, GitHub Copilot agent_environment_cloud_agent, Gemini_CLI_tools_model]
+    status: PASS
+  - id: coding02
+    route: 02-contexto-workspace-sandboxing-aislamiento
+    source_families: [Git_worktree_glossary_status, OpenAI Codex_app_safety, Anthropic_sandboxing, GitHub_Copilot_risks_environment, Gemini_CLI_sandbox]
+    status: PASS
+  - id: coding03
+    route: 03-specs-planificacion-task-decomposition-checkpoints
+    source_families: [OpenAI_AGENTS_md_and_plan_template, Anthropic_permission_modes_checkpointing, GitHub_Copilot_task_customization, Gemini_CLI_checkpointing]
+    status: PASS
+  - id: coding04
+    route: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries
+    source_families: [OpenAI_Codex_safety, Anthropic_permissions_hooks_settings_security, GitHub_Copilot_tool_permissions_resources_risks_firewall]
+    status: PASS
+  - id: coding05
+    route: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion
+    source_families: [Anthropic_agent_evals, GitHub_Copilot_review, SWE-bench_harness, OpenAI_coding_evaluation_methodology]
+    status: PASS
+  - id: coding06
+    route: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad
+    source_families: [OpenAI_Agents_API_sessions_multi_agent_observability_tracing, Anthropic_long_running_harness, GitHub_Copilot_SDK_session_persistence_fleet_mode]
+    status: PASS
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+indexability:
+  changed_by_source_review: false
+  google_selection_required: false
+next_action: COMPLETE_MOBILE_SAFE_MEDIA_REGENERATION_EXACT_HEAD_GATES_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW

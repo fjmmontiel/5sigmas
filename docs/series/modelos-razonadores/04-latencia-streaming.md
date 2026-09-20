@@ -9,10 +9,7 @@ tags:
   - LLMs
   - Razonamiento
 video: "04-latencia-streaming.mp4"
-video_poster: "04-latencia-streaming.jpg"
-video_captions: "04-latencia-streaming.vtt"
-video_transcript: "04-latencia-streaming-transcript.txt"
-video_duration: "PT1M55S"
+video_duration: "PT1M15S"
 ---
 
 # Capítulo 4 — Tiempo físico: latencia, streaming e interacción humana

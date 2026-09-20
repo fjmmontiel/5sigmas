@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - MCP
   - Seguridad
+video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+video_title: "MCP: lifecycle, capacidades y trust boundaries"
+video_summary: "MCP separa host, clientes y servidores; el descubrimiento de capacidades no elimina autorización, validación ni fronteras de confianza."
+video_duration: PT36S
+video_chapters:
+- name: "Host, cliente y servidor tienen roles distintos"
+  start: 0
+  end: 12
+- name: "Descubrir capacidades no las autoriza"
+  start: 12
+  end: 24
+- name: "Datos remotos no heredan autoridad"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 5 — MCP: hosts, clients y servers; tools, resources, prompts, ciclo de vida y fronteras de confianza

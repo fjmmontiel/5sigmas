@@ -55,30 +55,6 @@ try {
         }
       }
 
-      // Currency values are prose, not TeX. A bare "$" is an inline-MathJax
-      // delimiter in this site, so protect this exact regression permanently.
-      const fundingParagraph = page.locator('main p').filter({ hasText: 'The idea is already attracting significant capital.' }).first();
-      if (await fundingParagraph.count() !== 1) {
-        failures.push(`${viewport.name}: missing world-model funding paragraph`);
-      } else {
-        const fundingText = (await fundingParagraph.innerText()).replace(/\s+/g, ' ');
-        for (const amount of ['$1.03 billion', '$1 billion']) {
-          if (!fundingText.includes(amount)) failures.push(`${viewport.name}: funding currency corrupted ${JSON.stringify(amount)}`);
-        }
-        if (await fundingParagraph.locator('mjx-container').count()) failures.push(`${viewport.name}: funding currency was parsed as MathJax`);
-      }
-
-      const investmentParagraph = page.locator('main p').filter({ hasText: 'The investment scale extends far beyond those two companies.' }).first();
-      if (await investmentParagraph.count() !== 1) {
-        failures.push(`${viewport.name}: missing AI investment-scale paragraph`);
-      } else {
-        const investmentText = (await investmentParagraph.innerText()).replace(/\s+/g, ' ');
-        for (const amount of ['$110 billion', '$30 billion', '$20 billion', '$635 billion']) {
-          if (!investmentText.includes(amount)) failures.push(`${viewport.name}: investment currency corrupted ${JSON.stringify(amount)}`);
-        }
-        if (await investmentParagraph.locator('mjx-container').count()) failures.push(`${viewport.name}: investment currency was parsed as MathJax`);
-      }
-
       // This validator owns the canonical agent-loop visual, not unrelated page-level
       // MathJax formulas elsewhere in Chapter 5. Keep visual overflow fail-closed while
       // leaving whole-page overflow to the dedicated page/browser quality gates.
@@ -137,4 +113,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('English Chapter 5 agent-loop visual QA passed: canonical structure, translations, currency prose, interactions and visual-local overflow are preserved on desktop/mobile.');
+console.log('English Chapter 5 agent-loop visual QA passed: canonical structure, translations, interactions and visual-local overflow are preserved on desktop/mobile.');

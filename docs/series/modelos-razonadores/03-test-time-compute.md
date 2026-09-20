@@ -9,10 +9,7 @@ tags:
   - LLMs
   - Razonamiento
 video: "03-test-time-compute.mp4"
-video_poster: "03-test-time-compute.jpg"
-video_captions: "03-test-time-compute.vtt"
-video_transcript: "03-test-time-compute-transcript.txt"
-video_duration: "PT2M9S"
+video_duration: "PT1M29S"
 ---
 
 # Capítulo 3 — Test-Time Compute

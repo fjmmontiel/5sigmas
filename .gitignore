@@ -26,15 +26,13 @@ node_modules/*
 output/*
 exports/*
 test/*
-# Video output — ignore everywhere except published ES/locale content trees (served from same domain)
+# Video output — ignore everywhere except published series (served from same domain)
 *.mp4
 *.webm
 !docs/series/**/*.mp4
-!locales/**/*.mp4
-# Poster frames — same rule: ignore except published ES/locale content trees
+# Poster frames — same rule: ignore except published series
 *.jpg
 !docs/series/**/*.jpg
-!locales/**/*.jpg
 docs/**/videos/
 docs/assets/videos/
 # Animation export artifacts
