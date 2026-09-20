@@ -1,4 +1,4 @@
-schema_version: 3
+schema_version: 4
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -12,7 +12,7 @@ catalog:
   has_series_presentation: false
 inspection:
   inspected_on: 2026-09-20
-  inspected_branch_head_before_ledger_update: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
+  inspected_branch_head_before_ledger_update: ab2cd10f9eed4e32a7e603cef9b86e3379362a52
   es_chapters_found: 6
   en_chapters_found: 6
   es_native_video_declarations_found: 6
@@ -27,6 +27,11 @@ inspection:
   source_contract_result: PASS_12_OF_12
   media_bootstrap_run: 35499330009
   media_bootstrap_result: SUCCESS
+  manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
+  manual_mobile_review_artifact: 10601915287
+  manual_mobile_review_artifact_sha256: f5922e881a6bb0b133c89c2ac54c8e44a3f20838aad7a295288d78839523eaea
+  manual_mobile_review_evidence_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  manual_mobile_review_result: P1_SHARED_12_OF_12_NATIVE_MOBILE_RELATIONSHIP_SUMMARY_REQUIRED
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
   historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
@@ -40,9 +45,18 @@ gates:
   ARTICLE_GOLDEN: 0/6
 known_defects:
   p0: 0
-  p1: 0
+  p1: 12
   p2: 0
-  scope_note: No current P0/P1/P2 is asserted from the limited source/media-declaration inspection; unexecuted gates remain fail-closed and may reveal defects.
+  active:
+    - severity: P1
+      code: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
+      affected_route_locale_rows: 12
+      remediation: NATIVE_MOBILE_SUMMARIES_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+  scope_note: >-
+    Manual inspection of the exact browser evidence found a shared mobile pedagogy/pixel defect in
+    all six bilingual relationship visuals. No ARTICLE_GOLDEN promotion is allowed until the
+    native mobile remediation is rerendered and manually reinspected. Other unexecuted current-head
+    gates remain fail-closed and may reveal additional defects.
   closed_historical_p1:
     count: 12
     code: VIDEO_REQUIRED_UNDECLARED
@@ -52,16 +66,16 @@ voice:
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
-  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91"
+  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt tracked separately as 140 > 91"
 release:
-  pr: null
-  branch_divergence_vs_current_main: AHEAD_WITH_SERIES_WORK_BEHIND_BY_CONTEXT_LIVE_HARDENING_COMMITS
+  pr: 342
+  pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  next_action: OPEN_SINGLE_DRAFT_SERIES_PR_THEN_RUN_EXACT_SOURCE_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_AND_CAPTURE_EVIDENCE_FOR_PIXEL_PEDAGOGY
+  next_action: RENDER_CURRENT_HEAD_THEN_REINSPECT_NATIVE_MOBILE_SUMMARIES_AND_RUN_EXACT_SOURCE_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_GATES
 row_defaults: &row_defaults
-  iteration_count: 2
-  last_review_head: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
+  iteration_count: 3
+  last_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -70,15 +84,18 @@ row_defaults: &row_defaults
   PIXEL_REVIEW: false
   PEDAGOGY_REVIEW: false
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-  defects: []
+  defects:
+    - severity: P1
+      code: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
+      status: REMEDIATION_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20_EXACT_SOURCE_CONTRACTS_AND_NATIVE_MEDIA_METADATA_INSPECTED
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_PR_MERGE_REF
-  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_BROWSER_MEDIA_GATE
-  evidence_revision: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_CURRENT_PR_HEAD
+  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_CURRENT_HEAD_BROWSER_MEDIA_GATE
+  evidence_revision: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: RUN_EXACT_PR_GATES_AND_INSPECT_BROWSER_VISUAL_EVIDENCE
+  next_action: RERENDER_CURRENT_BRANCH_AND_REINSPECT_390PX_NATIVE_RELATIONSHIP_SUMMARY_THEN_CLEAR_OR_ITERATE_P1
   state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}

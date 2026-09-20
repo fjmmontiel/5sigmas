@@ -36,6 +36,7 @@
     load('/assets/javascripts/agent-knowledge-webmcp.js', 'webmcp-knowledge');
     load('/assets/javascripts/agent-learning-webmcp.js', 'webmcp-learning-paths');
     load('/assets/javascripts/measurement.js', 'measurement');
+    load('/assets/javascripts/inference-mobile-native.js', 'inference-mobile-native');
 })();
 
 function copyEmailToClipboard() {

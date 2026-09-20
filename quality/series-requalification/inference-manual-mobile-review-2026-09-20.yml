@@ -1,0 +1,59 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+reviewed_on: 2026-09-20
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+source_action:
+  run: 35499330009
+  head_sha: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  conclusion: SUCCESS
+  artifact_id: 10601915287
+  artifact_name: inference-engineering-browser-visual-evidence
+  artifact_sha256: f5922e881a6bb0b133c89c2ac54c8e44a3f20838aad7a295288d78839523eaea
+  retention_days: 1
+inspection:
+  route_locale_rows: 12
+  method: ALL_12_MOBILE_VISUALS_CONTACT_SHEET_PLUS_SIX_ALTERNATING_LOCALE_FULL_RESOLUTION_FILES
+  desktop_relationship_visuals: REVIEWED_NO_SHARED_DEFECT_FOUND
+  mobile_relationship_visuals: FAIL_SHARED_PATTERN
+  representative_full_resolution:
+    - inference-engineering-ch1-en-mobile-visual.png
+    - inference-engineering-ch2-es-mobile-visual.png
+    - inference-engineering-ch3-en-mobile-visual.png
+    - inference-engineering-ch4-es-mobile-visual.png
+    - inference-engineering-ch5-en-mobile-visual.png
+    - inference-engineering-ch6-es-mobile-visual.png
+finding:
+  severity: P1
+  code: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
+  affected_route_locale_rows: 12
+  chapters: 6
+  locales: [es, en]
+  detail: >-
+    Each inference relationship visual uses a wide fixed/min-width canvas as the only relationship
+    encoding on mobile. The initial 390px viewport exposes only a left slice of the causal graph;
+    material nodes, labels and edges remain off-screen. Although the container is intentionally
+    horizontally scrollable, this does not satisfy the current GOLDEN rule against certifying
+    pedagogy/legibility from giant canvases alone and makes the relationship incomplete at the
+    default mobile state.
+  examples:
+    ch1: TTFT/prefill/decode timeline continues beyond the visible right edge.
+    ch2: logical/physical KV placement graph loses right-side nodes and arrows.
+    ch3: quantization and parallelism boundaries lose right-side placement/communication nodes.
+    ch4: prefix/speculative paths lose verification/feedback nodes on the right.
+    ch5: routing/placement/fallback graph loses downstream decision/outcome nodes.
+    ch6: request-clock/energy/saturation graph loses measurement endpoints and denominators.
+remediation:
+  status: IMPLEMENTED_IN_BRANCH_PENDING_EXACT_RENDER_REVIEW
+  files:
+    - docs/assets/javascripts/inference-mobile-native.js
+    - docs/javascripts/external-links.js
+    - scripts/validate_inference_engineering_series4_release.mjs
+  mechanism: >-
+    Add a scoped native 390px semantic relationship summary for every one of the six inference
+    visuals in both locales and hide the wide detail scroller at <=720px. Desktop keeps the full
+    causal canvas. The release inventory now fail-closes on all six selectors, the loader, mobile
+    CSS contract and an explicit negative mutation.
+  certification: NOT_YET_PIXEL_OR_PEDAGOGY_PASS
+next_action: RENDER_CURRENT_BRANCH_HEAD_AND_REINSPECT_ALL_12_MOBILE_NATIVE_SUMMARIES_BEFORE_CLEARING_P1

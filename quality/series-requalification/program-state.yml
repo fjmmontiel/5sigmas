@@ -1,4 +1,4 @@
-schema_version: 26
+schema_version: 27
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -105,32 +105,35 @@ series_status:
   llm-inference-engineering-economics:
     ledger: quality/series-requalification/inference-article-ledger.yml
     source_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
+    manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
     active_branch: quality/llm-inference-requalification
-    branch_last_media_inspection_head: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
     current_main_observed: 7d543dd664f1dca420fbc366739d0355e38b32b2
-    branch_status: AHEAD_WITH_SERIES_WORK_BEHIND_BY_CONTEXT_LIVE_HARDENING_COMMITS
+    release_pr: 342
+    release_pr_state: OPEN_DRAFT
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count: 2
+    iteration_count: 3
     source: PASS_12_OF_12
-    build: PENDING_0_OF_12
-    browser: PENDING_0_OF_12
-    media_visual: NATIVE_ES_EN_IMPLEMENTED_12_OF_12_PENDING_EXACT_GATE
-    indexability: PENDING_0_OF_12
-    pixel: PENDING_0_OF_12
-    pedagogy: PENDING_0_OF_12
+    build: PENDING_0_OF_12_CURRENT_HEAD
+    browser: PENDING_0_OF_12_CURRENT_HEAD
+    media_visual: NATIVE_ES_EN_IMPLEMENTED_12_OF_12_PENDING_CURRENT_HEAD_GATE
+    indexability: PENDING_0_OF_12_CURRENT_HEAD
+    pixel: FAIL_0_OF_12_P1_MOBILE_RELATIONSHIP_VISUAL
+    pedagogy: FAIL_0_OF_12_P1_MOBILE_RELATIONSHIP_VISUAL
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1: 0
+    known_p1: 12
     known_p2: 0
-    known_defect_scope_note: HISTORICAL_VIDEO_REQUIRED_UNDECLARED_CLOSED_BY_BRANCH_BYTES; UNEXECUTED_GATES_FAIL_CLOSED_AND_MAY_REVEAL_NEW_DEFECTS
+    known_defect: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
+    remediation_status: NATIVE_MOBILE_SUMMARIES_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
     media_bootstrap_run: 35499330009
+    manual_mobile_review_artifact: 10601915287
     production_verified: false
     series_golden: false
     state: QA
-    next_action: OPEN_SINGLE_DRAFT_SERIES_PR_AND_RUN_EXACT_GATES_THEN_MANUALLY_INSPECT_PIXEL_PEDAGOGY_EVIDENCE
+    next_action: RENDER_CURRENT_HEAD_REINSPECT_12_NATIVE_MOBILE_SUMMARIES_THEN_CLEAR_OR_ITERATE_P1_AND_COMPLETE_EXACT_GATES
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
   current_main: 7d543dd664f1dca420fbc366739d0355e38b32b2
