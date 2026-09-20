@@ -1,0 +1,75 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+reviewed_on: 2026-09-20
+owner_amendments: [5655569434, 5716685049, 5727362172]
+branch: quality/coding-agents-requalification
+replacement_media:
+  generator_trigger_head: 2a6aa439a6ff57cc26021fab800e733f9329c40d
+  persisted_media_commit: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
+  regeneration_run: 35480907549
+  regeneration_result: SUCCESS
+  artifact_id: 10595124870
+  artifact_digest: sha256:ca9c8c26065096d3b8b2b4959811a789977a319d2e05fafa6d746cce96bb280e
+  artifact_size_bytes: 202393695
+  artifact_retention_days: 1
+  route_locale_rows: 12
+  native_videos: 12
+  native_posters: 12
+  duration_seconds: 36
+  silent_visual_only: true
+  voice_generated: false
+  captions_transcript_narration_timings_generated: false
+mobile_contract:
+  inline_player_css_px: 356x200
+  min_material_source_px: 68
+  min_material_projected_css_px: 12.61
+  reserved_native_controls_source_px: 280
+  reserved_native_controls_projected_css_px: 51.92
+  material_content_below_safe_zone: false
+  regression_gate_commit: 76433fb5d0918d1f804e510197f94544cacad8b0
+  negative_fixtures:
+    - prior_typography_60_source_px_projects_below_12_css_px
+    - prior_safe_zone_y_830_reserves_below_50_css_px
+manual_inspection:
+  video_state_frames_reviewed: 144
+  locales: [es, en]
+  modes: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  states: [start, intermediate, final]
+  mobile_frames_reviewed_at_native_capture_resolution: true
+  desktop_frames_reviewed_in_complete_contact_sheets: true
+  current_mobile_article_media_integration_reviewed: true
+  result: PASS
+  closed_defect:
+    severity: P1
+    code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
+    scope: all_6_chapters_es_en
+    closure_basis: >-
+      All six ES/EN mechanisms remain readable in the default inline mobile player at start, intermediate and final states in both normal and reduced-motion captures. Material labels no longer collapse to the previous 4-7 CSS-pixel range, and native playback controls occupy only the reserved lower strip without covering material mechanism content. Desktop normal/reduced states preserve composition and parity.
+  new_known_p0_p1_p2_in_replacement_media: 0
+page_layout_carry_forward:
+  prior_full_page_manual_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+  prior_full_page_frames_reviewed: 48
+  prior_page_result: PASS_NO_NEW_P0_P1_P2_IN_REVIEWED_PAGE_LAYOUTS
+  replacement_compare_head: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
+  site_facing_difference_from_prior_page_review: ONLY_12_MP4_AND_12_JPG_MEDIA_BINARIES
+  current_run_full_page_frames_captured: 48
+  note: >-
+    Article prose, interactive teaching visuals and rendered page structure did not change between the previous full-page manual review and the replacement-media revision. Current mobile article top/media integration was re-inspected; the only site-facing changes are the twelve MP4 and twelve JPG replacement binaries, which are covered by the 144-state manual review above.
+source:
+  receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
+  SOURCE_PASS: PASS_12_OF_12
+indexability:
+  regeneration_run_rendered_gate: PASS_12_OF_12
+  regeneration_run_negative_mutations: PASS_FAIL_CLOSED
+  exact_current_head_gate: PENDING_RUN_35482139307
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocker: false
+release:
+  pr: null
+  merged: false
+  deployed: false
+  live_verification: PENDING_RELEASE
+verdict: MANUAL_PIXEL_PEDAGOGY_PASS_REPLACEMENT_MEDIA_AWAIT_EXACT_CURRENT_HEAD_TECHNICAL_MILESTONE
+next_action: CONSUME_RUN_35482139307_THEN_RECONCILE_LEDGER_ARTICLE_GOLDEN_IF_ALL_NON_DEFERRED_GATES_GREEN

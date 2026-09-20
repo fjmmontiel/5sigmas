@@ -508,3 +508,105 @@ series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
   - name: Repair loop
     start: 24
     end: 36
+
+series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
+  video: 01-que-es-agent-harness.mp4
+  video_poster: 01-que-es-agent-harness.jpg
+  video_title: "What an agent harness adds to the model"
+  video_summary: "The harness turns model proposals into an operating trajectory with policy, tools, state, and real observations."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Proposal versus effect"
+      start: 0
+      end: 12
+    - name: "The feedback loop changes the next observation"
+      start: 12
+      end: 24
+    - name: "External control and stopping condition"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md:
+  video: 02-contexto-workspace-sandboxing-aislamiento.mp4
+  video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
+  video_title: "Workspace, worktrees, and sandboxing"
+  video_summary: "Isolation separates Git state, filesystem, processes, and resources; final integration revalidates the combined state."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One task, one observable state"
+      start: 0
+      end: 12
+    - name: "Isolate execution resources too"
+      start: 12
+      end: 24
+    - name: "Integrate against the current target"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md:
+  video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
+  video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
+  video_title: "Specs, plans, checkpoints, and stop conditions"
+  video_summary: "A contract fixes success; the plan can change with evidence; checkpoints and stop conditions make the trajectory recoverable."
+  video_duration: PT36S
+  video_chapters:
+    - name: "From request to observable contract"
+      start: 0
+      end: 12
+    - name: "Plan, evidence, checkpoint, and replan"
+      start: 12
+      end: 24
+    - name: "Done, recover, blocked, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md:
+  video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+  video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  video_title: "Tools, permissions, approvals, and trust boundaries"
+  video_summary: "Model intent creates effects only after independent validation, policy, approvals, sandbox, and external authority boundaries."
+  video_duration: PT36S
+  video_chapters:
+    - name: "A tool call is not authorization"
+      start: 0
+      end: 12
+    - name: "Untrusted input, bounded capability"
+      start: 12
+      end: 24
+    - name: "Project secrets without placing them in context"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md:
+  video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+  video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  video_title: "Tests, verifiers, and diff review"
+  video_summary: "Acceptance derives from combined, fresh evidence over the same candidate SHA; a change invalidates evidence that no longer applies."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One green signal is not enough"
+      start: 0
+      end: 12
+    - name: "Freshness bound to the candidate SHA"
+      start: 12
+      end: 24
+    - name: "Verify, repair, accept, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md:
+  video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+  video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
+  video_title: "Long-running tasks, subagents, recovery, and observability"
+  video_summary: "Durable state, explicit ownership, and candidate-bound evidence allow restart, worker coordination, and integration over a moving target."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Durable checkpoint and recovery"
+      start: 0
+      end: 12
+    - name: "Fan-out with ownership; fan-in with evidence"
+      start: 12
+      end: 24
+    - name: "Target moves: integrate and revalidate"
+      start: 24
+      end: 36

@@ -171,6 +171,18 @@ required_snippets:
   - snippets/agentes-ia/03-evaluacion.html
   - snippets/agentes-ia/04-seguridad.html
 published_files:
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.mp4
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.jpg
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.mp4
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.jpg
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
   - assets/images/home/agents-system-boundary.svg
   - article_audio.yml
   - series/fundamentos-ia-iag/00_presentacion_serie.mp4

@@ -1,0 +1,87 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+audited_on: 2026-09-20
+owner_amendments: [5655569434, 5716685049, 5727362172]
+main_base: 11737ad86db9b15b1981af6fef221d7db0b82110
+branch: quality/coding-agents-requalification
+site_facing_media_commit: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
+exact_technical_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+exact_milestone:
+  run: 35482139307
+  result: SUCCESS
+  artifact_id: 10596039807
+  artifact_digest: sha256:f0db0c6aafe9c14e9060a7f3887996598312ff6fc69978ac050d6060db8a762a
+  artifact_size_bytes: 202404970
+  artifact_retention_days: 1
+  exact_head_checkout: PASS
+  persisted_native_media_12_mp4_12_jpg: PASS
+  source_contracts_6_of_6: PASS
+  media_visual_gate_with_mobile_negative_fixtures: PASS
+  strict_es_build: PASS
+  publication_and_multilingual_search: PASS
+  strict_en_build_and_locale_audit: PASS
+  rendered_indexability_12_of_12_with_negative_mutations: PASS
+  browser_resource_listeners: PASS
+  chapter_interaction_accessibility_1_through_6: PASS
+  article_watch_media_lifecycle_12_of_12: PASS
+  full_page_capture_48: PASS
+  video_state_capture_144: PASS
+manual_review:
+  receipt: quality/series-requalification/coding-replacement-media-review-2026-09-20.yml
+  replacement_video_states_reviewed: 144
+  modes: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  states: [start, intermediate, final]
+  previous_shared_p1: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
+  previous_shared_p1_status: CLOSED
+  new_known_p0_p1_p2: 0
+  PIXEL_REVIEW: PASS_12_OF_12
+  PEDAGOGY_REVIEW: PASS_12_OF_12
+source:
+  receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
+  SOURCE_PASS: PASS_12_OF_12
+  fresh_primary_factual_requalification: PASS_6_OF_6
+  es_en_parity: PASS
+indexability:
+  INDEXABILITY_PASS: PASS_12_OF_12
+  canonical: PASS
+  hreflang: PASS
+  sitemap: PASS
+  internal_discovery: PASS
+  robots_noindex: PASS
+  negative_mutations: PASS_FAIL_CLOSED
+  google_selection_required: false
+media:
+  MEDIA_VISUAL_PASS: PASS_12_OF_12
+  silent_visual_video_allowed: true
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  voice_blocking: false
+gates:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  PIXEL_REVIEW: 12/12
+  PEDAGOGY_REVIEW: 12/12
+  ARTICLE_GOLDEN: 6/6
+  known_p0_p1_p2: 0
+series_audit:
+  catalog_reconciled: PASS_6_CHAPTERS_NO_PRESENTATION
+  es_en_routes: PASS_12_OF_12
+  article_watch_graph: PASS_12_OF_12
+  canonical_hreflang_sitemap_internal_graph: PASS_12_OF_12
+  rendered_output: PASS
+  status: PASS_PRE_RELEASE
+release:
+  SERIES_GOLDEN: false
+  reason: FINAL_PR_MERGE_DEPLOY_LIVE_VERIFICATION_REQUIRED
+  pr: null
+  merged: false
+  deployed: false
+  live_verification: PENDING
+linkedin:
+  writes: 0
+  queues: 0
+  activations: 0
+next_action: OPEN_FINAL_RELEASE_PR_THEN_REQUIRED_CHECKS_MERGE_DEPLOY_AND_LIVE_VERIFY_ES_EN_INDEXABILITY_MEDIA_BROWSER

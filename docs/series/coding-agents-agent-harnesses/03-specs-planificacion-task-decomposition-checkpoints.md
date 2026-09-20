@@ -11,6 +11,21 @@ tags:
   - Coding agents
   - Planificación
   - Evaluación
+video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
+video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
+video_title: "Specs, planes, checkpoints y stop conditions"
+video_summary: "Un contrato fija el éxito; el plan puede cambiar con evidencia; los checkpoints y stop conditions hacen la trayectoria recuperable."
+video_duration: PT36S
+video_chapters:
+- name: "De petición a contrato observable"
+  start: 0
+  end: 12
+- name: "Plan, evidencia, checkpoint y replan"
+  start: 12
+  end: 24
+- name: "Done, recover, blocked o escalate"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 3 — Specs, planificación, task decomposition, checkpoints y contratos de tarea

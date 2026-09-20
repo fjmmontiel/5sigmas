@@ -1,0 +1,343 @@
+schema_version: 5
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+reconciled_from_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+active_branch: quality/coding-agents-requalification
+catalog:
+  chapter_count: 6
+  route_locale_rows: 12
+  has_series_presentation: false
+source_review:
+  receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
+  receipt_commit: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+  SOURCE_PASS: PASS_12_OF_12
+  fresh_primary_factual_requalification: PASS_6_OF_6
+  deterministic_bilingual_contracts: PASS_6_OF_6
+replacement_media_review:
+  receipt: quality/series-requalification/coding-replacement-media-review-2026-09-20.yml
+  regeneration_run: 35480907549
+  regeneration_result: SUCCESS
+  site_facing_media_commit: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
+  artifact_id: 10595124870
+  artifact_digest: sha256:ca9c8c26065096d3b8b2b4959811a789977a319d2e05fafa6d746cce96bb280e
+  video_state_frames_reviewed: 144
+  prior_shared_p1: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
+  prior_shared_p1_status: CLOSED
+exact_technical_milestone:
+  head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+  run: 35482139307
+  result: SUCCESS
+  artifact_id: 10596039807
+  artifact_digest: sha256:f0db0c6aafe9c14e9060a7f3887996598312ff6fc69978ac050d6060db8a762a
+  exact_head_checkout: PASS
+  mobile_media_negative_fixtures: PASS_FAIL_CLOSED
+  rendered_indexability_negative_mutations: PASS_FAIL_CLOSED
+series_pre_release_audit:
+  receipt: quality/series-requalification/coding-series-pre-release-audit-2026-09-20.yml
+  status: PASS_PRE_RELEASE
+  series_golden: false
+  pending: FINAL_PR_MERGE_DEPLOY_LIVE_VERIFICATION
+gates:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  PIXEL_REVIEW: 12/12
+  PEDAGOGY_REVIEW: 12/12
+  ARTICLE_GOLDEN: 6/6
+  known_p0_p1_p2: 0
+indexability:
+  rendered_gate_exact_head: PASS_12_OF_12
+  negative_mutations_exact_head: PASS_FAIL_CLOSED
+  canonical: PASS_12_OF_12
+  hreflang: PASS_12_OF_12
+  sitemap: PASS_12_OF_12
+  internal_discovery: PASS_12_OF_12
+  robots_noindex: PASS_12_OF_12
+  google_selection_required: false
+  gsc_observation: null
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+rows:
+  - route: /series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
+    locale: es
+    source_path: docs/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN
+  - route: /en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
+    locale: en
+    source_path: locales/en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+    iteration_count: 4
+    last_review_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: []
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
+    parity_status: PASS_ES_EN_CLAIMS_UNITS_FORMULAS_CODE_LABELS_STATES
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
+    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK_LIFECYCLE
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, site_media: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac, technical: 7e9e467733d4e24aa0e859ab43afa64b97d3c444}
+    live_deploy_verification: PENDING_RELEASE
+    gsc_observation: null
+    next_action: FINAL_SERIES_RELEASE_PR_MERGE_DEPLOY_LIVE_VERIFY
+    state: GOLDEN

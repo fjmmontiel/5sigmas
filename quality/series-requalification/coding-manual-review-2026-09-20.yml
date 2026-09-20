@@ -1,0 +1,57 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: coding-agents-agent-harnesses
+site_facing_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+ledger_commit_after_review: b772c7f23914187c3c4576483c07ed1a87827218
+main_at_review: 11737ad86db9b15b1981af6fef221d7db0b82110
+owner_amendments: [5655569434, 5716685049, 5727362172]
+ci:
+  browser_visual_run: 35474853168
+  result: SUCCESS
+  artifact_id: 10593674893
+  artifact_digest: sha256:7aebbd89bacbf26ea58d0f5af92f349d960c70ee49f0e22bb4b46020fd3a7a8f
+  artifact_size_bytes: 193020778
+  artifact_retention_days: 1
+  passed:
+    - exact_bilingual_source_contracts_6_of_6
+    - persisted_native_visual_media_12_mp4_12_jpg
+    - strict_es_build
+    - publication_and_multilingual_search_after_render
+    - strict_en_build_and_rendered_locale_audit
+    - rendered_indexability_12_of_12_with_negative_mutations
+    - browser_resource_listeners
+    - chapter_interaction_accessibility_1_through_6
+    - article_watch_media_lifecycle_12_of_12
+    - full_page_capture_48
+    - video_state_capture_144
+manual_inspection:
+  full_page_frames: 48
+  video_state_frames: 144
+  modes: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  video_states: [start, intermediate, final]
+  article_page_result: PASS_NO_NEW_P0_P1_P2_IN_REVIEWED_PAGE_LAYOUTS
+  media_result: FAIL_P1
+  defect:
+    severity: P1
+    code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
+    scope: all_6_chapters_es_en
+    evidence: >-
+      The inline mobile player captures are about 356x200 px. Core video labels authored around 22-37 px in the 1920x1080 source collapse to about 4-7 px at that embed size, and native controls occupy the lower portion of the frame in the captured playback states. Material mechanism labels therefore require zoom/fullscreen and are not reliably readable in the default mobile article experience.
+    consequence: >-
+      MEDIA_VISUAL_PASS, PIXEL_REVIEW and PEDAGOGY_REVIEW remain false for all 12 route-locale rows even though the deterministic media and browser lifecycle gates are green.
+    repair: >-
+      Recompose the shared Coding video visual system around mobile-safe typography and a controls-safe lower region; regenerate ES/EN binaries; add a deterministic regression contract; rerun one grouped exact-head milestone; manually re-inspect replacement frames.
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocker: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+release:
+  pr: null
+  merged: false
+  deployed: false
+  live_verification: PENDING_RELEASE
+linkedin:
+  writes: 0
+  queues: 0
+  activations: 0

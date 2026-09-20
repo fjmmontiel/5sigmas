@@ -10,6 +10,21 @@ tags:
   - Software
   - Coding agents
   - Evaluación
+video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+video_title: "Tests, verifiers y revisión de diffs"
+video_summary: "La aceptación deriva de evidencia conjunta y fresca sobre el mismo candidate SHA; un cambio invalida la evidencia que ya no corresponde."
+video_duration: PT36S
+video_chapters:
+- name: "Una señal verde no basta"
+  start: 0
+  end: 12
+- name: "Freshness ligada al candidate SHA"
+  start: 12
+  end: 24
+- name: "Verificar, reparar, aceptar o escalar"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 5 — Tests, verifiers, review de diffs, stop conditions y evaluación de tareas

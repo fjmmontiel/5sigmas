@@ -78,13 +78,19 @@ jobs:
               return condition.startswith('failure() && ') and '||' not in condition
 
           def is_short_lived_golden_review_evidence(path, block, expression):
-              """Allow the one explicit GOLDEN pixel-review artifact needed for real manual inspection."""
-              if path.name != 'realtime-voice-browser-milestone.yml':
-                  return False
+              """Allow only named one-day artifacts used for real GOLDEN pixel review."""
               if unwrap_condition(expression) != 'always()':
                   return False
+              allowed = {
+                  'realtime-voice-browser-milestone.yml': 'realtime-voice-browser-pixel-evidence',
+                  'coding-browser-visual-milestone.yml': 'coding-agents-browser-visual-evidence',
+                  'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',
+              }
+              artifact_name = allowed.get(path.name)
+              if artifact_name is None:
+                  return False
               return bool(re.search(
-                  r'(?m)^\s*name:\s*realtime-voice-browser-pixel-evidence\s*$',
+                  rf'(?m)^\s*name:\s*{re.escape(artifact_name)}\s*$',
                   block,
               ))
 
@@ -115,8 +121,8 @@ jobs:
                           or is_short_lived_golden_review_evidence(path, block, expression)
                       ):
                           errors.append(
-                              f'{path}:{index + 1}: generic upload-artifact must be failure-only unless it is the '
-                              'explicit one-day GOLDEN pixel-review evidence artifact; '
+                              f'{path}:{index + 1}: generic upload-artifact must be failure-only unless it is an '
+                              'explicit named one-day GOLDEN pixel-review evidence artifact; '
                               f'found if: {expression}'
                           )
 
@@ -179,8 +185,8 @@ jobs:
               raise SystemExit(1)
 
           print(
-              'CI storage policy OK: generic artifacts are failure-only except the single explicit one-day '
-              'GOLDEN pixel-review evidence artifact; old generic artifacts are purged hourly, and the single '
+              'CI storage policy OK: generic artifacts are failure-only except explicit named one-day '
+              'GOLDEN pixel-review evidence artifacts; old generic artifacts are purged hourly, and the single '
               'required Pages artifact is deleted after deployment.'
           )
           PY
