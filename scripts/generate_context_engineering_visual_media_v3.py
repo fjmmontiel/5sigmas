@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Run Context media v2 with an exact-bounds node fit contract.
+"""Run Context media v2 with exact-bounds layout contracts.
 
 The v2 self-test correctly caught a Spanish single-word label whose glyph box was
-8 px wider than the *padding* budget, although it still fit inside the node. This
-wrapper keeps the 68 px material typography floor and all safe-area constraints,
-but changes the fail-closed condition to the actual node bounds (5 px horizontal
-and 9 px vertical margin per side). No threshold is lowered and no overflow is
-accepted.
+wider than the original padding budget, and the next pass caught a two-word EN
+label wrapping inside a physically too-small source node. This wrapper keeps the
+68 px material typography floor and all safe-area constraints. It validates
+against actual node bounds and widens the shared source stack so two-word labels
+stay on one line. No typography threshold is lowered and no overflow is accepted.
 """
 from __future__ import annotations
 
@@ -48,8 +48,27 @@ def exact_bounds_node(draw, center, value: str, *, w=400, h=150, outline=None, a
     return box
 
 
-# Patch only the node renderer used by all v2 mechanism functions.
+# Patch the node renderer used by every v2 mechanism.
 v2.node = exact_bounds_node
+
+
+def safe_stack_to_gate(draw, labels, center_label, out_label, p, colors=None):
+    """Three source nodes with enough physical width for 68 px bilingual labels."""
+    if colors is None:
+        colors = (v2.BLUE, v2.PURPLE, v2.ACCENT_2)
+    ys = (450, 575, 700)
+    for i, (lab, y, col) in enumerate(zip(labels, ys, colors)):
+        exact_bounds_node(draw, (270, y), lab, w=430, h=112, outline=col, active=p > .18 * (i + 1))
+        v2.arrow(draw, (490, y), (700, 575 + (i - 1) * 38), color=col, width=9)
+        if p > .18 * (i + 1):
+            v2.base.token(draw, (490, y), (700, 575 + (i - 1) * 38), min(1, (p - .18 * i) * 1.6), col)
+    exact_bounds_node(draw, (950, 575), center_label, w=500, h=230, outline=v2.ACCENT, active=p > .3)
+    v2.arrow(draw, (1210, 575), (1435, 575), color=v2.GOOD, width=9)
+    exact_bounds_node(draw, (1630, 575), out_label, w=330, h=160, outline=v2.GOOD, active=p > .65)
+
+
+# Keep vertical node spacing unchanged; widen only the common source stack.
+v2.stack_to_gate = safe_stack_to_gate
 
 
 def main() -> int:
@@ -59,6 +78,7 @@ def main() -> int:
     args = ap.parse_args()
     report = v2.self_test()
     report["node_fit_contract"] = "ACTUAL_BOUNDS_5PX_HORIZONTAL_9PX_VERTICAL_MARGIN_PER_SIDE"
+    report["source_stack_contract"] = "430PX_SOURCE_NODES_AT_68PX_MATERIAL_TYPE"
     if args.self_test:
         print(json.dumps(report, indent=2))
         return 0
