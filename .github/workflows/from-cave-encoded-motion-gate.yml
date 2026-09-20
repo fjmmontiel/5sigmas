@@ -1,0 +1,65 @@
+name: From Cave to AGI encoded motion gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-from-cave-to-agi
+    paths:
+      - 'motion/migration/from-cave-to-agi-content-v1.json'
+      - 'motion/content/from-cave-to-agi/**'
+      - 'motion/src/from-cave/**'
+      - 'motion/src/render/**'
+      - 'motion/web/from-cave-render.html'
+      - 'motion/scripts/from_cave_render_check.py'
+      - 'motion/scripts/from_cave_encode_motion_probe.py'
+      - '.github/workflows/from-cave-encoded-motion-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: from-cave-to-agi-encoded-motion
+  cancel-in-progress: false
+
+jobs:
+  encoded-motion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate probe source before expensive encode
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/from_cave_render_check.py motion/scripts/from_cave_encode_motion_probe.py
+          node --check motion/src/from-cave/render.mjs
+          node --check motion/src/from-cave/visuals.mjs
+          node --check motion/src/from-cave/visuals-motion.mjs
+          node --check motion/src/from-cave/visuals-text-layout.mjs
+
+      - name: Install deterministic browser/media dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --disable-pip-version-check playwright pillow
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+          ffmpeg -version | head -1
+
+      - name: Encode and inspect all canonical concept motion H/V
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/from_cave_encode_motion_probe.py
+          cat motion/dist/from-cave-to-agi-encoded-motion/from-cave-encoded-motion-report.json
+
+      - name: Preserve bounded encoded-motion evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: from-cave-to-agi-encoded-motion-${{ github.sha }}
+          path: motion/dist/from-cave-to-agi-encoded-motion/
+          if-no-files-found: error
+          retention-days: 1

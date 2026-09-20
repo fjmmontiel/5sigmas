@@ -1,4 +1,5 @@
 import {drawFromCaveMechanism as drawBase} from './visuals.mjs';
+import {drawFromCaveSemanticMotion} from './visuals-motion.mjs';
 
 /** Paint.text intentionally handles one line. Semantic diagrams can opt into explicit line breaks. */
 export function drawFromCaveMechanism(P, mechanism) {
@@ -14,7 +15,8 @@ export function drawFromCaveMechanism(P, mechanism) {
     return widest;
   };
   try {
-    return drawBase(P, mechanism);
+    drawBase(P, mechanism);
+    drawFromCaveSemanticMotion(P, mechanism);
   } finally {
     P.text = baseText;
   }
