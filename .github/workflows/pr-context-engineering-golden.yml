@@ -5,11 +5,17 @@ on:
     paths:
       - 'docs/series/context-engineering-memory-mcp/**'
       - 'locales/en/series/context-engineering-memory-mcp/**'
+      - 'docs/media/series/context-engineering-memory-mcp/**'
+      - 'locales/en/media/series/context-engineering-memory-mcp/**'
       - 'docs/snippets/articulos-tecnicos/context-*.html'
       - 'locales/en/snippets/articulos-tecnicos/context-*'
       - 'scripts/validate_context_engineering_*.mjs'
+      - 'scripts/validate_context_indexability.py'
+      - 'scripts/validate_context_media_visual.py'
+      - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_direct_reader_navigation.mjs'
+      - 'locales/en/media.yml'
       - 'locales/en/manifest.yml'
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
@@ -34,8 +40,10 @@ jobs:
           python-version: '3.11'
           cache: pip
 
-      - name: Install Python dependencies
+      - name: Install Python and media dependencies
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -83,6 +91,18 @@ jobs:
 
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate Context INDEXABILITY negative fixtures
+        run: python scripts/validate_context_indexability.py --self-test
+
+      - name: Validate Context rendered INDEXABILITY
+        run: python scripts/validate_context_indexability.py --site site --output artifacts/context-requalification/indexability/report.json
+
+      - name: Validate Context MEDIA_VISUAL/VOICE split fixture
+        run: python scripts/validate_context_media_visual.py --self-test
+
+      - name: Validate Context native visual media
+        run: python scripts/validate_context_media_visual.py --output artifacts/context-requalification/context-media-visual.json
 
       - name: Install Playwright Chromium
         run: |
@@ -134,6 +154,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: context-engineering-pr-gate-visual-evidence
-          path: artifacts/visual-review/context-engineering-*.png
+          path: |
+            artifacts/visual-review/context-engineering-*.png
+            artifacts/context-requalification/indexability/report.json
+            artifacts/context-requalification/context-media-visual.json
           if-no-files-found: warn
           retention-days: 1

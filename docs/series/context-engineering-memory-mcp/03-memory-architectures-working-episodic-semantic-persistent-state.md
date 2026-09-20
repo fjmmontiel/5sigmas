@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - Memoria
   - Arquitectura
+video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+video_title: "Arquitecturas de memoria y estado persistente"
+video_summary: "Memoria de trabajo, episodios, conocimiento semántico y estado persistente tienen ciclos de escritura, recuperación y caducidad distintos."
+video_duration: PT36S
+video_chapters:
+- name: "Cuatro memorias, cuatro ciclos"
+  start: 0
+  end: 12
+- name: "Escribir requiere una política"
+  start: 12
+  end: 24
+- name: "Recuperar no significa confiar"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 3 — Arquitecturas de memoria: working, episodic, semantic y estado persistente
