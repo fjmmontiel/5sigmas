@@ -1,4 +1,4 @@
-schema_version: 4
+schema_version: 5
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -12,7 +12,6 @@ catalog:
   has_series_presentation: false
 inspection:
   inspected_on: 2026-09-20
-  inspected_branch_head_before_ledger_update: ab2cd10f9eed4e32a7e603cef9b86e3379362a52
   es_chapters_found: 6
   en_chapters_found: 6
   es_native_video_declarations_found: 6
@@ -25,13 +24,17 @@ inspection:
   source_review_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
   source_contract_run: 35499330009
   source_contract_result: PASS_12_OF_12
-  media_bootstrap_run: 35499330009
-  media_bootstrap_result: SUCCESS
-  manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
-  manual_mobile_review_artifact: 10601915287
-  manual_mobile_review_artifact_sha256: f5922e881a6bb0b133c89c2ac54c8e44a3f20838aad7a295288d78839523eaea
-  manual_mobile_review_evidence_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
-  manual_mobile_review_result: P1_SHARED_12_OF_12_NATIVE_MOBILE_RELATIONSHIP_SUMMARY_REQUIRED
+  historical_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
+  historical_manual_mobile_review_artifact: 10601915287
+  historical_manual_mobile_review_evidence_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  historical_manual_mobile_review_result: P1_SHARED_12_OF_12_GIANT_CANVAS_ONLY
+  prior_card_summary_head: 21dd7761f55d61fbbd767d45b7f7259baa8097d2
+  prior_card_summary_gate_status: AUTOMATED_GREEN_BUT_PEDAGOGICALLY_INSUFFICIENT_UNDER_5655569434
+  relationship_graph_remediation_site_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
+  relationship_graph_remediation_scope: ALL_6_CHAPTERS_ES_EN_VIA_SHARED_RUNTIME
+  relationship_graph_gate_head: e2d785ec679def9a86213d7f0c1f6f0aefa00a11
+  relationship_graph_contract: DIRECTED_NODES_EDGES_BRANCHES_FEEDBACK_NORMAL_AND_REDUCED_MOTION
+  relationship_graph_render_review: PENDING_CURRENT_HEAD_CI_ARTIFACT
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
   historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
@@ -49,18 +52,22 @@ known_defects:
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
+      code: INFERENCE_MOBILE_RELATIONSHIP_COLLAPSED_TO_CARD_SUMMARY
       affected_route_locale_rows: 12
-      remediation: NATIVE_MOBILE_SUMMARIES_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+      previous_mechanism: FOUR_SEQUENTIAL_CARDS_WITH_DOWN_ARROWS
+      remediation: SIX_DISTINCT_NATIVE_DIRECTED_RELATIONSHIP_GRAPHS_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+      site_facing_remediation_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
   scope_note: >-
-    Manual inspection of the exact browser evidence found a shared mobile pedagogy/pixel defect in
-    all six bilingual relationship visuals. No ARTICLE_GOLDEN promotion is allowed until the
-    native mobile remediation is rerendered and manually reinspected. Other unexecuted current-head
-    gates remain fail-closed and may reveal additional defects.
+    The deterministic gate had been aligned to a four-card mobile fallback and could therefore pass
+    a representation that still collapsed topology into sequential summaries. This run replaced that
+    fallback for all six chapters with distinct directed relationship graphs and changed the browser
+    gate to reject legacy card steps while requiring chapter-specific node/edge counts, direction,
+    localized relationship text, responsive bounds and reduced-motion behavior. P1 remains open until
+    the exact remediation is rendered and inspected; no PIXEL/PEDAGOGY promotion is inferred from source.
   closed_historical_p1:
     count: 12
     code: VIDEO_REQUIRED_UNDECLARED
-    closure_evidence: Six ES frontmatters plus six EN media-manifest entries now declare native MP4/poster/title/summary/PT36S/key moments; all twelve MP4/poster assets exist on the branch.
+    closure_evidence: Six ES frontmatters plus six EN media-manifest entries declare native MP4/poster/title/summary/PT36S/key moments; all twelve MP4/poster assets exist on the branch.
 voice:
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   blocking: false
@@ -72,10 +79,16 @@ release:
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  next_action: RENDER_CURRENT_HEAD_THEN_REINSPECT_NATIVE_MOBILE_SUMMARIES_AND_RUN_EXACT_SOURCE_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_GATES
+  current_site_facing_remediation_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
+  current_head_ci:
+    series4_run: 35507550366
+    broad_visual_run: 35507550370
+    status_at_checkpoint: IN_PROGRESS
+  next_action: CONSUME_CURRENT_HEAD_CI_THEN_INSPECT_ALL_12_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
 row_defaults: &row_defaults
-  iteration_count: 3
-  last_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  iteration_count: 4
+  last_changed_site_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
+  last_pixel_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -86,16 +99,16 @@ row_defaults: &row_defaults
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects:
     - severity: P1
-      code: INFERENCE_RELATIONSHIP_VISUAL_MOBILE_GIANT_CANVAS_ONLY
-      status: REMEDIATION_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+      code: INFERENCE_MOBILE_RELATIONSHIP_COLLAPSED_TO_CARD_SUMMARY
+      status: DIRECTED_GRAPH_REMEDIATION_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
   factual_source_status: PASS_FRESH_2026_09_20
-  parity_status: PASS_FRESH_2026_09_20_EXACT_SOURCE_CONTRACTS_AND_NATIVE_MEDIA_METADATA_INSPECTED
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_CURRENT_PR_HEAD
-  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_CURRENT_HEAD_BROWSER_MEDIA_GATE
-  evidence_revision: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_EXACT_REMEDIATION_HEAD
+  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_EXACT_BROWSER_MEDIA_GATE
+  evidence_revision: ef765ecb6cb104ac84e8b98145749437d4756aa5
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: RERENDER_CURRENT_BRANCH_AND_REINSPECT_390PX_NATIVE_RELATIONSHIP_SUMMARY_THEN_CLEAR_OR_ITERATE_P1
+  next_action: INSPECT_EXACT_390PX_DIRECTED_GRAPH_RENDER_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
   state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
