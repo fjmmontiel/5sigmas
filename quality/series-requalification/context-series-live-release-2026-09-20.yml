@@ -1,19 +1,29 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: context-engineering-memory-mcp
 contract_issue: 305
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-release_pr: 339
-release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
-merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-pages_deploy_run: 35498875755
-pages_deploy_result: SUCCESS
-pages_live_qa_result: SUCCESS
-dedicated_live_qa_run: 35499422075
-dedicated_live_qa_job: 106048396961
-dedicated_live_qa_result: SUCCESS
-exact_live_checkout: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+article_release:
+  release_pr: 339
+  release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
+  merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+live_indexability_hardening:
+  pr: 341
+  reviewed_head: 43076d9903233397fd8c39efaac196fb63d8be44
+  merge_commit: 7d543dd664f1dca420fbc366739d0355e38b32b2
+  article_or_media_bytes_changed: false
+  voice_semantics_changed: false
+production_release:
+  production_main_verified: 7d543dd664f1dca420fbc366739d0355e38b32b2
+  pages_deploy_run: 35501589768
+  pages_deploy_result: SUCCESS
+  exact_revision_stamp: PASS_BUILD_JSON_EQUALS_7d543dd664f1dca420fbc366739d0355e38b32b2
+  generic_pages_live_qa: SUCCESS
+  dedicated_live_qa_run: 35502173179
+  dedicated_live_qa_job: 106055767662
+  dedicated_live_qa_result: SUCCESS
+  exact_live_checkout: 7d543dd664f1dca420fbc366739d0355e38b32b2
 live_surface_evidence:
   es_en_hub_entry: PASS
   chapter_routes: PASS_12_OF_12
@@ -21,6 +31,21 @@ live_surface_evidence:
   locale_switching: PASS_12_OF_12
   reader_progression: PASS_6_OF_6
   desktop_mobile_page_geometry: PASS_12_OF_12
+production_indexability:
+  exact_deployed_revision: PASS
+  direct_https_routes_no_redirect_chain: PASS
+  canonical_self_correct: PASS_12_OF_12_ARTICLE_AND_WATCH
+  robots_txt_routes_and_resources_allowed: PASS
+  meta_and_x_robots_noindex_absent: PASS
+  reciprocal_es_en_hreflang: PASS
+  normal_sitemap_consistency: PASS
+  video_sitemap_consistency: PASS
+  internal_discovery_no_orphans: PASS
+  article_watch_bidirectional_relation: PASS
+  localized_title_meta_h1_lang_and_crawlable_text: PASS
+  structured_data_visible_canonical_locale_coherent: PASS
+  google_selection_required: false
+  gsc_observation: null
 pre_release_gates:
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
@@ -31,17 +56,12 @@ pre_release_gates:
   PEDAGOGY_REVIEW: 12/12
   ARTICLE_GOLDEN: 6/6
   known_p0_p1_p2: 0
-production_indexability:
-  rendered_build_and_search_contract: PASS
-  canonical_hreflang_sitemap_internal_discovery: PASS_PRE_RELEASE_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
-  robots_noindex: PASS_PRE_RELEASE_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
-  google_selection_required: false
-  gsc_observation: null
 voice:
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; current inventory 128; budget remains 91"
 iteration_count_changed_this_release_run: false
 SERIES_GOLDEN: true
 production_verified: true
