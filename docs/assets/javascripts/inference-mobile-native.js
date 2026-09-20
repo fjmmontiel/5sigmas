@@ -83,7 +83,8 @@
         ['e1', 'prefix', 'lookup', [], 24, 8, '', ''], ['e2', 'lookup', 'hit', [], 52, 5, 'hit', 'hit'], ['e3', 'hit', 'reuse', [], 77, 3, '', ''],
         ['e4', 'lookup', 'miss', [], 52, 24, 'miss', 'miss'], ['e5', 'miss', 'prefill', [], 77, 24, '', ''],
         ['e6', 'draft', 'verify', [], 24, 54, '', ''], ['e7', 'verify', 'accept', [], 52, 49, 'acepta', 'accepts'], ['e8', 'accept', 'commit', [], 77, 46, '', ''],
-        ['e9', 'verify', 'reject', [], 52, 69, 'rechaza', 'rejects'], ['e10', 'reject', 'correct', [], 77, 67, '', ''], ['e11', 'correct', 'verify', [[88, 84], [38, 84]], 61, 84, 'reverifica ↺', 'reverify ↺'],
+        ['e9', 'verify', 'reject', [], 52, 69, 'rechaza', 'rejects'], ['e10', 'reject', 'correct', [], 77, 67, '', ''],
+        ['e11', 'correct', 'verify', [[88, 84], [38, 84]], 61, 84, 'reverifica ↺', 'reverify ↺'],
         ['e12', 'reuse', 'pressure', [[88, 42], [70, 91]], 75, 91, '', ''], ['e13', 'commit', 'pressure', [[88, 82], [66, 91]], 80, 88, '', ''],
       ],
     },
@@ -131,6 +132,12 @@
 
   const STYLE_ID = 's5-inference-mobile-native-style';
   const SVG_NS = 'http://www.w3.org/2000/svg';
+  const SAFE_X_MIN = 12;
+  const SAFE_X_MAX = 88;
+  const SAFE_Y_MIN = 10;
+  const SAFE_Y_MAX = 90;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const normalizeNode = ([id, x, y, es, en, tone]) => [id, clamp(x, SAFE_X_MIN, SAFE_X_MAX), clamp(y, SAFE_Y_MIN, SAFE_Y_MAX), es, en, tone];
 
   const ensureStyle = () => {
     if (document.getElementById(STYLE_ID)) return;
@@ -145,11 +152,11 @@
         .s5v-inference-mobile-native__graph{position:relative;width:100%;min-width:0;border-radius:15px;background:linear-gradient(180deg,color-mix(in srgb,currentColor 4%,transparent),transparent 48%);overflow:hidden}
         .s5v-inference-mobile-native__graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible;color:color-mix(in srgb,currentColor 70%,transparent)}
         .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
-        .s5v-inference-mobile-native__node{position:absolute;z-index:2;transform:translate(-50%,-50%);width:min(29%,104px);min-height:42px;display:grid;place-items:center;padding:7px 6px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.77rem;line-height:1.18;font-weight:850;text-align:center;overflow-wrap:anywhere}
+        .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(22%,86px);min-height:42px;display:grid;place-items:center;padding:7px 6px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.77rem;line-height:1.18;font-weight:850;text-align:center;overflow-wrap:anywhere}
         .s5v-inference-mobile-native__node[data-tone="decision"]{border-style:dashed;border-width:1.5px}
         .s5v-inference-mobile-native__node[data-tone="state"]{background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 7%,var(--md-default-bg-color,#fff))}
         .s5v-inference-mobile-native__node[data-tone="outcome"]{border-color:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 70%,currentColor 30%);box-shadow:0 5px 18px color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 12%,transparent)}
-        .s5v-inference-mobile-native__edge-label{position:absolute;z-index:3;transform:translate(-50%,-50%);max-width:98px;padding:2px 4px;border-radius:5px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,transparent);font-size:.67rem;line-height:1.08;font-weight:850;text-align:center;opacity:.78;pointer-events:none}
+        .s5v-inference-mobile-native__edge-label{position:absolute;z-index:3;transform:translate(-50%,-50%);max-width:78px;padding:2px 4px;border-radius:5px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,transparent);font-size:.67rem;line-height:1.08;font-weight:850;text-align:center;opacity:.78;pointer-events:none}
         .s5v-inference-mobile-native__relation{margin:0;padding:10px 11px;border-left:3px solid var(--md-accent-fg-color,#007f8c);border-radius:10px;background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 8%,transparent);font-size:.79rem;line-height:1.45;font-weight:720;overflow-wrap:anywhere}
         .s5v-inference-phases .s5v-inference-phases__scroll,
         .s5v-kv-paging .s5v-kv-paging__scroll,
@@ -193,7 +200,8 @@
     arrow.setAttribute('d', 'M0,0 L6,3 L0,6 Z'); arrow.setAttribute('fill', 'currentColor');
     marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
 
-    const byId = new Map(contract.nodes.map((node) => [node[0], node]));
+    const normalizedNodes = contract.nodes.map(normalizeNode);
+    const byId = new Map(normalizedNodes.map((node) => [node[0], node]));
     for (const edge of contract.edges) {
       const [id, fromId, toId, via, labelX, labelY, esLabel, enLabel] = edge;
       const from = byId.get(fromId); const to = byId.get(toId);
@@ -207,13 +215,13 @@
       const label = lang === 'en' ? enLabel : esLabel;
       if (label) {
         const labelNode = textNode(graph, 'span', 's5v-inference-mobile-native__edge-label', label);
-        labelNode.style.left = `${labelX}%`; labelNode.style.top = `${labelY}%`;
+        labelNode.style.left = `${clamp(labelX, 8, 92)}%`; labelNode.style.top = `${clamp(labelY, 6, 94)}%`;
         labelNode.dataset.mobileGraphEdgeLabel = id;
       }
     }
     graph.prepend(svg);
 
-    for (const [id, x, y, es, en, tone] of contract.nodes) {
+    for (const [id, x, y, es, en, tone] of normalizedNodes) {
       const node = textNode(graph, 'div', 's5v-inference-mobile-native__node', lang === 'en' ? en : es);
       node.style.left = `${x}%`; node.style.top = `${y}%`;
       node.dataset.mobileGraphNode = id;
