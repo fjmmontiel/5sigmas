@@ -7,6 +7,7 @@ const repoRoot = path.resolve(scriptDir, '..', '..');
 const contentRoot = path.join(repoRoot, 'motion', 'content', 'from-cave-to-agi');
 const index = JSON.parse(fs.readFileSync(path.join(contentRoot, 'series-register.json'), 'utf8'));
 const partial = JSON.parse(fs.readFileSync(path.join(contentRoot, 'series-register.partial.json'), 'utf8'));
+const localeBindings = JSON.parse(fs.readFileSync(path.join(contentRoot, 'locale-bindings.json'), 'utf8'));
 
 const required = [
   'concept_id', 'evidence', 'mechanism', 'semantic_rationale', 'perceptual_family',
@@ -30,6 +31,21 @@ for (const entry of index.chapter_sources) {
 if (chapters.length !== 6) throw new Error(`Expected 6 chapters, got ${chapters.length}`);
 const chapterIds = chapters.map((chapter) => chapter.chapter);
 if (new Set(chapterIds).size !== chapterIds.length) throw new Error('Duplicate chapter IDs');
+
+if (!Array.isArray(localeBindings.locales) || localeBindings.locales.join(',') !== 'es,en') throw new Error('Expected ES/EN locale binding');
+if (!Array.isArray(localeBindings.chapters) || localeBindings.chapters.length !== 6) throw new Error('Expected six locale-bound chapters');
+const localeIds = new Set();
+for (const binding of localeBindings.chapters) {
+  if (localeIds.has(binding.chapter)) throw new Error(`Duplicate locale binding ${binding.chapter}`);
+  localeIds.add(binding.chapter);
+  if (!chapterIds.includes(binding.chapter)) throw new Error(`Locale binding has unknown chapter ${binding.chapter}`);
+  for (const key of ['es','en','output_es','output_en']) {
+    if (typeof binding[key] !== 'string' || !binding[key]) throw new Error(`Locale binding ${binding.chapter} missing ${key}`);
+    if (!fs.existsSync(path.join(repoRoot, binding[key]))) throw new Error(`Missing bound ${key} path ${binding[key]}`);
+  }
+  const semantic = chapters.find((chapter) => chapter.chapter === binding.chapter);
+  if (semantic.source_es !== binding.es) throw new Error(`ES semantic/source binding drift for chapter ${binding.chapter}`);
+}
 
 const concepts = chapters.flatMap((chapter) => chapter.concepts ?? []);
 if (concepts.length !== 30) throw new Error(`Expected 30 authored concepts, got ${concepts.length}`);
@@ -63,6 +79,9 @@ console.log(JSON.stringify({
   concepts: concepts.length,
   perceptual_families: familyCounts.size,
   max_family_uses: maxFamilyUses,
-  source_bindings: chapters.map((chapter) => chapter.source_es),
+  locales: localeBindings.locales,
+  locale_pairs: localeBindings.chapters.length,
+  source_bindings: localeBindings.chapters.map((binding) => ({chapter: binding.chapter, es: binding.es, en: binding.en})),
+  output_bindings: localeBindings.chapters.map((binding) => ({chapter: binding.chapter, es: binding.output_es, en: binding.output_en})),
   result: 'PASS_STRUCTURAL_SOURCE_BOUND_REGISTER'
 }, null, 2));
