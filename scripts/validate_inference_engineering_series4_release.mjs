@@ -45,7 +45,7 @@ const mobileSelectors = [
 const mobileContractPasses = (source) => (
   mobileSelectors.every((selector) => source.includes(selector))
   && source.includes('data-inference-mobile-native')
-  && source.includes('data.inferenceMobileNative')
+  && source.includes('dataset.inferenceMobileNative')
   && source.includes('@media (max-width:720px)')
   && source.includes('display:none!important')
   && source.includes('overflow-x:clip')
