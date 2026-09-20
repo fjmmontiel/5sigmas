@@ -1,6 +1,7 @@
 import { Paint, clamp } from '../render/paint.mjs';
 import { sceneLayout, drawHeader, drawText } from '../render/layout.mjs';
 import { seguridadFrameState, seguridadRenderMatrix, indexSeguridadRegister } from './engine.mjs';
+import { seguridadTextState } from './timeline.mjs';
 
 export const SEGURIDAD_THEME = Object.freeze({
   background: '#FFFFFF',
@@ -54,7 +55,6 @@ function drawZone(P, zone, q) {
   if (zone.label) {
     const label=pretty(zone.label);
     if(zone.w<160 && zone.h>220){
-      // Tall barriers are semantic cut-sets: keep their names off the causal path/nodes.
       P.text(label,zone.x+zone.w/2,Math.max(48,zone.y-38),21,strong?P.T.accentText:P.T.muted,650,'center',300);
     } else if(zone.w<160){
       P.text(label,Math.min(960,zone.x+zone.w+12),zone.y+Math.max(0,(zone.h-24)/2),23,strong?P.T.accentText:P.T.muted,650,'left',300);
@@ -126,8 +126,9 @@ export function renderSeguridadFrame(canvas, spec, register, jobId, timeSeconds,
   const scene={id:frame.scene.conceptId,title:[frame.title],accentLine:-1,paragraphs:[frame.scene.text],source:null};
   const layout=sceneLayout(P,scene,portrait,{layout:'split'});
   const headerSpec=renderSpecForChapter(spec,register,frame);
+  const textState=seguridadTextState(frame.scene.text,frame.scene.conceptId,frame.localSeconds,frame.scene.durationSeconds,{reducedMotion});
   drawHeader(P,headerSpec,frame.sceneIndex,frame.timeSeconds,60,layout);
-  drawText(P,scene,layout,1,null);
+  drawText(P,scene,layout,1,textState);
   ctx.save();const m=layout.mechanism;ctx.translate(m.x+(m.w-1000*m.scale)/2,m.y);ctx.scale(m.scale,m.scale);drawMechanism(P,frame.scene.mechanism);ctx.restore();
   return Object.freeze({
     jobId:frame.job.id,
@@ -135,12 +136,15 @@ export function renderSeguridadFrame(canvas, spec, register, jobId, timeSeconds,
     sceneIndex:frame.sceneIndex,
     timeSeconds:frame.timeSeconds,
     localSeconds:frame.localSeconds,
+    mechanismLocalSeconds:frame.mechanismLocalSeconds,
     bodySize:layout.bodySize,
     mechanismScale:layout.mechanism.scale,
     metrics:layout.metrics,
     issues:Object.freeze(issues),
     family:frame.scene.perceptualFamily,
     topology:frame.scene.topology,
+    semanticTimeline:frame.scene.semanticTimeline,
+    textCue:Object.freeze({activeId:textState.activeId,status:textState.cues[0].status,visible:textState.cues[0].visible}),
     semanticAnnotations:Object.freeze({
       axes:Boolean(frame.scene.mechanism.geometry.axes),
       selectedCount:(frame.scene.mechanism.geometry.selected ?? []).length

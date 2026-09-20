@@ -35,9 +35,11 @@ jobs:
           paths = [
               Path('motion/src/seguridad/schema.mjs'),
               Path('motion/src/seguridad/mechanisms.mjs'),
+              Path('motion/src/seguridad/timeline.mjs'),
               Path('motion/src/seguridad/engine.mjs'),
               Path('motion/tests/seguridad-schema.test.mjs'),
               Path('motion/tests/seguridad-engine.test.mjs'),
+              Path('motion/tests/seguridad-timeline.test.mjs'),
               Path('motion/migration/seguridad-ia-content-v1.json'),
               Path('motion/migration/seguridad-ia-series-register.json'),
           ]
@@ -57,16 +59,19 @@ jobs:
           node --version
           node --check motion/src/seguridad/schema.mjs
           node --check motion/src/seguridad/mechanisms.mjs
+          node --check motion/src/seguridad/timeline.mjs
           node --check motion/src/seguridad/engine.mjs
           node --check motion/tests/seguridad-schema.test.mjs
           node --check motion/tests/seguridad-engine.test.mjs
+          node --check motion/tests/seguridad-timeline.test.mjs
           node -e "import('./motion/src/seguridad/engine.mjs').then(m=>console.log('ENGINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
+          node -e "import('./motion/src/seguridad/timeline.mjs').then(m=>console.log('TIMELINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
 
-      - name: Run schema and semantic-engine regressions
+      - name: Run schema, semantic-engine and synchronization regressions
         shell: bash
         run: |
           set -euo pipefail
-          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs
+          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs
 
       - name: Emit deterministic render coverage evidence
         shell: bash
@@ -75,9 +80,10 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import {seguridadRenderMatrix, validateSeguridadMechanismCoverage} from './motion/src/seguridad/engine.mjs';
+          import {SEGURIDAD_SYNC_PROFILE} from './motion/src/seguridad/timeline.mjs';
           const spec=JSON.parse(fs.readFileSync('motion/migration/seguridad-ia-content-v1.json','utf8'));
           const register=JSON.parse(fs.readFileSync('motion/migration/seguridad-ia-series-register.json','utf8'));
           const jobs=seguridadRenderMatrix(spec,register);
           const coverage=validateSeguridadMechanismCoverage(spec,register);
-          console.log(JSON.stringify({jobs:jobs.length,horizontal:jobs.filter(x=>x.orientation==='horizontal').length,vertical:jobs.filter(x=>x.orientation==='vertical').length,...coverage},null,2));
+          console.log(JSON.stringify({jobs:jobs.length,horizontal:jobs.filter(x=>x.orientation==='horizontal').length,vertical:jobs.filter(x=>x.orientation==='vertical').length,syncProfile:SEGURIDAD_SYNC_PROFILE,...coverage},null,2));
           NODE

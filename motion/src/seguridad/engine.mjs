@@ -1,5 +1,6 @@
 import { buildSeguridadRenderJobs, validateSeguridadSpec, SEGURIDAD_RENDER_CONTRACT } from './schema.mjs';
 import { compileSeguridadMechanism, SUPPORTED_SEGURIDAD_TOPOLOGIES } from './mechanisms.mjs';
+import { seguridadMechanismSeconds, seguridadSemanticTimeline } from './timeline.mjs';
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -38,10 +39,11 @@ export function compileSeguridadChapter(spec, register, jobOrId, { reducedMotion
     const concept = concepts.get(scene.concept_id);
     if (!concept) throw new Error(`seguridad engine: register missing ${scene.concept_id}`);
     if (!SUPPORTED_SEGURIDAD_TOPOLOGIES.includes(concept.topology)) throw new Error(`seguridad engine: unsupported topology ${concept.topology}`);
+    const durationSeconds = scene.end - scene.start;
     const mechanism = compileSeguridadMechanism(concept, {
       orientation: job.orientation,
-      localSeconds: reducedMotion ? SEGURIDAD_RENDER_CONTRACT.sceneDurationSeconds : 0,
-      durationSeconds: SEGURIDAD_RENDER_CONTRACT.sceneDurationSeconds,
+      localSeconds: reducedMotion ? durationSeconds : 0,
+      durationSeconds,
       reducedMotion
     });
     return Object.freeze({
@@ -49,7 +51,7 @@ export function compileSeguridadChapter(spec, register, jobOrId, { reducedMotion
       conceptId: scene.concept_id,
       start: scene.start,
       end: scene.end,
-      durationSeconds: scene.end - scene.start,
+      durationSeconds,
       text: scene.text[job.locale],
       evidence: concept.evidence,
       semanticRationale: concept.semantic_rationale,
@@ -57,6 +59,7 @@ export function compileSeguridadChapter(spec, register, jobOrId, { reducedMotion
       topology: concept.topology,
       choreography: concept.choreography,
       composition: concept.composition,
+      semanticTimeline: seguridadSemanticTimeline(scene.concept_id, durationSeconds),
       mechanism
     });
   });
@@ -79,11 +82,12 @@ export function seguridadFrameState(spec, register, jobOrId, timeSeconds, { redu
   const sceneIndex = Math.min(chapterPlan.scenes.length - 1, Math.floor(seekT / SEGURIDAD_RENDER_CONTRACT.sceneDurationSeconds));
   const scene = chapterPlan.scenes[sceneIndex];
   const localSeconds = reducedMotion ? scene.durationSeconds : clamp(t - scene.start, 0, scene.durationSeconds);
+  const mechanismLocalSeconds = seguridadMechanismSeconds(localSeconds, scene.durationSeconds, { reducedMotion });
   const concepts = indexSeguridadRegister(register);
   const concept = concepts.get(scene.conceptId);
   const mechanism = compileSeguridadMechanism(concept, {
     orientation: chapterPlan.job.orientation,
-    localSeconds,
+    localSeconds: mechanismLocalSeconds,
     durationSeconds: scene.durationSeconds,
     reducedMotion
   });
@@ -93,6 +97,7 @@ export function seguridadFrameState(spec, register, jobOrId, timeSeconds, { redu
     timeSeconds: t,
     sceneIndex,
     localSeconds,
+    mechanismLocalSeconds,
     progress: t / duration,
     title: chapterPlan.title,
     summary: chapterPlan.summary,
