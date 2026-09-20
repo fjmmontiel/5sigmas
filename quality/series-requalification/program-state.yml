@@ -1,4 +1,4 @@
-schema_version: 24
+schema_version: 25
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -10,8 +10,8 @@ canonical_series_order:
   - context-engineering-memory-mcp
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
-active_series: context-engineering-memory-mcp
-series_golden_count: 4/7
+active_series: llm-inference-engineering-economics
+series_golden_count: 5/7
 series_status:
   seguridad-ia:
     article_golden: 6/6
@@ -80,10 +80,9 @@ series_status:
   context-engineering-memory-mcp:
     ledger: quality/series-requalification/context-article-ledger.yml
     manual_review_receipt: quality/series-requalification/context-manual-review-2026-09-20.yml
-    active_branch: quality/context-engineering-requalification
-    site_facing_revision: 86a8f65f35ae8d4ae6d325bf577d35b02618dd19
-    automated_head: f8e47ac14b65667f242359eacb0cac24c4b28cf0
-    route_locale_rows: 12
+    live_release_receipt: quality/series-requalification/context-series-live-release-2026-09-20.yml
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
     source: PASS_12_OF_12
     build: PASS_12_OF_12
     browser: PASS_12_OF_12
@@ -91,22 +90,44 @@ series_status:
     indexability: PASS_12_OF_12
     pixel: PASS_12_OF_12
     pedagogy: PASS_12_OF_12
-    article_golden: 6/6
-    route_locale_rows_golden: 12/12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 339
+    release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
+    merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    production_main_verified: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    deploy_run: 35498875755
+    dedicated_live_qa_run: 35499422075
+    state: SERIES_GOLDEN
+    production_verified: true
+  llm-inference-engineering-economics:
+    ledger: quality/series-requalification/inference-article-ledger.yml
+    active_branch: quality/llm-inference-requalification
+    reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    route_locale_rows: 12
+    chapter_count: 6
+    has_series_presentation: false
+    source: PENDING_FRESH_REQUALIFICATION_0_OF_12
+    build: PENDING_0_OF_12
+    browser: PENDING_0_OF_12
+    media_visual: PENDING_0_OF_12
+    indexability: PENDING_0_OF_12
+    pixel: PENDING_0_OF_12
+    pedagogy: PENDING_0_OF_12
+    article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1: 0
+    known_p1: 12
     known_p2: 0
-    release_pr: 339
-    release_pr_state: DRAFT
+    blocker: VIDEO_REQUIRED_UNDECLARED
+    media_bootstrap_run: 35499330009
     production_verified: false
     series_golden: false
-    state: QA_PRE_RELEASE
-    next_action: COMPLETE_CURRENT_HEAD_BROAD_VISUAL_THEN_READY_PR_MERGE_DEPLOY_LIVE_VERIFY
-  llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+    state: MEDIA_VISUAL_PENDING
+    next_action: COMPLETE_NATIVE_ES_EN_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_EVIDENCE_AND_REQUALIFY_ALL_NON_DEFERRED_GATES
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
-  current_main: b6821a5077681531fba6610298dd0bb02b85813a
+  current_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
   draft_34:
     state: OPEN_DRAFT_UNMERGED_NOT_MERGEABLE
     reuse_policy: NEVER_BLIND_MERGE
