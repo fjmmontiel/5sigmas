@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-20T04:12:32Z",
+  "unit": "from-cave-to-agi",
+  "branch": "migration/video-golden-from-cave-to-agi",
+  "main_observed": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "head_before_run": "d488e8672b0754e6b489ebcc4afbeb6878c73465",
+  "implementation_head": "47d23f8165fdb69a879bef6945a5b2e3efe7b0f3",
+  "stage": "BROWSER_ES_EN_HV_PREFLIGHT_PASS_NOT_ENCODED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "implementation": {
+    "bilingual_render_spec": "motion/migration/from-cave-to-agi-content-v1.json",
+    "browser_renderer": "motion/src/from-cave/render.mjs",
+    "semantic_visuals": "motion/src/from-cave/visuals.mjs",
+    "multiline_text_layout": "motion/src/from-cave/visuals-text-layout.mjs",
+    "browser_harness": "motion/web/from-cave-render.html",
+    "browser_check": "motion/scripts/from_cave_render_check.py",
+    "workflow": ".github/workflows/from-cave-browser-render-preflight.yml"
+  },
+  "browser_preflight": {
+    "workflow_run": 35488486307,
+    "job": 106019092663,
+    "result": "PASS",
+    "artifact_id": 10598277164,
+    "artifact_digest": "sha256:4c95df6a6f4913983364597993fa9e3f4bae70cb33f085cf6110925ae86b8778",
+    "browser": "Chromium 152.0.7977.82",
+    "jobs": 24,
+    "frames_sampled": 360,
+    "locales": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "source_blobs_verified": 12,
+    "minimum_body_px": 56,
+    "minimum_mechanism_scale": 0.925,
+    "layout_issues": 0,
+    "browser_errors": 0,
+    "reduced_motion_sample": "PASS",
+    "contact_sheets": 4,
+    "semantic_coverage": {
+      "chapters": 6,
+      "concepts": 30,
+      "localized_concepts": 30,
+      "families": 30,
+      "max_family_use": 1,
+      "mechanisms": 30,
+      "supported_topologies": 30
+    }
+  },
+  "visual_inspection": {
+    "state": "INTERNAL_PREFLIGHT_PASS_NOT_OWNER_APPROVAL",
+    "sheets_inspected": [
+      "from-cave-es-horizontal-contact-sheet.jpg",
+      "from-cave-es-vertical-contact-sheet.jpg",
+      "from-cave-en-horizontal-contact-sheet.jpg",
+      "from-cave-en-vertical-contact-sheet.jpg"
+    ],
+    "initial_defect": "The first browser implementation technically passed layout but the contact sheets revealed visually repetitive generic node/edge diagrams despite distinct family labels.",
+    "repair": "Replaced generic diagram rendering with topology-specific semantic visuals for sequence, stack, split, convergence, radial system, grid, transform, DAG, dual curves, boundary, stream, logic mapping, tape/counterexample, cycles, growth curves, XOR remap, benchmark bars, serial-vs-parallel race, hub, compute surface, reuse lattice, constraint field, search tree, memory tiers, world rollout and control loop.",
+    "regression_found_after_repair": "Explicit multiline label SHARED\\nBASE overflowed in foundation-model lattice across ES/EN H/V.",
+    "regression_fix": "Added reusable explicit multiline semantic-label layout; rerun passed with zero layout issues.",
+    "final_observation": "The four final contact sheets show materially distinct compositions matching the declared semantic families; this is internal preflight evidence only and does not substitute encoded-motion review or owner approval."
+  },
+  "gates_not_yet_run": [
+    "encoded MP4 generation for all 24 ES/EN H/V outputs",
+    "full decode and exact media hashes for encoded outputs",
+    "encoded temporal motion and seek/replay inspection",
+    "whole-series encoded visual review",
+    "complete review package delivery under the single Drive root",
+    "explicit owner visual approval for this new unit",
+    "final current-main compatible release/integration checks"
+  ],
+  "next_action": "Encode from the exact 47d23f8165fdb69a879bef6945a5b2e3efe7b0f3 source snapshot, run full media/decode and encoded-motion gates, inspect the resulting full-series reel/contact evidence, then create one complete review package under the existing single Drive root only if those gates pass."
+}
