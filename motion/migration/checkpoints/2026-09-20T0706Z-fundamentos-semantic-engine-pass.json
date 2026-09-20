@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "unit": "fundamentos-ia-iag",
+  "recorded_at": "2026-09-20T07:06:30Z",
+  "stage": "DETERMINISTIC_SEMANTIC_ENGINE_PASS_NOT_BROWSER_RENDERED",
+  "source_main": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "branch": "migration/video-golden-fundamentos-ia-iag",
+  "head_before": "a2b78ff2a3b0d1fb418e5d70edc32651b808cdb6",
+  "implementation_head": "54e07d5ee9d24ea28b245bfa2046c224b965bec7",
+  "implementation_files": [
+    "motion/src/fundamentos/schema.mjs",
+    "motion/src/fundamentos/mechanisms.mjs",
+    "motion/src/fundamentos/engine.mjs",
+    "motion/scripts/check_fundamentos_register.mjs",
+    "motion/tests/fundamentos-engine.test.mjs",
+    ".github/workflows/fundamentos-semantic-engine.yml"
+  ],
+  "engine": {
+    "chapters": 5,
+    "canonical_concepts": 25,
+    "explicit_mechanisms": 25,
+    "generic_fallbacks": 0,
+    "perceptual_families": 25,
+    "max_family_use": 1,
+    "render_jobs": 20,
+    "native_horizontal_jobs": 10,
+    "native_vertical_jobs": 10,
+    "fps": 60,
+    "duration_seconds": 75,
+    "scene_duration_seconds": 15,
+    "languages": ["es", "en"],
+    "reduced_motion": "SUPPORTED_AND_REGRESSION_TESTED",
+    "seek_replay": "DETERMINISTIC_REGRESSION_TESTED"
+  },
+  "validation": {
+    "local_utf8_control_and_node_syntax": "PASS",
+    "github_workflow_run": 35495960657,
+    "github_job": 106038811546,
+    "github_conclusion": "success",
+    "utf8_control_files": 6,
+    "source_bound_register": "PASS",
+    "node_regressions": "5_PASS_0_FAIL"
+  },
+  "gates": {
+    "source_binding": "PASS_FOR_REGISTER",
+    "series_diversity_register": "PASS_MAX_FAMILY_USE_1",
+    "schema_framework": "PASS",
+    "deterministic_semantic_engine": "PASS",
+    "browser_hv": "NOT_RUN",
+    "encoded_motion": "NOT_RUN",
+    "media_integrity": "NOT_RUN",
+    "owner_visual_approval": "NOT_REQUESTED",
+    "technical_golden": false,
+    "published": false
+  },
+  "blockers": [],
+  "next_action": "Implement the Canvas/browser renderer on this validated 20-job engine, run real ES/EN H/V browser samples including reduced-motion and text/space diagnostics, repair demonstrated layout defects, then proceed to encoded-motion only after browser H/V passes."
+}
