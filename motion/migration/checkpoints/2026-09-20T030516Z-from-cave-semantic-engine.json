@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-20T03:05:16Z",
+  "unit": "from-cave-to-agi",
+  "branch": "migration/video-golden-from-cave-to-agi",
+  "main_observed": "11737ad86db9b15b1981af6fef221d7db0b82110",
+  "head_before": "ad7a53143cdcb6cacadd1b13b5977fb6921ae1fa",
+  "implementation_head": "1ee1ad887468d0995ea5a127d854e18ba5f7a312",
+  "stage": "DETERMINISTIC_SEMANTIC_ENGINE_PASS_NOT_BROWSER_RENDERED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "implementation": {
+    "files_added": [
+      "motion/src/from-cave/schema.mjs",
+      "motion/src/from-cave/mechanisms.mjs",
+      "motion/src/from-cave/engine.mjs",
+      "motion/tests/from-cave-engine.test.mjs"
+    ],
+    "workflow_updated": ".github/workflows/from-cave-semantic-register.yml",
+    "local_node_syntax": "PASS",
+    "native_render_jobs": 24,
+    "horizontal_jobs": 12,
+    "vertical_jobs": 12,
+    "fps": 60,
+    "duration_seconds_per_chapter": 75,
+    "deterministic_scene_seconds": 15,
+    "concepts": 30,
+    "explicit_mechanisms": 30,
+    "perceptual_families": 30,
+    "max_family_uses": 1,
+    "unsupported_topology_fallback": "REJECTED_BY_TEST",
+    "reduced_motion_contract": "PASS_ENGINE_TEST"
+  },
+  "ci": {
+    "workflow_run": 35485635461,
+    "job": 106011356851,
+    "head": "1ee1ad887468d0995ea5a127d854e18ba5f7a312",
+    "conclusion": "success",
+    "syntax_check": "PASS",
+    "source_bound_register": "PASS",
+    "hv_render_foundation": "PASS",
+    "deterministic_hv_semantic_engine": "PASS"
+  },
+  "gates_not_yet_run": [
+    "localized rendered-copy schema and ES/EN browser parity",
+    "native H/V browser frame/layout inspection",
+    "encoded MP4 motion review",
+    "whole-series encoded visual acceptance",
+    "complete review delivery and owner approval"
+  ],
+  "next_action": "Author the deterministic bilingual render copy/spec bound to the existing ES/EN source blobs, connect the semantic engine to the Canvas renderer, and execute native H/V browser inspection before any Drive review package or final PR is created."
+}
