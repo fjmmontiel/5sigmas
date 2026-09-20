@@ -1,0 +1,204 @@
+name: LLM Inference Engineering media bootstrap
+
+on:
+  push:
+    branches:
+      - quality/llm-inference-requalification
+    paths:
+      - '.github/workflows/inference-media-bootstrap.yml'
+      - 'scripts/generate_inference_engineering_visual_media.py'
+      - 'scripts/declare_inference_media_manifest.py'
+      - 'scripts/validate_inference_series_browser_milestone.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: inference-engineering-media-bootstrap
+  cancel-in-progress: true
+
+jobs:
+  generate-validate-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quality/llm-inference-requalification
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install generation and site dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pillow
+
+      - name: Generate locale-native silent inference visual media
+        run: |
+          python scripts/generate_inference_engineering_visual_media.py --self-test
+          python scripts/generate_inference_engineering_visual_media.py
+          python scripts/declare_inference_media_manifest.py
+
+      - name: Assert generated ES and EN media bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          stems=(
+            01-prefill-vs-decode-ttft-tpot-throughput-latency-budget
+            02-kv-cache-memory-hierarchy-continuous-batching-pagedattention
+            03-quantization-parallelism-memory-quality-tradeoffs
+            04-speculative-decoding-prefix-caching-latency-optimisations
+            05-model-routing-fallback-caching-workload-aware-serving
+            06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints
+          )
+          for stem in "${stems[@]}"; do
+            for ext in mp4 jpg; do
+              test -s "docs/series/llm-inference-engineering-economics/${stem}.${ext}"
+              test -s "locales/en/series/llm-inference-engineering-economics/${stem}.${ext}"
+            done
+          done
+          echo 'PASS: 12 MP4 + 12 JPG generated with locale-native identities.'
+
+      - name: Validate all six inference source contracts
+        run: |
+          node scripts/validate_inference_engineering_ch1_source.mjs
+          node scripts/validate_inference_engineering_ch2_source.mjs
+          node scripts/validate_inference_engineering_ch3_source.mjs
+          node scripts/validate_inference_engineering_ch4_source.mjs
+          node scripts/validate_inference_engineering_ch5_source.mjs
+          node scripts/validate_inference_engineering_ch6_source.mjs
+
+      - name: Validate MEDIA_VISUAL owner split and exact native binaries
+        run: |
+          python scripts/validate_inference_media_visual.py --self-test
+          python scripts/validate_inference_media_visual.py --output artifacts/inference-requalification/inference-media-visual.json
+
+      - name: Build Spanish strictly and audit publication/search surfaces
+        run: |
+          mkdocs build --clean --strict
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
+
+      - name: Prepare, audit and build English strictly
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate rendered INDEXABILITY plus negative fixtures
+        run: |
+          python scripts/validate_inference_indexability.py --self-test
+          python scripts/validate_inference_indexability.py --site site --output artifacts/inference-requalification/indexability/report.json
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated video URLs for preview QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          for root, replacements in [
+              (Path('site/videos'), [('https://5sigmas.com/', '/')]),
+              (Path('site/en/videos'), [('https://5sigmas.com/en/', '/en/'), ('https://5sigmas.com/', '/')]),
+          ]:
+              targets = [root / 'catalog.json', *root.rglob('*.html')]
+              for target in targets:
+                  if not target.is_file():
+                      continue
+                  text = target.read_text(encoding='utf-8')
+                  for source, dest in replacements:
+                      text = text.replace(source, dest)
+                  target.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Serve combined preview with byte-range support
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Audit browser resources, inference interactions and reader progression
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_inference_engineering_ch1_accessibility.mjs
+          node scripts/validate_inference_engineering_ch2_accessibility.mjs
+          node scripts/validate_inference_engineering_ch3_accessibility.mjs
+          node scripts/validate_inference_engineering_ch4_accessibility.mjs
+          node scripts/validate_inference_engineering_ch5_accessibility.mjs
+          node scripts/validate_inference_engineering_ch6_accessibility.mjs
+          node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Validate all 12 article-watch lifecycles and capture 48 article pages
+        run: node scripts/validate_inference_series_browser_milestone.mjs
+
+      - name: Inventory exact inference evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          roots = [Path('artifacts/inference-browser-milestone'), Path('artifacts/inference-requalification'), Path('artifacts/visual-review')]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for p in sorted(root.rglob('*')):
+                  if p.is_file() and ('inference' in p.as_posix().lower() or root.name != 'visual-review'):
+                      data = p.read_bytes()
+                      files.append({'path': p.as_posix(), 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+          out = Path('artifacts/inference-browser-milestone/evidence-manifest.json')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps({'head': '${{ github.sha }}', 'files': files}, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'head': '${{ github.sha }}', 'files': len(files)}))
+          PY
+
+      - name: Upload short-lived exact inference evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-browser-visual-evidence
+          path: |
+            artifacts/inference-browser-milestone/**
+            artifacts/inference-requalification/**
+            artifacts/visual-review/inference-engineering-*.png
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Commit generated site-facing media only after gates pass
+        run: |
+          git config user.name '5sigmas GOLDEN Series Builder'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/series/llm-inference-engineering-economics locales/en/media.yml locales/en/manifest.yml
+          git add -f locales/en/series/llm-inference-engineering-economics/*.mp4 locales/en/series/llm-inference-engineering-economics/*.jpg
+          if git diff --cached --quiet; then
+            echo 'No generated LLM inference media changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Add LLM Inference Engineering native visual videos ES and EN'
+          git pull --rebase origin quality/llm-inference-requalification
+          git push origin HEAD:quality/llm-inference-requalification
