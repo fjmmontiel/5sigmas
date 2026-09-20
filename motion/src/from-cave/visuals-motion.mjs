@@ -14,7 +14,12 @@ const cyclePoint=(points,t)=>{
 export function drawFromCaveSemanticMotion(P,m){
   if(m.reducedMotion) return;
   const t=clamp(m.progress), style=m.style;
-  if(style==='sequence'){segment(P,[110,400],[890,400],t);return;}
+  if(style==='sequence'){
+    const x=mix(110,890,t);
+    P.rect(110,384,Math.max(12,x-110),32,P.T.accentText,null,16);
+    dot(P,[x,400],18);
+    return;
+  }
   if(style==='stack'){const p=[840,mix(205,600,t)];P.path([[840,205],p],P.T.accentText,4);dot(P,p);return;}
   if(style==='split'){const lane=t<.5?260:535;const u=(t<.5?t:t-.5)*2;segment(P,[170,lane],[820,lane],u);return;}
   if(style==='converge'){const outer=[[150,150],[850,150],[150,650],[850,650]];const i=Math.min(3,Math.floor(t*4));const u=t*4-i;dot(P,pos(outer[i],[500,400],u),11);return;}
