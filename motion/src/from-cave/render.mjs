@@ -2,9 +2,7 @@ import {Paint} from '../render/paint.mjs';
 import {sceneLayout,drawHeader,drawText} from '../render/layout.mjs';
 import {fromCaveFrameState,fromCaveRenderMatrix,validateFromCaveMechanismCoverage,indexFromCaveConcepts} from './engine.mjs';
 import {FROM_CAVE_THEME} from './theme.mjs';
-
-const pretty=value=>String(value??'').replaceAll('_',' ').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
-const xy=p=>[120+p.x*760,92+p.y*616];
+import {drawFromCaveMechanism} from './visuals.mjs';
 
 function localizedScene(spec,frame){
   const chapter=spec.chapters.find(item=>item.chapter===frame.job.chapter);
@@ -12,41 +10,6 @@ function localizedScene(spec,frame){
   const scene=chapter.scenes.find(item=>item.concept_id===frame.scene.conceptId);
   if(!scene) throw new Error(`from-cave render: missing localized scene ${frame.scene.conceptId}`);
   return {chapter,scene,title:scene.title[frame.job.locale],text:scene.text[frame.job.locale]};
-}
-
-function endpoint(ref,mechanism){
-  if(ref==='core') return xy(mechanism.core.position);
-  const node=mechanism.nodes.find(item=>item.id===ref);
-  return node?xy(node.position):null;
-}
-
-function drawArrow(P,a,b,active){
-  if(!a||!b) return;
-  P.path([a,b],active?P.T.accentText:P.T.rule,active?4:2,active?1:.35);
-  if(!active) return;
-  const angle=Math.atan2(b[1]-a[1],b[0]-a[0]),r=13;
-  P.path([[b[0]-Math.cos(angle-.55)*r,b[1]-Math.sin(angle-.55)*r],b,[b[0]-Math.cos(angle+.55)*r,b[1]-Math.sin(angle+.55)*r]],P.T.accentText,3);
-}
-
-function drawNode(P,node){
-  const [x,y]=xy(node.position);const active=node.active;
-  P.circle(x,y,active?31:25,active?P.T.accentSurface:P.T.surface,active?P.T.accentText:P.T.rule,active?4:2);
-  if(active) P.circle(x,y,7,P.T.accentText,null,0);
-  const lines=P.lines(pretty(node.label),190,19,active?650:500);
-  const start=y+42;
-  lines.slice(0,2).forEach((line,i)=>P.text(line,x,start+i*24,19,active?P.T.accentText:P.T.muted,active?650:500,'center',190));
-}
-
-function drawMechanism(P,mechanism){
-  const hasCore=mechanism.edges.some(edge=>edge.from==='core'||edge.to==='core');
-  if(hasCore){
-    const [cx,cy]=xy(mechanism.core.position);
-    P.circle(cx,cy,46,P.T.accentSurface,P.T.accentText,4);
-    P.text('CORE',cx,cy-12,22,P.T.accentText,700,'center',120);
-  }
-  for(const edge of mechanism.edges) drawArrow(P,endpoint(edge.from,mechanism),endpoint(edge.to,mechanism),edge.active);
-  for(const node of mechanism.nodes) drawNode(P,node);
-  P.text(pretty(mechanism.style),500,724,20,P.T.muted,600,'center',640);
 }
 
 function headerSpec(spec,frame,localized,concepts){
@@ -74,12 +37,12 @@ export function renderFromCaveFrame(canvas,spec,localeBindings,chapters,jobId,ti
   const layout=sceneLayout(P,scene,portrait,{layout:'split'});
   drawHeader(P,headerSpec(spec,frame,localized,concepts),frame.sceneIndex,frame.timeSeconds,75,layout);
   drawText(P,scene,layout,1,null);
-  ctx.save();const m=layout.mechanism;ctx.translate(m.x+(m.w-1000*m.scale)/2,m.y);ctx.scale(m.scale,m.scale);drawMechanism(P,frame.scene.mechanism);ctx.restore();
+  ctx.save();const m=layout.mechanism;ctx.translate(m.x+(m.w-1000*m.scale)/2,m.y);ctx.scale(m.scale,m.scale);drawFromCaveMechanism(P,frame.scene.mechanism);ctx.restore();
   return Object.freeze({
     jobId:frame.job.id,locale:frame.job.locale,orientation:frame.job.orientation,scene:frame.scene.conceptId,sceneIndex:frame.sceneIndex,
     timeSeconds:frame.timeSeconds,localSeconds:frame.localSeconds,bodySize:layout.bodySize,mechanismScale:layout.mechanism.scale,
     metrics:layout.metrics,issues:Object.freeze(issues),family:frame.scene.perceptualFamily,topology:frame.scene.topology,
-    mechanismId:frame.scene.mechanism.mechanismId,reducedMotion
+    mechanismId:frame.scene.mechanism.mechanismId,visualStyle:frame.scene.mechanism.style,reducedMotion
   });
 }
 
