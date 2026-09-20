@@ -1,4 +1,4 @@
-schema_version: 12
+schema_version: 13
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -23,23 +23,26 @@ history:
   - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522226233, artifact: 10609316501, result: MEDIA_BOOTSTRAP_FAIL_ACCESSIBILITY_BEFORE_LIFECYCLE_COMMIT_SKIPPED}
   - {head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15, merge_ref: c1614cacee7715bc2da42faafd6ad209f9fc8c92, run: 35528636858, artifact: 10610099273, result: ALL_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_CONCURRENCY_ONLY}
   - {head: 57cb76c829bbd325b9cc1cdaac491419553956a4, run: 35531961728, artifact: 10611572106, result: ALL_NON_PIXEL_GATES_AND_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
+  - {head: bd7dede2201655a6f151a459f3d213fa5f944163, merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3, run: 35534948096, artifact: 10613115508, result: INDEXABILITY_MEDIA_BROWSER_LIFECYCLE_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
 current_inspection:
-  evidence_head: 57cb76c829bbd325b9cc1cdaac491419553956a4
-  run: 35531961728
-  job: 106134083482
-  artifact: 10611572106
-  artifact_sha256: 08df5b1d97255cc02fc2f566072557d24157508a34b47b4264478e48750e7850
+  evidence_head: bd7dede2201655a6f151a459f3d213fa5f944163
+  evidence_merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3
+  run: 35534948096
+  job: 106142199794
+  artifact: 10613115508
+  artifact_sha256: 2f9a4bd549441a862e53439243fc9d2b0ec1f9c73e09636d6a761e6717030913
   automated_relationship_rows: 12
   automated_motion_modes: [normal, reduced]
   automated_relationship_result: PASS_6_CHAPTERS_ES_EN
   automated_mobile_text_fit_result: FAIL_CH1_ES_NORMAL_REDUCED_ONLY
   exact_manual_images_inspected_this_run: 3
-  exact_manual_image_scope: [ch1_es_mobile_normal_native, ch1_en_mobile_normal_native, ch6_es_mobile_normal_native]
-  manual_result: P1_CONFIRMED_CH1_ES_CONCURRENCY_TEXT_CLIP_EN_AND_CH6_ES_SPOTCHECK_NO_SAME_DEFECT
-  remediation_site_head: c29f8364c2a9873506c590d09d48a06005e20a85
-  remediation_status: IMPLEMENTED_ES_ONLY_PADDING_FIX_PENDING_EXACT_CURRENT_HEAD_RERENDER
+  exact_manual_image_scope: [ch1_es_mobile_normal_native, ch1_es_mobile_reduced_native, ch1_en_mobile_normal_native]
+  manual_result: P1_RECONFIRMED_CH1_ES_CONCURRENCY_CLIP_EN_NORMAL_NO_SAME_DEFECT
+  remediation_site_head: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
+  remediation_status: IMPLEMENTED_WIDER_REPOSITIONED_CONCURRENCY_ROW_PENDING_EXACT_CURRENT_HEAD_RERENDER
 prior_exact_head_automated_gates:
-  evidence_head: 57cb76c829bbd325b9cc1cdaac491419553956a4
+  evidence_head: bd7dede2201655a6f151a459f3d213fa5f944163
+  evidence_merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
   BROWSER_RESOURCES_PARITY_PASS: 12/12
@@ -47,6 +50,7 @@ prior_exact_head_automated_gates:
   MEDIA_VISUAL_PLAYBACK_LIFECYCLE_PASS: 12/12
   INDEXABILITY_PASS: 12/12
   relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+  reader_shell_final_step: NOT_RUN_AFTER_TEXT_FIT_FAILURE
   pixel_pedagogy_manual_promotion: BLOCKED_BY_CH1_ES_TEXT_FIT
   carry_forward_to_new_site_head: false
 gates:
@@ -65,13 +69,14 @@ known_defects:
   active:
     - severity: P1
       code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_CONCURRENCY
-      evidence_head: 57cb76c829bbd325b9cc1cdaac491419553956a4
-      evidence_run: 35531961728
-      evidence_artifact: 10611572106
-      evidence_artifact_sha256: 08df5b1d97255cc02fc2f566072557d24157508a34b47b4264478e48750e7850
+      evidence_head: bd7dede2201655a6f151a459f3d213fa5f944163
+      evidence_merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3
+      evidence_run: 35534948096
+      evidence_artifact: 10613115508
+      evidence_artifact_sha256: 2f9a4bd549441a862e53439243fc9d2b0ec1f9c73e09636d6a761e6717030913
       scope: CH1_ES_NORMAL_REDUCED
       measurements: ["es normal 97x44 > 95x44", "es reduced 97x44 > 95x44"]
-      remediation_site_head: c29f8364c2a9873506c590d09d48a06005e20a85
+      remediation_site_head: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
       status: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_LAYOUT_PIXEL_PEDAGOGY_REVIEW
   harness_closed:
     - severity: P1
@@ -85,17 +90,17 @@ voice:
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
-  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt remains tracked separately"
+  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt remains tracked separately as 140 > 91 (+49)"
 release:
   pr: 342
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  current_site_facing_remediation_head: c29f8364c2a9873506c590d09d48a06005e20a85
+  current_site_facing_remediation_head: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
   current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
   main_reconciliation_required_before_ready_merge: true
-  iteration_count_changed_rows_this_run: 3
-  next_action: CONSUME_EXACT_CURRENT_HEAD_CHECKS_VERIFY_CH1_ES_TEXT_FIT_NORMAL_REDUCED_THEN_INSPECT_ALL_12_PIXEL_PEDAGOGY_EVIDENCE_CLEAR_OR_ITERATE_THEN_RECONCILE_MAIN
+  iteration_count_changed_rows_this_run: 2
+  next_action: CONSUME_EXACT_CURRENT_HEAD_CHECKS_VERIFY_CH1_ES_EN_ROW_TEXT_FIT_AND_OVERLAP_NORMAL_REDUCED_THEN_INSPECT_ALL_12_PIXEL_PEDAGOGY_EVIDENCE_CLEAR_OR_ITERATE_THEN_RECONCILE_MAIN
 row_defaults: &row_defaults
   iteration_count: 9
   last_changed_site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
@@ -113,23 +118,23 @@ row_defaults: &row_defaults
   parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
   canonical_hreflang_sitemap_internal_discovery: PRIOR_EXACT_HEAD_AUTOMATED_PASS_PENDING_CURRENT_HEAD_RERUN
   watch_video_lifecycle: PRIOR_EXACT_HEAD_RANGE_AND_PLAYBACK_PASS_PENDING_CURRENT_HEAD_RERUN
-  evidence_revision: c29f8364c2a9873506c590d09d48a06005e20a85
+  evidence_revision: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
   next_action: CONSUME_EXACT_CURRENT_HEAD_CHECKS_AND_MANUALLY_INSPECT_PIXEL_PEDAGOGY_BEFORE_PROMOTION
   state: QA
 ch1_es_defaults: &ch1_es_defaults
   <<: *row_defaults
-  iteration_count: 11
-  last_changed_site_head: c29f8364c2a9873506c590d09d48a06005e20a85
+  iteration_count: 12
+  last_changed_site_head: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
   defects:
     - {severity: P1, code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_CONCURRENCY, status: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER}
-  next_action: RERENDER_EXACT_CURRENT_HEAD_VERIFY_CONCURRENCY_TEXT_FIT_NORMAL_REDUCED_THEN_MANUALLY_INSPECT_AND_CLEAR_OR_ITERATE_P1
+  next_action: RERENDER_EXACT_CURRENT_HEAD_VERIFY_CONCURRENCY_TEXT_FIT_AND_ROW_OVERLAP_NORMAL_REDUCED_THEN_MANUALLY_INSPECT_AND_CLEAR_OR_ITERATE_P1
 ch1_en_defaults: &ch1_en_defaults
   <<: *row_defaults
-  iteration_count: 11
-  last_changed_site_head: 5d0e60b65439a6adc13ce9062308ff3422409616
-  next_action: CURRENT_HEAD_AUTOMATED_AND_MANUAL_SPOTCHECK_CLEAR_FOR_THIS_DEFECT_RETAIN_FAIL_CLOSED_UNTIL_EXACT_NEW_HEAD_INTEGRATED_REVIEW
+  iteration_count: 12
+  last_changed_site_head: f5777f27771e24beed0d47cc8f4b0cc50fa6b97b
+  next_action: GLOBAL_CH1_ROW_GEOMETRY_CHANGED_RERENDER_EXACT_CURRENT_HEAD_VERIFY_NO_REGRESSION_NORMAL_REDUCED
 ch6_es_defaults: &ch6_es_defaults
   <<: *row_defaults
   iteration_count: 10
