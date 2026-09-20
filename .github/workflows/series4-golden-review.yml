@@ -148,8 +148,8 @@ jobs:
           node scripts/validate_reader_header_overlap.mjs
           node scripts/validate_responsive_polish.mjs
 
-      - name: Upload Series 4 failure evidence
-        if: failure()
+      - name: Upload final Series 4 manual-review evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: inference-engineering-series4-pr-gate-visual-evidence
