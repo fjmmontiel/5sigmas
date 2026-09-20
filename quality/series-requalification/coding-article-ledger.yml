@@ -1,4 +1,4 @@
-schema_version: 3
+schema_version: 4
 program: 5sigmas_GOLDEN_requalification
 series: coding-agents-agent-harnesses
 owner_amendment_comment: 5716685049
@@ -9,19 +9,36 @@ catalog:
   chapter_count: 6
   route_locale_rows: 12
   has_series_presentation: false
-exact_review:
+previous_exact_review:
   head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
   browser_visual_run: 35474853168
   browser_visual_result: SUCCESS
   artifact_id: 10593674893
   artifact_digest: sha256:7aebbd89bacbf26ea58d0f5af92f349d960c70ee49f0e22bb4b46020fd3a7a8f
-  artifact_retention_days: 1
   full_page_frames_reviewed: 48
   video_state_frames_reviewed: 144
   review_modes: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
   video_states: [start, intermediate, final]
+current_source_review:
+  receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
+  receipt_commit: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+  SOURCE_PASS: PASS_12_OF_12
+  deterministic_bilingual_contracts: PASS_6_OF_6
+  fresh_primary_factual_requalification: PASS_6_OF_6
+  material_claim_change_required: false
+current_media_repair:
+  generator_commit: 2a6aa439a6ff57cc26021fab800e733f9329c40d
+  mobile_gate_commit: 76433fb5d0918d1f804e510197f94544cacad8b0
+  mobile_inline_css_px: 356x200
+  min_material_source_px: 68
+  min_material_projected_css_px: 12.61
+  lower_control_safe_zone_source_px: 280
+  lower_control_safe_zone_projected_css_px: 51.92
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  state: REGENERATION_AND_EXACT_HEAD_REVIEW_PENDING
+  blocking_manual_finding: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
 gates:
-  SOURCE_PASS: 0/12
+  SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
   BROWSER_PASS: 12/12
   MEDIA_VISUAL_PASS: 0/12
@@ -29,40 +46,24 @@ gates:
   PIXEL_REVIEW: 0/12
   PEDAGOGY_REVIEW: 0/12
   ARTICLE_GOLDEN: 0/6
-media_visual:
-  required_native_visual_videos: 12
-  declared_native_visual_videos: 12
-  native_posters: 12
-  deterministic_media_contract: PASS
-  article_watch_lifecycle: PASS_12_OF_12
-  blocking_manual_finding: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
-  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-source_review:
-  deterministic_bilingual_contracts: PASS_6_OF_6
-  current_primary_factual_requalification: PENDING_FRESH_PRIMARY_REVIEW
 indexability:
-  rendered_gate: PASS_12_OF_12
-  negative_mutations: PASS_FAIL_CLOSED
+  rendered_gate_previous_exact_head: PASS_12_OF_12
+  negative_mutations_previous_exact_head: PASS_FAIL_CLOSED
+  new_media_exact_head_revalidation: PENDING
   google_selection_required: false
   gsc_observation: null
 manual_review:
-  article_page_pixels: PASS_NO_NEW_PAGE_LAYOUT_DEFECTS_IN_48_REVIEWED_FRAMES
-  article_page_pedagogy: PASS_NO_NEW_PAGE_PEDAGOGY_DEFECTS_IN_REVIEWED_FRAMES
-  media_pixel_pedagogy: FAIL_P1
-  finding: >-
-    All six locale-native 1920x1080 mechanism videos render inside the mobile inline player at about 356x200 CSS pixels.
-    Core diagram labels are authored around 22-37 source pixels and therefore collapse to roughly 4-7 CSS pixels at that embedding size;
-    native controls also cover the lower safe area in start/intermediate/final captures. The mechanisms remain visible, but material labels are not reliably legible without zoom/fullscreen.
-  required_repair: >-
-    Redesign the shared Coding video composition for mobile-safe typography and a controls-safe lower region, regenerate all native ES/EN media,
-    add deterministic regression coverage for the safe-area/legibility contract, then rerun one grouped exact-head milestone and manually inspect the replacement frames.
+  previous_article_page_pixels: PASS_NO_NEW_PAGE_LAYOUT_DEFECTS_IN_48_REVIEWED_FRAMES
+  previous_article_page_pedagogy: PASS_NO_NEW_PAGE_PEDAGOGY_DEFECTS_IN_REVIEWED_FRAMES
+  previous_media_pixel_pedagogy: FAIL_P1
+  replacement_media_pixel_pedagogy: PENDING_REAL_FRAME_REVIEW
 rows:
   - route: /series/coding-agents-agent-harnesses/01-que-es-agent-harness/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -71,21 +72,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -94,21 +95,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -117,21 +118,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -140,21 +141,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -163,21 +164,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -186,21 +187,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -209,21 +210,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -232,21 +233,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -255,21 +256,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -278,21 +279,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
     locale: es
     source_path: docs/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -301,21 +302,21 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_ES_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_ES_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
   - route: /en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/
     locale: en
     source_path: locales/en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
-    iteration_count: 2
-    last_review_head: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
-    SOURCE_PASS: false
+    iteration_count: 3
+    last_review_head: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
+    SOURCE_PASS: true
     BUILD_PASS: true
     BROWSER_PASS: true
     MEDIA_VISUAL_PASS: false
@@ -324,12 +325,12 @@ rows:
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
     defects: [{severity: P1, code: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA}]
-    factual_source_status: DETERMINISTIC_CONTRACT_PASS_FRESH_PRIMARY_REVIEW_PENDING
+    factual_source_status: FRESH_PRIMARY_REVIEW_PASS_2026_09_20
     parity_status: DETERMINISTIC_ES_EN_CONTRACT_PASS
-    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD
-    watch_video_lifecycle: PASS_NATIVE_EN_ARTICLE_WATCH_PLAYBACK
-    evidence_revision: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f
+    canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
+    watch_video_lifecycle: PASS_NATIVE_EN_PREVIOUS_MEDIA_REPLACEMENT_PENDING
+    evidence_revision: {source: 528f787d9eb4f81d6faa9cb3ad751409531d94e9, technical: 5853e9411bf81ef4a5fb81f3159dc55f91f67f5f}
     live_deploy_verification: PENDING_RELEASE
     gsc_observation: null
-    next_action: REDESIGN_SHARED_VIDEO_MOBILE_SAFE_AREA_AND_REFRESH_PRIMARY_SOURCES
+    next_action: REGENERATE_MOBILE_SAFE_MEDIA_AND_REAL_PIXEL_PEDAGOGY_REVIEW
     state: QA
