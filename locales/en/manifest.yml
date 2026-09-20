@@ -300,6 +300,18 @@ published_files:
   - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
   - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
   - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.jpg
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.jpg
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.jpg
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete

@@ -712,3 +712,105 @@ series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-
   - name: "Fan-in only with evaluated evidence"
     start: 24
     end: 36
+
+series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md:
+  video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+  video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
+  video_title: "Prefill, decode, and the latency budget"
+  video_summary: "Prefill processes context in parallel; decode generates tokens sequentially. TTFT, TPOT, and throughput measure different phases of the same service."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Prefill builds the state required for decoding"
+    start: 0
+    end: 12
+  - name: "Decode advances one token at a time"
+    start: 12
+    end: 24
+  - name: "TTFT, TPOT, and throughput form the budget"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md:
+  video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
+  video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
+  video_title: "KV cache, memory hierarchy, and continuous batching"
+  video_summary: "The KV cache trades memory for less repeated compute; paging and continuous batching coordinate capacity, admission, and reuse across active requests."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The KV cache consumes capacity per sequence"
+    start: 0
+    end: 12
+  - name: "Continuous batching rebuilds the batch each step"
+    start: 12
+    end: 24
+  - name: "Paging turns capacity into assignable pages"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md:
+  video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
+  video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
+  video_title: "Quantization, parallelism, and trade-offs"
+  video_summary: "Quantization reduces bytes per parameter; tensor and pipeline parallelism distribute compute and memory. Each choice moves memory, quality, communication, and latency."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Fewer bits reduce memory and bandwidth"
+    start: 0
+    end: 12
+  - name: "Parallelism distributes the model across devices"
+    start: 12
+    end: 24
+  - name: "Optimizing one metric moves others"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md:
+  video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
+  video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
+  video_title: "Speculative decoding and prefix caching"
+  video_summary: "Speculative decoding proposes several cheap tokens and the target model verifies them; prefix caching reuses prefill work when the prefix truly matches."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The draft proposes a block of tokens"
+    start: 0
+    end: 12
+  - name: "The verifier accepts a prefix and rejects the rest"
+    start: 12
+    end: 24
+  - name: "A prefix hit avoids repeated prefill"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md:
+  video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
+  video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
+  video_title: "Routing, fallback, caching, and workload-aware serving"
+  video_summary: "A router assigns each request by capacity, quality, cost, and latency; cache and fallback change the path without removing verification or policy bounds."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Routing separates workloads before serving"
+    start: 0
+    end: 12
+  - name: "A cache hit avoids work when the key is valid"
+    start: 12
+    end: 24
+  - name: "Fallback recovers service under failure or saturation"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md:
+  video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+  video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
+  video_title: "Benchmarking: cost, throughput, latency, and energy"
+  video_summary: "An inference benchmark is comparable only when workload, measurement boundary, and hardware are fixed, and latency distribution, useful throughput, cost, and energy are reported."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The workload defines what is being measured"
+    start: 0
+    end: 12
+  - name: "A common boundary makes metrics comparable"
+    start: 12
+    end: 24
+  - name: "Acceptance requires SLO, cost, and constraints together"
+    start: 24
+    end: 36

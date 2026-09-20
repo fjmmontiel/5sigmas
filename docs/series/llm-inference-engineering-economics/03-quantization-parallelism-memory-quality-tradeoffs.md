@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Serving
   - GPUs
+video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
+video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
+video_title: "Quantization, paralelismo y trade-offs"
+video_summary: "Quantization reduce bytes por parámetro; tensor y pipeline parallelism reparten cómputo y memoria. Cada elección mueve memoria, calidad, comunicación y latencia."
+video_duration: PT36S
+video_chapters:
+- name: "Menos bits reducen memoria y ancho de banda"
+  start: 0
+  end: 12
+- name: "Paralelismo reparte el modelo entre dispositivos"
+  start: 12
+  end: 24
+- name: "Optimizar una métrica desplaza otras"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 3 — Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad
