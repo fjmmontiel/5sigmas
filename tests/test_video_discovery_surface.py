@@ -69,7 +69,14 @@ def html_page(source: dict, *, watch: bool, noindex: bool = False) -> str:
 <a href="{source['watch_url']}">watch</a></body></html>'''
 
 
-def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, sitemap_bad_id: str | None = None) -> tuple[Path, list[dict]]:
+def prepare_site(
+    base: Path,
+    locale: str,
+    *,
+    noindex_id: str | None = None,
+    sitemap_bad_id: str | None = None,
+    metadata_stale_id: str | None = None,
+) -> tuple[Path, list[dict]]:
     site_dir = base / ("site/en" if locale == "en" else "site")
     site_dir.mkdir(parents=True, exist_ok=True)
     sources = []
@@ -92,9 +99,15 @@ def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, site
         "version": 2,
         "videos": [
             {
-                "id": source["id"], "title": source["title"], "description": source["description"],
-                "watch_url": source["watch_url"], "video_url": source["video_url"], "thumb_url": source["poster_url"],
-                "captions_url": "", "duration_seconds": source["duration_ms"] // 1000, "chapters": [],
+                "id": source["id"],
+                "title": source["title"] + (" stale" if source["id"] == metadata_stale_id else ""),
+                "description": source["description"] + (" stale" if source["id"] == metadata_stale_id else ""),
+                "watch_url": source["watch_url"],
+                "video_url": source["video_url"],
+                "thumb_url": source["poster_url"],
+                "captions_url": "",
+                "duration_seconds": source["duration_ms"] // 1000,
+                "chapters": [],
             }
             for source in sources
         ],
@@ -104,12 +117,15 @@ def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, site
     video_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">']
     normal_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for source in sources:
-        title = source["title"] if source["id"] != sitemap_bad_id else source["title"] + " stale"
+        stale = source["id"] == metadata_stale_id
+        content_url = source["video_url"] if source["id"] != sitemap_bad_id else source["video_url"] + "?stale=1"
         video_lines.extend([
             '<url>', f'<loc>{escape(source["watch_url"])}</loc>', '<video:video>',
             f'<video:thumbnail_loc>{escape(source["poster_url"])}</video:thumbnail_loc>',
-            f'<video:title>{escape(title)}</video:title>', f'<video:description>{escape(source["description"])}</video:description>',
-            f'<video:content_loc>{escape(source["video_url"])}</video:content_loc>', f'<video:duration>{source["duration_ms"] // 1000}</video:duration>',
+            f'<video:title>{escape(source["title"] + (" stale" if stale else ""))}</video:title>',
+            f'<video:description>{escape(source["description"] + (" stale" if stale else ""))}</video:description>',
+            f'<video:content_loc>{escape(content_url)}</video:content_loc>',
+            f'<video:duration>{source["duration_ms"] // 1000}</video:duration>',
             '</video:video>', '</url>',
         ])
         normal_lines.extend(['<url>', f'<loc>{escape(source["watch_url"])}</loc>', '</url>'])
@@ -144,17 +160,44 @@ class DiscoverySurfaceTests(unittest.TestCase):
                     self.assertIn("WEBVTT", vtt)
                     self.assertIn(source["video_sha256"], vtt)
 
+    def test_mutable_metadata_is_bound_from_versioned_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source_id = "modelos-razonadores-02-es"
+            site_dir, sources = prepare_site(Path(tmp), "es", metadata_stale_id=source_id)
+            source = next(item for item in sources if item["id"] == source_id)
+            SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "es"}})
+            catalogue = json.loads((site_dir / "videos/catalog.json").read_text(encoding="utf-8"))
+            row = next(item for item in catalogue["videos"] if item["id"] == source_id)
+            self.assertEqual(row["title"], source["title"])
+            self.assertEqual(row["description"], source["description"])
+            sitemap = (site_dir / "video-sitemap.xml").read_text(encoding="utf-8")
+            self.assertIn(f"<video:title>{escape(source['title'])}</video:title>", sitemap)
+            self.assertIn(f"<video:description>{escape(source['description'])}</video:description>", sitemap)
+            self.assertNotIn(source["title"] + " stale", sitemap)
+
     def test_noindex_is_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             site_dir, _ = prepare_site(Path(tmp), "es", noindex_id="modelos-razonadores-04-es")
             with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "noindex"):
                 SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "es"}})
 
-    def test_video_sitemap_divergence_is_hard_failure(self):
+    def test_video_sitemap_exact_media_divergence_is_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             site_dir, _ = prepare_site(Path(tmp), "en", sitemap_bad_id="modelos-razonadores-05-en")
-            with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "video sitemap divergence"):
+            with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "video sitemap immutable binding divergence"):
                 SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "en"}})
+
+    def test_catalogue_exact_media_divergence_is_hard_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            site_dir, sources = prepare_site(Path(tmp), "es")
+            source = next(item for item in sources if item["id"] == "modelos-razonadores-03-es")
+            path = site_dir / "videos/catalog.json"
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            row = next(item for item in payload["videos"] if item["id"] == source["id"])
+            row["video_url"] = row["video_url"] + "?stale=1"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "catalogue immutable binding divergence"):
+                SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "es"}})
 
     def test_wrong_mp4_bytes_are_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
