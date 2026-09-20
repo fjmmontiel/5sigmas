@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -17,9 +17,11 @@ inspection:
   source_video_declarations_found: 0
   en_media_manifest_series_entries_found: 0
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
+  source_review_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
+  source_contract_run: 35499330009
   gate_hardening_branch_head_pending: true
 gates:
-  SOURCE_PASS: 0/12
+  SOURCE_PASS: 12/12
   BUILD_PASS: 0/12
   BROWSER_PASS: 0/12
   MEDIA_VISUAL_PASS: 0/12
@@ -42,11 +44,11 @@ release:
   pr: null
   production_verified: false
   series_golden: false
-  next_action: PRODUCE_DECLARE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_AND_MANUAL_PIXEL_PEDAGOGY
+  next_action: COMPLETE_NATIVE_ES_EN_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_EVIDENCE
 row_defaults: &row_defaults
   iteration_count: 1
   last_review_head: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-  SOURCE_PASS: false
+  SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
   MEDIA_VISUAL_PASS: false
@@ -58,15 +60,15 @@ row_defaults: &row_defaults
     - severity: P1
       code: VIDEO_REQUIRED_UNDECLARED
       status: OPEN
-      detail: Current curriculum requires native visual video; no route-locale video declaration exists on inspected main.
-  factual_source_status: PENDING_FRESH_REQUALIFICATION
-  parity_status: PENDING_FRESH_REQUALIFICATION
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE
-  watch_video_lifecycle: FAIL_VIDEO_REQUIRED_UNDECLARED
+      detail: Current curriculum requires native visual video; no route-locale video declaration exists on inspected main. Bootstrap Action 35499330009 is producing the replacement media but the persisted site-facing branch has not yet been requalified on those bytes.
+  factual_source_status: PASS_FRESH_2026_09_20
+  parity_status: PASS_FRESH_2026_09_20_EXACT_SOURCE_CONTRACTS
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_PERSISTED_MEDIA_HEAD
+  watch_video_lifecycle: PENDING_NATIVE_MEDIA_BOOTSTRAP
   evidence_revision: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: PRODUCE_DECLARE_NATIVE_VISUAL_VIDEO_AND_COMPLETE_FRESH_NON_DEFERRED_GATES
+  next_action: COMPLETE_NATIVE_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_AUTOMATED_AND_PIXEL_PEDAGOGY_EVIDENCE
   state: MEDIA_VISUAL_PENDING
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
