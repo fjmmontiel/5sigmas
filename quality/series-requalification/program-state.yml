@@ -1,4 +1,4 @@
-schema_version: 29
+schema_version: 30
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -113,31 +113,33 @@ series_status:
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count: 7
+    iteration_count: 8
     source: PASS_12_OF_12
     build: PENDING_0_OF_12_CURRENT_HEAD
     browser: PENDING_0_OF_12_CURRENT_HEAD
     media_visual: NATIVE_ES_EN_IMPLEMENTED_12_OF_12_PENDING_CURRENT_HEAD_GATE
     indexability: PENDING_0_OF_12_CURRENT_HEAD
-    pixel: FAIL_0_OF_12_P1_MOBILE_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
-    pedagogy: FAIL_0_OF_12_P1_MOBILE_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
+    pixel: FAIL_0_OF_12_P1_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
+    pedagogy: FAIL_0_OF_12_P1_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
     known_p1: 12
     known_p2: 0
-    known_defect: INFERENCE_MOBILE_GRAPH_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
-    last_full_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-    last_full_review_series4_run: 35516179647
-    last_full_review_pr_visual_run: 35516179685
-    last_full_review_artifact: 10607266455
-    last_full_review_artifact_sha256: b059e78151ef3f9a8d1a0d5c6e86d26f691f9a681a30a3d20558bf432278f3bc
-    current_site_remediation_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
-    remediation_status: FIX_V3_IMPLEMENTED_WITH_NEGATIVE_TEXT_FIT_MUTATION_PENDING_EXACT_RERENDER_ALL_12
+    known_defect: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
+    last_failed_exact_merge_ref: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
+    last_failed_branch_head: 8d5941b1887cfb4907057b7fe83c8e7f20debdb9
+    last_failed_series4_run: 35519776975
+    last_failed_artifact: 10608215457
+    last_failed_artifact_sha256: 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049
+    last_failed_result: TEXT_FIT_GATE_106_FAILURES_ES_EN_NORMAL_REDUCED_AFTER_INDEXABILITY_MEDIA_BROWSER_GREEN
+    current_site_remediation_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
+    current_branch_head_with_ledger: 8cdbf3dde1967168f60ed99bb79cfcfd27075324
+    remediation_status: FIX_V4_THREE_COLUMN_REFLOW_12PX_TEXT_SAFE_BOUNDS_PENDING_EXACT_RERENDER_ALL_12
     production_verified: false
     series_golden: false
     state: QA
-    next_action: RENDER_CURRENT_HEAD_RUN_TEXT_FIT_REGRESSION_REINSPECT_ALL_12_NATIVE_MOBILE_GRAPHS_THEN_CLEAR_OR_ITERATE_P1_AND_COMPLETE_EXACT_GATES
+    next_action: RENDER_EXACT_GRAPH_REFLOW_HEAD_RUN_TEXT_FIT_NEGATIVE_MUTATION_REINSPECT_ALL_12_ES_EN_MOBILE_NORMAL_REDUCED_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
   evaluating-ai-systems-production:
     state: REOPENED_PUBLISHED_UNCERTIFIED
 release_coordination:
