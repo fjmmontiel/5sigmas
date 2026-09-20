@@ -21,6 +21,8 @@ MEDIA = {
     ("en", "modelos-razonadores-intro-en"): ROOT / "locales/en/series/modelos-razonadores/00_presentacion_serie.mp4",
     ("es", "modelos-razonadores-01-es"): ROOT / "docs/series/modelos-razonadores/01-que-es-razonar.mp4",
     ("en", "modelos-razonadores-01-en"): ROOT / "locales/en/series/modelos-razonadores/01-que-es-razonar.mp4",
+    ("es", "modelos-razonadores-02-es"): ROOT / "docs/series/modelos-razonadores/02-fallos.mp4",
+    ("en", "modelos-razonadores-02-en"): ROOT / "locales/en/series/modelos-razonadores/02-fallos.mp4",
 }
 
 
@@ -126,7 +128,7 @@ class DiscoverySurfaceTests(unittest.TestCase):
             with self.subTest(locale=locale), tempfile.TemporaryDirectory() as tmp:
                 site_dir, sources = prepare_site(Path(tmp), locale)
                 result = SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": locale}})
-                self.assertEqual(len(result["sources"]), 2)
+                self.assertEqual(len(result["sources"]), 3)
                 catalogue = json.loads((site_dir / "videos/catalog.json").read_text(encoding="utf-8"))
                 self.assertEqual(catalogue["version"], 3)
                 for source in sources:
