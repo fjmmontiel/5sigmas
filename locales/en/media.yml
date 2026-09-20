@@ -610,3 +610,105 @@ series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuper
     - name: "Target moves: integrate and revalidate"
       start: 24
       end: 36
+
+series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
+  video: 01-context-engineering-vs-prompt-engineering.mp4
+  video_poster: 01-context-engineering-vs-prompt-engineering.jpg
+  video_title: "Context engineering versus prompt engineering"
+  video_summary: "Quality depends on which evidence, state, and tools enter each turn, not only on prompt wording."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Fixed prompt versus live context"
+    start: 0
+    end: 12
+  - name: "Per-turn selection and assembly"
+    start: 12
+    end: 24
+  - name: "Context changes after observation"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md:
+  video: 02-context-budgets-prioritisation-compaction-provenance.mp4
+  video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
+  video_title: "Budget, prioritization, compaction, and provenance"
+  video_summary: "A finite budget forces selection, compaction, or eviction while preserving provenance for what survives."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The window is a finite budget"
+    start: 0
+    end: 12
+  - name: "Compact without losing the source"
+    start: 12
+    end: 24
+  - name: "Priority changes with the task"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md:
+  video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+  video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+  video_title: "Memory architectures and persistent state"
+  video_summary: "Working memory, episodes, semantic knowledge, and persistent state have different write, retrieval, and expiry lifecycles."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Four memories, four lifecycles"
+    start: 0
+    end: 12
+  - name: "Writing requires a policy"
+    start: 12
+    end: 24
+  - name: "Retrieving does not mean trusting"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md:
+  video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+  video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+  video_title: "Retrieval, freshness, conflict, and grounding"
+  video_summary: "Retrieving candidates is not enough: relevance and freshness must be weighed, conflicts resolved, and traceable evidence assembled."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Relevance and freshness are different signals"
+    start: 0
+    end: 12
+  - name: "Resolve conflict before assembly"
+    start: 12
+    end: 24
+  - name: "Grounding keeps evidence and answer connected"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md:
+  video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+  video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+  video_title: "MCP: lifecycle, capabilities, and trust boundaries"
+  video_summary: "MCP separates host, clients, and servers; capability discovery does not remove authorization, validation, or trust boundaries."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Host, client, and server have different roles"
+    start: 0
+    end: 12
+  - name: "Discovering capabilities does not authorize them"
+    start: 12
+    end: 24
+  - name: "Remote data does not inherit authority"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md:
+  video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+  video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+  video_title: "Skills, plugins, subagents, and context isolation"
+  video_summary: "Extensions and subagents scale only when each worker's context, authority, and evidence remain explicit and evaluable."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Extending does not mean sharing all context"
+    start: 0
+    end: 12
+  - name: "Fan-out with isolated contexts"
+    start: 12
+    end: 24
+  - name: "Fan-in only with evaluated evidence"
+    start: 24
+    end: 36

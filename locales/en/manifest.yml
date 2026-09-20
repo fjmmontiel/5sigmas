@@ -288,6 +288,18 @@ published_files:
   - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
   - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
   - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.jpg
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.jpg
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete
