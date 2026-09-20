@@ -23,6 +23,8 @@ from xml.etree import ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 DISCOVERY_ROOT = ROOT / "discovery"
 SITE_ORIGIN = "https://5sigmas.com"
+SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+VIDEO_NS = "http://www.google.com/schemas/sitemap-video/1.1"
 
 
 def _load_contract_module():
@@ -225,7 +227,13 @@ def _write_vtt(site_dir: Path, source: dict[str, Any], compiled: dict[str, Any],
     target.write_text(compiled["vtt"] + "\n", encoding="utf-8")
 
 
+def _require_equal(actual: Any, expected: Any, *, surface: str, field: str, source_id: str) -> None:
+    if actual != expected:
+        raise CONTRACT.ContractError(f"{surface} immutable binding divergence for {source_id}: {field}")
+
+
 def _bind_catalogue(site_dir: Path, source: dict[str, Any], compiled: dict[str, Any]) -> None:
+    """Bind mutable discovery metadata while failing closed on media identity."""
     path = site_dir / "videos" / "catalog.json"
     if not path.is_file():
         raise CONTRACT.ContractError(f"video catalogue missing: {path}")
@@ -237,16 +245,19 @@ def _bind_catalogue(site_dir: Path, source: dict[str, Any], compiled: dict[str, 
     if len(matches) != 1:
         raise CONTRACT.ContractError(f"catalogue watch binding count != 1: {source['watch_url']}")
     row = matches[0]
-    expected = {
-        "title": source["title"],
-        "description": source["description"],
+    immutable = {
         "video_url": source["video_url"],
         "thumb_url": source["poster_url"],
         "duration_seconds": source["duration_ms"] // 1000,
     }
-    for key, value in expected.items():
-        if row.get(key) != value:
-            raise CONTRACT.ContractError(f"catalogue divergence for {source['id']}: {key}")
+    for key, value in immutable.items():
+        _require_equal(row.get(key), value, surface="catalogue", field=key, source_id=source["id"])
+
+    # The versioned discovery source is authoritative for mutable public metadata.
+    # Legacy article/catalogue copy is allowed to differ before this binding step,
+    # but the resulting catalogue, schema, transcript and sitemap must converge.
+    row["title"] = source["title"]
+    row["description"] = source["description"]
     row["captions_url"] = source["vtt_url"]
     row["chapters"] = compiled["chapters"]
     row["discovery_source_sha256"] = compiled["source_sha256"]
@@ -255,12 +266,13 @@ def _bind_catalogue(site_dir: Path, source: dict[str, Any], compiled: dict[str, 
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def _audit_video_sitemap(site_dir: Path, source: dict[str, Any], locale: str) -> None:
+def _bind_video_sitemap(site_dir: Path, source: dict[str, Any], locale: str) -> None:
+    """Bind mutable discovery metadata while preserving exact sitemap media identity."""
     path = site_dir / "video-sitemap.xml"
     if not path.is_file():
         raise CONTRACT.ContractError(f"video sitemap missing for {locale}")
     root = ET.fromstring(path.read_text(encoding="utf-8"))
-    ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "v": "http://www.google.com/schemas/sitemap-video/1.1"}
+    ns = {"s": SITEMAP_NS, "v": VIDEO_NS}
     matches = []
     for node in root.findall("s:url", ns):
         if (node.findtext("s:loc", default="", namespaces=ns) or "").strip() == source["watch_url"]:
@@ -270,17 +282,26 @@ def _audit_video_sitemap(site_dir: Path, source: dict[str, Any], locale: str) ->
     video = matches[0].find("v:video", ns)
     if video is None:
         raise CONTRACT.ContractError("video sitemap video node missing")
-    checks = {
+
+    immutable = {
         "v:thumbnail_loc": source["poster_url"],
-        "v:title": source["title"],
-        "v:description": source["description"],
         "v:content_loc": source["video_url"],
         "v:duration": str(source["duration_ms"] // 1000),
     }
-    for selector, expected in checks.items():
+    for selector, expected in immutable.items():
         value = (video.findtext(selector, default="", namespaces=ns) or "").strip()
-        if value != expected:
-            raise CONTRACT.ContractError(f"video sitemap divergence: {selector}")
+        _require_equal(value, expected, surface="video sitemap", field=selector, source_id=source["id"])
+
+    for selector, value in (("v:title", source["title"]), ("v:description", source["description"])):
+        element = video.find(selector, ns)
+        if element is None:
+            raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")
+        element.text = value
+
+    ET.register_namespace("", SITEMAP_NS)
+    ET.register_namespace("video", VIDEO_NS)
+    serialized = ET.tostring(root, encoding="unicode")
+    path.write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + serialized + "\n", encoding="utf-8")
 
 
 def _audit_normal_sitemap(site_dir: Path, source: dict[str, Any], locale: str) -> None:
@@ -311,7 +332,7 @@ def apply_discovery_surface(config: Any) -> dict[str, Any]:
         _patch_watch_html(watch_html, source, compiled)
         _patch_article_html(article_html, source, compiled)
         _bind_catalogue(site_dir, source, compiled)
-        _audit_video_sitemap(site_dir, source, locale)
+        _bind_video_sitemap(site_dir, source, locale)
         _audit_normal_sitemap(site_dir, source, locale)
         result["sources"].append({
             "path": str(source_path.relative_to(ROOT)),
