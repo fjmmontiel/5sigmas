@@ -106,7 +106,10 @@ class RenderedTests(unittest.TestCase):
     def test_video_sitemap_duration_divergence(self):
         self.data['video_sitemap']=self.data['video_sitemap'].replace('<video:duration>75</video:duration>','<video:duration>74</video:duration>');self.fail('VIDEO_SITEMAP_DURATION')
     def test_video_sitemap_title_divergence(self):
-        self.data['video_sitemap']=self.data['video_sitemap'].replace('<video:title>Modelos razonadores</video:title>','<video:title>Wrong title</video:title>');self.fail('VIDEO_SITEMAP_TITLE')
+        expected=f'<video:title>{self.s["title"]}</video:title>'
+        self.assertIn(expected,self.data['video_sitemap'])
+        self.data['video_sitemap']=self.data['video_sitemap'].replace(expected,'<video:title>Wrong title</video:title>')
+        self.fail('VIDEO_SITEMAP_TITLE')
     def test_sitemap_missing(self):
         self.data['normal_sitemap']=self.data['normal_sitemap'].replace(self.s['watch_url'],'https://5sigmas.com/');self.fail('NORMAL_SITEMAP_ENTRY')
     def test_article_link_missing(self): self.data['article_html']='<p>No video link.</p>';self.fail('ARTICLE_WATCH_LINKS')

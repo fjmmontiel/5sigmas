@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "modelos-razonadores-intro-es",
   "locale": "es",
-  "title": "Modelos razonadores",
-  "description": "Introducción visual a los modelos razonadores: pasos de razonamiento, presupuesto de cómputo, cinco preguntas de la serie y compromisos entre calidad, coste, latencia y riesgo.",
+  "title": "Modelos razonadores — test-time compute, cadenas de pensamiento y fallos sistemáticos",
+  "description": "Cinco capítulos sobre cómo razonan los LLMs: test-time compute, fallos, latencia, coste y riesgos cuando usan herramientas.",
   "watch_url": "https://5sigmas.com/videos/series/modelos-razonadores/00_presentacion_serie/",
   "article_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie/",
   "video_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie.mp4",
@@ -31,28 +31,11 @@
       "start_ms": 0,
       "end_ms": 15000,
       "cues": [
-        {
-          "id": "process-01",
-          "start_ms": 700,
-          "end_ms": 3372,
-          "text": "Un problema complejo puede dividirse en pasos."
-        },
-        {
-          "id": "process-02",
-          "start_ms": 3372,
-          "end_ms": 5727,
-          "text": "Esos pasos consumen tiempo y cómputo."
-        },
-        {
-          "id": "process-03",
-          "start_ms": 5727,
-          "end_ms": 15000,
-          "text": "Y también pueden fallar."
-        }
+        {"id": "process-01", "start_ms": 700, "end_ms": 3372, "text": "Un problema complejo puede dividirse en pasos."},
+        {"id": "process-02", "start_ms": 3372, "end_ms": 5727, "text": "Esos pasos consumen tiempo y cómputo."},
+        {"id": "process-03", "start_ms": 5727, "end_ms": 15000, "text": "Y también pueden fallar."}
       ],
-      "visual_description": [
-        "La multiplicación ilustrativa 17 × 6 se descompone en 10 × 6 y 7 × 6: 60 + 42 = 102. Una respuesta 104 aparece marcada como incorrecta. La cuadrícula representa la descomposición del cálculo, no un resultado de benchmark."
-      ]
+      "visual_description": ["La multiplicación ilustrativa 17 × 6 se descompone en 10 × 6 y 7 × 6: 60 + 42 = 102. Una respuesta 104 aparece marcada como incorrecta. La cuadrícula representa la descomposición del cálculo, no un resultado de benchmark."]
     },
     {
       "id": "budget",
@@ -60,22 +43,10 @@
       "start_ms": 15000,
       "end_ms": 35000,
       "cues": [
-        {
-          "id": "budget-01",
-          "start_ms": 15700,
-          "end_ms": 20277,
-          "text": "En inferencia puedes invertir más pasos, más muestras, verificación o interacción con herramientas."
-        },
-        {
-          "id": "budget-02",
-          "start_ms": 20277,
-          "end_ms": 35000,
-          "text": "En algunas tareas eso puede mejorar la respuesta, pero también aumenta coste y latencia."
-        }
+        {"id": "budget-01", "start_ms": 15700, "end_ms": 20277, "text": "En inferencia puedes invertir más pasos, más muestras, verificación o interacción con herramientas."},
+        {"id": "budget-02", "start_ms": 20277, "end_ms": 35000, "text": "En algunas tareas eso puede mejorar la respuesta, pero también aumenta coste y latencia."}
       ],
-      "visual_description": [
-        "Doce unidades de cómputo se reparten entre pasos, muestras y verificación. El reparto es ilustrativo: muestra que un presupuesto se puede asignar de distintas formas, no que exista una distribución óptima universal."
-      ]
+      "visual_description": ["Doce unidades de cómputo se reparten entre pasos, muestras y verificación. El reparto es ilustrativo: muestra que un presupuesto se puede asignar de distintas formas, no que exista una distribución óptima universal."]
     },
     {
       "id": "roadmap",
@@ -83,40 +54,13 @@
       "start_ms": 35000,
       "end_ms": 58000,
       "cues": [
-        {
-          "id": "roadmap-01",
-          "start_ms": 35700,
-          "end_ms": 38372,
-          "text": "Primero: qué significa razonar para un LLM."
-        },
-        {
-          "id": "roadmap-02",
-          "start_ms": 38372,
-          "end_ms": 40410,
-          "text": "Segundo: cómo fallan estos sistemas."
-        },
-        {
-          "id": "roadmap-03",
-          "start_ms": 40410,
-          "end_ms": 43082,
-          "text": "Tercero: cómo usar más cómputo en inferencia."
-        },
-        {
-          "id": "roadmap-04",
-          "start_ms": 43082,
-          "end_ms": 46389,
-          "text": "Cuarto: qué ocurre con la latencia y el streaming."
-        },
-        {
-          "id": "roadmap-05",
-          "start_ms": 46389,
-          "end_ms": 58000,
-          "text": "Quinto: cuándo más razonamiento introduce nuevos riesgos."
-        }
+        {"id": "roadmap-01", "start_ms": 35700, "end_ms": 38372, "text": "Primero: qué significa razonar para un LLM."},
+        {"id": "roadmap-02", "start_ms": 38372, "end_ms": 40410, "text": "Segundo: cómo fallan estos sistemas."},
+        {"id": "roadmap-03", "start_ms": 40410, "end_ms": 43082, "text": "Tercero: cómo usar más cómputo en inferencia."},
+        {"id": "roadmap-04", "start_ms": 43082, "end_ms": 46389, "text": "Cuarto: qué ocurre con la latencia y el streaming."},
+        {"id": "roadmap-05", "start_ms": 46389, "end_ms": 58000, "text": "Quinto: cuándo más razonamiento introduce nuevos riesgos."}
       ],
-      "visual_description": [
-        "El mapa conecta razonar con cinco preguntas: qué significa, cómo falla, cómo usar test-time compute, qué ocurre con la latencia y qué riesgos introduce. Calidad, coste y tiempo aparecen como decisiones relacionadas."
-      ]
+      "visual_description": ["El mapa conecta razonar con cinco preguntas: qué significa, cómo falla, cómo usar test-time compute, qué ocurre con la latencia y qué riesgos introduce. Calidad, coste y tiempo aparecen como decisiones relacionadas."]
     },
     {
       "id": "tradeoff",
@@ -124,28 +68,11 @@
       "start_ms": 58000,
       "end_ms": 75000,
       "cues": [
-        {
-          "id": "tradeoff-01",
-          "start_ms": 58700,
-          "end_ms": 61690,
-          "text": "Más razonamiento puede mejorar la calidad en tareas adecuadas."
-        },
-        {
-          "id": "tradeoff-02",
-          "start_ms": 61690,
-          "end_ms": 64044,
-          "text": "También consume tiempo, cómputo y dinero."
-        },
-        {
-          "id": "tradeoff-03",
-          "start_ms": 64044,
-          "end_ms": 75000,
-          "text": "Y puede introducir sobrepensamiento, errores o nuevas superficies de ataque."
-        }
+        {"id": "tradeoff-01", "start_ms": 58700, "end_ms": 61690, "text": "Más razonamiento puede mejorar la calidad en tareas adecuadas."},
+        {"id": "tradeoff-02", "start_ms": 61690, "end_ms": 64044, "text": "También consume tiempo, cómputo y dinero."},
+        {"id": "tradeoff-03", "start_ms": 64044, "end_ms": 75000, "text": "Y puede introducir sobrepensamiento, errores o nuevas superficies de ataque."}
       ],
-      "visual_description": [
-        "Un triángulo relaciona calidad, coste y latencia, y riesgo alrededor de la tarea. Es una comparación cualitativa: la posición no representa una puntuación ni una medida de rendimiento."
-      ]
+      "visual_description": ["Un triángulo relaciona calidad, coste y latencia, y riesgo alrededor de la tarea. Es una comparación cualitativa: la posición no representa una puntuación ni una medida de rendimiento."]
     }
   ]
 }
