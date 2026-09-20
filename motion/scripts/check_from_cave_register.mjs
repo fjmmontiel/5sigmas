@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const repoRoot = path.resolve(import.meta.dirname, '..', '..');
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(scriptDir, '..', '..');
 const contentRoot = path.join(repoRoot, 'motion', 'content', 'from-cave-to-agi');
 const index = JSON.parse(fs.readFileSync(path.join(contentRoot, 'series-register.json'), 'utf8'));
 const partial = JSON.parse(fs.readFileSync(path.join(contentRoot, 'series-register.partial.json'), 'utf8'));
