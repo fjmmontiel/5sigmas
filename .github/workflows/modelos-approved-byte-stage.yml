@@ -1,5 +1,6 @@
 name: Modelos approved byte staging
 
+# 2026-09-20 release retry: canonical delivery is still incomplete; this workflow stages the exact frozen owner-approved bytes only.
 on:
   push:
     branches:
