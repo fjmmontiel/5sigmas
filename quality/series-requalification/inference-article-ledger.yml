@@ -1,73 +1,35 @@
-schema_version: 9
+schema_version: 10
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
 current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
 active_branch: quality/llm-inference-requalification
 catalog:
   chapter_count: 6
   route_locale_rows: 12
   has_series_presentation: false
-inspection:
-  inspected_on: 2026-09-20
-  es_chapters_found: 6
-  en_chapters_found: 6
-  es_native_video_declarations_found: 6
-  en_media_manifest_series_entries_found: 6
-  es_native_mp4_found: 6
-  en_native_mp4_found: 6
-  es_posters_found: 6
-  en_posters_found: 6
-  media_metadata_scope: title_summary_duration_three_key_moments_per_locale
-  source_review_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
-  source_contract_run: 35499330009
-  source_contract_result: PASS_12_OF_12
-  historical_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
-  historical_manual_mobile_review_artifact: 10601915287
-  historical_manual_mobile_review_evidence_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
-  historical_manual_mobile_review_result: P1_SHARED_12_OF_12_GIANT_CANVAS_ONLY
-  prior_card_summary_head: 21dd7761f55d61fbbd767d45b7f7259baa8097d2
-  prior_card_summary_gate_status: AUTOMATED_GREEN_BUT_PEDAGOGICALLY_INSUFFICIENT_UNDER_5655569434
-  relationship_graph_remediation_site_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
-  relationship_graph_bounds_fix_site_head: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
-  exact_bounds_fix_evidence_head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97
-  exact_bounds_fix_series4_run: 35510156711
-  exact_bounds_fix_artifact: 10605125706
-  exact_bounds_fix_artifact_sha256: eac4c2dbe040301d493dbeb77decc8fef2a28b6d9d4d0c6bb97585b4dd85ae91
-  exact_bounds_fix_result: P1_REMAINS_LEGIBILITY_EDGE_ROUTING_CH1_TO_CH3_BEFORE_GATE_ABORT
-  relationship_graph_legibility_fix_site_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
-  exact_full_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-  exact_full_review_series4_run: 35516179647
-  exact_full_review_series4_result: AUTOMATED_SUCCESS_MANUAL_PIXEL_P1
-  exact_full_review_pr_visual_run: 35516179685
-  exact_full_review_pr_visual_result: SUCCESS
-  exact_full_review_artifact: 10607266455
-  exact_full_review_artifact_sha256: b059e78151ef3f9a8d1a0d5c6e86d26f691f9a681a30a3d20558bf432278f3bc
-  exact_full_review_scope: ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_PLUS_72_VIDEO_FRAMES
-  exact_full_review_result: P1_SHARED_12_OF_12_MOBILE_TEXT_CLIPPING_AND_EDGE_LABEL_COLLISIONS
-  text_fit_remediation_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
-  text_fit_regression_script: scripts/validate_inference_mobile_text_fit.mjs
-  text_fit_negative_mutation: SYNTHETIC_LONG_UNBREAKABLE_NODE_LABEL_MUST_OVERFLOW_AND_BE_DETECTED
-  exact_text_fit_merge_ref: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
-  exact_text_fit_branch_head: 8d5941b1887cfb4907057b7fe83c8e7f20debdb9
-  exact_text_fit_series4_run: 35519776975
-  exact_text_fit_result: FAIL_106_NODE_TEXT_OVERFLOWS_BOTH_LOCALES_NORMAL_REDUCED_AFTER_ALL_PRIOR_SUBGATES_GREEN
-  exact_text_fit_artifact: 10608215457
-  exact_text_fit_artifact_sha256: 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049
-  exact_text_fit_artifact_files: 172
-  exact_text_fit_artifact_retention_days: 1
-  exact_text_fit_automated_indexability_result: PASS_12_OF_12
-  exact_text_fit_automated_media_visual_result: PASS_12_OF_12
-  exact_text_fit_internal_graph_result: ES_EN_180_PAGES_CRAWL_ORPHANS_0_CONTEXTUAL_COVERAGE_100_PERCENT
-  exact_text_fit_manual_pixel_scope_this_iteration: ES_MOBILE_NORMAL_ALL_6_INSPECTED_PLUS_AUTOMATED_ALL_12_ES_EN_NORMAL_REDUCED_FAILURE_LOGS
-  exact_text_fit_manual_pixel_result: P1_CONFIRMED_CH3_FRAGMENTED_OUTCOME_CH4_RIGHT_EDGE_PREFILL_AND_DENSE_BRANCHING_CH5_CACHE_PLACEMENT_SUCCESS_CLIPPING_WITH_SHARED_TEXT_FIT_FAILURE_ACROSS_SERIES
-  graph_reflow_fix_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
-  graph_reflow_fix_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
-  graph_reflow_fix_mechanism: THREE_COLUMN_MOBILE_TOPOLOGY_FOR_DENSE_CH4_CH5_WIDER_12PX_NODE_BOXES_SAFE_15_85_BOUNDS_MORE_VERTICAL_BUDGET_SHORTER_EQUIVALENT_MOBILE_LABELS_AND_DECLUTTERED_EDGE_LABELS_WITHOUT_CARD_FALLBACK
-  historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
-  historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
+receipts:
+  source_review: quality/series-requalification/inference-source-review-2026-09-20.yml
+  historical_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
+  current_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
+history:
+  - {head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685, run: 35499330009, artifact: 10601915287, result: P1_SHARED_GIANT_CANVAS_ONLY}
+  - {head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97, run: 35510156711, artifact: 10605125706, result: P1_DIRECTED_GRAPH_LEGIBILITY_EDGE_ROUTING}
+  - {head: 64339a86f8a88ff03c04af98927209ffbda7ccef, run: 35516179647, artifact: 10607266455, result: AUTOMATED_GREEN_MANUAL_PIXEL_P1}
+  - {head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d, run: 35519776975, artifact: 10608215457, result: TEXT_FIT_106_FAILURES_ES_EN_NORMAL_REDUCED}
+  - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522229871, artifact: 10608637991, result: SERIES4_FAIL_PLAYBACK_LIFECYCLE_BEFORE_LAYOUT_GATES}
+  - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522226233, artifact: 10609316501, result: MEDIA_BOOTSTRAP_FAIL_ACCESSIBILITY_BEFORE_LIFECYCLE_COMMIT_SKIPPED}
+current_inspection:
+  evidence_head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12
+  artifact: 10609316501
+  artifact_sha256: f369ee2a325342d673ed5dfb9ccc2b91fe660f31440ff8f22b2a6718b0e65e61
+  inspected_route_locale_rows: 12
+  inspected_mobile_modes: [normal, reduced]
+  exact_native_mobile_images_inspected: 24
+  manual_result: P1_NODE_TEXT_FIT_AND_EDGE_LABEL_COLLISIONS_REMAINS
+  remediation_site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+  remediation_status: IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER
 gates:
   SOURCE_PASS: 12/12
   BUILD_PASS: 0/12
@@ -79,61 +41,44 @@ gates:
   ARTICLE_GOLDEN: 0/6
 known_defects:
   p0: 0
-  p1: 12
+  p1_open_rows: 12
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
-      affected_route_locale_rows: 12
-      evidence_head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
-      evidence_branch_head: 8d5941b1887cfb4907057b7fe83c8e7f20debdb9
-      evidence_runs: [35519776975]
-      evidence_artifact: 10608215457
-      evidence_artifact_sha256: 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049
-      automated_scope: ALL_6_CHAPTERS_ES_EN_MOBILE_NORMAL_REDUCED
-      manual_scope_this_iteration: ES_MOBILE_NORMAL_ALL_6
-      shared_cause: 29_TO_61PX_EFFECTIVE_NODE_TEXT_BUDGET_IN_DENSE_MOBILE_GRAPHS_WAS_SMALLER_THAN_REQUIRED_BY_SEMANTIC_LABELS;_FOUR_COLUMN_CH4_CH5_LAYOUT_COMPOUNDED_CLIPPING_AND_EDGE_LABEL_CONGESTION
-      remediation: REFLOW_DENSE_GRAPHS_TO_THREE_COLUMNS_INCREASE_NODE_TEXT_BUDGET_WITH_12PX_MINIMUM_PRESERVE_DIRECTED_TOPOLOGY_BRANCHING_FEEDBACK_AND_SEMANTICS_DECLUTTER_REDUNDANT_EDGE_LABELS
-      remediation_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
-      status: FIX_V4_IMPLEMENTED_PENDING_EXACT_MERGE_REF_RERENDER_TEXT_FIT_GATE_AND_ALL_12_PIXEL_PEDAGOGY_REVIEW
-  scope_note: >-
-    Exact merge-ref Series 4 run 35519776975 proved that source/build/publication/search,
-    rendered INDEXABILITY, MEDIA_VISUAL, browser resources, bilingual hub and locale parity were
-    green before the new fail-closed mobile text-fit regression rejected the candidate with 106
-    node overflow failures across both locales and normal/reduced motion. Artifact 10608215457
-    (sha256 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049,
-    172 files) was retained for one day. Manual inspection in this run covered the ES normal mobile
-    graph for all six chapters and confirmed visible quality debt in the same family, especially
-    fragmented output labels in chapter 3 and clipped/congested dense branch graphs in chapters 4
-    and 5. The shared renderer has been reflowed without reducing node text below 12px, without
-    reverting to cards, and without removing directed topology. P1 remains open until the exact
-    new merge-ref rerenders and all 12 ES/EN mobile graphs are manually reinspected.
-  closed_historical_p1:
-    count: 12
-    code: VIDEO_REQUIRED_UNDECLARED
-    closure_evidence: Six ES frontmatters plus six EN media-manifest entries declare native MP4/poster/title/summary/PT36S/key moments; all twelve MP4/poster assets exist on the branch.
+      code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_EDGE_LABEL_COLLISIONS
+      evidence_head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12
+      evidence_run: 35522226233
+      evidence_artifact: 10609316501
+      evidence_artifact_sha256: f369ee2a325342d673ed5dfb9ccc2b91fe660f31440ff8f22b2a6718b0e65e61
+      scope: ALL_12_ROWS_INSPECTED_SHARED_RENDERER_OPEN_PENDING_EXACT_REPAIRED_RERENDER
+      remediation_site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+      status: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_LAYOUT_PIXEL_PEDAGOGY_REVIEW
+  harness:
+    - severity: P1
+      code: SERIES4_PREVIEW_SERVER_LACKED_RANGE_SEEK_CONTRACT
+      evidence_run: 35522229871
+      evidence_step: Validate inference article/watch playback lifecycle
+      remediation_site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+      status: FIX_IMPLEMENTED_USE_SERVE_PREVIEW_RANGE_SELF_TEST_AND_206_PROBE_PENDING_RERUN
 voice:
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
-  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt tracked separately as 140 > 91"
+  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt remains tracked separately"
 release:
   pr: 342
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  current_site_facing_remediation_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
-  last_exact_green_automated_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-  last_exact_green_series4_run: 35516179647
-  last_exact_green_pr_visual_run: 35516179685
-  last_exact_manual_result: CHANGES_REQUIRED_PIXEL_PEDAGOGY_P1
-  next_action: RENDER_EXACT_GRAPH_REFLOW_HEAD_RUN_TEXT_FIT_NEGATIVE_MUTATION_THEN_INSPECT_ALL_12_ES_EN_MOBILE_NORMAL_REDUCED_AND_PROMOTE_ONLY_EXACT_GATES_IF_ZERO_P0_P1_P2
+  current_site_facing_remediation_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+  current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
+  main_reconciliation_required_before_ready_merge: true
+  next_action: CONSUME_CURRENT_HEAD_SERIES4_CHECKS_INSPECT_EXACT_ARTIFACTS_CLEAR_OR_ITERATE_P1_THEN_RECONCILE_MAIN_AND_RUN_FINAL_INTEGRATED_CHECKPOINT
 row_defaults: &row_defaults
-  iteration_count: 8
-  last_changed_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
-  last_full_pixel_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-  latest_shared_failure_evidence_head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
+  iteration_count: 9
+  last_changed_site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+  last_full_pixel_review_head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -143,17 +88,15 @@ row_defaults: &row_defaults
   PEDAGOGY_REVIEW: false
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects:
-    - severity: P1
-      code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
-      status: FIX_V4_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
+    - {severity: P1, code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_EDGE_LABEL_COLLISIONS, status: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER}
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
-  canonical_hreflang_sitemap_internal_discovery: AUTOMATED_PASS_ON_PRIOR_EXACT_MERGE_REF_C3B035F_BUT_PENDING_RERUN_AFTER_SITE_FACING_GRAPH_REFLOW
-  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_AUTOMATED_MEDIA_VISUAL_PASS_ON_PRIOR_MERGE_REF_PENDING_RERUN_AFTER_SITE_FACING_GRAPH_REFLOW
-  evidence_revision: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
+  canonical_hreflang_sitemap_internal_discovery: PRIOR_EXACT_HEAD_AUTOMATED_PASS_PENDING_CURRENT_HEAD_RERUN
+  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_STATIC_MEDIA_GATE_PRIOR_PASS_CURRENT_HEAD_LIFECYCLE_PENDING_RANGE_SERVER_RERUN
+  evidence_revision: 4d7a0e58900817409178f1ade95ff15f107ce348
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: RERENDER_EXACT_REPAIRED_MERGE_REF_RUN_TEXT_FIT_THEN_INSPECT_ALL_12_390PX_DIRECTED_GRAPHS_AND_CLEAR_OR_ITERATE_P1
+  next_action: RERENDER_EXACT_CURRENT_HEAD_RUN_TEXT_FIT_AND_LIFECYCLE_THEN_INSPECT_ALL_12_390PX_GRAPHS_AND_CLEAR_OR_ITERATE_P1
   state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
