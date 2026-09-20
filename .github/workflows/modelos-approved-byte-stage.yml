@@ -1,6 +1,6 @@
 name: Modelos approved byte staging
 
-# 2026-09-20 release retry: canonical delivery is still incomplete; this workflow stages the exact frozen owner-approved bytes only.
+# Recover and stage the exact frozen owner-approved horizontal snapshot without redesigning it.
 on:
   push:
     branches:
@@ -17,56 +17,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  stage-approved-bytes:
+  recover-exact-approved-bytes:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # Deliberately use only the single owner-approved user-facing root.
-      # Individual/private Drive file IDs never enter public repository state.
-      DRIVE_ROOT: https://drive.google.com/drive/folders/1R6q481pxvf_AAKzt7xAnUWzUA17VzS-Z
       RELEASE_BRANCH: migration/video-golden-modelos-razonadores
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           ref: migration/video-golden-modelos-razonadores
 
-      - name: Install exact-byte transport dependencies
+      - name: Fetch every reachable repository ref
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip --version
-          if ! python -m pip install --disable-pip-version-check 'gdown==5.2.0'; then
-            echo 'Standard pip install failed; retrying with externally-managed-environment override.' >&2
-            python -m pip install --break-system-packages --disable-pip-version-check 'gdown==5.2.0'
-          fi
-          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq ffmpeg
-          fi
-          command -v ffmpeg
-          command -v ffprobe
-          python -m gdown --version
+          git fetch --all --tags --prune
+          echo "reachable_commits=$(git rev-list --all --count)"
+          echo "reachable_objects=$(git rev-list --objects --all | wc -l)"
 
-      - name: Fetch frozen owner-approved collection from the one stable Drive root
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf /tmp/modelos-approved-root
-          mkdir -p /tmp/modelos-approved-root
-          # No sharing mutation is performed. This only reads the already configured root.
-          python -m gdown --folder --remaining-ok "${DRIVE_ROOT}" -O /tmp/modelos-approved-root
-          find /tmp/modelos-approved-root -type f -printf '%s\t%p\n' | sort -n
-
-      - name: Bind exact approved hashes to the twelve canonical horizontal consumers
+      - name: Recover exact approved MP4 blobs from reachable Git history
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          import hashlib, json, shutil, sys
+          import hashlib, json, os, subprocess, sys
 
-          root = Path('/tmp/modelos-approved-root')
           expected = {
               'e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6': ('docs/series/modelos-razonadores/00_presentacion_serie.mp4', 4051574),
               'a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807': ('docs/series/modelos-razonadores/01-que-es-razonar.mp4', 4686122),
@@ -81,73 +58,98 @@ jobs:
               '3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0': ('locales/en/series/modelos-razonadores/04-latencia-streaming.mp4', 6128150),
               'ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec': ('locales/en/series/modelos-razonadores/05-riesgos.mp4', 6439609),
           }
+          size_to_hashes = {}
+          for digest, (_, size) in expected.items():
+              size_to_hashes.setdefault(size, set()).add(digest)
 
+          # Start with exact bytes already present at canonical paths.
           found = {}
-          for p in root.rglob('*'):
-              if not p.is_file():
+          for digest, (target_s, size) in expected.items():
+              p = Path(target_s)
+              if p.is_file() and p.stat().st_size == size:
+                  actual = hashlib.sha256(p.read_bytes()).hexdigest()
+                  if actual == digest:
+                      found[digest] = {'object': None, 'source_path': target_s, 'already_canonical': True}
+
+          lines = subprocess.check_output(['git','rev-list','--objects','--all'], text=True).splitlines()
+          objects = {}
+          for line in lines:
+              parts = line.split(' ', 1)
+              oid = parts[0]
+              path = parts[1] if len(parts) > 1 else ''
+              if not path.lower().endswith('.mp4'):
                   continue
-              h = hashlib.sha256()
-              with p.open('rb') as f:
-                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
-                      h.update(chunk)
-              digest = h.hexdigest()
-              if digest in expected:
-                  if digest in found:
-                      raise SystemExit(f'duplicate exact approved hash {digest}: {found[digest]} and {p}')
-                  found[digest] = p
+              objects.setdefault(oid, path)
 
-          missing = sorted(set(expected) - set(found))
-          if missing:
-              print('Missing exact approved hashes from stable Drive root:', file=sys.stderr)
-              for h in missing:
-                  print(f'  {h} -> {expected[h][0]}', file=sys.stderr)
-              raise SystemExit(2)
-
-          manifest = []
-          for digest, (target_s, expected_size) in expected.items():
-              src = found[digest]
-              actual_size = src.stat().st_size
-              if actual_size != expected_size:
-                  raise SystemExit(f'size mismatch for {digest}: {actual_size} != {expected_size}')
+          print(f'Unique reachable MP4 objects to inspect: {len(objects)}')
+          inspected = 0
+          for oid, source_path in objects.items():
+              if len(found) == len(expected):
+                  break
+              try:
+                  size = int(subprocess.check_output(['git','cat-file','-s',oid], text=True).strip())
+              except subprocess.CalledProcessError:
+                  continue
+              if size not in size_to_hashes:
+                  continue
+              data = subprocess.check_output(['git','cat-file','blob',oid])
+              inspected += 1
+              digest = hashlib.sha256(data).hexdigest()
+              if digest not in expected or digest in found:
+                  continue
+              target_s, expected_size = expected[digest]
+              if len(data) != expected_size:
+                  raise SystemExit(f'internal size mismatch for {digest}: {len(data)} != {expected_size}')
               target = Path(target_s)
               target.parent.mkdir(parents=True, exist_ok=True)
-              shutil.copyfile(src, target)
-              manifest.append({'sha256': digest, 'size': actual_size, 'source_name': src.name, 'target': target_s})
-              print(f'BOUND {digest} {actual_size} {src.name!r} -> {target_s}')
+              target.write_bytes(data)
+              found[digest] = {'object': oid, 'source_path': source_path, 'already_canonical': False}
+              print(f'RECOVERED {digest} object={oid} historical_path={source_path!r} -> {target_s}')
 
-          Path('/tmp/modelos-approved-binding.json').write_text(
-              json.dumps({'count': len(manifest), 'assets': manifest}, ensure_ascii=False, indent=2) + '\n',
-              encoding='utf-8'
-          )
-          print('Exact approved horizontal binding: 12/12')
+          missing = [d for d in expected if d not in found]
+          result = {
+              'expected': len(expected),
+              'found': len(found),
+              'inspected_size_matched_mp4_objects': inspected,
+              'assets': [
+                  {
+                      'sha256': d,
+                      'target': expected[d][0],
+                      'size': expected[d][1],
+                      **found[d],
+                  }
+                  for d in expected if d in found
+              ],
+              'missing': [{'sha256': d, 'target': expected[d][0], 'size': expected[d][1]} for d in missing],
+          }
+          Path('/tmp/modelos-history-recovery.json').write_text(json.dumps(result, indent=2) + '\n')
+          print(json.dumps(result, indent=2))
+          if missing:
+              print(f'Exact history recovery incomplete: {len(found)}/12; no false PASS.', file=sys.stderr)
+              raise SystemExit(3)
+          print('Exact approved history recovery: 12/12')
           PY
 
-      - name: Verify media integrity and exact approved delivery gate
+      - name: Verify exact hashes after recovery
+        if: success()
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json, subprocess
+          import hashlib, json
           from pathlib import Path
-          m = json.loads(Path('/tmp/modelos-approved-binding.json').read_text(encoding='utf-8'))
+          m=json.loads(Path('/tmp/modelos-history-recovery.json').read_text())
           for a in m['assets']:
-              p = a['target']
-              probe = subprocess.check_output([
-                  'ffprobe','-v','error','-select_streams','v:0',
-                  '-show_entries','stream=codec_name,width,height,pix_fmt,r_frame_rate',
-                  '-of','json',p
-              ], text=True)
-              s = json.loads(probe)['streams'][0]
-              observed = (s['codec_name'], s['width'], s['height'], s['pix_fmt'], s['r_frame_rate'])
-              required = ('h264', 1920, 1080, 'yuvj420p', '60/1')
-              if observed != required:
-                  raise SystemExit(f'profile mismatch {p}: {observed} != {required}')
-              subprocess.run(['ffmpeg','-v','error','-i',p,'-f','null','-'], check=True)
-              print('FULL_DECODE_PASS', p)
+              p=Path(a['target'])
+              h=hashlib.sha256(p.read_bytes()).hexdigest()
+              if h != a['sha256'] or p.stat().st_size != a['size']:
+                  raise SystemExit(f'exact binding failed for {p}: {h} {p.stat().st_size}')
+              print('EXACT_PASS', h, p)
           PY
           node motion/scripts/check_modelos_approved_snapshot.mjs
 
-      - name: Refuse a stale concurrent write
+      - name: Refuse stale concurrent write
+        if: success()
         shell: bash
         run: |
           set -euo pipefail
@@ -157,7 +159,8 @@ jobs:
           echo "local=${local} remote=${remote}"
           test "${local}" = "${remote}"
 
-      - name: Commit exact approved snapshot to the existing complete-unit branch
+      - name: Commit recovered exact approved snapshot
+        if: success()
         shell: bash
         run: |
           set -euo pipefail
@@ -165,8 +168,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/series/modelos-razonadores/*.mp4 locales/en/series/modelos-razonadores/*.mp4
           if git diff --cached --quiet; then
-            echo "All twelve approved horizontal bytes are already canonical; nothing to commit."
+            echo 'All twelve exact approved horizontal bytes were already canonical.'
             exit 0
           fi
-          git commit -m "migration: stage exact approved Modelos R2 horizontal snapshot [skip ci]"
+          git commit -m 'migration: stage exact approved Modelos R2 horizontal snapshot [skip ci]'
           git push origin HEAD:"${RELEASE_BRANCH}"
