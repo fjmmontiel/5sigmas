@@ -7,23 +7,31 @@ on:
     paths:
       - 'motion/migration/fundamentos-ia-iag/**'
       - 'motion/src/fundamentos/**'
+      - 'motion/web/fundamentos-render.html'
       - 'motion/scripts/check_fundamentos_register.mjs'
+      - 'motion/scripts/fundamentos_render_check.py'
       - 'motion/tests/fundamentos-engine.test.mjs'
       - '.github/workflows/fundamentos-semantic-engine.yml'
   pull_request:
     paths:
       - 'motion/migration/fundamentos-ia-iag/**'
       - 'motion/src/fundamentos/**'
+      - 'motion/web/fundamentos-render.html'
       - 'motion/scripts/check_fundamentos_register.mjs'
+      - 'motion/scripts/fundamentos_render_check.py'
       - 'motion/tests/fundamentos-engine.test.mjs'
 
 permissions:
   contents: read
 
+concurrency:
+  group: fundamentos-ia-iag-browser-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  semantic-engine:
+  semantic-engine-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Reject control bytes and syntax/import errors before rendering
@@ -32,19 +40,35 @@ jobs:
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          paths=[Path('motion/migration/fundamentos-ia-iag/series-semantic-register.json'),*Path('motion/src/fundamentos').glob('*.mjs'),Path('motion/scripts/check_fundamentos_register.mjs'),Path('motion/tests/fundamentos-engine.test.mjs')]
+          paths=[Path('motion/migration/fundamentos-ia-iag/series-semantic-register.json'),*Path('motion/src/fundamentos').glob('*.mjs'),Path('motion/scripts/check_fundamentos_register.mjs'),Path('motion/scripts/fundamentos_render_check.py'),Path('motion/tests/fundamentos-engine.test.mjs'),Path('motion/web/fundamentos-render.html')]
           for p in paths:
               data=p.read_bytes(); data.decode('utf-8')
               bad=[b for b in data if b<32 and b not in (9,10,13)]
               if bad: raise SystemExit(f'{p}: control bytes present')
           print(f'UTF8_CONTROL_PASS files={len(paths)}')
           PY
-          node --check motion/src/fundamentos/schema.mjs
-          node --check motion/src/fundamentos/mechanisms.mjs
-          node --check motion/src/fundamentos/engine.mjs
-          node --check motion/scripts/check_fundamentos_register.mjs
-          node --check motion/tests/fundamentos-engine.test.mjs
+          for f in motion/src/fundamentos/*.mjs motion/scripts/check_fundamentos_register.mjs motion/tests/fundamentos-engine.test.mjs; do node --check "$f"; done
+          python -m py_compile motion/scripts/fundamentos_render_check.py
       - name: Validate complete source-bound register and render matrix
         run: node motion/scripts/check_fundamentos_register.mjs
       - name: Validate deterministic semantic engine regressions
         run: node --test motion/tests/fundamentos-engine.test.mjs
+      - name: Install browser-check dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+      - name: Render and inspect actual ES/EN H/V browser frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/fundamentos_render_check.py
+          cat motion/dist/fundamentos-browser-check/fundamentos-browser-preflight.json
+      - name: Preserve bounded browser evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: fundamentos-browser-preflight-${{ github.sha }}
+          path: motion/dist/fundamentos-browser-check/
+          if-no-files-found: error
+          retention-days: 1

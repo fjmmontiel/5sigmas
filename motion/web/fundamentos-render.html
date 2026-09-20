@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>5sigmas Fundamentos deterministic renderer</title>
+<style>html,body{margin:0;background:#fff}canvas{display:block;width:100%;height:auto}</style>
+<canvas id="stage" width="1920" height="1080"></canvas>
+<script type="module">
+import {renderFundamentosFrame,validateFundamentosLayouts,validateFundamentosBrowserInputs} from '../src/fundamentos/render.mjs';
+import {fundamentosRenderMatrix} from '../src/fundamentos/engine.mjs';
+const canvas=document.querySelector('#stage');
+window.setup=(register)=>{window.R=register;return {jobs:fundamentosRenderMatrix(register),coverage:validateFundamentosBrowserInputs(register)};};
+window.draw=(jobId,time,reduced=false)=>renderFundamentosFrame(canvas,window.R,jobId,time,{reducedMotion:reduced});
+window.frame=(jobId,time,reduced=false)=>{const result=window.draw(jobId,time,reduced);return {result,jpeg:canvas.toDataURL('image/jpeg',.95).split(',')[1]};};
+window.layoutCheck=()=>validateFundamentosLayouts(canvas,window.R);window.ready=true;
+</script></html>
