@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "unit": "fundamentos-ia-iag",
+  "recorded_at": "2026-09-20T08:12:10Z",
+  "stage": "ENCODED_MOTION_HV_PASS_NOT_FINAL_RENDERED",
+  "source_main": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "branch": "migration/video-golden-fundamentos-ia-iag",
+  "browser_checkpoint_head": "ae51d26e86af8438257bdea0dce051030c227988",
+  "encoded_gate_head_before_repair": "f8c7591355cd22c5299aa197a3d83d91d6ad6fdc",
+  "repair_head": "e9f37016ad34aa6bc848514c769076e1a38a1410",
+  "defect_repair": {
+    "failed_run": 35498634458,
+    "failed_job": 106046224826,
+    "defect": "fnd00-04 algebraic-transform had no observed semantic motion in the bounded encoded cue windows",
+    "scope": "visible mechanism choreography only for fnd00-04; claims, copy, cues, duration, source bindings and all other concepts unchanged",
+    "fix": "bind left term, learned term, connecting transform and objective term to the existing cue reveals",
+    "result": "REPAIRED_AND_REVALIDATED"
+  },
+  "browser_validation": {
+    "run": 35498777278,
+    "job": 106046622535,
+    "conclusion": "success",
+    "jobs": 20,
+    "frames_sampled": 300,
+    "layout_issues": 0,
+    "browser_errors": 0,
+    "source_blob_mismatches": 0,
+    "minimum_body_px": 54,
+    "minimum_mechanism_scale": 0.918,
+    "minimum_embed_body_px": 19.5
+  },
+  "encoded_motion": {
+    "run": 35498777394,
+    "job": 106046622536,
+    "conclusion": "success",
+    "fps": 60,
+    "concepts_per_orientation": 25,
+    "frames_total": 3600,
+    "static_concepts_horizontal": [],
+    "static_concepts_vertical": [],
+    "horizontal": {
+      "codec": "h264",
+      "width": 1920,
+      "height": 1080,
+      "pix_fmt": "yuv420p",
+      "duration_seconds": 30.0,
+      "frames": 1800,
+      "size_bytes": 1545457,
+      "sha256": "7fba81e53f76426e9fe1f68744ff49daca87edf1306cc12f7ce0c50e5f6640cd",
+      "full_decode": "PASS"
+    },
+    "vertical": {
+      "codec": "h264",
+      "width": 1080,
+      "height": 1920,
+      "pix_fmt": "yuv420p",
+      "duration_seconds": 30.0,
+      "frames": 1800,
+      "size_bytes": 1465196,
+      "sha256": "961487d9411bd96c36b8b351f1733992257bcdf09c401649319b9e87556aa7a0",
+      "full_decode": "PASS"
+    },
+    "repaired_concept_fnd00_04": {
+      "horizontal_windows": [
+        {"start_seconds": 5.05, "unique_frames": 36, "mean_rgb_delta": 0.2493},
+        {"start_seconds": 10.05, "unique_frames": 36, "mean_rgb_delta": 0.1875}
+      ],
+      "vertical_windows": [
+        {"start_seconds": 5.05, "unique_frames": 36, "mean_rgb_delta": 0.2664},
+        {"start_seconds": 10.05, "unique_frames": 36, "mean_rgb_delta": 0.2046}
+      ],
+      "motion_windows_pass": "2_OF_2_BOTH_ORIENTATIONS"
+    }
+  },
+  "artifact": {
+    "id": 10601444107,
+    "name": "fundamentos-encoded-motion-e9f37016ad34aa6bc848514c769076e1a38a1410",
+    "files": 3,
+    "size_bytes": 2803618,
+    "sha256": "e7c8ff74ed4ad6089068ed3a056c3f0ecd458dd4682906db254fe263f903628b",
+    "retention_days": 1
+  },
+  "gates": {
+    "source_binding": "PASS_EXACT_BLOB_MATCH_10_OF_10",
+    "schema_framework": "PASS",
+    "series_diversity_register": "PASS_25_FAMILIES_MAX_USE_1",
+    "browser_hv": "PASS_20_JOBS_300_FRAMES",
+    "encoded_motion": "PASS_25_OF_25_CONCEPTS_BOTH_ORIENTATIONS_NO_STATIC_CONCEPTS",
+    "diagnostic_media_integrity": "PASS_H264_60FPS_FULL_DECODE_HV",
+    "final_output_media_integrity": "NOT_RUN",
+    "complete_package_validation": "NOT_RUN",
+    "owner_visual_approval": "NOT_REQUESTED",
+    "technical_golden": false,
+    "published": false
+  },
+  "next_action": "Render the immutable 20 final ES/EN H/V outputs from this exact repaired renderer snapshot, validate 20/20 full-decode plus ES/EN and H/V semantic parity and whole-series encoded review, then create the one complete-block review package."
+}
