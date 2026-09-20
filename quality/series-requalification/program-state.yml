@@ -1,4 +1,4 @@
-schema_version: 31
+schema_version: 32
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -91,7 +91,8 @@ series_status:
     ledger: quality/series-requalification/inference-article-ledger.yml
     source_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
     historical_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
-    current_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
+    prior_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
+    current_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run12.yml
     active_branch: quality/llm-inference-requalification
     current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
     release_pr: 342
@@ -99,41 +100,55 @@ series_status:
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count: 9
+    iteration_count_ch1_es_en: 10
+    iteration_count_ch2_to_ch6_es_en: 9
     source: PASS_12_OF_12
     build: PENDING_0_OF_12_CURRENT_HEAD
     browser: PENDING_0_OF_12_CURRENT_HEAD
     media_visual: PENDING_0_OF_12_CURRENT_HEAD
     indexability: PENDING_0_OF_12_CURRENT_HEAD
-    pixel: FAIL_0_OF_12_P1_MOBILE_NODE_TEXT_AND_EDGE_LABELS_PENDING_RERENDER
-    pedagogy: FAIL_0_OF_12_P1_MOBILE_NODE_TEXT_AND_EDGE_LABELS_PENDING_RERENDER
+    pixel: PENDING_0_OF_12_CURRENT_HEAD
+    pedagogy: PENDING_0_OF_12_CURRENT_HEAD
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1_open_rows: 12
+    known_p1_open_rows: 2
     known_p2: 0
-    known_defect: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_EDGE_LABEL_COLLISIONS
-    evidence_head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12
-    evidence_run: 35522226233
-    evidence_artifact: 10609316501
-    evidence_artifact_sha256: f369ee2a325342d673ed5dfb9ccc2b91fe660f31440ff8f22b2a6718b0e65e61
-    prior_series4_run: 35522229871
-    prior_series4_result: FAIL_PLAYBACK_LIFECYCLE_AFTER_SOURCE_BUILD_INDEXABILITY_MEDIA_BROWSER_GREEN
-    current_site_remediation_head: 4d7a0e58900817409178f1ade95ff15f107ce348
-    playback_harness_status: RANGE_SERVER_FIX_IMPLEMENTED_PENDING_CURRENT_HEAD_RERUN
-    mobile_graph_status: SAFE_COLUMNS_TARGETED_NODE_WIDTHS_MORE_VERTICAL_BUDGET_REDUNDANT_EDGE_LABELS_REMOVED_PENDING_EXACT_RERENDER
+    known_defect: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_CONCURRENCY
+    evidence_head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15
+    evidence_merge_ref: c1614cacee7715bc2da42faafd6ad209f9fc8c92
+    evidence_run: 35528636858
+    evidence_job: 106125184859
+    evidence_artifact: 10610099273
+    evidence_artifact_sha256: 0cc72b573ca0e90e6e8cbeb55fc425e5319efc43948e40ce138630c7e11d299b
+    prior_exact_head_automated_result: SOURCE_BUILD_BROWSER_MEDIA_VISUAL_PLAYBACK_INDEXABILITY_RELATIONSHIPS_PASS_12_OF_12_TEXT_FIT_FAIL_CH1_ES_EN_NORMAL_REDUCED_ONLY
+    current_site_remediation_head: 5d0e60b65439a6adc13ce9062308ff3422409616
+    playback_harness_status: CLOSED_RANGE_SELF_TEST_206_416_AND_24_ARTICLE_24_WATCH_CONTEXTS_PASS
+    mobile_graph_status: CH1_CONCURRENCY_NODE_WIDENED_ONLY_PENDING_EXACT_CURRENT_HEAD_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY
     production_verified: false
     series_golden: false
     state: QA
-    next_action: CONSUME_CURRENT_HEAD_SERIES4_CHECKS_INSPECT_ALL_12_ES_EN_MOBILE_NORMAL_REDUCED_AND_VIDEO_LIFECYCLE_THEN_CLEAR_OR_ITERATE_P1_BEFORE_MAIN_RECONCILIATION
+    next_action: CONSUME_CURRENT_HEAD_SERIES4_CHECKS_VERIFY_CH1_TEXT_FIT_ES_EN_NORMAL_REDUCED_THEN_INSPECT_ALL_12_PIXEL_PEDAGOGY_EVIDENCE_BEFORE_MAIN_RECONCILIATION
   evaluating-ai-systems-production:
     state: REOPENED_PUBLISHED_UNCERTIFIED
 release_coordination:
   current_main: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
+  inference_branch_ahead_by: 54
+  inference_branch_behind_by: 9
   inference_branch_requires_main_reconciliation_before_ready_merge: true
   draft_34:
-    state: OPEN_DRAFT_UNMERGED_NOT_REUSED_BLINDLY
+    state: OPEN_DRAFT_UNMERGED
+    head: 459aca905454175bdbdf86c31f0af02cddd576a4
+    mergeable_observed: false
     reuse_policy: NEVER_BLIND_MERGE
+release_contract_281:
+  state: CHANGES_REQUIRED_BLOCKED
+  historical_72h_satisfied: true
+  live_article_change_since_clock: false
+  latest_article_lane_receipt: ARTICLE_LIVE_REVALIDATION_PARTIAL_2026_09_19
+  latest_pm_receipt: PM_CONTINUITY_2026_09_20
+  remaining_gap: FRESH_NONCACHED_EXACT_REVISION_ES_EN_LIVE_PROOF
+  no_72h_reset: true
 linkedin:
   writes_from_this_program: 0
   queues_from_this_program: 0
