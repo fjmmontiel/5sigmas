@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "unit": "modelos-razonadores",
+  "review_round": 2,
+  "owner_visual_approval": "APPROVED",
+  "assets": [
+    {
+      "slug": "es-00",
+      "target": "docs/series/modelos-razonadores/00_presentacion_serie.mp4",
+      "sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+      "size": 4051574,
+      "parts": [
+        "es-00/part-000.b64",
+        "es-00/part-001.b64"
+      ]
+    },
+    {
+      "slug": "es-01",
+      "target": "docs/series/modelos-razonadores/01-que-es-razonar.mp4",
+      "sha256": "a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807",
+      "size": 4686122,
+      "parts": [
+        "es-01/part-000.b64",
+        "es-01/part-001.b64",
+        "es-01/part-002.b64"
+      ]
+    },
+    {
+      "slug": "es-02",
+      "target": "docs/series/modelos-razonadores/02-fallos.mp4",
+      "sha256": "d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed",
+      "size": 5852621,
+      "parts": [
+        "es-02/part-000.b64",
+        "es-02/part-001.b64",
+        "es-02/part-002.b64"
+      ]
+    },
+    {
+      "slug": "es-03",
+      "target": "docs/series/modelos-razonadores/03-test-time-compute.mp4",
+      "sha256": "e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710",
+      "size": 7897504,
+      "parts": [
+        "es-03/part-000.b64",
+        "es-03/part-001.b64",
+        "es-03/part-002.b64",
+        "es-03/part-003.b64"
+      ]
+    },
+    {
+      "slug": "es-04",
+      "target": "docs/series/modelos-razonadores/04-latencia-streaming.mp4",
+      "sha256": "1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f",
+      "size": 6391044,
+      "parts": [
+        "es-04/part-000.b64",
+        "es-04/part-001.b64",
+        "es-04/part-002.b64"
+      ]
+    },
+    {
+      "slug": "es-05",
+      "target": "docs/series/modelos-razonadores/05-riesgos.mp4",
+      "sha256": "f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381",
+      "size": 6724633,
+      "parts": [
+        "es-05/part-000.b64",
+        "es-05/part-001.b64",
+        "es-05/part-002.b64"
+      ]
+    },
+    {
+      "slug": "en-00",
+      "target": "locales/en/series/modelos-razonadores/00_presentacion_serie.mp4",
+      "sha256": "f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730",
+      "size": 3946808,
+      "parts": [
+        "en-00/part-000.b64",
+        "en-00/part-001.b64"
+      ]
+    },
+    {
+      "slug": "en-01",
+      "target": "locales/en/series/modelos-razonadores/01-que-es-razonar.mp4",
+      "sha256": "b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc",
+      "size": 4641477,
+      "parts": [
+        "en-01/part-000.b64",
+        "en-01/part-001.b64",
+        "en-01/part-002.b64"
+      ]
+    },
+    {
+      "slug": "en-02",
+      "target": "locales/en/series/modelos-razonadores/02-fallos.mp4",
+      "sha256": "3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2",
+      "size": 5615464,
+      "parts": [
+        "en-02/part-000.b64",
+        "en-02/part-001.b64",
+        "en-02/part-002.b64"
+      ]
+    },
+    {
+      "slug": "en-03",
+      "target": "locales/en/series/modelos-razonadores/03-test-time-compute.mp4",
+      "sha256": "27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400",
+      "size": 7580952,
+      "parts": [
+        "en-03/part-000.b64",
+        "en-03/part-001.b64",
+        "en-03/part-002.b64",
+        "en-03/part-003.b64"
+      ]
+    },
+    {
+      "slug": "en-04",
+      "target": "locales/en/series/modelos-razonadores/04-latencia-streaming.mp4",
+      "sha256": "3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0",
+      "size": 6128150,
+      "parts": [
+        "en-04/part-000.b64",
+        "en-04/part-001.b64",
+        "en-04/part-002.b64"
+      ]
+    },
+    {
+      "slug": "en-05",
+      "target": "locales/en/series/modelos-razonadores/05-riesgos.mp4",
+      "sha256": "ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec",
+      "size": 6439609,
+      "parts": [
+        "en-05/part-000.b64",
+        "en-05/part-001.b64",
+        "en-05/part-002.b64"
+      ]
+    }
+  ]
+}
