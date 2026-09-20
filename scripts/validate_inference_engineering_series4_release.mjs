@@ -54,8 +54,6 @@ for (let i = 0; i < chapters.length; i += 1) {
   assert(!forbidden.test(en), `placeholder marker in ${enPath}`);
   assert(es.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${esPath} does not include canonical visual ${visual}`);
   assert(en.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${enPath} does not include canonical visual ${visual}`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(es), `${esPath} unexpectedly references video media; inventory/review required`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(en), `${enPath} unexpectedly references video media; inventory/review required`);
   assert((es.match(/^## /gm) || []).length >= 6, `${esPath} has suspiciously shallow pedagogical structure`);
   assert((en.match(/^## /gm) || []).length >= 6, `${enPath} has suspiciously shallow pedagogical structure`);
   assert((es.match(/\[\^[^\]]+\]/g) || []).length >= 4, `${esPath} has too few explicit source references for release review`);
@@ -96,6 +94,8 @@ assert(hubEn.includes('LLM Inference Engineering & Economics'), 'Series 4 Englis
 
 assert(chapters.length === 6, 'Series 4 chapter inventory must contain exactly six chapters');
 assert(seriesWorkflow.includes('validate_inference_engineering_series4_release.mjs'), 'Series 4 PR workflow does not execute deterministic release inventory');
+assert(seriesWorkflow.includes('validate_inference_indexability.py'), 'Series 4 PR workflow does not execute mandatory INDEXABILITY gate');
+assert(seriesWorkflow.includes('validate_inference_media_visual.py'), 'Series 4 PR workflow does not execute mandatory MEDIA_VISUAL gate');
 assert(seriesWorkflow.includes('validate_english_series_mirror.mjs'), 'Series 4 PR workflow does not execute English series mirror validation');
 assert(seriesWorkflow.includes('validate_locale_switching.mjs'), 'Series 4 PR workflow does not execute locale-switch/reader-sequence validation');
 assert(seriesWorkflow.includes('validate_reader_header_overlap.mjs'), 'Series 4 PR workflow does not execute reader header overlap validation');
@@ -124,5 +124,5 @@ if (!process.exitCode) {
       chapters: inventory,
     }, null, 2)}\n`,
   );
-  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, bilingual hub discovery, permanent PR/live gates, zero video dependencies).`);
+  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, bilingual hub discovery, permanent PR/live gates, visual-video contract delegated to MEDIA_VISUAL).`);
 }
