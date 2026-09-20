@@ -1,0 +1,16 @@
+{
+ "schema_version":1,
+ "date":"2026-09-20",
+ "unit":"seguridad-ia",
+ "state":"CHANGES_REQUIRED",
+ "review_ready":false,
+ "owner_visual_approval":"CHANGES_REQUIRED",
+ "technical_golden":false,
+ "published":false,
+ "supersedes":"PENDING_OWNER_REVIEW for snapshot aecca1f8615413dfee4b31d8f3a5c55a6d3c1295; previous decoding, hashes and pixel changes remain diagnostics, not visual approval",
+ "findings":["Owner reports text synchronization, style and repeated-animation defects in new batches", "Expanded EN delivery incomplete; ZIP cannot substitute for individual playable MP4s", "The old encoded-motion check measured pixel deltas and the locale check compared declared family/topology labels; neither certifies semantic quality"],
+ "implemented":["Shared review_admission.py and the same 26 regression tests as Fundamentos/Cave", "Mandatory gate_owner_review called inside the existing package checker", "Legacy and common manifests remain aligned on CHANGES_REQUIRED after rejection", "Exact media/evidence bindings, authored cues, independent review receipts, all QA gates and individual MP4 delivery required"],
+ "verification":{"local_contract_tests_passed":26,"real_metadata_mp4_pairs_checked_by_new_admission":24,"real_candidate_rejected":true,"legacy_full_decode_motion_loop_rerun_in_this_repair":false,"new_review_ready_outputs":0},
+ "next_action":"Repair actual authored timelines, mechanisms and style against the existing approved Golden baseline. Re-render and independently inspect before direct MP4 staging. Do not lower gates or relabel the old package. Preserve Modelos R2 approval. Reuse this PR; do not create a replacement PR.",
+ "private_delivery_receipts_are_not_public_repo_content":true
+}
