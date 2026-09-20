@@ -1,5 +1,5 @@
 import {FUNDAMENTOS_RENDER_CONTRACT,buildFundamentosRenderJobs,validateFundamentosRegister} from './schema.mjs';
-import {SUPPORTED_FUNDAMENTOS_MECHANISMS,compileFundamentosMechanism} from './mechanisms.mjs';
+import {SUPPORTED_FUNDAMENTOS_MECHANISMS,compileFundamentosMechanism,fundamentosRendererFamilyForMechanism} from './mechanisms.mjs';
 import {compileFundamentosCueTimeline,validateFundamentosCueBinding} from './timeline.mjs';
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 export function indexFundamentosConcepts(register){
@@ -24,7 +24,7 @@ export function compileFundamentosChapter(register,jobOrId,{reducedMotion=false}
     const mechanism=compileFundamentosMechanism(concept,{orientation:job.orientation,localSeconds,durationSeconds,reducedMotion});
     const timeline=compileFundamentosCueTimeline(concept,job.locale,{localSeconds,durationSeconds,reducedMotion});
     validateFundamentosCueBinding(timeline,mechanism);
-    return Object.freeze({index,conceptId:concept.id,start,end,durationSeconds,title:concept.copy[job.locale].title,body:concept.copy[job.locale].body,evidence:concept.evidence,semanticRationale:concept.semantic_rationale,perceptualFamily:concept.perceptual_family,topology:concept.topology,choreography:concept.choreography,composition:concept.composition,mechanism,timeline});
+    return Object.freeze({index,conceptId:concept.id,start,end,durationSeconds,title:concept.copy[job.locale].title,body:concept.copy[job.locale].body,evidence:concept.evidence,semanticRationale:concept.semantic_rationale,perceptualFamily:concept.perceptual_family,rendererFamily:mechanism.rendererFamily,topology:concept.topology,choreography:concept.choreography,composition:concept.composition,mechanism,timeline});
   });
   return Object.freeze({job,scenes:Object.freeze(scenes)});
 }
@@ -38,7 +38,20 @@ export function fundamentosFrameState(register,jobOrId,timeSeconds,{reducedMotio
   const mechanism=compileFundamentosMechanism(concept,{orientation:plan.job.orientation,localSeconds,durationSeconds:scene.durationSeconds,reducedMotion});
   const timeline=compileFundamentosCueTimeline(concept,plan.job.locale,{localSeconds,durationSeconds:scene.durationSeconds,reducedMotion});
   validateFundamentosCueBinding(timeline,mechanism);
-  return Object.freeze({job:plan.job,timeSeconds:t,sceneIndex,localSeconds,progress:t/duration,reducedMotion,scene:Object.freeze({...scene,mechanism,timeline})});
+  return Object.freeze({job:plan.job,timeSeconds:t,sceneIndex,localSeconds,progress:t/duration,reducedMotion,scene:Object.freeze({...scene,rendererFamily:mechanism.rendererFamily,mechanism,timeline})});
+}
+export function summarizeFundamentosRendererFamilies(register){
+  validateFundamentosRegister(register);
+  const groups=new Map();
+  for(const concept of register.concepts){
+    const rendererFamily=fundamentosRendererFamilyForMechanism(concept.mechanism);
+    const entries=groups.get(rendererFamily)||[];
+    entries.push(Object.freeze({conceptId:concept.id,chapter:concept.chapter,mechanism:concept.mechanism,declaredPerceptualFamily:concept.perceptual_family}));
+    groups.set(rendererFamily,entries);
+  }
+  const collisions=[...groups.entries()].filter(([,entries])=>entries.length>1).map(([rendererFamily,entries])=>Object.freeze({rendererFamily,uses:entries.length,entries:Object.freeze(entries)}));
+  const maxRendererFamilyUse=Math.max(...[...groups.values()].map(entries=>entries.length));
+  return Object.freeze({rendererFamilies:groups.size,maxRendererFamilyUse,rendererFamilyCollisions:Object.freeze(collisions)});
 }
 export function validateFundamentosMechanismCoverage(register){
   const structural=validateFundamentosRegister(register),missing=[],mechanismIds=new Set();
@@ -52,5 +65,7 @@ export function validateFundamentosMechanismCoverage(register){
   }
   if(missing.length)throw new Error(`fundamentos engine: uncovered mechanism ${JSON.stringify(missing)}`);
   if(mechanismIds.size!==25)throw new Error(`fundamentos engine: expected 25 explicit mechanisms, got ${mechanismIds.size}`);
-  return Object.freeze({...structural,mechanisms:mechanismIds.size,supportedMechanisms:SUPPORTED_FUNDAMENTOS_MECHANISMS.length,jobs:buildFundamentosRenderJobs(register).length});
+  const rendererSummary=summarizeFundamentosRendererFamilies(register);
+  if(rendererSummary.maxRendererFamilyUse>2)throw new Error(`fundamentos engine: renderer family reuse ${rendererSummary.maxRendererFamilyUse} exceeds hard target 2`);
+  return Object.freeze({...structural,mechanisms:mechanismIds.size,supportedMechanisms:SUPPORTED_FUNDAMENTOS_MECHANISMS.length,jobs:buildFundamentosRenderJobs(register).length,declaredPerceptualFamilies:structural.families,normalizedRendererFamilies:rendererSummary.rendererFamilies,maxNormalizedRendererFamilyUse:rendererSummary.maxRendererFamilyUse,rendererFamilyCollisions:rendererSummary.rendererFamilyCollisions});
 }

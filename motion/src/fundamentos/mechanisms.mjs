@@ -25,7 +25,16 @@ const RECIPES=Object.freeze({
   'parallel-impact-paths':'parallel-lanes',
   'objective-gap':'trajectory-gap'
 });
+const RENDERER_FAMILY_BY_STYLE=Object.freeze({
+  lattice:'graph',hub:'graph',containment:'containment',axes:'axes',transform:'transform',roadmap:'roadmap',
+  'control-loop':'loop',cycle:'loop',switchboard:'switchboard','comparison-grid':'grid','output-space':'grid',
+  distribution:'distribution','vector-space':'vector','attention-web':'attention','budget-surface':'budget',
+  'capability-stack':'stack','fanout-tree':'fanout',spectrum:'spectrum','parallel-pipeline':'pipeline','parallel-lanes':'pipeline',
+  'decision-tree':'decision','overlap-map':'overlap',ladder:'ladder','boundary-radar':'radar','trajectory-gap':'gap'
+});
 export const SUPPORTED_FUNDAMENTOS_MECHANISMS=Object.freeze(Object.keys(RECIPES));
+export const FUNDAMENTOS_RENDERER_FAMILY_BY_STYLE=RENDERER_FAMILY_BY_STYLE;
+export function fundamentosRendererFamilyForMechanism(mechanismId){const style=RECIPES[mechanismId];if(!style)throw new Error(`fundamentos mechanism: unsupported mechanism ${mechanismId}`);return RENDERER_FAMILY_BY_STYLE[style]||style;}
 const clamp=v=>Math.max(0,Math.min(1,v));
 const smooth=v=>{v=clamp(v);return v*v*(3-2*v)};
 const point=(x,y)=>Object.freeze({x:Number(x.toFixed(4)),y:Number(y.toFixed(4))});
@@ -58,5 +67,5 @@ export function compileFundamentosMechanism(concept,{orientation='horizontal',lo
   } else {
     for(let i=0;i<nodes.length-1;i++)edges.push(Object.freeze({from:nodes[i].id,to:nodes[i+1].id,reveal:nodes[i+1].reveal,active:reducedMotion||nodes[i+1].active}));
   }
-  return Object.freeze({mechanismId:concept.mechanism,style,topology:concept.topology,perceptualFamily:concept.perceptual_family,orientation,progress,reducedMotion,core:Object.freeze({id:'core',position:point(.5,.5)}),nodes:Object.freeze(nodes),edges:Object.freeze(edges),choreography:concept.choreography,composition:concept.composition});
+  return Object.freeze({mechanismId:concept.mechanism,style,rendererFamily:RENDERER_FAMILY_BY_STYLE[style]||style,topology:concept.topology,perceptualFamily:concept.perceptual_family,orientation,progress,reducedMotion,core:Object.freeze({id:'core',position:point(.5,.5)}),nodes:Object.freeze(nodes),edges:Object.freeze(edges),choreography:concept.choreography,composition:concept.composition});
 }
