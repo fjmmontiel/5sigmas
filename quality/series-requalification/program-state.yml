@@ -1,4 +1,4 @@
-schema_version: 32
+schema_version: 33
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -89,52 +89,50 @@ series_status:
     ledger: quality/series-requalification/context-article-ledger.yml
   llm-inference-engineering-economics:
     ledger: quality/series-requalification/inference-article-ledger.yml
-    source_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
-    historical_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
-    prior_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
-    current_manual_mobile_review_receipt: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run12.yml
+    current_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
     active_branch: quality/llm-inference-requalification
-    current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
+    current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
     release_pr: 342
     release_pr_state: OPEN_DRAFT
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count_ch1_es_en: 10
-    iteration_count_ch2_to_ch6_es_en: 9
+    iteration_count_ch1_es_en: 13
+    iteration_count_ch2_to_ch5_es_en_and_ch6_en: 10
+    iteration_count_ch6_es: 11
     source: PASS_12_OF_12
-    build: PENDING_0_OF_12_CURRENT_HEAD
-    browser: PENDING_0_OF_12_CURRENT_HEAD
-    media_visual: PENDING_0_OF_12_CURRENT_HEAD
-    indexability: PENDING_0_OF_12_CURRENT_HEAD
-    pixel: PENDING_0_OF_12_CURRENT_HEAD
-    pedagogy: PENDING_0_OF_12_CURRENT_HEAD
+    build: PASS_12_OF_12_AT_EVIDENCE_HEAD_39C9C718
+    browser: PASS_12_OF_12_AT_EVIDENCE_HEAD_39C9C718
+    media_visual: PASS_12_OF_12_AT_EVIDENCE_HEAD_39C9C718
+    indexability: PASS_12_OF_12_AT_EVIDENCE_HEAD_39C9C718
+    pixel: BLOCKED_0_OF_12_SHARED_P1
+    pedagogy: BLOCKED_0_OF_12_SHARED_P1
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1_open_rows: 2
+    known_p1_open_rows: 12
     known_p2: 0
-    known_defect: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_CONCURRENCY
-    evidence_head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15
-    evidence_merge_ref: c1614cacee7715bc2da42faafd6ad209f9fc8c92
-    evidence_run: 35528636858
-    evidence_job: 106125184859
-    evidence_artifact: 10610099273
-    evidence_artifact_sha256: 0cc72b573ca0e90e6e8cbeb55fc425e5319efc43948e40ce138630c7e11d299b
-    prior_exact_head_automated_result: SOURCE_BUILD_BROWSER_MEDIA_VISUAL_PLAYBACK_INDEXABILITY_RELATIONSHIPS_PASS_12_OF_12_TEXT_FIT_FAIL_CH1_ES_EN_NORMAL_REDUCED_ONLY
-    current_site_remediation_head: 5d0e60b65439a6adc13ce9062308ff3422409616
-    playback_harness_status: CLOSED_RANGE_SELF_TEST_206_416_AND_24_ARTICLE_24_WATCH_CONTEXTS_PASS
-    mobile_graph_status: CH1_CONCURRENCY_NODE_WIDENED_ONLY_PENDING_EXACT_CURRENT_HEAD_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY
+    known_defect: INFERENCE_MOBILE_EDGE_VISIBILITY_HARDCODED_BOUNDARY_OVERCLIP
+    evidence_head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5
+    evidence_run: 35538317845
+    evidence_job: 106151279864
+    evidence_artifact: 10614520052
+    evidence_artifact_sha256: 09efbd574f116b542e775c76eb3c814dcd4a564158a899daeac471dc27e3d447
+    exact_automated_result: SOURCE_BUILD_BROWSER_MEDIA_VISUAL_PLAYBACK_INDEXABILITY_RELATIONSHIPS_TEXT_FIT_READER_SHELL_PASS_12_OF_12
+    manual_pixel_pedagogy_result: P1_SHARED_VISIBLE_CAUSAL_EDGES
+    root_cause: HARDCODED_BOUNDARY_EXTENTS_16_2_X_6_4_OVERCLIP_SHORT_SVG_EDGES
+    regression_gap: EDGE_COUNT_AND_MARKER_END_WITHOUT_RENDERED_VISIBLE_SEGMENT_ASSERTION
     production_verified: false
     series_golden: false
     state: QA
-    next_action: CONSUME_CURRENT_HEAD_SERIES4_CHECKS_VERIFY_CH1_TEXT_FIT_ES_EN_NORMAL_REDUCED_THEN_INSPECT_ALL_12_PIXEL_PEDAGOGY_EVIDENCE_BEFORE_MAIN_RECONCILIATION
+    next_action: FIX_NODE_AWARE_EDGE_BOUNDARY_GEOMETRY_ADD_VISIBLE_EDGE_REGRESSION_RERENDER_12_ROWS_MANUALLY_REVIEW_THEN_RECONCILE_MAIN
   evaluating-ai-systems-production:
     state: REOPENED_PUBLISHED_UNCERTIFIED
 release_coordination:
-  current_main: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
-  inference_branch_ahead_by: 54
-  inference_branch_behind_by: 9
+  current_main: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
+  inference_branch_ahead_by: 59
+  inference_branch_behind_by: 11
+  inference_branch_status: DIVERGED
   inference_branch_requires_main_reconciliation_before_ready_merge: true
   draft_34:
     state: OPEN_DRAFT_UNMERGED
