@@ -1,25 +1,34 @@
-schema_version: 2
+schema_version: 3
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+current_main_observed: 7d543dd664f1dca420fbc366739d0355e38b32b2
 active_branch: quality/llm-inference-requalification
 catalog:
   chapter_count: 6
   route_locale_rows: 12
   has_series_presentation: false
 inspection:
-  inventory_reviewed_on: 2026-09-20
-  inventory_review_head: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  inspected_on: 2026-09-20
+  inspected_branch_head_before_ledger_update: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
   es_chapters_found: 6
   en_chapters_found: 6
-  source_video_declarations_found: 0
-  en_media_manifest_series_entries_found: 0
-  historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
+  es_native_video_declarations_found: 6
+  en_media_manifest_series_entries_found: 6
+  es_native_mp4_found: 6
+  en_native_mp4_found: 6
+  es_posters_found: 6
+  en_posters_found: 6
+  media_metadata_scope: title_summary_duration_three_key_moments_per_locale
   source_review_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
   source_contract_run: 35499330009
-  gate_hardening_branch_head_pending: true
+  source_contract_result: PASS_12_OF_12
+  media_bootstrap_run: 35499330009
+  media_bootstrap_result: SUCCESS
+  historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
+  historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
   SOURCE_PASS: 12/12
   BUILD_PASS: 0/12
@@ -31,9 +40,13 @@ gates:
   ARTICLE_GOLDEN: 0/6
 known_defects:
   p0: 0
-  p1: 12
+  p1: 0
   p2: 0
-  shared_p1: VIDEO_REQUIRED_UNDECLARED
+  scope_note: No current P0/P1/P2 is asserted from the limited source/media-declaration inspection; unexecuted gates remain fail-closed and may reveal defects.
+  closed_historical_p1:
+    count: 12
+    code: VIDEO_REQUIRED_UNDECLARED
+    closure_evidence: Six ES frontmatters plus six EN media-manifest entries now declare native MP4/poster/title/summary/PT36S/key moments; all twelve MP4/poster assets exist on the branch.
 voice:
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   blocking: false
@@ -42,12 +55,13 @@ voice:
   historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91"
 release:
   pr: null
+  branch_divergence_vs_current_main: AHEAD_WITH_SERIES_WORK_BEHIND_BY_CONTEXT_LIVE_HARDENING_COMMITS
   production_verified: false
   series_golden: false
-  next_action: COMPLETE_NATIVE_ES_EN_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_EVIDENCE
+  next_action: OPEN_SINGLE_DRAFT_SERIES_PR_THEN_RUN_EXACT_SOURCE_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_AND_CAPTURE_EVIDENCE_FOR_PIXEL_PEDAGOGY
 row_defaults: &row_defaults
-  iteration_count: 1
-  last_review_head: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  iteration_count: 2
+  last_review_head: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -56,20 +70,16 @@ row_defaults: &row_defaults
   PIXEL_REVIEW: false
   PEDAGOGY_REVIEW: false
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-  defects:
-    - severity: P1
-      code: VIDEO_REQUIRED_UNDECLARED
-      status: OPEN
-      detail: Current curriculum requires native visual video; no route-locale video declaration exists on inspected main. Bootstrap Action 35499330009 is producing the replacement media but the persisted site-facing branch has not yet been requalified on those bytes.
+  defects: []
   factual_source_status: PASS_FRESH_2026_09_20
-  parity_status: PASS_FRESH_2026_09_20_EXACT_SOURCE_CONTRACTS
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_PERSISTED_MEDIA_HEAD
-  watch_video_lifecycle: PENDING_NATIVE_MEDIA_BOOTSTRAP
-  evidence_revision: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  parity_status: PASS_FRESH_2026_09_20_EXACT_SOURCE_CONTRACTS_AND_NATIVE_MEDIA_METADATA_INSPECTED
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_PR_MERGE_REF
+  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_BROWSER_MEDIA_GATE
+  evidence_revision: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: COMPLETE_NATIVE_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_AUTOMATED_AND_PIXEL_PEDAGOGY_EVIDENCE
-  state: MEDIA_VISUAL_PENDING
+  next_action: RUN_EXACT_PR_GATES_AND_INSPECT_BROWSER_VISUAL_EVIDENCE
+  state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
   - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
