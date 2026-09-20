@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Run Context media v2 with exact-bounds layout contracts.
 
-The v2 self-test correctly caught a Spanish single-word label whose glyph box was
-wider than the original padding budget, and the next pass caught a two-word EN
-label wrapping inside a physically too-small source node. This wrapper keeps the
-68 px material typography floor and all safe-area constraints. It validates
-against actual node bounds and widens the shared source stack so two-word labels
-stay on one line. No typography threshold is lowered and no overflow is accepted.
+The v2 self-test correctly caught source labels whose real CI-font glyph boxes did
+not fit their historical nodes. This wrapper keeps the 68 px material typography
+floor and all safe-area constraints, validates against actual bounds, and widens
+only the physically undersized nodes. No typography threshold is lowered and no
+overflow is accepted.
 """
 from __future__ import annotations
 
@@ -30,13 +29,15 @@ def exact_bounds_node(draw, center, value: str, *, w=400, h=150, outline=None, a
     if outline is None:
         outline = v2.LINE
 
-    # Chapter 2's compaction input is intentionally two lines at the material
-    # 68 px floor. The exact glyph box measures 437 px in the CI font, so the
-    # historical 430 px node was physically impossible under the 5 px/side
-    # padding contract. Widen only that source node to 450 px; its right edge
-    # remains exactly x=555, where the existing outgoing arrow already starts.
+    # Chapter 2 compaction path. At the material 68 px floor, the real CI-font
+    # glyph boxes are 437 px for the long-document source and 353 px for the
+    # Spanish summary. Their historical 430/350 px nodes are physically too
+    # small under the 5 px/side contract. Widening to 450/370 keeps the existing
+    # arrow boundaries exact: right edges remain x=555 and x=1135 respectively.
     if center == (330, 575) and w == 430 and h == 180:
         w = 450
+    if center == (950, 575) and w == 350 and h == 160:
+        w = 370
 
     x, y = center
     box = (int(x-w/2), int(y-h/2), int(x+w/2), int(y+h/2))
@@ -89,6 +90,7 @@ def main() -> int:
     report["node_fit_contract"] = "ACTUAL_BOUNDS_5PX_HORIZONTAL_9PX_VERTICAL_MARGIN_PER_SIDE"
     report["source_stack_contract"] = "430PX_SOURCE_NODES_AT_68PX_MATERIAL_TYPE"
     report["compaction_source_contract"] = "450PX_NODE_AT_68PX_MATERIAL_TYPE_RIGHT_EDGE_X555"
+    report["compaction_summary_contract"] = "370PX_NODE_AT_68PX_MATERIAL_TYPE_RIGHT_EDGE_X1135"
     if args.self_test:
         print(json.dumps(report, indent=2))
         return 0
