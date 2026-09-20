@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "unit": "fundamentos-ia-iag",
+  "recorded_at": "2026-09-20T08:01:00Z",
+  "stage": "BROWSER_HV_PREFLIGHT_PASS_NOT_ENCODED",
+  "source_main": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "branch": "migration/video-golden-fundamentos-ia-iag",
+  "head_before": "f21c7af120d20deb3e199ef1f37f7fe638b2e991",
+  "implementation_head": "5b4687dcb7c94d00a33df8467c6e65df5f9151e2",
+  "implementation_files": [
+    "motion/src/fundamentos/theme.mjs",
+    "motion/src/fundamentos/layout.mjs",
+    "motion/src/fundamentos/visuals.mjs",
+    "motion/src/fundamentos/render.mjs",
+    "motion/web/fundamentos-render.html",
+    "motion/scripts/fundamentos_render_check.py",
+    ".github/workflows/fundamentos-semantic-engine.yml"
+  ],
+  "browser_validation": {
+    "github_workflow_run": 35498352460,
+    "github_job": 106045468781,
+    "github_conclusion": "success",
+    "browser": "Chrome 152.0.7977.82",
+    "jobs": 20,
+    "frames_sampled": 300,
+    "native_horizontal_jobs": 10,
+    "native_vertical_jobs": 10,
+    "layout_issues": 0,
+    "browser_errors": 0,
+    "source_blob_mismatches": 0,
+    "minimum_body_px": 54,
+    "minimum_mechanism_scale": 0.918,
+    "minimum_embed_body_px": 19.5,
+    "reduced_motion_issues": 0,
+    "contact_sheets": 4,
+    "contact_sheet_scope": "review-support technical evidence only; not owner approval"
+  },
+  "artifact": {
+    "id": 10600992622,
+    "name": "fundamentos-browser-preflight-5b4687dcb7c94d00a33df8467c6e65df5f9151e2",
+    "files": 5,
+    "size_bytes": 1386942,
+    "sha256": "e9a32f90761febf1b4df7bb99488055b75b0edc44c0eda6d5a0bc69c42fef9b1",
+    "retention_days": 1
+  },
+  "semantic_engine": {
+    "canonical_concepts": 25,
+    "explicit_mechanisms": 25,
+    "generic_fallbacks": 0,
+    "perceptual_families": 25,
+    "max_family_use": 1,
+    "node_regressions": "5_PASS_0_FAIL"
+  },
+  "gates": {
+    "source_binding": "PASS_EXACT_BLOB_MATCH_10_OF_10",
+    "schema_framework": "PASS",
+    "series_diversity_register": "PASS_MAX_FAMILY_USE_1",
+    "deterministic_semantic_engine": "PASS",
+    "browser_hv": "PASS_20_JOBS_300_FRAMES",
+    "text_space_diagnostics": "PASS_MIN_BODY_54PX_MIN_EMBED_19_5PX",
+    "reduced_motion": "PASS_SAMPLE_NO_ISSUES",
+    "encoded_motion": "NOT_RUN",
+    "media_integrity": "NOT_RUN",
+    "owner_visual_approval": "NOT_REQUESTED",
+    "technical_golden": false,
+    "published": false
+  },
+  "blockers": [],
+  "next_action": "Encode bounded H/V semantic-motion probes from the exact browser renderer across all 25 concepts, full-decode and reject static concepts before final 20-output rendering."
+}
