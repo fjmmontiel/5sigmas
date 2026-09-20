@@ -105,6 +105,12 @@ jobs:
           path: .localized-media/en/ttc-v1
           key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
 
+      - name: Stamp exact deployed revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '{"revision":"%s"}\n' "$GITHUB_SHA" > site/build.json
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
