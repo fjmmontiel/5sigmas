@@ -53,7 +53,7 @@ const mobileContractPasses = (source) => (
   && source.includes("? 'en' : 'es'")
 );
 assert(mobileContractPasses(mobileRuntime), 'native mobile relationship summary contract is incomplete');
-const mutatedMobileRuntime = mobileRuntime.replace('.s5v-routing-policy', '.s5v-routing-policy-REMOVED');
+const mutatedMobileRuntime = mobileRuntime.replaceAll('.s5v-routing-policy', '.s5v-routing_MUTATION-policy');
 assert(!mobileContractPasses(mutatedMobileRuntime), 'negative mutation unexpectedly preserved all six native mobile visual contracts');
 assert(sharedLoader.includes("load('/assets/javascripts/inference-mobile-native.js', 'inference-mobile-native')"), 'shared runtime loader does not load native mobile inference summaries');
 assert(navEs.includes('javascripts/external-links.js'), 'Spanish MkDocs config does not load the shared runtime loader');
