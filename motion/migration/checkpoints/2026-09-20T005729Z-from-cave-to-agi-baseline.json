@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-20T00:57:29Z",
+  "unit": "from-cave-to-agi",
+  "stage": "BASELINE_INVENTORY",
+  "branch": "migration/video-golden-from-cave-to-agi",
+  "base_main_sha": "11737ad86db9b15b1981af6fef221d7db0b82110",
+  "base_main_tree": "c635dd8f1ec88c1891a6fa3fd995724895349208",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published_migration": false,
+  "review_delivery": "NOT_CREATED",
+  "drive_review_package": "NOT_CREATED",
+  "gmail_review_request": "NOT_SENT",
+  "inventory": {
+    "public_horizontal_video_count": 12,
+    "locales": {"es": 6, "en": 6},
+    "orientation": "horizontal_baseline_only",
+    "assets": [
+      {"locale":"es","chapter":"00","path":"docs/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"1cfd1cc9a53bbb2160f4da374750e0584c3239f3","size_bytes":5119976,"consumer":"docs/series/from-cave-to-agi/00_presentacion_serie.md"},
+      {"locale":"es","chapter":"01","path":"docs/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"3b4ff679a324fc35a42d93ff2b63c642cab732c1","size_bytes":5552048,"consumer":"docs/series/from-cave-to-agi/01-representar.md"},
+      {"locale":"es","chapter":"02","path":"docs/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"aed92957a846f7c7c9ca582e0ce5c97c4ba8f4d5","size_bytes":5989810,"consumer":"docs/series/from-cave-to-agi/02-mecanizar.md"},
+      {"locale":"es","chapter":"03","path":"docs/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"6bce9309aebf61f86edf56b10e0b6c468d28c620","size_bytes":5310945,"consumer":"docs/series/from-cave-to-agi/03-aprender.md"},
+      {"locale":"es","chapter":"04","path":"docs/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"cd0bd2064c4e0aec2bd3336aef960c90e4de4125","size_bytes":4767614,"consumer":"docs/series/from-cave-to-agi/04-escalar.md"},
+      {"locale":"es","chapter":"05","path":"docs/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"a84dd677c08b50c30dea6251d419042aedfe2a53","size_bytes":5809323,"consumer":"docs/series/from-cave-to-agi/05-mas-alla.md"},
+      {"locale":"en","chapter":"00","path":"locales/en/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"f1ecf6834c5866155d7346209ecd194f13a3b99c","size_bytes":2172210,"consumer":"locales/en/series/from-cave-to-agi/00_presentacion_serie.md"},
+      {"locale":"en","chapter":"01","path":"locales/en/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"e76ae4362289a613b119b5b9e8159088700a5cf4","size_bytes":2320314,"consumer":"locales/en/series/from-cave-to-agi/01-representar.md"},
+      {"locale":"en","chapter":"02","path":"locales/en/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"bd58bd14ce68dc22642fe745a2a1b1e0e87de8ac","size_bytes":2330834,"consumer":"locales/en/series/from-cave-to-agi/02-mecanizar.md"},
+      {"locale":"en","chapter":"03","path":"locales/en/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"70a4443626eec360aa64105d3fabe378b436e5e2","size_bytes":2313721,"consumer":"locales/en/series/from-cave-to-agi/03-aprender.md"},
+      {"locale":"en","chapter":"04","path":"locales/en/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"f5a5613c4e84d91d163390beb8324fae9be7e61f","size_bytes":2403035,"consumer":"locales/en/series/from-cave-to-agi/04-escalar.md"},
+      {"locale":"en","chapter":"05","path":"locales/en/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"1693ed649705b4e76f92c4e75124622deca341fa","size_bytes":2330658,"consumer":"locales/en/series/from-cave-to-agi/05-mas-alla.md"}
+    ]
+  },
+  "current_gates": {
+    "baseline_inventory": "PASS",
+    "baseline_full_decode": "NOT_VERIFIED",
+    "source_spec_binding": "NOT_VERIFIED",
+    "native_vertical": "NOT_IMPLEMENTED",
+    "es_en_parity": "NOT_VERIFIED",
+    "series_diversity": "NOT_VERIFIED",
+    "whole_series_encoded_review": "NOT_VERIFIED",
+    "site_integration_current_main": "BASELINE_PRESENT_ONLY"
+  },
+  "next_action": "Run a fail-closed full-decode/media-profile baseline check for all 12 existing public MP4s, then inspect the six ES/EN articles and existing visual/source mechanisms before authoring the deterministic H/V migration spec. Do not open the final PR or create a Drive review package until the complete migrated block is review-ready."
+}
