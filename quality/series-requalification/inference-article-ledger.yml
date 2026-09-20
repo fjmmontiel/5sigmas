@@ -1,10 +1,10 @@
-schema_version: 7
+schema_version: 8
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-current_main_observed: 7d543dd664f1dca420fbc366739d0355e38b32b2
+current_main_observed: 4dc41bbd0096a4f2b41c2eafd80234d70e3e398e
 active_branch: quality/llm-inference-requalification
 catalog:
   chapter_count: 6
@@ -37,10 +37,21 @@ inspection:
   exact_bounds_fix_artifact: 10605125706
   exact_bounds_fix_artifact_sha256: eac4c2dbe040301d493dbeb77decc8fef2a28b6d9d4d0c6bb97585b4dd85ae91
   exact_bounds_fix_result: P1_REMAINS_LEGIBILITY_EDGE_ROUTING_CH1_TO_CH3_BEFORE_GATE_ABORT
-  exact_bounds_fix_pixel_scope: CH1_CH2_CH3_ES_EN_MOBILE_NORMAL_REDUCED_PLUS_DESKTOP_CAPTURED_BEFORE_GATE_ABORT
   relationship_graph_legibility_fix_site_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
-  relationship_graph_legibility_fix_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
-  relationship_graph_legibility_fix_mechanism: TALLER_NATIVE_GRAPHS_SHORTER_SEMANTIC_LABELS_NORMAL_WORD_BREAKS_SPACED_ROWS_AND_COLUMNS_BOUNDARY_TRIMMED_DIRECTED_EDGES
+  exact_full_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
+  exact_full_review_series4_run: 35516179647
+  exact_full_review_series4_result: AUTOMATED_SUCCESS_MANUAL_PIXEL_P1
+  exact_full_review_pr_visual_run: 35516179685
+  exact_full_review_pr_visual_result: SUCCESS
+  exact_full_review_artifact: 10607266455
+  exact_full_review_artifact_sha256: b059e78151ef3f9a8d1a0d5c6e86d26f691f9a681a30a3d20558bf432278f3bc
+  exact_full_review_scope: ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_PLUS_72_VIDEO_FRAMES
+  exact_full_review_result: P1_SHARED_12_OF_12_MOBILE_TEXT_CLIPPING_AND_EDGE_LABEL_COLLISIONS
+  text_fit_remediation_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  text_fit_remediation_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
+  text_fit_remediation_mechanism: WIDER_SAFE_NODE_BOXES_SHORTER_SEMANTIC_LABELS_SAFE_X_BOUNDS_EDGE_LABEL_DECLUTTER_AND_BOUND_CLAMP_WITH_12PX_MINIMUM_TEXT
+  text_fit_regression_script: scripts/validate_inference_mobile_text_fit.mjs
+  text_fit_negative_mutation: SYNTHETIC_LONG_UNBREAKABLE_NODE_LABEL_MUST_OVERFLOW_AND_BE_DETECTED
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
   historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
@@ -58,27 +69,29 @@ known_defects:
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_MOBILE_DIRECTED_GRAPH_LEGIBILITY_AND_EDGE_ROUTING
+      code: INFERENCE_MOBILE_GRAPH_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
       affected_route_locale_rows: 12
-      evidence_head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97
-      evidence_runs: [35510156711]
-      evidence_artifact: 10605125706
-      evidence_artifact_sha256: eac4c2dbe040301d493dbeb77decc8fef2a28b6d9d4d0c6bb97585b4dd85ae91
-      confirmed_pixel_scope: CH1_CH2_CH3_ES_EN_MOBILE_NORMAL_REDUCED_CAPTURED_BEFORE_GATE_ABORT
-      shared_cause: NODE_LABELS_REMAINED_TOO_DENSE_FOR_390PX_AND_OVERFLOW_WRAP_ANYWHERE_FRAGMENTED_WORDS;_CH3_NODES_AND_EDGE_LABELS_COLLIDED_SEVERELY;_CENTER_TO_CENTER_SVG_ENDPOINTS_COULD_HIDE_ARROWHEAD_DIRECTION_UNDER_TARGET_NODES
-      remediation: INCREASE_VERTICAL_BUDGET_SHORTEN_NODE_LABELS_USE_NORMAL_WORD_BREAKS_SPACE_COLUMNS_ROWS_AND_TRIM_EDGE_ENDPOINTS_TO_NODE_BOUNDARIES_WITHOUT_SHRINKING_TYPOGRAPHY
-      remediation_site_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
-      status: FIX_V2_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_ALL_12_PIXEL_PEDAGOGY_REVIEW
+      evidence_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
+      evidence_runs: [35516179647, 35516179685]
+      evidence_artifact: 10607266455
+      evidence_artifact_sha256: b059e78151ef3f9a8d1a0d5c6e86d26f691f9a681a30a3d20558bf432278f3bc
+      confirmed_pixel_scope: ALL_6_CHAPTERS_ES_EN_MOBILE_NORMAL_REDUCED_WITH_DESKTOP_AND_VIDEO_EVIDENCE_ALSO_INSPECTED
+      shared_cause: FIXED_NARROW_NODE_BOXES_WITH_LONG_SINGLE_WORD_LABELS_AND_OVERDENSE_EDGE_LABELS_ALLOWED_TEXT_TO_ESCAPE_OR_BE_HIDDEN_BY_GRAPH_OVERFLOW;_AUTOMATED_GEOMETRY_CHECK_ONLY_BOUNDED_NODE_BOXES_NOT_TEXT_CONTENT
+      remediation: WIDEN_NODE_BOXES_WITH_SAFE_CENTER_BOUNDS_SHORTEN_ONLY_MOBILE_SEMANTIC_LABELS_KEEP_12PX_TEXT_DECLUTTER_REDUNDANT_EDGE_LABELS_CLAMP_REMAINING_LABELS_AND_ADD_FAIL_CLOSED_TEXT_FIT_NEGATIVE_MUTATION
+      remediation_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+      status: FIX_V3_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_ALL_12_PIXEL_PEDAGOGY_REVIEW
   scope_note: >-
-    Current-head CI 35510156711 passed source, strict ES/EN build, publication/search,
-    INDEXABILITY negative fixtures and rendered gate, MEDIA_VISUAL/VOICE split, native media,
-    and browser-resource/locale parity before failing the relationship geometry/accessibility step.
-    Exact artifact 10605125706 was downloaded and manually inspected. Ch1 and Ch2 remain cramped,
-    while Ch3 shows severe word fragmentation, node/edge-label collisions and ambiguous direction;
-    the workflow aborted before Ch4-Ch6 evidence, so no claim is made about those pixels. The shared
-    renderer has been redesigned for all six chapters with taller vertical canvases, shorter semantic
-    labels, normal word breaking, wider spacing and edges trimmed to node boundaries. P1 remains open
-    until the new exact branch head renders all 12 route-locale graphs and those pixels are inspected.
+    Exact Series 4 run 35516179647 and broad PR visual run 35516179685 both passed on
+    64339a86f8a88ff03c04af98927209ffbda7ccef. The retained 118 MB artifact 10607266455
+    was downloaded and manually inspected rather than treating green CI as PIXEL/PEDAGOGY.
+    INDEXABILITY and MEDIA_VISUAL reports were green and the artifact contains all six chapters,
+    ES/EN, desktop/mobile, normal/reduced plus 72 video frames. Manual mobile review still found
+    real clipping/collision debt: chapter 1 concurrent-load text, chapter 3 long node labels and
+    right-edge topology plus dense trade-off labels, chapter 5 hit/fallback labels, chapter 6
+    completion/accounting labels, and additional edge-label congestion in chapters 2 and 4.
+    The shared renderer has now been remediated for every route×locale and a deterministic
+    text-fit validator with a negative overflow mutation is wired into the final chapter gate.
+    P1 remains open until the new exact head renders and all 12 graphs are reinspected.
   closed_historical_p1:
     count: 12
     code: VIDEO_REQUIRED_UNDECLARED
@@ -94,16 +107,17 @@ release:
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  current_site_facing_remediation_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
-  failed_head_ci:
-    series4_run: 35510156711
-    result: FAILED_AT_INFERENCE_RELATIONSHIP_GEOMETRY_AFTER_CH3_EVIDENCE_CAPTURE
-  next_action: RENDER_FINAL_LEDGER_HEAD_THEN_INSPECT_ALL_12_REPAIRED_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
+  current_site_facing_remediation_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  last_exact_green_automated_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
+  last_exact_green_series4_run: 35516179647
+  last_exact_green_pr_visual_run: 35516179685
+  last_exact_manual_result: CHANGES_REQUIRED_PIXEL_PEDAGOGY_P1
+  next_action: RENDER_FINAL_LEDGER_HEAD_RUN_TEXT_FIT_MUTATION_THEN_INSPECT_ALL_12_REPAIRED_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
 row_defaults: &row_defaults
-  iteration_count: 6
-  last_changed_site_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
-  last_full_pixel_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
-  latest_shared_failure_evidence_head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97
+  iteration_count: 7
+  last_changed_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  last_full_pixel_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
+  latest_shared_failure_evidence_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -114,13 +128,13 @@ row_defaults: &row_defaults
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects:
     - severity: P1
-      code: INFERENCE_MOBILE_DIRECTED_GRAPH_LEGIBILITY_AND_EDGE_ROUTING
-      status: FIX_V2_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
+      code: INFERENCE_MOBILE_GRAPH_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
+      status: FIX_V3_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
   canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_EXACT_CURRENT_HEAD
   watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_EXACT_BROWSER_MEDIA_GATE
-  evidence_revision: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
+  evidence_revision: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
   next_action: RERENDER_EXACT_REPAIRED_HEAD_INSPECT_390PX_DIRECTED_GRAPH_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
