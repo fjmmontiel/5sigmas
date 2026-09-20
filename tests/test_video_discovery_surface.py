@@ -23,6 +23,12 @@ MEDIA = {
     ("en", "modelos-razonadores-01-en"): ROOT / "locales/en/series/modelos-razonadores/01-que-es-razonar.mp4",
     ("es", "modelos-razonadores-02-es"): ROOT / "docs/series/modelos-razonadores/02-fallos.mp4",
     ("en", "modelos-razonadores-02-en"): ROOT / "locales/en/series/modelos-razonadores/02-fallos.mp4",
+    ("es", "modelos-razonadores-03-es"): ROOT / "docs/series/modelos-razonadores/03-test-time-compute.mp4",
+    ("en", "modelos-razonadores-03-en"): ROOT / "locales/en/series/modelos-razonadores/03-test-time-compute.mp4",
+    ("es", "modelos-razonadores-04-es"): ROOT / "docs/series/modelos-razonadores/04-latencia-streaming.mp4",
+    ("en", "modelos-razonadores-04-en"): ROOT / "locales/en/series/modelos-razonadores/04-latencia-streaming.mp4",
+    ("es", "modelos-razonadores-05-es"): ROOT / "docs/series/modelos-razonadores/05-riesgos.mp4",
+    ("en", "modelos-razonadores-05-en"): ROOT / "locales/en/series/modelos-razonadores/05-riesgos.mp4",
 }
 
 
@@ -86,15 +92,9 @@ def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, site
         "version": 2,
         "videos": [
             {
-                "id": source["id"],
-                "title": source["title"],
-                "description": source["description"],
-                "watch_url": source["watch_url"],
-                "video_url": source["video_url"],
-                "thumb_url": source["poster_url"],
-                "captions_url": "",
-                "duration_seconds": source["duration_ms"] // 1000,
-                "chapters": [],
+                "id": source["id"], "title": source["title"], "description": source["description"],
+                "watch_url": source["watch_url"], "video_url": source["video_url"], "thumb_url": source["poster_url"],
+                "captions_url": "", "duration_seconds": source["duration_ms"] // 1000, "chapters": [],
             }
             for source in sources
         ],
@@ -108,10 +108,8 @@ def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, site
         video_lines.extend([
             '<url>', f'<loc>{escape(source["watch_url"])}</loc>', '<video:video>',
             f'<video:thumbnail_loc>{escape(source["poster_url"])}</video:thumbnail_loc>',
-            f'<video:title>{escape(title)}</video:title>',
-            f'<video:description>{escape(source["description"])}</video:description>',
-            f'<video:content_loc>{escape(source["video_url"])}</video:content_loc>',
-            f'<video:duration>{source["duration_ms"] // 1000}</video:duration>',
+            f'<video:title>{escape(title)}</video:title>', f'<video:description>{escape(source["description"])}</video:description>',
+            f'<video:content_loc>{escape(source["video_url"])}</video:content_loc>', f'<video:duration>{source["duration_ms"] // 1000}</video:duration>',
             '</video:video>', '</url>',
         ])
         normal_lines.extend(['<url>', f'<loc>{escape(source["watch_url"])}</loc>', '</url>'])
@@ -123,12 +121,13 @@ def prepare_site(base: Path, locale: str, *, noindex_id: str | None = None, site
 
 
 class DiscoverySurfaceTests(unittest.TestCase):
-    def test_binds_exact_sources_for_both_locales(self):
+    def test_binds_exact_complete_series_for_both_locales(self):
         for locale in ("es", "en"):
             with self.subTest(locale=locale), tempfile.TemporaryDirectory() as tmp:
                 site_dir, sources = prepare_site(Path(tmp), locale)
                 result = SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": locale}})
-                self.assertEqual(len(result["sources"]), 3)
+                self.assertEqual(len(sources), 6)
+                self.assertEqual(len(result["sources"]), 6)
                 catalogue = json.loads((site_dir / "videos/catalog.json").read_text(encoding="utf-8"))
                 self.assertEqual(catalogue["version"], 3)
                 for source in sources:
@@ -147,20 +146,20 @@ class DiscoverySurfaceTests(unittest.TestCase):
 
     def test_noindex_is_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
-            site_dir, sources = prepare_site(Path(tmp), "es", noindex_id="modelos-razonadores-01-es")
+            site_dir, _ = prepare_site(Path(tmp), "es", noindex_id="modelos-razonadores-04-es")
             with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "noindex"):
                 SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "es"}})
 
     def test_video_sitemap_divergence_is_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
-            site_dir, sources = prepare_site(Path(tmp), "en", sitemap_bad_id="modelos-razonadores-01-en")
+            site_dir, _ = prepare_site(Path(tmp), "en", sitemap_bad_id="modelos-razonadores-05-en")
             with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "video sitemap divergence"):
                 SURFACE.apply_discovery_surface({"site_dir": str(site_dir), "extra": {"content_language": "en"}})
 
     def test_wrong_mp4_bytes_are_hard_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             site_dir, sources = prepare_site(Path(tmp), "es")
-            source = next(item for item in sources if item["id"] == "modelos-razonadores-01-es")
+            source = next(item for item in sources if item["id"] == "modelos-razonadores-03-es")
             target = site_dir / rel(source["video_url"], "es")
             target.write_bytes(b"not the approved mp4")
             with self.assertRaisesRegex(SURFACE.CONTRACT.ContractError, "byte/hash mismatch"):
@@ -168,23 +167,16 @@ class DiscoverySurfaceTests(unittest.TestCase):
 
     def test_key_moments_preserve_fractional_timestamps(self):
         clips = SURFACE.validated_clips([
-            {"name": "A", "start": 0, "end": 15.5},
-            {"name": "B", "start": 15.5, "end": 30},
+            {"name": "A", "start": 0, "end": 15.5}, {"name": "B", "start": 15.5, "end": 30},
         ], "https://5sigmas.com/videos/x/")
         self.assertEqual(clips[1]["start"], 15.5)
         self.assertEqual(clips[1]["url"], "https://5sigmas.com/videos/x/?t=15.5")
 
     def test_key_moments_reject_order_overlap_and_bad_end(self):
         with self.assertRaisesRegex(RuntimeError, "Unordered"):
-            SURFACE.validated_clips([
-                {"name": "B", "start": 20, "end": 30},
-                {"name": "A", "start": 0, "end": 20},
-            ], "https://5sigmas.com/videos/x/")
+            SURFACE.validated_clips([{"name": "B", "start": 20, "end": 30}, {"name": "A", "start": 0, "end": 20}], "https://5sigmas.com/videos/x/")
         with self.assertRaisesRegex(RuntimeError, "Overlapping"):
-            SURFACE.validated_clips([
-                {"name": "A", "start": 0, "end": 20},
-                {"name": "B", "start": 19, "end": 30},
-            ], "https://5sigmas.com/videos/x/")
+            SURFACE.validated_clips([{"name": "A", "start": 0, "end": 20}, {"name": "B", "start": 19, "end": 30}], "https://5sigmas.com/videos/x/")
         with self.assertRaisesRegex(RuntimeError, "end <= start"):
             SURFACE.validated_clips([{"name": "A", "start": 5, "end": 5}], "https://5sigmas.com/videos/x/")
 
