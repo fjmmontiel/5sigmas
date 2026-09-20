@@ -1,4 +1,4 @@
-schema_version: 23
+schema_version: 24
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -79,29 +79,30 @@ series_status:
     production_verified: true
   context-engineering-memory-mcp:
     ledger: quality/series-requalification/context-article-ledger.yml
+    manual_review_receipt: quality/series-requalification/context-manual-review-2026-09-20.yml
     active_branch: quality/context-engineering-requalification
+    site_facing_revision: 86a8f65f35ae8d4ae6d325bf577d35b02618dd19
+    automated_head: f8e47ac14b65667f242359eacb0cac24c4b28cf0
     route_locale_rows: 12
-    source: 0/12
+    source: PASS_12_OF_12
     build: PASS_12_OF_12
     browser: PASS_12_OF_12
-    browser_live_qa_run: 35486401441
-    browser_live_qa_job: 106013475335
-    browser_live_exact_head: b6821a5077681531fba6610298dd0bb02b85813a
-    media_visual: 0/12
-    indexability: 0/12
-    pixel: 0/12
-    pedagogy: 0/12
-    article_golden: 0/6
-    route_locale_rows_golden: 0/12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1: 12
+    known_p1: 0
     known_p2: 0
-    blocker: VIDEO_REQUIRED_UNDECLARED
-    gate_hardening: INDEXABILITY_AND_MEDIA_VISUAL_WIRED_FAIL_CLOSED
-    state: MEDIA_VISUAL_PENDING
+    release_pr: 339
+    release_pr_state: DRAFT
     production_verified: false
-    next_action: PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_FOR_MULTIPLE_CHAPTERS_THEN_GROUPED_SOURCE_MEDIA_INDEXABILITY_PIXEL_PEDAGOGY
+    series_golden: false
+    state: QA_PRE_RELEASE
+    next_action: COMPLETE_CURRENT_HEAD_BROAD_VISUAL_THEN_READY_PR_MERGE_DEPLOY_LIVE_VERIFY
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
