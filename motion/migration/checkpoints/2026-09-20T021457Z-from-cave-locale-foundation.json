@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-20T02:14:57Z",
+  "unit": "from-cave-to-agi",
+  "branch": "migration/video-golden-from-cave-to-agi",
+  "head_before_checkpoint": "de1fb01ca080b2c5078143c6c5959c15a7c17f47",
+  "stage": "COMPLETE_SOURCE_BOUND_REGISTER_ES_EN_AND_HV_FOUNDATION",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "source_and_output_binding": {
+    "locales": ["es", "en"],
+    "chapters": 6,
+    "source_pairs": 6,
+    "canonical_horizontal_output_pairs": 6,
+    "result": "PASS"
+  },
+  "semantic_register": {
+    "concepts": 30,
+    "perceptual_families": 30,
+    "max_family_uses": 1,
+    "result": "PASS_STRUCTURAL_SOURCE_BOUND_REGISTER"
+  },
+  "render_foundation": {
+    "node_syntax": "PASS",
+    "contract": "PASS_FOUNDATION_CONTRACT",
+    "accent": "#26A69A",
+    "accent_text": "#00776F",
+    "accent_surface": "#E7F4F0",
+    "body_contrast": 15.89,
+    "muted_contrast": 6.35,
+    "accent_text_contrast": 5.23,
+    "horizontal_body_floor_px": 46,
+    "portrait_body_floor_px": 46,
+    "family_repeat_cap": 2,
+    "browser_hv_layout": "NOT_RUN",
+    "encoded_motion": "NOT_RENDERED"
+  },
+  "evidence": {
+    "workflow_run": 35483477187,
+    "job": 106005386651,
+    "head": "de1fb01ca080b2c5078143c6c5959c15a7c17f47"
+  },
+  "next_action": "Author deterministic ES/EN per-chapter render specs and the series-specific semantic mechanism compiler, then execute native H/V browser layout and encoded-motion review. Do not create review delivery or final PR before the complete migrated block is review-ready."
+}
