@@ -1,5 +1,6 @@
 import {FUNDAMENTOS_RENDER_CONTRACT,buildFundamentosRenderJobs,validateFundamentosRegister} from './schema.mjs';
 import {SUPPORTED_FUNDAMENTOS_MECHANISMS,compileFundamentosMechanism} from './mechanisms.mjs';
+import {compileFundamentosCueTimeline,validateFundamentosCueBinding} from './timeline.mjs';
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 export function indexFundamentosConcepts(register){
   validateFundamentosRegister(register);
@@ -18,8 +19,12 @@ export function compileFundamentosChapter(register,jobOrId,{reducedMotion=false}
   if(concepts.length!==FUNDAMENTOS_RENDER_CONTRACT.conceptsPerChapter) throw new Error(`fundamentos engine: ${job.chapter} must contain five concepts`);
   const scenes=concepts.map((concept,index)=>{
     if(!SUPPORTED_FUNDAMENTOS_MECHANISMS.includes(concept.mechanism)) throw new Error(`fundamentos engine: unsupported mechanism ${concept.mechanism}`);
-    const start=index*FUNDAMENTOS_RENDER_CONTRACT.sceneDurationSeconds,end=(index+1)*FUNDAMENTOS_RENDER_CONTRACT.sceneDurationSeconds;
-    return Object.freeze({index,conceptId:concept.id,start,end,durationSeconds:end-start,title:concept.copy[job.locale].title,body:concept.copy[job.locale].body,evidence:concept.evidence,semanticRationale:concept.semantic_rationale,perceptualFamily:concept.perceptual_family,topology:concept.topology,choreography:concept.choreography,composition:concept.composition,mechanism:compileFundamentosMechanism(concept,{orientation:job.orientation,localSeconds:reducedMotion?end-start:0,durationSeconds:end-start,reducedMotion})});
+    const start=index*FUNDAMENTOS_RENDER_CONTRACT.sceneDurationSeconds,end=(index+1)*FUNDAMENTOS_RENDER_CONTRACT.sceneDurationSeconds,durationSeconds=end-start;
+    const localSeconds=reducedMotion?durationSeconds:0;
+    const mechanism=compileFundamentosMechanism(concept,{orientation:job.orientation,localSeconds,durationSeconds,reducedMotion});
+    const timeline=compileFundamentosCueTimeline(concept,job.locale,{localSeconds,durationSeconds,reducedMotion});
+    validateFundamentosCueBinding(timeline,mechanism);
+    return Object.freeze({index,conceptId:concept.id,start,end,durationSeconds,title:concept.copy[job.locale].title,body:concept.copy[job.locale].body,evidence:concept.evidence,semanticRationale:concept.semantic_rationale,perceptualFamily:concept.perceptual_family,topology:concept.topology,choreography:concept.choreography,composition:concept.composition,mechanism,timeline});
   });
   return Object.freeze({job,scenes:Object.freeze(scenes)});
 }
@@ -30,7 +35,10 @@ export function fundamentosFrameState(register,jobOrId,timeSeconds,{reducedMotio
   const sceneIndex=Math.min(plan.scenes.length-1,Math.floor(seekT/FUNDAMENTOS_RENDER_CONTRACT.sceneDurationSeconds));
   const scene=plan.scenes[sceneIndex],localSeconds=reducedMotion?scene.durationSeconds:clamp(t-scene.start,0,scene.durationSeconds);
   const concept=register.concepts.find(item=>item.id===scene.conceptId);
-  return Object.freeze({job:plan.job,timeSeconds:t,sceneIndex,localSeconds,progress:t/duration,reducedMotion,scene:Object.freeze({...scene,mechanism:compileFundamentosMechanism(concept,{orientation:plan.job.orientation,localSeconds,durationSeconds:scene.durationSeconds,reducedMotion})})});
+  const mechanism=compileFundamentosMechanism(concept,{orientation:plan.job.orientation,localSeconds,durationSeconds:scene.durationSeconds,reducedMotion});
+  const timeline=compileFundamentosCueTimeline(concept,plan.job.locale,{localSeconds,durationSeconds:scene.durationSeconds,reducedMotion});
+  validateFundamentosCueBinding(timeline,mechanism);
+  return Object.freeze({job:plan.job,timeSeconds:t,sceneIndex,localSeconds,progress:t/duration,reducedMotion,scene:Object.freeze({...scene,mechanism,timeline})});
 }
 export function validateFundamentosMechanismCoverage(register){
   const structural=validateFundamentosRegister(register),missing=[],mechanismIds=new Set();

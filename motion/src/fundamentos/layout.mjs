@@ -20,8 +20,9 @@ export function computeFundamentosLayout(ctx,{title,body,orientation}){
   return {W,H,portrait,margin,top,textWidth,mechanism:{...mechanism,scale},...best,
     metrics:{bodySize:best.bodySize,bodyBottom:best.bodyBottom,mechanismScale:scale,intendedEmbedBodyPixels:best.bodySize*(portrait?390/1080:1100/1920),permanentLowerLeftGap:Math.max(0,(portrait?820:930)-best.bodyBottom)}};
 }
-export function drawFundamentosEditorial(ctx,T,layout,{series,title,body,sceneIndex,sceneCount,timeSeconds,totalSeconds,family}){
-  const {W,H,margin,top,textWidth,titleSize,bodySize,titleLines,bodyLines,bodyY,portrait}=layout;
+export function drawFundamentosEditorial(ctx,T,layout,{series,title,body,visibleBody=body,sceneIndex,sceneCount,timeSeconds,totalSeconds,family}){
+  const {W,H,margin,top,textWidth,titleSize,bodySize,titleLines,bodyY,portrait}=layout;
+  const visibleBodyLines=lines(ctx,visibleBody,textWidth,bodySize,400,'Arial');
   ctx.fillStyle=T.background;ctx.fillRect(0,0,W,H);ctx.textBaseline='top';ctx.textAlign='left';
   font(ctx,36,650,'Arial');ctx.fillStyle=T.ink;ctx.fillText('5sigmas',margin,48);
   ctx.strokeStyle=T.rule;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(margin+178,46);ctx.lineTo(margin+178,90);ctx.stroke();
@@ -29,7 +30,7 @@ export function drawFundamentosEditorial(ctx,T,layout,{series,title,body,sceneIn
   font(ctx,18,500,'Arial');ctx.textAlign='right';ctx.fillText(`${String(sceneIndex+1).padStart(2,'0')} / ${String(sceneCount).padStart(2,'0')}`,W-margin,58);ctx.textAlign='left';
   ctx.strokeStyle=T.rule;ctx.beginPath();ctx.moveTo(margin,117);ctx.lineTo(W-margin,117);ctx.stroke();
   font(ctx,titleSize,600,'Georgia');ctx.fillStyle=T.ink;titleLines.forEach((line,i)=>ctx.fillText(line,margin,top+i*titleSize*1.08));
-  font(ctx,bodySize,400,'Arial');bodyLines.forEach((line,i)=>ctx.fillText(line,margin,bodyY+i*bodySize*1.25));
+  font(ctx,bodySize,400,'Arial');visibleBodyLines.forEach((line,i)=>ctx.fillText(line,margin,bodyY+i*bodySize*1.25));
   font(ctx,19,450,'Arial');ctx.fillStyle=T.muted;ctx.fillText(family,margin,H-55);
   const gap=8,stepW=(W-2*margin-gap*(sceneCount-1))/sceneCount;for(let i=0;i<sceneCount;i++){const x=margin+i*(stepW+gap);ctx.fillStyle=T.rule;ctx.fillRect(x,H-20,stepW,3);const q=clamp((timeSeconds-i*(totalSeconds/sceneCount))/(totalSeconds/sceneCount));if(q>0){ctx.fillStyle=T.accent;ctx.fillRect(x,H-20,stepW*q,3);}}
 }
