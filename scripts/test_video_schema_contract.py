@@ -30,15 +30,16 @@ EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # voice/accessibility surfaces. Security requalification added one deliberately reviewed native
 # ES surface, yielding the historical 92 > 91 debt checkpoint. Realtime Voice added exactly
 # six ES + six EN native visual-video/watch surfaces, Coding Agents added another six ES + six EN,
-# and Context Engineering now adds six ES + six EN reviewed native visual-video/watch surfaces.
-# The truthful reviewed catalogue is therefore 128. Keep the 91 budget and historical 92 checkpoint
-# immutable: PROGRAM AMENDMENT 5716685049 makes fully missing narration-dependent captions/
-# transcripts deferred owner-local debt, not a current GOLDEN blocker. Any catalogue change still
-# fails closed until it is deliberately reconciled.
-EXPECTED_VIDEO_LOCALE_SURFACES = 128
+# Context Engineering added six ES + six EN, and LLM Inference Engineering now adds another
+# six ES + six EN reviewed native visual-video/watch surfaces. The truthful reviewed catalogue
+# is therefore 140. Keep the 91 budget and historical 92 checkpoint immutable: PROGRAM AMENDMENT
+# 5716685049 makes fully missing narration-dependent captions/transcripts deferred owner-local debt,
+# not a current GOLDEN blocker. Any catalogue change still fails closed until deliberately reconciled.
+EXPECTED_VIDEO_LOCALE_SURFACES = 140
 EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 12
 EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 12
 EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 12
+EXPECTED_LLM_INFERENCE_LOCALE_SURFACES = 12
 HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
 
@@ -274,6 +275,17 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
     assert sum(1 for row in context_engineering if row["locale"] == "es") == 6
     assert sum(1 for row in context_engineering if row["locale"] == "en") == 6
 
+    inference_engineering = [
+        row for row in records if "series/llm-inference-engineering-economics/" in row["label"]
+    ]
+    assert len(inference_engineering) == EXPECTED_LLM_INFERENCE_LOCALE_SURFACES, (
+        "LLM Inference Engineering video/watch inventory changed: expected "
+        f"{EXPECTED_LLM_INFERENCE_LOCALE_SURFACES}, observed {len(inference_engineering)}. "
+        "Review the six ES + six EN native visual-video surfaces deliberately."
+    )
+    assert sum(1 for row in inference_engineering if row["locale"] == "es") == 6
+    assert sum(1 for row in inference_engineering if row["locale"] == "en") == 6
+
     missing = [row for row in records if not row["complete"]]
     debt_over_legacy_budget = max(
         0, len(missing) - LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
@@ -285,6 +297,7 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         "realtime_voice_locale_surfaces": len(realtime_voice),
         "coding_agents_locale_surfaces": len(coding_agents),
         "context_engineering_locale_surfaces": len(context_engineering),
+        "llm_inference_locale_surfaces": len(inference_engineering),
         "captions_transcript_complete": len(records) - len(missing),
         "captions_transcript_review": len(missing),
         "partial_declarations": 0,
@@ -302,11 +315,11 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
     print("Video accessibility inventory: " + json.dumps(summary, sort_keys=True))
 
     if enforce_debt:
-        # Preserve the historical 92 > 91 checkpoint explicitly. Realtime Voice, Coding Agents
-        # and Context Engineering add 36 reviewed native visual-video surfaces, increasing current
-        # owner-local voice/accessibility debt to 128 > 91; the budget itself is never raised to
-        # conceal that debt. Per PROGRAM AMENDMENT 5716685049 it remains non-blocking for current
-        # ARTICLE/SERIES GOLDEN.
+        # Preserve the historical 92 > 91 checkpoint explicitly. Realtime Voice, Coding Agents,
+        # Context Engineering and LLM Inference add 48 reviewed native visual-video surfaces,
+        # increasing current owner-local voice/accessibility debt to 140 > 91; the budget itself is
+        # never raised to conceal that debt. Per PROGRAM AMENDMENT 5716685049 it remains
+        # non-blocking for current ARTICLE/SERIES GOLDEN.
         assert summary["historical_missing_checkpoint"] == 92
         assert summary["historical_budget_exceeded_by"] == 1
         assert summary["legacy_missing_budget"] == LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET
@@ -315,16 +328,17 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
 
 
 def assert_owner_voice_deferral_contract() -> None:
-    """Regression: preserve historical 92 > 91 while tracking the current 128-surface debt."""
+    """Regression: preserve historical 92 > 91 while tracking current 140-surface debt."""
     summary = audit_published_accessibility_inventory(enforce_debt=True)
     assert summary["realtime_voice_locale_surfaces"] == 12
     assert summary["coding_agents_locale_surfaces"] == 12
     assert summary["context_engineering_locale_surfaces"] == 12
-    assert summary["captions_transcript_review"] == 128
+    assert summary["llm_inference_locale_surfaces"] == 12
+    assert summary["captions_transcript_review"] == 140
     assert summary["historical_missing_checkpoint"] == 92
     assert summary["historical_budget_exceeded_by"] == 1
     assert summary["legacy_missing_budget"] == 91
-    assert summary["legacy_budget_exceeded_by"] == 37
+    assert summary["legacy_budget_exceeded_by"] == 49
     assert summary["voice_enhancement"] == "DEFERRED_OWNER_LOCAL"
     assert summary["golden_blocking"] is False
 
