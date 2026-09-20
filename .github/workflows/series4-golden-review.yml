@@ -12,6 +12,7 @@ on:
       - 'docs/snippets/articulos-tecnicos/inference-*.html'
       - 'locales/en/snippets/articulos-tecnicos/inference-*'
       - 'scripts/validate_inference_engineering_*.mjs'
+      - 'scripts/validate_inference_mobile_text_fit.mjs'
       - 'scripts/validate_inference_indexability.py'
       - 'scripts/validate_inference_media_visual.py'
       - 'scripts/validate_voice_media_visual.py'
@@ -141,6 +142,9 @@ jobs:
           node scripts/validate_inference_engineering_ch4_accessibility.mjs
           node scripts/validate_inference_engineering_ch5_accessibility.mjs
           node scripts/validate_inference_engineering_ch6_accessibility.mjs
+
+      - name: Validate inference mobile text fit and negative mutation
+        run: node scripts/validate_inference_mobile_text_fit.mjs
 
       - name: Validate reader navigation and responsive shell
         run: |
