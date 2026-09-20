@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-01-en",
+  "locale": "en",
+  "title": "What It Means for an LLM to Reason",
+  "description": "What reasoning means for a language model, what o1 and DeepSeek R1 added, and why evaluating reasoning requires looking at steps, cost and failure modes.",
+  "watch_url": "https://5sigmas.com/en/videos/series/modelos-razonadores/01-que-es-razonar/",
+  "article_url": "https://5sigmas.com/en/series/modelos-razonadores/01-que-es-razonar/",
+  "video_url": "https://5sigmas.com/en/series/modelos-razonadores/01-que-es-razonar.mp4",
+  "poster_url": "https://5sigmas.com/en/series/modelos-razonadores/01-que-es-razonar.jpg",
+  "vtt_url": "https://5sigmas.com/en/series/modelos-razonadores/01-que-es-razonar.visual-text.vtt",
+  "video_sha256": "b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc",
+  "video_bytes": 4641477,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 82000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/01-que-es-razonar.en.json",
+    "text_timing_candidate_git_blob": "2f62cb64e9c32c284c5d65f67c31b1fd43fd1027",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media at chapter boundaries; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "definition",
+      "name": "What does it mean to “reason”?",
+      "start_ms": 0,
+      "end_ms": 17000,
+      "cues": [
+        {"id": "definition-01", "start_ms": 700, "end_ms": 4426, "text": "Operationally, we care about a process that breaks problems into steps."},
+        {"id": "definition-02", "start_ms": 4426, "end_ms": 6216, "text": "It consumes resources and time."},
+        {"id": "definition-03", "start_ms": 6216, "end_ms": 8652, "text": "And it can fail systematically."}
+      ],
+      "visual_description": ["A checkable arithmetic example shows 17 × 6 decomposed as (10 + 7) × 6 = 60 + 42 = 102. The video explicitly labels it as an exact example, not an observed internal chain of an LLM."]
+    },
+    {
+      "id": "training",
+      "name": "Verify outcomes, reinforce strategies.",
+      "start_ms": 17000,
+      "end_ms": 39000,
+      "cues": [
+        {"id": "training-01", "start_ms": 17700, "end_ms": 22394, "text": "RLVR uses tasks with verifiable outcomes to turn correctness into a reward signal."},
+        {"id": "training-02", "start_ms": 22394, "end_ms": 27087, "text": "DeepSeek R1 uses GRPO to compare attempts at the same problem relative to one another."},
+        {"id": "training-03", "start_ms": 27087, "end_ms": 32103, "text": "At inference time, the model can spend more steps before producing the final answer."},
+        {"id": "training-04", "start_ms": 32103, "end_ms": 34861, "text": "Training and inference are two different stages."}
+      ],
+      "visual_description": ["A schematic separates TRAINING from INFERENCE. During training, a verifiable reward signal updates weights W and reinforces strategies; during inference, weights remain fixed while a reasoning budget leads to the final answer."]
+    },
+    {
+      "id": "benchmark",
+      "name": "More reasoning, more than one lever.",
+      "start_ms": 39000,
+      "end_ms": 62000,
+      "cues": [
+        {"id": "benchmark-01", "start_ms": 39700, "end_ms": 42458, "text": "An answer can use a single sample"},
+        {"id": "benchmark-02", "start_ms": 42458, "end_ms": 45216, "text": "or combine several and decide by consensus."},
+        {"id": "benchmark-03", "start_ms": 45216, "end_ms": 48297, "text": "Those are different strategies and should be measured separately."},
+        {"id": "benchmark-04", "start_ms": 48297, "end_ms": 51700, "text": "On AIME 2024, o1 scored 74% with one sample"},
+        {"id": "benchmark-05", "start_ms": 51700, "end_ms": 54458, "text": "and 83% with consensus across 64 samples."},
+        {"id": "benchmark-06", "start_ms": 54458, "end_ms": 57861, "text": "That is evidence from that experiment, not a general guarantee."}
+      ],
+      "visual_description": ["The animation separates an illustrative arithmetic set of attempts from reported o1 results on AIME 2024: 74% with one sample and 83% with 64 samples plus consensus. It explicitly notes that consensus and correctness are not equivalent."]
+    },
+    {
+      "id": "limits",
+      "name": "The label matters less than the failure curve.",
+      "start_ms": 62000,
+      "end_ms": 82000,
+      "cues": [
+        {"id": "limits-01", "start_ms": 62700, "end_ms": 68684, "text": "Models can produce deliberate chains and still collapse when complexity or the available budget changes."},
+        {"id": "limits-02", "start_ms": 68684, "end_ms": 73055, "text": "Results also depend on benchmark and evaluation design."},
+        {"id": "limits-03", "start_ms": 73055, "end_ms": 78071, "text": "The useful practice is to measure where reasoning works, what it costs and how it fails."}
+      ],
+      "visual_description": ["An experimental-design matrix crosses task, budget and verification with conditions A, B and C. The cells contain lines and question marks; the video states that these are experimental conditions, not measured results."]
+    }
+  ]
+}
