@@ -158,5 +158,6 @@ jobs:
             artifacts/visual-review/english-series-mirror-*.png
             artifacts/inference-requalification/indexability/report.json
             artifacts/inference-requalification/inference-media-visual.json
+            artifacts/inference-requalification/video-frames/**
           if-no-files-found: warn
           retention-days: 1
