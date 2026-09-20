@@ -1,4 +1,4 @@
-schema_version: 5
+schema_version: 6
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -34,7 +34,14 @@ inspection:
   relationship_graph_remediation_scope: ALL_6_CHAPTERS_ES_EN_VIA_SHARED_RUNTIME
   relationship_graph_gate_head: e2d785ec679def9a86213d7f0c1f6f0aefa00a11
   relationship_graph_contract: DIRECTED_NODES_EDGES_BRANCHES_FEEDBACK_NORMAL_AND_REDUCED_MOTION
-  relationship_graph_render_review: PENDING_CURRENT_HEAD_CI_ARTIFACT
+  relationship_graph_failed_head: 9f741f177175ca8a6e2b0f8c24e3dcc85d1ea506
+  relationship_graph_failed_series4_run: 35507625524
+  relationship_graph_failed_broad_run: 35507625549
+  relationship_graph_failure_artifact: 10604896552
+  relationship_graph_failure_artifact_sha256: 68be4892db881a1107751b27f7af44df8588448210e382cbe7c7136ed33c14ed
+  relationship_graph_render_review: P1_SHARED_BOUNDS_CLIPPING_CONFIRMED_BY_CH1_PIXELS_AND_SHARED_RENDERER_GEOMETRY
+  relationship_graph_bounds_fix_site_head: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
+  relationship_graph_bounds_fix_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
   historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
@@ -52,18 +59,25 @@ known_defects:
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_MOBILE_RELATIONSHIP_COLLAPSED_TO_CARD_SUMMARY
+      code: INFERENCE_MOBILE_DIRECTED_GRAPH_CLIPPING_AND_BOUNDS
       affected_route_locale_rows: 12
-      previous_mechanism: FOUR_SEQUENTIAL_CARDS_WITH_DOWN_ARROWS
-      remediation: SIX_DISTINCT_NATIVE_DIRECTED_RELATIONSHIP_GRAPHS_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
-      site_facing_remediation_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
+      evidence_head: 9f741f177175ca8a6e2b0f8c24e3dcc85d1ea506
+      evidence_runs: [35507625524, 35507625549]
+      evidence_artifact: 10604896552
+      confirmed_pixel_scope: CH1_ES_EN_MOBILE_NORMAL_REDUCED_CAPTURED_BEFORE_GATE_ABORT
+      shared_cause: NODE_WIDTH_29_PERCENT_CONTENT_BOX_PLUS_EDGE_COORDINATES_10_TO_11_AND_86_TO_88_PERCENT_CAUSED_SYSTEMATIC_HORIZONTAL_CLIPPING;_BOTTOM_COORDINATES_UP_TO_95_PERCENT_ALSO_UNSAFE
+      remediation: CLAMP_NODE_CENTERS_TO_SAFE_XY_BOUNDS_USE_BORDER_BOX_22_PERCENT_WIDTH_AND_ROUTE_EDGES_THROUGH_NORMALIZED_NODE_COORDINATES
+      remediation_site_head: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
+      status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_PIXEL_PEDAGOGY_REVIEW
   scope_note: >-
-    The deterministic gate had been aligned to a four-card mobile fallback and could therefore pass
-    a representation that still collapsed topology into sequential summaries. This run replaced that
-    fallback for all six chapters with distinct directed relationship graphs and changed the browser
-    gate to reject legacy card steps while requiring chapter-specific node/edge counts, direction,
-    localized relationship text, responsive bounds and reduced-motion behavior. P1 remains open until
-    the exact remediation is rendered and inspected; no PIXEL/PEDAGOGY promotion is inferred from source.
+    Current-head deterministic CI reached the native directed graphs and failed chapter 1 in both the
+    focused Series 4 gate and broad PR visual review. Exact failure evidence was downloaded and inspected:
+    mobile graph nodes were clipped at the left/right bounds and labels crowded the causal path. The same
+    renderer used 29% content-box nodes while all six contracts place nodes at 10-12% and/or 86-88%, with
+    bottom nodes as low as 95%, so the bounds defect is shared rather than chapter-specific. The repair
+    keeps text size unchanged, narrows boxes without shrinking typography, clamps node centers to safe
+    horizontal/vertical margins, and routes SVG edges through the normalized coordinates. P1 stays open
+    until the repaired exact head is rerendered and all 12 route-locale graphs are manually inspected.
   closed_historical_p1:
     count: 12
     code: VIDEO_REQUIRED_UNDECLARED
@@ -79,16 +93,17 @@ release:
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  current_site_facing_remediation_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
-  current_head_ci:
-    series4_run: 35507550366
-    broad_visual_run: 35507550370
-    status_at_checkpoint: IN_PROGRESS
-  next_action: CONSUME_CURRENT_HEAD_CI_THEN_INSPECT_ALL_12_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
+  current_site_facing_remediation_head: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
+  failed_head_ci:
+    series4_run: 35507625524
+    broad_visual_run: 35507625549
+    result: FAILED_AT_INFERENCE_RELATIONSHIP_GEOMETRY_CH1
+  next_action: CONSUME_FINAL_CURRENT_HEAD_CI_AFTER_LEDGER_COMMIT_THEN_INSPECT_ALL_12_REPAIRED_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
 row_defaults: &row_defaults
-  iteration_count: 4
-  last_changed_site_head: ef765ecb6cb104ac84e8b98145749437d4756aa5
-  last_pixel_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  iteration_count: 5
+  last_changed_site_head: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
+  last_full_pixel_review_head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  latest_shared_failure_evidence_head: 9f741f177175ca8a6e2b0f8c24e3dcc85d1ea506
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -99,16 +114,16 @@ row_defaults: &row_defaults
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects:
     - severity: P1
-      code: INFERENCE_MOBILE_RELATIONSHIP_COLLAPSED_TO_CARD_SUMMARY
-      status: DIRECTED_GRAPH_REMEDIATION_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+      code: INFERENCE_MOBILE_DIRECTED_GRAPH_CLIPPING_AND_BOUNDS
+      status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_EXACT_REMEDIATION_HEAD
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_EXACT_CURRENT_HEAD
   watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_EXACT_BROWSER_MEDIA_GATE
-  evidence_revision: ef765ecb6cb104ac84e8b98145749437d4756aa5
+  evidence_revision: b38ae6a636f90ccc115d88d8f1977623a1caa2ae
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: INSPECT_EXACT_390PX_DIRECTED_GRAPH_RENDER_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
+  next_action: RERENDER_EXACT_REPAIRED_HEAD_INSPECT_390PX_DIRECTED_GRAPH_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
   state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
