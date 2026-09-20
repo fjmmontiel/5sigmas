@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - 'locales/**'
+      - 'discovery/**'
       - 'overrides/**'
       - 'overrides_locale/**'
       - 'hooks/**'
@@ -45,6 +46,9 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -81,8 +85,6 @@ jobs:
             echo "No public MP4 changed; full-catalogue frame review is available on demand."
             exit 0
           fi
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
           python scripts/capture_video_density_review.py "${changed_videos[@]}"
 
       - name: Prepare English locale for combined browser QA
@@ -316,6 +318,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en

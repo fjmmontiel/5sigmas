@@ -6,10 +6,12 @@ on:
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
       - 'locales/**'
+      - 'discovery/**'
       - 'hooks/**'
       - 'overrides/**'
       - 'overrides_locale/**'
       - 'scripts/validate_locale_switching.mjs'
+      - 'scripts/prepare_modelos_r2_ci_media.sh'
       - '.github/workflows/locale-switch-quality.yml'
 
 permissions:
@@ -31,6 +33,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Build Spanish site
         run: mkdocs build --clean --strict

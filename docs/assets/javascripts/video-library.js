@@ -16,9 +16,13 @@
   const parseTimestamp = (value) => {
     if (value === null || value === undefined) return null;
     const text = String(value).trim();
-    if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
+    if (/^\d+(?:\.\d{1,3})?$/.test(text)) {
+      const seconds = Number(text);
+      return Number.isFinite(seconds) ? seconds : null;
+    }
     if (!/^\d{1,2}:\d{2}(?::\d{2})?$/.test(text)) return null;
     const parts = text.split(':').map((item) => Number.parseInt(item, 10));
+    if (parts.slice(1).some((part) => part >= 60)) return null;
     if (parts.length === 2) return (parts[0] * 60) + parts[1];
     return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
   };
@@ -158,7 +162,8 @@
         url.searchParams.set('t', String(seconds));
         window.history.replaceState({}, '', url);
         seek(seconds, { play: true });
-        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        player.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
       });
     }
   };

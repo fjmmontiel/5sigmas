@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-02-en",
+  "locale": "en",
+  "title": "How reasoning models fail",
+  "description": "Sycophancy, shortcut learning, specification gaming and cascading failures: how to detect recurring failure patterns and bound their consequences.",
+  "watch_url": "https://5sigmas.com/en/videos/series/modelos-razonadores/02-fallos/",
+  "article_url": "https://5sigmas.com/en/series/modelos-razonadores/02-fallos/",
+  "video_url": "https://5sigmas.com/en/series/modelos-razonadores/02-fallos.mp4",
+  "poster_url": "https://5sigmas.com/en/series/modelos-razonadores/02-fallos.jpg",
+  "vtt_url": "https://5sigmas.com/en/series/modelos-razonadores/02-fallos.visual-text.vtt",
+  "video_sha256": "3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2",
+  "video_bytes": 5615464,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 108000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/02-fallos.en.json",
+    "text_timing_candidate_git_blob": "b533a18b14d90b8cda0844427a2b8052b8dd0082",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media at every scene boundary and cue samples; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "shortcut",
+      "name": "Right answer, wrong cue.",
+      "start_ms": 0,
+      "end_ms": 19000,
+      "cues": [
+        {"id":"shortcut-01","start_ms":700,"end_ms":6200,"text":"A shortcut learns a superficial correlation that works in evaluation"},
+        {"id":"shortcut-02","start_ms":6200,"end_ms":10900,"text":"and fails when that correlation changes."},
+        {"id":"shortcut-03","start_ms":10900,"end_ms":16900,"text":"The right test keeps the task fixed and breaks the superficial cue."}
+      ],
+      "visual_description": ["An initial evaluation and a test keep the same circular shape while changing the background. The result preserves the relevant rule and marks the shortcut as broken; the video labels this as an illustrative counterfactual, not images or results from the study."]
+    },
+    {
+      "id": "systematic-bias",
+      "name": "The error has a direction.",
+      "start_ms": 19000,
+      "end_ms": 42000,
+      "cues": [
+        {"id":"bias-01","start_ms":19700,"end_ms":24200,"text":"Position, confirmation, authority and sycophancy biases"},
+        {"id":"bias-02","start_ms":24200,"end_ms":28600,"text":"can push answers in a repeatable direction."},
+        {"id":"bias-03","start_ms":28600,"end_ms":34800,"text":"Sharma et al. show that telling a model the user likes or dislikes a text"},
+        {"id":"bias-04","start_ms":34800,"end_ms":39800,"text":"systematically shifts feedback tone relative to baseline across multiple models and domains."}
+      ],
+      "visual_description": ["The same text is evaluated under two frames, “I like it” and “I dislike it”, on a qualitative axis from more critical to more positive. The figure states that visual distance is not a measured effect size."]
+    },
+    {
+      "id": "gaming",
+      "name": "Optimize the proxy. Break the objective.",
+      "start_ms": 42000,
+      "end_ms": 65000,
+      "cues": [
+        {"id":"gaming-01","start_ms":42700,"end_ms":47700,"text":"When an observable metric replaces the real objective,"},
+        {"id":"gaming-02","start_ms":47700,"end_ms":52400,"text":"a model can optimize the metric without solving the task we intended."},
+        {"id":"gaming-03","start_ms":52400,"end_ms":58400,"text":"In Bondarenko et al.'s study, o3 attempted to hack the chess environment"},
+        {"id":"gaming-04","start_ms":58400,"end_ms":63000,"text":"in 88% of runs with the baseline prompt instead of winning by playing better."}
+      ],
+      "visual_description": ["A chessboard separates “win by playing” from the observable proxy “win = true”. The video shows 88% for o3 hacking attempts under the baseline prompt and notes that the percentage belongs to the cited study, not to the illustrative schematic."]
+    },
+    {
+      "id": "propagation",
+      "name": "An early error contaminates the chain.",
+      "start_ms": 65000,
+      "end_ms": 84000,
+      "cues": [
+        {"id":"propagation-01","start_ms":65700,"end_ms":71600,"text":"In a long chain, a false premise can feed several steps that are formally correct"},
+        {"id":"propagation-02","start_ms":71600,"end_ms":75800,"text":"but wrong in substance."},
+        {"id":"propagation-03","start_ms":75800,"end_ms":81900,"text":"Evaluating only the final answer hides that path."}
+      ],
+      "visual_description": ["An exact arithmetic example uses 17 × 6 and decomposes the calculation to 102. A note says it is not an internal model trace; it illustrates how an early premise or step constrains what follows."]
+    },
+    {
+      "id": "verification",
+      "name": "Do not trust a single signal of success.",
+      "start_ms": 84000,
+      "end_ms": 108000,
+      "cues": [
+        {"id":"verification-01","start_ms":84700,"end_ms":90300,"text":"To expose these failures, change the format without changing the task,"},
+        {"id":"verification-02","start_ms":90300,"end_ms":95100,"text":"verify intermediate steps and test out of distribution."},
+        {"id":"verification-03","start_ms":95100,"end_ms":100800,"text":"Multiple sampling adds another signal: when independent answers diverge,"},
+        {"id":"verification-04","start_ms":100800,"end_ms":104800,"text":"variance exposes uncertainty hidden by a single answer."},
+        {"id":"verification-05","start_ms":104800,"end_ms":107600,"text":"Then external verification can block the failure before production."}
+      ],
+      "visual_description": ["An illustrative matrix compares format, steps, samples and out-of-distribution tests. Several answers converge on 102 while other values and question marks represent uncertainty or missing verification; external verification appears before acting."]
+    }
+  ]
+}
