@@ -1,8 +1,9 @@
 {
   "schema_version": 1,
   "recorded_at_utc": "2026-09-20T00:57:29Z",
+  "last_updated_at_utc": "2026-09-20T01:12:27Z",
   "unit": "from-cave-to-agi",
-  "stage": "BASELINE_INVENTORY",
+  "stage": "BASELINE_MEDIA_VERIFIED",
   "branch": "migration/video-golden-from-cave-to-agi",
   "base_main_sha": "11737ad86db9b15b1981af6fef221d7db0b82110",
   "base_main_tree": "c635dd8f1ec88c1891a6fa3fd995724895349208",
@@ -12,28 +13,43 @@
   "review_delivery": "NOT_CREATED",
   "drive_review_package": "NOT_CREATED",
   "gmail_review_request": "NOT_SENT",
+  "visual_identity": {
+    "accent_locked": "#26A69A",
+    "existing_site_ink": "#1F857C",
+    "source": "docs/javascripts/nav-gradient.js@11737ad86db9b15b1981af6fef221d7db0b82110",
+    "note": "Lock existing series accent before migration authoring; no new decorative palette introduced."
+  },
+  "baseline_verification": {
+    "workflow_run": 35480733181,
+    "job": 105997934598,
+    "head_sha": "aef9af3770e08bdde8eb2a6dbfb76db6a3a5e5df",
+    "ffmpeg": "6.1.1-3ubuntu5",
+    "full_decode_pass": 12,
+    "full_decode_fail": 0,
+    "common_profile": {"codec":"h264","width":1920,"height":1080,"pixel_format":"yuv420p","fps":"30/1"}
+  },
   "inventory": {
     "public_horizontal_video_count": 12,
     "locales": {"es": 6, "en": 6},
     "orientation": "horizontal_baseline_only",
     "assets": [
-      {"locale":"es","chapter":"00","path":"docs/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"1cfd1cc9a53bbb2160f4da374750e0584c3239f3","size_bytes":5119976,"consumer":"docs/series/from-cave-to-agi/00_presentacion_serie.md"},
-      {"locale":"es","chapter":"01","path":"docs/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"3b4ff679a324fc35a42d93ff2b63c642cab732c1","size_bytes":5552048,"consumer":"docs/series/from-cave-to-agi/01-representar.md"},
-      {"locale":"es","chapter":"02","path":"docs/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"aed92957a846f7c7c9ca582e0ce5c97c4ba8f4d5","size_bytes":5989810,"consumer":"docs/series/from-cave-to-agi/02-mecanizar.md"},
-      {"locale":"es","chapter":"03","path":"docs/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"6bce9309aebf61f86edf56b10e0b6c468d28c620","size_bytes":5310945,"consumer":"docs/series/from-cave-to-agi/03-aprender.md"},
-      {"locale":"es","chapter":"04","path":"docs/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"cd0bd2064c4e0aec2bd3336aef960c90e4de4125","size_bytes":4767614,"consumer":"docs/series/from-cave-to-agi/04-escalar.md"},
-      {"locale":"es","chapter":"05","path":"docs/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"a84dd677c08b50c30dea6251d419042aedfe2a53","size_bytes":5809323,"consumer":"docs/series/from-cave-to-agi/05-mas-alla.md"},
-      {"locale":"en","chapter":"00","path":"locales/en/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"f1ecf6834c5866155d7346209ecd194f13a3b99c","size_bytes":2172210,"consumer":"locales/en/series/from-cave-to-agi/00_presentacion_serie.md"},
-      {"locale":"en","chapter":"01","path":"locales/en/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"e76ae4362289a613b119b5b9e8159088700a5cf4","size_bytes":2320314,"consumer":"locales/en/series/from-cave-to-agi/01-representar.md"},
-      {"locale":"en","chapter":"02","path":"locales/en/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"bd58bd14ce68dc22642fe745a2a1b1e0e87de8ac","size_bytes":2330834,"consumer":"locales/en/series/from-cave-to-agi/02-mecanizar.md"},
-      {"locale":"en","chapter":"03","path":"locales/en/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"70a4443626eec360aa64105d3fabe378b436e5e2","size_bytes":2313721,"consumer":"locales/en/series/from-cave-to-agi/03-aprender.md"},
-      {"locale":"en","chapter":"04","path":"locales/en/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"f5a5613c4e84d91d163390beb8324fae9be7e61f","size_bytes":2403035,"consumer":"locales/en/series/from-cave-to-agi/04-escalar.md"},
-      {"locale":"en","chapter":"05","path":"locales/en/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"1693ed649705b4e76f92c4e75124622deca341fa","size_bytes":2330658,"consumer":"locales/en/series/from-cave-to-agi/05-mas-alla.md"}
+      {"locale":"es","chapter":"00","path":"docs/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"1cfd1cc9a53bbb2160f4da374750e0584c3239f3","size_bytes":5119976,"sha256":"fe102ab299a762514ef3ff4fb10aa713ad00f84a545d6ff9d84f50e11ff5f069","duration_seconds":75.033333,"consumer":"docs/series/from-cave-to-agi/00_presentacion_serie.md"},
+      {"locale":"es","chapter":"01","path":"docs/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"3b4ff679a324fc35a42d93ff2b63c642cab732c1","size_bytes":5552048,"sha256":"849c39ba353db42d940d712bdd0ac9477759eed812bd71c5da0f91ff227b4799","duration_seconds":81.733333,"consumer":"docs/series/from-cave-to-agi/01-representar.md"},
+      {"locale":"es","chapter":"02","path":"docs/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"aed92957a846f7c7c9ca582e0ce5c97c4ba8f4d5","size_bytes":5989810,"sha256":"5bbf0c170b60e30c19f78c9593e5c369cdf0c241be075a5355cb72f78a61b33d","duration_seconds":86.3,"consumer":"docs/series/from-cave-to-agi/02-mecanizar.md"},
+      {"locale":"es","chapter":"03","path":"docs/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"6bce9309aebf61f86edf56b10e0b6c468d28c620","size_bytes":5310945,"sha256":"80d75ee67f3c3781be6e28aab3e4cb4fcf48a8c3ac43cde80431c0a8fe5881a2","duration_seconds":75.033333,"consumer":"docs/series/from-cave-to-agi/03-aprender.md"},
+      {"locale":"es","chapter":"04","path":"docs/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"cd0bd2064c4e0aec2bd3336aef960c90e4de4125","size_bytes":4767614,"sha256":"ab71ebd885fe342d6a4615a634248218edbe2d1dc18f7d0847f6cc0fc6409476","duration_seconds":68.6,"consumer":"docs/series/from-cave-to-agi/04-escalar.md"},
+      {"locale":"es","chapter":"05","path":"docs/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"a84dd677c08b50c30dea6251d419042aedfe2a53","size_bytes":5809323,"sha256":"4f73ab305ad13c50e95bc2731d08c4ac6c1e3bcc131e8400c13fbb796dce9b79","duration_seconds":84.9,"consumer":"docs/series/from-cave-to-agi/05-mas-alla.md"},
+      {"locale":"en","chapter":"00","path":"locales/en/series/from-cave-to-agi/00_presentacion_serie.mp4","git_blob_sha":"f1ecf6834c5866155d7346209ecd194f13a3b99c","size_bytes":2172210,"sha256":"27f985286a1889eaeea4b37277d88c87dd6d9fad769f816c86cffd811bdfc208","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/00_presentacion_serie.md"},
+      {"locale":"en","chapter":"01","path":"locales/en/series/from-cave-to-agi/01-representar.mp4","git_blob_sha":"e76ae4362289a613b119b5b9e8159088700a5cf4","size_bytes":2320314,"sha256":"5a7cef5b7bdea9e5152d4e93cf04db4acc915a65ff15316d22bd92431e241822","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/01-representar.md"},
+      {"locale":"en","chapter":"02","path":"locales/en/series/from-cave-to-agi/02-mecanizar.mp4","git_blob_sha":"bd58bd14ce68dc22642fe745a2a1b1e0e87de8ac","size_bytes":2330834,"sha256":"7498a6c0df9ababb2bfc9df01e720449b2dc9ec093d52a3978bd4c1ab1a08830","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/02-mecanizar.md"},
+      {"locale":"en","chapter":"03","path":"locales/en/series/from-cave-to-agi/03-aprender.mp4","git_blob_sha":"70a4443626eec360aa64105d3fabe378b436e5e2","size_bytes":2313721,"sha256":"d9babe458325509c27d625c1498ac25afc6cbb75d46094ab2deea76089235190","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/03-aprender.md"},
+      {"locale":"en","chapter":"04","path":"locales/en/series/from-cave-to-agi/04-escalar.mp4","git_blob_sha":"f5a5613c4e84d91d163390beb8324fae9be7e61f","size_bytes":2403035,"sha256":"d8dd5a7ba5e99f3ebb847c0fd87e1e1aba2dd49d1c05541c517c39b569745d91","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/04-escalar.md"},
+      {"locale":"en","chapter":"05","path":"locales/en/series/from-cave-to-agi/05-mas-alla.mp4","git_blob_sha":"1693ed649705b4e76f92c4e75124622deca341fa","size_bytes":2330658,"sha256":"17aae84a1932a3ad1efc8d7ec915e999acce0e9967ac5f8d8aeab316837636db","duration_seconds":63.0,"consumer":"locales/en/series/from-cave-to-agi/05-mas-alla.md"}
     ]
   },
   "current_gates": {
     "baseline_inventory": "PASS",
-    "baseline_full_decode": "NOT_VERIFIED",
+    "baseline_full_decode": "PASS",
     "source_spec_binding": "NOT_VERIFIED",
     "native_vertical": "NOT_IMPLEMENTED",
     "es_en_parity": "NOT_VERIFIED",
@@ -41,5 +57,5 @@
     "whole_series_encoded_review": "NOT_VERIFIED",
     "site_integration_current_main": "BASELINE_PRESENT_ONLY"
   },
-  "next_action": "Run a fail-closed full-decode/media-profile baseline check for all 12 existing public MP4s, then inspect the six ES/EN articles and existing visual/source mechanisms before authoring the deterministic H/V migration spec. Do not open the final PR or create a Drive review package until the complete migrated block is review-ready."
+  "next_action": "Inspect the six ES/EN article/source pairs and existing visual mechanisms, bind claims and scene concepts, then author the deterministic H/V migration spec using the locked existing accent. Baseline media integrity is now verified; do not treat baseline PASS as GOLDEN migration certification. Do not open the final PR or create a Drive review package until the complete migrated block is review-ready."
 }
