@@ -30,7 +30,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        chapter: ['00-foundations', '01-learning', '02-genai', '03-evaluation', '04-agi']
+        chapter: ['00_presentacion_serie', '01-que-es-ia', '02-que-es-ia-generativa', '03-ia-vs-ia-generativa', '04-agi']
         locale: [es, en]
         orientation: [horizontal, vertical]
     steps:
