@@ -31,12 +31,6 @@ extra:
   global_site_root: https://5sigmas.com/
   generator: false
   video_watch_pages: true
-  locale_video_pages:
-    series/modelos-razonadores/03-test-time-compute.md:
-      video: 03-test-time-compute.mp4
-      video_poster: 03-test-time-compute.jpg
-      video_title: Test-Time Compute
-      video_duration: PT1M0S
   alternate:
     - name: Español
       link: /
