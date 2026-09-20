@@ -31,6 +31,42 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Regenerate Modelos R2 posters from exact approved MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          for root in docs/series/modelos-razonadores locales/en/series/modelos-razonadores; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+              test -s "$poster"
+            done
+          done
+
+      - name: Verify exact approved Modelos R2 MP4 bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/modelos-r2.sha256 <<'EOF'
+          e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6  docs/series/modelos-razonadores/00_presentacion_serie.mp4
+          a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807  docs/series/modelos-razonadores/01-que-es-razonar.mp4
+          d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed  docs/series/modelos-razonadores/02-fallos.mp4
+          e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710  docs/series/modelos-razonadores/03-test-time-compute.mp4
+          1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f  docs/series/modelos-razonadores/04-latencia-streaming.mp4
+          f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381  docs/series/modelos-razonadores/05-riesgos.mp4
+          f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730  locales/en/series/modelos-razonadores/00_presentacion_serie.mp4
+          b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc  locales/en/series/modelos-razonadores/01-que-es-razonar.mp4
+          3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2  locales/en/series/modelos-razonadores/02-fallos.mp4
+          27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400  locales/en/series/modelos-razonadores/03-test-time-compute.mp4
+          3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0  locales/en/series/modelos-razonadores/04-latencia-streaming.mp4
+          ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec  locales/en/series/modelos-razonadores/05-riesgos.mp4
+          EOF
+          sha256sum -c /tmp/modelos-r2.sha256
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -66,44 +102,75 @@ jobs:
       - name: Test SEO audit crawler
         run: python -m unittest scripts.tests.test_audit_seo_site
 
-      - name: Restore reviewed English TTC media
-        id: en-ttc-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .localized-media/en/ttc-v1
-          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+      # The historical English TTC cache/staging override was removed.
+      # It silently replaced the current approved Modelos R2 chapter 03 media
+      # after the locale build. Current locale source bytes are authoritative.
 
-      - name: Seed reviewed English TTC media from verified PR artifact
-        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: english-ttc-reviewed-seed
-          path: .localized-media/en/ttc-v1
-          run-id: 31689108864
-          github-token: ${{ github.token }}
-
-      - name: Verify and stage reviewed English TTC media
+      - name: Create exact Modelos R2 production manifest
+        env:
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
         shell: bash
         run: |
           set -euo pipefail
-          media='.localized-media/en/ttc-v1'
-          mp4="$media/03-test-time-compute.mp4"
-          jpg="$media/03-test-time-compute.jpg"
-          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
-          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
-          test "$(stat -c %s "$mp4")" = '4337214'
-          test "$(stat -c %s "$jpg")" = '105949'
-          target='site/en/series/modelos-razonadores'
-          mkdir -p "$target"
-          cp "$mp4" "$target/03-test-time-compute.mp4"
-          cp "$jpg" "$target/03-test-time-compute.jpg"
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
 
-      - name: Save reviewed English TTC media cache
-        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: .localized-media/en/ttc-v1
-          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+          site = Path("site")
+          frozen = {
+              "series/modelos-razonadores/00_presentacion_serie.mp4": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+              "series/modelos-razonadores/01-que-es-razonar.mp4": "a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807",
+              "series/modelos-razonadores/02-fallos.mp4": "d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed",
+              "series/modelos-razonadores/03-test-time-compute.mp4": "e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710",
+              "series/modelos-razonadores/04-latencia-streaming.mp4": "1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f",
+              "series/modelos-razonadores/05-riesgos.mp4": "f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381",
+              "en/series/modelos-razonadores/00_presentacion_serie.mp4": "f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730",
+              "en/series/modelos-razonadores/01-que-es-razonar.mp4": "b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc",
+              "en/series/modelos-razonadores/02-fallos.mp4": "3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2",
+              "en/series/modelos-razonadores/03-test-time-compute.mp4": "27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400",
+              "en/series/modelos-razonadores/04-latencia-streaming.mp4": "3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0",
+              "en/series/modelos-razonadores/05-riesgos.mp4": "ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec",
+          }
+
+          objects = []
+          for locale_prefix in ("", "en/"):
+              root = site / locale_prefix / "series/modelos-razonadores"
+              for suffix, kind in ((".mp4", "video"), (".jpg", "poster")):
+                  paths = sorted(root.glob(f"*{suffix}"))
+                  if len(paths) != 6:
+                      raise SystemExit(f"expected 6 {kind} files under {root}, found {len(paths)}")
+                  for path in paths:
+                      rel = path.relative_to(site).as_posix()
+                      digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                      if kind == "video":
+                          expected = frozen.get(rel)
+                          if not expected:
+                              raise SystemExit(f"unexpected Modelos video path {rel}")
+                          if digest != expected:
+                              raise SystemExit(f"built media mismatch {rel}: {digest} != {expected}")
+                      objects.append({
+                          "path": rel,
+                          "kind": kind,
+                          "bytes": path.stat().st_size,
+                          "sha256": digest,
+                      })
+
+          if len(objects) != 24:
+              raise SystemExit(f"expected 24 Modelos release objects, found {len(objects)}")
+          manifest = {
+              "schema_version": 1,
+              "revision": os.environ["GITHUB_SHA"],
+              "media_origin": os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").rstrip("/"),
+              "objects": objects,
+          }
+          Path("site/modelos-r2-release.json").write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(manifest, ensure_ascii=False))
+          PY
 
       - name: Stamp exact deployed revision
         shell: bash
@@ -136,19 +203,72 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Wait for English TTC deployment
+      - name: Wait for exact Modelos R2 deployment
         shell: bash
         run: |
-          for attempt in {1..18}; do
-            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/modelos-razonadores/03-test-time-compute/ || true)"
-            if grep -q 'PRMs vs ORMs: two ways to teach reasoning' <<< "$body"; then
-              echo "Live English TTC release is serving the expected mirror."
+          set -euo pipefail
+          for attempt in {1..24}; do
+            manifest="$(curl --fail --silent --show-error --location "https://5sigmas.com/modelos-r2-release.json?rev=$GITHUB_SHA" || true)"
+            if grep -q "\"revision\": \"$GITHUB_SHA\"" <<< "$manifest"; then
+              echo "Exact Modelos R2 release manifest is live."
               exit 0
             fi
             sleep 5
           done
-          echo "English TTC production did not become ready within the validation window."
+          echo "Exact Modelos R2 production manifest did not become live within the validation window."
           exit 1
+
+      - name: Verify exact live Modelos R2 MP4 and poster bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const crypto = require('node:crypto');
+
+          const revision = process.env.GITHUB_SHA;
+          const manifestUrl = `https://5sigmas.com/modelos-r2-release.json?rev=${revision}`;
+          const frozen = new Map([
+            ["series/modelos-razonadores/00_presentacion_serie.mp4","e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6"],
+            ["series/modelos-razonadores/01-que-es-razonar.mp4","a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807"],
+            ["series/modelos-razonadores/02-fallos.mp4","d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed"],
+            ["series/modelos-razonadores/03-test-time-compute.mp4","e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710"],
+            ["series/modelos-razonadores/04-latencia-streaming.mp4","1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f"],
+            ["series/modelos-razonadores/05-riesgos.mp4","f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381"],
+            ["en/series/modelos-razonadores/00_presentacion_serie.mp4","f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730"],
+            ["en/series/modelos-razonadores/01-que-es-razonar.mp4","b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc"],
+            ["en/series/modelos-razonadores/02-fallos.mp4","3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2"],
+            ["en/series/modelos-razonadores/03-test-time-compute.mp4","27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400"],
+            ["en/series/modelos-razonadores/04-latencia-streaming.mp4","3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0"],
+            ["en/series/modelos-razonadores/05-riesgos.mp4","ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec"],
+          ]);
+
+          const manifestResponse = await fetch(manifestUrl, { cache: 'no-store' });
+          if (!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
+          const manifest = await manifestResponse.json();
+          if (manifest.revision !== revision) throw new Error(`wrong live revision ${manifest.revision}`);
+          if (!Array.isArray(manifest.objects) || manifest.objects.length !== 24) {
+            throw new Error(`expected 24 release objects, found ${manifest.objects?.length}`);
+          }
+          const origin = manifest.media_origin || 'https://5sigmas.com';
+
+          for (const object of manifest.objects) {
+            if (object.kind === 'video') {
+              const expected = frozen.get(object.path);
+              if (!expected || expected !== object.sha256) {
+                throw new Error(`manifest video not frozen-approved: ${object.path}`);
+              }
+            }
+            const url = `${origin}/${object.path}?rev=${revision}`;
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`${object.path}: HTTP ${response.status}`);
+            const bytes = Buffer.from(await response.arrayBuffer());
+            const digest = crypto.createHash('sha256').update(bytes).digest('hex');
+            if (digest !== object.sha256) {
+              throw new Error(`${object.path}: live sha256 ${digest} != expected ${object.sha256}`);
+            }
+            console.log(`verified live ${object.kind}: ${object.path} sha256=${digest}`);
+          }
+          NODE
 
       - name: Install Playwright
         run: |
