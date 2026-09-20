@@ -3,170 +3,134 @@
 
   const CONTRACTS = [
     {
-      selector: '.s5v-inference-phases',
-      scroll: '.s5v-inference-phases__scroll',
-      key: '01',
-      es: {
-        kicker: 'Ruta móvil · latencia por fases',
-        title: 'La primera salida y el ritmo posterior nacen en fronteras distintas',
-        steps: [
-          ['Petición + cola', 'Red, gateway, admisión y espera ya consumen parte de TTFT antes de que el modelo ejecute prefill.'],
-          ['Prefill', 'Procesa L_in, construye el estado KV reutilizable y prepara la primera salida; prefill no equivale por sí solo a TTFT.'],
-          ['Primera salida', 'La frontera que termina TTFT depende del harness: primer token/chunk observado o primera salida visible no razonadora.'],
-          ['Decode', 'Reutiliza y extiende KV token a token. TPOT/ITL describen esta cadencia; no son throughput agregado.'],
-        ],
-        relation: 'Concurrencia → scheduler/batching → throughput o goodput, pero también puede mover cola, TTFT y TPOT.',
+      key: '01', selector: '.s5v-inference-phases', scroll: '.s5v-inference-phases__scroll', height: 356,
+      title: {
+        es: 'TTFT y TPOT nacen en fronteras distintas del mismo pipeline',
+        en: 'TTFT and TPOT come from different boundaries in the same pipeline',
       },
-      en: {
-        kicker: 'Mobile path · latency by phase',
-        title: 'First output and the later token cadence come from different boundaries',
-        steps: [
-          ['Request + queue', 'Network, gateway, admission, and waiting already consume TTFT before model prefill starts.'],
-          ['Prefill', 'Processes L_in, builds reusable KV state, and prepares first output; prefill alone is not TTFT.'],
-          ['First output', 'The boundary that ends TTFT depends on the harness: first observed token/chunk or first visible non-reasoning output.'],
-          ['Decode', 'Reuses and extends KV token by token. TPOT/ITL describe this cadence; they are not aggregate throughput.'],
-        ],
-        relation: 'Concurrency → scheduler/batching → throughput or goodput, while queueing, TTFT, and TPOT can move too.',
+      relation: {
+        es: 'La petición atraviesa cola y prefill antes de la primera salida; decode reutiliza y extiende KV. La concurrencia actúa sobre scheduler/batching y puede subir goodput a costa de cola, TTFT o TPOT.',
+        en: 'The request crosses queueing and prefill before first output; decode reuses and extends KV. Concurrency acts through scheduler/batching and can raise goodput while worsening queueing, TTFT, or TPOT.',
       },
+      nodes: [
+        ['request', 10, 12, 'Petición', 'Request', 'input'], ['queue', 34, 12, 'Cola', 'Queue', 'decision'],
+        ['prefill', 61, 12, 'Prefill', 'Prefill', 'compute'], ['first', 87, 28, '1ª salida', '1st output', 'outcome'],
+        ['decode', 72, 52, 'Decode', 'Decode', 'compute'], ['kv', 39, 52, 'Estado KV', 'KV state', 'state'],
+        ['concurrency', 11, 82, 'Concurrencia', 'Concurrency', 'input'], ['scheduler', 43, 82, 'Scheduler / batching', 'Scheduler / batching', 'decision'],
+        ['goodput', 80, 82, 'Throughput / goodput', 'Throughput / goodput', 'outcome'],
+      ],
+      edges: [
+        ['e1', 'request', 'queue', [], 22, 7, '', ''], ['e2', 'queue', 'prefill', [], 48, 7, '', ''],
+        ['e3', 'prefill', 'first', [], 76, 15, 'TTFT', 'TTFT'], ['e4', 'first', 'decode', [], 87, 43, 'ritmo', 'cadence'],
+        ['e5', 'prefill', 'kv', [[58, 35]], 49, 39, 'crea', 'builds'], ['e6', 'kv', 'decode', [], 55, 57, 'reutiliza', 'reuses'],
+        ['e7', 'concurrency', 'scheduler', [], 27, 77, '', ''], ['e8', 'scheduler', 'goodput', [], 61, 77, 'capacidad', 'capacity'],
+        ['e9', 'scheduler', 'queue', [[43, 68], [34, 68], [34, 30]], 25, 61, 'presión', 'pressure'],
+      ],
     },
     {
-      selector: '.s5v-kv-paging',
-      scroll: '.s5v-kv-paging__scroll',
-      key: '02',
-      es: {
-        kicker: 'Ruta móvil · estado y memoria',
-        title: 'KV lógico, bloques físicos y batching continuo son capas diferentes',
-        steps: [
-          ['Estado KV por secuencia', 'Cada petición activa acumula claves y valores que crecen con los tokens procesados; el tamaño lógico no dicta una dirección física contigua.'],
-          ['Bloques / páginas', 'PagedAttention desacopla el KV lógico de su colocación física para reducir fragmentación y permitir asignación no contigua.'],
-          ['Scheduler continuo', 'Cuando una petición termina o libera capacidad, otra puede entrar sin esperar a que finalice un batch estático completo.'],
-          ['Jerarquía de memoria', 'GPU, host y cualquier mecanismo de offload añaden capacidad y coste de movimiento; la política decide qué estado permanece cerca del cómputo.'],
-        ],
-        relation: 'Más memoria utilizable → mayor batch posible, pero paging, scheduling y movimiento de estado determinan si esa capacidad se convierte en throughput sin romper latencia.',
+      key: '02', selector: '.s5v-kv-paging', scroll: '.s5v-kv-paging__scroll', height: 370,
+      title: { es: 'KV lógico, bloques físicos y batching continuo forman un circuito de asignación', en: 'Logical KV, physical blocks, and continuous batching form an allocation loop' },
+      relation: {
+        es: 'La tabla desacopla el KV lógico de los bloques físicos. Cuando una petición libera páginas, el scheduler puede admitir otra; host↔GPU añade capacidad pero también movimiento de estado.',
+        en: 'The block table decouples logical KV from physical blocks. When a request releases pages, the scheduler can admit another; host↔GPU adds capacity but also state-movement cost.',
       },
-      en: {
-        kicker: 'Mobile path · state and memory',
-        title: 'Logical KV, physical blocks, and continuous batching are different layers',
-        steps: [
-          ['Per-sequence KV state', 'Each active request accumulates keys and values as tokens are processed; logical size does not require contiguous physical placement.'],
-          ['Blocks / pages', 'PagedAttention decouples logical KV from physical placement to reduce fragmentation and permit non-contiguous allocation.'],
-          ['Continuous scheduler', 'When a request finishes or frees capacity, another can enter without waiting for an entire static batch to complete.'],
-          ['Memory hierarchy', 'GPU, host, and offload mechanisms trade capacity for movement cost; policy decides which state stays close to compute.'],
-        ],
-        relation: 'More usable memory → larger possible batches, but paging, scheduling, and state movement decide whether that capacity becomes throughput without breaking latency.',
-      },
+      nodes: [
+        ['a', 11, 12, 'Req A', 'Req A', 'input'], ['b', 11, 32, 'Req B', 'Req B', 'input'], ['table', 42, 22, 'Block table', 'Block table', 'state'],
+        ['gpu', 76, 22, 'Pool GPU', 'GPU pool', 'state'], ['finish', 76, 49, 'Fin / release', 'Finish / release', 'event'], ['free', 48, 49, 'Bloques libres', 'Free blocks', 'state'],
+        ['waiting', 12, 78, 'Req C espera', 'Req C waits', 'input'], ['scheduler', 47, 78, 'Scheduler', 'Scheduler', 'decision'], ['admit', 80, 78, 'Admitir C', 'Admit C', 'outcome'],
+        ['host', 86, 54, 'Host tier', 'Host tier', 'state'],
+      ],
+      edges: [
+        ['e1', 'a', 'table', [], 25, 10, '', ''], ['e2', 'b', 'table', [], 25, 33, '', ''], ['e3', 'table', 'gpu', [], 59, 16, 'mapa', 'maps'],
+        ['e4', 'gpu', 'finish', [], 82, 37, '', ''], ['e5', 'finish', 'free', [], 62, 52, 'libera', 'releases'],
+        ['e6', 'free', 'scheduler', [], 47, 64, 'capacidad', 'capacity'], ['e7', 'waiting', 'scheduler', [], 29, 73, '', ''],
+        ['e8', 'scheduler', 'admit', [], 64, 73, 'admite', 'admits'], ['e9', 'admit', 'table', [[86, 66], [64, 66], [64, 36]], 74, 61, 'asigna', 'allocates'],
+        ['e10', 'gpu', 'host', [], 84, 38, 'offload ⇄', 'offload ⇄'],
+      ],
     },
     {
-      selector: '.s5v-quant-parallel',
-      scroll: '.s5v-quant-parallel__scroll',
-      key: '03',
-      es: {
-        kicker: 'Ruta móvil · representación y placement',
-        title: 'Cuantizar bytes y repartir el modelo resuelven cuellos distintos',
-        steps: [
-          ['Representación', 'Weights, activaciones y KV cache pueden usar precisiones diferentes; cuantizar una de ellas no implica cuantizar las demás.'],
-          ['Kernel + hardware', 'Menos bits ayudan sólo si el kernel y el acelerador ejecutan ese formato de forma eficiente y la pérdida de calidad es aceptable.'],
-          ['Placement', 'Data parallel replica modelos para peticiones distintas; tensor/pipeline parallel reparten trabajo del mismo modelo entre dispositivos.'],
-          ['Comunicación', 'Más ranks pueden reducir memoria por GPU, pero añaden collectives, sincronización y tráfico de interconexión.'],
-        ],
-        relation: 'La optimización correcta minimiza bytes y trabajo local sin convertir comunicación, sincronización o calidad en el nuevo cuello de botella.',
+      key: '03', selector: '.s5v-quant-parallel', scroll: '.s5v-quant-parallel__scroll', height: 360,
+      title: { es: 'Cuantización y paralelismo atacan cuellos distintos y convergen en el mismo resultado', en: 'Quantization and parallelism attack different bottlenecks and converge on one outcome' },
+      relation: {
+        es: 'La lane superior reduce representación y trabajo local; la inferior reparte el modelo y añade comunicación. Ambas convergen en latencia/memoria/calidad: optimizar una puede convertir la otra en el nuevo cuello.',
+        en: 'The upper lane reduces representation and local work; the lower lane splits the model and adds communication. Both converge on latency/memory/quality, so optimizing one can make the other the new bottleneck.',
       },
-      en: {
-        kicker: 'Mobile path · representation and placement',
-        title: 'Reducing bytes and splitting the model solve different bottlenecks',
-        steps: [
-          ['Representation', 'Weights, activations, and KV cache can use different precisions; quantizing one does not imply quantizing the others.'],
-          ['Kernel + hardware', 'Fewer bits help only when kernels and accelerators execute that format efficiently and the quality loss is acceptable.'],
-          ['Placement', 'Data parallel replicates models for different requests; tensor/pipeline parallel split one model’s work across devices.'],
-          ['Communication', 'More ranks can reduce memory per GPU, but add collectives, synchronization, and interconnect traffic.'],
-        ],
-        relation: 'The useful optimum cuts bytes and local work without turning communication, synchronization, or quality into the new bottleneck.',
-      },
+      nodes: [
+        ['bytes', 11, 15, 'Weights / act / KV', 'Weights / act / KV', 'input'], ['quant', 39, 15, 'Precisión', 'Precision', 'decision'], ['kernel', 67, 15, 'Kernel + HW', 'Kernel + HW', 'compute'], ['local', 88, 31, 'Bytes / trabajo local', 'Bytes / local work', 'state'],
+        ['model', 11, 60, 'Modelo', 'Model', 'input'], ['placement', 39, 60, 'DP / TP / PP / EP / CP', 'DP / TP / PP / EP / CP', 'decision'], ['comms', 67, 60, 'Collectives / tráfico', 'Collectives / traffic', 'compute'],
+        ['outcome', 61, 88, 'Latencia · memoria · calidad', 'Latency · memory · quality', 'outcome'], ['topology', 88, 60, 'Interconnect + runtime', 'Interconnect + runtime', 'state'],
+      ],
+      edges: [
+        ['e1', 'bytes', 'quant', [], 25, 10, '', ''], ['e2', 'quant', 'kernel', [], 53, 10, '', ''], ['e3', 'kernel', 'local', [], 80, 18, 'ejecuta', 'executes'],
+        ['e4', 'model', 'placement', [], 25, 55, '', ''], ['e5', 'placement', 'comms', [], 53, 55, 'reparte', 'splits'], ['e6', 'comms', 'topology', [], 79, 55, 'depende', 'depends'],
+        ['e7', 'local', 'outcome', [[82, 68]], 77, 70, 'trade-off', 'trade-off'], ['e8', 'topology', 'outcome', [[82, 82]], 77, 84, 'trade-off', 'trade-off'],
+      ],
     },
     {
-      selector: '.s5v-reuse-spec',
-      scroll: '.s5v-reuse-spec__scroll',
-      key: '04',
-      es: {
-        kicker: 'Ruta móvil · reutilizar ≠ especular',
-        title: 'Prefix caching salta trabajo ya validado; speculative decoding crea trabajo provisional',
-        steps: [
-          ['Prefix compatible', 'Un hit sólo reutiliza estado KV si identidad, tokens y contexto relevante son compatibles con la entrada actual.'],
-          ['Reutilización', 'El estado ya verificado evita recomputar parte del prefill; no crea tokens nuevos ni elimina el coste de decode restante.'],
-          ['Draft provisional', 'Speculative decoding propone varios candidatos con un draft model o mecanismo más barato.'],
-          ['Target verifica', 'Sólo el prefijo aceptado por el modelo target entra en el estado comprometido; lo rechazado se descarta y debe recalcularse.'],
-        ],
-        relation: 'Ambos mecanismos consumen KV/scheduler capacity. Su ganancia end-to-end depende del workload, hit/acceptance rate y de no desplazar trabajo más valioso.',
+      key: '04', selector: '.s5v-reuse-spec', scroll: '.s5v-reuse-spec__scroll', height: 390,
+      title: { es: 'Reutilizar estado validado y especular tokens son dos ramas diferentes', en: 'Reusing validated state and speculating tokens are two different branches' },
+      relation: {
+        es: 'Prefix caching bifurca en hit/miss y sólo evita recomputar prefill compatible. Speculative decoding bifurca en accept/reject y sólo compromete lo verificado por target; reject vuelve al camino de corrección.',
+        en: 'Prefix caching branches on hit/miss and only avoids recomputing compatible prefill. Speculative decoding branches on accept/reject and only commits target-verified tokens; rejection loops back through correction.',
       },
-      en: {
-        kicker: 'Mobile path · reuse ≠ speculation',
-        title: 'Prefix caching skips already validated work; speculative decoding creates provisional work',
-        steps: [
-          ['Compatible prefix', 'A hit reuses KV state only when identity, tokens, and relevant context are compatible with the current input.'],
-          ['Reuse', 'Previously verified state avoids recomputing part of prefill; it does not create new tokens or remove the remaining decode cost.'],
-          ['Provisional draft', 'Speculative decoding proposes several candidates with a cheaper draft model or mechanism.'],
-          ['Target verifies', 'Only the prefix accepted by the target model enters committed state; rejected candidates are discarded and recomputed.'],
-        ],
-        relation: 'Both mechanisms consume KV/scheduler capacity. End-to-end gain depends on workload, hit/acceptance rate, and not displacing more valuable work.',
-      },
+      nodes: [
+        ['prefix', 11, 13, 'Prefix', 'Prefix', 'input'], ['lookup', 38, 13, 'Lookup', 'Lookup', 'decision'], ['hit', 66, 8, 'HIT', 'HIT', 'outcome'], ['reuse', 88, 8, 'Reusar KV', 'Reuse KV', 'state'],
+        ['miss', 66, 29, 'MISS', 'MISS', 'event'], ['prefill', 88, 29, 'Prefill completo', 'Full prefill', 'compute'],
+        ['draft', 11, 59, 'Draft', 'Draft', 'compute'], ['verify', 38, 59, 'Target verify', 'Target verify', 'decision'], ['accept', 65, 51, 'ACCEPT', 'ACCEPT', 'outcome'], ['commit', 88, 51, 'Commit', 'Commit', 'state'],
+        ['reject', 65, 72, 'REJECT', 'REJECT', 'event'], ['correct', 88, 72, 'Rewind / corregir', 'Rewind / correct', 'compute'], ['pressure', 49, 91, 'KV + scheduler pressure', 'KV + scheduler pressure', 'state'],
+      ],
+      edges: [
+        ['e1', 'prefix', 'lookup', [], 24, 8, '', ''], ['e2', 'lookup', 'hit', [], 52, 5, 'hit', 'hit'], ['e3', 'hit', 'reuse', [], 77, 3, '', ''],
+        ['e4', 'lookup', 'miss', [], 52, 24, 'miss', 'miss'], ['e5', 'miss', 'prefill', [], 77, 24, '', ''],
+        ['e6', 'draft', 'verify', [], 24, 54, '', ''], ['e7', 'verify', 'accept', [], 52, 49, 'acepta', 'accepts'], ['e8', 'accept', 'commit', [], 77, 46, '', ''],
+        ['e9', 'verify', 'reject', [], 52, 69, 'rechaza', 'rejects'], ['e10', 'reject', 'correct', [], 77, 67, '', ''], ['e11', 'correct', 'verify', [[88, 84], [38, 84]], 61, 84, 'reverifica ↺', 'reverify ↺'],
+        ['e12', 'reuse', 'pressure', [[88, 42], [70, 91]], 75, 91, '', ''], ['e13', 'commit', 'pressure', [[88, 82], [66, 91]], 80, 88, '', ''],
+      ],
     },
     {
-      selector: '.s5v-routing-policy',
-      scroll: '.s5v-routing-policy__scroll',
-      key: '05',
-      es: {
-        kicker: 'Ruta móvil · cuatro decisiones',
-        title: 'Cache, routing, placement y fallback no son la misma capa',
-        steps: [
-          ['Filtrar restricciones', 'Capacidades, política, región, contexto y SLO eliminan opciones inválidas antes de optimizar coste o latencia.'],
-          ['Cache de respuesta', 'Un hit compatible puede cerrar la petición sin inferencia; un miss activa la política de selección de modelo.'],
-          ['Routing → placement', 'El router elige una clase/modelo; después el scheduler coloca la petición en un worker según carga, KV locality y capacidad.'],
-          ['Fallo → fallback', 'Un fallo no autoriza cualquier alternativa: deben seguir cumpliéndose presupuesto, compatibilidad y semántica de la petición.'],
-        ],
-        relation: 'La telemetría debe conservar decisión, cache, intento y outcome para aprender de alternativas reales, no sólo del modelo finalmente elegido.',
+      key: '05', selector: '.s5v-routing-policy', scroll: '.s5v-routing-policy__scroll', height: 405,
+      title: { es: 'Cache, routing, placement y fallback forman un árbol de decisión con feedback', en: 'Caching, routing, placement, and fallback form a decision tree with feedback' },
+      relation: {
+        es: 'Primero se filtran restricciones; un cache hit termina sin inferencia. Un miss pasa por routing y placement. El fallo abre fallback sólo si sigue siendo compatible, y telemetry cierra el loop hacia la política.',
+        en: 'Constraints are filtered first; a cache hit ends without inference. A miss goes through routing and placement. Failure opens fallback only when still compatible, and telemetry closes the loop back to policy.',
       },
-      en: {
-        kicker: 'Mobile path · four decisions',
-        title: 'Caching, routing, placement, and fallback are not the same layer',
-        steps: [
-          ['Filter constraints', 'Capabilities, policy, region, context, and SLO remove invalid options before optimizing cost or latency.'],
-          ['Response cache', 'A compatible hit can close the request without inference; a miss activates model-selection policy.'],
-          ['Routing → placement', 'The router chooses a class/model; then the scheduler places the request on a worker using load, KV locality, and capacity.'],
-          ['Failure → fallback', 'A failure does not authorize any alternative: budget, compatibility, and request semantics must still hold.'],
-        ],
-        relation: 'Telemetry must preserve decision, cache, attempt, and outcome so policy learns from real alternatives, not only the model ultimately selected.',
-      },
+      nodes: [
+        ['request', 10, 10, 'Petición', 'Request', 'input'], ['eligible', 34, 10, 'Elegibilidad', 'Eligibility', 'decision'], ['cache', 59, 10, 'Response cache', 'Response cache', 'decision'], ['hit', 86, 8, 'HIT → respuesta', 'HIT → response', 'outcome'],
+        ['router', 59, 38, 'Router', 'Router', 'decision'], ['placement', 84, 38, 'Worker placement', 'Worker placement', 'decision'], ['primary', 84, 60, 'Primary attempt', 'Primary attempt', 'compute'],
+        ['success', 59, 76, 'SUCCESS', 'SUCCESS', 'outcome'], ['fallback', 84, 82, 'Fallback gate', 'Fallback gate', 'decision'], ['alt', 59, 92, 'Fallback model', 'Fallback model', 'compute'],
+        ['telemetry', 29, 76, 'Telemetry', 'Telemetry', 'state'], ['policy', 28, 43, 'Policy update', 'Policy update', 'state'],
+      ],
+      edges: [
+        ['e1', 'request', 'eligible', [], 22, 5, '', ''], ['e2', 'eligible', 'cache', [], 46, 5, 'válida', 'valid'], ['e3', 'cache', 'hit', [], 73, 4, 'hit', 'hit'],
+        ['e4', 'cache', 'router', [], 59, 24, 'miss ↓', 'miss ↓'], ['e5', 'router', 'placement', [], 72, 33, 'elige clase', 'selects class'], ['e6', 'placement', 'primary', [], 86, 50, '', ''],
+        ['e7', 'primary', 'success', [], 72, 67, 'ok', 'ok'], ['e8', 'primary', 'fallback', [], 86, 72, 'fail ↓', 'fail ↓'], ['e9', 'fallback', 'alt', [], 72, 87, 'compatible', 'compatible'],
+        ['e10', 'success', 'telemetry', [], 44, 71, '', ''], ['e11', 'alt', 'telemetry', [[45, 92], [29, 84]], 42, 90, '', ''], ['e12', 'telemetry', 'policy', [], 28, 60, 'aprende', 'learns'], ['e13', 'policy', 'router', [], 43, 38, 'feedback', 'feedback'],
+      ],
     },
     {
-      selector: '.s5v-benchmark-boundary',
-      scroll: '.s5v-benchmark-boundary__scroll',
-      key: '06',
-      es: {
-        kicker: 'Ruta móvil · el número nace de una frontera',
-        title: 'Workload, reloj, SLO, energía y hardware deben compartir una frontera declarada',
-        steps: [
-          ['Workload + carga', 'Publica distribución de inputs/outputs, prefijos compartidos, request rate, concurrencia y proceso de llegadas; cambian el régimen del sistema.'],
-          ['Reloj cliente', 'TTFT/TPOT sólo son comparables si se fijan los endpoints temporales y qué salida termina cada intervalo.'],
-          ['Goodput', 'Filtra completions por éxito y por SLO; throughput bruto puede crecer aunque la experiencia incumpla la frontera requerida.'],
-          ['Coste + energía', 'Integra potencia sobre la misma ventana y publica denominadores de coste/energía junto con modelo, hardware, software y topology scope.'],
-        ],
-        relation: 'Un mismo runtime produce cifras distintas al cambiar workload o boundary. Sin denominador y frontera publicados, el benchmark no es reproducible ni comparable.',
+      key: '06', selector: '.s5v-benchmark-boundary', scroll: '.s5v-benchmark-boundary__scroll', height: 390,
+      title: { es: 'Performance, latencia y economía deben medir la misma frontera', en: 'Performance, latency, and economics must measure the same boundary' },
+      relation: {
+        es: 'Workload/SUT, reloj cliente y contabilidad energética son lanes simultáneas. Sólo al converger sobre la misma ventana, éxito/SLO y denominadores se puede reportar goodput, coste/tarea y energía/tarea comparables.',
+        en: 'Workload/SUT, client clock, and energy accounting are simultaneous lanes. Only when they converge on the same window, success/SLO, and denominators can goodput, cost/task, and energy/task be compared.',
       },
-      en: {
-        kicker: 'Mobile path · every number comes from a boundary',
-        title: 'Workload, clock, SLO, energy, and hardware must share a declared measurement boundary',
-        steps: [
-          ['Workload + load process', 'Publish input/output distributions, shared prefixes, request rate, concurrency, and arrival process; they change the system regime.'],
-          ['Client clock', 'TTFT/TPOT are comparable only when temporal endpoints and the output that ends each interval are fixed.'],
-          ['Goodput', 'Filter completions by success and SLO; raw throughput can rise while the required user-facing boundary is violated.'],
-          ['Cost + energy', 'Integrate power over the same window and publish cost/energy denominators with model, hardware, software, and topology scope.'],
-        ],
-        relation: 'The same runtime yields different numbers when workload or boundary changes. Without a published denominator and boundary, the benchmark is not reproducible or comparable.',
-      },
+      nodes: [
+        ['workload', 10, 12, 'Workload + arrivals', 'Workload + arrivals', 'input'], ['sut', 40, 12, 'SUT / queue / service', 'SUT / queue / service', 'compute'], ['response', 72, 12, 'Completions', 'Completions', 'state'],
+        ['clock', 10, 46, 'Client clock', 'Client clock', 'input'], ['latency', 40, 46, 'TTFT / TPOT / E2E', 'TTFT / TPOT / E2E', 'state'], ['goodput', 72, 46, 'Success + SLO → goodput', 'Success + SLO → goodput', 'outcome'],
+        ['power', 10, 78, 'Power meter + cost', 'Power meter + cost', 'input'], ['account', 40, 78, '∫P(t)dt + ledger', '∫P(t)dt + ledger', 'state'], ['denom', 72, 78, 'Cost / energy per task', 'Cost / energy per task', 'outcome'],
+        ['sweep', 20, 95, 'Saturation sweep', 'Saturation sweep', 'decision'], ['report', 88, 95, 'Report + operating region', 'Report + operating region', 'outcome'],
+      ],
+      edges: [
+        ['e1', 'workload', 'sut', [], 25, 7, 'carga', 'load'], ['e2', 'sut', 'response', [], 56, 7, '', ''], ['e3', 'response', 'goodput', [], 74, 29, 'filtra', 'filters'],
+        ['e4', 'clock', 'latency', [], 25, 41, 'endpoints', 'endpoints'], ['e5', 'latency', 'goodput', [], 56, 41, 'SLO', 'SLO'],
+        ['e6', 'power', 'account', [], 25, 73, 'misma ventana', 'same window'], ['e7', 'account', 'denom', [], 56, 73, 'denominador', 'denominator'],
+        ['e8', 'goodput', 'report', [[88, 62]], 83, 63, '', ''], ['e9', 'denom', 'report', [[88, 86]], 83, 85, '', ''], ['e10', 'sweep', 'report', [], 55, 92, 'región útil', 'operating region'], ['e11', 'sweep', 'sut', [[20, 88], [20, 30], [40, 30]], 17, 58, 'varía carga ↺', 'vary load ↺'],
+      ],
     },
   ];
 
   const STYLE_ID = 's5-inference-mobile-native-style';
+  const SVG_NS = 'http://www.w3.org/2000/svg';
 
   const ensureStyle = () => {
     if (document.getElementById(STYLE_ID)) return;
@@ -175,15 +139,18 @@
     style.textContent = `
       .s5v-inference-mobile-native{display:none;box-sizing:border-box}
       @media (max-width:720px){
-        .s5v-inference-mobile-native{display:grid;gap:9px;margin:12px 0 16px;padding:13px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);overflow-x:clip}
+        .s5v-inference-mobile-native{display:grid;gap:10px;margin:12px 0 16px;padding:13px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);overflow:hidden}
         .s5v-inference-mobile-native__kicker{font-size:.72rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase;opacity:.72}
-        .s5v-inference-mobile-native h4{margin:0 0 2px;font-size:1.02rem;line-height:1.2;letter-spacing:-.02em}
-        .s5v-inference-mobile-native__steps{display:grid;gap:7px;margin:0;padding:0;list-style:none}
-        .s5v-inference-mobile-native__step{min-width:0;padding:11px 12px;border:1px solid color-mix(in srgb,currentColor 16%,transparent);border-radius:13px;background:var(--md-default-bg-color,#fff);overflow-wrap:anywhere}
-        .s5v-inference-mobile-native__step strong{display:block;margin:0 0 4px;font-size:.84rem;line-height:1.25}
-        .s5v-inference-mobile-native__step p{margin:0;font-size:.78rem;line-height:1.43;font-weight:650;opacity:.82}
-        .s5v-inference-mobile-native__arrow{justify-self:center;font-size:1rem;font-weight:900;line-height:.7;opacity:.62}
-        .s5v-inference-mobile-native__relation{margin:2px 0 0;padding:10px 11px;border-left:3px solid var(--md-accent-fg-color,#007f8c);border-radius:10px;background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 8%,transparent);font-size:.78rem;line-height:1.43;font-weight:750;overflow-wrap:anywhere}
+        .s5v-inference-mobile-native h4{margin:0;font-size:1.02rem;line-height:1.22;letter-spacing:-.02em}
+        .s5v-inference-mobile-native__graph{position:relative;width:100%;min-width:0;border-radius:15px;background:linear-gradient(180deg,color-mix(in srgb,currentColor 4%,transparent),transparent 48%);overflow:hidden}
+        .s5v-inference-mobile-native__graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible;color:color-mix(in srgb,currentColor 70%,transparent)}
+        .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
+        .s5v-inference-mobile-native__node{position:absolute;z-index:2;transform:translate(-50%,-50%);width:min(29%,104px);min-height:42px;display:grid;place-items:center;padding:7px 6px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.77rem;line-height:1.18;font-weight:850;text-align:center;overflow-wrap:anywhere}
+        .s5v-inference-mobile-native__node[data-tone="decision"]{border-style:dashed;border-width:1.5px}
+        .s5v-inference-mobile-native__node[data-tone="state"]{background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 7%,var(--md-default-bg-color,#fff))}
+        .s5v-inference-mobile-native__node[data-tone="outcome"]{border-color:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 70%,currentColor 30%);box-shadow:0 5px 18px color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 12%,transparent)}
+        .s5v-inference-mobile-native__edge-label{position:absolute;z-index:3;transform:translate(-50%,-50%);max-width:98px;padding:2px 4px;border-radius:5px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,transparent);font-size:.67rem;line-height:1.08;font-weight:850;text-align:center;opacity:.78;pointer-events:none}
+        .s5v-inference-mobile-native__relation{margin:0;padding:10px 11px;border-left:3px solid var(--md-accent-fg-color,#007f8c);border-radius:10px;background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 8%,transparent);font-size:.79rem;line-height:1.45;font-weight:720;overflow-wrap:anywhere}
         .s5v-inference-phases .s5v-inference-phases__scroll,
         .s5v-kv-paging .s5v-kv-paging__scroll,
         .s5v-quant-parallel .s5v-quant-parallel__scroll,
@@ -191,12 +158,13 @@
         .s5v-routing-policy .s5v-routing-policy__scroll,
         .s5v-benchmark-boundary .s5v-benchmark-boundary__scroll{display:none!important}
       }
-      @media (prefers-reduced-motion:reduce){.s5v-inference-mobile-native *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+      @keyframes s5InferenceMobileFlow{to{stroke-dashoffset:-18}}
+      @media (prefers-reduced-motion:reduce){.s5v-inference-mobile-native__edge-path{animation:none!important;stroke-dasharray:none!important}.s5v-inference-mobile-native *{scroll-behavior:auto!important;transition:none!important}}
     `;
     document.head.appendChild(style);
   };
 
-  const appendTextElement = (parent, tag, className, text) => {
+  const textNode = (parent, tag, className, text) => {
     const node = document.createElement(tag);
     node.className = className;
     node.textContent = text;
@@ -204,39 +172,69 @@
     return node;
   };
 
-  const buildSummary = (section, contract, copy) => {
-    if (section.querySelector('[data-inference-mobile-native]')) return;
+  const buildPath = (from, to, via = []) => [[from[1], from[2]], ...via, [to[1], to[2]]].map((point) => point.join(',')).join(' ');
+
+  const buildGraph = (summary, contract, lang) => {
+    const graph = document.createElement('div');
+    graph.className = 's5v-inference-mobile-native__graph';
+    graph.dataset.inferenceMobileGraph = contract.key;
+    graph.style.height = `${contract.height}px`;
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+    const defs = document.createElementNS(SVG_NS, 'defs');
+    const marker = document.createElementNS(SVG_NS, 'marker');
+    marker.setAttribute('id', `s5-inference-arrow-${contract.key}`);
+    marker.setAttribute('markerWidth', '6'); marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('refX', '5'); marker.setAttribute('refY', '3'); marker.setAttribute('orient', 'auto');
+    const arrow = document.createElementNS(SVG_NS, 'path');
+    arrow.setAttribute('d', 'M0,0 L6,3 L0,6 Z'); arrow.setAttribute('fill', 'currentColor');
+    marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
+
+    const byId = new Map(contract.nodes.map((node) => [node[0], node]));
+    for (const edge of contract.edges) {
+      const [id, fromId, toId, via, labelX, labelY, esLabel, enLabel] = edge;
+      const from = byId.get(fromId); const to = byId.get(toId);
+      if (!from || !to) continue;
+      const polyline = document.createElementNS(SVG_NS, 'polyline');
+      polyline.setAttribute('points', buildPath(from, to, via));
+      polyline.setAttribute('marker-end', `url(#s5-inference-arrow-${contract.key})`);
+      polyline.classList.add('s5v-inference-mobile-native__edge-path');
+      polyline.dataset.mobileGraphEdge = id;
+      svg.appendChild(polyline);
+      const label = lang === 'en' ? enLabel : esLabel;
+      if (label) {
+        const labelNode = textNode(graph, 'span', 's5v-inference-mobile-native__edge-label', label);
+        labelNode.style.left = `${labelX}%`; labelNode.style.top = `${labelY}%`;
+        labelNode.dataset.mobileGraphEdgeLabel = id;
+      }
+    }
+    graph.prepend(svg);
+
+    for (const [id, x, y, es, en, tone] of contract.nodes) {
+      const node = textNode(graph, 'div', 's5v-inference-mobile-native__node', lang === 'en' ? en : es);
+      node.style.left = `${x}%`; node.style.top = `${y}%`;
+      node.dataset.mobileGraphNode = id;
+      node.dataset.tone = tone;
+    }
+    summary.appendChild(graph);
+  };
+
+  const buildSummary = (section, contract, lang) => {
+    if (section.querySelector(`[data-inference-mobile-native="${contract.key}"]`)) return;
     const scroll = section.querySelector(contract.scroll);
     if (!scroll) return;
-
     const summary = document.createElement('div');
     summary.className = 's5v-inference-mobile-native';
     summary.dataset.inferenceMobileNative = contract.key;
     summary.setAttribute('role', 'group');
-    summary.setAttribute('aria-label', copy.title);
-
-    appendTextElement(summary, 'div', 's5v-inference-mobile-native__kicker', copy.kicker);
-    appendTextElement(summary, 'h4', '', copy.title);
-
-    const list = document.createElement('ol');
-    list.className = 's5v-inference-mobile-native__steps';
-    copy.steps.forEach(([label, detail], index) => {
-      const item = document.createElement('li');
-      item.className = 's5v-inference-mobile-native__step';
-      item.dataset.inferenceMobileStep = String(index + 1);
-      appendTextElement(item, 'strong', '', label);
-      appendTextElement(item, 'p', '', detail);
-      list.appendChild(item);
-      if (index < copy.steps.length - 1) {
-        const arrow = document.createElement('li');
-        arrow.className = 's5v-inference-mobile-native__arrow';
-        arrow.setAttribute('aria-hidden', 'true');
-        arrow.textContent = '↓';
-        list.appendChild(arrow);
-      }
-    });
-    summary.appendChild(list);
-    const relation = appendTextElement(summary, 'p', 's5v-inference-mobile-native__relation', copy.relation);
+    summary.setAttribute('aria-label', contract.title[lang]);
+    textNode(summary, 'div', 's5v-inference-mobile-native__kicker', lang === 'en' ? 'Mobile relationship map' : 'Mapa de relaciones móvil');
+    textNode(summary, 'h4', '', contract.title[lang]);
+    buildGraph(summary, contract, lang);
+    const relation = textNode(summary, 'p', 's5v-inference-mobile-native__relation', contract.relation[lang]);
     relation.dataset.inferenceMobileRelation = 'true';
     scroll.parentNode.insertBefore(summary, scroll);
   };
@@ -245,17 +243,11 @@
     ensureStyle();
     const lang = (document.documentElement.lang || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
     for (const contract of CONTRACTS) {
-      for (const section of document.querySelectorAll(contract.selector)) {
-        buildSummary(section, contract, contract[lang]);
-      }
+      for (const section of document.querySelectorAll(contract.selector)) buildSummary(section, contract, lang);
     }
   };
 
-  if (typeof document$ !== 'undefined' && document$.subscribe) {
-    document$.subscribe(init);
-  } else if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
-  } else {
-    init();
-  }
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(init);
+  else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+  else init();
 })();
