@@ -1,0 +1,26 @@
+name: From Cave to AGI semantic register
+
+on:
+  push:
+    branches:
+      - migration/video-golden-from-cave-to-agi
+    paths:
+      - 'motion/content/from-cave-to-agi/**'
+      - 'motion/scripts/check_from_cave_register.mjs'
+      - '.github/workflows/from-cave-semantic-register.yml'
+  pull_request:
+    paths:
+      - 'motion/content/from-cave-to-agi/**'
+      - 'motion/scripts/check_from_cave_register.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate complete source-bound series register
+        run: node motion/scripts/check_from_cave_register.mjs
