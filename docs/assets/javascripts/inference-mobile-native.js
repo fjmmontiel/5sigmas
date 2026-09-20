@@ -12,7 +12,7 @@
       nodes: [
         ['request', 14, 11, 'Petición', 'Request', 'input'], ['queue', 50, 11, 'Cola', 'Queue', 'decision'], ['prefill', 86, 11, 'Prefill', 'Prefill', 'compute'],
         ['first', 86, 38, '1ª salida', '1st output', 'outcome'], ['decode', 50, 38, 'Decode', 'Decode', 'compute'], ['kv', 14, 38, 'Estado KV', 'KV state', 'state'],
-        ['concurrency', 14, 75, 'Concurrencia', 'Concurrency', 'input'], ['scheduler', 50, 75, 'Scheduler', 'Scheduler', 'decision'], ['goodput', 86, 75, 'Goodput', 'Goodput', 'outcome'],
+        ['concurrency', 14, 75, 'Carga concurrente', 'Concurrent load', 'input'], ['scheduler', 50, 75, 'Scheduler', 'Scheduler', 'decision'], ['goodput', 86, 75, 'Goodput', 'Goodput', 'outcome'],
       ],
       edges: [
         ['e1','request','queue',[],32,6,'',''], ['e2','queue','prefill',[],68,6,'',''], ['e3','prefill','first',[],91,24,'TTFT','TTFT'],
@@ -46,8 +46,8 @@
       },
       nodes: [
         ['bytes',14,10,'Weights + KV','Weights + KV','input'], ['quant',50,10,'Precisión','Precision','decision'], ['kernel',86,10,'Kernel / HW','Kernel / HW','compute'],
-        ['local',86,34,'Bytes locales','Local bytes','state'], ['model',14,58,'Modelo','Model','input'], ['placement',50,58,'Paralelismo','Parallelism','decision'], ['comms',86,58,'Collectives','Collectives','compute'],
-        ['topology',86,82,'Interconnect','Interconnect','state'], ['outcome',50,88,'Latencia · memoria · calidad','Latency · memory · quality','outcome'],
+        ['local',86,34,'Bytes locales','Local bytes','state'], ['model',14,58,'Modelo','Model','input'], ['placement',50,58,'Modo paralelo','Parallel mode','decision'], ['comms',86,58,'Ops colectivas','Collective ops','compute'],
+        ['topology',86,82,'Enlace GPU','GPU link','state'], ['outcome',50,88,'Latencia / memoria / calidad','Latency / memory / quality','outcome'],
       ],
       edges: [
         ['e1','bytes','quant',[],32,5,'',''], ['e2','quant','kernel',[],68,5,'',''], ['e3','kernel','local',[],91,22,'ejecuta','executes'],
@@ -82,7 +82,7 @@
         en: 'Constraints are filtered first; a cache hit ends without inference. A miss goes through routing and placement. Failure opens fallback only when still compatible, and telemetry closes the loop back to policy.',
       },
       nodes: [
-        ['request',12,9,'Petición','Request','input'], ['eligible',38,9,'Elegibilidad','Eligibility','decision'], ['cache',64,9,'Response cache','Response cache','decision'], ['hit',88,9,'HIT → respuesta','HIT → response','outcome'],
+        ['request',12,9,'Petición','Request','input'], ['eligible',38,9,'¿Elegible?','Eligible?','decision'], ['cache',64,9,'Response cache','Response cache','decision'], ['hit',88,9,'HIT → salida','HIT → output','outcome'],
         ['router',38,34,'Router','Router','decision'], ['placement',64,34,'Placement','Placement','decision'], ['primary',88,34,'Primary','Primary','compute'],
         ['success',64,58,'SUCCESS','SUCCESS','outcome'], ['fallback',88,58,'Fallback gate','Fallback gate','decision'], ['alt',88,80,'Fallback model','Fallback model','compute'],
         ['telemetry',38,80,'Telemetry','Telemetry','state'], ['policy',12,58,'Policy update','Policy update','state'],
@@ -101,7 +101,7 @@
         en: 'Workload/SUT, client clock, and energy accounting are simultaneous lanes. Only when they converge on the same window, success/SLO, and denominators can goodput, cost/task, and energy/task be compared.',
       },
       nodes: [
-        ['workload',14,10,'Workload','Workload','input'], ['sut',50,10,'SUT / queue','SUT / queue','compute'], ['response',86,10,'Completions','Completions','state'],
+        ['workload',14,10,'Workload','Workload','input'], ['sut',50,10,'SUT / queue','SUT / queue','compute'], ['response',86,10,'Salidas','Outputs','state'],
         ['clock',14,38,'Client clock','Client clock','input'], ['latency',50,38,'TTFT / TPOT / E2E','TTFT / TPOT / E2E','state'], ['goodput',86,38,'Goodput + SLO','Goodput + SLO','outcome'],
         ['power',14,66,'Power + cost','Power + cost','input'], ['account',50,66,'∫P(t)dt + ledger','∫P(t)dt + ledger','state'], ['denom',86,66,'Cost / energy / task','Cost / energy / task','outcome'],
         ['sweep',24,90,'Saturation sweep','Saturation sweep','decision'], ['report',76,90,'Operating region','Operating region','outcome'],
@@ -116,8 +116,8 @@
 
   const STYLE_ID = 's5-inference-mobile-native-style';
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const SAFE_X_MIN = 12;
-  const SAFE_X_MAX = 88;
+  const SAFE_X_MIN = 13;
+  const SAFE_X_MAX = 87;
   const SAFE_Y_MIN = 8;
   const SAFE_Y_MAX = 92;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -136,11 +136,11 @@
         .s5v-inference-mobile-native__graph{position:relative;width:100%;min-width:0;border-radius:15px;background:linear-gradient(180deg,color-mix(in srgb,currentColor 4%,transparent),transparent 48%);overflow:hidden}
         .s5v-inference-mobile-native__graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:hidden;color:color-mix(in srgb,currentColor 72%,transparent)}
         .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.45;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
-        .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(20%,76px);min-height:44px;display:grid;place-items:center;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.77rem;line-height:1.16;font-weight:850;text-align:center;overflow-wrap:normal;word-break:normal;hyphens:auto}
+        .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(22%,78px);min-height:44px;display:grid;place-items:center;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;overflow-wrap:normal;word-break:normal;hyphens:auto}
         .s5v-inference-mobile-native__node[data-tone="decision"]{border-style:dashed;border-width:1.5px}
         .s5v-inference-mobile-native__node[data-tone="state"]{background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 7%,var(--md-default-bg-color,#fff))}
         .s5v-inference-mobile-native__node[data-tone="outcome"]{border-color:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 70%,currentColor 30%);box-shadow:0 5px 18px color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 12%,transparent)}
-        .s5v-inference-mobile-native__edge-label{position:absolute;z-index:1;transform:translate(-50%,-50%);max-width:86px;padding:2px 4px;border-radius:5px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,transparent);font-size:.66rem;line-height:1.08;font-weight:850;text-align:center;opacity:.82;pointer-events:none}
+        .s5v-inference-mobile-native__edge-label{position:absolute;z-index:1;transform:translate(-50%,-50%);max-width:76px;padding:2px 4px;border-radius:5px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,transparent);font-size:.66rem;line-height:1.08;font-weight:850;text-align:center;opacity:.82;pointer-events:none}
         .s5v-inference-mobile-native__relation{margin:0;padding:10px 11px;border-left:3px solid var(--md-accent-fg-color,#007f8c);border-radius:10px;background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 8%,transparent);font-size:.79rem;line-height:1.45;font-weight:720;overflow-wrap:anywhere}
         .s5v-inference-phases .s5v-inference-phases__scroll,
         .s5v-kv-paging .s5v-kv-paging__scroll,
@@ -167,7 +167,7 @@
     const dx = toward[0] - center[0];
     const dy = toward[1] - center[1];
     if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return center;
-    const tx = Math.abs(dx) < 0.001 ? Number.POSITIVE_INFINITY : 10.5 / Math.abs(dx);
+    const tx = Math.abs(dx) < 0.001 ? Number.POSITIVE_INFINITY : 11.5 / Math.abs(dx);
     const ty = Math.abs(dy) < 0.001 ? Number.POSITIVE_INFINITY : 5.5 / Math.abs(dy);
     const t = Math.min(1, tx, ty);
     return [center[0] + dx * t, center[1] + dy * t];
@@ -216,7 +216,7 @@
       const label = lang === 'en' ? enLabel : esLabel;
       if (label) {
         const labelNode = textNode(graph, 'span', 's5v-inference-mobile-native__edge-label', label);
-        labelNode.style.left = `${clamp(labelX, 7, 93)}%`; labelNode.style.top = `${clamp(labelY, 4, 96)}%`;
+        labelNode.style.left = `${clamp(labelX, 14, 86)}%`; labelNode.style.top = `${clamp(labelY, 5, 95)}%`;
         labelNode.dataset.mobileGraphEdgeLabel = id;
       }
     }
