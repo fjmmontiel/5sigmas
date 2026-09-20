@@ -87,6 +87,7 @@ jobs:
                   'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',
                   'context-media-bootstrap.yml': 'context-engineering-browser-visual-evidence',
                   'inference-media-bootstrap.yml': 'inference-engineering-browser-visual-evidence',
+                  'series4-golden-review.yml': 'inference-engineering-series4-pr-gate-visual-evidence',
               }
               artifact_name = allowed.get(path.name)
               if artifact_name is None:
