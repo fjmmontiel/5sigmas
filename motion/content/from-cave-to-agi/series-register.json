@@ -6,8 +6,11 @@
   "technical_golden": false,
   "palette": {
     "accent": "#26A69A",
-    "ink": "#1F857C",
-    "source": "existing-series-identity"
+    "accent_ink": "#1F857C",
+    "high_contrast_accent_text": "#00776F",
+    "accent_surface": "#E7F4F0",
+    "body_ink": "#17211F",
+    "source": "existing-series-identity-with-accessible-render-variants"
   },
   "authoring_policy": {
     "one_deterministic_timeline": true,
@@ -34,5 +37,5 @@
     "diversity_gate": "PASS_STRUCTURAL_SOURCE_BOUND_REGISTER",
     "encoded_motion_visual_acceptance": "PENDING"
   },
-  "next_action": "Run the deterministic register validator, then implement the H/V render spec and engine from this complete source-bound register before any review package is requested."
+  "next_action": "Run the deterministic register/foundation validators, then implement the H/V render spec and engine from this complete source-bound register before any review package is requested."
 }
