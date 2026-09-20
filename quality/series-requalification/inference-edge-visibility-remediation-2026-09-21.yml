@@ -1,0 +1,51 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+recorded_date: 2026-09-21
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+prior_manual_evidence:
+  head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5
+  run: 35538317845
+  artifact: 10614520052
+  artifact_sha256: 09efbd574f116b542e775c76eb3c814dcd4a564158a899daeac471dc27e3d447
+  result: P1_SHARED_EDGE_VISIBILITY_AND_CAUSAL_CONTINUITY
+remediation:
+  site_facing_head: 23632b14f5d4c4852f9615dd7ab6dec065a6ebbe
+  renderer: docs/assets/javascripts/inference-mobile-native.js
+  regression_gate: scripts/validate_inference_mobile_text_fit.mjs
+  changes:
+    - Replaced fixed 16.2x6.4 normalized clipping with source/target extents measured from each rendered node box.
+    - Edge endpoints are recomputed from actual node dimensions and rerendered after layout/resize.
+    - Added source/target provenance on each rendered directed edge.
+    - Added a deterministic rendered-edge visibility assertion with minimum visible polyline length 1.5 SVG user units.
+    - Added a negative mutation containing a 0.5-unit directed edge; the gate must reject it.
+  preserved_contract:
+    min_node_font_px: 12
+    topology_branching_feedback: preserved
+    giant_horizontal_canvas_fallback: false
+    card_fallback: false
+    normal_and_reduced_motion_required: true
+status:
+  P0: 0
+  P1_rows: 12
+  P2: 0
+  defect_code: INFERENCE_MOBILE_EDGE_VISIBILITY_HARDCODED_BOUNDARY_OVERCLIP
+  defect_state: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER_AND_MANUAL_REVIEW
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 0/12
+  BROWSER_PASS: 0/12
+  MEDIA_VISUAL_PASS: 0/12
+  INDEXABILITY_PASS: 0/12
+  PIXEL_REVIEW: 0/12
+  PEDAGOGY_REVIEW: 0/12
+  ARTICLE_GOLDEN: 0/6
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  historical_accessibility_debt: "92 > 91 retained; budget remains 91; future voice/accessibility lane only"
+next_action:
+  - Consume one exact-current-head Series 4 integration checkpoint; do not reuse prior-head PASSes.
+  - Require the short-edge negative mutation plus all 12 ES/EN mobile normal/reduced graphs to pass the visibility/layout gate.
+  - Inspect exact 12 route-locale mobile pixels plus desktop and video start/middle/final evidence before clearing P1.
+  - Only after zero known P0/P1/P2 reconcile current main, run the integrated final checkpoint, merge/deploy, and verify live indexability.
