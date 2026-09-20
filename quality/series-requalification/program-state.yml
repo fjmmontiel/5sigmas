@@ -1,4 +1,4 @@
-schema_version: 22
+schema_version: 23
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -83,7 +83,10 @@ series_status:
     route_locale_rows: 12
     source: 0/12
     build: PASS_12_OF_12
-    browser: 0/12
+    browser: PASS_12_OF_12
+    browser_live_qa_run: 35486401441
+    browser_live_qa_job: 106013475335
+    browser_live_exact_head: b6821a5077681531fba6610298dd0bb02b85813a
     media_visual: 0/12
     indexability: 0/12
     pixel: 0/12
@@ -98,7 +101,7 @@ series_status:
     gate_hardening: INDEXABILITY_AND_MEDIA_VISUAL_WIRED_FAIL_CLOSED
     state: MEDIA_VISUAL_PENDING
     production_verified: false
-    next_action: PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_FOR_MULTIPLE_CHAPTERS_THEN_GROUPED_SOURCE_MEDIA_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
+    next_action: PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_FOR_MULTIPLE_CHAPTERS_THEN_GROUPED_SOURCE_MEDIA_INDEXABILITY_PIXEL_PEDAGOGY
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
