@@ -35,12 +35,33 @@
     "workflow_run": 35489348099,
     "observed_head": "91940c4a53ad455b920b999dd2b5c27d24ea4843",
     "observed_state": "IN_PROGRESS",
-    "first_wave": {
-      "in_progress": 6,
-      "queued": 18,
-      "source_validation_passed_for_running_jobs": true,
-      "dependency_install_passed_for_running_jobs": true,
-      "render_step_started": true
+    "completed_success": 6,
+    "expected": 24,
+    "observed_success_outputs": [
+      {"job":"render-00-es-horizontal","artifact_id":10599070208,"artifact_zip_sha256":"5dff6d757d2c9c3d419b89d071a1de8a752c84748fc3de65b472e6f67423d859"},
+      {"job":"render-00-es-vertical","artifact_id":10597663742,"artifact_zip_sha256":"341ad5548ea14948bebd90c512279f43926a0bad08416128613f5295d1f8791c"},
+      {"job":"render-00-en-horizontal","artifact_id":10598194977,"artifact_zip_sha256":"f0059b60271a41ef5d812c4ba9661035e99926948d5e8cc92c189600b5d3d019"},
+      {"job":"render-00-en-vertical","artifact_id":10599015223,"artifact_zip_sha256":"bc0a726884c99d8982a4eec624c52e725b40e111e480d4e58151170b1309db3e"},
+      {"job":"render-01-es-horizontal","artifact_id":10598607563,"artifact_zip_sha256":"c70b1d9bb3070188c2b6b02235482ce866423421bde6b3b68c148e596ed517ad","mp4_sha256":"c8d3710379b409f0a2adf526652519c0b27d587434a7b97eff7df283d4a531f6","mp4_size_bytes":2270531,"full_decode":"PASS","frames":4500},
+      {"job":"render-01-es-vertical","artifact_id":10598313310,"artifact_zip_sha256":"5b7bbb0db55e7dcf3b1a616db69683da217c928a8d1adb121aa789de8e7e800c"}
+    ],
+    "first_verified_output_detail": {
+      "job":"from-cave-to-agi-01-es-horizontal",
+      "source_path":"docs/series/from-cave-to-agi/01-representar.md",
+      "canonical_horizontal_output":"docs/series/from-cave-to-agi/01-representar.mp4",
+      "codec":"h264",
+      "width":1920,
+      "height":1080,
+      "pixel_format":"yuv420p",
+      "fps":"60/1",
+      "duration_seconds":75.0,
+      "frames":4500,
+      "browser_errors":0,
+      "render_issues":0,
+      "semantic_scenes":5,
+      "owner_visual_approval":"NOT_REQUESTED",
+      "technical_golden":false,
+      "published":false
     }
   },
   "acceptance": {
@@ -48,5 +69,5 @@
     "technical_golden": false,
     "published": false
   },
-  "next_action": "Let the immutable 91940c4 source snapshot finish all 24 native ES/EN H/V renders. Require 24/24 full decode plus ES/EN and H/V parity in the package job. Only after a complete package exists: inspect the whole-series encoded outputs, deliver beneath the single existing Drive root, create/reuse one final PR for this complete block, and send exactly one review request."
+  "next_action": "Continue the immutable 91940c4 source snapshot render without restarting valid jobs. Require 24/24 successful full-decode outputs, then run the package job's ES/EN and H/V parity checks. Only after a complete package exists: inspect the whole-series encoded outputs, deliver beneath the single existing Drive root, create/reuse one final PR for this complete block, and send exactly one review request."
 }
