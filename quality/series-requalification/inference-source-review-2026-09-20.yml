@@ -1,0 +1,60 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: 2026-09-20
+reviewed_source_base: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+exact_source_contract_run: 35499330009
+source_contracts:
+  chapters_1_through_6: PASS
+  es_en_claim_formula_unit_code_contracts: PASS
+  note: Generated visual-media frontmatter changes do not alter article claims or references.
+primary_refresh:
+  chapter_1:
+    status: PASS
+    checked:
+      - NVIDIA AIPerf Metrics Reference current docs: TTFT versus TTFO, decode duration and client-observed streaming boundaries
+      - vLLM benchmark metric definitions retained as article comparison boundary
+    conclusion: Article caveat that metric names require measurement-boundary definitions remains current.
+  chapter_2:
+    status: PASS
+    checked:
+      - Hugging Face Transformers main continuous batching architecture: per-step scheduler, token/cache budgets and request lifecycle
+      - NVIDIA TensorRT-LLM current KV Cache System: block pools, reuse, eviction and host offload
+    conclusion: KV-cache and continuous-batching mechanisms remain current; article avoids universal speedup claims.
+  chapter_3:
+    status: PASS
+    checked:
+      - NVIDIA TensorRT-LLM current quantization docs: FP4/FP8, FP8/NVFP4 KV cache, AWQ/GPTQ families and hardware-dependent support
+      - NVIDIA TensorRT-LLM current parallelism docs: TP/PP/DP/EP/CP/Wide-EP roles
+    conclusion: Article separation of representation, placement, communication and quality trade-offs remains current.
+  chapter_4:
+    status: PASS
+    checked:
+      - vLLM current Automatic Prefix Caching feature and design docs: matched-prefix KV reuse affects prefill rather than decode
+      - vLLM current per-request speculative-decoding acceptance metrics
+      - NVIDIA TensorRT-LLM current speculative-decoding caveat that observed speedups are workload/batch dependent
+    conclusion: Article correctly treats prefix reuse and speculative verification as distinct, non-additive mechanisms.
+  chapter_5:
+    status: PASS
+    checked:
+      - NVIDIA Dynamo current KV-aware routing: reusable KV state plus projected active prefill/decode load
+      - Amazon Bedrock current intelligent prompt routing: quality/cost routing with explicit configured criteria/fallback and documented limits
+      - Gateway API Inference Extension current project/conformance direction retained as infrastructure boundary rather than application quality policy
+    conclusion: Article correctly separates model policy, worker placement, cache admission and fallback.
+  chapter_6:
+    status: PASS
+    checked:
+      - NVIDIA AIPerf current metrics reference for streaming metric boundaries
+      - MLCommons current MLPerf Inference v6.1 suite for 2026 and scenario-specific benchmark framing
+    conclusion: Reproducibility contract and warning against comparing incompatible harnesses remain current.
+source_quality:
+  material_claims_have_primary_or_original_sources: true
+  illustrative_numbers_are_marked_as_illustrative: true
+  current_vendor_capabilities_are_not_presented_as_universal_constants: true
+parity:
+  es_technical_natural: PASS
+  en_native: PASS
+  claims_units_formulas_code_labels_states: PASS_BY_EXACT_SOURCE_CONTRACTS
+SOURCE_PASS: 12/12
+known_source_defects: []
+next_action: Preserve this receipt against the final site-facing media head; rerun source contracts if article body claims change.
