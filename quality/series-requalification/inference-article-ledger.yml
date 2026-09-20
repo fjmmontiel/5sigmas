@@ -1,4 +1,4 @@
-schema_version: 8
+schema_version: 9
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -48,10 +48,24 @@ inspection:
   exact_full_review_scope: ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_PLUS_72_VIDEO_FRAMES
   exact_full_review_result: P1_SHARED_12_OF_12_MOBILE_TEXT_CLIPPING_AND_EDGE_LABEL_COLLISIONS
   text_fit_remediation_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
-  text_fit_remediation_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
-  text_fit_remediation_mechanism: WIDER_SAFE_NODE_BOXES_SHORTER_SEMANTIC_LABELS_SAFE_X_BOUNDS_EDGE_LABEL_DECLUTTER_AND_BOUND_CLAMP_WITH_12PX_MINIMUM_TEXT
   text_fit_regression_script: scripts/validate_inference_mobile_text_fit.mjs
   text_fit_negative_mutation: SYNTHETIC_LONG_UNBREAKABLE_NODE_LABEL_MUST_OVERFLOW_AND_BE_DETECTED
+  exact_text_fit_merge_ref: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
+  exact_text_fit_branch_head: 8d5941b1887cfb4907057b7fe83c8e7f20debdb9
+  exact_text_fit_series4_run: 35519776975
+  exact_text_fit_result: FAIL_106_NODE_TEXT_OVERFLOWS_BOTH_LOCALES_NORMAL_REDUCED_AFTER_ALL_PRIOR_SUBGATES_GREEN
+  exact_text_fit_artifact: 10608215457
+  exact_text_fit_artifact_sha256: 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049
+  exact_text_fit_artifact_files: 172
+  exact_text_fit_artifact_retention_days: 1
+  exact_text_fit_automated_indexability_result: PASS_12_OF_12
+  exact_text_fit_automated_media_visual_result: PASS_12_OF_12
+  exact_text_fit_internal_graph_result: ES_EN_180_PAGES_CRAWL_ORPHANS_0_CONTEXTUAL_COVERAGE_100_PERCENT
+  exact_text_fit_manual_pixel_scope_this_iteration: ES_MOBILE_NORMAL_ALL_6_INSPECTED_PLUS_AUTOMATED_ALL_12_ES_EN_NORMAL_REDUCED_FAILURE_LOGS
+  exact_text_fit_manual_pixel_result: P1_CONFIRMED_CH3_FRAGMENTED_OUTCOME_CH4_RIGHT_EDGE_PREFILL_AND_DENSE_BRANCHING_CH5_CACHE_PLACEMENT_SUCCESS_CLIPPING_WITH_SHARED_TEXT_FIT_FAILURE_ACROSS_SERIES
+  graph_reflow_fix_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
+  graph_reflow_fix_scope: SHARED_RENDERER_ALL_6_CHAPTERS_ES_EN
+  graph_reflow_fix_mechanism: THREE_COLUMN_MOBILE_TOPOLOGY_FOR_DENSE_CH4_CH5_WIDER_12PX_NODE_BOXES_SAFE_15_85_BOUNDS_MORE_VERTICAL_BUDGET_SHORTER_EQUIVALENT_MOBILE_LABELS_AND_DECLUTTERED_EDGE_LABELS_WITHOUT_CARD_FALLBACK
   historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
   historical_video_required_undeclared_status: IMPLEMENTED_AND_CLOSED_BY_CURRENT_BRANCH_BYTES_PENDING_EXACT_MEDIA_GATE
 gates:
@@ -69,29 +83,31 @@ known_defects:
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_MOBILE_GRAPH_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
+      code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
       affected_route_locale_rows: 12
-      evidence_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-      evidence_runs: [35516179647, 35516179685]
-      evidence_artifact: 10607266455
-      evidence_artifact_sha256: b059e78151ef3f9a8d1a0d5c6e86d26f691f9a681a30a3d20558bf432278f3bc
-      confirmed_pixel_scope: ALL_6_CHAPTERS_ES_EN_MOBILE_NORMAL_REDUCED_WITH_DESKTOP_AND_VIDEO_EVIDENCE_ALSO_INSPECTED
-      shared_cause: FIXED_NARROW_NODE_BOXES_WITH_LONG_SINGLE_WORD_LABELS_AND_OVERDENSE_EDGE_LABELS_ALLOWED_TEXT_TO_ESCAPE_OR_BE_HIDDEN_BY_GRAPH_OVERFLOW;_AUTOMATED_GEOMETRY_CHECK_ONLY_BOUNDED_NODE_BOXES_NOT_TEXT_CONTENT
-      remediation: WIDEN_NODE_BOXES_WITH_SAFE_CENTER_BOUNDS_SHORTEN_ONLY_MOBILE_SEMANTIC_LABELS_KEEP_12PX_TEXT_DECLUTTER_REDUNDANT_EDGE_LABELS_CLAMP_REMAINING_LABELS_AND_ADD_FAIL_CLOSED_TEXT_FIT_NEGATIVE_MUTATION
-      remediation_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
-      status: FIX_V3_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_ALL_12_PIXEL_PEDAGOGY_REVIEW
+      evidence_head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
+      evidence_branch_head: 8d5941b1887cfb4907057b7fe83c8e7f20debdb9
+      evidence_runs: [35519776975]
+      evidence_artifact: 10608215457
+      evidence_artifact_sha256: 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049
+      automated_scope: ALL_6_CHAPTERS_ES_EN_MOBILE_NORMAL_REDUCED
+      manual_scope_this_iteration: ES_MOBILE_NORMAL_ALL_6
+      shared_cause: 29_TO_61PX_EFFECTIVE_NODE_TEXT_BUDGET_IN_DENSE_MOBILE_GRAPHS_WAS_SMALLER_THAN_REQUIRED_BY_SEMANTIC_LABELS;_FOUR_COLUMN_CH4_CH5_LAYOUT_COMPOUNDED_CLIPPING_AND_EDGE_LABEL_CONGESTION
+      remediation: REFLOW_DENSE_GRAPHS_TO_THREE_COLUMNS_INCREASE_NODE_TEXT_BUDGET_WITH_12PX_MINIMUM_PRESERVE_DIRECTED_TOPOLOGY_BRANCHING_FEEDBACK_AND_SEMANTICS_DECLUTTER_REDUNDANT_EDGE_LABELS
+      remediation_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
+      status: FIX_V4_IMPLEMENTED_PENDING_EXACT_MERGE_REF_RERENDER_TEXT_FIT_GATE_AND_ALL_12_PIXEL_PEDAGOGY_REVIEW
   scope_note: >-
-    Exact Series 4 run 35516179647 and broad PR visual run 35516179685 both passed on
-    64339a86f8a88ff03c04af98927209ffbda7ccef. The retained 118 MB artifact 10607266455
-    was downloaded and manually inspected rather than treating green CI as PIXEL/PEDAGOGY.
-    INDEXABILITY and MEDIA_VISUAL reports were green and the artifact contains all six chapters,
-    ES/EN, desktop/mobile, normal/reduced plus 72 video frames. Manual mobile review still found
-    real clipping/collision debt: chapter 1 concurrent-load text, chapter 3 long node labels and
-    right-edge topology plus dense trade-off labels, chapter 5 hit/fallback labels, chapter 6
-    completion/accounting labels, and additional edge-label congestion in chapters 2 and 4.
-    The shared renderer has now been remediated for every route×locale and a deterministic
-    text-fit validator with a negative overflow mutation is wired into the final chapter gate.
-    P1 remains open until the new exact head renders and all 12 graphs are reinspected.
+    Exact merge-ref Series 4 run 35519776975 proved that source/build/publication/search,
+    rendered INDEXABILITY, MEDIA_VISUAL, browser resources, bilingual hub and locale parity were
+    green before the new fail-closed mobile text-fit regression rejected the candidate with 106
+    node overflow failures across both locales and normal/reduced motion. Artifact 10608215457
+    (sha256 4e1eea3548ddb043cbc96fb7b410f80f7408c7c0ad5610b1880411eb66a6f049,
+    172 files) was retained for one day. Manual inspection in this run covered the ES normal mobile
+    graph for all six chapters and confirmed visible quality debt in the same family, especially
+    fragmented output labels in chapter 3 and clipped/congested dense branch graphs in chapters 4
+    and 5. The shared renderer has been reflowed without reducing node text below 12px, without
+    reverting to cards, and without removing directed topology. P1 remains open until the exact
+    new merge-ref rerenders and all 12 ES/EN mobile graphs are manually reinspected.
   closed_historical_p1:
     count: 12
     code: VIDEO_REQUIRED_UNDECLARED
@@ -107,17 +123,17 @@ release:
   pr_state: OPEN_DRAFT
   production_verified: false
   series_golden: false
-  current_site_facing_remediation_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  current_site_facing_remediation_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
   last_exact_green_automated_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
   last_exact_green_series4_run: 35516179647
   last_exact_green_pr_visual_run: 35516179685
   last_exact_manual_result: CHANGES_REQUIRED_PIXEL_PEDAGOGY_P1
-  next_action: RENDER_FINAL_LEDGER_HEAD_RUN_TEXT_FIT_MUTATION_THEN_INSPECT_ALL_12_REPAIRED_NATIVE_DIRECTED_GRAPHS_AND_EXACT_BUILD_BROWSER_MEDIA_VISUAL_INDEXABILITY_EVIDENCE
+  next_action: RENDER_EXACT_GRAPH_REFLOW_HEAD_RUN_TEXT_FIT_NEGATIVE_MUTATION_THEN_INSPECT_ALL_12_ES_EN_MOBILE_NORMAL_REDUCED_AND_PROMOTE_ONLY_EXACT_GATES_IF_ZERO_P0_P1_P2
 row_defaults: &row_defaults
-  iteration_count: 7
-  last_changed_site_head: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  iteration_count: 8
+  last_changed_site_head: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
   last_full_pixel_review_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
-  latest_shared_failure_evidence_head: 64339a86f8a88ff03c04af98927209ffbda7ccef
+  latest_shared_failure_evidence_head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -128,16 +144,16 @@ row_defaults: &row_defaults
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects:
     - severity: P1
-      code: INFERENCE_MOBILE_GRAPH_TEXT_CLIPPING_EDGE_LABEL_COLLISIONS
-      status: FIX_V3_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
+      code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_LEGIBILITY
+      status: FIX_V4_IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_REVIEW
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_NATIVE_MEDIA_METADATA
-  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE_ON_EXACT_CURRENT_HEAD
-  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_PENDING_EXACT_BROWSER_MEDIA_GATE
-  evidence_revision: ad7b8499f2bc0e0065c4666d98ed2ba1800ddc09
+  canonical_hreflang_sitemap_internal_discovery: AUTOMATED_PASS_ON_PRIOR_EXACT_MERGE_REF_C3B035F_BUT_PENDING_RERUN_AFTER_SITE_FACING_GRAPH_REFLOW
+  watch_video_lifecycle: NATIVE_ES_EN_MEDIA_DECLARED_AUTOMATED_MEDIA_VISUAL_PASS_ON_PRIOR_MERGE_REF_PENDING_RERUN_AFTER_SITE_FACING_GRAPH_REFLOW
+  evidence_revision: eaa0cf4a429d3b7528e05aca79079bbf722ef6f1
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: RERENDER_EXACT_REPAIRED_HEAD_INSPECT_390PX_DIRECTED_GRAPH_THEN_CLEAR_OR_ITERATE_P1_AND_PROMOTE_ONLY_EXACT_GATES
+  next_action: RERENDER_EXACT_REPAIRED_MERGE_REF_RUN_TEXT_FIT_THEN_INSPECT_ALL_12_390PX_DIRECTED_GRAPHS_AND_CLEAR_OR_ITERATE_P1
   state: QA
 rows:
   - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
