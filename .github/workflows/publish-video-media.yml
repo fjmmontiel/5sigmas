@@ -1,6 +1,12 @@
 name: Publish video media to Cloudflare R2
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/series/modelos-razonadores/**"
+      - "locales/en/series/modelos-razonadores/**"
+      - ".github/workflows/publish-video-media.yml"
   workflow_dispatch:
     inputs:
       publish:
@@ -41,9 +47,83 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install PyYAML==6.0.3 awscli
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Regenerate Modelos R2 posters from the exact approved MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          for root in docs/series/modelos-razonadores locales/en/series/modelos-razonadores; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+              test -s "$poster"
+              echo "poster $(sha256sum "$poster" | awk '{print $1}')  $poster"
+            done
+          done
+
+      - name: Verify frozen Modelos R2 MP4 hashes locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/modelos-r2.sha256 <<'EOF'
+          e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6  docs/series/modelos-razonadores/00_presentacion_serie.mp4
+          a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807  docs/series/modelos-razonadores/01-que-es-razonar.mp4
+          d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed  docs/series/modelos-razonadores/02-fallos.mp4
+          e9c6c081bb19d2953777b3d37642e5a718de8dd16ce7b6f73ff9dc252dca8710  docs/series/modelos-razonadores/03-test-time-compute.mp4
+          1ba074bafc897e818ef1015bfa4c3597d8c80f16f58496c3cb5345eca49c020f  docs/series/modelos-razonadores/04-latencia-streaming.mp4
+          f594dde47114da817416d0a6b37089cdec34eb607005fe452d5fc22f5b2df381  docs/series/modelos-razonadores/05-riesgos.mp4
+          f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730  locales/en/series/modelos-razonadores/00_presentacion_serie.mp4
+          b4e13a927f4485c3fa372bbf5fa53c2d8452107431a66e38cb1e692c4c72ffcc  locales/en/series/modelos-razonadores/01-que-es-razonar.mp4
+          3f5f6fe9ec604b06ce448092e0f66ffb0fc543998cb9ba0f4583f3f3575c52b2  locales/en/series/modelos-razonadores/02-fallos.mp4
+          27860f4c8304a3215dc5e29894e071df10f2b276fa1ddc5cbc6ea69c7f81e400  locales/en/series/modelos-razonadores/03-test-time-compute.mp4
+          3d8cb7f28b0a0ded5eb1b048a5f4d38b533948ee5181d2ea899507bc38dcc5a0  locales/en/series/modelos-razonadores/04-latencia-streaming.mp4
+          ef27ccf56d3112214286d5eab4a34bcf4b55c1bf2bc108abe4e074eb0c29beec  locales/en/series/modelos-razonadores/05-riesgos.mp4
+          EOF
+          sha256sum -c /tmp/modelos-r2.sha256
 
       - name: Validate and stage declared video media
         run: python scripts/prepare_video_media.py --output .video-media
+
+      - name: Stage approved English Modelos R2 media
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='.video-media/media/en/series/modelos-razonadores'
+          mkdir -p "$target"
+          cp locales/en/series/modelos-razonadores/*.mp4 "$target/"
+          cp locales/en/series/modelos-razonadores/*.jpg "$target/"
+          python - <<'PY'
+          import hashlib
+          import json
+          import mimetypes
+          from pathlib import Path
+
+          manifest_path = Path('.video-media/manifest.json')
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          root = Path('.video-media/media')
+          existing = {item['key'] for item in manifest['objects']}
+          for path in sorted((root / 'en/series/modelos-razonadores').iterdir()):
+              if path.suffix.lower() not in {'.mp4', '.jpg'}:
+                  continue
+              key = path.relative_to(root).as_posix()
+              if key in existing:
+                  continue
+              data = path.read_bytes()
+              manifest['objects'].append({
+                  'key': key,
+                  'kind': 'video' if path.suffix.lower() == '.mp4' else 'poster',
+                  'source': f"locales/{key}",
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+                  'content_type': mimetypes.guess_type(path.name)[0] or 'application/octet-stream',
+              })
+          manifest['objects'] = sorted(manifest['objects'], key=lambda item: item['key'])
+          manifest['object_count'] = len(manifest['objects'])
+          manifest['total_bytes'] = sum(item['bytes'] for item in manifest['objects'])
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
 
       - name: Record deterministic media manifest in logs
         shell: bash
@@ -54,7 +134,7 @@ jobs:
           echo "manifest_bytes=$(stat -c %s .video-media/manifest.json)"
 
       - name: Validate R2 publishing configuration
-        if: inputs.publish
+        if: github.event_name == 'push' || inputs.publish
         shell: bash
         run: |
           set -euo pipefail
@@ -66,7 +146,7 @@ jobs:
           [[ "$S5_VIDEO_MEDIA_ORIGIN" == https://* ]] || { echo "S5_VIDEO_MEDIA_ORIGIN must use HTTPS" >&2; exit 1; }
 
       - name: Publish media objects to R2
-        if: inputs.publish
+        if: github.event_name == 'push' || inputs.publish
         run: |
           aws s3 sync .video-media/media/ "s3://${R2_BUCKET_NAME}/" \
             --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
@@ -77,11 +157,22 @@ jobs:
             --cache-control "no-cache" \
             --content-type "application/json" \
             --only-show-errors
+          aws s3 cp .video-media/media/series/modelos-razonadores/ "s3://${R2_BUCKET_NAME}/series/modelos-razonadores/" \
+            --recursive \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --cache-control "public,max-age=86400" \
+            --only-show-errors
+          aws s3 cp .video-media/media/en/series/modelos-razonadores/ "s3://${R2_BUCKET_NAME}/en/series/modelos-razonadores/" \
+            --recursive \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --cache-control "public,max-age=86400" \
+            --only-show-errors
 
-      - name: Verify public playback, byte ranges and CORS
-        if: inputs.publish
+      - name: Verify exact public Modelos R2 bytes, byte ranges and CORS
+        if: github.event_name == 'push' || inputs.publish
         run: |
           python - <<'PY'
+          import hashlib
           import json
           import os
           from pathlib import Path
@@ -90,33 +181,49 @@ jobs:
 
           manifest = json.loads(Path('.video-media/manifest.json').read_text(encoding='utf-8'))
           origin = os.environ['S5_VIDEO_MEDIA_ORIGIN'].rstrip('/')
-          selected = []
-          for kind in ('video', 'poster', 'captions'):
-              match = next((item for item in manifest['objects'] if item['kind'] == kind), None)
-              if match:
-                  selected.append(match)
+          selected = [
+              item for item in manifest['objects']
+              if '/modelos-razonadores/' in f"/{item['key']}" and item['kind'] in {'video', 'poster'}
+          ]
+          if len(selected) != 24:
+              raise RuntimeError(f"expected 24 Modelos R2 public objects, found {len(selected)}")
 
           for item in selected:
               url = f"{origin}/{quote(item['key'], safe='/')}"
-              request = Request(
+              full_request = Request(
                   url,
                   headers={
                       'Origin': 'https://5sigmas.com',
-                      'Range': 'bytes=0-0',
-                      'User-Agent': '5sigmas-media-verifier/1.0',
+                      'User-Agent': '5sigmas-modelos-r2-verifier/1.0',
                   },
               )
-              with urlopen(request, timeout=30) as response:
-                  if response.status not in {200, 206}:
-                      raise RuntimeError(f"{url} returned {response.status}")
+              with urlopen(full_request, timeout=60) as response:
+                  payload = response.read()
+                  remote_sha = hashlib.sha256(payload).hexdigest()
+                  if remote_sha != item['sha256']:
+                      raise RuntimeError(
+                          f"{url} stale/wrong bytes: remote={remote_sha} expected={item['sha256']}"
+                      )
                   allow_origin = response.headers.get('Access-Control-Allow-Origin')
                   if allow_origin not in {'https://5sigmas.com', '*'}:
                       raise RuntimeError(f"{url} returned invalid CORS origin {allow_origin!r}")
-                  if item['kind'] == 'video' and response.status != 206:
-                      raise RuntimeError(f"{url} did not honor the byte-range request")
-                  if item['kind'] == 'video' and not response.headers.get('Content-Range'):
-                      raise RuntimeError(f"{url} omitted Content-Range")
                   if 'max-age' not in (response.headers.get('Cache-Control') or ''):
                       raise RuntimeError(f"{url} omitted cache metadata")
-                  print(f"verified {item['kind']}: {url}")
+
+              if item['kind'] == 'video':
+                  range_request = Request(
+                      url,
+                      headers={
+                          'Origin': 'https://5sigmas.com',
+                          'Range': 'bytes=0-0',
+                          'User-Agent': '5sigmas-modelos-r2-verifier/1.0',
+                      },
+                  )
+                  with urlopen(range_request, timeout=30) as response:
+                      if response.status != 206:
+                          raise RuntimeError(f"{url} did not honor byte-range requests")
+                      if not response.headers.get('Content-Range'):
+                          raise RuntimeError(f"{url} omitted Content-Range")
+              print(f"verified exact {item['kind']}: {url} sha256={item['sha256']}")
           PY
+
