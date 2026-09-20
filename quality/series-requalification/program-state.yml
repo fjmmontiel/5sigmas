@@ -1,4 +1,4 @@
-schema_version: 25
+schema_version: 26
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -92,44 +92,50 @@ series_status:
     pedagogy: PASS_12_OF_12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0_p1_p2: 0
-    release_pr: 339
-    release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
-    merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-    production_main_verified: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-    deploy_run: 35498875755
-    dedicated_live_qa_run: 35499422075
+    article_release_pr: 339
+    article_release_merge: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    live_indexability_hardening_pr: 341
+    live_indexability_hardening_merge: 7d543dd664f1dca420fbc366739d0355e38b32b2
+    production_main_verified: 7d543dd664f1dca420fbc366739d0355e38b32b2
+    deploy_run: 35501589768
+    dedicated_live_qa_run: 35502173179
+    exact_live_indexability: PASS
     state: SERIES_GOLDEN
     production_verified: true
   llm-inference-engineering-economics:
     ledger: quality/series-requalification/inference-article-ledger.yml
+    source_receipt: quality/series-requalification/inference-source-review-2026-09-20.yml
     active_branch: quality/llm-inference-requalification
-    reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    branch_last_media_inspection_head: 56af286a05e0753ba2879cdf14b24cf08a6e4dec
+    current_main_observed: 7d543dd664f1dca420fbc366739d0355e38b32b2
+    branch_status: AHEAD_WITH_SERIES_WORK_BEHIND_BY_CONTEXT_LIVE_HARDENING_COMMITS
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    source: PENDING_FRESH_REQUALIFICATION_0_OF_12
+    iteration_count: 2
+    source: PASS_12_OF_12
     build: PENDING_0_OF_12
     browser: PENDING_0_OF_12
-    media_visual: PENDING_0_OF_12
+    media_visual: NATIVE_ES_EN_IMPLEMENTED_12_OF_12_PENDING_EXACT_GATE
     indexability: PENDING_0_OF_12
     pixel: PENDING_0_OF_12
     pedagogy: PENDING_0_OF_12
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1: 12
+    known_p1: 0
     known_p2: 0
-    blocker: VIDEO_REQUIRED_UNDECLARED
+    known_defect_scope_note: HISTORICAL_VIDEO_REQUIRED_UNDECLARED_CLOSED_BY_BRANCH_BYTES; UNEXECUTED_GATES_FAIL_CLOSED_AND_MAY_REVEAL_NEW_DEFECTS
     media_bootstrap_run: 35499330009
     production_verified: false
     series_golden: false
-    state: MEDIA_VISUAL_PENDING
-    next_action: COMPLETE_NATIVE_ES_EN_VISUAL_MEDIA_BOOTSTRAP_THEN_INSPECT_EXACT_EVIDENCE_AND_REQUALIFY_ALL_NON_DEFERRED_GATES
+    state: QA
+    next_action: OPEN_SINGLE_DRAFT_SERIES_PR_AND_RUN_EXACT_GATES_THEN_MANUALLY_INSPECT_PIXEL_PEDAGOGY_EVIDENCE
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
-  current_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  current_main: 7d543dd664f1dca420fbc366739d0355e38b32b2
   draft_34:
-    state: OPEN_DRAFT_UNMERGED_NOT_MERGEABLE
+    state: OPEN_DRAFT_UNMERGED_NOT_REUSED_BLINDLY
     reuse_policy: NEVER_BLIND_MERGE
 linkedin:
   writes_from_this_program: 0
