@@ -1,0 +1,83 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+reconciled_from_main: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+active_branch: quality/llm-inference-requalification
+catalog:
+  chapter_count: 6
+  route_locale_rows: 12
+  has_series_presentation: false
+inspection:
+  inventory_reviewed_on: 2026-09-20
+  inventory_review_head: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  es_chapters_found: 6
+  en_chapters_found: 6
+  source_video_declarations_found: 0
+  en_media_manifest_series_entries_found: 0
+  historical_release_contract_defect: ZERO_VIDEO_DEPENDENCIES_REQUIREMENT_CONTRADICTED_CURRENT_MEDIA_VISUAL_CONTRACT
+  gate_hardening_branch_head_pending: true
+gates:
+  SOURCE_PASS: 0/12
+  BUILD_PASS: 0/12
+  BROWSER_PASS: 0/12
+  MEDIA_VISUAL_PASS: 0/12
+  INDEXABILITY_PASS: 0/12
+  PIXEL_REVIEW: 0/12
+  PEDAGOGY_REVIEW: 0/12
+  ARTICLE_GOLDEN: 0/6
+known_defects:
+  p0: 0
+  p1: 12
+  p2: 0
+  shared_p1: VIDEO_REQUIRED_UNDECLARED
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91"
+release:
+  pr: null
+  production_verified: false
+  series_golden: false
+  next_action: PRODUCE_DECLARE_NATIVE_ES_EN_VISUAL_VIDEO_THEN_RUN_SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_AND_MANUAL_PIXEL_PEDAGOGY
+row_defaults: &row_defaults
+  iteration_count: 1
+  last_review_head: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  SOURCE_PASS: false
+  BUILD_PASS: false
+  BROWSER_PASS: false
+  MEDIA_VISUAL_PASS: false
+  INDEXABILITY_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  defects:
+    - severity: P1
+      code: VIDEO_REQUIRED_UNDECLARED
+      status: OPEN
+      detail: Current curriculum requires native visual video; no route-locale video declaration exists on inspected main.
+  factual_source_status: PENDING_FRESH_REQUALIFICATION
+  parity_status: PENDING_FRESH_REQUALIFICATION
+  canonical_hreflang_sitemap_internal_discovery: PENDING_RENDERED_INDEXABILITY_GATE
+  watch_video_lifecycle: FAIL_VIDEO_REQUIRED_UNDECLARED
+  evidence_revision: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
+  gsc_observation: null
+  next_action: PRODUCE_DECLARE_NATIVE_VISUAL_VIDEO_AND_COMPLETE_FRESH_NON_DEFERRED_GATES
+  state: MEDIA_VISUAL_PENDING
+rows:
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, source_path: docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, source_path: docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, source_path: docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, source_path: docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, source_path: docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
+  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
