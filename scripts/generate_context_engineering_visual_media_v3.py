@@ -29,6 +29,15 @@ spec.loader.exec_module(v2)
 def exact_bounds_node(draw, center, value: str, *, w=400, h=150, outline=None, active=False, size=68):
     if outline is None:
         outline = v2.LINE
+
+    # Chapter 2's compaction input is intentionally two lines at the material
+    # 68 px floor. The exact glyph box measures 437 px in the CI font, so the
+    # historical 430 px node was physically impossible under the 5 px/side
+    # padding contract. Widen only that source node to 450 px; its right edge
+    # remains exactly x=555, where the existing outgoing arrow already starts.
+    if center == (330, 575) and w == 430 and h == 180:
+        w = 450
+
     x, y = center
     box = (int(x-w/2), int(y-h/2), int(x+w/2), int(y+h/2))
     if box[1] < 390 or box[3] > v2.SAFE_ZONE_START_Y - 15:
@@ -79,6 +88,7 @@ def main() -> int:
     report = v2.self_test()
     report["node_fit_contract"] = "ACTUAL_BOUNDS_5PX_HORIZONTAL_9PX_VERTICAL_MARGIN_PER_SIDE"
     report["source_stack_contract"] = "430PX_SOURCE_NODES_AT_68PX_MATERIAL_TYPE"
+    report["compaction_source_contract"] = "450PX_NODE_AT_68PX_MATERIAL_TYPE_RIGHT_EDGE_X555"
     if args.self_test:
         print(json.dumps(report, indent=2))
         return 0
