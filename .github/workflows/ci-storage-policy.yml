@@ -85,6 +85,7 @@ jobs:
                   'realtime-voice-browser-milestone.yml': 'realtime-voice-browser-pixel-evidence',
                   'coding-browser-visual-milestone.yml': 'coding-agents-browser-visual-evidence',
                   'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',
+                  'context-media-bootstrap.yml': 'context-engineering-browser-visual-evidence',
               }
               artifact_name = allowed.get(path.name)
               if artifact_name is None:
