@@ -1,0 +1,79 @@
+name: Modelos R2 exact approved transfer
+
+on:
+  push:
+    branches:
+      - migration/video-golden-modelos-razonadores
+    paths:
+      - .approved-transfer/modelos-r2/manifest.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: modelos-r2-exact-approved-transfer
+  cancel-in-progress: false
+
+jobs:
+  reconstruct-and-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: migration/video-golden-modelos-razonadores
+
+      - name: Reconstruct exact approved MP4 bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json
+          from pathlib import Path
+
+          root = Path(".approved-transfer/modelos-r2")
+          manifest = json.loads((root / "manifest.json").read_text())
+          if manifest.get("schema_version") != 1 or len(manifest.get("assets", [])) != 12:
+              raise SystemExit("invalid transfer manifest")
+
+          for asset in manifest["assets"]:
+              payload = "".join((root / part).read_text(encoding="ascii") for part in asset["parts"])
+              data = base64.b64decode(payload, validate=True)
+              digest = hashlib.sha256(data).hexdigest()
+              if digest != asset["sha256"]:
+                  raise SystemExit(f"sha256 mismatch for {asset['target']}: {digest}")
+              if len(data) != asset["size"]:
+                  raise SystemExit(f"size mismatch for {asset['target']}: {len(data)}")
+              target = Path(asset["target"])
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              print("EXACT_PASS", digest, len(data), target)
+          PY
+
+      - name: Verify approved snapshot contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node motion/scripts/check_modelos_approved_snapshot.mjs
+
+      - name: Refuse concurrent branch overwrite
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin migration/video-golden-modelos-razonadores
+          remote="$(git rev-parse origin/migration/video-golden-modelos-razonadores)"
+          echo "workflow_sha=$GITHUB_SHA remote=$remote"
+          test "$remote" = "$GITHUB_SHA"
+
+      - name: Commit exact approved snapshot and remove transfer payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/series/modelos-razonadores/*.mp4 locales/en/series/modelos-razonadores/*.mp4
+          git rm -r .approved-transfer/modelos-r2
+          git rm .github/workflows/modelos-approved-transfer.yml
+          git commit -m "migration: stage exact owner-approved Modelos R2 bytes"
+          git push origin HEAD:migration/video-golden-modelos-razonadores
