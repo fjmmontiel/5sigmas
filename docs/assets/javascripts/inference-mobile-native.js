@@ -12,7 +12,7 @@
       nodes: [
         ['request', 17, 11, 'Petición', 'Request', 'input'], ['queue', 50, 11, 'Cola', 'Queue', 'decision'], ['prefill', 83, 11, 'Prefill', 'Prefill', 'compute'],
         ['first', 83, 38, '1ª salida', '1st output', 'outcome'], ['decode', 50, 38, 'Decode', 'Decode', 'compute'], ['kv', 17, 38, 'Estado KV', 'KV state', 'state'],
-        ['concurrency', 17, 75, 'Concurrencia', 'Concurrency', 'input'], ['scheduler', 50, 75, 'Scheduler', 'Scheduler', 'decision'], ['goodput', 83, 75, 'Goodput', 'Goodput', 'outcome'],
+        ['concurrency', 18, 75, 'Concurrencia', 'Concurrency', 'input'], ['scheduler', 51, 75, 'Scheduler', 'Scheduler', 'decision'], ['goodput', 83, 75, 'Goodput', 'Goodput', 'outcome'],
       ],
       edges: [
         ['e1','request','queue',[],32,6,'',''], ['e2','queue','prefill',[],68,6,'',''], ['e3','prefill','first',[],91,24,'',''],
@@ -137,7 +137,7 @@
         .s5v-inference-mobile-native__graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:hidden;color:color-mix(in srgb,currentColor 72%,transparent)}
         .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.45;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
         .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(30%,96px);min-height:46px;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
-        [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(34%,108px)}
+        [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(35%,108px)}
         html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{padding-inline:3px}
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="finish"],
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="waiting"],
