@@ -15,6 +15,7 @@ from pathlib import Path
 
 import yaml
 
+import generate_coding_agent_visual_media as mobile_gen
 import validate_voice_media_visual as base
 
 SERIES = "coding-agents-agent-harnesses"
@@ -31,6 +32,17 @@ ARTICLES = (
 def configure() -> None:
     base.SERIES = SERIES
     base.ARTICLES = ARTICLES
+
+
+def mobile_safe_contract() -> dict[str, float | int | bool]:
+    """Fail closed on the exact mobile legibility + native-controls safe-area contract."""
+    contract = mobile_gen.assert_mobile_safe_contract()
+    assert contract["mobile_inline_width_css_px"] == 356
+    assert float(contract["min_material_projected_css_px"]) >= 12.0
+    assert float(contract["reserved_control_projected_css_px"]) >= 50.0
+    assert contract["material_content_below_safe_zone"] is False
+    assert contract["voice_generated"] is False
+    return contract
 
 
 def self_test() -> None:
@@ -60,7 +72,13 @@ def self_test() -> None:
     }.issubset(blocking)
     assert len(ARTICLES) == 6
     assert base.sample_timestamps(36.0) == [0.0, 7.2, 14.4, 21.6, 28.8, 35.28]
-    print("PASS Coding MEDIA_VISUAL/VOICE split + exact-video visual sampling fixture")
+    contract = mobile_safe_contract()
+    # Negative regression fixtures: either historical parameter would now fail closed.
+    assert 60 * (356 / 1920) < 12.0
+    assert (1080 - 830) * (356 / 1920) < 50.0
+    assert contract["min_material_source_px"] >= 68
+    assert contract["safe_zone_start_source_y"] <= 800
+    print("PASS Coding MEDIA_VISUAL/VOICE split + exact-video sampling + mobile-safe typography/control-safe-area fixtures")
 
 
 def main() -> int:
@@ -83,18 +101,19 @@ def main() -> int:
     output = args.output if args.output.is_absolute() else root / args.output
     samples_root = output.parent / "video-frames"
     try:
+        contract = mobile_safe_contract()
         results = [
             base.inspect_target(root, target, samples_root=samples_root)
             for target in base.load_targets(root)
         ]
-    except (OSError, RuntimeError, ValueError, yaml.YAMLError) as exc:
+    except (AssertionError, OSError, RuntimeError, ValueError, yaml.YAMLError) as exc:
         print(f"CODING_MEDIA_CONFIG_ERROR: {exc}", file=sys.stderr)
         return 2
 
     visual = [item for result in results for item in result["media_visual_blockers"]]
     voice = [item for result in results for item in result["voice_enhancement_debt"]]
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "owner_amendment_comment": 5716685049,
         "series": SERIES,
         "route_locale_obligations": len(results),
@@ -102,6 +121,7 @@ def main() -> int:
         "VOICE_ENHANCEMENT": "DEFERRED_OWNER_LOCAL" if voice else "READY",
         "PIXEL_REVIEW": "MANUAL_REVIEW_REQUIRED",
         "PEDAGOGY_REVIEW": "MANUAL_REVIEW_REQUIRED",
+        "mobile_safe_source_contract": contract,
         "visual_sample_policy": (
             "six deterministic frames per exact native MP4; evidence only, "
             "never automatic certification or narration-derived timing"
