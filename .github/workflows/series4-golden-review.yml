@@ -16,6 +16,7 @@ on:
       - 'scripts/inference_relationship_accessibility_common.mjs'
       - 'scripts/validate_inference_mobile_text_fit.mjs'
       - 'scripts/validate_inference_series_browser_milestone.mjs'
+      - 'scripts/serve_preview.py'
       - 'scripts/validate_inference_indexability.py'
       - 'scripts/validate_inference_media_visual.py'
       - 'scripts/validate_voice_media_visual.py'
@@ -102,11 +103,21 @@ jobs:
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Serve combined preview
+      - name: Serve combined preview with byte-range support
+        shell: bash
         run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-series4-preview.log 2>&1 &
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-series4-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-series4-preview.pid
           for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            if curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null; then
+              status="$(curl --silent --output /dev/null --write-out '%{http_code}' -H 'Range: bytes=0-31' http://127.0.0.1:8000/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4 || true)"
+              if [[ "$status" == '206' ]]; then
+                echo 'Preview server is ready with byte-range support.'
+                exit 0
+              fi
+            fi
             sleep 1
           done
           cat /tmp/5sigmas-series4-preview.log
