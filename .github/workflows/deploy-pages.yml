@@ -222,8 +222,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node <<'NODE'
-          const crypto = require('node:crypto');
+          node --input-type=module <<'NODE'
+          import crypto from 'node:crypto';
 
           const revision = process.env.GITHUB_SHA;
           const manifestUrl = `https://5sigmas.com/modelos-r2-release.json?rev=${revision}`;
