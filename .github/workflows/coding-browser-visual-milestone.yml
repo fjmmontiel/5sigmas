@@ -22,8 +22,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: quality/coding-agents-requalification
+          # Pin validation to the exact triggering revision so later branch writes
+          # cannot silently change the bytes under a running GOLDEN milestone.
+          ref: ${{ github.sha }}
           fetch-depth: 1
+
+      - name: Assert exact triggering revision is checked out
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          echo "PASS exact-head checkout: ${GITHUB_SHA}"
 
       - uses: actions/setup-python@v5
         with:
