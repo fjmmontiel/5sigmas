@@ -1,14 +1,13 @@
-schema_version: 5
+schema_version: 6
 program: 5sigmas_GOLDEN_requalification
 series: context-engineering-memory-mcp
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 reconciled_from_main: b6821a5077681531fba6610298dd0bb02b85813a
-active_branch: quality/context-engineering-requalification
+active_branch: quality/llm-inference-requalification
 catalog: {chapter_count: 6, route_locale_rows: 12, has_series_presentation: false}
 inspection:
   site_facing_revision_inspected: 86a8f65f35ae8d4ae6d325bf577d35b02618dd19
-  current_orchestration_head_automated: 0f19878b0438be5f1094e4dfac5582e17cb54b66
   source_review_receipt: quality/series-requalification/context-source-review-2026-09-20.yml
   source_review_receipt_head: ddb0b44fc0bbd81bf192e02c88dcde7735b63eeb
   manual_pixel_pedagogy_reviewed_on: 2026-09-20
@@ -27,16 +26,20 @@ evidence:
   deterministic_video_frames_per_native_mp4: 6
   context_golden_pr_gate_run: 35491320469
   context_golden_pr_gate_result: SUCCESS
-  series5_review_run: 35491320491
-  series5_review_result: SUCCESS
   final_broad_pr_visual_run: 35496210349
   final_broad_pr_visual_result: SUCCESS
-  pages_deploy_run: 35498875755
+  article_release_pr: 339
+  article_release_merge: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  live_indexability_hardening_pr: 341
+  live_indexability_hardening_reviewed_head: 43076d9903233397fd8c39efaac196fb63d8be44
+  production_main_verified: 7d543dd664f1dca420fbc366739d0355e38b32b2
+  pages_deploy_run: 35501589768
   pages_deploy_result: SUCCESS
-  dedicated_live_qa_run: 35499422075
-  dedicated_live_qa_job: 106048396961
+  dedicated_live_qa_run: 35502173179
+  dedicated_live_qa_job: 106055767662
   dedicated_live_qa_result: SUCCESS
-  exact_live_checkout: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+  exact_live_checkout: 7d543dd664f1dca420fbc366739d0355e38b32b2
+  exact_revision_stamp: PASS_BUILD_JSON_EQUALS_DEPLOYED_SHA
   live_release_receipt: quality/series-requalification/context-series-live-release-2026-09-20.yml
 mobile_video_contract: {material_source_px: 68, material_projected_css_px: 12.61, safe_zone_start_y: 810, reserved_control_css_px: 50.06, scene_endpoint_layout_checks: 72, voice_generated: false}
 gates: {SOURCE_PASS: 12/12, BUILD_PASS: 12/12, BROWSER_PASS: 12/12, MEDIA_VISUAL_PASS: 12/12, INDEXABILITY_PASS: 12/12, PIXEL_REVIEW: 12/12, PEDAGOGY_REVIEW: 12/12, ARTICLE_GOLDEN: 6/6}
@@ -48,11 +51,11 @@ voice:
   generated_captions_transcript_narration_timings: false
   historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; current inventory 128; budget remains 91"
 release:
-  pr: 339
-  release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
-  merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
-  pages_deploy_run: 35498875755
-  dedicated_live_qa_run: 35499422075
+  article_pr: 339
+  live_indexability_hardening_pr: 341
+  production_main_verified: 7d543dd664f1dca420fbc366739d0355e38b32b2
+  pages_deploy_run: 35501589768
+  dedicated_live_qa_run: 35502173179
   production_verified: true
   series_golden: true
   next_action: COMPLETE
@@ -70,11 +73,11 @@ row_defaults: &row_defaults
   defects: []
   factual_source_status: PASS_FRESH_2026_09_20
   parity_status: PASS_FRESH_2026_09_20
-  canonical_hreflang_sitemap_internal_discovery: PASS_RENDERED_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
-  robots_noindex_status: PASS_RENDERED_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
+  canonical_hreflang_sitemap_internal_discovery: PASS_LIVE_EXACT_DEPLOYED_SHA_7d543dd664f1dca420fbc366739d0355e38b32b2
+  robots_noindex_status: PASS_LIVE_EXACT_DEPLOYED_SHA_7d543dd664f1dca420fbc366739d0355e38b32b2
   evidence_revision: 86a8f65f35ae8d4ae6d325bf577d35b02618dd19
   evidence_artifact_id: 10597609868
-  live_deploy_verification: PASS_MERGE_61d9b3af_PAGES_35498875755_LIVE_QA_35499422075
+  live_deploy_verification: PASS_PAGES_35501589768_EXACT_LIVE_QA_35502173179_SHA_7d543dd664f1dca420fbc366739d0355e38b32b2
   gsc_observation: null
   next_action: COMPLETE
   state: GOLDEN
