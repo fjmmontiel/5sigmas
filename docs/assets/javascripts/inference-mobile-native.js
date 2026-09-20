@@ -139,7 +139,7 @@
     style.textContent = `
       .s5v-inference-mobile-native{display:none;box-sizing:border-box}
       @media (max-width:720px){
-        .s5v-inference-mobile-native{display:grid;gap:10px;margin:12px 0 16px;padding:13px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);overflow:hidden}
+        .s5v-inference-mobile-native{display:grid;gap:10px;margin:12px 0 16px;padding:13px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);overflow:hidden;overflow-x:clip}
         .s5v-inference-mobile-native__kicker{font-size:.72rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase;opacity:.72}
         .s5v-inference-mobile-native h4{margin:0;font-size:1.02rem;line-height:1.22;letter-spacing:-.02em}
         .s5v-inference-mobile-native__graph{position:relative;width:100%;min-width:0;border-radius:15px;background:linear-gradient(180deg,color-mix(in srgb,currentColor 4%,transparent),transparent 48%);overflow:hidden}
