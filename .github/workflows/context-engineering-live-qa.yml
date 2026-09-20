@@ -11,7 +11,9 @@ on:
       - 'locales/en/snippets/articulos-tecnicos/context-*'
       - 'scripts/validate_context_engineering_ch*.mjs'
       - 'scripts/validate_context_engineering_release_surface.mjs'
+      - 'scripts/validate_context_live_indexability.mjs'
       - '.github/workflows/context-engineering-live-qa.yml'
+      - '.github/workflows/deploy-pages.yml'
   workflow_run:
     workflows: ['Deploy MkDocs to GitHub Pages']
     types: [completed]
@@ -83,6 +85,11 @@ jobs:
       - name: Validate Context Engineering release surface
         run: node scripts/validate_context_engineering_release_surface.mjs
 
+      - name: Validate Context Engineering indexability on rendered preview
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_context_live_indexability.mjs
+
       - name: Revalidate Context Engineering relationship geometry and accessibility
         run: |
           node scripts/validate_context_engineering_ch1_accessibility.mjs
@@ -138,6 +145,12 @@ jobs:
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_context_engineering_release_surface.mjs
+
+      - name: Validate exact live Context Engineering indexability
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+          S5_EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: node scripts/validate_context_live_indexability.mjs
 
       - name: Upload live evidence on failure
         if: failure()
