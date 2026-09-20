@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "spec_id": "from-cave-to-agi-v1",
+  "unit": "from-cave-to-agi",
+  "status": "AUTHORED_NOT_BROWSER_CERTIFIED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "series_register": "motion/content/from-cave-to-agi/series-register.json",
+  "locale_bindings": "motion/content/from-cave-to-agi/locale-bindings.json",
+  "theme": {
+    "base": "neutral_flat_editorial",
+    "accent": "#26A69A",
+    "accent_dark": "#00776F",
+    "accent_surface": "#E7F4F0"
+  },
+  "render_contract": {
+    "width_horizontal": 1920,
+    "height_horizontal": 1080,
+    "width_vertical": 1080,
+    "height_vertical": 1920,
+    "fps": 60,
+    "duration_seconds_per_chapter": 75,
+    "scene_duration_seconds": 15,
+    "audio": "silent",
+    "deterministic_seek": true,
+    "native_vertical_recomposition": true,
+    "reduced_motion_variant": true,
+    "text_reveal": "whole_chunk",
+    "unseen_text_prelaid_out": true,
+    "source_binding_policy": "git_blob_runtime_verified"
+  },
+  "source_bindings": [
+    {"chapter":"00","es":"docs/series/from-cave-to-agi/00_presentacion_serie.md","en":"locales/en/series/from-cave-to-agi/00_presentacion_serie.md"},
+    {"chapter":"01","es":"docs/series/from-cave-to-agi/01-representar.md","en":"locales/en/series/from-cave-to-agi/01-representar.md"},
+    {"chapter":"02","es":"docs/series/from-cave-to-agi/02-mecanizar.md","en":"locales/en/series/from-cave-to-agi/02-mecanizar.md"},
+    {"chapter":"03","es":"docs/series/from-cave-to-agi/03-aprender.md","en":"locales/en/series/from-cave-to-agi/03-aprender.md"},
+    {"chapter":"04","es":"docs/series/from-cave-to-agi/04-escalar.md","en":"locales/en/series/from-cave-to-agi/04-escalar.md"},
+    {"chapter":"05","es":"docs/series/from-cave-to-agi/05-mas-alla.md","en":"locales/en/series/from-cave-to-agi/05-mas-alla.md"}
+  ],
+  "chapters": [
+    {
+      "chapter":"00",
+      "slug":"presentacion",
+      "title":{"es":"De la cueva a la AGI","en":"From Cave to AGI"},
+      "scenes":[
+        {"concept_id":"overview.abstraction-lineage","title":{"es":"Continuidad histórica","en":"Historical continuity"},"text":{"es":"La serie recorre el paso desde marcas y símbolos manipulables hasta modelos fundacionales, mostrando una continuidad histórica en vez de avances aislados.","en":"The series traces the path from manipulable marks and symbols to foundation models, showing historical continuity rather than isolated breakthroughs."}},
+        {"concept_id":"overview.representation-stack","title":{"es":"Capas de capacidad","en":"Capability layers"},"text":{"es":"Los sistemas actuales dependen de capas previas de notación matemática, computación y aprendizaje automático.","en":"Modern systems depend on earlier layers of mathematical notation, computation and machine learning."}},
+        {"concept_id":"overview.rules-to-data","title":{"es":"De reglas a datos","en":"From rules to data"},"text":{"es":"La historia de la IA pasa de codificar procedimientos y conocimiento de forma explícita a ajustar modelos mediante datos y optimización.","en":"AI shifts from explicitly encoding procedures and knowledge to fitting models through data and optimization."}},
+        {"concept_id":"overview.scale-convergence","title":{"es":"Convergencia de escala","en":"Scaling convergence"},"text":{"es":"A partir de 2012, datos, cómputo, optimización y arquitectura empiezan a reforzarse mutuamente a suficiente escala.","en":"From 2012 onward, data, compute, optimization and architecture increasingly reinforce one another at sufficient scale."}},
+        {"concept_id":"overview.frontier-system","title":{"es":"Sistema compuesto","en":"Composite system"},"text":{"es":"La frontera posterior al escalado combina modelos con memoria, búsqueda, herramientas y representaciones del mundo.","en":"Beyond scaling, frontier systems combine models with memory, search, tools and representations of the world."}}
+      ]
+    },
+    {
+      "chapter":"01",
+      "slug":"representar",
+      "title":{"es":"Representar","en":"Represent"},
+      "scenes":[
+        {"concept_id":"represent.symbol-substitution","title":{"es":"Símbolos manipulables","en":"Manipulable symbols"},"text":{"es":"Las marcas físicas permiten registrar cantidades ausentes y convierten objetos concretos en símbolos operables.","en":"Physical marks record absent quantities and turn concrete objects into symbols that can be manipulated."}},
+        {"concept_id":"represent.place-value-zero","title":{"es":"Valor posicional y cero","en":"Place value and zero"},"text":{"es":"La notación posicional y el cero separan el valor del símbolo de su forma aislada y permiten expresar cantidades generales con un vocabulario pequeño.","en":"Positional notation and zero separate a symbol's value from its isolated form and express general quantities with a small vocabulary."}},
+        {"concept_id":"represent.algebra-unknown","title":{"es":"Álgebra e incógnitas","en":"Algebra and unknowns"},"text":{"es":"El álgebra convierte cantidades desconocidas en objetos que pueden transformarse con reglas generales; la notación posterior comprime esas operaciones.","en":"Algebra turns unknown quantities into objects that can be transformed by general rules; later notation compresses those operations."}},
+        {"concept_id":"represent.deductive-proof","title":{"es":"Prueba deductiva","en":"Deductive proof"},"text":{"es":"El ideal deductivo griego organiza conclusiones como cadenas revisables desde definiciones y postulados.","en":"The Greek deductive ideal organizes conclusions as auditable chains from definitions and postulates."}},
+        {"concept_id":"represent.calculus-change","title":{"es":"Cambio y acumulación","en":"Change and accumulation"},"text":{"es":"El cálculo formaliza tasa de cambio y acumulación, haciendo calculables fenómenos continuos y predictivos.","en":"Calculus formalizes rates of change and accumulation, making continuous and predictive phenomena computable."}}
+      ]
+    },
+    {
+      "chapter":"02",
+      "slug":"mecanizar",
+      "title":{"es":"Mecanizar","en":"Mechanize"},
+      "scenes":[
+        {"concept_id":"mechanize.fixed-operation-limit","title":{"es":"Operaciones fijas","en":"Fixed operations"},"text":{"es":"Pascalina y Step Reckoner automatizan familias concretas de operaciones, pero no separan mecanismo e instrucciones generales.","en":"The Pascaline and Step Reckoner automate specific families of operations but do not separate the mechanism from general instructions."}},
+        {"concept_id":"mechanize.instructions-separate","title":{"es":"Programa separado","en":"Separate program"},"text":{"es":"Jacquard separa instrucciones del mecanismo; Babbage y Lovelace extienden esa idea hacia una máquina general y procedimientos reutilizables.","en":"Jacquard separates instructions from mechanism; Babbage and Lovelace extend the idea toward a general machine and reusable procedures."}},
+        {"concept_id":"mechanize.logic-to-circuit","title":{"es":"Lógica a circuitos","en":"Logic to circuits"},"text":{"es":"Boole formaliza operaciones lógicas y Shannon muestra cómo implementarlas con circuitos de conmutación.","en":"Boole formalizes logical operations and Shannon shows how to implement them with switching circuits."}},
+        {"concept_id":"mechanize.turing-boundary","title":{"es":"Computación y límites","en":"Computation and limits"},"text":{"es":"La máquina de Turing abstrae la computación general y el problema de parada demuestra que existen límites formales no reducibles a más hardware.","en":"The Turing machine abstracts general computation, while the halting problem shows formal limits that cannot be removed by adding hardware."}},
+        {"concept_id":"mechanize.stored-program","title":{"es":"Programa almacenado","en":"Stored program"},"text":{"es":"El programa almacenado coloca datos e instrucciones bajo una codificación común; Manchester Baby y EDSAC convierten el principio en ejecución real.","en":"The stored-program idea places data and instructions under a common encoding; Manchester Baby and EDSAC turn the principle into real execution."}}
+      ]
+    },
+    {
+      "chapter":"03",
+      "slug":"aprender",
+      "title":{"es":"Aprender","en":"Learn"},
+      "scenes":[
+        {"concept_id":"learn.expert-rule-inference","title":{"es":"Reglas expertas","en":"Expert rules"},"text":{"es":"Los sistemas expertos pueden rendir muy bien en dominios estrechos cuando reglas, hechos y heurísticas son suficientemente estables y acotables.","en":"Expert systems can perform very well in narrow domains when rules, facts and heuristics are sufficiently stable and bounded."}},
+        {"concept_id":"learn.knowledge-acquisition-bottleneck","title":{"es":"Cuello de adquisición","en":"Knowledge bottleneck"},"text":{"es":"Al crecer un dominio, mantener reglas exige extraer conocimiento experto, resolver conflictos y absorber excepciones; la adquisición de conocimiento se vuelve un cuello de botella.","en":"As a domain grows, maintaining rules requires eliciting expert knowledge, resolving conflicts and absorbing exceptions; knowledge acquisition becomes a bottleneck."}},
+        {"concept_id":"learn.generalization-objective","title":{"es":"Generalización","en":"Generalization"},"text":{"es":"El aprendizaje estadístico desplaza el objetivo desde memorizar ejemplos hacia captar regularidades que funcionen fuera del conjunto de entrenamiento.","en":"Statistical learning shifts the objective from memorizing examples to capturing regularities that work beyond the training set."}},
+        {"concept_id":"learn.optimization-loop","title":{"es":"Optimización","en":"Optimization"},"text":{"es":"Aprender de ejemplos requiere ajustar parámetros para reducir error; descenso de gradiente, regularización y validación convierten esa idea en un procedimiento repetible.","en":"Learning from examples requires adjusting parameters to reduce error; gradient descent, regularization and validation turn that idea into a repeatable procedure."}},
+        {"concept_id":"learn.multilayer-recovery","title":{"es":"Capas ocultas y backprop","en":"Hidden layers and backprop"},"text":{"es":"El perceptrón de una capa no puede separar XOR; las capas ocultas amplían la representación y backpropagation ofrece una receta general para ajustar redes multicapa.","en":"A single-layer perceptron cannot separate XOR; hidden layers expand the representation and backpropagation provides a general recipe for fitting multilayer networks."}}
+      ]
+    },
+    {
+      "chapter":"04",
+      "slug":"escalar",
+      "title":{"es":"Escalar","en":"Scale"},
+      "scenes":[
+        {"concept_id":"scale.alexnet-regime-shift","title":{"es":"Cambio de régimen","en":"Regime shift"},"text":{"es":"AlexNet logró 15,3% de error top-5 en ILSVRC 2012 frente al 26,2% del segundo clasificado, combinando profundidad, datos, regularización y GPU.","en":"AlexNet reached 15.3% top-5 error at ILSVRC 2012 versus 26.2% for the runner-up, combining depth, data, regularization and GPUs."}},
+        {"concept_id":"scale.transformer-parallelism","title":{"es":"Atención paralela","en":"Parallel attention"},"text":{"es":"El Transformer elimina la recurrencia del núcleo y reorganiza el cálculo alrededor de atención, haciendo el entrenamiento mucho más paralelizable.","en":"The Transformer removes recurrence from the core and reorganizes computation around attention, making training far more parallelizable."}},
+        {"concept_id":"scale.pretraining-reuse","title":{"es":"Preentrenar y reutilizar","en":"Pretrain and reuse"},"text":{"es":"BERT y la familia GPT consolidan la idea de entrenar una base amplia y después adaptarla o condicionarla para múltiples tareas.","en":"BERT and the GPT family consolidate the idea of training a broad base and then adapting or conditioning it for many tasks."}},
+        {"concept_id":"scale.scaling-laws","title":{"es":"Leyes de escala","en":"Scaling laws"},"text":{"es":"En muchos regímenes, el error cae de forma relativamente predecible con parámetros, datos y cómputo; Chinchilla enfatiza que importa también cómo se reparte el presupuesto.","en":"Across many regimes, error falls relatively predictably with parameters, data and compute; Chinchilla emphasizes that allocation of the budget also matters."}},
+        {"concept_id":"scale.foundation-model-reuse","title":{"es":"Modelos fundacionales","en":"Foundation models"},"text":{"es":"Los modelos fundacionales se preentrenan sobre datos amplios y luego sirven como infraestructura reutilizable para muchas tareas y, cada vez más, modalidades.","en":"Foundation models are pretrained on broad data and then serve as reusable infrastructure for many tasks and increasingly many modalities."}}
+      ]
+    },
+    {
+      "chapter":"05",
+      "slug":"mas-alla",
+      "title":{"es":"Más allá","en":"Beyond"},
+      "scenes":[
+        {"concept_id":"beyond.transformer-constraints","title":{"es":"Límites del Transformer","en":"Transformer constraints"},"text":{"es":"Al escalar Transformers se hacen visibles límites de coste de contexto largo, memoria persistente y capacidad de planificar o actuar más allá de predecir la siguiente pieza de una secuencia.","en":"As Transformers scale, limits become visible in long-context cost, persistent memory and the ability to plan or act beyond predicting the next piece of a sequence."}},
+        {"concept_id":"beyond.search-verification","title":{"es":"Búsqueda y verificación","en":"Search and verification"},"text":{"es":"AlphaGo y sus descendientes muestran que en ciertos problemas el sistema combina modelo, búsqueda y evaluación para explorar activamente espacios de posibilidades.","en":"AlphaGo and its descendants show that, for some problems, a system combines a model, search and evaluation to actively explore spaces of possibilities."}},
+        {"concept_id":"beyond.persistent-memory","title":{"es":"Memoria persistente","en":"Persistent memory"},"text":{"es":"Una ventana de contexto larga no equivale a memoria persistente; distintas líneas exploran mecanismos para secuencias largas y adaptación durante el uso.","en":"A long context window is not the same as persistent memory; different lines of work explore mechanisms for long sequences and adaptation during use."}},
+        {"concept_id":"beyond.world-model-rollout","title":{"es":"Modelos del mundo","en":"World models"},"text":{"es":"Los world models aprenden representaciones internas de cómo evoluciona un entorno y pueden imaginar futuros posibles para apoyar planificación.","en":"World models learn internal representations of how an environment evolves and can imagine possible futures to support planning."}},
+        {"concept_id":"beyond.embodied-system-loop","title":{"es":"Bucle percepción-acción","en":"Perception-action loop"},"text":{"es":"La frontera combina modelos con percepción, herramientas, planificación y control físico para cerrar el bucle entre representación y acción.","en":"The frontier combines models with perception, tools, planning and physical control to close the loop between representation and action."}}
+      ]
+    }
+  ]
+}
