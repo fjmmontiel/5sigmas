@@ -34,7 +34,7 @@
       edges: [
         ['e1','a','table',[],31,10,'',''], ['e2','b','table',[],31,30,'',''], ['e3','table','gpu',[],68,15,'mapa','maps'], ['e4','gpu','finish',[],91,34,'',''],
         ['e5','finish','free',[],68,43,'libera','releases'], ['e6','free','scheduler',[],56,61,'capacidad','capacity'], ['e7','waiting','scheduler',[],32,71,'',''], ['e8','scheduler','admit',[],68,71,'admite','admits'],
-        ['e9','admit','table',[[72,62],[72,33]],74,57,'asigna','allocates'], ['e10','gpu','host',[],91,58,'offload ⇄','offload ⇄'],
+        ['e9','admit','table',[[72,62],[72,33]],74,57,'',''], ['e10','gpu','host',[],91,58,'',''],
       ],
     },
     {
@@ -50,9 +50,9 @@
         ['topology',86,82,'Enlace GPU','GPU link','state'], ['outcome',50,88,'Latencia / memoria / calidad','Latency / memory / quality','outcome'],
       ],
       edges: [
-        ['e1','bytes','quant',[],32,5,'',''], ['e2','quant','kernel',[],68,5,'',''], ['e3','kernel','local',[],91,22,'ejecuta','executes'],
-        ['e4','model','placement',[],32,53,'',''], ['e5','placement','comms',[],68,53,'reparte','splits'], ['e6','comms','topology',[],91,70,'depende','depends'],
-        ['e7','local','outcome',[[72,44],[72,82]],66,42,'trade-off','trade-off'], ['e8','topology','outcome',[],68,86,'trade-off','trade-off'],
+        ['e1','bytes','quant',[],32,5,'',''], ['e2','quant','kernel',[],68,5,'',''], ['e3','kernel','local',[],91,22,'',''],
+        ['e4','model','placement',[],32,53,'',''], ['e5','placement','comms',[],68,53,'reparte','splits'], ['e6','comms','topology',[],91,70,'',''],
+        ['e7','local','outcome',[[72,44],[72,82]],66,42,'trade-off','trade-off'], ['e8','topology','outcome',[],68,86,'',''],
       ],
     },
     {
@@ -70,7 +70,7 @@
       ],
       edges: [
         ['e1','prefix','lookup',[],28,4,'',''], ['e2','lookup','hit',[],56,4,'hit','hit'], ['e3','hit','reuse',[],80,4,'',''], ['e4','lookup','miss',[[42,22]],54,20,'miss','miss'], ['e5','miss','prefill',[],80,23,'',''],
-        ['e6','draft','verify',[],28,49,'',''], ['e7','verify','accept',[],56,45,'acepta','accepts'], ['e8','accept','commit',[],80,43,'',''], ['e9','verify','reject',[],56,64,'rechaza','rejects'], ['e10','reject','correct',[],80,64,'',''],
+        ['e6','draft','verify',[],28,49,'',''], ['e7','verify','accept',[],56,45,'',''], ['e8','accept','commit',[],80,43,'',''], ['e9','verify','reject',[],56,64,'',''], ['e10','reject','correct',[],80,64,'',''],
         ['e11','correct','verify',[[88,80],[42,80]],64,80,'reverifica ↺','reverify ↺'], ['e12','reuse','pressure',[[88,37],[62,37],[62,82]],68,34,'',''], ['e13','commit','pressure',[[78,82]],78,78,'',''],
       ],
     },
@@ -89,8 +89,8 @@
       ],
       edges: [
         ['e1','request','eligible',[],28,4,'',''], ['e2','eligible','cache',[],56,4,'válida','valid'], ['e3','cache','hit',[],80,4,'hit','hit'], ['e4','cache','router',[[70,22],[42,22]],57,20,'miss','miss'],
-        ['e5','router','placement',[],56,29,'elige','selects'], ['e6','placement','primary',[],80,29,'',''], ['e7','primary','success',[],80,48,'ok','ok'], ['e8','primary','fallback',[],91,46,'fail','fail'],
-        ['e9','fallback','alt',[],91,70,'compatible','compatible'], ['e10','success','telemetry',[[62,70]],56,69,'',''], ['e11','alt','telemetry',[],65,84,'',''], ['e12','telemetry','policy',[[28,80],[28,58]],31,72,'aprende','learns'], ['e13','policy','router',[[14,34]],25,32,'feedback','feedback'],
+        ['e5','router','placement',[],56,29,'',''], ['e6','placement','primary',[],80,29,'',''], ['e7','primary','success',[],80,48,'ok','ok'], ['e8','primary','fallback',[],91,46,'fail','fail'],
+        ['e9','fallback','alt',[],91,70,'',''], ['e10','success','telemetry',[[62,70]],56,69,'',''], ['e11','alt','telemetry',[],65,84,'',''], ['e12','telemetry','policy',[[28,80],[28,58]],31,72,'aprende','learns'], ['e13','policy','router',[[14,34]],25,32,'feedback','feedback'],
       ],
     },
     {
@@ -107,8 +107,8 @@
         ['sweep',24,90,'Saturation sweep','Saturation sweep','decision'], ['report',76,90,'Operating region','Operating region','outcome'],
       ],
       edges: [
-        ['e1','workload','sut',[],32,5,'carga','load'], ['e2','sut','response',[],68,5,'',''], ['e3','response','goodput',[],91,24,'filtra','filters'],
-        ['e4','clock','latency',[],32,33,'endpoints','endpoints'], ['e5','latency','goodput',[],68,33,'SLO','SLO'], ['e6','power','account',[],32,61,'misma ventana','same window'], ['e7','account','denom',[],68,61,'denominador','denominator'],
+        ['e1','workload','sut',[],32,5,'carga','load'], ['e2','sut','response',[],68,5,'',''], ['e3','response','goodput',[],91,24,'',''],
+        ['e4','clock','latency',[],32,33,'endpoints','endpoints'], ['e5','latency','goodput',[],68,33,'SLO','SLO'], ['e6','power','account',[],32,61,'misma ventana','same window'], ['e7','account','denom',[],68,61,'',''],
         ['e8','goodput','report',[[86,78]],83,75,'',''], ['e9','denom','report',[[86,82]],82,82,'',''], ['e10','sweep','report',[],50,85,'región útil','operating region'], ['e11','sweep','sut',[[24,78],[24,24],[50,24]],19,53,'varía carga ↺','vary load ↺'],
       ],
     },
