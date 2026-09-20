@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/context-media-bootstrap.yml'
       - 'scripts/generate_context_engineering_visual_media.py'
+      - 'scripts/declare_context_engineering_media_manifest.py'
       - 'scripts/validate_context_series_browser_milestone.mjs'
 
 permissions:
@@ -46,6 +47,7 @@ jobs:
         run: |
           python scripts/generate_context_engineering_visual_media.py --self-test
           python scripts/generate_context_engineering_visual_media.py
+          python scripts/declare_context_engineering_media_manifest.py
 
       - name: Assert generated ES and EN media bytes
         shell: bash
@@ -191,7 +193,7 @@ jobs:
         run: |
           git config user.name '5sigmas GOLDEN Series Builder'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
-          git add docs/series/context-engineering-memory-mcp locales/en/media.yml
+          git add docs/series/context-engineering-memory-mcp locales/en/media.yml locales/en/manifest.yml
           git add -f locales/en/series/context-engineering-memory-mcp/*.mp4 locales/en/series/context-engineering-memory-mcp/*.jpg
           if git diff --cached --quiet; then
             echo 'No generated Context media changes to commit.'
