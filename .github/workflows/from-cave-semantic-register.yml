@@ -1,4 +1,4 @@
-name: From Cave to AGI semantic and render foundation
+name: From Cave to AGI semantic engine
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - 'motion/content/from-cave-to-agi/**'
       - 'motion/src/from-cave/**'
       - 'motion/src/render/**'
+      - 'motion/tests/from-cave-engine.test.mjs'
       - 'motion/scripts/check_from_cave_register.mjs'
       - 'motion/scripts/check_from_cave_foundation.mjs'
       - '.github/workflows/from-cave-semantic-register.yml'
@@ -16,6 +17,7 @@ on:
       - 'motion/content/from-cave-to-agi/**'
       - 'motion/src/from-cave/**'
       - 'motion/src/render/**'
+      - 'motion/tests/from-cave-engine.test.mjs'
       - 'motion/scripts/check_from_cave_register.mjs'
       - 'motion/scripts/check_from_cave_foundation.mjs'
 
@@ -23,19 +25,25 @@ permissions:
   contents: read
 
 jobs:
-  semantic-and-foundation:
+  semantic-engine:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Syntax-check authored renderer foundation
+      - name: Syntax-check authored renderer and semantic engine
         run: |
           node --check motion/src/from-cave/theme.mjs
+          node --check motion/src/from-cave/schema.mjs
+          node --check motion/src/from-cave/mechanisms.mjs
+          node --check motion/src/from-cave/engine.mjs
           node --check motion/src/render/paint.mjs
           node --check motion/src/render/layout.mjs
           node --check motion/scripts/check_from_cave_register.mjs
           node --check motion/scripts/check_from_cave_foundation.mjs
+          node --check motion/tests/from-cave-engine.test.mjs
       - name: Validate complete source-bound series register
         run: node motion/scripts/check_from_cave_register.mjs
       - name: Validate H/V render foundation
         run: node motion/scripts/check_from_cave_foundation.mjs
+      - name: Validate deterministic H/V semantic engine
+        run: node --test motion/tests/from-cave-engine.test.mjs
