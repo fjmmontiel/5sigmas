@@ -9,6 +9,7 @@ on:
       - 'docs/assets/javascripts/video-library.js'
       - 'scripts/video_discovery_contract.py'
       - 'scripts/prepare_modelos_r2_ci_media.sh'
+      - 'scripts/serve_static_range.py'
       - 'scripts/validate_modelos_r2_discovery_browser.mjs'
       - 'tests/test_video_discovery_contract.py'
       - 'tests/test_video_discovery_surface.py'
@@ -88,15 +89,23 @@ jobs:
               target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
           PY
 
-      - name: Serve combined site
+      - name: Serve combined site with MP4 byte ranges
         run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-modelos-discovery.log 2>&1 &
+          python scripts/serve_static_range.py --port 8000 --directory site > /tmp/5sigmas-modelos-discovery.log 2>&1 &
           for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            if curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then
+              break
+            fi
             sleep 1
           done
-          cat /tmp/5sigmas-modelos-discovery.log
-          exit 1
+          curl --fail --silent \
+            --range 0-31 \
+            --dump-header /tmp/modelos-range.headers \
+            http://127.0.0.1:8000/series/modelos-razonadores/00_presentacion_serie.mp4 \
+            --output /tmp/modelos-range.bin
+          grep -Eq '^HTTP/[0-9.]+ 206 ' /tmp/modelos-range.headers
+          grep -Eiq '^Accept-Ranges: bytes' /tmp/modelos-range.headers
+          test "$(wc -c < /tmp/modelos-range.bin)" -eq 32
 
       - name: Validate all 12 discovery surfaces in native Chromium
         run: node scripts/validate_modelos_r2_discovery_browser.mjs
