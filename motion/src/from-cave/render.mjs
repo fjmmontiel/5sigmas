@@ -2,7 +2,7 @@ import {Paint} from '../render/paint.mjs';
 import {sceneLayout,drawHeader,drawText} from '../render/layout.mjs';
 import {fromCaveFrameState,fromCaveRenderMatrix,validateFromCaveMechanismCoverage,indexFromCaveConcepts} from './engine.mjs';
 import {FROM_CAVE_THEME} from './theme.mjs';
-import {drawFromCaveMechanism} from './visuals.mjs';
+import {drawFromCaveMechanism} from './visuals-text-layout.mjs';
 
 function localizedScene(spec,frame){
   const chapter=spec.chapters.find(item=>item.chapter===frame.job.chapter);
