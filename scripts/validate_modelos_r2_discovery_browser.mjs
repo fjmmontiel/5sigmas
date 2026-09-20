@@ -25,6 +25,26 @@ async function loadSources() {
   return sources;
 }
 
+async function requireH264(browser) {
+  const page = await browser.newPage();
+  try {
+    const support = await page.evaluate(() => {
+      const video = document.createElement('video');
+      return {
+        avc: video.canPlayType('video/mp4; codecs="avc1.42E01E"'),
+        mp4: video.canPlayType('video/mp4'),
+        userAgent: navigator.userAgent,
+      };
+    });
+    if (!support.avc || !support.mp4) {
+      throw new Error(`H264-capable browser required; support=${JSON.stringify(support)}`);
+    }
+    console.log(`Browser media preflight PASS: ${browser.version()} ${JSON.stringify(support)}`);
+  } finally {
+    await page.close();
+  }
+}
+
 async function waitForMetadata(page, label) {
   try {
     return await page.locator('[data-s5-watch-player]').evaluate((video) => new Promise((resolve, reject) => {
@@ -259,8 +279,14 @@ async function mobileReducedMotionChecks(browser, source) {
 }
 
 const sources = await loadSources();
-const browser = await chromium.launch({ headless: true });
+let browser;
 try {
+  browser = await chromium.launch({ headless: true, channel: 'chrome' });
+} catch (error) {
+  throw new Error(`H264-capable Google Chrome is required for native MP4 discovery QA: ${error instanceof Error ? error.message : String(error)}`);
+}
+try {
+  await requireH264(browser);
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   for (const source of sources) {
     await rawContractChecks(context.request, source);
