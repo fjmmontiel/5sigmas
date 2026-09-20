@@ -1,0 +1,63 @@
+{
+  "chapter": "03",
+  "slug": "aprender",
+  "source_es": "docs/series/from-cave-to-agi/03-aprender.md",
+  "question": "¿Cómo pasó la IA de escribir conocimiento a mano a aprender regularidades útiles a partir de ejemplos?",
+  "concepts": [
+    {
+      "concept_id": "learn.expert-rule-inference",
+      "evidence": "Los sistemas expertos pueden rendir muy bien en dominios estrechos cuando reglas, hechos y heurísticas son suficientemente estables y acotables.",
+      "mechanism": "Hechos activan reglas compatibles dentro de una red de inferencia hasta producir una recomendación; fuera del dominio, el flujo se queda sin regla aplicable.",
+      "semantic_rationale": "Debe verse tanto la potencia local como la dependencia de una base de conocimiento explícita.",
+      "perceptual_family": "rule-activation-network",
+      "topology": "fact-rule inference network",
+      "choreography": "inject facts, fire only matching rules, propagate a recommendation, then present an out-of-domain fact with no path",
+      "composition": "rule graph with active inference path",
+      "cues": ["facts", "rules", "inference", "domain-boundary"]
+    },
+    {
+      "concept_id": "learn.knowledge-acquisition-bottleneck",
+      "evidence": "Al crecer un dominio, mantener reglas exige extraer conocimiento experto, resolver conflictos y absorber excepciones; la adquisición de conocimiento se vuelve un cuello de botella.",
+      "mechanism": "Una base de reglas crece con excepciones y conflictos hasta que el coste de mantenimiento supera el crecimiento útil de cobertura.",
+      "semantic_rationale": "La degradación debe aparecer como complejidad de mantenimiento, no como simple falta de cómputo.",
+      "perceptual_family": "maintenance-complexity-growth",
+      "topology": "coverage versus maintenance burden",
+      "choreography": "add rules and exceptions; show coverage rise first, then conflict/maintenance load accelerate",
+      "composition": "dual growth curves with conflict nodes",
+      "cues": ["coverage", "exceptions", "conflicts", "bottleneck"]
+    },
+    {
+      "concept_id": "learn.generalization-objective",
+      "evidence": "El aprendizaje estadístico desplaza el objetivo desde memorizar ejemplos hacia captar regularidades que funcionen fuera del conjunto de entrenamiento.",
+      "mechanism": "Ejemplos se separan en entrenamiento y evaluación; la frontera se ajusta sobre un conjunto y después se prueba sobre puntos nunca usados para ajustarla.",
+      "semantic_rationale": "La escena debe hacer visible la diferencia entre bajo error de entrenamiento y generalización real.",
+      "perceptual_family": "generalization-split",
+      "topology": "train/test distribution split",
+      "choreography": "fit on training points, freeze parameters, reveal held-out points and measure retained performance",
+      "composition": "paired train/held-out fields",
+      "cues": ["train", "fit", "freeze", "generalize"]
+    },
+    {
+      "concept_id": "learn.optimization-loop",
+      "evidence": "Aprender de ejemplos requiere ajustar parámetros para reducir error; descenso de gradiente, regularización y validación convierten esa idea en un procedimiento repetible.",
+      "mechanism": "Un bucle calcula predicción, pérdida, gradiente y actualización mientras un carril de validación vigila el sobreajuste.",
+      "semantic_rationale": "El entrenamiento debe verse como feedback cuantitativo y no como una secuencia decorativa.",
+      "perceptual_family": "optimization-feedback-loop",
+      "topology": "closed-loop parameter update with validation side-channel",
+      "choreography": "predict, measure loss, propagate update, repeat; validation diverges if overfit grows",
+      "composition": "cyclic optimizer with validation monitor",
+      "cues": ["predict", "loss", "gradient", "update", "validate"]
+    },
+    {
+      "concept_id": "learn.multilayer-recovery",
+      "evidence": "El perceptrón de una capa no puede separar XOR; las capas ocultas amplían la representación y backpropagation ofrece una receta general para ajustar redes multicapa.",
+      "mechanism": "Primero una frontera lineal falla sobre XOR; después una capa oculta transforma el espacio y el error se propaga hacia atrás para ajustar pesos.",
+      "semantic_rationale": "La escena debe conectar límite expresivo y mecanismo de entrenamiento sin sugerir que una sola capa ya resolvía XOR.",
+      "perceptual_family": "xor-space-remap",
+      "topology": "non-separable space remapped by hidden representation",
+      "choreography": "attempt linear separator and fail, map points through hidden units, separate transformed space, then propagate error backward",
+      "composition": "XOR plane coupled to hidden-layer graph",
+      "cues": ["xor", "linear-limit", "hidden-layer", "backprop"]
+    }
+  ]
+}

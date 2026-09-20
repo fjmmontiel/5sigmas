@@ -1,0 +1,63 @@
+{
+  "chapter": "00",
+  "slug": "presentacion_serie",
+  "source_es": "docs/series/from-cave-to-agi/00_presentacion_serie.md",
+  "question": "¿Qué cadena histórica conecta la abstracción simbólica con los sistemas de IA actuales y sus nuevas fronteras?",
+  "concepts": [
+    {
+      "concept_id": "overview.abstraction-lineage",
+      "evidence": "La serie recorre el paso desde marcas y símbolos manipulables hasta modelos fundacionales, mostrando una continuidad histórica en vez de avances aislados.",
+      "mechanism": "Una línea temporal comprime cinco cambios de régimen y conserva un hilo causal visible entre cada etapa.",
+      "semantic_rationale": "La introducción debe hacer visible la continuidad histórica sin convertir los capítulos en una lista intercambiable.",
+      "perceptual_family": "historical-lineage-compression",
+      "topology": "single temporal spine with regime transitions",
+      "choreography": "advance along one spine; each regime changes the active representation while the prior layer remains as context",
+      "composition": "long causal timeline / vertical stepped chronology",
+      "cues": ["represent", "mechanize", "learn", "scale", "frontier"]
+    },
+    {
+      "concept_id": "overview.representation-stack",
+      "evidence": "Los sistemas actuales dependen de capas previas de notación matemática, computación y aprendizaje automático.",
+      "mechanism": "Capas funcionales se apilan desde representación a cómputo y aprendizaje; retirar una capa invalida las capacidades superiores.",
+      "semantic_rationale": "El visual debe comunicar dependencia estructural, no sólo orden cronológico.",
+      "perceptual_family": "capability-dependency-stack",
+      "topology": "dependency stack",
+      "choreography": "assemble layers bottom-up, then briefly remove a lower layer to show upstream collapse",
+      "composition": "stacked capability strata",
+      "cues": ["symbols", "computation", "learning", "foundation-model"]
+    },
+    {
+      "concept_id": "overview.rules-to-data",
+      "evidence": "La historia de la IA pasa de codificar procedimientos y conocimiento de forma explícita a ajustar modelos mediante datos y optimización.",
+      "mechanism": "Un mismo problema entra primero por un carril de reglas manuales y después por un carril de ejemplos que actualizan parámetros.",
+      "semantic_rationale": "El cambio de paradigma debe verse como un cambio del mecanismo de adquisición de comportamiento.",
+      "perceptual_family": "paradigm-channel-switch",
+      "topology": "two alternative learning channels",
+      "choreography": "route identical task from hand-authored rule channel to example-driven parameter channel",
+      "composition": "parallel rule/data lanes",
+      "cues": ["rules", "examples", "optimization", "generalization"]
+    },
+    {
+      "concept_id": "overview.scale-convergence",
+      "evidence": "A partir de 2012, datos, cómputo, optimización y arquitectura empiezan a reforzarse mutuamente a suficiente escala.",
+      "mechanism": "Cuatro recursos independientes convergen sobre un cuello de botella común y elevan conjuntamente la capacidad.",
+      "semantic_rationale": "La escena debe evitar atribuir el cambio de régimen a un único factor.",
+      "perceptual_family": "multi-factor-convergence",
+      "topology": "converging resource vectors",
+      "choreography": "grow data, compute, optimization and architecture independently, then converge them into one capability threshold",
+      "composition": "four-vector convergence field",
+      "cues": ["data", "compute", "optimization", "architecture"]
+    },
+    {
+      "concept_id": "overview.frontier-system",
+      "evidence": "La frontera posterior al escalado combina modelos con memoria, búsqueda, herramientas y representaciones del mundo.",
+      "mechanism": "Un modelo base se conecta a módulos externos con bucles de lectura, acción y verificación.",
+      "semantic_rationale": "La unidad útil pasa de ser sólo el modelo a ser un sistema compuesto.",
+      "perceptual_family": "frontier-system-constellation",
+      "topology": "central model with typed external loops",
+      "choreography": "attach memory, search, tools and world-model loops one by one and show information returning to the core",
+      "composition": "typed system constellation",
+      "cues": ["memory", "search", "tools", "world-models"]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "chapter": "05",
+  "slug": "mas-alla",
+  "source_es": "docs/series/from-cave-to-agi/05-mas-alla.md",
+  "question": "¿Qué capacidades empiezan a requerir sistemas que añaden memoria, búsqueda, herramientas y modelos del mundo al modelo base?",
+  "concepts": [
+    {
+      "concept_id": "beyond.transformer-constraints",
+      "evidence": "Al escalar Transformers se hacen visibles límites de coste de contexto largo, memoria persistente y capacidad de planificar o actuar más allá de predecir la siguiente pieza de una secuencia.",
+      "mechanism": "Tres restricciones se tensan por separado: coste de atención con contexto, estado persistente ausente y una tarea que exige acción multietapa.",
+      "semantic_rationale": "El visual debe separar limitaciones computacionales, funcionales y estructurales.",
+      "perceptual_family": "constraint-triangle",
+      "topology": "three independent constraint axes",
+      "choreography": "increase context length, persistence requirement and planning depth on separate axes until the base-only region is exceeded",
+      "composition": "triangular constraint field",
+      "cues": ["context-cost", "persistent-memory", "planning", "system-extension"]
+    },
+    {
+      "concept_id": "beyond.search-verification",
+      "evidence": "AlphaGo y sus descendientes muestran que en ciertos problemas el sistema combina modelo, búsqueda y evaluación para explorar activamente espacios de posibilidades; líneas posteriores reutilizan búsqueda y verificación en otros dominios.",
+      "mechanism": "Un árbol genera alternativas, un evaluador poda ramas y el presupuesto se reasigna a trayectorias prometedoras hasta seleccionar una solución.",
+      "semantic_rationale": "La búsqueda debe verse como gasto selectivo de cómputo guiado por evaluación.",
+      "perceptual_family": "search-prune-verify",
+      "topology": "branching search tree with evaluator feedback",
+      "choreography": "expand candidate branches, score them, prune weak paths, deepen promising paths, verify final candidate",
+      "composition": "search tree plus evaluator rail",
+      "cues": ["expand", "score", "prune", "verify"]
+    },
+    {
+      "concept_id": "beyond.persistent-memory",
+      "evidence": "Una ventana de contexto larga no equivale a memoria persistente; líneas como SSM/Mamba y memorias que se actualizan en inferencia exploran mecanismos distintos para secuencias largas y adaptación en uso.",
+      "mechanism": "Información entra en tres niveles: contexto efímero, estado recurrente compacto y memoria selectiva que sobrevive más allá del intercambio inmediato.",
+      "semantic_rationale": "La escena debe mostrar diferencias de persistencia y actualización, no presentar todas las memorias como un buffer más grande.",
+      "perceptual_family": "memory-tier-flow",
+      "topology": "multi-timescale memory hierarchy",
+      "choreography": "route observations through ephemeral context, compact recurrent state and selectively consolidated long-term memory",
+      "composition": "three-tier memory flow",
+      "cues": ["context", "state", "consolidate", "retrieve"]
+    },
+    {
+      "concept_id": "beyond.world-model-rollout",
+      "evidence": "Los world models aprenden representaciones internas de cómo evoluciona un entorno y pueden imaginar futuros posibles para apoyar planificación.",
+      "mechanism": "Desde un estado latente se despliegan futuros alternativos bajo acciones distintas y se comparan antes de ejecutar una acción real.",
+      "semantic_rationale": "La diferencia frente a predecir texto debe verse en la simulación de consecuencias bajo acciones.",
+      "perceptual_family": "latent-world-rollout",
+      "topology": "branching latent dynamics under actions",
+      "choreography": "encode current state, branch candidate actions through latent dynamics, compare predicted futures, execute selected action",
+      "composition": "latent state-space rollouts",
+      "cues": ["state", "action", "simulate", "select"]
+    },
+    {
+      "concept_id": "beyond.embodied-system-loop",
+      "evidence": "La frontera combina modelos con percepción, herramientas, planificación y control físico; modelos del mundo y robótica fundacional buscan cerrar el bucle entre representación y acción.",
+      "mechanism": "Percepción actualiza estado, el plan propone una acción, el controlador actúa y la observación siguiente corrige el modelo interno.",
+      "semantic_rationale": "El sistema debe verse como un bucle cerrado con feedback del mundo, no como un modelo que sólo emite texto.",
+      "perceptual_family": "embodied-sense-plan-act",
+      "topology": "closed-loop agent-environment control",
+      "choreography": "sense environment, update internal state, plan, act, observe consequences, correct next plan",
+      "composition": "agent-environment feedback loop",
+      "cues": ["sense", "model", "plan", "act", "observe"]
+    }
+  ]
+}
