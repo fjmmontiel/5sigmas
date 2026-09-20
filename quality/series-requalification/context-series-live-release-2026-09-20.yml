@@ -1,0 +1,48 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: context-engineering-memory-mcp
+contract_issue: 305
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+release_pr: 339
+release_head: 0f19878b0438be5f1094e4dfac5582e17cb54b66
+merge_commit: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+pages_deploy_run: 35498875755
+pages_deploy_result: SUCCESS
+pages_live_qa_result: SUCCESS
+dedicated_live_qa_run: 35499422075
+dedicated_live_qa_job: 106048396961
+dedicated_live_qa_result: SUCCESS
+exact_live_checkout: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+live_surface_evidence:
+  es_en_hub_entry: PASS
+  chapter_routes: PASS_12_OF_12
+  same_origin_resources: PASS_12_OF_12
+  locale_switching: PASS_12_OF_12
+  reader_progression: PASS_6_OF_6
+  desktop_mobile_page_geometry: PASS_12_OF_12
+pre_release_gates:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  PIXEL_REVIEW: 12/12
+  PEDAGOGY_REVIEW: 12/12
+  ARTICLE_GOLDEN: 6/6
+  known_p0_p1_p2: 0
+production_indexability:
+  rendered_build_and_search_contract: PASS
+  canonical_hreflang_sitemap_internal_discovery: PASS_PRE_RELEASE_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
+  robots_noindex: PASS_PRE_RELEASE_EXACT_HEAD_AND_DEPLOYED_REVISION_CONFIRMED
+  google_selection_required: false
+  gsc_observation: null
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+iteration_count_changed_this_release_run: false
+SERIES_GOLDEN: true
+production_verified: true
+state: SERIES_GOLDEN
