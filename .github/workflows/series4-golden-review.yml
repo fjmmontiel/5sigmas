@@ -5,12 +5,18 @@ on:
     paths:
       - 'docs/series/llm-inference-engineering-economics/**'
       - 'locales/en/series/llm-inference-engineering-economics/**'
+      - 'docs/media/series/llm-inference-engineering-economics/**'
+      - 'locales/en/media/series/llm-inference-engineering-economics/**'
       - 'docs/series/index.md'
       - 'locales/en/series/index.md'
       - 'docs/snippets/articulos-tecnicos/inference-*.html'
       - 'locales/en/snippets/articulos-tecnicos/inference-*'
       - 'scripts/validate_inference_engineering_*.mjs'
+      - 'scripts/validate_inference_indexability.py'
+      - 'scripts/validate_inference_media_visual.py'
+      - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
+      - 'scripts/audit_multilingual_search_foundation.py'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_locale_switching.mjs'
       - 'scripts/validate_direct_reader_navigation.mjs'
@@ -18,6 +24,7 @@ on:
       - 'scripts/validate_responsive_polish.mjs'
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
+      - 'locales/en/media.yml'
       - 'locales/en/manifest.yml'
       - '.github/workflows/series4-golden-review.yml'
       - '.github/workflows/inference-engineering-live-qa.yml'
@@ -41,8 +48,10 @@ jobs:
           python-version: '3.11'
           cache: pip
 
-      - name: Install Python dependencies
+      - name: Install Python and media dependencies
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -71,8 +80,10 @@ jobs:
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
 
-      - name: Audit public-series publication contract
-        run: python scripts/audit_publication_contract.py
+      - name: Audit public-series publication and search contracts
+        run: |
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en
@@ -87,6 +98,18 @@ jobs:
 
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate inference INDEXABILITY negative fixtures
+        run: python scripts/validate_inference_indexability.py --self-test
+
+      - name: Validate rendered inference INDEXABILITY
+        run: python scripts/validate_inference_indexability.py --site site --output artifacts/inference-requalification/indexability/report.json
+
+      - name: Validate inference MEDIA_VISUAL/VOICE split fixture
+        run: python scripts/validate_inference_media_visual.py --self-test
+
+      - name: Validate native inference visual media
+        run: python scripts/validate_inference_media_visual.py --output artifacts/inference-requalification/inference-media-visual.json
 
       - name: Install Playwright Chromium
         run: |
@@ -125,7 +148,7 @@ jobs:
           node scripts/validate_reader_header_overlap.mjs
           node scripts/validate_responsive_polish.mjs
 
-      - name: Upload Series 4 visual evidence on failure
+      - name: Upload Series 4 failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -133,5 +156,7 @@ jobs:
           path: |
             artifacts/visual-review/inference-engineering-*.png
             artifacts/visual-review/english-series-mirror-*.png
+            artifacts/inference-requalification/indexability/report.json
+            artifacts/inference-requalification/inference-media-visual.json
           if-no-files-found: warn
           retention-days: 1
