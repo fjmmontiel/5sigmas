@@ -9,6 +9,7 @@ const routes = [
   '05-model-routing-fallback-caching-workload-aware-serving',
   '06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints',
 ];
+const MIN_VISIBLE_EDGE_LENGTH = 1.5;
 
 const within = (inner, outer, pad = 1) => Boolean(
   inner && outer
@@ -53,10 +54,27 @@ const inspectGraph = async (page, selector) => page.locator(selector).evaluate((
       scrollHeight: label.scrollHeight,
     };
   });
+  const edges = [...graph.querySelectorAll('[data-mobile-graph-edge]')].map((edge) => {
+    const style = getComputedStyle(edge);
+    let length = 0;
+    try { length = edge.getTotalLength(); } catch {}
+    return {
+      id: edge.dataset.mobileGraphEdge,
+      from: edge.dataset.mobileGraphFrom || '',
+      to: edge.dataset.mobileGraphTo || '',
+      markerEnd: edge.getAttribute('marker-end') || '',
+      length,
+      display: style.display,
+      visibility: style.visibility,
+      opacity: parseFloat(style.opacity || '1'),
+      strokeWidth: parseFloat(style.strokeWidth || '0'),
+    };
+  });
   return {
     graph: { x: graphRect.x, y: graphRect.y, width: graphRect.width, height: graphRect.height },
     nodes,
     labels,
+    edges,
   };
 });
 
@@ -94,6 +112,15 @@ const collectLayoutFailures = (result, prefix) => {
       }
     }
   }
+  for (const edge of result.edges) {
+    if (!edge.markerEnd) failures.push(`${prefix}: edge ${edge.id} lacks direction marker`);
+    if (edge.display === 'none' || edge.visibility === 'hidden' || edge.opacity <= 0 || edge.strokeWidth <= 0) {
+      failures.push(`${prefix}: edge ${edge.id} is not visibly rendered`);
+    }
+    if (!Number.isFinite(edge.length) || edge.length < MIN_VISIBLE_EDGE_LENGTH) {
+      failures.push(`${prefix}: edge ${edge.id} visible path too short (${edge.length.toFixed(3)} < ${MIN_VISIBLE_EDGE_LENGTH})`);
+    }
+  }
   return failures;
 };
 
@@ -106,8 +133,14 @@ const runNegativeMutation = async (browser) => {
       #n1{left:20px;top:20px;white-space:nowrap}
       #n2{left:48px;top:34px}
       #l{position:absolute;left:44px;top:38px;width:54px;height:18px}
+      svg{position:absolute;inset:0;width:100%;height:100%}
+      [data-mobile-graph-edge]{fill:none;stroke:#000;stroke-width:1.45}
     </style>
     <div id="g">
+      <svg viewBox="0 0 100 100">
+        <defs><marker id="mutant-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#000"/></marker></defs>
+        <polyline points="10,10 10.5,10" marker-end="url(#mutant-arrow)" data-mobile-graph-edge="mutant-short"></polyline>
+      </svg>
       <div id="n1" class="n" data-mobile-graph-node="mutant-a">THIS_LABEL_MUST_OVERFLOW</div>
       <div id="n2" class="n" data-mobile-graph-node="mutant-b">OVERLAP</div>
       <span id="l" data-mobile-graph-edge-label="mutant-edge">COLLIDE</span>
@@ -119,6 +152,7 @@ const runNegativeMutation = async (browser) => {
     failures.some((failure) => failure.includes('text clips/overflows')),
     failures.some((failure) => failure.includes('node overlap')),
     failures.some((failure) => failure.includes('edge label mutant-edge overlaps node')),
+    failures.some((failure) => failure.includes('edge mutant-short visible path too short')),
   ];
   if (expected.some((detected) => !detected)) {
     throw new Error(`Negative mobile-layout mutations were not all detected: ${JSON.stringify(failures)}`);
@@ -170,4 +204,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('PASS: negative overflow/overlap mutations fail as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text without meaningful node/label collisions at 390px in normal/reduced motion.');
+console.log(`PASS: negative overflow/overlap/short-edge mutations fail as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text, avoid meaningful node/label collisions, and retain directed visible edge paths >= ${MIN_VISIBLE_EDGE_LENGTH} SVG units at 390px in normal/reduced motion.`);

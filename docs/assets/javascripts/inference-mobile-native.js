@@ -178,22 +178,24 @@
     return node;
   };
 
-  const boundaryPoint = (center, toward) => {
+  const boundaryPoint = (center, toward, halfExtent) => {
     const dx = toward[0] - center[0];
     const dy = toward[1] - center[1];
     if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return center;
-    const tx = Math.abs(dx) < 0.001 ? Number.POSITIVE_INFINITY : 16.2 / Math.abs(dx);
-    const ty = Math.abs(dy) < 0.001 ? Number.POSITIVE_INFINITY : 6.4 / Math.abs(dy);
+    const halfX = Math.max(0.25, halfExtent?.[0] ?? 15);
+    const halfY = Math.max(0.25, halfExtent?.[1] ?? 5);
+    const tx = Math.abs(dx) < 0.001 ? Number.POSITIVE_INFINITY : halfX / Math.abs(dx);
+    const ty = Math.abs(dy) < 0.001 ? Number.POSITIVE_INFINITY : halfY / Math.abs(dy);
     const t = Math.min(1, tx, ty);
     return [center[0] + dx * t, center[1] + dy * t];
   };
 
-  const buildPath = (from, to, via = []) => {
+  const buildPath = (from, to, via = [], fromExtent, toExtent) => {
     const raw = [[from[1], from[2]], ...via, [to[1], to[2]]];
     if (raw.length < 2) return raw.map((p) => p.join(',')).join(' ');
     const points = raw.map((p) => [...p]);
-    points[0] = boundaryPoint(points[0], points[1]);
-    points[points.length - 1] = boundaryPoint(points[points.length - 1], points[points.length - 2]);
+    points[0] = boundaryPoint(points[0], points[1], fromExtent);
+    points[points.length - 1] = boundaryPoint(points[points.length - 1], points[points.length - 2], toExtent);
     return points.map((point) => point.join(',')).join(' ');
   };
 
@@ -202,6 +204,7 @@
     graph.className = 's5v-inference-mobile-native__graph';
     graph.dataset.inferenceMobileGraph = contract.key;
     graph.style.height = `${contract.height}px`;
+    summary.appendChild(graph);
 
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('viewBox', '0 0 100 100');
@@ -215,35 +218,66 @@
     const arrow = document.createElementNS(SVG_NS, 'path');
     arrow.setAttribute('d', 'M0,0 L6,3 L0,6 Z'); arrow.setAttribute('fill', 'currentColor');
     marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
+    graph.prepend(svg);
 
     const normalizedNodes = contract.nodes.map(normalizeNode);
     const byId = new Map(normalizedNodes.map((node) => [node[0], node]));
-    for (const edge of contract.edges) {
-      const [id, fromId, toId, via, labelX, labelY, esLabel, enLabel] = edge;
-      const from = byId.get(fromId); const to = byId.get(toId);
-      if (!from || !to) continue;
-      const polyline = document.createElementNS(SVG_NS, 'polyline');
-      polyline.setAttribute('points', buildPath(from, to, via));
-      polyline.setAttribute('marker-end', `url(#s5-inference-arrow-${contract.key})`);
-      polyline.classList.add('s5v-inference-mobile-native__edge-path');
-      polyline.dataset.mobileGraphEdge = id;
-      svg.appendChild(polyline);
-      const label = lang === 'en' ? enLabel : esLabel;
-      if (label) {
-        const labelNode = textNode(graph, 'span', 's5v-inference-mobile-native__edge-label', label);
-        labelNode.style.left = `${clamp(labelX, 14, 86)}%`; labelNode.style.top = `${clamp(labelY, 5, 95)}%`;
-        labelNode.dataset.mobileGraphEdgeLabel = id;
-      }
-    }
-    graph.prepend(svg);
-
+    const nodeElements = new Map();
     for (const [id, x, y, es, en, tone] of normalizedNodes) {
       const node = textNode(graph, 'div', 's5v-inference-mobile-native__node', lang === 'en' ? en : es);
       node.style.left = `${x}%`; node.style.top = `${y}%`;
       node.dataset.mobileGraphNode = id;
       node.dataset.tone = tone;
+      nodeElements.set(id, node);
     }
-    summary.appendChild(graph);
+
+    for (const [id, , , , labelX, labelY, esLabel, enLabel] of contract.edges) {
+      const label = lang === 'en' ? enLabel : esLabel;
+      if (!label) continue;
+      const labelNode = textNode(graph, 'span', 's5v-inference-mobile-native__edge-label', label);
+      labelNode.style.left = `${clamp(labelX, 14, 86)}%`; labelNode.style.top = `${clamp(labelY, 5, 95)}%`;
+      labelNode.dataset.mobileGraphEdgeLabel = id;
+    }
+
+    let renderQueued = false;
+    const renderEdges = () => {
+      renderQueued = false;
+      const graphRect = graph.getBoundingClientRect();
+      if (graphRect.width <= 0 || graphRect.height <= 0) return;
+      const extents = new Map();
+      for (const [id, node] of nodeElements) {
+        const rect = node.getBoundingClientRect();
+        extents.set(id, [
+          (rect.width / graphRect.width) * 50,
+          (rect.height / graphRect.height) * 50,
+        ]);
+      }
+      for (const existing of svg.querySelectorAll('[data-mobile-graph-edge]')) existing.remove();
+      for (const edge of contract.edges) {
+        const [id, fromId, toId, via] = edge;
+        const from = byId.get(fromId); const to = byId.get(toId);
+        if (!from || !to) continue;
+        const polyline = document.createElementNS(SVG_NS, 'polyline');
+        polyline.setAttribute('points', buildPath(from, to, via, extents.get(fromId), extents.get(toId)));
+        polyline.setAttribute('marker-end', `url(#s5-inference-arrow-${contract.key})`);
+        polyline.classList.add('s5v-inference-mobile-native__edge-path');
+        polyline.dataset.mobileGraphEdge = id;
+        polyline.dataset.mobileGraphFrom = fromId;
+        polyline.dataset.mobileGraphTo = toId;
+        svg.appendChild(polyline);
+      }
+    };
+    const queueRender = () => {
+      if (renderQueued) return;
+      renderQueued = true;
+      requestAnimationFrame(renderEdges);
+    };
+    queueRender();
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(queueRender);
+      observer.observe(graph);
+      graph._s5InferenceResizeObserver = observer;
+    }
   };
 
   const buildSummary = (section, contract, lang) => {
@@ -257,10 +291,10 @@
     summary.setAttribute('aria-label', contract.title[lang]);
     textNode(summary, 'div', 's5v-inference-mobile-native__kicker', lang === 'en' ? 'Mobile relationship map' : 'Mapa de relaciones móvil');
     textNode(summary, 'h4', '', contract.title[lang]);
+    scroll.parentNode.insertBefore(summary, scroll);
     buildGraph(summary, contract, lang);
     const relation = textNode(summary, 'p', 's5v-inference-mobile-native__relation', contract.relation[lang]);
     relation.dataset.inferenceMobileRelation = 'true';
-    scroll.parentNode.insertBefore(summary, scroll);
   };
 
   const init = () => {
