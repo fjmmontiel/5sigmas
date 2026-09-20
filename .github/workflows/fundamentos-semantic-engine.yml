@@ -1,0 +1,50 @@
+name: Fundamentos IA semantic engine
+
+on:
+  push:
+    branches:
+      - migration/video-golden-fundamentos-ia-iag
+    paths:
+      - 'motion/migration/fundamentos-ia-iag/**'
+      - 'motion/src/fundamentos/**'
+      - 'motion/scripts/check_fundamentos_register.mjs'
+      - 'motion/tests/fundamentos-engine.test.mjs'
+      - '.github/workflows/fundamentos-semantic-engine.yml'
+  pull_request:
+    paths:
+      - 'motion/migration/fundamentos-ia-iag/**'
+      - 'motion/src/fundamentos/**'
+      - 'motion/scripts/check_fundamentos_register.mjs'
+      - 'motion/tests/fundamentos-engine.test.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject control bytes and syntax/import errors before rendering
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          paths=[Path('motion/migration/fundamentos-ia-iag/series-semantic-register.json'),*Path('motion/src/fundamentos').glob('*.mjs'),Path('motion/scripts/check_fundamentos_register.mjs'),Path('motion/tests/fundamentos-engine.test.mjs')]
+          for p in paths:
+              data=p.read_bytes(); data.decode('utf-8')
+              bad=[b for b in data if b<32 and b not in (9,10,13)]
+              if bad: raise SystemExit(f'{p}: control bytes present')
+          print(f'UTF8_CONTROL_PASS files={len(paths)}')
+          PY
+          node --check motion/src/fundamentos/schema.mjs
+          node --check motion/src/fundamentos/mechanisms.mjs
+          node --check motion/src/fundamentos/engine.mjs
+          node --check motion/scripts/check_fundamentos_register.mjs
+          node --check motion/tests/fundamentos-engine.test.mjs
+      - name: Validate complete source-bound register and render matrix
+        run: node motion/scripts/check_fundamentos_register.mjs
+      - name: Validate deterministic semantic engine regressions
+        run: node --test motion/tests/fundamentos-engine.test.mjs
