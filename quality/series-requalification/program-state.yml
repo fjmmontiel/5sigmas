@@ -1,4 +1,4 @@
-schema_version: 21
+schema_version: 22
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -10,8 +10,8 @@ canonical_series_order:
   - context-engineering-memory-mcp
   - llm-inference-engineering-economics
   - evaluating-ai-systems-production
-active_series: coding-agents-agent-harnesses
-series_golden_count: 3/7
+active_series: context-engineering-memory-mcp
+series_golden_count: 4/7
 series_status:
   seguridad-ia:
     article_golden: 6/6
@@ -57,8 +57,9 @@ series_status:
     source_receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
     manual_media_receipt: quality/series-requalification/coding-replacement-media-review-2026-09-20.yml
     series_pre_release_audit: quality/series-requalification/coding-series-pre-release-audit-2026-09-20.yml
-    active_branch: quality/coding-agents-requalification
-    route_locale_rows: 12
+    live_release_receipt: quality/series-requalification/coding-series-live-release-2026-09-20.yml
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
     source: PASS_12_OF_12
     build: PASS_12_OF_12
     browser: PASS_12_OF_12
@@ -66,21 +67,42 @@ series_status:
     indexability: PASS_12_OF_12
     pixel: PASS_12_OF_12
     pedagogy: PASS_12_OF_12
-    article_golden: 6/6
-    route_locale_rows_golden: 12/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0_p1_p2: 0
-    exact_technical_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
-    exact_milestone_run: 35482139307
-    site_facing_media_commit: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
-    state: ARTICLE_GOLDEN_SERIES_AUDIT_PASS_RELEASE_PENDING
+    release_pr: 337
+    release_head: d079131c52f89a88e388edb485e843263dd264d1
+    merge_commit: b6821a5077681531fba6610298dd0bb02b85813a
+    production_main_verified: b6821a5077681531fba6610298dd0bb02b85813a
+    deploy_run: 35485868761
+    dedicated_live_qa_run: 35486401426
+    state: SERIES_GOLDEN
+    production_verified: true
+  context-engineering-memory-mcp:
+    ledger: quality/series-requalification/context-article-ledger.yml
+    active_branch: quality/context-engineering-requalification
+    route_locale_rows: 12
+    source: 0/12
+    build: PASS_12_OF_12
+    browser: 0/12
+    media_visual: 0/12
+    indexability: 0/12
+    pixel: 0/12
+    pedagogy: 0/12
+    article_golden: 0/6
+    route_locale_rows_golden: 0/12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0: 0
+    known_p1: 12
+    known_p2: 0
+    blocker: VIDEO_REQUIRED_UNDECLARED
+    gate_hardening: INDEXABILITY_AND_MEDIA_VISUAL_WIRED_FAIL_CLOSED
+    state: MEDIA_VISUAL_PENDING
     production_verified: false
-    next_action: OPEN_FINAL_RELEASE_PR_REQUIRED_CHECKS_MERGE_DEPLOY_LIVE_VERIFY_THEN_SERIES_GOLDEN
-  context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
+    next_action: PRODUCE_NATIVE_ES_EN_VISUAL_VIDEO_FOR_MULTIPLE_CHAPTERS_THEN_GROUPED_SOURCE_MEDIA_INDEXABILITY_BROWSER_PIXEL_PEDAGOGY
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
 release_coordination:
-  current_main: 11737ad86db9b15b1981af6fef221d7db0b82110
+  current_main: b6821a5077681531fba6610298dd0bb02b85813a
   draft_34:
     state: OPEN_DRAFT_UNMERGED_NOT_MERGEABLE
     reuse_policy: NEVER_BLIND_MERGE
