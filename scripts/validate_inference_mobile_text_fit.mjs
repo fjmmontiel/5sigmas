@@ -18,6 +18,13 @@ const within = (inner, outer, pad = 1) => Boolean(
   && inner.y + inner.height <= outer.y + outer.height + pad,
 );
 
+const overlapsMeaningfully = (a, b, minOverlapPx = 2) => {
+  if (!a || !b) return false;
+  const overlapX = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
+  const overlapY = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+  return overlapX > minOverlapPx && overlapY > minOverlapPx;
+};
+
 const inspectGraph = async (page, selector) => page.locator(selector).evaluate((graph) => {
   const graphRect = graph.getBoundingClientRect();
   const nodes = [...graph.querySelectorAll('[data-mobile-graph-node]')].map((node) => {
@@ -53,19 +60,68 @@ const inspectGraph = async (page, selector) => page.locator(selector).evaluate((
   };
 });
 
+const collectLayoutFailures = (result, prefix) => {
+  const failures = [];
+  for (const node of result.nodes) {
+    if (!within(node.box, result.graph)) failures.push(`${prefix}: node ${node.id} box clipped ${JSON.stringify(node.box)}`);
+    if (node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1) {
+      failures.push(`${prefix}: node ${node.id} text clips/overflows (${node.scrollWidth}x${node.scrollHeight} > ${node.clientWidth}x${node.clientHeight}) ${JSON.stringify(node.text)}`);
+    }
+    if (node.fontSize < 12) failures.push(`${prefix}: node ${node.id} text below 12px (${node.fontSize}px)`);
+  }
+  for (let i = 0; i < result.nodes.length; i += 1) {
+    for (let j = i + 1; j < result.nodes.length; j += 1) {
+      if (overlapsMeaningfully(result.nodes[i].box, result.nodes[j].box)) {
+        failures.push(`${prefix}: node overlap ${result.nodes[i].id}<->${result.nodes[j].id}`);
+      }
+    }
+  }
+  for (const label of result.labels) {
+    if (!within(label.box, result.graph)) failures.push(`${prefix}: edge label ${label.id} clipped ${JSON.stringify(label.box)} ${JSON.stringify(label.text)}`);
+    if (label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1) {
+      failures.push(`${prefix}: edge label ${label.id} text clips/overflows ${JSON.stringify(label.text)}`);
+    }
+    for (const node of result.nodes) {
+      if (overlapsMeaningfully(label.box, node.box)) {
+        failures.push(`${prefix}: edge label ${label.id} overlaps node ${node.id}`);
+      }
+    }
+  }
+  for (let i = 0; i < result.labels.length; i += 1) {
+    for (let j = i + 1; j < result.labels.length; j += 1) {
+      if (overlapsMeaningfully(result.labels[i].box, result.labels[j].box)) {
+        failures.push(`${prefix}: edge-label overlap ${result.labels[i].id}<->${result.labels[j].id}`);
+      }
+    }
+  }
+  return failures;
+};
+
 const runNegativeMutation = async (browser) => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await page.setContent(`
     <style>
       #g{position:relative;width:280px;height:180px;overflow:hidden}
-      #n{position:absolute;width:54px;height:42px;overflow:visible;white-space:nowrap;font-size:12px}
+      .n{position:absolute;width:54px;height:42px;overflow:visible;font-size:12px}
+      #n1{left:20px;top:20px;white-space:nowrap}
+      #n2{left:48px;top:34px}
+      #l{position:absolute;left:44px;top:38px;width:54px;height:18px}
     </style>
-    <div id="g"><div id="n" data-mobile-graph-node="mutant">THIS_LABEL_MUST_OVERFLOW</div></div>
+    <div id="g">
+      <div id="n1" class="n" data-mobile-graph-node="mutant-a">THIS_LABEL_MUST_OVERFLOW</div>
+      <div id="n2" class="n" data-mobile-graph-node="mutant-b">OVERLAP</div>
+      <span id="l" data-mobile-graph-edge-label="mutant-edge">COLLIDE</span>
+    </div>
   `);
   const result = await inspectGraph(page, '#g');
-  const mutant = result.nodes[0];
-  if (!(mutant.scrollWidth > mutant.clientWidth + 1)) {
-    throw new Error(`Negative text-overflow mutation was not detected: ${JSON.stringify(mutant)}`);
+  const failures = collectLayoutFailures(result, 'negative-mutation');
+  const expected = [
+    failures.some((failure) => failure.includes('text clips/overflows')),
+    failures.some((failure) => failure.includes('node overlap')),
+    failures.some((failure) => failure.includes('edge label mutant-edge overlaps node')),
+  ];
+  if (expected.some((detected) => !detected)) {
+    throw new Error(`Negative mobile-layout mutations were not all detected: ${JSON.stringify(failures)}`);
   }
   await page.close();
 };
@@ -97,19 +153,7 @@ try {
           continue;
         }
         const result = await inspectGraph(page, selector);
-        for (const node of result.nodes) {
-          if (!within(node.box, result.graph)) failures.push(`${key}/${locale}/${motion}: node ${node.id} box clipped ${JSON.stringify(node.box)}`);
-          if (node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1) {
-            failures.push(`${key}/${locale}/${motion}: node ${node.id} text clips/overflows (${node.scrollWidth}x${node.scrollHeight} > ${node.clientWidth}x${node.clientHeight}) ${JSON.stringify(node.text)}`);
-          }
-          if (node.fontSize < 12) failures.push(`${key}/${locale}/${motion}: node ${node.id} text below 12px (${node.fontSize}px)`);
-        }
-        for (const label of result.labels) {
-          if (!within(label.box, result.graph)) failures.push(`${key}/${locale}/${motion}: edge label ${label.id} clipped ${JSON.stringify(label.box)} ${JSON.stringify(label.text)}`);
-          if (label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1) {
-            failures.push(`${key}/${locale}/${motion}: edge label ${label.id} text clips/overflows ${JSON.stringify(label.text)}`);
-          }
-        }
+        failures.push(...collectLayoutFailures(result, `${key}/${locale}/${motion}`));
         const pageWidth = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
         if (pageWidth.scrollWidth > pageWidth.clientWidth + 1) failures.push(`${key}/${locale}/${motion}: page horizontal overflow ${JSON.stringify(pageWidth)}`);
       }
@@ -121,9 +165,9 @@ try {
 }
 
 if (failures.length) {
-  console.error(`Inference mobile text-fit gate failed (${failures.length}):`);
+  console.error(`Inference mobile text-fit/layout gate failed (${failures.length}):`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log('PASS: negative clipping mutation fails as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text at 390px in normal/reduced motion.');
+console.log('PASS: negative overflow/overlap mutations fail as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text without meaningful node/label collisions at 390px in normal/reduced motion.');
