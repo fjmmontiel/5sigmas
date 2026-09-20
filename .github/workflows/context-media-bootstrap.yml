@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/context-media-bootstrap.yml'
       - 'scripts/generate_context_engineering_visual_media.py'
+      - 'scripts/generate_context_engineering_visual_media_v2.py'
       - 'scripts/declare_context_engineering_media_manifest.py'
       - 'scripts/validate_context_series_browser_milestone.mjs'
 
@@ -15,7 +16,7 @@ permissions:
 
 concurrency:
   group: context-engineering-media-bootstrap
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   generate-validate-commit:
@@ -45,8 +46,8 @@ jobs:
 
       - name: Generate locale-native silent Context visual media
         run: |
-          python scripts/generate_context_engineering_visual_media.py --self-test
-          python scripts/generate_context_engineering_visual_media.py
+          python scripts/generate_context_engineering_visual_media_v2.py --self-test
+          python scripts/generate_context_engineering_visual_media_v2.py
           python scripts/declare_context_engineering_media_manifest.py
 
       - name: Assert generated ES and EN media bytes
