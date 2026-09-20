@@ -1,4 +1,4 @@
-schema_version: 20
+schema_version: 21
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -54,25 +54,28 @@ series_status:
     receipt: quality/series-requalification/realtime-voice-release.yml
   coding-agents-agent-harnesses:
     ledger: quality/series-requalification/coding-article-ledger.yml
+    source_receipt: quality/series-requalification/coding-source-review-2026-09-20.yml
+    manual_media_receipt: quality/series-requalification/coding-replacement-media-review-2026-09-20.yml
+    series_pre_release_audit: quality/series-requalification/coding-series-pre-release-audit-2026-09-20.yml
     active_branch: quality/coding-agents-requalification
     route_locale_rows: 12
-    source: PASS_12_OF_12_FRESH_PRIMARY_2026_09_20
-    build: PASS_12_OF_12_PREVIOUS_EXACT_HEAD
-    browser: PASS_12_OF_12_PREVIOUS_EXACT_HEAD
-    media_visual: PENDING_REPLACEMENT_MEDIA_REAL_REVIEW
-    indexability: PASS_12_OF_12_PREVIOUS_EXACT_HEAD_REVALIDATE_AFTER_MEDIA
-    pixel: PENDING_REPLACEMENT_MEDIA_REAL_REVIEW
-    pedagogy: PENDING_REPLACEMENT_MEDIA_REAL_REVIEW
-    article_golden: 0/6
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
-    known_p0_p1_p2: 12_P1_SHARED_MEDIA_FINDING_UNTIL_REAL_REVIEW_CLOSES_IT
-    current_shared_finding: CODING_VIDEO_MOBILE_LEGIBILITY_AND_CONTROL_SAFE_AREA
-    media_generator_commit: 2a6aa439a6ff57cc26021fab800e733f9329c40d
-    media_gate_commit: 76433fb5d0918d1f804e510197f94544cacad8b0
-    source_receipt_commit: 528f787d9eb4f81d6faa9cb3ad751409531d94e9
-    state: QA_ACTIVE_MEDIA_REGENERATION
+    known_p0_p1_p2: 0
+    exact_technical_head: 7e9e467733d4e24aa0e859ab43afa64b97d3c444
+    exact_milestone_run: 35482139307
+    site_facing_media_commit: 56ec7d8ba8d7a550d0bbac7f1d86e551a4bc6dac
+    state: ARTICLE_GOLDEN_SERIES_AUDIT_PASS_RELEASE_PENDING
     production_verified: false
-    next_action: HARVEST_REGENERATION_THEN_EXACT_HEAD_MEDIA_INDEXABILITY_BROWSER_AND_REAL_PIXEL_PEDAGOGY_REVIEW
+    next_action: OPEN_FINAL_RELEASE_PR_REQUIRED_CHECKS_MERGE_DEPLOY_LIVE_VERIFY_THEN_SERIES_GOLDEN
   context-engineering-memory-mcp: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   llm-inference-engineering-economics: {state: REOPENED_PUBLISHED_UNCERTIFIED}
   evaluating-ai-systems-production: {state: REOPENED_PUBLISHED_UNCERTIFIED}
