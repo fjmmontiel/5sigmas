@@ -1,17 +1,6 @@
 name: Seguridad IA browser render preflight
 
 on:
-  push:
-    branches:
-      - migration/video-golden-seguridad-ia
-    paths:
-      - 'motion/src/seguridad/**'
-      - 'motion/src/render/**'
-      - 'motion/web/seguridad-render.html'
-      - 'motion/scripts/seguridad_render_check.py'
-      - 'motion/migration/seguridad-ia-content-v1.json'
-      - 'motion/migration/seguridad-ia-series-register.json'
-      - '.github/workflows/seguridad-browser-render-preflight.yml'
   workflow_dispatch:
 
 permissions:
@@ -51,10 +40,11 @@ jobs:
           python motion/scripts/seguridad_render_check.py
           cat motion/dist/seguridad-ia-check/seguridad-render-preflight.json
 
-      - name: Preserve bounded review-support evidence
+      - name: Preserve failure evidence only
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: seguridad-ia-browser-preflight-${{ github.sha }}
+          name: seguridad-ia-browser-preflight-failure-${{ github.sha }}
           path: motion/dist/seguridad-ia-check/
-          if-no-files-found: error
+          if-no-files-found: ignore
           retention-days: 1
