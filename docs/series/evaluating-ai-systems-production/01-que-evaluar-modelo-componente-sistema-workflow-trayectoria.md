@@ -10,6 +10,22 @@ tags:
   - Agentes
   - Producción
   - Reliability
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
+video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
+video_title: "Modelo, componente, workflow, trayectoria y sistema"
+video_summary: "La frontera correcta contiene el mecanismo que quieres atribuir: una trayectoria es evidencia de una ejecución, mientras el outcome confirma si el cambio importa al sistema."
+video_duration: PT36S
+video_chapters:
+  - name: "Empieza por el cambio y elige la frontera mínima"
+    start: 0
+    end: 12
+  - name: "Una trayectoria conecta policy, componentes y outcome"
+    start: 12
+    end: 24
+  - name: "Diagnostica estrecho; confirma en la frontera del riesgo"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 1 — Qué evaluar: modelo, componente, sistema, workflow y trayectoria

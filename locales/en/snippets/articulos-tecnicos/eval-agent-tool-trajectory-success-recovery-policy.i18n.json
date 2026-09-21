@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-agent-tool-trajectory-success-recovery-policy.html",
-  "source_blob_sha": "7814a277a6056eb3a30519c271e9932c368b353f",
+  "source_blob_sha": "1513b1a9b4cb9092432598b5dcb40b7208fca9c4",
   "replacements": {
     "Evaluación de una trayectoria de agente separando proceso, recuperación y resultado final": "Evaluation of an agent trajectory separating process, recovery, and final outcome",
     "RESULTADO ≠ TRAYECTORIA": "OUTCOME ≠ TRAJECTORY",

@@ -10,6 +10,22 @@ tags:
   - Producción
   - Reliability
   - Experimentos
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
+video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
+video_title: "Evaluación online: shadow, canary, A/B y regression gates"
+video_summary: "La evaluación online aumenta exposición de forma controlada: shadow observa sin decidir, canary limita blast radius, A/B estima efecto y guardrails o regression gates detienen una promoción insegura."
+video_duration: PT36S
+video_chapters:
+  - name: "Shadow observa tráfico sin cambiar la decisión"
+    start: 0
+    end: 12
+  - name: "Canary aumenta exposición sólo con guardrails verdes"
+    start: 12
+    end: 24
+  - name: "A/B mide efecto; regression gate decide promote o rollback"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 5 — Evaluación online: shadow, canary, A/B, guardrails y regression gates

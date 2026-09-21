@@ -88,6 +88,8 @@ jobs:
                   'context-media-bootstrap.yml': 'context-engineering-browser-visual-evidence',
                   'inference-media-bootstrap.yml': 'inference-engineering-browser-visual-evidence',
                   'series4-golden-review.yml': 'inference-engineering-series4-pr-gate-visual-evidence',
+                  'evaluating-ai-systems-media-bootstrap.yml': 'evaluating-ai-systems-media-bootstrap-evidence',
+                  'series5-golden-review.yml': 'ai-systems-evaluation-series5-pr-gate-visual-evidence',
               }
               artifact_name = allowed.get(path.name)
               if artifact_name is None:

@@ -10,6 +10,22 @@ tags:
   - Datasets
   - Producción
   - Reliability
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
+video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
+video_title: "Eval sets: curación, hard negatives, leakage y versionado"
+video_summary: "Un eval set fiable conserva provenance, separa bancos por función y congela una release; hard pairs y canales de leakage distintos prueban fallos distintos sin mutar la comparación."
+video_duration: PT36S
+video_chapters:
+  - name: "Provenance y grouping preceden al split"
+    start: 0
+    end: 12
+  - name: "Hard positive y hard negative cruzan una sola frontera"
+    start: 12
+    end: 24
+  - name: "La release se congela; fallos nuevos alimentan v+1"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 2 — Offline eval sets: curación, hard negatives, contaminación y versionado

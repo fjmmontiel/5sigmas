@@ -10,6 +10,22 @@ tags:
   - Observabilidad
   - Producción
   - Reliability
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
+video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+video_title: "Observabilidad, taxonomías de fallos y feedback loops"
+video_summary: "Telemetría no es un veredicto: señales de producción se convierten en fallos reproducibles, eval cases y reparaciones que vuelven a pasar por el mismo gate antes de regresar a producción."
+video_duration: PT36S
+video_chapters:
+  - name: "Telemetría detecta síntomas; la taxonomía localiza el fallo"
+    start: 0
+    end: 12
+  - name: "Un fallo reproducible se convierte en eval case"
+    start: 12
+    end: 24
+  - name: "Repair → candidate → eval → producción cierra el loop"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 6 — Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación

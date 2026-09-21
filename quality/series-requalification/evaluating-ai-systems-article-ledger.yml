@@ -1,0 +1,185 @@
+schema_version: 4
+program: 5sigmas_GOLDEN_requalification
+series: evaluating-ai-systems-production
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+state: ARTICLE_GOLDEN_6_OF_6_SERIES_AUDIT_RELEASE_PENDING
+active_branch: quality/evaluating-ai-systems-requalification
+base_main: ff32ffeeaf2d66caa9984e181e39def112130b99
+release_pr: 352
+chapter_count: 6
+route_locale_rows: 12
+has_series_presentation: false
+iteration_policy: increment_only_when_route_locale_is_really_inspected_or_changed
+
+latest_inspected_checkpoint:
+  head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+  site_facing_revision: 98087d2ea0213205ac2db9a59a637e66124e8788
+  mirror_pin_revision: aca3db5938be9a57b556ac0278a18112e92d0302
+  run: 35640790841
+  result: PASS_ALL_CURRENT_NONDEFERRED_ARTICLE_GATES
+  artifact: 10658961724
+  artifact_sha256: b9676c2e34493a63814ddefa3d7ee682fe3575111da06747d29eb401691f4a6d
+  source_contracts: PASS_12_OF_12
+  build_es_en: PASS_12_OF_12
+  media_visual: PASS_12_OF_12
+  indexability_static: PASS_12_OF_12
+  indexability_rendered_preview: PASS_12_OF_12_ARTICLE_AND_WATCH_24_SURFACES
+  browser_resources_locale_parity: PASS
+  browser_relationship_accessibility: PASS_DESKTOP_MOBILE_NORMAL_REDUCED
+  article_watch_playback_lifecycle: PASS_DESKTOP_MOBILE_NORMAL_REDUCED
+  reader_navigation_responsive_shell: PASS
+  pixel_review: PASS_12_ROUTE_LOCALE_ROWS_DESKTOP_MOBILE_NORMAL_REDUCED
+  pedagogy_review: PASS_12_ROUTE_LOCALE_ROWS_DIRECTED_RELATIONSHIP_MECHANISMS
+  video_start_middle_final_manual_review: PASS_12_NATIVE_ES_EN_VIDEOS_72_FRAMES
+  known_p0_p1_p2: 0
+  production_verified: false
+  series_golden: false
+
+historical_checkpoints:
+  - head: cca79fe0976f96b41b3c23754b603b836727fe9a
+    run: 35598982706
+    result: CHANGES_REQUIRED_MEDIA_VISUAL
+    artifact: 10637648202
+    artifact_sha256: 1f56d416c1d2ed81c6e0ceb7b3060f78935ebde7eb8e2a8907247815a1164316
+  - head: c7ee0419f455e770838cb50c580d192baf697ab2
+    run: 35630418674
+    result: CHANGES_REQUIRED_BROWSER_RELATIONSHIP
+    artifact: 10654414195
+    artifact_sha256: e899c0af6041815f99432e6d09b892929964e2d5f440336460c6af90b4cf25e9
+
+summary_current_exact_head:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  PIXEL_REVIEW: 12/12
+  PEDAGOGY_REVIEW: 12/12
+  ARTICLE_GOLDEN: 6/6
+  known_p0: 0
+  known_p1_rows: 0
+  known_p2: 0
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+
+source_review:
+  status: PASS_CURRENT_PRIMARY_CLAIMS_NO_MATERIAL_CONTRADICTIONS
+  reviewed_2026_09_21:
+    - NIST_TEVV_Athlon_2026_08_07
+    - NIST_AITE_2026_07_27
+    - Anthropic_Demystifying_Evals_2026_01_09
+    - LiveBench_current
+    - MT_Bench_LLM_as_a_Judge
+    - position_bias_study_2024_2025
+    - OpenAI_Agents_SDK_Tracing_current
+    - tau2_bench_current
+    - Istio_Traffic_Mirroring_current
+    - Argo_Rollouts_Analysis_current
+    - Microsoft_SRM_current
+    - OpenTelemetry_GenAI_SemConv_current
+    - NIST_AI_RMF_Playbook_current
+    - OpenAI_Graders_API_current
+  full_source_pass_promoted: true
+
+media_visual:
+  policy: VIDEO_VISUAL_REQUIRED_PER_ROUTE_LOCALE
+  obligations: 12
+  last_exact_pass_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+  last_exact_pass: true
+  format: H264_YUV420P_1920x1080_36S
+  localized_es_en: true
+  poster_title_summary_duration_key_moments: true
+  article_watch_lifecycle: PASS_24_SURFACES_DESKTOP_MOBILE_NORMAL_REDUCED
+  audio_required_now: false
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  historical_caption_transcript_threshold_debt: '92 > 91 retained for future voice/accessibility lane'
+
+indexability:
+  last_exact_pass_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+  last_exact_pass: true
+  route_locale_rows: 12
+  article_watch_surfaces: 24
+  canonical: PASS
+  noindex_xrobots_robots: PASS
+  hreflang_reciprocal_es_en: PASS
+  sitemap_normal_video: PASS
+  internal_discovery_orphans: PASS
+  h1_title_meta_lang: PASS
+  schema_visible_content_consistency: PASS
+  negative_mutations: PASS
+  google_selection_asserted: false
+  authenticated_gsc_observation: NONE_CONSUMED
+  release_requires_live_revalidation: true
+
+manual_review:
+  desktop_mobile_normal_reduced: PASS_12_ROUTE_LOCALE_ROWS
+  mobile_reduced_identical_to_normal_for_all_12_rows: true
+  desktop_reduced_materially_equivalent: true
+  video_frames_inspected: 72
+  p0: []
+  p1: []
+  p2: []
+  notes:
+    - MOBILE_PRIMARY_MECHANISMS_USE_DIRECTED_RELATIONSHIPS_NOT_NUMBERED_CARD_FALLBACK
+    - LEGACY_GIANT_DESKTOP_DETAIL_CANVAS_HIDDEN_ON_MOBILE
+    - ES_EN_LABELS_AND_EXPLANATORY_COPY_READABLE_AT_390PX
+    - NO_PAGE_LEVEL_HORIZONTAL_OVERFLOW_OBSERVED
+    - VIDEO_TOPOLOGY_LABELS_AND_STATE_TRANSITIONS_READABLE_IN_ALL_12_ASSETS
+
+articles:
+  - &golden_row
+    route: /series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
+    locale: es
+    iteration_count: 3
+    last_reviewed_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+    SOURCE_PASS: true
+    BUILD_PASS: true
+    BROWSER_PASS: true
+    MEDIA_VISUAL_PASS: true
+    INDEXABILITY_PASS: true
+    PIXEL_REVIEW: true
+    PEDAGOGY_REVIEW: true
+    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+    defects: {P0: [], P1: [], P2: []}
+    es_en_parity: PASS
+    factual_source_status: PASS_CURRENT_PRIMARY_CLAIMS_NO_MATERIAL_CONTRADICTIONS
+    canonical_hreflang_sitemap_internal_discovery: PASS
+    watch_video_lifecycle: PASS
+    evidence_revision_exact: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+    live_deploy_verification: NOT_RELEASED
+    gsc_observation: NONE_CONSUMED
+    next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_RELEASE
+    state: GOLDEN
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
+    locale: en
+  - <<: *golden_row
+    route: /series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
+    locale: es
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
+    locale: en
+  - <<: *golden_row
+    route: /series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
+    locale: es
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
+    locale: en
+  - <<: *golden_row
+    route: /series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
+    locale: es
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
+    locale: en
+  - <<: *golden_row
+    route: /series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
+    locale: es
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
+    locale: en
+  - <<: *golden_row
+    route: /series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
+    locale: es
+  - <<: *golden_row
+    route: /en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
+    locale: en

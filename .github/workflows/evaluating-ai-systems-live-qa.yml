@@ -16,7 +16,7 @@ jobs:
   live-evaluating-ai-systems:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,21 +26,29 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Wait for Evaluating AI Systems deployment
+      - name: Wait for exact Evaluating AI Systems deployment revision
         shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           set -euo pipefail
-          url='https://5sigmas.com/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/'
-          for attempt in {1..18}; do
-            body="$(curl --fail --silent --show-error --location "$url" || true)"
-            if grep -q 'Capítulo 1' <<< "$body" && grep -q 'Qué evaluar' <<< "$body"; then
-              echo 'Evaluating AI Systems production route is serving the deployed series.'
+          for attempt in {1..30}; do
+            revision="$(curl --fail --silent --show-error --location -H 'Cache-Control: no-cache' https://5sigmas.com/build.json | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{try{console.log(JSON.parse(s).revision||'')}catch{console.log('')}})" || true)"
+            if [[ "$revision" == "$EXPECTED_SHA" ]]; then
+              echo "Exact production revision is live: $revision"
               exit 0
             fi
+            echo "Waiting for production revision $EXPECTED_SHA; observed ${revision:-none}"
             sleep 5
           done
-          echo 'Evaluating AI Systems production route did not become ready within the validation window.'
+          echo "Exact deployed revision did not become live within the validation window."
           exit 1
+
+      - name: Validate exact live Evaluating AI Systems indexability
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+          S5_EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: node scripts/validate_evaluating_ai_live_indexability.mjs
 
       - name: Install Playwright
         run: |

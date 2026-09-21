@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html",
-  "source_blob_sha": "ccb60e25df579d473bfb004e51ddb9290028c960",
+  "source_blob_sha": "aa9a5de7d17aa62f414ddaf549b25703236d1695",
   "replacements": {
     "Relación entre frontera de evaluación, workflow, trayectoria y outcome": "Relationship among evaluation boundary, workflow, trajectory, and outcome",
     "Primero fija la frontera": "Set the boundary first",

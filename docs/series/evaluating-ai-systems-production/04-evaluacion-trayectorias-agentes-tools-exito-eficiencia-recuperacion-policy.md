@@ -10,6 +10,22 @@ tags:
   - Agentes
   - Reliability
   - Producción
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
+video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
+video_title: "Trayectorias de agentes: éxito, eficiencia, recovery y policy"
+video_summary: "Una trayectoria agentic se evalúa por outcome y por proceso: tools y estados observados explican cómo se llegó al resultado, mientras recovery, coste y policy separan éxito limpio de éxito corrupto."
+video_duration: PT36S
+video_chapters:
+  - name: "Acción, tool result y estado forman la trayectoria"
+    start: 0
+    end: 12
+  - name: "El recovery debe restaurar progreso sin ocultar fallos"
+    start: 12
+    end: 24
+  - name: "Éxito, eficiencia y policy se aceptan conjuntamente"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 4 — Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política
