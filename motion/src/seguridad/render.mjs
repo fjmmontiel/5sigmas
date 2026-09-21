@@ -73,7 +73,7 @@ function drawZone(P, zone, q, plan) {
   if (zone.label) {
     const label=pretty(zone.label);
     const base=mechanismLabelSize(plan,'zone');
-    if(zone.w<160 && zone.h>220){
+    if(zone.w<220 && zone.h>220){
       P.text(label,zone.x+zone.w/2,Math.max(48,zone.y-base-16),base,strong?P.T.accentText:P.T.muted,650,'center',430);
     } else if(zone.w<160){
       P.text(label,Math.min(955,zone.x+zone.w+14),zone.y+Math.max(0,(zone.h-base)/2),base,strong?P.T.accentText:P.T.muted,650,'left',390);
