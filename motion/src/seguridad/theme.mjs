@@ -1,1 +1,1 @@
-export const SEGURIDAD_THEME=Object.freeze({background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',bodyFont:'Arial',headlineFont:'Georgia',accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8'});
+export const SEGURIDAD_THEME=Object.freeze({background:'#FCFBF7',ink:'#181B1D',muted:'#6D716F',rule:'#DADDD8',bodyFont:'Inter',headlineFont:'GFS Didot',accent:'#A34B35',accentText:'#873B2B',accentSurface:'#F3E7E2'});
