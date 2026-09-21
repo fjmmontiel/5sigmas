@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  // GOLDEN checkpoint: Ch5 mobile overlay must cover the full graph before edge routing is measured.
   const GRAPH_SELECTOR = '[data-inference-mobile-graph]';
   const EDGE_SELECTOR = '[data-mobile-graph-edge][data-mobile-graph-short-edge="true"][data-mobile-graph-routed-short-edge="true"]';
   const ROUTE_VERSION = 'orthogonal-clearance-v2';
