@@ -1,4 +1,4 @@
-schema_version: 43
+schema_version: 44
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -10,8 +10,8 @@ canonical_series_order:
 - context-engineering-memory-mcp
 - llm-inference-engineering-economics
 - evaluating-ai-systems-production
-active_series: evaluating-ai-systems-production
-series_golden_count: 6/7
+active_series: NONE_ALL_CANONICAL_SERIES_GOLDEN
+series_golden_count: 7/7
 series_status:
   seguridad-ia:
     article_golden: 6/6
@@ -134,21 +134,22 @@ series_status:
     ledger: quality/series-requalification/evaluating-ai-systems-article-ledger.yml
     active_branch: quality/evaluating-ai-systems-live-qa-contract-fix
     release_pr: 352
-    release_pr_state: MERGED_ARTICLE_GOLDEN_LIVE_CURRENT_GATE_REVALIDATION_PENDING
-    base_main: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    release_pr_state: MERGED_ARTICLE_GOLDEN_SERIES_GOLDEN_PRODUCTION_VERIFIED
+    base_main: e198072b35507406d8616824d90a15d17d3f5dc8
     release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-    deploy_run: 35649362206
-    deployed_revision: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-    dedicated_live_qa_run: 35650849256
+    live_contract_fix_pr: 353
+    live_contract_fix_merge_commit: e198072b35507406d8616824d90a15d17d3f5dc8
+    deploy_run: 35658347258
+    deployed_revision: e198072b35507406d8616824d90a15d17d3f5dc8
+    dedicated_live_qa_run: 35659933884
     live_exact_revision: PASS
     live_indexability: PASS_12_OF_12_ROUTE_LOCALE_24_ARTICLE_WATCH_SURFACES
-    live_browser_resources: PASS
+    live_browser_resources: PASS_ALL_ES_EN_EVALUATION_ROUTES
     live_hub_mirror: PASS
     live_locale_switching_reader_progression: PASS
-    live_current_owner_relationship_accessibility: PENDING_CONTRACT_FIX
-    live_current_owner_article_watch_playback: PENDING_CONTRACT_FIX
-    live_qa_failure_class: QA_CONTRACT_DEFECT_NOT_ARTICLE_DEFECT
-    live_contract_fix_pr: 353
+    live_current_owner_relationship_accessibility: PASS_ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED
+    live_current_owner_article_watch_playback: PASS_NORMAL_AND_REDUCED_MOTION
+    live_qa_failure_class: NONE_CURRENT
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
@@ -184,6 +185,9 @@ series_status:
     exact_checkpoint_result: SUCCESS_ALL_CURRENT_NONDEFERRED_ARTICLE_GATES
     exact_checkpoint_artifact: 10658961724
     exact_checkpoint_artifact_sha256: b9676c2e34493a63814ddefa3d7ee682fe3575111da06747d29eb401691f4a6d
+    final_series_audit_head: 6b5cd877a754d9506bb0e217d993efd3477deb26
+    final_series_audit_run: 35656657665
+    final_series_audit_result: SUCCESS
     manual_pixel_pedagogy: PASS_12_ROUTE_LOCALE_ROWS_DESKTOP_MOBILE_NORMAL_REDUCED
     manual_video_frames: PASS_12_NATIVE_ES_EN_VIDEOS_72_INSPECTED_FRAMES
     primary_source_review: PASS_CURRENT_PRIMARY_CLAIMS_NO_MATERIAL_CONTRADICTIONS
@@ -192,12 +196,13 @@ series_status:
     series5_indexability_negative_mutations_added: true
     series5_media_visual_voice_split_added: true
     live_exact_revision_gate_added: true
-    production_verified: false
-    series_golden: false
-    state: ARTICLE_GOLDEN_6_OF_6_RELEASED_LIVE_CURRENT_GATE_REVALIDATION_PENDING
-    next_action: PASS_PR353_SERIES5_REVIEW_MERGE_DEPLOY_THEN_CURRENT_OWNER_LIVE_RELATIONSHIP_AND_PLAYBACK_QA
+    qa_contract_defect_resolved: true
+    production_verified: true
+    series_golden: true
+    state: SERIES_GOLDEN_PRODUCTION_VERIFIED
+    next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
 release_coordination:
-  current_main: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+  current_main: e198072b35507406d8616824d90a15d17d3f5dc8
   inference_release_pr: 342
   inference_release_pr_merged: true
   inference_release_merge_commit: 0a4b29a88048bfd7e222c20d2fd3075f38ccd2e2
@@ -209,16 +214,19 @@ release_coordination:
   evaluation_release_pr_draft: false
   evaluation_release_pr_merged: true
   evaluation_release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-  evaluation_deploy_run: 35649362206
-  evaluation_dedicated_live_qa_run: 35650849256
+  evaluation_live_contract_fix_pr: 353
+  evaluation_live_contract_fix_merge_commit: e198072b35507406d8616824d90a15d17d3f5dc8
+  evaluation_deploy_run: 35658347258
+  evaluation_dedicated_live_qa_run: 35659933884
   evaluation_live_indexability: PASS
-  evaluation_live_qa_contract_fix_pr: 353
+  evaluation_live_relationship_accessibility: PASS
+  evaluation_live_article_watch_playback: PASS
   evaluation_first_checkpoint_run: 35598982706
   evaluation_first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
   evaluation_latest_exact_qa_run: 35640790841
   evaluation_latest_exact_qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
   evaluation_article_golden: 6/6
-  evaluation_series_golden: false
+  evaluation_series_golden: true
   draft_34:
     state: OPEN_DRAFT_UNMERGED
     head: 459aca905454175bdbdf86c31f0af02cddd576a4
@@ -229,7 +237,7 @@ release_contract_281:
   historical_72h_satisfied: true
   live_article_change_since_clock: false
   latest_article_lane_receipt: ARTICLE_LIVE_REVALIDATION_PARTIAL_2026_09_19
-  latest_pm_receipt: PM_CONTINUITY_2026_09_20
+  latest_pm_receipt: PM_CONTINUITY_2026_09_21
   remaining_gap: FRESH_NONCACHED_EXACT_REVISION_ES_EN_LIVE_PROOF
   no_72h_reset: true
 linkedin:
