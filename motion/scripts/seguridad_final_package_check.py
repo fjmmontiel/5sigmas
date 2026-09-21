@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Validate Seguridad media diagnostics; independently gate owner review admission."""
+"""Validate Seguridad media diagnostics; independently gate owner review.
+
+Pixel movement is diagnostic only. It must never act as a semantic-motion gate:
+semantic motion, cue sync and visual quality are decided by the independent
+encoded-media review consumed by review_admission.py.
+"""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -11,7 +16,6 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw, ImageStat
 from review_admission import finalize_package
 FPS=60
-SCENE_STARTS=[0,12,24,36,48]
 
 
 def sha256(path: Path) -> str:
@@ -31,18 +35,48 @@ def delta(a: Image.Image,b: Image.Image) -> float:
     return round(sum(ImageStat.Stat(d).mean)/3,4)
 
 
+def encoded_motion_diagnostic(path: Path,cues: list[dict]) -> tuple[list[dict],list[str]]:
+    """Measure pixel evolution across authored visual windows, diagnostics only.
+
+    Low pixel delta is never a semantic-motion failure. Independent encoded-media
+    QA remains the fail-closed authority for semantic motion and cue correctness.
+    """
+    rows=[];warnings=[]
+    for cue in cues:
+        start=float(cue['visual_at']);end=float(cue['visual_end_at']);scene_end=float(cue['scene_end_at'])
+        if not (0 <= start < end < scene_end + 1e-9):
+            raise ValueError(f"invalid authored cue timing {cue.get('id')}: {start}, {end}, {scene_end}")
+        span=end-start
+        times=(start+.05,start+span*.35,start+span*.70,end-.05)
+        images=[frame(path,t,width=320) for t in times]
+        pair_deltas=[delta(images[i],images[i+1]) for i in range(3)]
+        emergence=delta(images[0],images[-1])
+        max_delta=max(pair_deltas)
+        rows.append({'cue_id':cue.get('id'),'concept_id':cue.get('concept_id'),
+                     'visual_target_id':cue.get('visual_target_id'),'visual_at':start,
+                     'visual_end_at':end,'sample_times':[round(t,3) for t in times],
+                     'pair_deltas':pair_deltas,'max_pair_delta':max_delta,
+                     'window_emergence_delta':emergence,
+                     'scope':'PIXEL_CHANGE_DIAGNOSTIC_ONLY_NOT_SEMANTIC_MOTION'})
+        if max_delta<=.015 and emergence<=.015:
+            warnings.append(f"low encoded pixel-change diagnostic {path.name} cue {cue.get('id')}: max_pair_delta={max_delta}, emergence={emergence}")
+    return rows,warnings
+
+
 def make_contact_sheet(items: list[dict],out: Path,orientation: str) -> None:
     cell_w,cell_h=(384,250) if orientation=='horizontal' else (220,390)
     margin,label_h,cols,rows=12,34,5,6
     sheet=Image.new('RGB',(margin+cols*(cell_w+margin),margin+rows*(cell_h+label_h+margin)),'white');draw=ImageDraw.Draw(sheet)
     for row,meta in enumerate(sorted(items,key=lambda x:int(x['chapter']))):
         mp4=out.parent/meta['mp4']['file']
-        for col,t in enumerate([6,18,30,42,54]):
+        cues=meta.get('text_visual_cues',[])
+        times=[float(c['visual_at'])+(float(c['visual_end_at'])-float(c['visual_at']))*.5 for c in cues]
+        for col,t in enumerate(times):
             im=frame(mp4,t,width=cell_w)
             if im.height>cell_h:im.thumbnail((cell_w,cell_h))
             x=margin+col*(cell_w+margin);y=margin+row*(cell_h+label_h+margin)
             bg=Image.new('RGB',(cell_w,cell_h),'white');bg.paste(im,((cell_w-im.width)//2,(cell_h-im.height)//2));sheet.paste(bg,(x,y))
-            draw.text((x,y+cell_h+7),f"{meta['chapter']} · S{col+1} · {t}s",fill='black')
+            draw.text((x,y+cell_h+7),f"{meta['chapter']} · C{col+1} · {t:.2f}s",fill='black')
     sheet.save(out,quality=92)
 
 
@@ -85,21 +119,22 @@ def main() -> None:
     combos=Counter((m['locale'],m['orientation']) for m in metas)
     if dict(combos)!={(l,o):6 for l in ('es','en') for o in ('horizontal','vertical')}:raise SystemExit(f'locale/orientation coverage mismatch: {combos}')
     if len({(m['chapter'],m['locale'],m['orientation']) for m in metas})!=24:raise SystemExit('duplicate chapter/locale/orientation')
-    errors=[];motion=[]
+    errors=[];motion=[];diagnostic_warnings=[]
     for m in sorted(metas,key=lambda x:(x['locale'],x['orientation'],x['chapter'])):
         path=root/m['mp4']['file']
         if not path.exists():errors.append(f'missing {path.name}');continue
         if sha256(path)!=m['mp4']['sha256']:errors.append(f'hash mismatch {path.name}')
         p=m['mp4']['ffprobe'];expected_wh=(1920,1080) if m['orientation']=='horizontal' else (1080,1920)
         if (int(p['width']),int(p['height']))!=expected_wh or p['codec_name']!='h264' or p['r_frame_rate']!='60/1' or int(p['nb_frames'])!=3600:errors.append(f'media profile mismatch {path.name}: {p}')
-        subprocess.run(['ffmpeg','-v','error','-i',str(path),'-f','null','-'],check=True)
-        scene_rows=[]
-        for s in SCENE_STARTS:
-            pairs=[]
-            for offset in (.05,8.05):pairs.append(delta(frame(path,s+offset,width=320),frame(path,s+offset+.5,width=320)))
-            moving=max(pairs);scene_rows.append({'scene_start':s,'deltas':pairs,'max_delta':moving})
-            if moving<=.015:errors.append(f'no encoded motion observed {path.name} scene {s}: {pairs}')
-        motion.append({'file':path.name,'scenes':scene_rows})
+        decode=subprocess.run(['ffmpeg','-v','error','-i',str(path),'-f','null','-'],capture_output=True,text=True)
+        if decode.returncode!=0:errors.append(f'full decode failed {path.name}: {decode.stderr.strip()}');continue
+        cues=m.get('text_visual_cues',[])
+        if not isinstance(cues,list) or len(cues)!=5 or len({c.get('id') for c in cues})!=5:
+            errors.append(f'missing/duplicate authored cues {path.name}');continue
+        try:rows,warnings=encoded_motion_diagnostic(path,cues)
+        except (KeyError,TypeError,ValueError,subprocess.CalledProcessError) as exc:
+            errors.append(f'invalid motion diagnostic inputs {path.name}: {exc}');continue
+        motion.append({'file':path.name,'cues':rows});diagnostic_warnings.extend(warnings)
     parity=[];groups=defaultdict(dict)
     for m in metas:groups[(m['chapter'],m['orientation'])][m['locale']]=m
     for key,g in sorted(groups.items()):
@@ -121,7 +156,7 @@ def main() -> None:
         'review_ready':False,'technical_golden':False,'owner_visual_approval':'NOT_REQUESTED','output_count':len(metas),
         'coverage':{f'{l}_{o}':n for (l,o),n in sorted(combos.items())},'es_en_parity':parity,
         'parity_scope':'STRUCTURAL_ONLY_NOT_SEMANTIC_APPROVAL','encoded_motion_scope':'PIXEL_CHANGE_DIAGNOSTIC_ONLY_NOT_SEMANTIC_MOTION',
-        'encoded_motion_check':motion,'errors':errors,'outputs':metas}
+        'encoded_motion_check':motion,'diagnostic_warnings':diagnostic_warnings,'errors':errors,'outputs':metas}
     (root/'seguridad-ia-final-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     if errors:raise SystemExit('\n'.join(errors))
     gate_owner_review(root,metas,manifest,internal_only=args.internal_only)
