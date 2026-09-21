@@ -177,7 +177,7 @@ function portraitChannel(P,S,l){
   label(P,loc('Informe externo','External report',l),760,20,44,false,470);
   doc(P,535,85,450,235,'',[]);
   label(P,loc('Ignora la tarea','Ignore the task',l),760,135,44,true,408);
-  label(P,loc('y pide acceso','and request access',l),760,196,44,true,408);
+  label(P,loc('y pide acceso','Request access',l),760,196,44,true,408);
   path(P,[[560,281],[560+390*q[1],281]],P.T.accentText,5);
  }
  if(on[2]){
