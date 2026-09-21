@@ -63,6 +63,31 @@ const activeMotion = async (root) => root.evaluate((node) => {
 });
 const within = (inner, outer, pad = 1) => Boolean(inner && outer && inner.x >= outer.x - pad && inner.y >= outer.y - pad && inner.x + inner.width <= outer.x + outer.width + pad && inner.y + inner.height <= outer.y + outer.height + pad && inner.width > 0 && inner.height > 0);
 
+const isExpectedPlatformTelemetryAbort = (urlValue, errorText) => {
+  if (!/ERR_ABORTED/i.test(errorText || '')) return false;
+  try {
+    const requestUrl = new URL(urlValue);
+    const previewUrl = new URL(base);
+    return requestUrl.origin === previewUrl.origin && requestUrl.pathname === '/cdn-cgi/rum';
+  } catch {
+    return false;
+  }
+};
+
+const platformTelemetryAbortMutationCount = (() => {
+  const fixtures = [
+    [`${base}/cdn-cgi/rum?test=1`, 'net::ERR_ABORTED', true, 'exact same-origin Cloudflare RUM abort'],
+    [`${base}/cdn-cgi/rum?test=1`, 'net::ERR_FAILED', false, 'non-abort RUM failure'],
+    [`${base}/assets/site.js`, 'net::ERR_ABORTED', false, 'other same-origin abort'],
+    ['https://example.invalid/cdn-cgi/rum?test=1', 'net::ERR_ABORTED', false, 'cross-origin RUM abort'],
+  ];
+  for (const [urlValue, errorText, expected, name] of fixtures) {
+    const actual = isExpectedPlatformTelemetryAbort(urlValue, errorText);
+    if (actual !== expected) throw new Error(`Inference platform-telemetry abort classifier mutation failed: ${name}; expected=${expected}; actual=${actual}`);
+  }
+  return fixtures.length;
+})();
+
 export async function validateInferenceChapter(key) {
   const config = CONFIGS[key];
   if (!config) throw new Error(`Unknown inference chapter contract ${key}`);
@@ -77,9 +102,16 @@ export async function validateInferenceChapter(key) {
         const page = await context.newPage();
         for (const locale of ['es', 'en']) {
           const route = `${locale === 'en' ? '/en' : ''}/series/llm-inference-engineering-economics/${config.route}/`;
-          const badResources = []; const runtimeErrors = [];
+          const badResources = []; const runtimeErrors = []; const expectedPlatformAborts = [];
           const onResponse = (response) => { try { const url = new URL(response.url()); const origin = new URL(base).origin; if (url.origin === origin && response.status() >= 400 && !/favicon/i.test(url.pathname)) badResources.push(`${response.status()} ${url.pathname}`); } catch {} };
-          const onRequestFailed = (request) => runtimeErrors.push(`requestfailed ${request.url()} ${request.failure()?.errorText || ''}`);
+          const onRequestFailed = (request) => {
+            const errorText = request.failure()?.errorText || '';
+            if (isExpectedPlatformTelemetryAbort(request.url(), errorText)) {
+              expectedPlatformAborts.push(`requestfailed ${request.url()} ${errorText}`);
+              return;
+            }
+            runtimeErrors.push(`requestfailed ${request.url()} ${errorText}`);
+          };
           const onPageError = (error) => runtimeErrors.push(`pageerror ${error.message}`);
           const onConsole = (message) => { if (message.type() === 'error') runtimeErrors.push(`console.error ${message.text()}`); };
           page.on('response', onResponse); page.on('requestfailed', onRequestFailed); page.on('pageerror', onPageError); page.on('console', onConsole);
@@ -153,5 +185,5 @@ export async function validateInferenceChapter(key) {
     }
   } finally { await browser.close(); }
   if (failures.length) { console.error(`Inference engineering chapter ${key} relationship/accessibility gate failed (${failures.length}):`); for (const failure of failures) console.error(`- ${failure}`); process.exitCode = 1; return; }
-  console.log(`Inference engineering chapter ${key} relationship/accessibility PASS: desktop causal topology + native mobile directed graph, ES/EN, normal/reduced, resource/runtime listeners and responsive legibility are intact.`);
+  console.log(`Inference engineering chapter ${key} relationship/accessibility PASS: desktop causal topology + native mobile directed graph, ES/EN, normal/reduced, resource/runtime listeners and responsive legibility are intact; platform telemetry abort classifier mutations=${platformTelemetryAbortMutationCount}.`);
 }
