@@ -1,3 +1,4 @@
+import { CHAPTER01_PRESENTATIONS } from './chapter01-presentations.mjs';
 import { buildSeguridadRenderJobs, validateSeguridadSpec, SEGURIDAD_RENDER_CONTRACT } from './schema.mjs';
 import { compileSeguridadMechanism, SUPPORTED_SEGURIDAD_TOPOLOGIES } from './mechanisms.mjs';
 import { seguridadMechanismSeconds, seguridadSemanticTimeline } from './timeline.mjs';
@@ -30,7 +31,8 @@ export function indexSeguridadRegister(register) {
   for (const chapter of register?.chapters ?? []) {
     for (const concept of chapter?.concepts ?? []) {
       if (concepts.has(concept.id)) throw new Error(`seguridad engine: duplicate concept ${concept.id}`);
-      concepts.set(concept.id, concept);
+      const presentation = concept.presentation ?? CHAPTER01_PRESENTATIONS[concept.id];
+      concepts.set(concept.id, presentation ? { ...concept, presentation } : concept);
     }
   }
   if (concepts.size !== 30) throw new Error(`seguridad engine: expected 30 concepts, got ${concepts.size}`);

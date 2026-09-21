@@ -1,4 +1,4 @@
-import { Paint, clamp } from '../render/paint.mjs';
+import { Paint, clamp, mixHex } from '../render/paint.mjs';
 import { sceneLayout, drawHeader, drawText } from '../render/layout.mjs';
 import { seguridadFrameState, seguridadRenderMatrix, indexSeguridadRegister } from './engine.mjs';
 import { seguridadTextState } from './timeline.mjs';
@@ -55,7 +55,14 @@ function drawAuthoredBox(P,node,q,plan) {
   if(q<=0)return;
   const c=P.c;c.save();c.globalAlpha*=.25+.75*q;
   const strong=node.style==='accent';const denied=node.style==='blocked';
-  if(node.style!=='status')P.rect(node.x,node.y,node.w,node.h,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accent:P.T.rule,12,strong?3:2);
+  let highlight=0;
+  if(node.highlightPhase!==undefined){
+    if(!Number.isInteger(node.highlightPhase)||!plan.cueProgress[node.highlightPhase])throw new Error('seguridad: invalid highlight phase');
+    highlight=plan.cueProgress[node.highlightPhase].progress;
+  }
+  const fill=strong?P.T.accentSurface:mixHex('#FFFFFF',P.T.accentSurface,highlight);
+  const stroke=strong?P.T.accent:mixHex(P.T.rule,P.T.accent,highlight);
+  if(node.style!=='status')P.rect(node.x,node.y,node.w,node.h,fill,stroke,12,strong?3:2+highlight);
   const vertical=plan.orientation==='vertical';
   const size=vertical?43:38, subSize=vertical?35:32, max=node.w-40;
   const text=localized(node.label,P.locale);
