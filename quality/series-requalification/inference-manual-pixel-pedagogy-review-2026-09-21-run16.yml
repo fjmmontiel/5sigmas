@@ -1,0 +1,77 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: 2026-09-21
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+status: CHANGES_REQUIRED
+exact_evidence:
+  head: 6d559fea45e4b8d02533da7f65d8e2e3bea216a0
+  run: 35557780069
+  artifact: 10621695409
+  artifact_sha256: d12fde24cfcb1469350f0ae46340711b485d2f289a3bb0680d2d30b86df8a92e
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  automated_result: PASS
+  automated_gates:
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    article_watch_lifecycle: PASS_24_ARTICLE_24_WATCH
+    relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+    mobile_text_fit_negative_mutation: PASS
+    routed_short_edge_shape_negative_mutations: PASS
+    reader_navigation_responsive_shell: PASS
+manual_review:
+  performed: true
+  route_locale_rows: 12
+  mobile_contexts: 24
+  desktop_contexts: 24
+  video_key_frames: 36
+  mobile_modes: [normal, reduced]
+  desktop_modes: [normal, reduced]
+  video_moments: [start, intermediate, final]
+  result: CHANGES_REQUIRED
+  desktop_result: PASS_NO_NEW_P0_P1_P2_OBSERVED
+  mobile_result: FAIL_SHARED_DIRECTED_EDGE_VISIBILITY
+  video_result: FAIL_CH1_ES_EN_FINAL_THROUGHPUT_LABEL_OVERFLOW
+findings:
+  - severity: P1
+    code: INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY
+    scope: ALL_12_ROUTE_LOCALE_ROWS_SHARED_RENDERER
+    status: OPEN_FIX_IMPLEMENTED_PENDING_EXACT_RERENDER
+    observed:
+      - 'Ch1 ES/EN: Concurrency/Concurrencia -> Scheduler -> Goodput edges visually absent or reduced to card-boundary stubs.'
+      - 'Ch2 ES/EN: Req C waits/espera -> Scheduler -> Admit C horizontal relationships are effectively invisible.'
+      - 'Ch3 ES/EN: lower Model(o) -> Parallel mode/Modo paralelo -> Collective ops/Ops colectivas relationship is effectively invisible.'
+      - 'Ch4 ES/EN: lower speculative-decoding relationships contain visually missing shafts despite DOM paths.'
+      - 'Ch5 ES/EN: lower Primary/Fallback/Telemetry/Policy relations appear disconnected.'
+      - 'Ch6 ES/EN: Power+cost/accounting and Load sweep/Operating region horizontal relations appear disconnected.'
+    root_cause: 'orthogonal-shaft-v1 used a fixed 4.5 SVG-unit detour. For same-row nodes this corridor lands at or inside the rendered node boundary/shadow; the geometric path exists but its shaft is occluded. The old gate checked shape/length but not node-box clearance or pixel visibility.'
+    remediation: 'orthogonal-clearance-v2 routes from source/target top-or-bottom or left-or-right centers through a corridor computed from the actual rendered node boxes plus 2 SVG units of clearance. The deterministic gate now requires node-box clearance and an >=8 SVG-unit main shaft, with a boundary-hidden negative mutation.'
+  - severity: P1
+    code: INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW
+    scope: [CH1_ES_VIDEO, CH1_EN_VIDEO]
+    status: OPEN_REPAIR_SOURCE_IMPLEMENTED_CANDIDATE_MEDIA_PENDING
+    observed: 'At the final key moment (~35.28 s), THROUGHPUT overflows the right-most gate node in both ES and EN.'
+    remediation: 'Focused repair keeps >=68 px material typography and widens only the THROUGHPUT gate to 620 source pixels; no voice/audio is generated.'
+closed_this_review:
+  - code: INFERENCE_CH6_EN_VIDEO_LABEL_OVERFLOW_MEASUREMENTS
+    status: CLOSED
+    evidence: 'Current exact EN Ch6 start/intermediate/final frames use Metrics and Tokens/s with no observed overflow; ES Mediciones is also legible.'
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: '92 > 91 retained for future voice/accessibility lane; budget remains 91.'
+release:
+  article_golden: 0/6
+  series_golden: false
+  merge_allowed: false
+  deploy_verified: false
+next_action:
+  - 'Rerender all 12 route×locale mobile normal/reduced contexts on orthogonal-clearance-v2 and repeat real pixel/pedagogy review.'
+  - 'Build and commit repaired Ch1 ES/EN MP4+poster, then enforce source parity in Series 4 GOLDEN review.'
+  - 'Only after zero P0/P1/P2: reconcile current main, run one integrated checkpoint, ready/merge #342, deploy, and verify exact-revision live ES/EN INDEXABILITY.'

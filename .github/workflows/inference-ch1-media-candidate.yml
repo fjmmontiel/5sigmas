@@ -1,0 +1,39 @@
+name: Inference Ch1 repaired-media candidate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/repair_inference_ch1_visual_media.py'
+      - '.github/workflows/inference-ch1-media-candidate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  render-ch1-media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deterministic media dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install pillow pyyaml
+      - name: Render repaired Ch1 ES/EN candidate media
+        run: python scripts/repair_inference_ch1_visual_media.py --emit artifacts/ch1-repaired-media
+      - name: Upload repaired-media candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-ch1-repaired-media-candidate
+          path: artifacts/ch1-repaired-media/**
+          if-no-files-found: error
+          retention-days: 1

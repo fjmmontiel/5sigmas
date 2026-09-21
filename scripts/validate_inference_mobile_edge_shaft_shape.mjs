@@ -9,25 +9,69 @@ const routes = [
   '05-model-routing-fallback-caching-workload-aware-serving',
   '06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints',
 ];
-const ROUTE_VERSION = 'orthogonal-shaft-v1';
-const MIN_DETOUR_SEGMENT = 4;
+const ROUTE_VERSION = 'orthogonal-clearance-v2';
+const MIN_MAIN_SHAFT = 8;
 const MIN_NONZERO_SEGMENT = 0.75;
+const MIN_NODE_CLEARANCE = 1.25;
 const EPS = 0.25;
 
-const inspect = async (page, selector) => page.locator(selector).evaluate((graph) => [...graph.querySelectorAll('[data-mobile-graph-edge][data-mobile-graph-short-edge="true"]')].map((edge) => {
-  const points = String(edge.getAttribute('points') || '').trim().split(/\s+/).map((point) => point.split(',').map(Number));
-  return {
-    id: edge.dataset.mobileGraphEdge,
-    routed: edge.dataset.mobileGraphRoutedShortEdge === 'true',
-    routeVersion: edge.dataset.mobileGraphShortEdgeRoute || '',
-    points,
+const inspect = async (page, selector) => page.locator(selector).evaluate((graph) => {
+  const svg = graph.querySelector('svg');
+  const graphRect = graph.getBoundingClientRect();
+  const vb = svg?.viewBox?.baseVal;
+  const boxFor = (id) => {
+    if (!id || !vb?.width || !vb?.height || !graphRect.width || !graphRect.height) return null;
+    const node = graph.querySelector(`[data-mobile-graph-node="${CSS.escape(id)}"]`);
+    if (!node) return null;
+    const rect = node.getBoundingClientRect();
+    const left = vb.x + ((rect.left - graphRect.left) / graphRect.width) * vb.width;
+    const right = vb.x + ((rect.right - graphRect.left) / graphRect.width) * vb.width;
+    const top = vb.y + ((rect.top - graphRect.top) / graphRect.height) * vb.height;
+    const bottom = vb.y + ((rect.bottom - graphRect.top) / graphRect.height) * vb.height;
+    return { left, right, top, bottom };
   };
-}));
+  return [...graph.querySelectorAll('[data-mobile-graph-edge][data-mobile-graph-short-edge="true"]')].map((edge) => {
+    const points = String(edge.getAttribute('points') || '').trim().split(/\s+/).map((point) => point.split(',').map(Number));
+    return {
+      id: edge.dataset.mobileGraphEdge,
+      from: edge.dataset.mobileGraphFrom || '',
+      to: edge.dataset.mobileGraphTo || '',
+      routed: edge.dataset.mobileGraphRoutedShortEdge === 'true',
+      routeVersion: edge.dataset.mobileGraphShortEdgeRoute || '',
+      clearanceMarker: edge.dataset.mobileGraphShaftClearance || '',
+      points,
+      sourceBox: boxFor(edge.dataset.mobileGraphFrom || ''),
+      targetBox: boxFor(edge.dataset.mobileGraphTo || ''),
+    };
+  });
+});
+
+const shaftClearsBoxes = (edge) => {
+  if (!edge.sourceBox || !edge.targetBox || !Array.isArray(edge.points) || edge.points.length < 4) return false;
+  const a = edge.points[1];
+  const b = edge.points[edge.points.length - 2];
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  if (Math.abs(dy) <= EPS && Math.abs(dx) > EPS) {
+    const y = (a[1] + b[1]) / 2;
+    const above = y <= Math.min(edge.sourceBox.top, edge.targetBox.top) - MIN_NODE_CLEARANCE;
+    const below = y >= Math.max(edge.sourceBox.bottom, edge.targetBox.bottom) + MIN_NODE_CLEARANCE;
+    return above || below;
+  }
+  if (Math.abs(dx) <= EPS && Math.abs(dy) > EPS) {
+    const x = (a[0] + b[0]) / 2;
+    const left = x <= Math.min(edge.sourceBox.left, edge.targetBox.left) - MIN_NODE_CLEARANCE;
+    const right = x >= Math.max(edge.sourceBox.right, edge.targetBox.right) + MIN_NODE_CLEARANCE;
+    return left || right;
+  }
+  return false;
+};
 
 const shapeFailures = (edge, prefix) => {
   const failures = [];
   if (!edge.routed) failures.push(`${prefix}: short edge ${edge.id} is not routed`);
   if (edge.routeVersion !== ROUTE_VERSION) failures.push(`${prefix}: short edge ${edge.id} lacks ${ROUTE_VERSION}`);
+  if (edge.clearanceMarker !== '2') failures.push(`${prefix}: short edge ${edge.id} lacks measured node-clearance routing`);
   if (!Array.isArray(edge.points) || edge.points.length < 4) failures.push(`${prefix}: short edge ${edge.id} lacks a multi-segment shaft (${edge.points?.length ?? 0} points)`);
   if (!Array.isArray(edge.points) || edge.points.length < 2) return failures;
   const lengths = [];
@@ -41,16 +85,28 @@ const shapeFailures = (edge, prefix) => {
     if (Math.abs(dx) > EPS && Math.abs(dy) > EPS) failures.push(`${prefix}: short edge ${edge.id} contains diagonal chevron segment`);
     if (len < MIN_NONZERO_SEGMENT) failures.push(`${prefix}: short edge ${edge.id} contains a degenerate segment ${len.toFixed(2)} < ${MIN_NONZERO_SEGMENT}`);
   }
-  if (Math.max(0, ...lengths) < MIN_DETOUR_SEGMENT) failures.push(`${prefix}: short edge ${edge.id} has no continuous shaft segment >= ${MIN_DETOUR_SEGMENT}`);
+  const main = edge.points.length >= 4 ? Math.hypot(
+    edge.points[edge.points.length - 2][0] - edge.points[1][0],
+    edge.points[edge.points.length - 2][1] - edge.points[1][1],
+  ) : 0;
+  if (main < MIN_MAIN_SHAFT) failures.push(`${prefix}: short edge ${edge.id} main shaft ${main.toFixed(2)} < ${MIN_MAIN_SHAFT}`);
+  if (!shaftClearsBoxes(edge)) failures.push(`${prefix}: short edge ${edge.id} main shaft does not clear source/target node boxes by >=${MIN_NODE_CLEARANCE}`);
   return failures;
 };
 
-const mutantV = { id: 'mutant-v', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [12, 6], [14, 10]] };
-const mutantDirect = { id: 'mutant-direct', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [14, 10]] };
-const mutantDegenerate = { id: 'mutant-degenerate', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [10, 14.5], [10, 14.5], [14, 14.5]] };
+const sourceBox = { left: 8, right: 14, top: 8, bottom: 14 };
+const targetBox = { left: 20, right: 26, top: 8, bottom: 14 };
+const common = { routed: true, routeVersion: ROUTE_VERSION, clearanceMarker: '2', sourceBox, targetBox };
+const mutantV = { ...common, id: 'mutant-v', points: [[14, 11], [16, 7], [20, 11]] };
+const mutantDirect = { ...common, id: 'mutant-direct', points: [[14, 11], [20, 11]] };
+const mutantDegenerate = { ...common, id: 'mutant-degenerate', points: [[11, 8], [11, 6], [11, 6], [23, 8]] };
+const mutantInsideBoundary = { ...common, id: 'mutant-inside-boundary', points: [[11, 8], [11, 13.5], [23, 13.5], [23, 8]] };
+const mutantTinyShaft = { ...common, id: 'mutant-tiny-shaft', targetBox: { left: 14.5, right: 20.5, top: 8, bottom: 14 }, points: [[11, 8], [11, 5], [15, 5], [17.5, 8]] };
 if (!shapeFailures(mutantV, 'negative-v').some((failure) => failure.includes('multi-segment shaft') || failure.includes('diagonal chevron'))) throw new Error('V-shaped routed-short-edge mutation escaped');
 if (!shapeFailures(mutantDirect, 'negative-direct').some((failure) => failure.includes('multi-segment shaft'))) throw new Error('direct short-edge mutation escaped');
 if (!shapeFailures(mutantDegenerate, 'negative-degenerate').some((failure) => failure.includes('degenerate segment'))) throw new Error('degenerate orthogonal-segment mutation escaped');
+if (!shapeFailures(mutantInsideBoundary, 'negative-boundary').some((failure) => failure.includes('does not clear'))) throw new Error('node-boundary-hidden shaft mutation escaped');
+if (!shapeFailures(mutantTinyShaft, 'negative-tiny-shaft').some((failure) => failure.includes('main shaft'))) throw new Error('tiny main-shaft mutation escaped');
 
 const browser = await chromium.launch({ headless: true });
 const failures = [];
@@ -82,4 +138,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log('PASS: V/direct/degenerate negative mutations fail and every routed short edge has a >=4-point nondegenerate orthogonal shaft with a continuous >=4 SVG-unit segment across 12 ES/EN routes in normal/reduced motion.');
+console.log('PASS: V/direct/degenerate/boundary-hidden/tiny-shaft mutations fail and every routed short edge has a node-clear orthogonal shaft >=8 SVG units across 12 ES/EN routes in normal/reduced motion.');
