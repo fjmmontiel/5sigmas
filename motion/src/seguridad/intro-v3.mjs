@@ -83,7 +83,7 @@ function channel(P,S,l,v){
    marker(P,'1',276,470,{radius:22,strong:false});
    label(P,loc('Resume el informe','Summarize the report',l),600,444,540,v?41:39,false);
   }
-  if(b<1)travel(P,'2',routeB,b,{radius:24});else{
+  if(b<1)travel(P,'2',routeB,b);else{
    marker(P,'2',878,565,{radius:22});
    label(P,loc('Pide acceso','Request access',l),600,541,540,v?41:39,true);
   }
