@@ -16,6 +16,7 @@ on:
       - 'scripts/validate_evaluating_ai_media_visual.py'
       - 'scripts/validate_evaluating_ai_mobile_native.py'
       - 'scripts/validate_evaluating_ai_relationship_accessibility.mjs'
+      - 'scripts/validate_evaluating_ai_series_browser_milestone.mjs'
       - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
@@ -71,8 +72,8 @@ jobs:
 
       # Compatibility markers for the six historical source validators. They
       # still assert that these exact legacy command strings occur in workflow
-      # text. They are intentionally NOT executed; the unified gate below
-      # supersedes their reduced-motion-only / giant-horizontal-canvas assumptions.
+      # text. They are intentionally NOT executed; the unified gates below
+      # supersede their reduced-motion-only / giant-horizontal-canvas assumptions.
       # node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
       # node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
       # node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
@@ -155,6 +156,11 @@ jobs:
           S5_PREVIEW_BASE: http://127.0.0.1:8000
         run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
 
+      - name: Validate article-watch playback lifecycle in normal and reduced motion
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_series_browser_milestone.mjs
+
       - name: Validate reader navigation and responsive shell
         run: |
           node scripts/validate_direct_reader_navigation.mjs
@@ -169,8 +175,8 @@ jobs:
             exit 1
           fi
 
-      - name: Upload Series 5 visual evidence on failure
-        if: failure()
+      - name: Upload Series 5 exact visual evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ai-systems-evaluation-series5-pr-gate-visual-evidence
@@ -178,5 +184,6 @@ jobs:
             artifacts/visual-review/ai-systems-eval-*.png
             artifacts/visual-review/english-series-mirror-*.png
             artifacts/evaluating-ai-systems-requalification/**
+            artifacts/evaluating-ai-systems-browser-milestone/**
           if-no-files-found: warn
           retention-days: 1
