@@ -10,6 +10,7 @@ canvas failure mode and verifies the locale renderer emits the same EN projectio
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import os
 import re
 import sys
@@ -18,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HOOK_PATH = ROOT / "hooks/reading_time.py"
+LOCALE_MAIN_PATH = ROOT / "locale_main.py"
 
 VISUALS = {
     "01": (ROOT / "docs/snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html", "s5v-eval-boundary", "s5v-eval-boundary__scroll"),
@@ -85,15 +87,32 @@ def inspect_projection_contract(source: str, hook: str, section_class: str, scro
     return findings
 
 
+def _load_locale_main_like_macro_plugin():
+    """Load locale_main by file spec with repo root absent, matching mkdocs-macros."""
+    original_path = list(sys.path)
+    try:
+        root_resolved = ROOT.resolve()
+        sys.path[:] = [
+            entry
+            for entry in sys.path
+            if not entry or Path(entry).resolve() != root_resolved
+        ]
+        spec = importlib.util.spec_from_file_location("_series5_locale_main_probe", LOCALE_MAIN_PATH)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot construct module spec for {LOCALE_MAIN_PATH}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        sys.path[:] = original_path
+
+
 def inspect_locale_render_contract(chapter: str, section_class: str) -> list[Finding]:
-    """Exercise the actual EN macro renderer so source-only hook wiring cannot false-pass."""
-    if str(ROOT) not in sys.path:
-        sys.path.insert(0, str(ROOT))
+    """Exercise EN with mkdocs-macros-style loading so source-only wiring cannot pass."""
     old_locale = os.environ.get("S5_LOCALE")
     os.environ["S5_LOCALE"] = "en"
     try:
-        import locale_main
-
+        locale_main = _load_locale_main_like_macro_plugin()
         rendered = locale_main.render_include_html(LOCALE_VISUAL_PATHS[chapter])
     finally:
         if old_locale is None:
