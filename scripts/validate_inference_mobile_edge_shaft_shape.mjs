@@ -14,8 +14,7 @@ const MIN_MAIN_SHAFT = 8;
 const MIN_NONZERO_SEGMENT = 0.75;
 const MIN_NODE_CLEARANCE = 1.25;
 const COVERAGE_TOLERANCE_PX = 1;
-const CH5_GRAPH_KEY = '05';
-const CH5_COVERAGE_MARKER = 'ch5-full-height-v1';
+const COVERAGE_MARKER = 'all-full-height-v2';
 const EPS = 0.25;
 
 const inspect = async (page, selector) => page.locator(selector).evaluate((graph) => {
@@ -58,19 +57,13 @@ const inspect = async (page, selector) => page.locator(selector).evaluate((graph
   };
 });
 
-const layoutFailures = (layout, prefix, { requireFullHeight = false } = {}) => {
+const layoutFailures = (layout, prefix) => {
   const failures = [];
   if (!layout?.graph || !layout?.svg) {
     failures.push(`${prefix}: graph/SVG layout bounds unavailable`);
     return failures;
   }
-
-  // x/y/width alignment is a generic overlay invariant. Full-height coverage is deliberately
-  // Ch5-only: that chapter's canonical desktop rule `.s5v-routing-policy svg { height:auto }`
-  // leaked into the injected mobile overlay. Other chapters intentionally use shorter SVG
-  // overlays and were already proven visually/semantically correct; forcing their height would
-  // turn a Ch5 regression into unrelated layout churn.
-  for (const key of ['x', 'y', 'width']) {
+  for (const key of ['x', 'y', 'width', 'height']) {
     const graphValue = Number(layout.graph[key]);
     const svgValue = Number(layout.svg[key]);
     if (!Number.isFinite(graphValue) || !Number.isFinite(svgValue)) {
@@ -81,18 +74,8 @@ const layoutFailures = (layout, prefix, { requireFullHeight = false } = {}) => {
       failures.push(`${prefix}: edge SVG ${key} ${svgValue.toFixed(2)} does not cover graph ${key} ${graphValue.toFixed(2)} within ${COVERAGE_TOLERANCE_PX}px`);
     }
   }
-
-  if (requireFullHeight) {
-    const graphHeight = Number(layout.graph.height);
-    const svgHeight = Number(layout.svg.height);
-    if (!Number.isFinite(graphHeight) || !Number.isFinite(svgHeight)) {
-      failures.push(`${prefix}: non-finite graph/SVG height`);
-    } else if (Math.abs(svgHeight - graphHeight) > COVERAGE_TOLERANCE_PX) {
-      failures.push(`${prefix}: edge SVG height ${svgHeight.toFixed(2)} does not cover graph height ${graphHeight.toFixed(2)} within ${COVERAGE_TOLERANCE_PX}px`);
-    }
-    if (layout.coverageFix !== CH5_COVERAGE_MARKER) {
-      failures.push(`${prefix}: Ch5 edge SVG lacks ${CH5_COVERAGE_MARKER} coverage marker`);
-    }
+  if (layout.coverageFix !== COVERAGE_MARKER) {
+    failures.push(`${prefix}: edge SVG lacks ${COVERAGE_MARKER} coverage marker`);
   }
   return failures;
 };
@@ -154,14 +137,14 @@ const mutantTinyShaft = { ...common, id: 'mutant-tiny-shaft', targetBox: { left:
 const compressedSvgMutation = {
   graph: { x: 0, y: 0, width: 288, height: 640 },
   svg: { x: 0, y: 0, width: 288, height: 288 },
-  coverageFix: CH5_COVERAGE_MARKER,
+  coverageFix: COVERAGE_MARKER,
 };
 if (!shapeFailures(mutantV, 'negative-v').some((failure) => failure.includes('multi-segment shaft') || failure.includes('diagonal chevron'))) throw new Error('V-shaped routed-short-edge mutation escaped');
 if (!shapeFailures(mutantDirect, 'negative-direct').some((failure) => failure.includes('multi-segment shaft'))) throw new Error('direct short-edge mutation escaped');
 if (!shapeFailures(mutantDegenerate, 'negative-degenerate').some((failure) => failure.includes('degenerate segment'))) throw new Error('degenerate orthogonal-segment mutation escaped');
 if (!shapeFailures(mutantInsideBoundary, 'negative-boundary').some((failure) => failure.includes('does not clear'))) throw new Error('node-boundary-hidden shaft mutation escaped');
 if (!shapeFailures(mutantTinyShaft, 'negative-tiny-shaft').some((failure) => failure.includes('main shaft'))) throw new Error('tiny main-shaft mutation escaped');
-if (!layoutFailures(compressedSvgMutation, 'negative-compressed-svg', { requireFullHeight: true }).some((failure) => failure.includes('height'))) throw new Error('compressed Ch5 edge-overlay SVG mutation escaped');
+if (!layoutFailures(compressedSvgMutation, 'negative-compressed-svg').some((failure) => failure.includes('height'))) throw new Error('compressed edge-overlay SVG mutation escaped');
 
 const browser = await chromium.launch({ headless: true });
 const failures = [];
@@ -180,7 +163,7 @@ try {
         await page.waitForTimeout(100);
         const inspection = await inspect(page, selector);
         const prefix = `${key}/${locale}/${motion}`;
-        failures.push(...layoutFailures(inspection.layout, prefix, { requireFullHeight: key === CH5_GRAPH_KEY }));
+        failures.push(...layoutFailures(inspection.layout, prefix));
         for (const edge of inspection.edges) failures.push(...shapeFailures(edge, prefix));
       }
     }
@@ -195,4 +178,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log('PASS: compressed Ch5-SVG/V/direct/degenerate/boundary-hidden/tiny-shaft mutations fail; Ch5 mobile edge overlay fully covers its graph while all graphs preserve overlay x/y/width alignment; every routed short edge has a node-clear orthogonal shaft >=8 SVG units across 12 ES/EN routes in normal/reduced motion.');
+console.log('PASS: compressed-SVG/V/direct/degenerate/boundary-hidden/tiny-shaft mutations fail; every mobile edge overlay fully covers its graph with the explicit full-height marker; every routed short edge has a node-clear orthogonal shaft >=8 SVG units across 12 ES/EN routes in normal/reduced motion.');
