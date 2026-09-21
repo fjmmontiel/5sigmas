@@ -153,7 +153,7 @@ def _projection_markup(spec: dict, language: str) -> str:
         )
     return (
         f'<div class="s5v-mobile-native" data-mobile-native="true" role="group" aria-label="{aria}">'
-        f'<div class="s5v-mobile-native__flow'>{"".join(rows)}</div>'
+        f'<div class="s5v-mobile-native__flow">{"".join(rows)}</div>'
         '</div>'
     )
 
