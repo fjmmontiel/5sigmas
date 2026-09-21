@@ -27,6 +27,8 @@ def bundle(mutation=None):
         modules[ENTRY]=modules[ENTRY].replace("label(P,loc('Memoria','Memory',l),135,y1+55,38,true,230);", "label(P,loc('Memoria persistente','Persistent memory',l),640,y1+135,38,true,640);")
     elif mutation=='unreadable-portrait':
         modules[ENTRY]=modules[ENTRY].replace('const size=P.portrait?44:34;', 'const size=P.portrait?32:34;')
+    elif mutation=='underline-through-label':
+        modules[ENTRY]=modules[ENTRY].replace("label(P,loc('y pide acceso','Request access',l),760,196,44,true,408);", "label(P,loc('y pide acceso','and request access',l),760,196,44,true,408);")
     imports={}
     for key,text in modules.items():
         parent=(MOTION/key).parent
@@ -42,8 +44,13 @@ INSTRUMENT=r'''() => {
  const c=document.querySelector('canvas').getContext('2d');
  const nativeMeasure=c.measureText.bind(c),nativeText=c.fillText.bind(c),nativeRect=c.roundRect.bind(c),nativeBegin=c.beginPath.bind(c),nativeFill=c.fill.bind(c),cache=new Map();
  c.measureText=(s)=>{const k=c.font+'|'+String(s);if(!cache.has(k))cache.set(k,nativeMeasure(s));return cache.get(k);};
- let box=null,order=0,texts=[],rects=[];
- c.beginPath=()=>{box=null;return nativeBegin();};
+ let box=null,order=0,texts=[],rects=[],strokes=[],segments=[],lastPoint=null;
+ const nativeMove=c.moveTo.bind(c),nativeLine=c.lineTo.bind(c),nativeStroke=c.stroke.bind(c);
+ const transformPoint=(x,y)=>{const t=c.getTransform();return{x:t.a*x+t.c*y+t.e,y:t.b*x+t.d*y+t.f};};
+ c.moveTo=(x,y)=>{lastPoint=transformPoint(x,y);return nativeMove(x,y);};
+ c.lineTo=(x,y)=>{const next=transformPoint(x,y);if(lastPoint)segments.push([lastPoint,next]);lastPoint=next;return nativeLine(x,y);};
+ c.stroke=(...a)=>{const width=c.lineWidth*Math.abs(c.getTransform().a);for(const [a,b]of segments){if(Math.abs(a.y-b.y)<.1&&Math.abs(a.x-b.x)>20)strokes.push({x:Math.min(a.x,b.x),y:a.y-width/2,w:Math.abs(a.x-b.x),h:width,order:++order,alpha:c.globalAlpha});}return nativeStroke(...a);};
+ c.beginPath=()=>{box=null;segments=[];lastPoint=null;return nativeBegin();};
  c.roundRect=(x,y,w,h,...a)=>{const t=c.getTransform();box={x:t.a*x+t.e,y:t.d*y+t.f,w:w*t.a,h:h*t.d};return nativeRect(x,y,w,h,...a);};
  c.fill=(...a)=>{if(box)rects.push({...box,order:++order,alpha:c.globalAlpha});return nativeFill(...a);};
  c.fillText=(s,x,y,...a)=>{const m=nativeMeasure(s),t=c.getTransform(),l=x-(c.textAlign==='center'?m.width/2:c.textAlign==='right'?m.width:0),size=Number(/([0-9.]+)px/.exec(c.font)?.[1]);
@@ -52,11 +59,12 @@ INSTRUMENT=r'''() => {
  window.scan=(locale,orientation,first,count)=>{
   const findings=[],canvas=document.querySelector('canvas');let minimum=null;
   for(let n=first;n<first+count;n++){
-   texts=[];rects=[];order=0;const r=window.render(canvas,locale,orientation,n/60);
+   texts=[];rects=[];strokes=[];order=0;const r=window.render(canvas,locale,orientation,n/60);
    for(const a of texts.filter(x=>x.text.trim()&&x.alpha>.1)){
     if(orientation==='vertical'&&a.y>117&&a.y<1810){const size=a.size*390/1080;minimum=minimum===null?size:Math.min(minimum,size);if(size<15)findings.push({type:'mobile-content-type',n,text:a.text,size});}
     if(a.x<-.5||a.y<-.5||a.x+a.w>canvas.width+.5||a.y+a.h>canvas.height+.5)findings.push({type:'text-bounds',n,text:a.text});
     for(const b of texts){if(b.order<=a.order||!b.text.trim()||b.alpha<=.1)continue;const q=overlap(a,b);if(q.w>3&&q.h>5&&q.area>Math.min(a.w*a.h,b.w*b.h)*.08)findings.push({type:'text-overlap',n,text:a.text,other:b.text});}
+    for(const b of strokes){if(b.order<=a.order||b.alpha<.9)continue;const q=overlap(a,b);if(q.w>10&&q.h>1)findings.push({type:'horizontal-stroke-through-text',n,text:a.text,intersection:q});}
     for(const b of rects){if(b.order<=a.order||b.alpha<.95)continue;const q=overlap(a,b);if(q.w>4&&q.h>4&&q.area>a.w*a.h*.04)findings.push({type:'shape-over-text',n,text:a.text});}
    }
    findings.push(...r.issues.map(issue=>({...issue,n})));
@@ -72,10 +80,11 @@ def run(browser,mutation=None):
     duration=page.evaluate('window.profile.duration');rows=[]
     combinations=[('es','horizontal'),('es','vertical'),('en','horizontal'),('en','vertical')]
     if mutation=='caption-in-motion-path':combinations=[('es','horizontal'),('en','horizontal')]
+    if mutation=='underline-through-label':combinations=[('en','vertical')]
     if mutation=='unreadable-portrait':combinations=[('es','vertical'),('en','vertical')]
     for locale,orientation in combinations:
         findings=[];minimum=None
-        first,last=(0,round(duration*60)) if not mutation else ((22*60,25*60) if mutation=='caption-in-motion-path' else (10*60,12*60))
+        first,last=(0,round(duration*60)) if not mutation else ((22*60,25*60) if mutation=='caption-in-motion-path' else ((5*60,10*60) if mutation=='underline-through-label' else (10*60,12*60)))
         for frame in range(first,last,240):
             result=page.evaluate('(a)=>window.scan(...a)',[locale,orientation,frame,min(240,last-frame)])
             findings.extend(result['findings']);value=result['minimumContentCssPx']
@@ -90,7 +99,7 @@ def main():
     if not chrome:raise SystemExit('An actual Chromium runtime is required')
     with sync_playwright() as p:
         browser=p.chromium.launch(executable_path=chrome,headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
-        good=run(browser);controls=[run(browser,m) for m in ('caption-in-motion-path','unreadable-portrait')] if args.mutations else []
+        good=run(browser);controls=[run(browser,m) for m in ('caption-in-motion-path','unreadable-portrait','underline-through-label')] if args.mutations else []
         browser.close()
     result={'scope':'SOURCE_GEOMETRY_ONLY_NOT_ENCODED_ACCEPTANCE','positive':good,'negative_controls':controls}
     args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
