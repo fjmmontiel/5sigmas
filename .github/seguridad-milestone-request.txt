@@ -1,5 +1,5 @@
-Seguridad IA encoded/browser milestone request
-requested_at: 2026-09-21T04:03:00+02:00
-reason: exact-head post-redesign H/V encoded and browser validation milestone
+Seguridad IA browser milestone request
+requested_at: 2026-09-21T05:22:00+02:00
+reason: exact-source post-choreography H/V browser validation milestone; renderer commit 72fea4cd6da4607d5448e98d6c0ece77e3c3abb4
 cadence_trigger: false
 source_media_files_changed_by_this_marker: false
