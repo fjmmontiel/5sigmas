@@ -11,12 +11,16 @@ import hashlib
 import json
 import os
 import re
+import sys
 from pathlib import Path
-
-from hooks.reading_time import _inject_mobile_native
 
 _READING_WPM = 230
 _REPO_ROOT = Path(__file__).resolve().parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from hooks.reading_time import _inject_mobile_native
+
 _CANONICAL_MIRROR_MARKER = "<!-- 5sigmas-canonical-mirror -->"
 _SECURITY_ANIMATION_PREFIX = "snippets/seguridad-ia/"
 
