@@ -1,14 +1,11 @@
-schema_version: 22
+schema_version: 23
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
 active_branch: quality/llm-inference-requalification
-catalog:
-  chapter_count: 6
-  route_locale_rows: 12
-  has_series_presentation: false
+catalog: {chapter_count: 6, route_locale_rows: 12, has_series_presentation: false}
 receipts:
   source_review: quality/series-requalification/inference-source-review-2026-09-20.yml
   historical_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
@@ -19,6 +16,7 @@ receipts:
   manual_review_run15: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run15.yml
   manual_review_run16: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run16.yml
   manual_review_run17: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run17.yml
+  manual_review_run18: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run18-integrated.yml
   edge_visibility_remediation: quality/series-requalification/inference-edge-visibility-remediation-2026-09-21.yml
   directed_edge_reroute_remediation: quality/series-requalification/inference-directed-edge-reroute-remediation-2026-09-21.yml
   run15_delta: quality/series-requalification/inference-run15-ledger-delta.yml
@@ -44,11 +42,12 @@ history:
   - {head: 40bab616e8200fae2c2f7b912913deecb6e92d6e, run: 35561130922, artifact: 10622267672, result: AUTOMATED_GREEN_MANUAL_CH5_SVG_HEIGHT_P1}
   - {head: c77fb6c8ebc833b9e2e8771a172569b80d33e8df, run: 35564821218, artifact: 10624366941, result: SHARED_EDGE_OVERLAY_HEIGHT_COLLAPSE_10_ROWS}
   - {head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147, run: 35572557014, artifact: 10626503761, result: ALL_AUTOMATED_AND_MANUAL_GATES_GREEN_ARTICLE_GOLDEN_6_OF_6}
+  - {head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17, run: 35579062804, artifact: 10630580355, result: INTEGRATED_CURRENT_MAIN_ALL_AUTOMATED_AND_MANUAL_GATES_GREEN_RELEASE_READY}
 current_inspection:
-  site_facing_evidence_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
-  run: 35572557014
-  artifact: 10626503761
-  artifact_sha256: d7adb22eafa57c20bc6822f6bc698e08266e3aea4f25a9196bbf9054853a8430
+  site_facing_evidence_head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  run: 35579062804
+  artifact: 10630580355
+  artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
   automated_result: PASS
   manual_result: PASS
   inspected_route_locale_rows: 12
@@ -57,6 +56,12 @@ current_inspection:
   inspected_video_key_frames: 36
   pixel_review: PASS_12_OF_12
   pedagogy_review: PASS_12_OF_12
+  comparison_to_prior_article_golden_artifact:
+    prior_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+    screenshots_total: 98
+    byte_identical: 82
+    changed_and_manually_reinspected: 16
+    missing: 0
 exact_site_revision_gates:
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
@@ -94,18 +99,18 @@ voice:
   historical_accessibility_debt: '92 > 91 retained for future voice/accessibility lane; budget remains 91; non-blocking for current GOLDEN.'
 release:
   pr: 342
-  pr_state: OPEN_DRAFT
+  pr_state: OPEN_DRAFT_READY_FOR_REVIEW_TRANSITION
   production_verified: false
   article_golden: 6/6
   series_golden: false
   current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
-  branch_status_at_evidence: DIVERGED_87_AHEAD_11_BEHIND
-  main_reconciliation_required_before_ready_merge: true
-  exact_site_revision: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
-  next_action: RECONCILE_CURRENT_MAIN_THEN_EXACT_INTEGRATED_CHECKPOINT_MANUAL_AUDIT_MERGE_DEPLOY_LIVE_VERIFY
+  branch_status_at_evidence: RECONCILED_CURRENT_MAIN_0_BEHIND
+  main_reconciliation_required_before_ready_merge: false
+  exact_site_revision: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  next_action: MARK_PR342_READY_MERGE_THEN_DEPLOY_LIVE_VERIFY_AND_FINAL_SERIES_AUDIT
 row_defaults: &row
-  last_reviewed_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
-  last_manual_pixel_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  last_reviewed_head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  last_manual_pixel_head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
   SOURCE_PASS: true
   BUILD_PASS: true
   BROWSER_PASS: true
@@ -115,28 +120,29 @@ row_defaults: &row
   PEDAGOGY_REVIEW: true
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   defects: []
-  factual_source_status: PASS_FRESH_2026_09_20
-  parity_status: PASS_EXACT_094938CB_ES_EN
-  canonical_hreflang_sitemap_internal_discovery: PASS_EXACT_094938CB
-  watch_video_lifecycle: PASS_EXACT_094938CB_24_ARTICLE_24_WATCH
-  media_visual_status: PASS_EXACT_094938CB_NATIVE_ES_EN_VISUAL_VIDEO
-  evidence_revision: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
-  evidence_run: 35572557014
-  evidence_artifact: 10626503761
-  live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
+  factual_source_status: PASS_FRESH_2026_09_20_RECONFIRMED_BY_INTEGRATED_SOURCE_GATES
+  parity_status: PASS_EXACT_09F3B0B_ES_EN
+  canonical_hreflang_sitemap_internal_discovery: PASS_EXACT_09F3B0B
+  watch_video_lifecycle: PASS_EXACT_09F3B0B_24_ARTICLE_24_WATCH
+  media_visual_status: PASS_EXACT_09F3B0B_NATIVE_ES_EN_VISUAL_VIDEO
+  evidence_revision: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  evidence_run: 35579062804
+  evidence_artifact: 10630580355
+  evidence_artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
+  live_deploy_verification: PENDING_RELEASE_DEPLOY
   gsc_observation: null
-  next_action: RECONCILE_MAIN_THEN_EXACT_INTEGRATED_RELEASE_CHECKPOINT
+  next_action: MERGE_PR342_THEN_VERIFY_EXACT_DEPLOY_LIVE_INDEXABILITY
   state: GOLDEN
 rows:
-  - {<<: *row, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, iteration_count: 23, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, iteration_count: 23, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
-  - {<<: *row, route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
-  - {<<: *row, route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
-  - {<<: *row, route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
-  - {<<: *row, route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
-  - {<<: *row, route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, iteration_count: 21, source_path: docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
-  - {<<: *row, route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, iteration_count: 24, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, iteration_count: 24, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, iteration_count: 20, source_path: docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, iteration_count: 20, source_path: docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, iteration_count: 20, source_path: docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, iteration_count: 20, source_path: docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, iteration_count: 22, source_path: docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, iteration_count: 21, source_path: locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}

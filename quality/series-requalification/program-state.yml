@@ -1,15 +1,15 @@
-schema_version: 38
+schema_version: 39
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 canonical_series_order:
-  - seguridad-ia
-  - agentes-ia
-  - agentes-voz-tiempo-real
-  - coding-agents-agent-harnesses
-  - context-engineering-memory-mcp
-  - llm-inference-engineering-economics
-  - evaluating-ai-systems-production
+- seguridad-ia
+- agentes-ia
+- agentes-voz-tiempo-real
+- coding-agents-agent-harnesses
+- context-engineering-memory-mcp
+- llm-inference-engineering-economics
+- evaluating-ai-systems-production
 active_series: llm-inference-engineering-economics
 series_golden_count: 5/7
 series_status:
@@ -89,30 +89,30 @@ series_status:
     ledger: quality/series-requalification/context-article-ledger.yml
   llm-inference-engineering-economics:
     ledger: quality/series-requalification/inference-article-ledger.yml
-    latest_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run17.yml
+    latest_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run18-integrated.yml
     active_branch: quality/llm-inference-requalification
-    evaluated_site_revision: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
-    evaluated_run: 35572557014
-    evaluated_artifact: 10626503761
-    evaluated_artifact_sha256: d7adb22eafa57c20bc6822f6bc698e08266e3aea4f25a9196bbf9054853a8430
+    evaluated_site_revision: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+    evaluated_run: 35579062804
+    evaluated_artifact: 10630580355
+    evaluated_artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
     current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
     release_pr: 342
-    release_pr_state: OPEN_DRAFT
+    release_pr_state: OPEN_DRAFT_READY_FOR_REVIEW_TRANSITION
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count_ch1_es: 23
-    iteration_count_ch1_en: 23
-    iteration_count_ch2_es: 19
-    iteration_count_ch2_en: 19
-    iteration_count_ch3_es: 19
-    iteration_count_ch3_en: 19
-    iteration_count_ch4_es: 19
-    iteration_count_ch4_en: 19
-    iteration_count_ch5_es: 19
-    iteration_count_ch5_en: 19
-    iteration_count_ch6_es: 21
-    iteration_count_ch6_en: 20
+    iteration_count_ch1_es: 24
+    iteration_count_ch1_en: 24
+    iteration_count_ch2_es: 20
+    iteration_count_ch2_en: 20
+    iteration_count_ch3_es: 20
+    iteration_count_ch3_en: 20
+    iteration_count_ch4_es: 20
+    iteration_count_ch4_en: 20
+    iteration_count_ch5_es: 20
+    iteration_count_ch5_en: 20
+    iteration_count_ch6_es: 22
+    iteration_count_ch6_en: 21
     source: PASS_12_OF_12
     build: PASS_12_OF_12
     browser: PASS_12_OF_12
@@ -125,19 +125,23 @@ series_status:
     known_p0: 0
     known_p1_open_rows: 0
     known_p2: 0
-    latest_automated_result: PASS_ALL_CURRENT_NONDEFERRED_GATES
-    latest_manual_review: PASS_12_ROUTE_LOCALE_ROWS_MOBILE_DESKTOP_VIDEO
+    latest_automated_result: PASS_ALL_CURRENT_NONDEFERRED_GATES_INTEGRATED_CURRENT_MAIN
+    latest_manual_review: PASS_12_ROUTE_LOCALE_ROWS_MOBILE_DESKTOP_VIDEO_INTEGRATED_CURRENT_MAIN
     production_verified: false
     series_golden: false
-    state: QA_ARTICLES_GOLDEN_PENDING_INTEGRATED_RELEASE
-    next_action: RECONCILE_CURRENT_MAIN_THEN_EXACT_INTEGRATED_CHECKPOINT_MANUAL_AUDIT_READY_MERGE_DEPLOY_LIVE_INDEXABILITY_FINAL_SERIES_AUDIT
+    state: QA_ARTICLES_GOLDEN_RELEASE_READY_PENDING_MERGE_DEPLOY_LIVE
+    next_action: MARK_PR342_READY_MERGE_THEN_VERIFY_DEPLOY_LIVE_INDEXABILITY_FINAL_SERIES_AUDIT
   evaluating-ai-systems-production:
     state: REOPENED_PUBLISHED_UNCERTIFIED
 release_coordination:
   current_main: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
-  inference_branch_status: DIVERGED_87_AHEAD_11_BEHIND_AT_EVALUATED_SITE_REVISION
-  inference_branch_requires_main_reconciliation_before_ready_merge: true
-  current_site_evidence_is_pre_reconciliation: true
+  inference_branch_status: RECONCILED_CURRENT_MAIN_0_BEHIND_AT_EXACT_INTEGRATED_EVIDENCE
+  inference_branch_requires_main_reconciliation_before_ready_merge: false
+  current_site_evidence_is_pre_reconciliation: false
+  integrated_evidence_head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  integrated_evidence_run: 35579062804
+  integrated_evidence_artifact: 10630580355
+  integrated_evidence_artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
   draft_34:
     state: OPEN_DRAFT_UNMERGED
     head: 459aca905454175bdbdf86c31f0af02cddd576a4
