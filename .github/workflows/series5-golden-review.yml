@@ -13,6 +13,7 @@ on:
       - 'scripts/validate_evaluating_ai_indexability.py'
       - 'scripts/validate_evaluating_ai_live_indexability.mjs'
       - 'scripts/validate_evaluating_ai_media_visual.py'
+      - 'scripts/validate_evaluating_ai_mobile_native.py'
       - 'scripts/validate_evaluating_ai_browser_runtime_contract.mjs'
       - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
@@ -66,6 +67,11 @@ jobs:
           node scripts/validate_ai_systems_eval_ch4_source.mjs
           node scripts/validate_ai_systems_eval_ch5_source.mjs
           node scripts/validate_ai_systems_eval_ch6_source.mjs
+
+      - name: Reject giant mobile canvases and require native relationship projections
+        run: |
+          python scripts/validate_evaluating_ai_mobile_native.py --self-test
+          python scripts/validate_evaluating_ai_mobile_native.py
 
       - name: Validate media declarations and signatures
         run: |
