@@ -1,4 +1,4 @@
-schema_version: 40
+schema_version: 41
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -133,11 +133,26 @@ series_status:
   evaluating-ai-systems-production:
     ledger: quality/series-requalification/evaluating-ai-systems-article-ledger.yml
     active_branch: quality/evaluating-ai-systems-requalification
+    release_pr: 352
+    release_pr_state: OPEN_DRAFT_CHANGES_REQUIRED
     base_main: ff32ffeeaf2d66caa9984e181e39def112130b99
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
+    iteration_count_ch1_es: 1
+    iteration_count_ch1_en: 1
+    iteration_count_ch2_es: 1
+    iteration_count_ch2_en: 1
+    iteration_count_ch3_es: 1
+    iteration_count_ch3_en: 1
+    iteration_count_ch4_es: 1
+    iteration_count_ch4_en: 1
+    iteration_count_ch5_es: 1
+    iteration_count_ch5_en: 1
+    iteration_count_ch6_es: 1
+    iteration_count_ch6_en: 1
     source: PASS_0_OF_12
+    source_automated_contract: PASS_12_OF_12
     build: PASS_0_OF_12
     browser: PASS_0_OF_12
     media_visual: PASS_0_OF_12
@@ -147,8 +162,13 @@ series_status:
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1_rows_inspected: 4
+    known_p1_rows_inspected: 12
     known_media_visual_pending_rows: 12
+    first_checkpoint_head: cca79fe0976f96b41b3c23754b603b836727fe9a
+    first_checkpoint_run: 35598982706
+    first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
+    first_checkpoint_artifact: 10637648202
+    first_checkpoint_artifact_sha256: 1f56d416c1d2ed81c6e0ceb7b3060f78935ebde7eb8e2a8907247815a1164316
     shared_gates_hardened: true
     series5_indexability_gate_added: true
     series5_indexability_negative_mutations_added: true
@@ -156,8 +176,8 @@ series_status:
     live_exact_revision_gate_added: true
     production_verified: false
     series_golden: false
-    state: REQUALIFICATION_QA
-    next_action: FIRST_SERIES5_INTEGRATION_CHECKPOINT_THEN_CH1_CH2_MOBILE_REDUNDANT_CANVAS_REDESIGN_AND_CONTINUE_CH3_CH6_REVIEW
+    state: REQUALIFICATION_QA_CHANGES_REQUIRED
+    next_action: DELIVER_NATIVE_VISUAL_MEDIA_AND_REPLACE_GIANT_MOBILE_CANVAS_ASSUMPTION_THEN_ONE_INTEGRATED_CHECKPOINT
 release_coordination:
   current_main: ff32ffeeaf2d66caa9984e181e39def112130b99
   inference_release_pr: 342
@@ -168,7 +188,10 @@ release_coordination:
   inference_exact_live_indexability: PASS
   evaluation_branch: quality/evaluating-ai-systems-requalification
   evaluation_branch_started_from_current_main: true
-  evaluation_first_gate_hardening_head_before_state_commit: 35cef3f10475013011d90e8ce0db79ba26fde2dc
+  evaluation_release_pr: 352
+  evaluation_release_pr_draft: true
+  evaluation_first_checkpoint_run: 35598982706
+  evaluation_first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
   draft_34:
     state: OPEN_DRAFT_UNMERGED
     head: 459aca905454175bdbdf86c31f0af02cddd576a4
