@@ -10,8 +10,10 @@ on:
       - 'docs/snippets/articulos-tecnicos/eval-*.html'
       - 'locales/en/snippets/articulos-tecnicos/eval-*'
       - 'scripts/validate_ai_systems_eval_*.mjs'
+      - 'scripts/validate_evaluating_ai_indexability.py'
       - 'scripts/validate_evaluating_ai_live_indexability.mjs'
       - 'scripts/validate_evaluating_ai_media_visual.py'
+      - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_english_series_mirror.mjs'
@@ -95,6 +97,11 @@ jobs:
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
 
+      - name: Validate Series 5 INDEXABILITY_PASS + negative mutations
+        run: |
+          python scripts/validate_evaluating_ai_indexability.py --self-test
+          python scripts/validate_evaluating_ai_indexability.py --site site
+
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
@@ -110,7 +117,7 @@ jobs:
           cat /tmp/5sigmas-series5-preview.log
           exit 1
 
-      - name: Validate rendered Series 5 INDEXABILITY_PASS
+      - name: Validate rendered Series 5 indexability over preview transport
         env:
           S5_PREVIEW_BASE: http://127.0.0.1:8000
         run: node scripts/validate_evaluating_ai_live_indexability.mjs
