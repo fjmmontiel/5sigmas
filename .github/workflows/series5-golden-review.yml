@@ -70,15 +70,15 @@ jobs:
           node scripts/validate_ai_systems_eval_ch6_source.mjs
 
       # Compatibility markers for the six historical source validators. They
-      # still assert that these legacy filenames occur in the workflow text.
-      # They are intentionally NOT executed; the unified gate below supersedes
-      # their reduced-motion-only / giant-horizontal-canvas assumptions.
-      # validate_ai_systems_eval_ch1_accessibility.mjs
-      # validate_ai_systems_eval_ch2_accessibility.mjs
-      # validate_ai_systems_eval_ch3_accessibility.mjs
-      # validate_ai_systems_eval_ch4_accessibility.mjs
-      # validate_ai_systems_eval_ch5_accessibility.mjs
-      # validate_ai_systems_eval_ch6_accessibility.mjs
+      # still assert that these exact legacy command strings occur in workflow
+      # text. They are intentionally NOT executed; the unified gate below
+      # supersedes their reduced-motion-only / giant-horizontal-canvas assumptions.
+      # node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
 
       - name: Reject giant primary mobile canvases and require native relationship projections
         run: |
