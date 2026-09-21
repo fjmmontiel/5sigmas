@@ -1,22 +1,44 @@
-schema_version: 2
+schema_version: 3
 program: 5sigmas_GOLDEN_requalification
 series: evaluating-ai-systems-production
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 state: REQUALIFICATION_QA
 active_branch: quality/evaluating-ai-systems-requalification
-main_at_start: ff32ffeeaf2d66caa9984e181e39def112130b99
-checkpoint_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-checkpoint_run: 35598982706
-checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
-checkpoint_artifact: 10637648202
-checkpoint_artifact_sha256: 1f56d416c1d2ed81c6e0ceb7b3060f78935ebde7eb8e2a8907247815a1164316
+base_main: ff32ffeeaf2d66caa9984e181e39def112130b99
+release_pr: 352
 chapter_count: 6
 route_locale_rows: 12
 has_series_presentation: false
-summary:
+iteration_policy: increment_only_when_route_locale_is_really_inspected_or_changed
+
+latest_inspected_checkpoint:
+  head: c7ee0419f455e770838cb50c580d192baf697ab2
+  run: 35630418674
+  result: CHANGES_REQUIRED_BROWSER_RELATIONSHIP
+  artifact: 10654414195
+  artifact_sha256: e899c0af6041815f99432e6d09b892929964e2d5f440336460c6af90b4cf25e9
+  source_contracts: PASS_12_OF_12
+  build_es_en: PASS_12_OF_12
+  media_visual: PASS_12_OF_12
+  indexability_static: PASS_12_OF_12
+  indexability_rendered_preview: PASS_12_OF_12_ARTICLE_AND_WATCH_24_SURFACES
+  browser_resources_locale_parity: PASS
+  browser_relationship_accessibility: FAIL_48_MOBILE_CONTEXTS
+  failure_root_cause: MOBILE_NATIVE_PROJECTION_BUILD_HOOK_CLASS_TOKEN_MISS
+  pixel_pedagogy_whole_article: NOT_PROMOTED
+  video_start_middle_final_manual_subreview: PASS_12_ROUTE_LOCALE_ROWS_36_REQUIRED_FRAMES
+
+working_head_before_next_checkpoint: 99ffdab29e6e6a614a328cf153fdb326ab648303
+shared_fixes_pending_exact_checkpoint:
+  - MOBILE_NATIVE_PROJECTION_BUILD_HOOK_CLASS_TOKEN_MISS_FIXED_BY_CLASS_TOKEN_MATCH
+  - ARTICLE_WATCH_PLAYBACK_LIFECYCLE_GATE_EXTENDED_TO_DESKTOP_MOBILE_NORMAL_REDUCED
+  - ARTICLE_WATCH_PLAYBACK_LIFECYCLE_GATE_TO_BE_WIRED_IN_SERIES5_CHECKPOINT
+  - SUCCESS_ARTIFACT_RETENTION_TO_BE_ENABLED_FOR_MANUAL_PIXEL_PEDAGOGY_REVIEW
+
+summary_current_head_fail_closed:
   SOURCE_PASS: 0/12
-  SOURCE_AUTOMATED_CONTRACT: PASS_12_OF_12
+  SOURCE_AUTOMATED_CONTRACT_LAST_EXACT: PASS_12_OF_12_AT_C7EE
   BUILD_PASS: 0/12
   BROWSER_PASS: 0/12
   MEDIA_VISUAL_PASS: 0/12
@@ -26,60 +48,60 @@ summary:
   ARTICLE_GOLDEN: 0/6
   known_p0: 0
   known_p1_rows: 12
-  known_media_visual_pending_rows: 12
+  known_p2: 0
   voice_enhancement: DEFERRED_OWNER_LOCAL
-checkpoint_steps:
-  source_contracts: PASS
-  legacy_media_declarations_and_signatures: PASS_BUT_NOT_SUFFICIENT
-  current_owner_MEDIA_VISUAL: FAIL_EXPECTED_AND_ACTIONABLE
-  build_es: SKIPPED_AFTER_FAIL_CLOSED_MEDIA_GATE
-  build_en: SKIPPED_AFTER_FAIL_CLOSED_MEDIA_GATE
-  INDEXABILITY_PASS: NOT_EXECUTED_AFTER_EARLY_MEDIA_FAILURE
-  browser: NOT_EXECUTED_AFTER_EARLY_MEDIA_FAILURE
-  pixel_pedagogy: NOT_REVIEWED_ON_CHECKPOINT_HEAD
-shared_hardening_this_run:
-  - Series 5 workflow now executes a current-owner MEDIA_VISUAL gate that classifies narration/audio/captions/transcript as VOICE_ENHANCEMENT rather than a current blocker.
-  - Series 5 workflow now executes a separate rendered INDEXABILITY_PASS plus negative mutation fixtures for noindex, cross-locale canonical and missing H1, while retaining sitemap-hreflang/orphan fail-closed checks in the reused hardened base.
-  - Dedicated live QA now waits for the exact deployed build.json revision and executes exact live INDEXABILITY_PASS before browser certification.
-  - No threshold was lowered and no Google selection/indexing state is asserted.
-media_inventory:
+
+source_review:
+  status: PRIMARY_CURRENT_SPOT_CHECKS_COMPLETE_FULL_CLAIM_AUDIT_STILL_REQUIRED
+  primary_current_spot_checks:
+    - NIST_TEVV_Athlon_2026_08_07
+    - NIST_AITE_2026_07_27
+    - Google_DeepMind_Gemini_3_5_Flash_Model_Card_2026_05_19
+    - Anthropic_Demystifying_Evals_2026_01_09
+    - Istio_Traffic_Mirroring_current
+    - Argo_Rollouts_Analysis_current
+    - OpenAI_Agents_SDK_Tracing_current
+    - Microsoft_SRM_current_paper
+    - OpenTelemetry_GenAI_SemConv_current
+    - NIST_AI_RMF_MEASURE_MANAGE_current
+  full_source_pass_promoted: false
+
+media_visual:
   policy: VIDEO_VISUAL_REQUIRED_PER_ROUTE_LOCALE
-  route_locale_obligations: 12
-  MEDIA_VISUAL_PASS: false
-  exact_blocker_codes_per_row:
-    - VIDEO_MISSING
-    - VIDEO_POSTER_MISSING
-    - VIDEO_TITLE_MISSING
-    - VIDEO_SUMMARY_MISSING
-    - VIDEO_DURATION_MISSING
-    - VIDEO_CHAPTERS_MISSING
-  blocker_counts:
-    VIDEO_MISSING: 12
-    VIDEO_POSTER_MISSING: 12
-    VIDEO_TITLE_MISSING: 12
-    VIDEO_SUMMARY_MISSING: 12
-    VIDEO_DURATION_MISSING: 12
-    VIDEO_CHAPTERS_MISSING: 12
-  voice_debt_codes_per_row:
-    - VIDEO_CAPTIONS_MISSING
-    - VIDEO_TRANSCRIPT_MISSING
-  voice_debt_counts:
-    VIDEO_CAPTIONS_MISSING: 12
-    VIDEO_TRANSCRIPT_MISSING: 12
-  voice_debt_blocks_current_golden: false
+  obligations: 12
+  last_exact_pass_head: c7ee0419f455e770838cb50c580d192baf697ab2
+  last_exact_pass: true
+  format: H264_YUV420P_1920x1080_36S
+  localized_es_en: true
+  poster_title_summary_duration_key_moments: true
+  audio_required_now: false
   voice_enhancement: DEFERRED_OWNER_LOCAL
-shared_browser_gate_defects_observed:
-  - ACCESSIBILITY_VALIDATORS_RUN_REDUCED_MOTION_ONLY
-  - RESPONSE_AND_PAGEERROR_LISTENERS_DETACHED_IMMEDIATELY_AFTER_GOTO
-  - MOBILE_GATE_REQUIRES_LARGE_HORIZONTAL_SCROLL_INSTEAD_OF_PROVING_RELATIONSHIP_READABILITY_AT_390PX
-  - CH1_CH2_REACHABILITY_USES_PROGRAMMATIC_SCROLLLEFT_NOT_REAL_TOUCH_GESTURE
+  historical_caption_transcript_threshold_debt: '92 > 91 retained for future voice/accessibility lane'
+
+indexability:
+  last_exact_pass_head: c7ee0419f455e770838cb50c580d192baf697ab2
+  last_exact_pass: true
+  route_locale_rows: 12
+  article_watch_surfaces: 24
+  canonical: PASS_AT_C7EE
+  noindex_xrobots_robots: PASS_AT_C7EE
+  hreflang_reciprocal_es_en: PASS_AT_C7EE
+  sitemap_normal_video: PASS_AT_C7EE
+  internal_discovery_orphans: PASS_AT_C7EE
+  h1_title_meta_lang: PASS_AT_C7EE
+  schema_visible_content_consistency: PASS_AT_C7EE
+  negative_mutations: PASS_AT_C7EE
+  google_selection_asserted: false
+  authenticated_gsc_observation: NONE_CONSUMED
+  current_head_requires_revalidation: true
+
 articles:
-  - route: /series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
+  - &row
+    route: /series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
+    iteration_count: 2
+    last_reviewed_head: c7ee0419f455e770838cb50c580d192baf697ab2
     SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
     BUILD_PASS: false
     BROWSER_PASS: false
     MEDIA_VISUAL_PASS: false
@@ -87,256 +109,46 @@ articles:
     PIXEL_REVIEW: false
     PEDAGOGY_REVIEW: false
     VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1180, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, TOUCH_REACHABILITY_SIMULATED_WITH_SCROLLLEFT, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
+    defects: {P0: [], P1: [MOBILE_NATIVE_PROJECTION_BUILD_HOOK_CLASS_TOKEN_MISS_FIX_PENDING_EXACT_RERENDER, ARTICLE_WATCH_LIFECYCLE_GATE_WIRING_PENDING_EXACT_CHECKPOINT], P2: []}
+    es_en_parity: AUTOMATED_PASS_AT_C7EE_PENDING_CURRENT_HEAD
+    factual_source_status: PRIMARY_CURRENT_SPOT_CHECKED_FULL_CLAIM_AUDIT_REQUIRED
+    canonical_hreflang_sitemap_internal_discovery: PASS_AT_C7EE_PENDING_CURRENT_HEAD
+    watch_video_lifecycle: MEDIA_VISUAL_PASS_AT_C7EE_BROWSER_PLAYBACK_GATE_PENDING
+    evidence_revision_exact: c7ee0419f455e770838cb50c580d192baf697ab2
+    live_deploy_verification: NOT_RELEASED
     gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
+    next_action: RUN_ONE_INTEGRATED_EXACT_HEAD_CHECKPOINT_THEN_MANUAL_PIXEL_PEDAGOGY
     state: QA
-  - route: /en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1180, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, TOUCH_REACHABILITY_SIMULATED_WITH_SCROLLLEFT, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-  - route: /series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
+  - <<: *row
+    route: /series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1220, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, TOUCH_REACHABILITY_SIMULATED_WITH_SCROLLLEFT, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
-    state: QA
-  - route: /en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1220, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, TOUCH_REACHABILITY_SIMULATED_WITH_SCROLLLEFT, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-  - route: /series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
+  - <<: *row
+    route: /series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1220, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
-    state: QA
-  - route: /en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GIANT_CANVAS_MIN_WIDTH_1220, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-  - route: /series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
+  - <<: *row
+    route: /series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT300PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
-    state: QA
-  - route: /en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT300PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-  - route: /series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
+  - <<: *row
+    route: /series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT300PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
-    state: QA
-  - route: /en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT300PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-  - route: /series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
+  - <<: *row
+    route: /series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
     locale: es
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT350PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_ES_VISUAL_VIDEO
-    state: QA
-  - route: /en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
+  - <<: *row
+    route: /en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
     locale: en
-    iteration_count: 1
-    last_reviewed_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    SOURCE_PASS: false
-    SOURCE_AUTOMATED_CONTRACT: true
-    BUILD_PASS: false
-    BROWSER_PASS: false
-    MEDIA_VISUAL_PASS: false
-    INDEXABILITY_PASS: false
-    PIXEL_REVIEW: false
-    PEDAGOGY_REVIEW: false
-    VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-    defects: {P0: [], P1: [MOBILE_GATE_REQUIRES_GT350PX_HORIZONTAL_SCROLL, ACCESSIBILITY_GATE_REDUCED_ONLY, RUNTIME_LISTENERS_DETACHED_AFTER_GOTO, VIDEO_VISUAL_CONTRACT_MISSING], P2: []}
-    es_en_parity: UNVERIFIED_CURRENT_REQUALIFICATION
-    factual_source_status: SOURCE_REVIEW_REQUIRED
-    canonical_hreflang_sitemap_internal_discovery: UNVERIFIED_CURRENT_HEAD
-    watch_video_lifecycle: BLOCKED_VIDEO_VISUAL_CONTRACT_MISSING
-    gsc_observation: NONE_CONSUMED
-    evidence_revision_exact: cca79fe0976f96b41b3c23754b603b836727fe9a
-    next_action: REDESIGN_MOBILE_RELATIONSHIP_AND_BROWSER_GATE_THEN_ADD_NATIVE_EN_VISUAL_VIDEO
-    state: QA
-next_action: >-
-  Keep PR 352 draft. Deliver native visual-video/poster/title/summary/duration/non-voice key-moment metadata for the 12 route-locale obligations without generating future owner voice. In parallel, replace the Series 5 giant-mobile-canvas assumption and reduced-only/early-listener browser gates, starting with Ch1-Ch2 but carrying the shared fix through Ch3-Ch6. Then run one new integration checkpoint so BUILD/BROWSER/INDEXABILITY and MEDIA_VISUAL can be evaluated on the same exact head before manual PIXEL/PEDAGOGY review.
