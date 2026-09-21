@@ -11,6 +11,7 @@ const routes = [
 ];
 const ROUTE_VERSION = 'orthogonal-shaft-v1';
 const MIN_DETOUR_SEGMENT = 4;
+const MIN_NONZERO_SEGMENT = 0.75;
 const EPS = 0.25;
 
 const inspect = async (page, selector) => page.locator(selector).evaluate((graph) => [...graph.querySelectorAll('[data-mobile-graph-edge][data-mobile-graph-short-edge="true"]')].map((edge) => {
@@ -38,6 +39,7 @@ const shapeFailures = (edge, prefix) => {
     const len = Math.hypot(dx, dy);
     lengths.push(len);
     if (Math.abs(dx) > EPS && Math.abs(dy) > EPS) failures.push(`${prefix}: short edge ${edge.id} contains diagonal chevron segment`);
+    if (len < MIN_NONZERO_SEGMENT) failures.push(`${prefix}: short edge ${edge.id} contains a degenerate segment ${len.toFixed(2)} < ${MIN_NONZERO_SEGMENT}`);
   }
   if (Math.max(0, ...lengths) < MIN_DETOUR_SEGMENT) failures.push(`${prefix}: short edge ${edge.id} has no continuous shaft segment >= ${MIN_DETOUR_SEGMENT}`);
   return failures;
@@ -45,8 +47,10 @@ const shapeFailures = (edge, prefix) => {
 
 const mutantV = { id: 'mutant-v', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [12, 6], [14, 10]] };
 const mutantDirect = { id: 'mutant-direct', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [14, 10]] };
+const mutantDegenerate = { id: 'mutant-degenerate', routed: true, routeVersion: ROUTE_VERSION, points: [[10, 10], [10, 14.5], [10, 14.5], [14, 14.5]] };
 if (!shapeFailures(mutantV, 'negative-v').some((failure) => failure.includes('multi-segment shaft') || failure.includes('diagonal chevron'))) throw new Error('V-shaped routed-short-edge mutation escaped');
 if (!shapeFailures(mutantDirect, 'negative-direct').some((failure) => failure.includes('multi-segment shaft'))) throw new Error('direct short-edge mutation escaped');
+if (!shapeFailures(mutantDegenerate, 'negative-degenerate').some((failure) => failure.includes('degenerate segment'))) throw new Error('degenerate orthogonal-segment mutation escaped');
 
 const browser = await chromium.launch({ headless: true });
 const failures = [];
@@ -78,4 +82,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log('PASS: V/direct negative mutations fail and every routed short edge has a >=4-point orthogonal shaft with a continuous >=4 SVG-unit segment across 12 ES/EN routes in normal/reduced motion.');
+console.log('PASS: V/direct/degenerate negative mutations fail and every routed short edge has a >=4-point nondegenerate orthogonal shaft with a continuous >=4 SVG-unit segment across 12 ES/EN routes in normal/reduced motion.');
