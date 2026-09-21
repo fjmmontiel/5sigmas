@@ -142,6 +142,7 @@
         .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(30%,96px);min-height:46px;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
         [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(35%,108px)}
         [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(25%,80px);padding-inline:3px}
+        html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(27%,86px);padding-inline:3px}
         html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{padding-inline:3px}
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="finish"],
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="waiting"],
