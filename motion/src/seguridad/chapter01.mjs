@@ -37,7 +37,7 @@ function roleLedger(P,S,s,l,v){
   P.rect(42,ys[i]-5,282,128,i===2?P.T.accentSurface:null,null,0);
   label(P,text(s,keys[i],l),181,ys[i]+31,276,fs,i===2);
   P.c.save();P.c.beginPath();P.c.rect(337,ys[i]-10,548,150);P.c.clip();
-  label(P,text(s,copy[i],l),610+60*(1-t),ys[i]+24,528,fs,i===2);P.c.restore();
+  label(P,text(s,copy[i],l),610+25*(1-t),ys[i]+24,528,fs,i===2);P.c.restore();
   P.path([[40,ys[i]+146],[900,ys[i]+146]],P.T.rule,2);
  }
  if(on[2]){arrow(P,[[934,530],[974,530],[974,176],[915,176]],q[2]);label(P,text(s,'attempt',l),500,657,900,v?43:37,true);}
@@ -73,15 +73,24 @@ function literalFilter(P,S,s,l,v){
  for(let i=0;i<2;i++){
   if(!on[i])continue;
   const y=ys[i],words=text(s,i?'form2':'form1',l);paper(P,36,y,646,150,false);
+  if(on[2]&&!i){
+   const needle=text(s,'signature',l).replace(/[«»“”"]/g,'').toLocaleLowerCase(l);
+   for(const [li,line] of P.lines(words,590,fs).entries()){
+    const index=line.toLocaleLowerCase(l).indexOf(needle);if(index<0)continue;
+    const x=359-P.measure(line,fs)/2+P.measure(line.slice(0,index),fs),w=P.measure(line.slice(index,index+needle.length),fs),yy=y+24+li*fs*1.2;
+    P.rect(x-3,yy-2,w+6,fs*1.12,P.T.accentSurface,null,2);
+    P.path([[x,yy+fs*1.13],[x+w,yy+fs*1.13]],P.T.accent,3,q[2]);
+   }
+  }
   label(P,words,359,y+24,590,fs,false);
-  if(on[2]){const scan=52+Math.min(q[2]*1.2,1)*605;
-   if(q[2]<.84)P.path([[scan,y+8],[scan,y+140]],P.T.accent,4);
-   if(q[2]>.85){label(P,text(s,i?'no_match':'match',l),842,y+44,284,v?43:40,!i);if(!i)P.check(724,y+64,P.T.accentText,1.3);else P.circle(724,y+64,12,null,P.T.rule,3);}
+  if(on[2]&&q[2]>.85){
+   const value=text(s,i?'no_match':'match',l),size=v?43:40,iconX=842-P.measure(value,size,!i?600:400)/2-18;
+   label(P,value,842,y+44,284,size,!i);if(!i)P.check(iconX,y+64,P.T.accentText,1.1);else P.circle(iconX,y+64,10,null,P.T.rule,3);
   }
  }
  if(on[3]){
   P.path([[31,332],[16,332],[16,600],[305,600]],P.T.accent,3,q[3]);
-  arrow(P,[[354,568],[354,618],[500,618],[500,648]],q[3]);
+  arrow(P,[[354,568],[354,618],[500,618],[500,631]],q[3]);
   label(P,text(s,'action',l),500,652,960,v?39:34,true);label(P,text(s,'send',l),500,710,930,v?46:43,true);
  }
  return {signature:on[0]?'ignore':'absent',forms:on[1]?2:on[0]?1:0,matches:on[2]?['first']:[],not_matched:on[2]?['second']:[],meaning:on[3]?'same_requested_action':'unresolved',authority:'not_granted'};
@@ -95,7 +104,7 @@ function evidenceTrace(P,S,s,l,v){
  for(let i=0;i<4;i++){
   if(!on[i])continue;
   P.circle(58,ys[i]+37,13,i===2?P.T.accent:P.T.background,P.T.accent,3);
-  P.path([[77,ys[i]+37],[124+q[i]*130,ys[i]+37]],P.T.accent,3);
+  P.path([[77,ys[i]+37],[90+q[i]*30,ys[i]+37]],P.T.accent,3);
   label(P,text(s,head[i],l),302,ys[i]+8,352,v?38:31,true);
   cell(P,text(s,values[i],l),510,ys[i]-3,445,118,fs,i===2);
   if(i===2&&q[i]>.85)cross(P,971,ys[i]+55,10);
@@ -127,7 +136,7 @@ function quarantine(P,S,s,l,v){
  }else{
   if(on[0]){
    P.rect(10,35,345,200,null,P.T.rule,3,2);label(P,text(s,'untrusted',l),182,44,322,24,true);
-   paper(P,27,105,143,93);label(P,text(s,'document',l),98,125,128,22,false);
+   paper(P,27,105,143,93);label(P,text(s,'document',l),98,135,128,22,false);
    arrow(P,[[180,150],[210,150]],q[0]);cell(P,text(s,'reader',l),219,117,119,70,25,true);
    label(P,text(s,'no_tools',l),182,209,322,20,false);
   }
