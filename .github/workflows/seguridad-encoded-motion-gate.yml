@@ -6,7 +6,7 @@ on:
     branches:
       - migration/video-golden-seguridad-ia
     paths:
-      - .github/seguridad-milestone-request.txt
+      - .github/seguridad-encoded-motion-request.txt
 
 permissions:
   contents: read
