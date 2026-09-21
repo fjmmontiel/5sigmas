@@ -136,7 +136,7 @@ function surfaces(P,S,l,v){
    label(P,[loc('Datos externos','External data',l),loc('Restricción','Restriction',l),loc('Estado guardado','Saved state',l)][i],xs[i],203,28,false,310);
    if(i===0){doc(P,xs[i]-92,55,184,128,'',[]);packet(P,loc('Orden','Order',l),[xs[i]-12,83],[xs[i]+55,126],q[i],{w:130,h:56});}
    if(i===1){P.circle(xs[i],120,52,null,P.T.rule,4);arrow(P,[xs[i]-120,120],[xs[i]-60,120],q[i]);stop(P,xs[i]-44,87+33*q[i],14);}
-   if(i===2){P.rect(P?xs[i]-94:0,76,188,105,P.T.accentSurface,P.T.rule,5,3);packet(P,loc('Nota','Note',l),[xs[i]-30,56],[xs[i],129],q[i],{w:125,h:58});}
+   if(i===2){P.rect(xs[i]-94,76,188,105,P.T.accentSurface,P.T.rule,5,3);packet(P,loc('Nota','Note',l),[xs[i]-30,56],[xs[i],129],q[i],{w:125,h:58});}
   }
   if(on[3]){arrow(P,[270,186],[410,186],q[3]);arrow(P,[610,186],[750,186],q[3]);label(P,loc('Una cadena posible, no equivalencia','A possible chain, not equivalence',l),500,259,27,true,970);}
  }
