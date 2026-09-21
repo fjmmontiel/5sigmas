@@ -1,0 +1,49 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_kind: MANUAL_PIXEL_PEDAGOGY_EXACT_ARTIFACT
+reviewed_at_utc: 2026-09-21T03:25:00Z
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+evidence:
+  branch_head: 419e6bf653cdf0cbf74838c0f56c8a640de6a0ec
+  run: 35554862361
+  run_conclusion: success
+  artifact: 10619929383
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  artifact_sha256: fc8ad88bbd5ed4388ee50372ebff7ce240a334c213897172eb6da724e813ee2a
+  route_locale_rows_inspected: 12
+  mobile_motion_contexts_inspected: 24
+  desktop_normal_reduced_inspected: true
+  video_start_middle_final_es_en_inspected: true
+automated_exact_head:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  relationship_geometry_accessibility: PASS
+  mobile_text_fit_negative_mutation: PASS
+  reader_navigation_responsive_shell: PASS
+manual_verdict:
+  PIXEL_REVIEW: CHANGES_REQUIRED
+  PEDAGOGY_REVIEW: CHANGES_REQUIRED
+  p0: 0
+  p1: 2_classes
+  p2: 0
+  findings:
+    - code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+      scope: SHARED_12_ROUTE_LOCALE_ROWS
+      finding: Current three-point short-edge dogleg is a V/chevron; in exact mobile pixels several adjacent-node causal links still read as isolated arrowheads rather than continuous directed shafts.
+    - code: INFERENCE_CH6_EN_VIDEO_LABEL_OVERFLOW_MEASUREMENTS
+      scope: CH6_EN_VIDEO_SCENE_01
+      finding: Exact retained video frame shows the single token Measurements extending outside the right node. Other inspected ES/EN start/middle/final video frames remain semantically coherent; Ch6 Tokens / s is readable but wraps awkwardly.
+closed_this_review:
+  - code: INFERENCE_CH1_ES_SCHEDULER_TEXT_FIT
+    proof: Exact head automated text-fit gate is green in normal/reduced and retained Ch1 ES pixels show the complete Scheduler label.
+remediation_started:
+  - orthogonal short-edge postprocessor with a >=4-point shaft instead of a V-shaped dogleg
+  - deterministic V/direct negative mutations and orthogonal segment contract across ES/EN normal/reduced
+  - one-shot reproducible Ch6 ES/EN media repair using Metrics and Tokens/s; VOICE untouched
+next_action: >-
+  Let the one-shot media repair produce the binary child head, then consume the exact-head Series 4 gate. Require SOURCE/BUILD/BROWSER/MEDIA_VISUAL/INDEXABILITY/lifecycle plus the new orthogonal-shaft regression to pass, then manually re-inspect all 12 mobile normal/reduced surfaces and the repaired Ch6 ES/EN video frames before promoting PIXEL/PEDAGOGY.

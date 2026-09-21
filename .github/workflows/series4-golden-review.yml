@@ -8,6 +8,8 @@ on:
       - 'docs/media/series/llm-inference-engineering-economics/**'
       - 'locales/en/media/series/llm-inference-engineering-economics/**'
       - 'docs/assets/javascripts/inference-mobile-native.js'
+      - 'docs/assets/javascripts/inference-short-edge-shaft-fix.js'
+      - 'docs/javascripts/external-links.js'
       - 'docs/series/index.md'
       - 'locales/en/series/index.md'
       - 'docs/snippets/articulos-tecnicos/inference-*.html'
@@ -15,7 +17,9 @@ on:
       - 'scripts/validate_inference_engineering_*.mjs'
       - 'scripts/inference_relationship_accessibility_common.mjs'
       - 'scripts/validate_inference_mobile_text_fit.mjs'
+      - 'scripts/validate_inference_mobile_edge_shaft_shape.mjs'
       - 'scripts/validate_inference_series_browser_milestone.mjs'
+      - 'scripts/repair_inference_ch6_visual_media.py'
       - 'scripts/serve_preview.py'
       - 'scripts/validate_inference_indexability.py'
       - 'scripts/validate_inference_media_visual.py'
@@ -67,6 +71,8 @@ jobs:
           python scripts/prepare_video_media.py --check
           python scripts/audit_media_magic.py
           python scripts/test_video_schema_contract.py
+      - name: Validate Ch6 mobile-safe visual media source parity
+        run: python scripts/repair_inference_ch6_visual_media.py --check
       - name: Validate all Series 4 source contracts
         run: |
           node scripts/validate_inference_engineering_ch1_source.mjs
@@ -142,6 +148,8 @@ jobs:
           node scripts/validate_inference_engineering_ch6_accessibility.mjs
       - name: Validate inference mobile text fit and negative mutation
         run: node scripts/validate_inference_mobile_text_fit.mjs
+      - name: Validate routed short-edge shaft shape and negative mutations
+        run: node scripts/validate_inference_mobile_edge_shaft_shape.mjs
       - name: Validate reader navigation and responsive shell
         run: |
           node scripts/validate_direct_reader_navigation.mjs
