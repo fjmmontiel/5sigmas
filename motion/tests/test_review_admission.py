@@ -73,6 +73,17 @@ class AdmissionTests(unittest.TestCase):
         ]
         for row in self.inventory: row['scenes']=copy.deepcopy(scenes)
         self.rebind();self.assertBlocked('EXCESSIVE_SEGURIDAD_HANDLER_REUSE')
+    def test_seguridad_linear_archetype_aliases_fail_even_with_different_topology_names(self):
+        self.manifest['unit']='seguridad-ia'
+        scenes=[
+            dict(concept_id='C1',declared_family='family_a',topology='directed_path'),
+            dict(concept_id='C2',declared_family='family_b',topology='finite_state_machine'),
+            dict(concept_id='C3',declared_family='family_c',topology='sequential_gates'),
+            dict(concept_id='C4',declared_family='family_d',topology='state_space'),
+            dict(concept_id='C5',declared_family='family_e',topology='graph_cut'),
+        ]
+        for row in self.inventory: row['scenes']=copy.deepcopy(scenes)
+        self.rebind();self.assertBlocked('EXCESSIVE_SEGURIDAD_HANDLER_REUSE')
     def test_seguridad_scene_mechanism_mapping_must_match_across_locale_orientation(self):
         self.manifest['unit']='seguridad-ia'
         scenes=[
