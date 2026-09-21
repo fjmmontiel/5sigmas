@@ -1,38 +1,50 @@
-schema_version: 19
+schema_version: 20
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run16.yml
-reviewed_head: 6d559fea45e4b8d02533da7f65d8e2e3bea216a0
-reviewed_run: 35557780069
-reviewed_artifact: 10621695409
-reviewed_artifact_sha256: d12fde24cfcb1469350f0ae46340711b485d2f289a3bb0680d2d30b86df8a92e
+previous_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run16.yml
+reviewed_head: da147a0d993fb6117b08f401e33a2186761b75f6
+reviewed_run: 35559402263
+reviewed_artifact: 10621443194
+reviewed_artifact_sha256: 81a13a529b752d270a5d12fe917404238232036e7fbfc4c1855dc1aeff6d3089
+current_branch_head_before_ledger_commit: 2856477b446843896397774138522b52b5ac57fb
 iteration_counts_after_this_review:
-  ch1_es: 19
-  ch1_en: 19
-  ch2_es: 15
-  ch2_en: 15
-  ch3_es: 15
-  ch3_en: 15
-  ch4_es: 15
-  ch4_en: 15
-  ch5_es: 15
-  ch5_en: 15
-  ch6_es: 17
-  ch6_en: 16
-iteration_reason: 'All 12 route×locale rows were actually inspected in mobile normal/reduced, desktop normal/reduced, and video start/intermediate/final evidence. Shared mobile renderer remediation changes all 12 rows. No row increments more than once.'
-reviewed_exact_gates:
+  ch1_es: 20
+  ch1_en: 20
+  ch2_es: 16
+  ch2_en: 16
+  ch3_es: 16
+  ch3_en: 16
+  ch4_es: 16
+  ch4_en: 16
+  ch5_es: 16
+  ch5_en: 16
+  ch6_es: 18
+  ch6_en: 17
+iteration_reason: 'All 12 route×locale rows were actually inspected in the exact da147 mobile normal/reduced retained evidence. Ch1 ES/EN repaired video candidate was also manually inspected in this run. No row increments more than once.'
+automated_exact_head_da147:
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
   BROWSER_PASS: 12/12
-  MEDIA_VISUAL_PASS: 12/12
+  MEDIA_VISUAL_AUTOMATED_GATE: 12/12
   INDEXABILITY_PASS: 12/12
+  ARTICLE_WATCH_LIFECYCLE: 12/12
+  RELATIONSHIP_ACCESSIBILITY: 12/12
+  MOBILE_TEXT_FIT: 12/12
+  MOBILE_EDGE_SHAFT_SHAPE: 12/12
+  READER_SHELL: 12/12
+  note: 'These are automated exact-head results only. They do not override the manual pixel/video findings below.'
+manual_review_da147:
   PIXEL_REVIEW: 0/12
   PEDAGOGY_REVIEW: 0/12
+  MEDIA_VISUAL_MANUAL: CHANGES_REQUIRED_CH1_ES_EN
   ARTICLE_GOLDEN: 0/6
-  reason: 'Automated exact-head gates are green, but real pixel/pedagogy inspection found P1 defects.'
-pending_after_remediation_commit:
+  findings:
+    - 'Retained mobile normal/reduced screenshots across the six chapters still show missing/stubbed/arrowhead-only directed relationships. The evidence artifact cannot certify the causal graph visually.'
+    - 'The dedicated final routed-geometry gate is green on the same head, so the current diagnosis is an evidence-synchronization blocker: relationship screenshots may be captured before the requestAnimationFrame reroute settles.'
+    - 'Ch1 ES/EN old final video frames overflow the THROUGHPUT node; the deterministic repaired candidate was manually reviewed clean and is now committed as new MP4 bytes.'
+current_head_fail_closed:
   SOURCE_PASS: 12/12
   BUILD_PASS: 0/12
   BROWSER_PASS: 0/12
@@ -41,7 +53,7 @@ pending_after_remediation_commit:
   PIXEL_REVIEW: 0/12
   PEDAGOGY_REVIEW: 0/12
   ARTICLE_GOLDEN: 0/6
-  reason: 'Shared site-facing mobile edge renderer changes in this commit; Ch1 repaired video candidate is not yet committed. All non-source gates remain fail-closed for the next exact revision.'
+  reason: 'Current branch bytes include newly committed Ch1 ES/EN MP4s plus this durable ledger update. No substantive Series4 exact-head integration run has yet certified these current bytes; bot-triggered runs after the binary commit were action_required rather than content-test failures.'
 known_defects:
   p0: 0
   p1_open_rows: 12
@@ -50,21 +62,28 @@ known_defects:
     - severity: P1
       code: INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY
       scope: ALL_12_ROUTE_LOCALE_ROWS
-      evidence_head: 6d559fea45e4b8d02533da7f65d8e2e3bea216a0
-      evidence_run: 35557780069
-      evidence_artifact: 10621695409
-      root_cause_file: docs/assets/javascripts/inference-short-edge-shaft-fix.js
+      evidence_head: da147a0d993fb6117b08f401e33a2186761b75f6
+      evidence_run: 35559402263
+      evidence_artifact: 10621443194
+      evidence_artifact_sha256: 81a13a529b752d270a5d12fe917404238232036e7fbfc4c1855dc1aeff6d3089
+      renderer_file: docs/assets/javascripts/inference-short-edge-shaft-fix.js
       regression_gate_file: scripts/validate_inference_mobile_edge_shaft_shape.mjs
-      status: FIX_IMPLEMENTED_THIS_COMMIT_PENDING_EXACT_RERENDER_MANUAL_REVIEW
+      diagnosis: 'The final geometry gate passes but retained relationship screenshots still show missing/stubbed causal edges. Current likely root cause is screenshot synchronization with requestAnimationFrame routing, not proof that the settled runtime geometry is bad.'
+      status: OPEN_EVIDENCE_SYNCHRONIZATION_BLOCKER
+      next_action: 'Make evidence capture wait for a settled routed state (or route synchronously), then rerender and manually reinspect all 12 route×locale normal/reduced surfaces.'
     - severity: P1
       code: INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW
       scope: [CH1_ES_VIDEO, CH1_EN_VIDEO]
       evidence_head: 6d559fea45e4b8d02533da7f65d8e2e3bea216a0
       evidence_run: 35557780069
       evidence_artifact: 10621695409
-      root_cause: 'THROUGHPUT single token is ~564 source px at 72 px DejaVu Sans Bold while generic gate node provides ~386 px inner width.'
+      root_cause: 'THROUGHPUT single token exceeds the generic gate-node inner width in the old Ch1 visual video.'
       repair_source: scripts/repair_inference_ch1_visual_media.py
-      status: REPAIR_SOURCE_IMPLEMENTED_THIS_COMMIT_CANDIDATE_BINARY_PENDING
+      repair_workflow: .github/workflows/inference-ch1-media-candidate.yml
+      repair_workflow_run: 35560850333
+      repair_commit: 2856477b446843896397774138522b52b5ac57fb
+      manual_candidate_review: 'ES/EN final repaired frames fit; start/midpoint spot checks show no collateral clipping.'
+      status: FIX_COMMITTED_PENDING_EXACT_HEAD_MEDIA_GATE
   closed:
     - severity: P1
       code: INFERENCE_CH6_EN_VIDEO_LABEL_OVERFLOW_MEASUREMENTS
@@ -75,65 +94,66 @@ voice:
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: '92 > 91 remains future voice/accessibility-lane debt and does not block current GOLDEN.'
 rows:
   - route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/
     locale: es
-    iteration_count: 19
+    iteration_count: 20
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY, INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/
     locale: en
-    iteration_count: 19
+    iteration_count: 20
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY, INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW]
     state: QA
   - route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/
     locale: es
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/
     locale: en
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/
     locale: es
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/
     locale: en
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/
     locale: es
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/
     locale: en
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/
     locale: es
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/
     locale: en
-    iteration_count: 15
+    iteration_count: 16
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/
     locale: es
-    iteration_count: 17
+    iteration_count: 18
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
   - route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/
     locale: en
-    iteration_count: 16
+    iteration_count: 17
     defects: [INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY]
     state: QA
 release:
@@ -143,4 +163,14 @@ release:
   deploy_verified: false
   current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
   main_reconciliation_required_before_ready_merge: true
-next_action: 'Consume exact-head rerender for orthogonal-clearance-v2; build/commit Ch1 repaired binaries and parity gate; repeat 12-row pixel/pedagogy review; only then reconcile main.'
+  draft_34_checked: true
+  draft_34_reused_or_merged: false
+release_contract_v2:
+  issue: 'fjmmontiel/5sigmas-tools-content#281'
+  state: CHANGES_REQUIRED_BLOCKED
+  historical_72h_satisfied: true
+  missing: FRESH_NONCACHED_EXACT_REVISION_ES_EN_LIVE_PROOF
+  linkedin_writes_from_golden: 0
+  linkedin_queues_from_golden: 0
+  linkedin_activations_from_golden: 0
+next_action: 'Consume the current exact-head Series4 integration after this human-authored ledger commit; add deterministic Ch1 media --check into the Series4 gate; synchronize relationship evidence capture with settled routing and rerender/reinspect all 12 mobile normal/reduced surfaces; only with zero P0/P1/P2 reconcile main and proceed to final integrated checkpoint, merge, deploy and live indexability verification.'
