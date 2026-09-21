@@ -1,4 +1,4 @@
-schema_version: 42
+schema_version: 43
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -132,10 +132,23 @@ series_status:
     next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
   evaluating-ai-systems-production:
     ledger: quality/series-requalification/evaluating-ai-systems-article-ledger.yml
-    active_branch: quality/evaluating-ai-systems-requalification
+    active_branch: quality/evaluating-ai-systems-live-qa-contract-fix
     release_pr: 352
-    release_pr_state: OPEN_DRAFT_ARTICLE_GOLDEN_SERIES_AUDIT_RELEASE_PENDING
-    base_main: ff32ffeeaf2d66caa9984e181e39def112130b99
+    release_pr_state: MERGED_ARTICLE_GOLDEN_LIVE_CURRENT_GATE_REVALIDATION_PENDING
+    base_main: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    deploy_run: 35649362206
+    deployed_revision: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    dedicated_live_qa_run: 35650849256
+    live_exact_revision: PASS
+    live_indexability: PASS_12_OF_12_ROUTE_LOCALE_24_ARTICLE_WATCH_SURFACES
+    live_browser_resources: PASS
+    live_hub_mirror: PASS
+    live_locale_switching_reader_progression: PASS
+    live_current_owner_relationship_accessibility: PENDING_CONTRACT_FIX
+    live_current_owner_article_watch_playback: PENDING_CONTRACT_FIX
+    live_qa_failure_class: QA_CONTRACT_DEFECT_NOT_ARTICLE_DEFECT
+    live_contract_fix_pr: 353
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
@@ -181,20 +194,25 @@ series_status:
     live_exact_revision_gate_added: true
     production_verified: false
     series_golden: false
-    state: ARTICLE_GOLDEN_6_OF_6_SERIES_AUDIT_RELEASE_PENDING
-    next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_PR_READY_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
+    state: ARTICLE_GOLDEN_6_OF_6_RELEASED_LIVE_CURRENT_GATE_REVALIDATION_PENDING
+    next_action: PASS_PR353_SERIES5_REVIEW_MERGE_DEPLOY_THEN_CURRENT_OWNER_LIVE_RELATIONSHIP_AND_PLAYBACK_QA
 release_coordination:
-  current_main: ff32ffeeaf2d66caa9984e181e39def112130b99
+  current_main: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
   inference_release_pr: 342
   inference_release_pr_merged: true
   inference_release_merge_commit: 0a4b29a88048bfd7e222c20d2fd3075f38ccd2e2
   inference_deploy_run: 35594975702
   inference_dedicated_live_qa_run: 35596015267
   inference_exact_live_indexability: PASS
-  evaluation_branch: quality/evaluating-ai-systems-requalification
-  evaluation_branch_started_from_current_main: true
+  evaluation_branch: quality/evaluating-ai-systems-live-qa-contract-fix
   evaluation_release_pr: 352
-  evaluation_release_pr_draft: true
+  evaluation_release_pr_draft: false
+  evaluation_release_pr_merged: true
+  evaluation_release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+  evaluation_deploy_run: 35649362206
+  evaluation_dedicated_live_qa_run: 35650849256
+  evaluation_live_indexability: PASS
+  evaluation_live_qa_contract_fix_pr: 353
   evaluation_first_checkpoint_run: 35598982706
   evaluation_first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
   evaluation_latest_exact_qa_run: 35640790841
