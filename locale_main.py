@@ -11,16 +11,10 @@ import hashlib
 import json
 import os
 import re
-import sys
 from pathlib import Path
 
 _READING_WPM = 230
 _REPO_ROOT = Path(__file__).resolve().parent
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
-
-from hooks.reading_time import _inject_mobile_native
-
 _CANONICAL_MIRROR_MARKER = "<!-- 5sigmas-canonical-mirror -->"
 _SECURITY_ANIMATION_PREFIX = "snippets/seguridad-ia/"
 
@@ -297,14 +291,6 @@ def render_include_html(path: str, **kwargs: object) -> str:
         context.setdefault("extra_rows", "")
 
     rendered = _render_template(html, context)
-    # Locale snippets are expanded by mkdocs-macros before the final page hook.
-    # Inject Series 5's mobile-native projection here as well so EN cannot miss
-    # the semantic ~390px primary surface even if hook ordering differs.
-    rendered, _ = _inject_mobile_native(
-        rendered,
-        {"extra": {"content_language": _locale()}},
-        final_document=False,
-    )
     if _should_wrap_locale_shell(path, rendered, shell_mode=anim_shell):
         return _wrap_animation_shell(
             rendered,

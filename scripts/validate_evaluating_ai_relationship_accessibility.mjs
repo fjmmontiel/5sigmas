@@ -139,6 +139,16 @@ try {
 
                 const text = await projection.innerText();
                 check(text.includes(chapter.sentinels[locale]), `${label}: localized semantic sentinel missing`);
+                check((await projection.locator('.s5v-mobile-native__index').count()) === 0, `${label}: legacy numbered-card fallback remains`);
+                const mobileNodes = projection.locator('[data-mobile-node]');
+                const mobileEdges = projection.locator('[data-mobile-edge]');
+                check((await mobileNodes.count()) >= chapter.relationships.length * 2, `${label}: directed mobile node coverage too low`);
+                check((await mobileEdges.count()) >= chapter.relationships.length, `${label}: directed mobile edge coverage too low`);
+                const visibleEdges = await mobileEdges.evaluateAll((nodes) => nodes.map((node) => {
+                  const style = getComputedStyle(node); const box = node.getBoundingClientRect();
+                  return { display: style.display, visibility: style.visibility, width: box.width, height: box.height, text: node.textContent || '' };
+                }));
+                check(visibleEdges.every((edge) => edge.display !== 'none' && edge.visibility !== 'hidden' && edge.width >= 12 && edge.height >= 12 && /[→↗⇒↺]/.test(edge.text)), `${label}: directed mobile edge is not visibly encoded ${JSON.stringify(visibleEdges)}`);
                 for (const relationship of chapter.relationships) {
                   const rel = projection.locator(`[data-mobile-relationship="${relationship}"]`).first();
                   check((await rel.count()) === 1, `${label}: relationship ${relationship} missing`);
