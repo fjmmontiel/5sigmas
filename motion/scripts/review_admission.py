@@ -28,7 +28,18 @@ FUNDAMENTOS_HANDLERS = {
     'control-loop':'drawLoop', 'cycle':'drawLoop',
     'parallel-pipeline':'drawPipeline', 'parallel-lanes':'drawPipeline',
 }
+# Seguridad has several distinct topology labels backed by the same concrete
+# mechanism implementation. Count the implementation, not the label.
+SEGURIDAD_HANDLERS = {
+    'directed_path':'directedPath',
+    'ordered_levels':'orderedLevels',
+    'two_domains_single_validated_bridge':'twoDomainsBridge',
+    'finite_state_machine':'finiteStateMachine',
+    'two_parallel_lanes':'parallelLanes',
+    'three_parallel_lanes':'parallelLanes',
+}
 SHA = re.compile(r'^[0-9a-f]{64}$')
+
 
 def sha256(path: Path) -> str:
     h = hashlib.sha256()
@@ -36,12 +47,15 @@ def sha256(path: Path) -> str:
         for data in iter(lambda: stream.read(1024 * 1024), b''): h.update(data)
     return h.hexdigest()
 
+
 def digest(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
                                      ensure_ascii=False, allow_nan=False).encode()).hexdigest()
 
+
 def asset_binding(manifest: dict) -> str:
     return digest({k: manifest.get(k) for k in ('unit', 'source_head', 'inventory')})
+
 
 def safe_file(root: Path, name: str) -> Path:
     root = root.resolve()
@@ -49,8 +63,42 @@ def safe_file(root: Path, name: str) -> Path:
     if not path.is_relative_to(root): raise ValueError('path outside evidence root')
     return path
 
+
 def numbered(value) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def _seguridad_handler_checks(inventory: list[dict], fail) -> None:
+    """Structural anti-gaming checks; not a substitute for encoded visual review."""
+    per_chapter: dict[str, set[tuple]] = {}
+    for row in inventory:
+        scenes = row.get('scenes', [])
+        if not isinstance(scenes, list) or len(scenes) != 5:
+            fail('MISSING_SEGURIDAD_SCENE_MECHANISM_BINDING', row.get('mp4'))
+            continue
+        signature = tuple((s.get('concept_id'), s.get('declared_family'), s.get('topology')) for s in scenes)
+        if any(not all(item) for item in signature):
+            fail('INCOMPLETE_SEGURIDAD_SCENE_MECHANISM_BINDING', row.get('mp4'))
+            continue
+        per_chapter.setdefault(str(row.get('chapter')), set()).add(signature)
+    for chapter, signatures in per_chapter.items():
+        if len(signatures) != 1:
+            fail('SEGURIDAD_SCENE_MECHANISM_PARITY_MISMATCH', chapter)
+
+    canonical = [row for row in inventory if row.get('locale') == 'es' and row.get('orientation') == 'horizontal']
+    handlers = Counter()
+    for row in canonical:
+        for scene in row.get('scenes', []):
+            topology = scene.get('topology')
+            if topology:
+                handlers[SEGURIDAD_HANDLERS.get(topology, topology)] += 1
+    if not handlers:
+        fail('MISSING_SEGURIDAD_HANDLER_EVIDENCE')
+        return
+    for handler, uses in sorted(handlers.items()):
+        if uses >= 3:
+            fail('EXCESSIVE_SEGURIDAD_HANDLER_REUSE', f'{handler}/{uses}')
+
 
 def assess(manifest: dict, media_root: Path, qa: dict | None = None,
            delivery: dict | None = None, evidence_root: Path | None = None) -> dict:
@@ -93,7 +141,6 @@ def assess(manifest: dict, media_root: Path, qa: dict | None = None,
         or not critic.get('run_id') or not critic.get('generator_run_id')
         or critic.get('run_id') == critic.get('generator_run_id')
         or not critic.get('evaluator_revision')): fail('NO_INDEPENDENT_CRITIC')
-    # A contact sheet / RGB delta / renderer state is insufficient evidence.
     for gate in GATES:
         proof = qa.get('gates', {}).get(gate, {})
         if proof.get('status') != 'PASS': fail('GATE_NOT_PASS', gate)
@@ -116,8 +163,6 @@ def assess(manifest: dict, media_root: Path, qa: dict | None = None,
         if proof.get('sha256') != r['sha256']: fail('OUTPUT_REVIEW_HASH_MISMATCH', r['mp4'])
         cues = r.get('text_visual_cues', [])
         seen = proof.get('cue_observations', [])
-        # Expected cues are source-authored inputs bound in the manifest, not
-        # descriptions invented after seeing the output by its own renderer.
         if not cues or len({x.get('id') for x in cues}) != len(cues):
             fail('MISSING_OR_DUPLICATE_AUTHORED_CUES', r['mp4']); continue
         if len(seen) != len(cues) or {x.get('id') for x in seen} != {x.get('id') for x in cues}:
@@ -137,7 +182,6 @@ def assess(manifest: dict, media_root: Path, qa: dict | None = None,
                 fail('CUE_SEMANTICS_OR_READING_FAILED', cue['id'])
             if obs.get('sample_phases') != ['before', 'during', 'after']:
                 fail('INCOMPLETE_ENCODED_CUE_SAMPLING', cue['id'])
-    # Detect one concrete label-gaming regression independently of a critic.
     if manifest.get('unit') == 'fundamentos-ia-iag':
         canonical = [s for r in inventory if r.get('locale') == 'es' and r.get('orientation') == 'horizontal' for s in r.get('scenes', [])]
         groups = {}
@@ -149,6 +193,8 @@ def assess(manifest: dict, media_root: Path, qa: dict | None = None,
             if len({s.get('family') for s in scenes}) > 1:
                 fail('ALIASED_HANDLER_COUNTED_AS_DISTINCT_FAMILIES', handler)
             if len(scenes) >= 4: fail('EXCESSIVE_HANDLER_REUSE', handler)
+    if manifest.get('unit') == 'seguridad-ia':
+        _seguridad_handler_checks(inventory, fail)
     content_ready = not errors
     delivery = delivery or {}
     if delivery.get('asset_binding_sha256') != bound: fail('STALE_OR_MISSING_DELIVERY_BINDING')
@@ -168,6 +214,7 @@ def assess(manifest: dict, media_root: Path, qa: dict | None = None,
             'review_ready':not errors, 'state':'REVIEW_READY' if not errors else 'CHANGES_REQUIRED',
             'errors':errors}
 
+
 def finalize_package(package: Path, media: Path, *, internal_only=False) -> dict:
     """Called by packagers before returning success. Rewrites embedded states too.
 
@@ -185,7 +232,6 @@ def finalize_package(package: Path, media: Path, *, internal_only=False) -> dict
     if not decision['review_ready']: manifest['owner_visual_approval'] = 'NOT_REQUESTED'
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n')
     (package/'review-admission.json').write_text(json.dumps(decision, indent=2)+'\n')
-    # Do not leave a stale REVIEW_CANDIDATE manifest in an otherwise updated ZIP.
     for archive in package.glob('*review-candidate.zip'):
         replacement = archive.with_suffix('.tmp')
         with zipfile.ZipFile(archive) as src, zipfile.ZipFile(replacement, 'w', zipfile.ZIP_DEFLATED) as dst:
@@ -204,6 +250,7 @@ def finalize_package(package: Path, media: Path, *, internal_only=False) -> dict
     if not decision['review_ready'] and not internal_only:
         raise SystemExit('REVIEW BLOCKED: inspect review-admission.json; --internal-only is diagnostic, never owner review')
     return decision
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
