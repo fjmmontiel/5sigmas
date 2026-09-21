@@ -39,6 +39,31 @@ def ffmpeg_encoder(path: Path, width: int, height: int) -> list[str]:
     ]
 
 
+def cue_from_scene(scene: dict, semantic_timeline: dict) -> dict:
+    """Bind the encoded asset to the authored semantic timeline in global MP4 time.
+
+    The renderer itself is not treated as an evaluator. These values are expected
+    events used later by the independent encoded-media critic; observations must
+    still come from the decoded MP4 and match within one encoded frame.
+    """
+    start = float(scene["start"])
+    sentence_id = semantic_timeline["sentence_id"]
+    return {
+        "id": sentence_id,
+        "sentence_id": sentence_id,
+        "concept_id": semantic_timeline["concept_id"],
+        "visual_target_id": semantic_timeline["visual_target_id"],
+        "action": semantic_timeline["action"],
+        "timeline_version": semantic_timeline["version"],
+        "text_at": start + float(semantic_timeline["text_start_seconds"]),
+        "text_reveal_end_at": start + float(semantic_timeline["text_reveal_end_seconds"]),
+        "reading_hold_end_at": start + float(semantic_timeline["reading_hold_end_seconds"]),
+        "visual_at": start + float(semantic_timeline["visual_start_seconds"]),
+        "visual_end_at": start + float(semantic_timeline["visual_end_seconds"]),
+        "scene_end_at": float(scene["end"]),
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chapter", type=int, required=True, choices=range(6))
@@ -72,7 +97,7 @@ def main() -> None:
     frame_count = 0
     observed_families: set[str] = set()
     observed_topologies: set[str] = set()
-    scene_mechanisms: dict[str, dict[str, str]] = {}
+    scene_mechanisms: dict[str, dict[str, object]] = {}
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(executable_path=chrome, headless=True, args=["--no-sandbox", "--disable-dev-shm-usage"])
@@ -93,6 +118,7 @@ def main() -> None:
                     "concept_id": result["scene"],
                     "declared_family": result["family"],
                     "topology": result["topology"],
+                    "semantic_timeline": result["semanticTimeline"],
                 }
                 jpeg = base64.b64decode(item["jpeg"])
                 assert proc.stdin is not None
@@ -150,6 +176,13 @@ def main() -> None:
 
     source_binding = spec["source_bindings"][args.chapter][args.locale]
     ordered_scene_mechanisms = [scene_mechanisms[s["concept_id"]] for s in chapter["scenes"]]
+    text_visual_cues = [
+        cue_from_scene(scene, scene_mechanisms[scene["concept_id"]]["semantic_timeline"])
+        for scene in chapter["scenes"]
+    ]
+    if len({cue["id"] for cue in text_visual_cues}) != 5:
+        raise SystemExit(f"expected five unique authored semantic cues, got {text_visual_cues}")
+
     meta = {
         "schema_version": 1,
         "unit": "seguridad-ia",
@@ -182,7 +215,11 @@ def main() -> None:
             "size_bytes": transcript.stat().st_size,
         },
         "browser_errors": browser_errors,
-        "scene_mechanisms": ordered_scene_mechanisms,
+        "scene_mechanisms": [
+            {k: v for k, v in row.items() if k != "semantic_timeline"}
+            for row in ordered_scene_mechanisms
+        ],
+        "text_visual_cues": text_visual_cues,
         "observed_families": sorted(observed_families),
         "observed_topologies": sorted(observed_topologies),
         "technical_golden": False,
@@ -196,7 +233,8 @@ def main() -> None:
         "size_bytes": meta["mp4"]["size_bytes"],
         "frames": frame_count,
         "full_decode": "PASS",
-        "scene_mechanisms": ordered_scene_mechanisms,
+        "semantic_cues": len(text_visual_cues),
+        "scene_mechanisms": meta["scene_mechanisms"],
     }))
 
 
