@@ -107,24 +107,36 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Localize generated video URLs for preview QA
+      - name: Localize playable watch-media transport for preview QA only
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          for root, replacements in [
-              (Path('site/videos'), [('https://5sigmas.com/', '/')]),
-              (Path('site/en/videos'), [('https://5sigmas.com/en/', '/en/'), ('https://5sigmas.com/', '/')]),
-          ]:
-              targets = [root / 'catalog.json', *root.rglob('*.html')]
-              for target in targets:
-                  if not target.is_file():
-                      continue
+          import re
+
+          # Preserve production canonical/hreflang/schema URLs verbatim. The preview
+          # server only needs local transport for the actual <video> poster/source.
+          media_attr = re.compile(
+              r'(?P<prefix>\b(?:poster|src)=["\'])https://5sigmas\.com'
+              r'(?P<path>/[^"\']+\.(?:mp4|webm|ogg|jpg|jpeg|webp)(?:\?[^"\']*)?)'
+              r'(?P<quote>["\'])',
+              re.IGNORECASE,
+          )
+          changed = 0
+          for root in (Path('site/videos'), Path('site/en/videos')):
+              for target in root.rglob('*.html'):
                   text = target.read_text(encoding='utf-8')
-                  for source, dest in replacements:
-                      text = text.replace(source, dest)
-                  target.write_text(text, encoding='utf-8')
+                  localized, count = media_attr.subn(
+                      lambda match: f"{match.group('prefix')}{match.group('path')}{match.group('quote')}",
+                      text,
+                  )
+                  if count:
+                      target.write_text(localized, encoding='utf-8')
+                      changed += count
+          if changed < 24:
+              raise SystemExit(f'Expected at least 24 watch poster/source transport URLs, localized {changed}')
+          print(f'Localized {changed} playable watch-media transport URLs; canonical/hreflang/schema left untouched.')
           PY
 
       - name: Serve combined preview with byte-range support
