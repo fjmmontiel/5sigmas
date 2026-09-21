@@ -19,6 +19,7 @@ on:
       - 'scripts/validate_evaluating_ai_series_browser_milestone.mjs'
       - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
+      - 'scripts/serve_preview.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_locale_switching.mjs'
@@ -129,9 +130,10 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Serve combined preview
+      - name: Serve exact built preview with byte-range media support
         run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-series5-preview.log 2>&1 &
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/5sigmas-series5-preview.log 2>&1 &
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
             sleep 1
