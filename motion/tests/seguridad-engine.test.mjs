@@ -29,16 +29,19 @@ test('render matrix is exactly six chapters x two locales x two native orientati
   }
 });
 
-test('all 30 semantic concepts compile H/V and diversity counts real handlers rather than labels', () => {
+test('all 30 semantic concepts compile H/V and diversity counts perceptual archetypes rather than labels', () => {
   const evidence = validateSeguridadMechanismCoverage(spec, register);
   assert.equal(evidence.concepts, 30);
-  assert.equal(evidence.declaredFamilies, 27);
-  assert.equal(evidence.effectiveHandlerFamilies, 25);
+  assert.equal(evidence.declaredFamilies, 28);
+  assert.equal(evidence.effectiveHandlerFamilies, 23);
   assert.equal(evidence.maxDeclaredFamilyUse, 2);
   assert.equal(evidence.maxHandlerUse, 2);
   assert.deepEqual(evidence.aliasedDeclaredFamilies, [
+    {handler:'constraintsToPath', declaredFamilies:['rate_limit_authorization','threat_canvas'], uses:2},
+    {handler:'cycleWithExit', declaredFamilies:['memory_lifecycle','out_of_band_control'], uses:2},
     {handler:'orderedLevels', declaredFamilies:['outcome_ladder','privilege_ladder'], uses:2},
-    {handler:'parallelLanes', declaredFamilies:['parallel_evidence_lanes','parallel_mechanism_compare'], uses:2}
+    {handler:'parallelLanes', declaredFamilies:['parallel_evidence_lanes','parallel_mechanism_compare'], uses:2},
+    {handler:'stackedInfluences', declaredFamilies:['context_competition','protocol_trust_layers'], uses:2}
   ]);
 
   const concepts = indexSeguridadRegister(register);
@@ -68,6 +71,16 @@ test('all 30 semantic concepts compile H/V and diversity counts real handlers ra
   }
 });
 
+test('redesigned formerly-linear concepts use non-linear mechanism archetypes', () => {
+  const concepts = indexSeguridadRegister(register);
+  assert.equal(concepts.get('S02-C5').topology, 'constraints_to_path');
+  assert.equal(concepts.get('S05-C3').topology, 'stacked_influences');
+  assert.equal(concepts.get('S05-C4').topology, 'cycle_with_exit');
+  assert.equal(concepts.get('S02-C5').perceptual_family, 'rate_limit_authorization');
+  assert.equal(concepts.get('S05-C3').perceptual_family, 'protocol_trust_layers');
+  assert.equal(concepts.get('S05-C4').perceptual_family, 'out_of_band_control');
+});
+
 test('renaming families cannot hide a repeated real handler', () => {
   const mutated = structuredClone(register);
   const aliases = [
@@ -91,6 +104,16 @@ test('a third topology alias to the same real handler fails the family cap', () 
   concept.topology = 'three_parallel_lanes';
   concept.perceptual_family = 'totally_new_name';
   assert.throws(() => validateSeguridadMechanismCoverage(spec, mutated), /real handler repeat 3 exceeds cap/);
+});
+
+test('legacy FSM or sequential-gate relabel cannot reintroduce the linear path archetype', () => {
+  for (const topology of ['finite_state_machine', 'sequential_gates']) {
+    const mutated = structuredClone(register);
+    const concept = mutated.chapters[2].concepts[4];
+    concept.topology = topology;
+    concept.perceptual_family = `renamed_${topology}`;
+    assert.throws(() => validateSeguridadMechanismCoverage(spec, mutated), /real handler repeat 3 exceeds cap/);
+  }
 });
 
 test('seek/replay is deterministic and independent of call order', () => {
