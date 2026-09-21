@@ -4,6 +4,23 @@ import { seguridadMechanismSeconds, seguridadSemanticTimeline } from './timeline
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
+// Perceptual diversity is counted by the concrete mechanism implementation,
+// never by author-assigned family/topology labels. Aliases that dispatch to the
+// same geometry builder therefore count as one family. The encoded-media critic
+// still performs the independent temporal/visual series review later.
+const SEGURIDAD_HANDLER_BY_TOPOLOGY = Object.freeze({
+  directed_path: 'directedPath',
+  ordered_levels: 'orderedLevels',
+  two_domains_single_validated_bridge: 'twoDomainsBridge',
+  finite_state_machine: 'finiteStateMachine',
+  two_parallel_lanes: 'parallelLanes',
+  three_parallel_lanes: 'parallelLanes'
+});
+
+export function seguridadPerceptualHandler(topology) {
+  return SEGURIDAD_HANDLER_BY_TOPOLOGY[topology] ?? topology;
+}
+
 export function indexSeguridadRegister(register) {
   const concepts = new Map();
   for (const chapter of register?.chapters ?? []) {
@@ -110,17 +127,36 @@ export function validateSeguridadMechanismCoverage(spec, register) {
   validateSeguridadSpec(spec, register);
   const concepts = indexSeguridadRegister(register);
   const missing = [];
-  const counts = new Map();
+  const declaredFamilies = new Map();
+  const handlers = new Map();
+  const handlerFamilies = new Map();
   for (const concept of concepts.values()) {
     if (!SUPPORTED_SEGURIDAD_TOPOLOGIES.includes(concept.topology)) missing.push({ id: concept.id, topology: concept.topology });
-    counts.set(concept.perceptual_family, (counts.get(concept.perceptual_family) ?? 0) + 1);
+    declaredFamilies.set(concept.perceptual_family, (declaredFamilies.get(concept.perceptual_family) ?? 0) + 1);
+    const handler = seguridadPerceptualHandler(concept.topology);
+    handlers.set(handler, (handlers.get(handler) ?? 0) + 1);
+    if (!handlerFamilies.has(handler)) handlerFamilies.set(handler, new Set());
+    handlerFamilies.get(handler).add(concept.perceptual_family);
     for (const orientation of SEGURIDAD_RENDER_CONTRACT.orientations) {
       compileSeguridadMechanism(concept, { orientation, localSeconds: 6, durationSeconds: 12 });
       compileSeguridadMechanism(concept, { orientation, localSeconds: 12, durationSeconds: 12, reducedMotion: true });
     }
   }
   if (missing.length) throw new Error(`seguridad engine: uncovered topology ${JSON.stringify(missing)}`);
-  const maxFamilyUse = Math.max(...counts.values());
-  if (maxFamilyUse > SEGURIDAD_RENDER_CONTRACT.familyRepeatCap) throw new Error(`seguridad engine: family repeat ${maxFamilyUse} exceeds cap`);
-  return Object.freeze({ concepts: concepts.size, families: counts.size, maxFamilyUse, supportedTopologies: SUPPORTED_SEGURIDAD_TOPOLOGIES.length });
+  const maxDeclaredFamilyUse = Math.max(...declaredFamilies.values());
+  const maxHandlerUse = Math.max(...handlers.values());
+  if (maxHandlerUse > SEGURIDAD_RENDER_CONTRACT.familyRepeatCap) throw new Error(`seguridad engine: real handler repeat ${maxHandlerUse} exceeds cap`);
+  const aliases = [...handlerFamilies.entries()]
+    .filter(([, families]) => families.size > 1)
+    .map(([handler, families]) => Object.freeze({handler, declaredFamilies:Object.freeze([...families].sort()), uses:handlers.get(handler)}))
+    .sort((a,b)=>a.handler.localeCompare(b.handler));
+  return Object.freeze({
+    concepts: concepts.size,
+    declaredFamilies: declaredFamilies.size,
+    effectiveHandlerFamilies: handlers.size,
+    maxDeclaredFamilyUse,
+    maxHandlerUse,
+    aliasedDeclaredFamilies: Object.freeze(aliases),
+    supportedTopologies: SUPPORTED_SEGURIDAD_TOPOLOGIES.length
+  });
 }
