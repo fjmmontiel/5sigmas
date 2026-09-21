@@ -1,0 +1,6 @@
+Seguridad IA exact 24 final encode milestone
+requested_at: 2026-09-21T04:12:00+02:00
+reason: source gates and exact-head H/V diagnostic are green; produce current exact 24 MP4 internal package for independent encoded review
+cadence_trigger: false
+owner_review_request: false
+delivery: false
