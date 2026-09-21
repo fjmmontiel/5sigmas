@@ -10,6 +10,9 @@ on:
       - 'docs/snippets/articulos-tecnicos/eval-*.html'
       - 'locales/en/snippets/articulos-tecnicos/eval-*'
       - 'scripts/validate_ai_systems_eval_*.mjs'
+      - 'scripts/validate_evaluating_ai_live_indexability.mjs'
+      - 'scripts/validate_evaluating_ai_media_visual.py'
+      - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_locale_switching.mjs'
@@ -67,6 +70,11 @@ jobs:
           python scripts/audit_media_magic.py
           python scripts/test_video_schema_contract.py
 
+      - name: Validate current-owner MEDIA_VISUAL / VOICE split
+        run: |
+          python scripts/validate_evaluating_ai_media_visual.py --self-test
+          python scripts/validate_evaluating_ai_media_visual.py
+
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
 
@@ -102,6 +110,11 @@ jobs:
           cat /tmp/5sigmas-series5-preview.log
           exit 1
 
+      - name: Validate rendered Series 5 INDEXABILITY_PASS
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_live_indexability.mjs
+
       - name: Audit browser resources, bilingual hub and locale parity
         run: |
           node scripts/audit_browser_resources.mjs
@@ -132,5 +145,6 @@ jobs:
           path: |
             artifacts/visual-review/ai-systems-eval-*.png
             artifacts/visual-review/english-series-mirror-*.png
+            artifacts/evaluating-ai-systems-requalification/**
           if-no-files-found: warn
           retention-days: 1
