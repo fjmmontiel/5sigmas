@@ -290,6 +290,6 @@ export function compileSeguridadMechanism(concept, {orientation='horizontal', lo
   if (!Array.isArray(concept.cues) || concept.cues.length < 2) throw new Error(`seguridad mechanism: ${concept.id} requires semantic cues`);
   const builder = BUILDERS[concept.topology];
   if (!builder) throw new Error(`seguridad mechanism: no semantic builder for ${concept.id} topology=${concept.topology}`);
-  const geometry = builder(concept, orientation);
+  const geometry = concept.presentation?.layouts?.[orientation] ?? builder(concept, orientation);
   return mkPlan(concept, orientation, localSeconds, durationSeconds, reducedMotion, geometry);
 }

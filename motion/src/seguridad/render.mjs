@@ -27,6 +27,7 @@ export const SEGURIDAD_MECHANISM_TEXT_CONTRACT = Object.freeze({
   minimumVerticalEmbedPx: 12
 });
 
+const localized = (value, locale) => typeof value === 'object' && value !== null ? value[locale] : value;
 const pretty = value => String(value ?? '').replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 function centerOf(ref, plan) {
@@ -41,8 +42,59 @@ function centerOf(ref, plan) {
   return null;
 }
 
-function progressFor(plan, kind, index, total=1) {
+function progressFor(plan, kind, index, total=1, element=null) {
+  if (element && Number.isInteger(element.phase)) {
+    const cue = plan.cueProgress[element.phase];
+    if (!cue) throw new Error(`seguridad: unknown authored phase ${element.phase}`);
+    return cue.progress;
+  }
   return seguridadElementProgress(plan, kind, index, total);
+}
+
+function drawAuthoredBox(P,node,q,plan) {
+  if(q<=0)return;
+  const c=P.c;c.save();c.globalAlpha*=.25+.75*q;
+  const strong=node.style==='accent';const denied=node.style==='blocked';
+  if(node.style!=='status')P.rect(node.x,node.y,node.w,node.h,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accent:P.T.rule,12,strong?3:2);
+  const vertical=plan.orientation==='vertical';
+  const size=vertical?43:38, subSize=vertical?35:32, max=node.w-40;
+  const text=localized(node.label,P.locale);
+  if(typeof text!=='string')throw new Error('seguridad: missing localized box label');
+  const lines=P.lines(text,max,size,650);
+  const sub=localized(node.sublabel,P.locale);
+  const subLines=sub?P.lines(sub,max,subSize):[];
+  const height=lines.length*size*1.15+(subLines.length?18+subLines.length*subSize*1.2:0);
+  if(height>node.h-20)P.issues.push({type:'authored-box-overflow',text,height,available:node.h-20});
+  let y=node.y+(node.h-height)/2;
+  for(const line of lines){P.text(line,node.x+node.w/2,y,size,strong||denied?P.T.accentText:P.T.ink,650,'center',max);y+=size*1.15;}
+  if(subLines.length)y+=18;
+  for(const line of subLines){P.text(line,node.x+node.w/2,y,subSize,P.T.muted,400,'center',max);y+=subSize*1.2;}
+  c.restore();
+}
+
+function drawAuthoredEdge(P,edge,q) {
+  if(q<=0)return;
+  const points=edge.points;P.path(points,P.T.accent,4,q);
+  if(q<.98)return;
+  const a=points.at(-2),b=points.at(-1);
+  if(edge.blocked){
+    P.path([[b[0]-10,b[1]-10],[b[0]+10,b[1]+10]],P.T.accentText,5);
+    P.path([[b[0]-10,b[1]+10],[b[0]+10,b[1]-10]],P.T.accentText,5);
+  }else{
+    const t=Math.atan2(b[1]-a[1],b[0]-a[0]),r=15;
+    P.path([[b[0]-Math.cos(t-.55)*r,b[1]-Math.sin(t-.55)*r],b,[b[0]-Math.cos(t+.55)*r,b[1]-Math.sin(t+.55)*r]],P.T.accent,4);
+  }
+}
+
+function drawAuthoredAnnotation(P,a,q) {
+  if(q<=0)return;
+  const text=localized(a.label,P.locale);
+  if(typeof text!=='string')throw new Error('seguridad: missing localized annotation');
+  const width=a.width??Math.min(920,2*Math.min(a.x,1000-a.x)-20);
+  const lines=P.lines(text,width,a.size,a.strong?650:400);
+  const c=P.c;c.save();c.globalAlpha*=q;
+  for(const [i,line]of lines.entries())P.text(line,a.x,a.y+i*a.size*1.22,a.size,a.strong?P.T.accentText:P.T.muted,a.strong?650:400,a.align??'center',width);
+  c.restore();
 }
 
 function mechanismLabelSize(plan, kind) {
@@ -86,13 +138,28 @@ function drawZone(P, zone, q, plan) {
 }
 
 function drawNode(P, node, q, plan, {selected=false}={}) {
+  if(['document','storage','boundary'].includes(node.shape)) {
+    if(q<=0)return;const c=P.c;c.save();c.globalAlpha*=q;
+    if(node.shape==='document') {
+      P.rect(node.x,node.y,node.w,node.h,'#FFFFFF',P.T.accent,4,3);
+      for(let i=0;i<3;i++)P.path([[node.x+18,node.y+30+i*25],[node.x+node.w-18,node.y+30+i*25]],P.T.muted,3);
+    }else if(node.shape==='storage'){
+      P.rect(node.x,node.y,node.w,node.h,P.T.accentSurface,P.T.accent,18,3);
+      P.path([[node.x+15,node.y+30],[node.x+node.w-15,node.y+30]],P.T.accent,3);
+      P.path([[node.x+15,node.y+65],[node.x+node.w-15,node.y+65]],P.T.accent,3);
+    }else{
+      P.path([[node.x,node.y],[node.x+node.w,node.y]],P.T.accentText,5);
+      P.text(localized(node.label,P.locale),node.x+node.w/2,node.y+28,36,P.T.muted,500,'center',180);
+    }c.restore();return;
+  }
+  if (node.shape === 'box') return drawAuthoredBox(P,node,q,plan);
   if (q <= 0) return;
   const c=P.c;c.save();c.globalAlpha*=.2+.8*q;
   const strong=selected || ['effect','decision','authorization_result','release_state','terminal','high_privilege'].includes(node.role);
   const radius=selected?40:strong?42:36;
   P.circle(node.x,node.y,radius,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accentText:P.T.accent,strong?5:4);
   if(selected) P.circle(node.x,node.y,8,P.T.accentText,null,0);
-  const label=node.label || node.role;
+  const label=node.label === '' ? '' : localized(node.label,P.locale) || node.role;
   if(label) {
     const size=mechanismLabelSize(plan,'node');
     P.text(pretty(label),node.x,node.y+52,size,strong?P.T.accentText:P.T.muted,strong?650:500,'center',420);
@@ -122,9 +189,10 @@ function drawMechanism(P, plan) {
   for (const [i,zone] of zones.entries()) drawZone(P,zone,progressFor(plan,'zone',i,zones.length),plan);
   for (const [i,path] of paths.entries()) P.path(path,P.T.muted,4,progressFor(plan,'path',i,paths.length));
   drawAxes(P,plan);
-  for (const [i,edge] of edges.entries()) drawArrow(P,centerOf(edge.from,plan),centerOf(edge.to,plan),progressFor(plan,'edge',i,edges.length),edge.role);
+  for (const [i,edge] of edges.entries()) {const q=progressFor(plan,'edge',i,edges.length,edge);if(edge.points)drawAuthoredEdge(P,edge,q);else drawArrow(P,centerOf(edge.from,plan),centerOf(edge.to,plan),q,edge.role);}
   const selected=new Set(plan.geometry.selected ?? []);
-  for (const [i,node] of nodes.entries()) drawNode(P,node,progressFor(plan,'node',i,nodes.length),plan,{selected:selected.has(i)});
+  for (const [i,node] of nodes.entries()) drawNode(P,node,progressFor(plan,'node',i,nodes.length,node),plan,{selected:selected.has(i)});
+  for(const [i,a] of (plan.geometry.annotations??[]).entries()) drawAuthoredAnnotation(P,a,progressFor(plan,'annotation',i,1,a));
   c.restore();
 }
 
@@ -138,7 +206,7 @@ function renderSpecForChapter(spec, register, frame) {
     scenes:chapter.scenes.map((scene,index)=>({
       id:scene.concept_id,
       duration:scene.end-scene.start,
-      kicker:`${String(index+1).padStart(2,'0')} · ${concepts.get(scene.concept_id).perceptual_family}`
+      kicker:localized(concepts.get(scene.concept_id).presentation?.footer,frame.job.locale)??`${String(index+1).padStart(2,'0')} · ${concepts.get(scene.concept_id).perceptual_family}`
     }))
   };
 }
@@ -150,8 +218,9 @@ export function renderSeguridadFrame(canvas, spec, register, jobId, timeSeconds,
   if(canvas.width!==W)canvas.width=W;if(canvas.height!==H)canvas.height=H;
   const ctx=canvas.getContext('2d',{alpha:false});ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.fillStyle=SEGURIDAD_THEME.background;ctx.fillRect(0,0,W,H);
   const issues=[];const P=new Paint(ctx,SEGURIDAD_THEME,issues,frame.job.locale,{});
-  const scene={id:frame.scene.conceptId,title:[frame.title],accentLine:-1,paragraphs:[frame.scene.text],source:null};
-  const layout=sceneLayout(P,scene,portrait,{layout:'split'});
+  const presentation=indexSeguridadRegister(register).get(frame.scene.conceptId).presentation;
+  const scene={id:frame.scene.conceptId,title:[localized(presentation?.title,frame.job.locale)??frame.title],accentLine:-1,paragraphs:[frame.scene.text],source:null};
+  const layout=sceneLayout(P,scene,portrait,{layout:presentation?.editorial_layout??'split'});
   const headerSpec=renderSpecForChapter(spec,register,frame);
   const textState=seguridadTextState(frame.scene.text,frame.scene.conceptId,frame.localSeconds,frame.scene.durationSeconds,{reducedMotion});
   drawHeader(P,headerSpec,frame.sceneIndex,frame.timeSeconds,60,layout);
