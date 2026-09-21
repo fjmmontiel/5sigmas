@@ -153,9 +153,50 @@ def _projection_markup(spec: dict, language: str) -> str:
         )
     return (
         f'<div class="s5v-mobile-native" data-mobile-native="true" role="group" aria-label="{aria}">'
-        f'<div class="s5v-mobile-native__flow">{"".join(rows)}</div>'
+        f'<div class="s5v-mobile-native__flow'>{"".join(rows)}</div>'
         '</div>'
     )
+
+
+def _inject_mobile_native(html: str, config, *, final_document: bool) -> tuple[str, bool]:
+    """Inject Series 5 mobile projections after the visual HTML is actually present.
+
+    Macros expand include_html snippets after the page-content hook in the current build
+    pipeline, so on_page_content is only an early opportunity. on_post_page calls this
+    same idempotent transform against the fully rendered document and is the authoritative
+    backstop for the final HTML delivered to users and audited by Playwright.
+    """
+    language = _content_language(config)
+    changed = False
+    for section_class, spec in MOBILE_NATIVE_PROJECTIONS.items():
+        marker = f'class="{section_class}'
+        section_start = html.find(marker)
+        if section_start < 0:
+            continue
+        section_end = html.find('</section>', section_start)
+        if section_end < 0:
+            section_end = len(html)
+        if 'data-mobile-native="true"' in html[section_start:section_end]:
+            continue
+        header_end = html.find('</header>', section_start, section_end)
+        if header_end < 0:
+            continue
+        insert_at = header_end + len('</header>')
+        html = html[:insert_at] + _projection_markup(spec, language) + html[insert_at:]
+        changed = True
+
+    if changed:
+        html = re.sub(
+            r'mobile="horizontal-scroll-[^"]+"',
+            'mobile="native-390px-semantic-projection;desktop-detail-hidden-on-mobile"',
+            html,
+        )
+        if 'data-series5-mobile-native-style="true"' not in html:
+            if final_document and '</head>' in html:
+                html = html.replace('</head>', MOBILE_NATIVE_STYLE + '</head>', 1)
+            else:
+                html = MOBILE_NATIVE_STYLE + html
+    return html, changed
 
 
 def on_page_markdown(markdown, page, **kwargs):
@@ -172,30 +213,10 @@ def on_page_markdown(markdown, page, **kwargs):
 
 
 def on_page_content(html, page, config, **kwargs):
-    language = _content_language(config)
-    changed = False
-    for section_class, spec in MOBILE_NATIVE_PROJECTIONS.items():
-        marker = f'class="{section_class}'
-        section_start = html.find(marker)
-        if section_start < 0:
-            continue
-        header_end = html.find('</header>', section_start)
-        if header_end < 0:
-            continue
-        insert_at = header_end + len('</header>')
-        projection = _projection_markup(spec, language)
-        html = html[:insert_at] + projection + html[insert_at:]
-        changed = True
-
-    if changed:
-        # The source SVG remains the high-detail desktop representation; the
-        # generated static projection is the authoritative mobile teaching
-        # surface. Rewrite stale authoring metadata in rendered output so QA
-        # and future inspection describe the surface users actually receive.
-        html = re.sub(
-            r'mobile="horizontal-scroll-[^"]+"',
-            'mobile="native-390px-semantic-projection;desktop-detail-hidden-on-mobile"',
-            html,
-        )
-        html = MOBILE_NATIVE_STYLE + html
+    html, _ = _inject_mobile_native(html, config, final_document=False)
     return html
+
+
+def on_post_page(output, page, config, **kwargs):
+    output, _ = _inject_mobile_native(output, config, final_document=True)
+    return output
