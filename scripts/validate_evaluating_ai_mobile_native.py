@@ -5,11 +5,12 @@ The detailed SVGs may remain wide for desktop, but they cannot be the primary
 mobile teaching surface. The MkDocs hook must emit a static native ~390px
 semantic projection for every Series 5 visual and hide the legacy wide canvas at
 mobile widths. This gate also retains negative fixtures for the historical giant
-canvas failure mode.
+canvas failure mode and verifies the locale renderer emits the same EN projection.
 """
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -25,6 +26,15 @@ VISUALS = {
     "04": (ROOT / "docs/snippets/articulos-tecnicos/eval-agent-tool-trajectory-success-recovery-policy.html", "s5v-agent-trajectory", "at-scroll"),
     "05": (ROOT / "docs/snippets/articulos-tecnicos/eval-online-shadow-canary-ab-regression-gates.html", "s5v-online-eval", "oe-scroll"),
     "06": (ROOT / "docs/snippets/articulos-tecnicos/eval-production-feedback-loop.html", "s5v-eval-feedback", "fb-scroll"),
+}
+
+LOCALE_VISUAL_PATHS = {
+    "01": "snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html",
+    "02": "snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html",
+    "03": "snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html",
+    "04": "snippets/articulos-tecnicos/eval-agent-tool-trajectory-success-recovery-policy.html",
+    "05": "snippets/articulos-tecnicos/eval-online-shadow-canary-ab-regression-gates.html",
+    "06": "snippets/articulos-tecnicos/eval-production-feedback-loop.html",
 }
 
 # Stop at the next top-level media query or </style>; nested selector braces are
@@ -72,6 +82,36 @@ def inspect_projection_contract(source: str, hook: str, section_class: str, scro
         findings.append(Finding("MOBILE_GIANT_CANVAS", f"legacy mobile min-width(s) {','.join(f'{px:g}' for px in giant)}px remain primary because native replacement is incomplete"))
     if legacy_scroll_contract and findings:
         findings.append(Finding("MOBILE_CONTRACT_HORIZONTAL_SCROLL", "legacy horizontal-scroll authoring contract remains primary because native replacement is incomplete"))
+    return findings
+
+
+def inspect_locale_render_contract(chapter: str, section_class: str) -> list[Finding]:
+    """Exercise the actual EN macro renderer so source-only hook wiring cannot false-pass."""
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    old_locale = os.environ.get("S5_LOCALE")
+    os.environ["S5_LOCALE"] = "en"
+    try:
+        import locale_main
+
+        rendered = locale_main.render_include_html(LOCALE_VISUAL_PATHS[chapter])
+    finally:
+        if old_locale is None:
+            os.environ.pop("S5_LOCALE", None)
+        else:
+            os.environ["S5_LOCALE"] = old_locale
+
+    findings: list[Finding] = []
+    if section_class not in rendered:
+        findings.append(Finding("EN_LOCALE_VISUAL_MISSING", f"rendered EN snippet lost {section_class}"))
+    if 'data-mobile-native="true"' not in rendered:
+        findings.append(Finding("EN_MOBILE_NATIVE_PROJECTION_MISSING", "EN locale macro output has no native mobile projection"))
+    if 'data-mobile-relationship=' not in rendered:
+        findings.append(Finding("EN_MOBILE_RELATIONSHIPS_MISSING", "EN locale macro output has no deterministic relationship markers"))
+    if 'data-series5-mobile-native-style="true"' not in rendered:
+        findings.append(Finding("EN_MOBILE_NATIVE_STYLE_MISSING", "EN locale macro output does not carry the mobile-native CSS contract"))
+    if 'native-390px-semantic-projection;desktop-detail-hidden-on-mobile' not in rendered:
+        findings.append(Finding("EN_MOBILE_RENDERED_CONTRACT_NOT_REWRITTEN", "EN rendered GOLDEN contract still claims horizontal-scroll as primary"))
     return findings
 
 
@@ -132,10 +172,21 @@ def main() -> int:
             legacy_note = f"; desktop-detail legacy widths={','.join(f'{px:g}' for px in legacy)}px" if legacy else ""
             print(f"CH{chapter} MOBILE_NATIVE_SOURCE_PASS{legacy_note}")
 
+        try:
+            locale_findings = inspect_locale_render_contract(chapter, section_class)
+        except Exception as exc:
+            locale_findings = [Finding("EN_LOCALE_RENDER_EXCEPTION", f"{type(exc).__name__}: {exc}")]
+        if locale_findings:
+            failed = True
+            for finding in locale_findings:
+                print(f"CH{chapter} {finding.code}: {finding.detail}")
+        else:
+            print(f"CH{chapter} EN_MOBILE_NATIVE_RENDER_PASS")
+
     if failed:
         print("MOBILE_NATIVE_SOURCE_PASS=false")
         return 1
-    print("MOBILE_NATIVE_SOURCE_PASS=true (6/6 canonical visuals have build-time native mobile projections)")
+    print("MOBILE_NATIVE_SOURCE_PASS=true (6/6 canonical visuals and 6/6 EN locale renders have native mobile projections)")
     return 0
 
 
