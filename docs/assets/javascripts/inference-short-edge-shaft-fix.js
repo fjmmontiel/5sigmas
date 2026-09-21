@@ -1,24 +1,23 @@
 (() => {
   'use strict';
 
-  // GOLDEN checkpoint: Ch5 mobile overlay must cover the full graph before edge routing is measured.
+  // GOLDEN checkpoint: every native mobile edge overlay must cover the full graph before routing
+  // is measured. The intrinsic SVG aspect ratio otherwise collapses the overlay to ~286–294px
+  // while graph contracts intentionally range from 480–640px, hiding lower causal relationships.
   const GRAPH_SELECTOR = '[data-inference-mobile-graph]';
   const EDGE_SELECTOR = '[data-mobile-graph-edge][data-mobile-graph-short-edge="true"][data-mobile-graph-routed-short-edge="true"]';
   const ROUTE_VERSION = 'orthogonal-clearance-v2';
   const CLEARANCE = 2.0;
   const FALLBACK_DETOUR = 7.0;
+  const COVERAGE_MARKER = 'all-full-height-v2';
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
   const enforceGraphCoverage = (graph) => {
-    if (graph.dataset.inferenceMobileGraph !== '05') return;
     const svg = graph.querySelector('svg');
     if (!svg) return;
-    // The canonical Ch5 snippet owns `.s5v-routing-policy svg { height:auto }` for its desktop SVG.
-    // The injected native mobile graph lives inside the same section, so force its overlay SVG to
-    // cover the full 640px graph before any node-aware routing geometry is measured.
     svg.style.height = '100%';
     svg.style.overflow = 'hidden';
-    svg.dataset.mobileGraphCoverageFix = 'ch5-full-height-v1';
+    svg.dataset.mobileGraphCoverageFix = COVERAGE_MARKER;
   };
 
   const parsePoints = (value) => String(value || '').trim().split(/\s+/).map((point) => point.split(',').map(Number)).filter((point) => point.length === 2 && point.every(Number.isFinite));
