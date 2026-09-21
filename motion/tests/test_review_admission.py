@@ -30,6 +30,8 @@ class AdmissionTests(unittest.TestCase):
              outputs=[dict(mp4=r['mp4'],sha256=r['sha256'],cue_observations=[dict(id='cue1',text_at=.2,visual_at=.3,semantics_match=True,reading_hold_verified=True,sample_phases=['before','during','after'])]) for r in self.inventory])
         self.delivery=dict(asset_binding_sha256=binding,files=[dict(mp4=r['mp4'],file_id=str(i),mime_type='video/mp4',sha256_readback=r['sha256'],size_bytes=r['size_bytes'],playback_url=f'https://drive.google.com/file/d/{i}/view',playback_verified=True,parent_verified=True) for i,r in enumerate(self.inventory)])
     def assess(self): return qa.assess(self.manifest,self.root,self.proof,self.delivery,self.root)
+    def rebind(self):
+        binding=qa.asset_binding(self.manifest);self.proof['asset_binding_sha256']=binding;self.delivery['asset_binding_sha256']=binding
     def assertBlocked(self,code):
         d=self.assess();self.assertFalse(d['review_ready']);self.assertTrue(any(e.startswith(code) for e in d['errors']),d['errors'])
     def test_positive_contract_fixture(self): self.assertTrue(self.assess()['review_ready'])
@@ -60,6 +62,29 @@ class AdmissionTests(unittest.TestCase):
     def test_relabelled_same_handler(self):
         self.manifest['unit']='fundamentos-ia-iag';self.inventory[0]['scenes']=[dict(family='foo',visual_style='lattice'),dict(family='bar',visual_style='hub')]
         self.assertBlocked('ALIASED_HANDLER_COUNTED_AS_DISTINCT_FAMILIES')
+    def test_seguridad_third_real_handler_use_fails_even_with_distinct_family_labels(self):
+        self.manifest['unit']='seguridad-ia'
+        scenes=[
+            dict(concept_id='C1',declared_family='family_a',topology='two_parallel_lanes'),
+            dict(concept_id='C2',declared_family='family_b',topology='three_parallel_lanes'),
+            dict(concept_id='C3',declared_family='family_c',topology='two_parallel_lanes'),
+            dict(concept_id='C4',declared_family='family_d',topology='state_space'),
+            dict(concept_id='C5',declared_family='family_e',topology='graph_cut'),
+        ]
+        for row in self.inventory: row['scenes']=copy.deepcopy(scenes)
+        self.rebind();self.assertBlocked('EXCESSIVE_SEGURIDAD_HANDLER_REUSE')
+    def test_seguridad_scene_mechanism_mapping_must_match_across_locale_orientation(self):
+        self.manifest['unit']='seguridad-ia'
+        scenes=[
+            dict(concept_id='C1',declared_family='family_a',topology='two_parallel_lanes'),
+            dict(concept_id='C2',declared_family='family_b',topology='state_space'),
+            dict(concept_id='C3',declared_family='family_c',topology='ordered_levels'),
+            dict(concept_id='C4',declared_family='family_d',topology='graph_cut'),
+            dict(concept_id='C5',declared_family='family_e',topology='finite_state_machine'),
+        ]
+        for row in self.inventory: row['scenes']=copy.deepcopy(scenes)
+        self.inventory[-1]['scenes'][2]['topology']='directed_path'
+        self.rebind();self.assertBlocked('SEGURIDAD_SCENE_MECHANISM_PARITY_MISMATCH')
     def test_path_traversal(self): self.inventory[0]['mp4']='../outside.mp4';self.assertBlocked('INVALID_MEDIA_PATH')
     def test_embedded_manifest_cannot_retain_review_state(self):
         self.manifest['state']='COMPLETE_REVIEW_CANDIDATE_TECHNICAL_PACKAGE'
