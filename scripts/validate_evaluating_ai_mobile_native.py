@@ -27,7 +27,12 @@ VISUALS = {
     "06": (ROOT / "docs/snippets/articulos-tecnicos/eval-production-feedback-loop.html", "s5v-eval-feedback", "fb-scroll"),
 }
 
-MOBILE_MEDIA_RE = re.compile(r"@media\s*\(max-width\s*:\s*700px\)\s*\{(?P<body>.*?)\}(?=\s*@media|\s*</style>)", re.S)
+# Stop at the next top-level media query or </style>; nested selector braces are
+# intentionally part of the captured body so min-width mutations are visible.
+MOBILE_MEDIA_RE = re.compile(
+    r"@media\s*\(max-width\s*:\s*700px\)\s*\{(?P<body>.*?)(?=@media\s*\(|</style>)",
+    re.S,
+)
 MIN_WIDTH_RE = re.compile(r"min-width\s*:\s*(?P<px>\d+(?:\.\d+)?)px", re.I)
 
 
