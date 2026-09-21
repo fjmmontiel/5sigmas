@@ -42,7 +42,7 @@ function budget(P,S,s,l,v){
 function transfer(P,S,s,l,v){
  const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?43:38;
  if(on[0]){
-  P.rect(20,99,445,333,null,P.T.rule,4,3);label(P,t(s,'source',l),242,18,453,fs,true);label(P,t(s,'gradients',l),242,123,406,fs,false);
+  P.rect(20,99,445,333,null,P.T.rule,4,3);const title=t(s,'source',l),titleLines=P.lines(title,453,fs,600).length,titleY=Math.min(18,99-(titleLines-1)*fs*1.2-fs-8);label(P,title,242,titleY,453,fs,true);label(P,t(s,'gradients',l),242,123,406,fs,false);
   arrow(P,[[242,231],[242,268]],q[0]);
   if(!on[1])cell(P,t(s,'optimize',l),47,280,390,116,fs,true);
  }
