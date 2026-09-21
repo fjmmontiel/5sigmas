@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
+const baseUrl = process.env.S5_PREVIEW_BASE || process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/evaluating-ai-systems-browser-milestone');
 const timeoutMs = 10000;
 const series = 'evaluating-ai-systems-production';
@@ -15,8 +15,10 @@ const chapters = [
   '06-observability-failure-taxonomies-production-eval-repair-feedback-loops',
 ];
 const modes = [
-  { name: 'desktop-normal', viewport: { width: 1440, height: 1000 }, mobile: false },
-  { name: 'mobile-normal', viewport: { width: 390, height: 844 }, mobile: true },
+  { name: 'desktop-normal', viewport: { width: 1440, height: 1000 }, mobile: false, reducedMotion: 'no-preference' },
+  { name: 'desktop-reduced', viewport: { width: 1440, height: 1000 }, mobile: false, reducedMotion: 'reduce' },
+  { name: 'mobile-normal', viewport: { width: 390, height: 844 }, mobile: true, reducedMotion: 'no-preference' },
+  { name: 'mobile-reduced', viewport: { width: 390, height: 844 }, mobile: true, reducedMotion: 'reduce' },
 ];
 
 function routes(locale, stem) {
@@ -190,7 +192,7 @@ try {
       viewport: mode.viewport,
       isMobile: mode.mobile,
       hasTouch: mode.mobile,
-      reducedMotion: 'no-preference',
+      reducedMotion: mode.reducedMotion,
     });
     try {
       for (const locale of ['es', 'en']) {
@@ -214,8 +216,9 @@ try {
   await browser.close();
 }
 receipt.routeLocaleRows = 12;
-receipt.articleContexts = 24;
-receipt.watchContexts = 24;
+receipt.motionProfiles = ['normal', 'reduced'];
+receipt.articleContexts = 48;
+receipt.watchContexts = 48;
 receipt.result = 'PASS';
 await fs.writeFile(path.join(outDir, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
-console.log(`PASS Evaluating AI Systems article↔watch visual media lifecycle: ${receipt.articleContexts} article + ${receipt.watchContexts} watch contexts; silent H264 is valid and VOICE remains deferred.`);
+console.log(`PASS Evaluating AI Systems article↔watch visual media lifecycle: ${receipt.articleContexts} article + ${receipt.watchContexts} watch contexts across normal+reduced motion; silent H264 is valid and VOICE remains deferred.`);
