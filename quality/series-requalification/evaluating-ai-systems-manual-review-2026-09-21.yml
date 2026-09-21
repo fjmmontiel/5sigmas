@@ -1,0 +1,45 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: evaluating-ai-systems-production
+review_date: 2026-09-21
+status: PASS_ARTICLE_GOLDEN_6_OF_6_SERIES_RELEASE_PENDING
+qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+site_facing_revision: 98087d2ea0213205ac2db9a59a637e66124e8788
+mirror_pin_revision: aca3db5938be9a57b556ac0278a18112e92d0302
+run_id: 35640790841
+artifact_id: 10658961724
+artifact_sha256: b9676c2e34493a63814ddefa3d7ee682fe3575111da06747d29eb401691f4a6d
+coverage:
+  route_locale_rows: 12
+  desktop_mobile_normal_reduced_page_surfaces: 48
+  native_visual_videos_es_en: 12
+  deterministic_video_frames_manually_inspected: 72
+automated:
+  source: PASS_12_OF_12
+  build_es_en: PASS_12_OF_12
+  browser_resources_locale_parity: PASS
+  relationship_accessibility: PASS
+  article_watch_lifecycle: PASS
+  media_visual: PASS_12_OF_12
+  indexability: PASS_12_OF_12
+  indexability_negative_mutations: PASS
+  reader_shell: PASS
+manual:
+  pixel: PASS_12_OF_12
+  pedagogy: PASS_12_OF_12
+  video_visual: PASS_12_OF_12
+  defects_p0: 0
+  defects_p1: 0
+  defects_p2: 0
+source_review:
+  current_primary_claim_audit: PASS
+  material_corrections_required: 0
+voice:
+  state: DEFERRED_OWNER_LOCAL
+  blocker: false
+  generated_this_run: false
+release:
+  article_golden: 6/6
+  series_golden: false
+  production_verified: false
+  next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_PR_READY_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA

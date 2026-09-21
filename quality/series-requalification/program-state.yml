@@ -1,4 +1,4 @@
-schema_version: 41
+schema_version: 42
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -134,41 +134,46 @@ series_status:
     ledger: quality/series-requalification/evaluating-ai-systems-article-ledger.yml
     active_branch: quality/evaluating-ai-systems-requalification
     release_pr: 352
-    release_pr_state: OPEN_DRAFT_CHANGES_REQUIRED
+    release_pr_state: OPEN_DRAFT_ARTICLE_GOLDEN_SERIES_AUDIT_RELEASE_PENDING
     base_main: ff32ffeeaf2d66caa9984e181e39def112130b99
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count_ch1_es: 1
-    iteration_count_ch1_en: 1
-    iteration_count_ch2_es: 1
-    iteration_count_ch2_en: 1
-    iteration_count_ch3_es: 1
-    iteration_count_ch3_en: 1
-    iteration_count_ch4_es: 1
-    iteration_count_ch4_en: 1
-    iteration_count_ch5_es: 1
-    iteration_count_ch5_en: 1
-    iteration_count_ch6_es: 1
-    iteration_count_ch6_en: 1
-    source: PASS_0_OF_12
-    source_automated_contract: PASS_12_OF_12
-    build: PASS_0_OF_12
-    browser: PASS_0_OF_12
-    media_visual: PASS_0_OF_12
-    indexability: PASS_0_OF_12
-    pixel: PASS_0_OF_12
-    pedagogy: PASS_0_OF_12
-    article_golden: 0/6
+    iteration_count_ch1_es: 3
+    iteration_count_ch1_en: 3
+    iteration_count_ch2_es: 3
+    iteration_count_ch2_en: 3
+    iteration_count_ch3_es: 3
+    iteration_count_ch3_en: 3
+    iteration_count_ch4_es: 3
+    iteration_count_ch4_en: 3
+    iteration_count_ch5_es: 3
+    iteration_count_ch5_en: 3
+    iteration_count_ch6_es: 3
+    iteration_count_ch6_en: 3
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1_rows_inspected: 12
-    known_media_visual_pending_rows: 12
-    first_checkpoint_head: cca79fe0976f96b41b3c23754b603b836727fe9a
-    first_checkpoint_run: 35598982706
-    first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
-    first_checkpoint_artifact: 10637648202
-    first_checkpoint_artifact_sha256: 1f56d416c1d2ed81c6e0ceb7b3060f78935ebde7eb8e2a8907247815a1164316
+    known_p1_rows_inspected: 0
+    known_p2: 0
+    exact_qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+    site_facing_revision: 98087d2ea0213205ac2db9a59a637e66124e8788
+    mirror_pin_revision: aca3db5938be9a57b556ac0278a18112e92d0302
+    exact_checkpoint_run: 35640790841
+    exact_checkpoint_result: SUCCESS_ALL_CURRENT_NONDEFERRED_ARTICLE_GATES
+    exact_checkpoint_artifact: 10658961724
+    exact_checkpoint_artifact_sha256: b9676c2e34493a63814ddefa3d7ee682fe3575111da06747d29eb401691f4a6d
+    manual_pixel_pedagogy: PASS_12_ROUTE_LOCALE_ROWS_DESKTOP_MOBILE_NORMAL_REDUCED
+    manual_video_frames: PASS_12_NATIVE_ES_EN_VIDEOS_72_INSPECTED_FRAMES
+    primary_source_review: PASS_CURRENT_PRIMARY_CLAIMS_NO_MATERIAL_CONTRADICTIONS
     shared_gates_hardened: true
     series5_indexability_gate_added: true
     series5_indexability_negative_mutations_added: true
@@ -176,8 +181,8 @@ series_status:
     live_exact_revision_gate_added: true
     production_verified: false
     series_golden: false
-    state: REQUALIFICATION_QA_CHANGES_REQUIRED
-    next_action: DELIVER_NATIVE_VISUAL_MEDIA_AND_REPLACE_GIANT_MOBILE_CANVAS_ASSUMPTION_THEN_ONE_INTEGRATED_CHECKPOINT
+    state: ARTICLE_GOLDEN_6_OF_6_SERIES_AUDIT_RELEASE_PENDING
+    next_action: FRESH_ZERO_BASED_SERIES_AUDIT_THEN_PR_READY_MERGE_DEPLOY_LIVE_INDEXABILITY_MEDIA_QA
 release_coordination:
   current_main: ff32ffeeaf2d66caa9984e181e39def112130b99
   inference_release_pr: 342
@@ -192,6 +197,10 @@ release_coordination:
   evaluation_release_pr_draft: true
   evaluation_first_checkpoint_run: 35598982706
   evaluation_first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
+  evaluation_latest_exact_qa_run: 35640790841
+  evaluation_latest_exact_qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+  evaluation_article_golden: 6/6
+  evaluation_series_golden: false
   draft_34:
     state: OPEN_DRAFT_UNMERGED
     head: 459aca905454175bdbdf86c31f0af02cddd576a4
