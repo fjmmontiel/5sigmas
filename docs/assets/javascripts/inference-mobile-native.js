@@ -121,6 +121,7 @@
   const SAFE_Y_MIN = 8;
   const SAFE_Y_MAX = 90;
   const SHORT_EDGE_SOLID_THRESHOLD = 8;
+  const SHORT_EDGE_DOGLEG_OFFSET = 3.25;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const normalizeNode = ([id, x, y, es, en, tone]) => [id, clamp(x, SAFE_X_MIN, SAFE_X_MAX), clamp(y, SAFE_Y_MIN, SAFE_Y_MAX), es, en, tone];
 
@@ -140,7 +141,7 @@
         .s5v-inference-mobile-native__edge-path--short{stroke-dasharray:none!important;animation:none!important}
         .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(30%,96px);min-height:46px;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
         [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(35%,108px)}
-        [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(25%,80px)}
+        [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(25%,80px);padding-inline:3px}
         html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{padding-inline:3px}
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="finish"],
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="waiting"],
@@ -203,6 +204,21 @@
     return points.map((point) => point.join(',')).join(' ');
   };
 
+  const buildShortDogleg = (pointsText) => {
+    const points = String(pointsText).trim().split(/\s+/).map((point) => point.split(',').map(Number));
+    if (points.length !== 2 || points.some((point) => point.some((value) => !Number.isFinite(value)))) return pointsText;
+    const [start, end] = points;
+    const dx = end[0] - start[0];
+    const dy = end[1] - start[1];
+    const norm = Math.hypot(dx, dy);
+    if (norm < 0.001) return pointsText;
+    const midpoint = [
+      (start[0] + end[0]) / 2 - (dy / norm) * SHORT_EDGE_DOGLEG_OFFSET,
+      (start[1] + end[1]) / 2 + (dx / norm) * SHORT_EDGE_DOGLEG_OFFSET,
+    ];
+    return [start, midpoint, end].map((point) => point.join(',')).join(' ');
+  };
+
   const buildGraph = (summary, contract, lang) => {
     const graph = document.createElement('div');
     graph.className = 's5v-inference-mobile-native__graph';
@@ -262,7 +278,8 @@
         const from = byId.get(fromId); const to = byId.get(toId);
         if (!from || !to) continue;
         const polyline = document.createElementNS(SVG_NS, 'polyline');
-        polyline.setAttribute('points', buildPath(from, to, via, extents.get(fromId), extents.get(toId)));
+        const pointsText = buildPath(from, to, via, extents.get(fromId), extents.get(toId));
+        polyline.setAttribute('points', pointsText);
         polyline.setAttribute('marker-end', `url(#s5-inference-arrow-${contract.key})`);
         polyline.classList.add('s5v-inference-mobile-native__edge-path');
         polyline.dataset.mobileGraphEdge = id;
@@ -271,7 +288,13 @@
         svg.appendChild(polyline);
         let visibleLength = Number.POSITIVE_INFINITY;
         try { visibleLength = polyline.getTotalLength(); } catch {}
-        if (visibleLength < SHORT_EDGE_SOLID_THRESHOLD) {
+        const baseVisibleLength = visibleLength;
+        if (baseVisibleLength < SHORT_EDGE_SOLID_THRESHOLD && via.length === 0) {
+          polyline.setAttribute('points', buildShortDogleg(pointsText));
+          polyline.dataset.mobileGraphRoutedShortEdge = 'true';
+          try { visibleLength = polyline.getTotalLength(); } catch {}
+        }
+        if (baseVisibleLength < SHORT_EDGE_SOLID_THRESHOLD) {
           polyline.classList.add('s5v-inference-mobile-native__edge-path--short');
           polyline.dataset.mobileGraphShortEdge = 'true';
         }
