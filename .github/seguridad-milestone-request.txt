@@ -1,0 +1,5 @@
+Seguridad IA encoded/browser milestone request
+requested_at: 2026-09-21T04:03:00+02:00
+reason: exact-head post-redesign H/V encoded and browser validation milestone
+cadence_trigger: false
+source_media_files_changed_by_this_marker: false
