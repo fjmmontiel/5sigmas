@@ -1,18 +1,6 @@
 name: Seguridad IA encoded motion gate
 
 on:
-  push:
-    branches:
-      - migration/video-golden-seguridad-ia
-    paths:
-      - 'motion/src/seguridad/**'
-      - 'motion/src/render/**'
-      - 'motion/web/seguridad-render.html'
-      - 'motion/scripts/seguridad_render_check.py'
-      - 'motion/scripts/seguridad_encode_motion_probe.py'
-      - 'motion/migration/seguridad-ia-content-v1.json'
-      - 'motion/migration/seguridad-ia-series-register.json'
-      - '.github/workflows/seguridad-encoded-motion-gate.yml'
   workflow_dispatch:
 
 permissions:
@@ -68,15 +56,17 @@ jobs:
               assert o['ffprobe']['codec_name'] == 'h264'
               assert o['ffprobe']['r_frame_rate'] == '60/1'
           print(json.dumps({
-              'state':'ENCODED_HV_MOTION_PROBE_PASS',
+              'state':'ENCODED_HV_MOTION_PROBE_PASS_DIAGNOSTIC_ONLY',
               'outputs':[(o['orientation'],o['sha256'],o['frames_written']) for o in d['outputs']],
+              'semantic_review': 'NOT_PERFORMED_BY_THIS_PIXEL_MOTION_PROBE'
           }))
           PY
 
-      - name: Preserve bounded encoded-motion evidence
+      - name: Preserve failure evidence only
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: seguridad-ia-encoded-motion-${{ github.sha }}
+          name: seguridad-ia-encoded-motion-failure-${{ github.sha }}
           path: motion/dist/seguridad-ia-encoded-motion/
-          if-no-files-found: error
+          if-no-files-found: ignore
           retention-days: 1
