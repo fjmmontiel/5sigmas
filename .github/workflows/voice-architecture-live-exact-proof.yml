@@ -63,6 +63,10 @@ jobs:
             hreflang: attr(tag, 'hreflang'),
           }));
           const sha256 = (text) => crypto.createHash('sha256').update(text).digest('hex');
+          const h1Text = (html) => {
+            const match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
+            return (match?.[1] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+          };
 
           async function fresh(path, label) {
             const url = new URL(path, origin);
@@ -112,12 +116,12 @@ jobs:
             if (!new RegExp(`<html[^>]+lang=["']${route.locale}["']`, 'i').test(html)) {
               throw new Error(`${route.locale}: incorrect or missing html lang`);
             }
+            if (h1Text(html) !== route.title) {
+              throw new Error(`${route.locale}: live H1 does not match the reviewed article title`);
+            }
             if (!html.includes(route.title)) throw new Error(`${route.locale}: current reviewed title missing`);
             for (const anchor of route.anchors) {
               if (!html.includes(anchor)) throw new Error(`${route.locale}: current reviewed anchor missing: ${anchor}`);
-            }
-            if (html.includes('Tres arquitecturas para agentes de voz')) {
-              throw new Error(`${route.locale}: stale pre-release article detected`);
             }
             const canonical = findLink(html, ({ rel }) => rel.toLowerCase().split(/\s+/).includes('canonical'));
             const expectedCanonical = `${origin}${route.path}`;
