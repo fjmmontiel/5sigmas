@@ -40,10 +40,13 @@ jobs:
               Path('motion/src/seguridad/schema.mjs'),
               Path('motion/src/seguridad/mechanisms.mjs'),
               Path('motion/src/seguridad/timeline.mjs'),
+              Path('motion/src/seguridad/choreography.mjs'),
               Path('motion/src/seguridad/engine.mjs'),
+              Path('motion/src/seguridad/render.mjs'),
               Path('motion/tests/seguridad-schema.test.mjs'),
               Path('motion/tests/seguridad-engine.test.mjs'),
               Path('motion/tests/seguridad-timeline.test.mjs'),
+              Path('motion/tests/seguridad-choreography.test.mjs'),
               Path('motion/tests/test_review_admission.py'),
               Path('motion/scripts/review_admission.py'),
               Path('motion/scripts/seguridad_final_export.py'),
@@ -68,19 +71,24 @@ jobs:
           node --check motion/src/seguridad/schema.mjs
           node --check motion/src/seguridad/mechanisms.mjs
           node --check motion/src/seguridad/timeline.mjs
+          node --check motion/src/seguridad/choreography.mjs
           node --check motion/src/seguridad/engine.mjs
+          node --check motion/src/seguridad/render.mjs
           node --check motion/tests/seguridad-schema.test.mjs
           node --check motion/tests/seguridad-engine.test.mjs
           node --check motion/tests/seguridad-timeline.test.mjs
+          node --check motion/tests/seguridad-choreography.test.mjs
           python -m py_compile motion/scripts/review_admission.py motion/scripts/seguridad_final_export.py motion/scripts/seguridad_final_package_check.py motion/tests/test_review_admission.py
           node -e "import('./motion/src/seguridad/engine.mjs').then(m=>console.log('ENGINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
           node -e "import('./motion/src/seguridad/timeline.mjs').then(m=>console.log('TIMELINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
+          node -e "import('./motion/src/seguridad/choreography.mjs').then(m=>console.log('CHOREOGRAPHY_IMPORT_PASS', Object.keys(m).sort().join(',')))"
+          node -e "import('./motion/src/seguridad/render.mjs').then(m=>console.log('RENDER_IMPORT_PASS', Object.keys(m).sort().join(',')))"
 
-      - name: Run schema, semantic-engine, synchronization and admission regressions
+      - name: Run schema, semantic-engine, synchronization, choreography and admission regressions
         shell: bash
         run: |
           set -euo pipefail
-          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs
+          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs motion/tests/seguridad-choreography.test.mjs
           python motion/tests/test_review_admission.py
 
       - name: Emit deterministic render coverage evidence
@@ -91,9 +99,11 @@ jobs:
           import fs from 'node:fs';
           import {seguridadRenderMatrix, validateSeguridadMechanismCoverage} from './motion/src/seguridad/engine.mjs';
           import {SEGURIDAD_SYNC_PROFILE} from './motion/src/seguridad/timeline.mjs';
+          import {SEGURIDAD_CHOREOGRAPHY_PROFILES} from './motion/src/seguridad/choreography.mjs';
+          import {SEGURIDAD_MECHANISM_TEXT_CONTRACT} from './motion/src/seguridad/render.mjs';
           const spec=JSON.parse(fs.readFileSync('motion/migration/seguridad-ia-content-v1.json','utf8'));
           const register=JSON.parse(fs.readFileSync('motion/migration/seguridad-ia-series-register.json','utf8'));
           const jobs=seguridadRenderMatrix(spec,register);
           const coverage=validateSeguridadMechanismCoverage(spec,register);
-          console.log(JSON.stringify({jobs:jobs.length,horizontal:jobs.filter(x=>x.orientation==='horizontal').length,vertical:jobs.filter(x=>x.orientation==='vertical').length,syncProfile:SEGURIDAD_SYNC_PROFILE,...coverage},null,2));
+          console.log(JSON.stringify({jobs:jobs.length,horizontal:jobs.filter(x=>x.orientation==='horizontal').length,vertical:jobs.filter(x=>x.orientation==='vertical').length,syncProfile:SEGURIDAD_SYNC_PROFILE,choreographyProfiles:SEGURIDAD_CHOREOGRAPHY_PROFILES,mechanismText:SEGURIDAD_MECHANISM_TEXT_CONTRACT,...coverage},null,2));
           NODE

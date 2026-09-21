@@ -54,11 +54,19 @@ def contact_sheet(page, orientation: str, target: Path) -> list[dict]:
             else:
                 im.thumbnail((250, 420))
             tiles.append((job, scene + 1, t, im.copy(), item['result']))
-            samples.append({'job': job, 'scene': scene + 1, 'time': t, 'family': item['result']['family'], 'topology': item['result']['topology']})
+            samples.append({
+                'job': job,
+                'scene': scene + 1,
+                'time': t,
+                'family': item['result']['family'],
+                'topology': item['result']['topology'],
+                'choreography_profile': item['result']['choreographyProfile'],
+                'mechanism_label_embed_px': item['result']['mechanismLabelEmbedPx'],
+            })
 
     cols = 5
     tile_w = max(im.width for *_, im, _ in tiles)
-    tile_h = max(im.height for *_, im, _ in tiles) + 54
+    tile_h = max(im.height for *_, im, _ in tiles) + 72
     rows = (len(tiles) + cols - 1) // cols
     sheet = Image.new('RGB', (cols * tile_w + 40, rows * tile_h + 30), 'white')
     draw = ImageDraw.Draw(sheet)
@@ -67,8 +75,9 @@ def contact_sheet(page, orientation: str, target: Path) -> list[dict]:
         y = 15 + (i // cols) * tile_h
         label = f'{job.split("-")[2]} · S{scene} · {result["family"]}'
         draw.text((x, y), label, fill='black')
-        draw.text((x, y + 20), f'{result["topology"]} · {t:.0f}s', fill='black')
-        sheet.paste(im, (x, y + 46))
+        draw.text((x, y + 20), f'{result["topology"]} · {result["choreographyProfile"]}', fill='black')
+        draw.text((x, y + 40), f'{t:.0f}s · label {result["mechanismLabelEmbedPx"]:.1f}px', fill='black')
+        sheet.paste(im, (x, y + 64))
     sheet.save(target, quality=91)
     return samples
 
@@ -90,6 +99,7 @@ def main() -> None:
         setup = page.evaluate('(a)=>window.setup(a.spec,a.register)', {'spec': spec, 'register': register})
         rows = page.evaluate('window.layoutCheck()')
         issues = [{'jobId': row['jobId'], 'scene': row['scene'], 'timeSeconds': row['timeSeconds'], 'issue': issue} for row in rows for issue in row['issues']]
+        profiles = sorted({row['choreographyProfile'] for row in rows})
         report = {
             'unit': 'seguridad-ia',
             'scope': 'actual browser/canvas layout and semantic-motion preflight; not encoded MP4 or Technical GOLDEN',
@@ -99,10 +109,16 @@ def main() -> None:
             'setup': setup,
             'minimum_body_px': min(row['bodySize'] for row in rows),
             'minimum_mechanism_scale': min(row['mechanismScale'] for row in rows),
+            'minimum_mechanism_label_embed_px': min(row['mechanismLabelEmbedPx'] for row in rows),
+            'choreography_profiles': profiles,
+            'choreography_profile_count': len(profiles),
             'issue_count': len(issues),
             'issues': issues,
             'browser_errors': errors,
         }
+        if len(profiles) < 15:
+            issues.append({'jobId':'series','scene':'all','timeSeconds':0,'issue':{'type':'insufficient-choreography-profile-diversity','profiles':profiles}})
+            report['issue_count'] = len(issues)
         report['horizontal_contact_sheet'] = contact_sheet(page, 'horizontal', OUT / 'seguridad-es-horizontal-contact-sheet.jpg')
         report['vertical_contact_sheet'] = contact_sheet(page, 'vertical', OUT / 'seguridad-es-vertical-contact-sheet.jpg')
         reduced = page.evaluate("()=>window.draw('seguridad-ia-05-en-vertical',54,true)")
@@ -118,6 +134,8 @@ def main() -> None:
         'browser_errors': 0,
         'minimum_body_px': report['minimum_body_px'],
         'minimum_mechanism_scale': report['minimum_mechanism_scale'],
+        'minimum_mechanism_label_embed_px': report['minimum_mechanism_label_embed_px'],
+        'choreography_profile_count': report['choreography_profile_count'],
         'contact_sheets': 2,
     }))
 
