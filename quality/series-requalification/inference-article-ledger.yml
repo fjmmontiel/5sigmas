@@ -1,4 +1,4 @@
-schema_version: 18
+schema_version: 22
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -12,169 +12,131 @@ catalog:
 receipts:
   source_review: quality/series-requalification/inference-source-review-2026-09-20.yml
   historical_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
-  prior_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
-  prior_exact_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run12.yml
-  prior_manual_pixel_pedagogy_review: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
-  node_aware_edge_visibility_remediation: quality/series-requalification/inference-edge-visibility-remediation-2026-09-21.yml
-  latest_manual_pixel_pedagogy_review: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run14.yml
+  mobile_review_run11: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
+  mobile_review_run12: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run12.yml
+  manual_review_run13: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
+  manual_review_run14: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run14.yml
+  manual_review_run15: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run15.yml
+  manual_review_run16: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run16.yml
+  manual_review_run17: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run17.yml
+  edge_visibility_remediation: quality/series-requalification/inference-edge-visibility-remediation-2026-09-21.yml
   directed_edge_reroute_remediation: quality/series-requalification/inference-directed-edge-reroute-remediation-2026-09-21.yml
+  run15_delta: quality/series-requalification/inference-run15-ledger-delta.yml
+  run16_delta: quality/series-requalification/inference-run16-ledger-delta.yml
+  ch5_svg_coverage_remediation: quality/series-requalification/inference-ch5-mobile-svg-coverage-remediation-2026-09-21.yml
+  ch5_svg_coverage_delta: quality/series-requalification/inference-ch5-svg-coverage-ledger-delta-2026-09-21.yml
 history:
   - {head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685, run: 35499330009, artifact: 10601915287, result: P1_SHARED_GIANT_CANVAS_ONLY}
   - {head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97, run: 35510156711, artifact: 10605125706, result: P1_DIRECTED_GRAPH_LEGIBILITY_EDGE_ROUTING}
   - {head: 64339a86f8a88ff03c04af98927209ffbda7ccef, run: 35516179647, artifact: 10607266455, result: AUTOMATED_GREEN_MANUAL_PIXEL_P1}
   - {head: c3b035f693c2f50e565aa4d3a85b767bfe93a45d, run: 35519776975, artifact: 10608215457, result: TEXT_FIT_106_FAILURES_ES_EN_NORMAL_REDUCED}
-  - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522229871, artifact: 10608637991, result: SERIES4_FAIL_PLAYBACK_LIFECYCLE_BEFORE_LAYOUT_GATES}
-  - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522226233, artifact: 10609316501, result: MEDIA_BOOTSTRAP_FAIL_ACCESSIBILITY_BEFORE_LIFECYCLE_COMMIT_SKIPPED}
-  - {head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15, merge_ref: c1614cacee7715bc2da42faafd6ad209f9fc8c92, run: 35528636858, artifact: 10610099273, result: ALL_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_CONCURRENCY_ONLY}
-  - {head: 57cb76c829bbd325b9cc1cdaac491419553956a4, run: 35531961728, artifact: 10611572106, result: ALL_NON_PIXEL_GATES_AND_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
-  - {head: bd7dede2201655a6f151a459f3d213fa5f944163, merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3, run: 35534948096, artifact: 10613115508, result: INDEXABILITY_MEDIA_BROWSER_LIFECYCLE_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
-  - {head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5, run: 35538317845, artifact: 10614520052, result: AUTOMATED_ALL_GREEN_MANUAL_PIXEL_PEDAGOGY_P1_EDGE_VISIBILITY}
-  - {head: 23632b14f5d4c4852f9615dd7ab6dec065a6ebbe, result: NODE_AWARE_EDGE_GEOMETRY_AND_SHORT_EDGE_NEGATIVE_MUTATION_IMPLEMENTED}
-  - {head: 837b6abacd1d8038d5d22d489381e45324894375, merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d, run: 35544170017, artifact: 10616606049, result: SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_RELATIONSHIPS_PASS_SHORT_EDGE_FAIL_CH1_CH6_E7}
-  - {head: ca2d50b3778b93a43127d42e4782fd4afadc0737, run: 35547227151, artifact: 10616942622, result: AUTOMATED_ALL_GREEN_MANUAL_PIXEL_PEDAGOGY_P1_DIRECTED_EDGE_SHAFT_VISIBILITY_DASH_PHASE}
-  - {head: 9e652b494cb91047a422e1e1775daa99b79c9374, merge_ref: a0419466e1c0add83b1f3c0db57a725dac155297, run: 35550339841, artifact: 10618611606, result: SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_LIFECYCLE_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_SCHEDULER_NORMAL_REDUCED}
-  - {head: 39e368937307535c369b67745df2c23eb5953d58, result: DIRECT_SHORT_EDGE_DOGLEG_AND_CH1_SCHEDULER_PADDING_REMEDIATION_IMPLEMENTED}
-  - {head: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85, result: MIN_EDGE_6_AND_UNROUTED_SHORT_EDGE_NEGATIVE_GATE_IMPLEMENTED}
+  - {head: 02fbf70d6fb7fe72a96870b19a2604262c17bd12, run: 35522229871, artifact: 10608637991, result: PLAYBACK_LIFECYCLE_HARNESS_FAILURE}
+  - {head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15, run: 35528636858, artifact: 10610099273, result: RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_CONCURRENCY}
+  - {head: 57cb76c829bbd325b9cc1cdaac491419553956a4, run: 35531961728, artifact: 10611572106, result: NON_PIXEL_GATES_PASS_TEXT_FIT_FAIL_CH1_ES}
+  - {head: bd7dede2201655a6f151a459f3d213fa5f944163, run: 35534948096, artifact: 10613115508, result: INDEXABILITY_MEDIA_BROWSER_LIFECYCLE_PASS_TEXT_FIT_FAIL_CH1_ES}
+  - {head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5, run: 35538317845, artifact: 10614520052, result: AUTOMATED_GREEN_MANUAL_P1_EDGE_VISIBILITY}
+  - {head: 837b6abacd1d8038d5d22d489381e45324894375, run: 35544170017, artifact: 10616606049, result: SHORT_EDGE_FAIL_CH1_CH6_E7}
+  - {head: ca2d50b3778b93a43127d42e4782fd4afadc0737, run: 35547227151, artifact: 10616942622, result: AUTOMATED_GREEN_MANUAL_P1_DASH_PHASE}
+  - {head: 9e652b494cb91047a422e1e1775daa99b79c9374, run: 35550339841, artifact: 10618611606, result: TEXT_FIT_FAIL_CH1_ES_SCHEDULER}
+  - {head: 419e6bf653cdf0cbf74838c0f56c8a640de6a0ec, run: 35554862361, artifact: 10619929383, result: AUTOMATED_GREEN_MANUAL_SHARED_EDGE_P1}
+  - {head: 6d559fea45e4b8d02533da7f65d8e2e3bea216a0, run: 35557780069, artifact: 10621695409, result: AUTOMATED_GREEN_MANUAL_EDGE_AND_CH1_VIDEO_P1}
+  - {head: da147a0d993fb6117b08f401e33a2186761b75f6, run: 35559402263, artifact: 10621443194, result: AUTOMATED_GREEN_MANUAL_EDGE_EVIDENCE_SYNC_P1}
+  - {head: 40bab616e8200fae2c2f7b912913deecb6e92d6e, run: 35561130922, artifact: 10622267672, result: AUTOMATED_GREEN_MANUAL_CH5_SVG_HEIGHT_P1}
+  - {head: c77fb6c8ebc833b9e2e8771a172569b80d33e8df, run: 35564821218, artifact: 10624366941, result: SHARED_EDGE_OVERLAY_HEIGHT_COLLAPSE_10_ROWS}
+  - {head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147, run: 35572557014, artifact: 10626503761, result: ALL_AUTOMATED_AND_MANUAL_GATES_GREEN_ARTICLE_GOLDEN_6_OF_6}
 current_inspection:
-  evidence_head: 9e652b494cb91047a422e1e1775daa99b79c9374
-  merge_ref: a0419466e1c0add83b1f3c0db57a725dac155297
-  run: 35550339841
-  artifact: 10618611606
-  artifact_sha256: 9bcaccda65a1d55759b66722c24e477166b2a28de05024a9077d8e19d7c95754
-  manual_mobile_pixel_performed_this_run: true
+  site_facing_evidence_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  run: 35572557014
+  artifact: 10626503761
+  artifact_sha256: d7adb22eafa57c20bc6822f6bc698e08266e3aea4f25a9196bbf9054853a8430
+  automated_result: PASS
+  manual_result: PASS
   inspected_route_locale_rows: 12
   inspected_mobile_motion_contexts: 24
-  desktop_and_video_reinspection_this_run: false
-  automated_result: FAIL_MOBILE_TEXT_FIT_AFTER_SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_LIFECYCLE_RELATIONSHIPS_PASS
-  deterministic_failure: CH1_ES_SCHEDULER_TEXT_CLIP_NORMAL_REDUCED_72X44_GT_70X44
-  manual_result: CHANGES_REQUIRED_SHARED_DIRECT_ADJACENT_EDGE_SHAFT_VISIBILITY_PLUS_CH1_ES_SCHEDULER_TEXT_FIT
-  remediation_renderer_head: 39e368937307535c369b67745df2c23eb5953d58
-  remediation_gate_head: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85
-  remediation_status: IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW
-prior_exact_head_automated_gates:
-  evidence_head: 9e652b494cb91047a422e1e1775daa99b79c9374
+  inspected_desktop_motion_contexts: 24
+  inspected_video_key_frames: 36
+  pixel_review: PASS_12_OF_12
+  pedagogy_review: PASS_12_OF_12
+exact_site_revision_gates:
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
   BROWSER_PASS: 12/12
   MEDIA_VISUAL_PASS: 12/12
   INDEXABILITY_PASS: 12/12
+  PIXEL_REVIEW: 12/12
+  PEDAGOGY_REVIEW: 12/12
   article_watch_lifecycle: PASS_24_ARTICLE_24_WATCH
   relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
-  mobile_text_fit_negative_mutation: FAIL_CH1_ES_SCHEDULER_NORMAL_REDUCED
-  reader_shell: NOT_REACHED_AFTER_TEXT_FIT_FAILURE
-current_target_gates:
-  site_facing_head: 39e368937307535c369b67745df2c23eb5953d58
-  regression_gate_head: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85
-  SOURCE_PASS: 12/12
-  BUILD_PASS: 0/12
-  BROWSER_PASS: 0/12
-  MEDIA_VISUAL_PASS: 0/12
-  INDEXABILITY_PASS: 0/12
-  PIXEL_REVIEW: 0/12
-  PEDAGOGY_REVIEW: 0/12
-  ARTICLE_GOLDEN: 0/6
-  reason: SHARED_SITE_FACING_EDGE_RENDERER_CHANGED_AND_REQUIRES_EXACT_HEAD_RERENDER_MANUAL_REVIEW
+  mobile_text_fit_negative_mutation: PASS
+  mobile_edge_shaft_shape_negative_mutations: PASS
+  full_height_overlay_contract: PASS_12_ROWS_NORMAL_REDUCED
+  reader_navigation_responsive_shell: PASS
+  ARTICLE_GOLDEN: 6/6
 known_defects:
   p0: 0
-  p1_open_rows: 12
+  p1_open_rows: 0
   p2: 0
-  active:
-    - severity: P1
-      code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
-      evidence_head: 9e652b494cb91047a422e1e1775daa99b79c9374
-      evidence_run: 35550339841
-      evidence_artifact: 10618611606
-      evidence_artifact_sha256: 9bcaccda65a1d55759b66722c24e477166b2a28de05024a9077d8e19d7c95754
-      scope: SHARED_MOBILE_RENDERER_MULTIPLE_DIRECT_ADJACENT_EDGES_ACROSS_6_CHAPTERS_ES_EN
-      root_cause_file: docs/assets/javascripts/inference-mobile-native.js
-      regression_gate_file: scripts/validate_inference_mobile_text_fit.mjs
-      remediation_renderer_head: 39e368937307535c369b67745df2c23eb5953d58
-      remediation_gate_head: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85
-      status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW
-      next_action: REQUIRE_MIN_EDGE_6_ROUTED_SHORT_EDGE_SOLID_NONANIMATED_ALL_12_ROWS_NORMAL_REDUCED_THEN_MANUAL_PIXEL_PEDAGOGY
-    - severity: P1
-      code: INFERENCE_CH1_ES_SCHEDULER_TEXT_FIT
-      evidence_head: 9e652b494cb91047a422e1e1775daa99b79c9374
-      evidence_run: 35550339841
-      evidence_artifact: 10618611606
-      scope: CH1_ES_NORMAL_REDUCED
-      proof: 'scheduler 72x44 > 70x44'
-      remediation_renderer_head: 39e368937307535c369b67745df2c23eb5953d58
-      status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER
-  harness_closed:
-    - severity: P1
-      code: SERIES4_PREVIEW_SERVER_LACKED_RANGE_SEEK_CONTRACT
-      evidence_run: 35522229871
-      closed_by_run: 35528636858
-      proof: RANGE_SELF_TEST_206_416_AND_24_ARTICLE_24_WATCH_LIFECYCLE_PASS
-      status: CLOSED
+  active: []
+  closed_historical:
+    - SERIES4_PREVIEW_SERVER_LACKED_RANGE_SEEK_CONTRACT
+    - INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+    - INFERENCE_CH1_ES_SCHEDULER_TEXT_FIT
+    - INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY
+    - INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW
+    - INFERENCE_CH6_EN_VIDEO_LABEL_OVERFLOW_MEASUREMENTS
+    - INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT
+    - INFERENCE_MOBILE_EDGE_OVERLAY_HEIGHT_COLLAPSE
 voice:
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
   blocking: false
   generated_voice: false
   generated_captions_transcript_narration_timings: false
-  historical_accessibility_debt: "92 > 91 retained for future voice/accessibility lane; budget remains 91; current exact catalogue debt remains tracked separately as 140 > 91 (+49)"
+  historical_accessibility_debt: '92 > 91 retained for future voice/accessibility lane; budget remains 91; non-blocking for current GOLDEN.'
 release:
   pr: 342
   pr_state: OPEN_DRAFT
   production_verified: false
+  article_golden: 6/6
   series_golden: false
   current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
-  branch_status: DIVERGED
+  branch_status_at_evidence: DIVERGED_87_AHEAD_11_BEHIND
   main_reconciliation_required_before_ready_merge: true
-  iteration_count_changed_rows_this_run: 12
-  next_action: CONSUME_POST_REMEDIATION_EXACT_HEAD_GATE_MANUAL_REVIEW_THEN_RECONCILE_CURRENT_MAIN
-row_defaults: &row_defaults
-  iteration_count: 13
-  last_reviewed_head: 9e652b494cb91047a422e1e1775daa99b79c9374
-  last_manual_pixel_head: 9e652b494cb91047a422e1e1775daa99b79c9374
-  last_changed_site_head: 39e368937307535c369b67745df2c23eb5953d58
+  exact_site_revision: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  next_action: RECONCILE_CURRENT_MAIN_THEN_EXACT_INTEGRATED_CHECKPOINT_MANUAL_AUDIT_MERGE_DEPLOY_LIVE_VERIFY
+row_defaults: &row
+  last_reviewed_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  last_manual_pixel_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
   SOURCE_PASS: true
-  BUILD_PASS: false
-  BROWSER_PASS: false
-  MEDIA_VISUAL_PASS: false
-  INDEXABILITY_PASS: false
-  PIXEL_REVIEW: false
-  PEDAGOGY_REVIEW: false
+  BUILD_PASS: true
+  BROWSER_PASS: true
+  MEDIA_VISUAL_PASS: true
+  INDEXABILITY_PASS: true
+  PIXEL_REVIEW: true
+  PEDAGOGY_REVIEW: true
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-  defects:
-    - {severity: P1, code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE, status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW}
+  defects: []
   factual_source_status: PASS_FRESH_2026_09_20
-  parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_EXACT_9E652B_BROWSER_PARITY_PENDING_POST_REMEDIATION_RENDER_REVERIFY
-  canonical_hreflang_sitemap_internal_discovery: EXACT_HEAD_9E652B_PASS_PENDING_POST_REMEDIATION_RERUN
-  watch_video_lifecycle: EXACT_HEAD_9E652B_PASS_PENDING_POST_REMEDIATION_RERUN
-  media_visual_status: EXACT_HEAD_9E652B_PASS_PENDING_POST_REMEDIATION_RERUN
-  evidence_revision: 9e652b494cb91047a422e1e1775daa99b79c9374
-  pending_site_revision: 39e368937307535c369b67745df2c23eb5953d58
-  pending_gate_revision: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85
+  parity_status: PASS_EXACT_094938CB_ES_EN
+  canonical_hreflang_sitemap_internal_discovery: PASS_EXACT_094938CB
+  watch_video_lifecycle: PASS_EXACT_094938CB_24_ARTICLE_24_WATCH
+  media_visual_status: PASS_EXACT_094938CB_NATIVE_ES_EN_VISUAL_VIDEO
+  evidence_revision: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  evidence_run: 35572557014
+  evidence_artifact: 10626503761
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
-  next_action: RECONFIRM_EXACT_HEAD_GATES_AND_MANUAL_PIXEL_PEDAGOGY
-  state: QA
-ch1_defaults: &ch1_defaults
-  <<: *row_defaults
-  iteration_count: 17
-ch1_es_defaults: &ch1_es_defaults
-  <<: *ch1_defaults
-  defects:
-    - {severity: P1, code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE, status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW}
-    - {severity: P1, code: INFERENCE_CH1_ES_SCHEDULER_TEXT_FIT, status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER}
-ch6_es_defaults: &ch6_es_defaults
-  <<: *row_defaults
-  iteration_count: 15
-ch6_en_defaults: &ch6_en_defaults
-  <<: *row_defaults
-  iteration_count: 14
+  next_action: RECONCILE_MAIN_THEN_EXACT_INTEGRATED_RELEASE_CHECKPOINT
+  state: GOLDEN
 rows:
-  - {<<: *ch1_es_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
-  - {<<: *ch1_defaults, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
-  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, source_path: docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
-  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
-  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, source_path: docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
-  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
-  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, source_path: docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
-  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
-  - {<<: *row_defaults, route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, source_path: docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
-  - {<<: *row_defaults, route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
-  - {<<: *ch6_es_defaults, route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, source_path: docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
-  - {<<: *ch6_en_defaults, route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, iteration_count: 23, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, iteration_count: 23, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, iteration_count: 19, source_path: docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, iteration_count: 19, source_path: locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md}
+  - {<<: *row, route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, iteration_count: 21, source_path: docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
+  - {<<: *row, route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, iteration_count: 20, source_path: locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md}
