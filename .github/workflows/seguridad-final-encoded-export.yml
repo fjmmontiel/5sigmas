@@ -1,0 +1,162 @@
+name: Seguridad IA complete encoded export
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/seguridad-final-encode-request.txt
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seguridad-ia-complete-encoded-export-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  encode-chapter:
+    name: encode chapter ${{ matrix.chapter }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        chapter: [0, 1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate exact source before expensive encode
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/seguridad_render_check.py motion/scripts/seguridad_final_export.py
+          node --check motion/src/seguridad/render.mjs
+          node --check motion/src/seguridad/engine.mjs
+          node --check motion/src/seguridad/mechanisms.mjs
+          node --check motion/src/seguridad/timeline.mjs
+
+      - name: Install browser encoder dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+
+      - name: Encode ES/EN horizontal and vertical from one timeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+          for locale in es en; do
+            for orientation in horizontal vertical; do
+              python motion/scripts/seguridad_final_export.py \
+                --chapter "${{ matrix.chapter }}" \
+                --locale "$locale" \
+                --orientation "$orientation" \
+                --source-head "$GITHUB_SHA" \
+                --out "$OUT"
+            done
+          done
+          test "$(find "$OUT" -name '*.mp4' | wc -l)" -eq 4
+          test "$(find "$OUT" -name '*.metadata.json' | wc -l)" -eq 4
+          test "$(find "$OUT" -name '*.visual-transcript.json' | wc -l)" -eq 4
+          test "$(find "$OUT" -name '*.poster.jpg' | wc -l)" -eq 4
+          python - "$OUT" <<'PY'
+          import json, sys
+          from pathlib import Path
+          root=Path(sys.argv[1])
+          metas=[json.loads(p.read_text(encoding='utf-8')) for p in root.glob('*.metadata.json')]
+          assert len(metas)==4
+          for meta in metas:
+              cues=meta.get('text_visual_cues',[])
+              assert len(cues)==5, (meta.get('job_id'), cues)
+              assert len({c['id'] for c in cues})==5
+              assert all(c.get('sentence_id') and c.get('concept_id') and c.get('visual_target_id') for c in cues)
+              assert all(c['text_at'] < c['visual_at'] < c['visual_end_at'] < c['scene_end_at'] for c in cues)
+          print(json.dumps({'metadata_cue_binding':'PASS','outputs':len(metas),'cues':sum(len(m['text_visual_cues']) for m in metas)}))
+          PY
+
+      - name: Preserve chapter outputs for one bounded release milestone
+        uses: actions/upload-artifact@v4
+        with:
+          name: seguridad-final-ch${{ matrix.chapter }}-${{ github.sha }}
+          path: motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  package-gate:
+    name: complete 24-output internal package gate
+    needs: encode-chapter
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all six immutable chapter artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: seguridad-final-ch*-${{ github.sha }}
+          path: motion/dist/seguridad-ia-final-package
+          merge-multiple: true
+
+      - name: Install package review dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check pillow
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+
+      - name: Validate exact encodes without promoting owner review
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/seguridad_final_package_check.py \
+            --package motion/dist/seguridad-ia-final-package \
+            --internal-only
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('motion/dist/seguridad-ia-final-package/seguridad-ia-final-manifest.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert d['output_count']==24
+          assert d['errors']==[]
+          assert d['technical_golden'] is False
+          assert d['owner_visual_approval']=='NOT_REQUESTED'
+          assert d['review_ready'] is False
+          assert d['state']=='CHANGES_REQUIRED'
+          admission=d.get('review_admission',{})
+          expected_prefixes=('MISSING_CURRENT_QA_RUBRIC','STALE_QA_BINDING','NO_INDEPENDENT_CRITIC',
+                             'STALE_OR_MISSING_DELIVERY_BINDING','MISSING_CURRENT_DISCOVERY_RUBRIC')
+          assert all(any(e.startswith(prefix) for e in admission.get('errors',[])) for prefix in expected_prefixes)
+          # The internal renderer/integrity package itself is complete; the missing
+          # independent QA/delivery/discovery evidence is intentionally fail-closed.
+          assert len(d['encoded_motion_check'])==24
+          assert len(d['es_en_parity'])==12
+          print(json.dumps({
+            'state':'INTERNAL_EXACT_24_ENCODE_COMPLETE_REVIEW_BLOCKED_AS_DESIGNED',
+            'outputs':d['output_count'],
+            'motion_scene_diagnostics':len(d['encoded_motion_check'])*5,
+            'parity_pairs':len(d['es_en_parity']),
+            'review_admission_errors':len(admission.get('errors',[])),
+          }))
+          PY
+
+      - name: Preserve exact 24-output internal QA package
+        uses: actions/upload-artifact@v4
+        with:
+          name: seguridad-ia-internal-exact24-${{ github.sha }}
+          path: motion/dist/seguridad-ia-final-package/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
