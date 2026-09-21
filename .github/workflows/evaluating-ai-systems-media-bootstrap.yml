@@ -1,6 +1,7 @@
 name: Evaluating AI Systems media bootstrap
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - quality/evaluating-ai-systems-requalification
