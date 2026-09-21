@@ -28,15 +28,21 @@ FUNDAMENTOS_HANDLERS = {
     'control-loop':'drawLoop', 'cycle':'drawLoop',
     'parallel-pipeline':'drawPipeline', 'parallel-lanes':'drawPipeline',
 }
-# Seguridad has several distinct topology labels backed by the same concrete
-# mechanism implementation. Count the implementation, not the label.
+# Seguridad normalizes perceptual archetypes, not just code symbols. Linear path,
+# legacy FSM and sequential gates have proven visually interchangeable in encoded
+# media and therefore share one family. Encoded whole-series review remains the
+# independent authority after this structural anti-gaming guard.
 SEGURIDAD_HANDLERS = {
-    'directed_path':'directedPath',
+    'directed_path':'linearStatePath',
+    'finite_state_machine':'linearStatePath',
+    'sequential_gates':'linearStatePath',
     'ordered_levels':'orderedLevels',
     'two_domains_single_validated_bridge':'twoDomainsBridge',
-    'finite_state_machine':'finiteStateMachine',
     'two_parallel_lanes':'parallelLanes',
     'three_parallel_lanes':'parallelLanes',
+    'constraints_to_path':'constraintsToPath',
+    'stacked_influences':'stackedInfluences',
+    'cycle_with_exit':'cycleWithExit',
 }
 SHA = re.compile(r'^[0-9a-f]{64}$')
 
