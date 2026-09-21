@@ -120,6 +120,7 @@
   const SAFE_X_MAX = 83;
   const SAFE_Y_MIN = 8;
   const SAFE_Y_MAX = 90;
+  const SHORT_EDGE_SOLID_THRESHOLD = 8;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const normalizeNode = ([id, x, y, es, en, tone]) => [id, clamp(x, SAFE_X_MIN, SAFE_X_MAX), clamp(y, SAFE_Y_MIN, SAFE_Y_MAX), es, en, tone];
 
@@ -136,9 +137,10 @@
         .s5v-inference-mobile-native__graph{position:relative;width:100%;min-width:0;border-radius:15px;background:linear-gradient(180deg,color-mix(in srgb,currentColor 4%,transparent),transparent 48%);overflow:hidden}
         .s5v-inference-mobile-native__graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:hidden;color:color-mix(in srgb,currentColor 72%,transparent)}
         .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.45;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
+        .s5v-inference-mobile-native__edge-path--short{stroke-dasharray:none!important;animation:none!important}
         .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(30%,96px);min-height:46px;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
         [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(35%,108px)}
-        [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(27%,86px)}
+        [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(25%,80px)}
         html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{padding-inline:3px}
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="finish"],
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="waiting"],
@@ -151,7 +153,7 @@
         [data-inference-mobile-graph="05"] [data-mobile-graph-node="alt"],
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="latency"],
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="account"],
-        [data-inference-mobile-graph="06"] [data-mobile-graph-node="denom"],
+        [data-inference-mobile-graph="06"] [data-mobile-graph-node="denom"]{width:min(30%,96px)}
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="report"]{width:min(32%,102px)}
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="account"]{width:min(29%,92px)}
         .s5v-inference-mobile-native__node[data-tone="decision"]{border-style:dashed;border-width:1.5px}
@@ -215,10 +217,10 @@
     const defs = document.createElementNS(SVG_NS, 'defs');
     const marker = document.createElementNS(SVG_NS, 'marker');
     marker.setAttribute('id', `s5-inference-arrow-${contract.key}`);
-    marker.setAttribute('markerWidth', '6'); marker.setAttribute('markerHeight', '6');
-    marker.setAttribute('refX', '5'); marker.setAttribute('refY', '3'); marker.setAttribute('orient', 'auto');
+    marker.setAttribute('markerWidth', '4'); marker.setAttribute('markerHeight', '4');
+    marker.setAttribute('refX', '3.5'); marker.setAttribute('refY', '2'); marker.setAttribute('orient', 'auto');
     const arrow = document.createElementNS(SVG_NS, 'path');
-    arrow.setAttribute('d', 'M0,0 L6,3 L0,6 Z'); arrow.setAttribute('fill', 'currentColor');
+    arrow.setAttribute('d', 'M0,0 L4,2 L0,4 Z'); arrow.setAttribute('fill', 'currentColor');
     marker.appendChild(arrow); defs.appendChild(marker); svg.appendChild(defs);
     graph.prepend(svg);
 
@@ -267,6 +269,12 @@
         polyline.dataset.mobileGraphFrom = fromId;
         polyline.dataset.mobileGraphTo = toId;
         svg.appendChild(polyline);
+        let visibleLength = Number.POSITIVE_INFINITY;
+        try { visibleLength = polyline.getTotalLength(); } catch {}
+        if (visibleLength < SHORT_EDGE_SOLID_THRESHOLD) {
+          polyline.classList.add('s5v-inference-mobile-native__edge-path--short');
+          polyline.dataset.mobileGraphShortEdge = 'true';
+        }
       }
     };
     const queueRender = () => {
