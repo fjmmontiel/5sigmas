@@ -9,11 +9,13 @@ on:
       - 'locales/en/series/index.md'
       - 'docs/snippets/articulos-tecnicos/eval-*.html'
       - 'locales/en/snippets/articulos-tecnicos/eval-*'
+      - 'hooks/reading_time.py'
       - 'scripts/validate_ai_systems_eval_*.mjs'
       - 'scripts/validate_evaluating_ai_indexability.py'
       - 'scripts/validate_evaluating_ai_live_indexability.mjs'
       - 'scripts/validate_evaluating_ai_media_visual.py'
       - 'scripts/validate_evaluating_ai_mobile_native.py'
+      - 'scripts/validate_evaluating_ai_relationship_accessibility.mjs'
       - 'scripts/validate_evaluating_ai_browser_runtime_contract.mjs'
       - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
@@ -68,7 +70,7 @@ jobs:
           node scripts/validate_ai_systems_eval_ch5_source.mjs
           node scripts/validate_ai_systems_eval_ch6_source.mjs
 
-      - name: Reject giant mobile canvases and require native relationship projections
+      - name: Reject giant primary mobile canvases and require native relationship projections
         run: |
           python scripts/validate_evaluating_ai_mobile_native.py --self-test
           python scripts/validate_evaluating_ai_mobile_native.py
@@ -138,14 +140,10 @@ jobs:
           node scripts/validate_english_series_mirror.mjs
           node scripts/validate_locale_switching.mjs
 
-      - name: Validate current Series 5 relationship geometry and accessibility
-        run: |
-          node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+      - name: Validate native Series 5 relationship geometry and accessibility
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
 
       - name: Validate owner runtime contract across motion, touch and teardown
         run: node scripts/validate_evaluating_ai_browser_runtime_contract.mjs
