@@ -13,6 +13,7 @@ on:
       - 'scripts/validate_evaluating_ai_indexability.py'
       - 'scripts/validate_evaluating_ai_live_indexability.mjs'
       - 'scripts/validate_evaluating_ai_media_visual.py'
+      - 'scripts/validate_evaluating_ai_browser_runtime_contract.mjs'
       - 'scripts/validate_security_indexability.py'
       - 'scripts/validate_voice_media_visual.py'
       - 'scripts/audit_browser_resources.mjs'
@@ -73,6 +74,8 @@ jobs:
           python scripts/test_video_schema_contract.py
 
       - name: Validate current-owner MEDIA_VISUAL / VOICE split
+        id: media_visual
+        continue-on-error: true
         run: |
           python scripts/validate_evaluating_ai_media_visual.py --self-test
           python scripts/validate_evaluating_ai_media_visual.py
@@ -138,11 +141,22 @@ jobs:
           node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
           node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
 
+      - name: Validate owner runtime contract across motion, touch and teardown
+        run: node scripts/validate_evaluating_ai_browser_runtime_contract.mjs
+
       - name: Validate reader navigation and responsive shell
         run: |
           node scripts/validate_direct_reader_navigation.mjs
           node scripts/validate_reader_header_overlap.mjs
           node scripts/validate_responsive_polish.mjs
+
+      - name: Enforce current-owner MEDIA_VISUAL gate
+        if: always()
+        run: |
+          if [ "${{ steps.media_visual.outcome }}" != "success" ]; then
+            echo "MEDIA_VISUAL remains a current GOLDEN blocker; independent build/indexability/browser evidence above is retained, but this job stays fail-closed."
+            exit 1
+          fi
 
       - name: Upload Series 5 visual evidence on failure
         if: failure()
