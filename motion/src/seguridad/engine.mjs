@@ -4,17 +4,21 @@ import { seguridadMechanismSeconds, seguridadSemanticTimeline } from './timeline
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-// Perceptual diversity is counted by the concrete mechanism implementation,
-// never by author-assigned family/topology labels. Aliases that dispatch to the
-// same geometry builder therefore count as one family. The encoded-media critic
-// still performs the independent temporal/visual series review later.
+// Diversity is counted by perceptual archetype, not author-assigned labels.
+// Different topology/builder names that render the same narrative geometry must
+// collapse to one family so naming changes cannot hide repetition. Encoded-media
+// inspection remains mandatory because source normalization is only a guardrail.
 const SEGURIDAD_HANDLER_BY_TOPOLOGY = Object.freeze({
-  directed_path: 'directedPath',
+  directed_path: 'linearStatePath',
+  finite_state_machine: 'linearStatePath',
+  sequential_gates: 'linearStatePath',
   ordered_levels: 'orderedLevels',
   two_domains_single_validated_bridge: 'twoDomainsBridge',
-  finite_state_machine: 'finiteStateMachine',
   two_parallel_lanes: 'parallelLanes',
-  three_parallel_lanes: 'parallelLanes'
+  three_parallel_lanes: 'parallelLanes',
+  constraints_to_path: 'constraintsToPath',
+  stacked_influences: 'stackedInfluences',
+  cycle_with_exit: 'cycleWithExit'
 });
 
 export function seguridadPerceptualHandler(topology) {
