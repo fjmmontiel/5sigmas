@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html",
-  "source_blob_sha": "c346eb615fd11c1e2ea2b1486e9cd36587b0c447",
+  "source_blob_sha": "756890e12b12932e64fa5fee575be59f84f3f01e",
   "replacements": {
     "Calibración de un juez humano o basado en LLM antes de usarlo como gate de release": "Calibration of a human or LLM-based judge before using it as a release gate",
     "Calibra antes de escalar": "Calibrate before scaling",

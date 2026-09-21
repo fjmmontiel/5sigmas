@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-online-shadow-canary-ab-regression-gates.html",
-  "source_blob_sha": "e92e55d87c9d94208a1c83a11cb2999ef56050bf",
+  "source_blob_sha": "19ed9672783f02894dc9914bd8c70231d8e8c8c2",
   "replacements": {
     "Evaluación online progresiva desde shadow hasta experimento y rollout": "Progressive online evaluation from shadow to experiment and rollout",
     "EXPOSICIÓN ≠ CAUSALIDAD": "EXPOSURE ≠ CAUSALITY",
