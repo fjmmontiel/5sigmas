@@ -72,7 +72,6 @@ function channel(P,S,l,v){
   const instructionY=lerp(323,206,q[1]);
   P.rect(577,instructionY-8,357,64,P.T.background,null,0);
   label(P,loc('Pide acceso','Request access',l),755,instructionY,350,v?43:40,true);
-  P.path([[565,284],[565+349*q[1],284]],P.T.accent,4);
  }
  if(on[2]){
   contextLedger(P,l);
@@ -84,7 +83,7 @@ function channel(P,S,l,v){
    marker(P,'1',276,470,{radius:22,strong:false});
    label(P,loc('Resume el informe','Summarize the report',l),600,444,540,v?41:39,false);
   }
-  if(b<1)travel(P,'2',routeB,b);else{
+  if(b<1)travel(P,'2',routeB,b,{radius:24});else{
    marker(P,'2',878,565,{radius:22});
    label(P,loc('Pide acceso','Request access',l),600,541,540,v?41:39,true);
   }
@@ -145,9 +144,6 @@ function permissions(P,S,l,v){
   P.path([[82,y],[925,y]],P.T.rule,2);
   if(on[0]){
    label(P,names[i],183,y-76,315,fs,false);
-   const endpoint=on[2]?(i===0?866:422):280;
-   const x=on[2]?lerp(280,endpoint,q[2]):lerp(95,280,q[0]);
-   marker(P,String(i+1),x,y,{radius:v?28:25,strong:true});
   }
  }
  if(on[1]){
@@ -157,6 +153,12 @@ function permissions(P,S,l,v){
   if(q[1]>.60)cross(P,519,405,15);
   if(q[1]>.95)cross(P,519,585,15);
   label(P,loc('Sólo lectura','Read only',l),523,81,450,v?42:37,true);
+ }
+ // Moving request tokens are above the permission mask so their IDs stay readable while crossing.
+ if(on[0])for(const [i,y]of ys.entries()){
+  const endpoint=on[2]?(i===0?866:422):280;
+  const x=on[2]?lerp(280,endpoint,q[2]):lerp(95,280,q[0]);
+  marker(P,String(i+1),x,y,{radius:v?28:25,strong:true});
  }
  if(on[2]&&q[2]>.95){
   label(P,loc('Permitida','Allowed',l),847,279,285,fs,true);
