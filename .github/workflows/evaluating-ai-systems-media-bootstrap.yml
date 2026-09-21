@@ -1,0 +1,217 @@
+name: Evaluating AI Systems media bootstrap
+
+on:
+  push:
+    branches:
+      - quality/evaluating-ai-systems-requalification
+    paths:
+      - '.github/workflows/evaluating-ai-systems-media-bootstrap.yml'
+      - 'scripts/generate_evaluating_ai_visual_media.py'
+      - 'scripts/declare_evaluating_ai_media.py'
+      - 'scripts/validate_evaluating_ai_series_browser_milestone.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: evaluating-ai-systems-media-bootstrap
+  cancel-in-progress: true
+
+jobs:
+  generate-validate-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quality/evaluating-ai-systems-requalification
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install generation and site dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pillow
+
+      - name: Generate locale-native silent Evaluating AI visual media
+        run: |
+          python scripts/generate_evaluating_ai_visual_media.py --self-test
+          python scripts/generate_evaluating_ai_visual_media.py
+          python scripts/declare_evaluating_ai_media.py
+
+      - name: Assert generated ES and EN media bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          stems=(
+            01-que-evaluar-modelo-componente-sistema-workflow-trayectoria
+            02-offline-eval-sets-curation-hard-negatives-contamination-versioning
+            03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo
+            04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy
+            05-online-evaluation-shadow-canary-ab-guardrails-regression-gates
+            06-observability-failure-taxonomies-production-eval-repair-feedback-loops
+          )
+          for stem in "${stems[@]}"; do
+            for ext in mp4 jpg; do
+              test -s "docs/series/evaluating-ai-systems-production/${stem}.${ext}"
+              test -s "locales/en/series/evaluating-ai-systems-production/${stem}.${ext}"
+            done
+          done
+          echo 'PASS: 12 MP4 + 12 JPG generated with locale-native visual identities.'
+
+      - name: Validate all six source contracts
+        run: |
+          node scripts/validate_ai_systems_eval_ch1_source.mjs
+          node scripts/validate_ai_systems_eval_ch2_source.mjs
+          node scripts/validate_ai_systems_eval_ch3_source.mjs
+          node scripts/validate_ai_systems_eval_ch4_source.mjs
+          node scripts/validate_ai_systems_eval_ch5_source.mjs
+          node scripts/validate_ai_systems_eval_ch6_source.mjs
+
+      - name: Validate current-owner MEDIA_VISUAL / VOICE split and exact native binaries
+        run: |
+          python scripts/validate_evaluating_ai_media_visual.py --self-test
+          python scripts/validate_evaluating_ai_media_visual.py --output artifacts/evaluating-ai-systems-requalification/media-visual.json
+
+      - name: Build Spanish strictly and audit publication/search surfaces
+        run: |
+          mkdocs build --clean --strict
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
+
+      - name: Prepare, audit and build English strictly
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate rendered INDEXABILITY plus negative fixtures
+        run: |
+          python scripts/validate_evaluating_ai_indexability.py --self-test
+          python scripts/validate_evaluating_ai_indexability.py --site site
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated video URLs for preview QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          for root, replacements in [
+              (Path('site/videos'), [('https://5sigmas.com/', '/')]),
+              (Path('site/en/videos'), [('https://5sigmas.com/en/', '/en/'), ('https://5sigmas.com/', '/')]),
+          ]:
+              targets = [root / 'catalog.json', *root.rglob('*.html')]
+              for target in targets:
+                  if not target.is_file():
+                      continue
+                  text = target.read_text(encoding='utf-8')
+                  for source, dest in replacements:
+                      text = text.replace(source, dest)
+                  target.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Serve combined preview with byte-range support
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-eval-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-eval-preview.log
+          exit 1
+
+      - name: Validate rendered Series 5 indexability over preview transport
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_live_indexability.mjs
+
+      - name: Audit browser resources and six relationship visuals
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+
+      - name: Validate owner runtime contract across motion, touch and teardown
+        run: node scripts/validate_evaluating_ai_browser_runtime_contract.mjs
+
+      - name: Validate all 12 article-watch visual-media lifecycles
+        env:
+          S5_PREVIEW_URL: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_series_browser_milestone.mjs
+
+      - name: Inventory exact generated evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          roots = [
+              Path('artifacts/evaluating-ai-systems-browser-milestone'),
+              Path('artifacts/evaluating-ai-systems-requalification'),
+              Path('artifacts/visual-review'),
+          ]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for p in sorted(root.rglob('*')):
+                  if p.is_file():
+                      data = p.read_bytes()
+                      files.append({'path': p.as_posix(), 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+          out = Path('artifacts/evaluating-ai-systems-requalification/evidence-manifest.json')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps({'head': '${{ github.sha }}', 'files': files}, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'head': '${{ github.sha }}', 'files': len(files)}))
+          PY
+
+      - name: Upload short-lived exact Evaluating AI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluating-ai-systems-media-bootstrap-evidence
+          path: |
+            artifacts/evaluating-ai-systems-browser-milestone/**
+            artifacts/evaluating-ai-systems-requalification/**
+            artifacts/visual-review/ai-systems-eval-*.png
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Commit generated site-facing media only after gates pass
+        run: |
+          git config user.name '5sigmas GOLDEN Series Builder'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/series/evaluating-ai-systems-production locales/en/media.yml locales/en/manifest.yml
+          git add -f locales/en/series/evaluating-ai-systems-production/*.mp4 locales/en/series/evaluating-ai-systems-production/*.jpg
+          git add -f docs/series/evaluating-ai-systems-production/*.mp4 docs/series/evaluating-ai-systems-production/*.jpg
+          if git diff --cached --quiet; then
+            echo 'No generated Evaluating AI Systems media changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Add Evaluating AI Systems native visual videos ES and EN'
+          git pull --rebase origin quality/evaluating-ai-systems-requalification
+          git push origin HEAD:quality/evaluating-ai-systems-requalification
