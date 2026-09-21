@@ -138,6 +138,7 @@
         .s5v-inference-mobile-native__edge-path{fill:none;stroke:currentColor;stroke-width:1.45;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5 4;animation:s5InferenceMobileFlow 3.2s linear infinite}
         .s5v-inference-mobile-native__node{position:absolute;z-index:2;box-sizing:border-box;transform:translate(-50%,-50%);width:min(30%,96px);min-height:46px;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 5px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:11px;background:var(--md-default-bg-color,#fff);box-shadow:0 4px 14px color-mix(in srgb,currentColor 7%,transparent);font-size:.75rem;line-height:1.16;font-weight:850;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
         [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{width:min(35%,108px)}
+        [data-inference-mobile-graph="01"] [data-mobile-graph-node="scheduler"]{width:min(27%,86px)}
         html[lang^="es"] [data-inference-mobile-graph="01"] [data-mobile-graph-node="concurrency"]{padding-inline:3px}
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="finish"],
         [data-inference-mobile-graph="02"] [data-mobile-graph-node="waiting"],
@@ -152,6 +153,7 @@
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="account"],
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="denom"],
         [data-inference-mobile-graph="06"] [data-mobile-graph-node="report"]{width:min(32%,102px)}
+        [data-inference-mobile-graph="06"] [data-mobile-graph-node="account"]{width:min(29%,92px)}
         .s5v-inference-mobile-native__node[data-tone="decision"]{border-style:dashed;border-width:1.5px}
         .s5v-inference-mobile-native__node[data-tone="state"]{background:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 7%,var(--md-default-bg-color,#fff))}
         .s5v-inference-mobile-native__node[data-tone="outcome"]{border-color:color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 70%,currentColor 30%);box-shadow:0 5px 18px color-mix(in srgb,var(--md-accent-fg-color,#007f8c) 12%,transparent)}
