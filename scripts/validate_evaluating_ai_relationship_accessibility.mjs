@@ -58,6 +58,7 @@ const motionModes = [
   { name: 'normal', value: 'no-preference' },
   { name: 'reduced', value: 'reduce' },
 ];
+const rawTex = /\\(?:frac|dfrac|tfrac|mathbf|mathrm|text|ldots|cdots|land|lor|tau|hat|sum|prod|sqrt|begin|end)\b/;
 
 const browser = await chromium.launch({ headless: true });
 try {
@@ -75,9 +76,11 @@ try {
           const page = await context.newPage();
           const badResources = [];
           const runtimeErrors = [];
+          const consoleErrors = [];
 
-          // Listeners stay attached for the complete route lifecycle: navigation,
-          // layout/relationship checks, screenshot, touch and teardown.
+          // These listeners stay attached for navigation, lazy resources,
+          // relationship checks, touch/focus, screenshots, final settle and
+          // page teardown. Nothing is detached immediately after goto.
           page.on('response', (response) => {
             try {
               const url = new URL(response.url());
@@ -88,102 +91,135 @@ try {
             } catch {}
           });
           page.on('pageerror', (error) => runtimeErrors.push(String(error)));
+          page.on('console', (message) => {
+            if (message.type() === 'error') consoleErrors.push(message.text());
+          });
 
-          const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
-          check(response?.ok(), `${chapter.id}/${locale}/${viewport.name}/${motion.name}: HTTP ${response?.status() ?? 'none'}`);
+          const label = `${chapter.id}/${locale}/${viewport.name}/${motion.name}`;
+          try {
+            const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+            check(response?.ok(), `${label}: HTTP ${response?.status() ?? 'none'}`);
 
-          const visual = page.locator(chapter.section).first();
-          check((await visual.count()) === 1, `${chapter.id}/${locale}/${viewport.name}/${motion.name}: visual ${chapter.section} missing`);
-          if (!(await visual.count())) {
-            await page.close();
-            continue;
-          }
+            const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
+            check(htmlLang.startsWith(locale), `${label}: html lang=${htmlLang}`);
+            const articleText = await page.locator('main').innerText();
+            check(!rawTex.test(articleText), `${label}: raw TeX command leaked into rendered article`);
 
-          const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
-          check(htmlLang.startsWith(locale), `${chapter.id}/${locale}/${viewport.name}/${motion.name}: html lang=${htmlLang}`);
-          const pageOverflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
-          check(pageOverflow.scrollWidth <= pageOverflow.clientWidth + 1, `${chapter.id}/${locale}/${viewport.name}/${motion.name}: page-level horizontal overflow ${JSON.stringify(pageOverflow)}`);
+            const motionMatches = await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+            check(motionMatches === (motion.name === 'reduced'), `${label}: browser motion preference mismatch (${motionMatches})`);
 
-          const projection = visual.locator('.s5v-mobile-native[data-mobile-native="true"]').first();
-          const scroller = visual.locator(chapter.scroller).first();
-          check((await scroller.count()) === 1, `${chapter.id}/${locale}/${viewport.name}/${motion.name}: legacy detail scroller missing`);
+            const visual = page.locator(chapter.section).first();
+            check((await visual.count()) === 1, `${label}: visual ${chapter.section} missing`);
+            if (!(await visual.count())) continue;
 
-          if (viewport.name === 'mobile') {
-            check((await projection.count()) === 1, `${chapter.id}/${locale}/mobile/${motion.name}: native projection missing`);
-            if (await projection.count()) {
-              const projectionBox = await projection.boundingBox();
-              check(Boolean(projectionBox), `${chapter.id}/${locale}/mobile/${motion.name}: native projection not visible`);
-              if (projectionBox) {
-                check(projectionBox.x >= -1 && projectionBox.x + projectionBox.width <= viewport.width + 1,
-                  `${chapter.id}/${locale}/mobile/${motion.name}: native projection escapes viewport ${JSON.stringify(projectionBox)}`);
+            const pageOverflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+            check(pageOverflow.scrollWidth <= pageOverflow.clientWidth + 1, `${label}: page-level horizontal overflow ${JSON.stringify(pageOverflow)}`);
+
+            const projection = visual.locator('.s5v-mobile-native[data-mobile-native="true"]').first();
+            const scroller = visual.locator(chapter.scroller).first();
+            check((await scroller.count()) === 1, `${label}: legacy detail scroller missing`);
+
+            if (viewport.name === 'mobile') {
+              check((await projection.count()) === 1, `${label}: native projection missing`);
+              if (await projection.count()) {
+                const projectionBox = await projection.boundingBox();
+                check(Boolean(projectionBox), `${label}: native projection not visible`);
+                if (projectionBox) {
+                  check(projectionBox.x >= -1 && projectionBox.x + projectionBox.width <= viewport.width + 1,
+                    `${label}: native projection escapes viewport ${JSON.stringify(projectionBox)}`);
+                }
+                const semantics = await projection.evaluate((node) => ({
+                  display: getComputedStyle(node).display,
+                  role: node.getAttribute('role'),
+                  aria: node.getAttribute('aria-label') || '',
+                }));
+                check(semantics.display !== 'none', `${label}: native projection display:none`);
+                check(['group', 'region'].includes(semantics.role), `${label}: native projection needs group/region semantics (${semantics.role})`);
+                check(semantics.aria.length >= 20, `${label}: native projection lacks meaningful aria-label`);
+
+                const text = await projection.innerText();
+                check(text.includes(chapter.sentinels[locale]), `${label}: localized semantic sentinel missing`);
+                for (const relationship of chapter.relationships) {
+                  const rel = projection.locator(`[data-mobile-relationship="${relationship}"]`).first();
+                  check((await rel.count()) === 1, `${label}: relationship ${relationship} missing`);
+                }
+                const fontSizes = await projection.locator('[data-mobile-relationship]').evaluateAll((nodes) => nodes.map((node) => parseFloat(getComputedStyle(node).fontSize)));
+                check(fontSizes.length === chapter.relationships.length, `${label}: relationship count ${fontSizes.length} != ${chapter.relationships.length}`);
+                check(fontSizes.every((size) => Number.isFinite(size) && size >= 14), `${label}: text below 14px ${JSON.stringify(fontSizes)}`);
+
+                // Real touch against the actual teaching surface. Mobile
+                // reachability no longer relies on assigning scrollLeft.
+                await projection.tap({ position: { x: 8, y: 8 } });
+                await page.waitForTimeout(80);
               }
-              const projectionDisplay = await projection.evaluate((node) => getComputedStyle(node).display);
-              check(projectionDisplay !== 'none', `${chapter.id}/${locale}/mobile/${motion.name}: native projection display:none`);
-              const text = await projection.innerText();
-              check(text.includes(chapter.sentinels[locale]), `${chapter.id}/${locale}/mobile/${motion.name}: localized semantic sentinel missing`);
-
-              for (const relationship of chapter.relationships) {
-                const rel = projection.locator(`[data-mobile-relationship="${relationship}"]`).first();
-                check((await rel.count()) === 1, `${chapter.id}/${locale}/mobile/${motion.name}: relationship ${relationship} missing`);
+              if (await scroller.count()) {
+                const scrollerDisplay = await scroller.evaluate((node) => getComputedStyle(node).display);
+                check(scrollerDisplay === 'none', `${label}: giant desktop detail canvas remains primary (${scrollerDisplay})`);
               }
-              const fontSizes = await projection.locator('[data-mobile-relationship]').evaluateAll((nodes) => nodes.map((node) => parseFloat(getComputedStyle(node).fontSize)));
-              check(fontSizes.length === chapter.relationships.length, `${chapter.id}/${locale}/mobile/${motion.name}: relationship count ${fontSizes.length} != ${chapter.relationships.length}`);
-              check(fontSizes.every((size) => Number.isFinite(size) && size >= 14), `${chapter.id}/${locale}/mobile/${motion.name}: text below 14px ${JSON.stringify(fontSizes)}`);
+            } else {
+              if (await projection.count()) {
+                const projectionDisplay = await projection.evaluate((node) => getComputedStyle(node).display);
+                check(projectionDisplay === 'none', `${label}: mobile projection should not replace desktop detail`);
+              }
+              if (await scroller.count()) {
+                const semantics = await scroller.evaluate((node) => ({
+                  display: getComputedStyle(node).display,
+                  role: node.getAttribute('role'),
+                  tabindex: node.getAttribute('tabindex'),
+                  aria: node.getAttribute('aria-label') || '',
+                  scrollWidth: node.scrollWidth,
+                  clientWidth: node.clientWidth,
+                }));
+                check(semantics.display !== 'none', `${label}: desktop detail canvas hidden`);
+                check(semantics.role === 'region', `${label}: desktop relationship surface must expose role=region`);
+                check(semantics.tabindex === '0', `${label}: desktop relationship surface must be keyboard-focusable`);
+                check(semantics.aria.length >= 20, `${label}: desktop relationship surface lacks meaningful aria-label`);
+                check(semantics.scrollWidth <= semantics.clientWidth + 2, `${label}: desktop detail unexpectedly requires horizontal scroll ${JSON.stringify(semantics)}`);
+                await scroller.focus();
+                check(await scroller.evaluate((node) => document.activeElement === node), `${label}: desktop relationship surface cannot receive keyboard focus`);
+              }
+              for (const name of chapter.nodes) {
+                const item = visual.locator(`[data-node="${name}"]`).first();
+                check((await item.count()) === 1, `${label}: node ${name} missing`);
+                if (await item.count()) check(Boolean(await item.boundingBox()), `${label}: node ${name} not visible`);
+              }
+              for (const name of chapter.boundaries) {
+                const item = visual.locator(`[data-boundary="${name}"]`).first();
+                check((await item.count()) === 1, `${label}: boundary ${name} missing`);
+                if (await item.count()) check(Boolean(await item.boundingBox()), `${label}: boundary ${name} not visible`);
+              }
+            }
 
-              // Real touch event against the actual mobile teaching surface. It
-              // is static by design, so reachability does not depend on scrollLeft.
-              await projection.tap({ position: { x: 8, y: 8 } });
-              const afterTapOverflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
-              check(afterTapOverflow.scrollWidth <= afterTapOverflow.clientWidth + 1, `${chapter.id}/${locale}/mobile/${motion.name}: touch introduced page overflow`);
+            if (motion.name === 'reduced') {
+              const moving = await visual.evaluate((root) => [root, ...root.querySelectorAll('*')].map((element) => {
+                const style = getComputedStyle(element);
+                return { animation: style.animationName, duration: style.animationDuration, transition: style.transitionDuration };
+              }).filter((value) => value.animation !== 'none' && value.duration !== '0s'));
+              check(moving.length === 0, `${label}: active animation remains under reduced motion ${JSON.stringify(moving.slice(0, 4))}`);
             }
-            if (await scroller.count()) {
-              const scrollerDisplay = await scroller.evaluate((node) => getComputedStyle(node).display);
-              check(scrollerDisplay === 'none', `${chapter.id}/${locale}/mobile/${motion.name}: giant desktop detail canvas remains primary (${scrollerDisplay})`);
+
+            await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+            await page.waitForTimeout(140);
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(80);
+
+            const target = viewport.name === 'mobile' ? projection : visual;
+            if (await target.count()) {
+              await target.screenshot({
+                path: path.join(outDir, `ai-systems-eval-${chapter.id}-${locale}-${viewport.name}-${motion.name}.png`),
+                animations: motion.name === 'reduced' ? 'disabled' : 'allow',
+              });
             }
-          } else {
-            if (await projection.count()) {
-              const projectionDisplay = await projection.evaluate((node) => getComputedStyle(node).display);
-              check(projectionDisplay === 'none', `${chapter.id}/${locale}/desktop/${motion.name}: mobile projection should not replace desktop detail`);
-            }
-            if (await scroller.count()) {
-              const scrollerDisplay = await scroller.evaluate((node) => getComputedStyle(node).display);
-              check(scrollerDisplay !== 'none', `${chapter.id}/${locale}/desktop/${motion.name}: desktop detail canvas hidden`);
-              const metrics = await scroller.evaluate((node) => ({ scrollWidth: node.scrollWidth, clientWidth: node.clientWidth, overflowX: getComputedStyle(node).overflowX }));
-              check(metrics.scrollWidth <= metrics.clientWidth + 2, `${chapter.id}/${locale}/desktop/${motion.name}: desktop detail unexpectedly requires horizontal scroll ${JSON.stringify(metrics)}`);
-            }
-            for (const name of chapter.nodes) {
-              const item = visual.locator(`[data-node="${name}"]`).first();
-              check((await item.count()) === 1, `${chapter.id}/${locale}/desktop/${motion.name}: node ${name} missing`);
-              if (await item.count()) check(Boolean(await item.boundingBox()), `${chapter.id}/${locale}/desktop/${motion.name}: node ${name} not visible`);
-            }
-            for (const name of chapter.boundaries) {
-              const item = visual.locator(`[data-boundary="${name}"]`).first();
-              check((await item.count()) === 1, `${chapter.id}/${locale}/desktop/${motion.name}: boundary ${name} missing`);
-              if (await item.count()) check(Boolean(await item.boundingBox()), `${chapter.id}/${locale}/desktop/${motion.name}: boundary ${name} not visible`);
-            }
+            await page.waitForTimeout(80);
+          } finally {
+            // Teardown is part of the observed lifecycle; evaluate collected
+            // evidence only after the page has closed.
+            await page.close({ runBeforeUnload: true }).catch((error) => runtimeErrors.push(`teardown:${String(error)}`));
+            await new Promise((resolve) => setTimeout(resolve, 25));
+            check(badResources.length === 0, `${label}: broken same-origin resources ${JSON.stringify(badResources)}`);
+            check(runtimeErrors.length === 0, `${label}: runtime/page errors through teardown ${JSON.stringify(runtimeErrors)}`);
+            check(consoleErrors.length === 0, `${label}: console errors through teardown ${JSON.stringify(consoleErrors.slice(0, 8))}`);
           }
-
-          if (motion.name === 'reduced') {
-            const moving = await visual.evaluate((root) => [root, ...root.querySelectorAll('*')].map((element) => {
-              const style = getComputedStyle(element);
-              return { animation: style.animationName, duration: style.animationDuration, transition: style.transitionDuration };
-            }).filter((value) => value.animation !== 'none' && value.duration !== '0s'));
-            check(moving.length === 0, `${chapter.id}/${locale}/${viewport.name}/reduced: active animation remains ${JSON.stringify(moving.slice(0, 4))}`);
-          }
-
-          const target = viewport.name === 'mobile' ? projection : visual;
-          if (await target.count()) {
-            await target.screenshot({
-              path: path.join(outDir, `ai-systems-eval-${chapter.id}-${locale}-${viewport.name}-${motion.name}.png`),
-              animations: 'disabled',
-            });
-          }
-
-          // Resource/runtime checks are intentionally evaluated after all
-          // interactions and screenshots, immediately before teardown.
-          check(badResources.length === 0, `${chapter.id}/${locale}/${viewport.name}/${motion.name}: broken same-origin resources ${JSON.stringify(badResources)}`);
-          check(runtimeErrors.length === 0, `${chapter.id}/${locale}/${viewport.name}/${motion.name}: runtime errors ${JSON.stringify(runtimeErrors)}`);
-          await page.close();
         }
       }
       await context.close();
@@ -198,4 +234,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log('Evaluating AI Systems native relationship/accessibility gate PASS: 6 chapters × ES/EN × desktop/mobile × normal/reduced; desktop topology preserved, native ~390px relationships legible, giant canvas hidden on mobile, touch exercised, listeners persisted through teardown, and resources/runtime stayed clean.');
+console.log('Evaluating AI Systems native relationship/accessibility gate PASS: 6 chapters × ES/EN × desktop/mobile × normal/reduced; desktop topology and focus preserved, static native ~390px relationships legible, giant canvases hidden on mobile, real touch exercised, raw TeX rejected in rendered output, and response/pageerror/console listeners persisted through teardown.');
