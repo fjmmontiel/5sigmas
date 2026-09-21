@@ -46,7 +46,8 @@ function channel(P,S,l,v){
  }
  if(on[2]){
   P.rect(85,400,830,216,null,P.T.rule,5,3);
-  label(P,loc('CONTEXTO DEL MODELO','MODEL CONTEXT',l),500,347,38,true,930);
+  // Keep the legend clear while the two text packets cross its reserved band.
+  if(q[2]>=.9)label(P,loc('CONTEXTO DEL MODELO','MODEL CONTEXT',l),500,347,38,true,930);
   packet(P,loc('Resume el informe','Summarize the report',l),[245,300],[500,457],q[2],{w:450});
   packet(P,loc('Pide acceso','Request access',l),[755,320],[500,551],q[2],{w:450,strong:false});
   if(q[2]>.8){label(P,loc('Sistema','System',l),175,442,35,false,180);label(P,loc('Externo','External',l),175,536,35,false,180);}
@@ -78,7 +79,7 @@ function memory(P,S,l,v){
  }
  if(on[2]){
   P.path([[378,y2-48],[900,y2-48]],P.T.accentText,5,q[2]);
-  label(P,loc('ORIGEN EXTERNO · NO VALIDADO','EXTERNAL ORIGIN · NOT VALIDATED',l),600,606,34,true,720);
+  label(P,loc('ORIGEN EXTERNO · NO VALIDADO','EXTERNAL ORIGIN · NOT VALIDATED',l),600,65,34,true,720);
  }
  if(on[3]){
   P.rect(390,667,510,95,null,P.T.rule,5,3);
@@ -92,19 +93,20 @@ function permissions(P,S,l,v){
  label(P,loc('PROPUESTA DEL MODELO','MODEL PROPOSAL',l),200,20,35,false,390);
  label(P,loc('PERMISO','PERMISSION',l),575,20,35,true,310);
  label(P,loc('EFECTO','EFFECT',l),900,20,35,false,210);
+ for(const y of ys)path(P,[[130,y],[935,y]],P.T.rule,3);
+ if(on[1]){
+  label(P,loc('Sólo lectura','Read only',l),575,122,40,true,470);
+  P.rect(556,205,42,450,P.T.accentSurface,null,0);path(P,[[577,205],[577,655]],P.T.accentText,3);
+  P.check(577,265,P.T.accentText,1.8);stop(P,577,435,15);stop(P,577,605,15);
+ }
+ // Draw request labels after the policy plane so crossing it cannot strike through text.
  for(const [i,y]of ys.entries()){
-  path(P,[[130,y],[935,y]],P.T.rule,3);
   if(on[0]){
    label(P,names[i],165,y-88,44,false,260);
    const move=on[2]?q[2]:0;
    const x=on[2]?lerp(365,i===0?840:465,move):lerp(145,365,q[0]);
    strip(P,loc('Solicitud','Request',l),x,y,205,66,on[2]);
   }
- }
- if(on[1]){
-  label(P,loc('Sólo lectura','Read only',l),575,122,40,true,470);
-  P.rect(556,205,42,450,P.T.accentSurface,null,0);path(P,[[577,205],[577,655]],P.T.accentText,3);
-  P.check(577,265,P.T.accentText,1.8);stop(P,577,435,15);stop(P,577,605,15);
  }
  if(on[2]&&q[2]>.95){label(P,loc('Permitido','Allowed',l),845,318,36,true,260);label(P,loc('Bloqueado','Blocked',l),820,488,36,true,300);label(P,loc('Bloqueado','Blocked',l),820,658,36,true,300);}
  if(on[3]){
@@ -134,7 +136,7 @@ function surfaces(P,S,l,v){
    label(P,[loc('Datos externos','External data',l),loc('Restricción','Restriction',l),loc('Estado guardado','Saved state',l)][i],xs[i],203,28,false,310);
    if(i===0){doc(P,xs[i]-92,55,184,128,'',[]);packet(P,loc('Orden','Order',l),[xs[i]-12,83],[xs[i]+55,126],q[i],{w:130,h:56});}
    if(i===1){P.circle(xs[i],120,52,null,P.T.rule,4);arrow(P,[xs[i]-120,120],[xs[i]-60,120],q[i]);stop(P,xs[i]-44,87+33*q[i],14);}
-   if(i===2){P.rect(xs[i]-94,76,188,105,P.T.accentSurface,P.T.rule,5,3);packet(P,loc('Nota','Note',l),[xs[i]-30,56],[xs[i],129],q[i],{w:125,h:58});}
+   if(i===2){P.rect(P?xs[i]-94:0,76,188,105,P.T.accentSurface,P.T.rule,5,3);packet(P,loc('Nota','Note',l),[xs[i]-30,56],[xs[i],129],q[i],{w:125,h:58});}
   }
   if(on[3]){arrow(P,[270,186],[410,186],q[3]);arrow(P,[610,186],[750,186],q[3]);label(P,loc('Una cadena posible, no equivalencia','A possible chain, not equivalence',l),500,259,27,true,970);}
  }
