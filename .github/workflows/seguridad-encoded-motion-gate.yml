@@ -2,6 +2,11 @@ name: Seguridad IA encoded motion gate
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/seguridad-milestone-request.txt
 
 permissions:
   contents: read
