@@ -1,0 +1,52 @@
+name: Inference Ch1 repaired-media candidate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/repair_inference_ch1_visual_media.py'
+      - '.github/workflows/inference-ch1-media-candidate.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  render-ch1-media:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deterministic media dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install pillow pyyaml
+      - name: Render and install repaired Ch1 ES/EN visual media
+        run: |
+          python scripts/repair_inference_ch1_visual_media.py --write
+          python scripts/repair_inference_ch1_visual_media.py --check
+      - name: Commit repaired visual media to the PR branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg \
+            docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4 \
+            locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg \
+            locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+          if git diff --cached --quiet; then
+            echo 'Ch1 repaired media already matches the deterministic source.'
+          else
+            git commit -m 'fix(golden): commit repaired Ch1 visual media'
+            git push origin HEAD:${{ github.head_ref }}
+          fi

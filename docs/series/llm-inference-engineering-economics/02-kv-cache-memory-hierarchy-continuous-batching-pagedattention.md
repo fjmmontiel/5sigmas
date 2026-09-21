@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Serving
   - Memoria
+video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
+video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
+video_title: "KV cache, jerarquía de memoria y continuous batching"
+video_summary: "El KV cache intercambia memoria por menos cómputo repetido; paging y continuous batching coordinan capacidad, admisión y reutilización entre requests activos."
+video_duration: PT36S
+video_chapters:
+- name: "El KV cache ocupa capacidad por secuencia"
+  start: 0
+  end: 12
+- name: "Continuous batching recompone el batch en cada paso"
+  start: 12
+  end: 24
+- name: "Paging convierte capacidad en páginas asignables"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 2 — KV cache, jerarquía de memoria, continuous batching y PagedAttention

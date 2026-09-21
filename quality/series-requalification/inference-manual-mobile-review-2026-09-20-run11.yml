@@ -1,0 +1,61 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+reviewed_on: 2026-09-20
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+exact_evidence:
+  head_sha: 02fbf70d6fb7fe72a96870b19a2604262c17bd12
+  media_bootstrap_run: 35522226233
+  artifact_id: 10609316501
+  artifact_name: inference-engineering-browser-visual-evidence
+  artifact_sha256: f369ee2a325342d673ed5dfb9ccc2b91fe660f31440ff8f22b2a6718b0e65e61
+  retention_days: 1
+  series4_run: 35522229871
+  series4_artifact_id: 10608637991
+  series4_artifact_sha256: 9bf5b73d596b9937fbfc0641ce18f0eec6aabd2bb6ce9403cf505d76c6c0ea9a
+inspection:
+  route_locale_rows_inspected: 12
+  locales: [es, en]
+  chapters: [1, 2, 3, 4, 5, 6]
+  mobile_modes_inspected: [normal, reduced]
+  exact_native_mobile_images_inspected: 24
+  desktop_zero_defect_claim: false
+  finding:
+    severity: P1
+    code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_AND_EDGE_LABEL_COLLISIONS
+    direct_pixel_summary: >-
+      The exact 390px native mobile evidence still shows clipped or over-constrained node text and
+      unnecessary edge-label congestion in multiple ES/EN graphs. Ch1 directly clips Concurrencia/
+      Concurrency at the left boundary; the denser Ch2, Ch4, Ch5 and Ch6 maps also carry labels or
+      long node text too close to nodes/edges. Ch3 ES/EN and Ch4 EN did not show the same defect as
+      clearly in this manual review, but remain uncertified until the repaired exact head rerenders.
+    open_rows: 12
+    rationale_for_open_rows: >-
+      All 12 rows share the same mobile renderer and all 12 were inspected and are changed by the
+      shared remediation. Rows without a directly visible instance of the current defect family are
+      QA, not PASS, until the exact repaired revision passes the deterministic layout gate and pixel review.
+  media_visual_observation: >-
+    Artifact inventory includes locale-native silent H264 visual media and posters. This review does
+    not promote MEDIA_VISUAL_PASS because the Series 4 lifecycle gate failed before a complete exact-head
+    playback receipt; VOICE remains separately deferred.
+remediation:
+  site_head: 4d7a0e58900817409178f1ade95ff15f107ce348
+  files:
+    - docs/assets/javascripts/inference-mobile-native.js
+    - .github/workflows/series4-golden-review.yml
+  mechanism: >-
+    Move outer graph columns inward, widen only nodes that need more semantic text budget while keeping
+    12px typography, increase vertical budget in dense graphs, trim SVG edges to the enlarged node
+    boundaries, and remove redundant edge labels whose meaning is already encoded by directed topology,
+    branch/state node names and the explanatory relation text. The canonical desktop topology remains
+    unchanged and hidden only on mobile.
+  playback_harness_fix: >-
+    Replace Python SimpleHTTPServer in the Series 4 gate with scripts/serve_preview.py, execute its
+    byte-range self-test, and require an actual HTTP 206 Range response before running article/watch seeks.
+  status: IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER
+certification:
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+next_action: CONSUME_CURRENT_HEAD_SERIES4_RUN_THEN_INSPECT_ALL_12_ES_EN_MOBILE_NORMAL_REDUCED_AND_VIDEO_LIFECYCLE_BEFORE_CLEARING_P1

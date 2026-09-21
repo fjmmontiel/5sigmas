@@ -28,6 +28,36 @@ const hubEs = read('docs/series/index.md');
 const hubEn = read('locales/en/series/index.md');
 const seriesWorkflow = read('.github/workflows/series4-golden-review.yml');
 const liveWorkflow = read('.github/workflows/inference-engineering-live-qa.yml');
+const mobileRuntimePath = 'docs/assets/javascripts/inference-mobile-native.js';
+const sharedLoaderPath = 'docs/javascripts/external-links.js';
+assert(fs.existsSync(mobileRuntimePath), `missing native mobile inference runtime: ${mobileRuntimePath}`);
+assert(fs.existsSync(sharedLoaderPath), `missing shared JS loader: ${sharedLoaderPath}`);
+const mobileRuntime = fs.existsSync(mobileRuntimePath) ? read(mobileRuntimePath) : '';
+const sharedLoader = fs.existsSync(sharedLoaderPath) ? read(sharedLoaderPath) : '';
+const mobileSelectors = [
+  '.s5v-inference-phases',
+  '.s5v-kv-paging',
+  '.s5v-quant-parallel',
+  '.s5v-reuse-spec',
+  '.s5v-routing-policy',
+  '.s5v-benchmark-boundary',
+];
+const mobileContractPasses = (source) => (
+  mobileSelectors.every((selector) => source.includes(selector))
+  && source.includes('data-inference-mobile-native')
+  && source.includes('dataset.inferenceMobileNative')
+  && source.includes('@media (max-width:720px)')
+  && source.includes('display:none!important')
+  && source.includes('overflow-x:clip')
+  && source.includes("const lang = (document.documentElement.lang || 'es')")
+  && source.includes("? 'en' : 'es'")
+);
+assert(mobileContractPasses(mobileRuntime), 'native mobile relationship summary contract is incomplete');
+const mutatedMobileRuntime = mobileRuntime.replaceAll('.s5v-routing-policy', '.s5v-routing_MUTATION-policy');
+assert(!mobileContractPasses(mutatedMobileRuntime), 'negative mutation unexpectedly preserved all six native mobile visual contracts');
+assert(sharedLoader.includes("load('/assets/javascripts/inference-mobile-native.js', 'inference-mobile-native')"), 'shared runtime loader does not load native mobile inference summaries');
+assert(navEs.includes('javascripts/external-links.js'), 'Spanish MkDocs config does not load the shared runtime loader');
+assert(navEn.includes('javascripts/external-links.js'), 'English MkDocs config does not load the shared runtime loader');
 
 let previousEsNav = -1;
 let previousEnNav = -1;
@@ -54,8 +84,6 @@ for (let i = 0; i < chapters.length; i += 1) {
   assert(!forbidden.test(en), `placeholder marker in ${enPath}`);
   assert(es.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${esPath} does not include canonical visual ${visual}`);
   assert(en.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${enPath} does not include canonical visual ${visual}`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(es), `${esPath} unexpectedly references video media; inventory/review required`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(en), `${enPath} unexpectedly references video media; inventory/review required`);
   assert((es.match(/^## /gm) || []).length >= 6, `${esPath} has suspiciously shallow pedagogical structure`);
   assert((en.match(/^## /gm) || []).length >= 6, `${enPath} has suspiciously shallow pedagogical structure`);
   assert((es.match(/\[\^[^\]]+\]/g) || []).length >= 4, `${esPath} has too few explicit source references for release review`);
@@ -96,6 +124,8 @@ assert(hubEn.includes('LLM Inference Engineering & Economics'), 'Series 4 Englis
 
 assert(chapters.length === 6, 'Series 4 chapter inventory must contain exactly six chapters');
 assert(seriesWorkflow.includes('validate_inference_engineering_series4_release.mjs'), 'Series 4 PR workflow does not execute deterministic release inventory');
+assert(seriesWorkflow.includes('validate_inference_indexability.py'), 'Series 4 PR workflow does not execute mandatory INDEXABILITY gate');
+assert(seriesWorkflow.includes('validate_inference_media_visual.py'), 'Series 4 PR workflow does not execute mandatory MEDIA_VISUAL gate');
 assert(seriesWorkflow.includes('validate_english_series_mirror.mjs'), 'Series 4 PR workflow does not execute English series mirror validation');
 assert(seriesWorkflow.includes('validate_locale_switching.mjs'), 'Series 4 PR workflow does not execute locale-switch/reader-sequence validation');
 assert(seriesWorkflow.includes('validate_reader_header_overlap.mjs'), 'Series 4 PR workflow does not execute reader header overlap validation');
@@ -120,9 +150,10 @@ if (!process.exitCode) {
       workflows: {
         pullRequest: { path: '.github/workflows/series4-golden-review.yml', sha256: sha256('.github/workflows/series4-golden-review.yml') },
         live: { path: '.github/workflows/inference-engineering-live-qa.yml', sha256: sha256('.github/workflows/inference-engineering-live-qa.yml') },
+        mobileNativeRuntime: { path: mobileRuntimePath, sha256: sha256(mobileRuntimePath) },
       },
       chapters: inventory,
     }, null, 2)}\n`,
   );
-  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, bilingual hub discovery, permanent PR/live gates, zero video dependencies).`);
+  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, bilingual hub discovery, permanent PR/live gates, native mobile relationship summaries, visual-video contract delegated to MEDIA_VISUAL).`);
 }

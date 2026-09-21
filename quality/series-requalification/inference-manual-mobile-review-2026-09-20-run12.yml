@@ -1,0 +1,54 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: 2026-09-20
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+prior_branch_head: 80443ab7e996bdf73ef97fffbd4edf37f192ac15
+merge_ref_under_test: c1614cacee7715bc2da42faafd6ad209f9fc8c92
+series4_run: 35528636858
+series4_job: 106125184859
+evidence_artifact:
+  id: 10610099273
+  name: inference-engineering-series4-pr-gate-visual-evidence
+  sha256: 0cc72b573ca0e90e6e8cbeb55fc425e5319efc43948e40ce138630c7e11d299b
+automated_results:
+  source_contracts: PASS_6_OF_6
+  strict_build_es_en: PASS
+  publication_search: PASS
+  indexability_negative_mutations: PASS
+  indexability_rendered: PASS_12_OF_12
+  media_visual_static: PASS_12_OF_12
+  range_preview_self_test: PASS_206_416
+  article_watch_playback_lifecycle: PASS_24_ARTICLE_24_WATCH_CONTEXTS
+  relationship_geometry_accessibility: PASS_6_OF_6_ES_EN_NORMAL_REDUCED
+  mobile_text_fit: FAIL_4_CASES_CH1_CONCURRENCY_ONLY
+mobile_text_fit_failures:
+  - {route: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget, locale: es, motion: normal, node: concurrency, text: Concurrencia, measured: "94x44 > 90x44"}
+  - {route: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget, locale: en, motion: normal, node: concurrency, text: Concurrency, measured: "94x44 > 92x44"}
+  - {route: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget, locale: es, motion: reduced, node: concurrency, text: Concurrencia, measured: "94x44 > 90x44"}
+  - {route: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget, locale: en, motion: reduced, node: concurrency, text: Concurrency, measured: "94x44 > 92x44"}
+manual_pixel_inspection:
+  inspected_exact_images:
+    - visual-review/inference-engineering-ch1-es-mobile-normal-native.png
+    - visual-review/inference-engineering-ch1-en-mobile-normal-native.png
+  result: P1_CONFIRMED_CH1_CONCURRENCY_NODE_TEXT_CLIPS_LEFT_EDGE
+  topology_observation: request_queue_prefill_first_output_decode_kv_concurrency_scheduler_goodput_relationship_remains_readable_and_directed
+  limits: CH2_TO_CH6_NOT_MANUALLY_PROMOTED_THIS_RUN
+p1_refinement:
+  prior_scope: ALL_12_ROWS_PENDING_EXACT_RERENDER
+  current_scope: CH1_ES_EN_ONLY_FOR_DETERMINISTIC_TEXT_FIT_DEFECT
+  code: INFERENCE_MOBILE_GRAPH_NODE_TEXT_FIT_CONCURRENCY
+remediation:
+  commit: 5d0e60b65439a6adc13ce9062308ff3422409616
+  change: widen_only_ch1_concurrency_node_from_32_percent_102px_to_34_percent_108px
+  min_font_px_unchanged: 12
+  topology_changed: false
+  cards_or_horizontal_canvas_introduced: false
+  status: IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+next_action: consume_current_head_checks_then_inspect_exact_ch1_es_en_normal_reduced_and_all_12_pixel_pedagogy_evidence_before_any_gate_promotion

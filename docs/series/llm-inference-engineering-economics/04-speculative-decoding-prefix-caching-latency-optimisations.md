@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Serving
   - Latencia
+video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
+video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
+video_title: "Speculative decoding y prefix caching"
+video_summary: "Speculative decoding propone varios tokens baratos y el modelo objetivo los verifica; prefix caching reutiliza trabajo de prefill cuando el prefijo realmente coincide."
+video_duration: PT36S
+video_chapters:
+- name: "El draft propone un bloque de tokens"
+  start: 0
+  end: 12
+- name: "El verifier acepta un prefijo y rechaza el resto"
+  start: 12
+  end: 24
+- name: "Un prefix hit evita repetir prefill"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 4 — Speculative decoding, prefix caching y otras optimizaciones de latencia

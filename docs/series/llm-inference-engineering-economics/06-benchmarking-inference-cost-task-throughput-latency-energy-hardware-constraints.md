@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Benchmarking
   - Serving
+video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
+video_title: "Benchmarking: coste, throughput, latencia y energía"
+video_summary: "Un benchmark de inferencia sólo es comparable si fija workload, frontera de medida y hardware, y reporta distribución de latencia, throughput útil, coste y energía."
+video_duration: PT36S
+video_chapters:
+- name: "El workload define qué se está midiendo"
+  start: 0
+  end: 12
+- name: "Una frontera común hace comparables las métricas"
+  start: 12
+  end: 24
+- name: "Aceptar requiere SLO, coste y restricciones juntos"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 6 — Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware
