@@ -13,19 +13,23 @@ from review_admission import finalize_package
 FPS=60
 SCENE_STARTS=[0,12,24,36,48]
 
+
 def sha256(path: Path) -> str:
     h=hashlib.sha256()
     with path.open('rb') as f:
         for chunk in iter(lambda:f.read(1024*1024),b''):h.update(chunk)
     return h.hexdigest()
 
+
 def frame(path: Path,t: float,width: int=480) -> Image.Image:
     raw=subprocess.check_output(['ffmpeg','-hide_banner','-loglevel','error','-ss',f'{t:.3f}','-i',str(path),'-frames:v','1','-vf',f'scale={width}:-2:flags=lanczos','-f','image2pipe','-vcodec','png','-'])
     return Image.open(io.BytesIO(raw)).convert('RGB')
 
+
 def delta(a: Image.Image,b: Image.Image) -> float:
     d=ImageChops.difference(a.resize((320,180)),b.resize((320,180)))
     return round(sum(ImageStat.Stat(d).mean)/3,4)
+
 
 def make_contact_sheet(items: list[dict],out: Path,orientation: str) -> None:
     cell_w,cell_h=(384,250) if orientation=='horizontal' else (220,390)
@@ -41,6 +45,7 @@ def make_contact_sheet(items: list[dict],out: Path,orientation: str) -> None:
             draw.text((x,y+cell_h+7),f"{meta['chapter']} · S{col+1} · {t}s",fill='black')
     sheet.save(out,quality=92)
 
+
 def gate_owner_review(root: Path,metas: list[dict],legacy: dict,*,internal_only=False):
     """Normalize the legacy format without promoting its renderer self-reports."""
     heads=sorted({m['source_head'] for m in metas})
@@ -48,11 +53,16 @@ def gate_owner_review(root: Path,metas: list[dict],legacy: dict,*,internal_only=
     inventory=[]
     for m in sorted(metas,key=lambda x:(x['chapter'],x['locale'],x['orientation'])):
         media=m['mp4'];probe=media['ffprobe']
+        scene_mechanisms=m.get('scene_mechanisms')
+        if not isinstance(scene_mechanisms,list) or len(scene_mechanisms)!=5:
+            raise SystemExit(f"{m.get('job_id','unknown')}: missing exact per-scene mechanism binding")
         inventory.append({'chapter':m['chapter'],'locale':m['locale'],'orientation':m['orientation'],
             'mp4':media['file'],'sha256':media['sha256'],'size_bytes':media['size_bytes'],
             'duration_seconds':float(probe['duration']),'frames':int(probe['nb_frames']),'fps':FPS,
             'source_binding':m['source_binding'],'text_visual_cues':m.get('text_visual_cues',[]),
-            'declared_families_diagnostic_only':m['observed_families']})
+            'scenes':scene_mechanisms,
+            'declared_families_diagnostic_only':m['observed_families'],
+            'declared_topologies_diagnostic_only':m['observed_topologies']})
     canonical={'schema_version':2,'unit':'seguridad-ia','source_head':heads[0],'outputs':len(metas),
         'state':'INTERNAL_RENDER_PACKAGE','review_ready':False,'owner_visual_approval':'NOT_REQUESTED',
         'technical_golden':False,'published':False,'inventory':inventory}
@@ -60,11 +70,11 @@ def gate_owner_review(root: Path,metas: list[dict],legacy: dict,*,internal_only=
     try:
         return finalize_package(root,root,internal_only=internal_only)
     finally:
-        # Keep the legacy consumer and the shared gate in agreement on failure.
         current=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
         legacy.update(state=current['state'],review_ready=current.get('review_ready',False),
                       review_admission=current.get('review_admission'),technical_golden=False)
         (root/'seguridad-ia-final-manifest.json').write_text(json.dumps(legacy,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
 
 def main() -> None:
     ap=argparse.ArgumentParser();ap.add_argument('--package',type=Path,required=True)
@@ -99,7 +109,8 @@ def main() -> None:
             'duration_match':es['mp4']['ffprobe']['duration']==en['mp4']['ffprobe']['duration'],
             'frames_match':es['mp4']['ffprobe']['nb_frames']==en['mp4']['ffprobe']['nb_frames'],
             'families_match':es['observed_families']==en['observed_families'],
-            'topologies_match':es['observed_topologies']==en['observed_topologies']}
+            'topologies_match':es['observed_topologies']==en['observed_topologies'],
+            'scene_mechanisms_match':es.get('scene_mechanisms')==en.get('scene_mechanisms')}
         if not all(v for k,v in row.items() if k not in ('chapter','orientation')):errors.append(f'ES/EN parity fail {key}: {row}')
         parity.append(row)
     for locale in ('es','en'):
