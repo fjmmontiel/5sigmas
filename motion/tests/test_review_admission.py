@@ -29,9 +29,23 @@ class AdmissionTests(unittest.TestCase):
              gates={k:dict(status='PASS',method='independent-encoded-review',findings=['test fixture'],receipt=dict(path='critic.txt',sha256=qa.sha256(receipt))) for k in qa.GATES},
              outputs=[dict(mp4=r['mp4'],sha256=r['sha256'],cue_observations=[dict(id='cue1',text_at=.2,visual_at=.3,semantics_match=True,reading_hold_verified=True,sample_phases=['before','during','after'])]) for r in self.inventory])
         self.delivery=dict(asset_binding_sha256=binding,files=[dict(mp4=r['mp4'],file_id=str(i),mime_type='video/mp4',sha256_readback=r['sha256'],size_bytes=r['size_bytes'],playback_url=f'https://drive.google.com/file/d/{i}/view',playback_verified=True,parent_verified=True) for i,r in enumerate(self.inventory)])
-    def assess(self): return qa.assess(self.manifest,self.root,self.proof,self.delivery,self.root)
+        discovery_receipt=self.root/'discovery.txt';discovery_receipt.write_text('synthetic integrated discovery finding, not production evidence')
+        canonical={(str(r['chapter']),r['locale']):r for r in self.inventory if r['orientation']=='horizontal'}
+        self.discovery=dict(
+            rubric=qa.DISCOVERY_RUBRIC,asset_binding_sha256=binding,status='PASS',
+            verifier=dict(role='independent_discovery_staging_review',run_id='discovery-critic-2',generator_run_id='discovery-generator-1',evaluator_revision='test-discovery-v1',build_revision='test-build-a'),
+            receipt=dict(path='discovery.txt',sha256=qa.sha256(discovery_receipt)),
+            surfaces=[dict(chapter=chapter,locale=locale,status='PASS',source_mp4_sha256=row['sha256'],media_orientation='horizontal',
+                browser_verified=True,deep_link_verified=True,chapters_count=1,clips_count=1,
+                gates={k:dict(status='PASS',method='integrated-rendered-browser-review',findings=['synthetic discovery fixture']) for k in qa.DISCOVERY_GATES})
+                for (chapter,locale),row in sorted(canonical.items())])
+    def assess(self): return qa.assess(self.manifest,self.root,self.proof,self.delivery,self.root,self.discovery)
     def rebind(self):
-        binding=qa.asset_binding(self.manifest);self.proof['asset_binding_sha256']=binding;self.delivery['asset_binding_sha256']=binding
+        binding=qa.asset_binding(self.manifest);self.proof['asset_binding_sha256']=binding;self.delivery['asset_binding_sha256']=binding;self.discovery['asset_binding_sha256']=binding
+        horizontal={(str(r.get('chapter')),r.get('locale')):r for r in self.manifest.get('inventory',[]) if r.get('orientation')=='horizontal'}
+        for surface in self.discovery['surfaces']:
+            row=horizontal.get((str(surface.get('chapter')),surface.get('locale')))
+            if row: surface['source_mp4_sha256']=row.get('sha256')
     def assertBlocked(self,code):
         d=self.assess();self.assertFalse(d['review_ready']);self.assertTrue(any(e.startswith(code) for e in d['errors']),d['errors'])
     def test_positive_contract_fixture(self): self.assertTrue(self.assess()['review_ready'])
@@ -47,6 +61,7 @@ class AdmissionTests(unittest.TestCase):
         for status in ['FAIL','UNKNOWN','NOT_VERIFIED','STALE',None]:
             with self.subTest(status=status):
                 self.proof['gates']['palette_style']['status']=status;self.assertBlocked('GATE_NOT_PASS')
+                self.proof['gates']['palette_style']['status']='PASS'
     def test_pixel_delta_not_semantic_qa(self): self.proof['gates']['semantic_motion']['method']='pixel-delta-only';self.assertBlocked('INSUFFICIENT_GATE_EVIDENCE')
     def test_contact_sheet_not_temporal_qa(self): self.proof['gates']['text_visual_sync']['method']='contact-sheet-only';self.assertBlocked('INSUFFICIENT_GATE_EVIDENCE')
     def test_text_revealed_early(self): self.proof['outputs'][0]['cue_observations'][0]['text_at']=0;self.assertBlocked('CUE_TIMING_MISMATCH')
@@ -59,6 +74,20 @@ class AdmissionTests(unittest.TestCase):
     def test_drive_processing_not_playable(self): self.delivery['files'][0]['playback_verified']=False;self.assertBlocked('MP4_NOT_READY_IN_DRIVE')
     def test_stale_delivery(self): self.delivery['files'][0]['sha256_readback']='f'*64;self.assertBlocked('MP4_NOT_READY_IN_DRIVE')
     def test_missing_delivery_does_not_invalidate_content(self): self.delivery={};d=self.assess();self.assertTrue(d['content_ready']);self.assertFalse(d['review_ready'])
+
+    def test_missing_discovery_does_not_invalidate_content_but_blocks_review(self):
+        self.discovery={};d=self.assess();self.assertTrue(d['content_ready']);self.assertFalse(d['review_ready']);self.assertTrue(any(e.startswith('MISSING_CURRENT_DISCOVERY_RUBRIC') for e in d['errors']))
+    def test_stale_discovery_binding(self): self.discovery['asset_binding_sha256']='f'*64;self.assertBlocked('STALE_DISCOVERY_BINDING')
+    def test_discovery_self_review_is_not_independent(self): self.discovery['verifier']['run_id']='discovery-generator-1';self.assertBlocked('NO_INDEPENDENT_DISCOVERY_VERIFIER')
+    def test_discovery_receipt_must_be_current(self): (self.root/'discovery.txt').write_text('changed');self.assertBlocked('MISSING_OR_STALE_DISCOVERY_RECEIPT')
+    def test_missing_discovery_locale_surface(self): self.discovery['surfaces']=self.discovery['surfaces'][:-1];self.assertBlocked('INCOMPLETE_DISCOVERY_ES_EN_SURFACES')
+    def test_duplicate_discovery_surface(self): self.discovery['surfaces'].append(copy.deepcopy(self.discovery['surfaces'][0]));self.assertBlocked('DUPLICATE_DISCOVERY_SURFACE')
+    def test_discovery_must_bind_canonical_mp4(self): self.discovery['surfaces'][0]['source_mp4_sha256']='f'*64;self.assertBlocked('DISCOVERY_MP4_BINDING_MISMATCH')
+    def test_discovery_browser_navigation_is_required(self): self.discovery['surfaces'][0]['deep_link_verified']=False;self.assertBlocked('DISCOVERY_BROWSER_NAVIGATION_NOT_VERIFIED')
+    def test_discovery_chapter_clip_counts_are_fail_closed(self): self.discovery['surfaces'][0]['clips_count']=0;self.assertBlocked('DISCOVERY_CHAPTER_CLIP_COUNT_MISMATCH')
+    def test_discovery_unknown_gate_blocks(self): self.discovery['surfaces'][0]['gates']['video_sitemap']['status']='UNKNOWN';self.assertBlocked('DISCOVERY_GATE_NOT_PASS')
+    def test_discovery_js_only_transcript_is_not_evidence(self): self.discovery['surfaces'][0]['gates']['transcript_html']['method']='js-only';self.assertBlocked('INSUFFICIENT_DISCOVERY_GATE_EVIDENCE')
+
     def test_relabelled_same_handler(self):
         self.manifest['unit']='fundamentos-ia-iag';self.inventory[0]['scenes']=[dict(family='foo',visual_style='lattice'),dict(family='bar',visual_style='hub')]
         self.assertBlocked('ALIASED_HANDLER_COUNTED_AS_DISTINCT_FAMILIES')
