@@ -4,10 +4,12 @@ on:
   pull_request:
     paths:
       - 'locales/en/**'
+      - 'discovery/**'
       - 'mkdocs.en.yml'
       - 'hooks/video_sitemap_en.py'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
+      - 'scripts/prepare_modelos_r2_ci_media.sh'
       - 'scripts/audit_english_full_parity.py'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
@@ -70,6 +72,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Prepare strict English locale
         run: python scripts/prepare_locale.py --locale en

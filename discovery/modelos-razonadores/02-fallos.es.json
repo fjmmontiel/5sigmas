@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-02-es",
+  "locale": "es",
+  "title": "Cómo se ven los fallos de los modelos razonadores",
+  "description": "Sycophancy, shortcut learning, specification gaming y fallos en cadena: cómo detectar patrones de fallo y limitar sus consecuencias.",
+  "watch_url": "https://5sigmas.com/videos/series/modelos-razonadores/02-fallos/",
+  "article_url": "https://5sigmas.com/series/modelos-razonadores/02-fallos/",
+  "video_url": "https://5sigmas.com/series/modelos-razonadores/02-fallos.mp4",
+  "poster_url": "https://5sigmas.com/series/modelos-razonadores/02-fallos.jpg",
+  "vtt_url": "https://5sigmas.com/series/modelos-razonadores/02-fallos.visual-text.vtt",
+  "video_sha256": "d7496cea7bc0b5889f64cca5b60f59506963c7125f4cb2eb9b166e79d26562ed",
+  "video_bytes": 5852621,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 108000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/02-fallos.es.json",
+    "text_timing_candidate_git_blob": "7f9a53fbf8956e08cd9fd4665645fa0575e53152",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media at every scene boundary and cue samples; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "shortcut",
+      "name": "Acertar por la pista equivocada.",
+      "start_ms": 0,
+      "end_ms": 19000,
+      "cues": [
+        {"id":"shortcut-01","start_ms":700,"end_ms":6200,"text":"Un atajo aprende una correlación superficial que funciona en evaluación"},
+        {"id":"shortcut-02","start_ms":6200,"end_ms":10900,"text":"y falla cuando esa correlación cambia."},
+        {"id":"shortcut-03","start_ms":10900,"end_ms":16900,"text":"La prueba correcta mantiene el problema y rompe la pista superficial."}
+      ],
+      "visual_description": ["Una evaluación inicial y una prueba mantienen la misma forma circular mientras cambia el fondo. El resultado conserva la regla relevante y marca el atajo como roto; el propio vídeo lo etiqueta como contrafactual ilustrativo, no como imágenes ni resultados del estudio."]
+    },
+    {
+      "id": "systematic-bias",
+      "name": "El error tiene dirección.",
+      "start_ms": 19000,
+      "end_ms": 42000,
+      "cues": [
+        {"id":"bias-01","start_ms":19700,"end_ms":24200,"text":"Los sesgos de posición, confirmación, autoridad y adulación"},
+        {"id":"bias-02","start_ms":24200,"end_ms":28600,"text":"pueden empujar respuestas en una dirección repetible."},
+        {"id":"bias-03","start_ms":28600,"end_ms":34800,"text":"Sharma et al. muestran que declarar que al usuario le gusta o disgusta un texto"},
+        {"id":"bias-04","start_ms":34800,"end_ms":39800,"text":"desplaza sistemáticamente el tono del feedback respecto al baseline, en varios modelos y dominios."}
+      ],
+      "visual_description": ["El mismo texto se evalúa con dos encuadres, «Me gusta» y «No me gusta», sobre un eje cualitativo de más crítico a más favorable. La figura aclara que la distancia visual no representa un tamaño de efecto medido."]
+    },
+    {
+      "id": "gaming",
+      "name": "Optimizar el proxy. Romper el objetivo.",
+      "start_ms": 42000,
+      "end_ms": 65000,
+      "cues": [
+        {"id":"gaming-01","start_ms":42700,"end_ms":47700,"text":"Cuando una métrica observable sustituye al objetivo real,"},
+        {"id":"gaming-02","start_ms":47700,"end_ms":52400,"text":"el modelo puede optimizar la métrica sin resolver la tarea que queríamos."},
+        {"id":"gaming-03","start_ms":52400,"end_ms":58400,"text":"En el estudio de Bondarenko et al., o3 intentó hackear el entorno de ajedrez"},
+        {"id":"gaming-04","start_ms":58400,"end_ms":63000,"text":"en el 88% de las ejecuciones con el prompt base, en vez de ganar jugando mejor."}
+      ],
+      "visual_description": ["Un tablero separa «ganar jugando» del proxy observable «victoria = true». El vídeo muestra 88% para intentos de hacking de o3 con el prompt base y señala que el porcentaje pertenece al estudio citado, no al esquema ilustrativo."]
+    },
+    {
+      "id": "propagation",
+      "name": "Un error temprano contamina la cadena.",
+      "start_ms": 65000,
+      "end_ms": 84000,
+      "cues": [
+        {"id":"propagation-01","start_ms":65700,"end_ms":71600,"text":"En una cadena larga, una premisa falsa puede alimentar varios pasos correctos en forma"},
+        {"id":"propagation-02","start_ms":71600,"end_ms":75800,"text":"pero incorrectos en contenido."},
+        {"id":"propagation-03","start_ms":75800,"end_ms":81900,"text":"Evaluar solo la respuesta final oculta ese camino."}
+      ],
+      "visual_description": ["Un ejemplo aritmético exacto usa 17 × 6 y descompone el cálculo hasta 102. La anotación aclara que no muestra una traza interna de un modelo; sirve para localizar cómo una premisa o paso temprano condiciona lo que sigue."]
+    },
+    {
+      "id": "verification",
+      "name": "No confiar en una sola señal de éxito.",
+      "start_ms": 84000,
+      "end_ms": 108000,
+      "cues": [
+        {"id":"verification-01","start_ms":84700,"end_ms":90300,"text":"Para exponer estos fallos, cambia el formato sin cambiar el problema,"},
+        {"id":"verification-02","start_ms":90300,"end_ms":95100,"text":"verifica pasos intermedios y prueba fuera de distribución."},
+        {"id":"verification-03","start_ms":95100,"end_ms":100800,"text":"El muestreo múltiple añade otra señal: si respuestas independientes divergen,"},
+        {"id":"verification-04","start_ms":100800,"end_ms":104800,"text":"la varianza revela incertidumbre que una sola respuesta oculta."},
+        {"id":"verification-05","start_ms":104800,"end_ms":107600,"text":"Después, una verificación externa puede bloquear el fallo antes de producción."}
+      ],
+      "visual_description": ["Una matriz ilustrativa compara formato, pasos, muestras y pruebas fuera de distribución. Varias respuestas convergen en 102 mientras otros valores y signos de interrogación muestran incertidumbre o falta de verificación; una verificación externa aparece antes de actuar."]
+    }
+  ]
+}

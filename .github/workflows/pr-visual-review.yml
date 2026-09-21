@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - 'locales/**'
+      - 'discovery/**'
       - 'overrides/**'
       - 'overrides_locale/**'
       - 'hooks/**'
@@ -45,6 +46,9 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -81,8 +85,6 @@ jobs:
             echo "No public MP4 changed; full-catalogue frame review is available on demand."
             exit 0
           fi
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
           python scripts/capture_video_density_review.py "${changed_videos[@]}"
 
       - name: Prepare English locale for combined browser QA
@@ -99,37 +101,8 @@ jobs:
       - name: Test SEO audit crawler
         run: python -m unittest scripts.tests.test_audit_seo_site
 
-      - name: Restore reviewed English TTC media
-        id: en-ttc-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .localized-media/en/ttc-v1
-          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
-
-      - name: Seed reviewed English TTC media from verified PR artifact
-        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: english-ttc-reviewed-seed
-          path: .localized-media/en/ttc-v1
-          run-id: 31689108864
-          github-token: ${{ github.token }}
-
-      - name: Verify and stage reviewed English TTC media for browser QA
-        shell: bash
-        run: |
-          set -euo pipefail
-          media='.localized-media/en/ttc-v1'
-          mp4="$media/03-test-time-compute.mp4"
-          jpg="$media/03-test-time-compute.jpg"
-          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
-          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
-          test "$(stat -c %s "$mp4")" = '4337214'
-          test "$(stat -c %s "$jpg")" = '105949'
-          target='site/en/series/modelos-razonadores'
-          mkdir -p "$target"
-          cp "$mp4" "$target/03-test-time-compute.mp4"
-          cp "$jpg" "$target/03-test-time-compute.jpg"
+      # Modelos R2 English media is now manifest-declared and comes directly
+      # from locales/en. Do not overwrite it with the historical TTC cache.
 
       - uses: actions/setup-node@v4
         with:
@@ -345,6 +318,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en
