@@ -85,35 +85,21 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_locale_switching.mjs
 
-      - name: Validate live chapter 5.1 visual states and accessibility
+      # The six historical per-chapter accessibility validators intentionally
+      # encode the retired giant-horizontal-mobile-canvas contract. The current
+      # owner gate is the unified native relationship/accessibility validator
+      # used by Series 5 GOLDEN review: all six chapters, both locales,
+      # desktop/mobile, normal/reduced motion, focus/touch, rendered TeX and
+      # runtime/resource observation through teardown.
+      - name: Validate live native relationships, runtime lifecycle and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+        run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
 
-      - name: Validate live chapter 5.2 visual states and accessibility
+      - name: Validate live article-watch playback lifecycle in normal and reduced motion
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
-
-      - name: Validate live chapter 5.3 visual states and accessibility
-        env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
-
-      - name: Validate live chapter 5.4 visual states and accessibility
-        env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
-
-      - name: Validate live chapter 5.5 visual states and accessibility
-        env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
-
-      - name: Validate live chapter 5.6 visual states and accessibility
-        env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+        run: node scripts/validate_evaluating_ai_series_browser_milestone.mjs
 
       - name: Upload live Series 5 failure evidence
         if: failure()
@@ -123,5 +109,6 @@ jobs:
           path: |
             artifacts/visual-review/ai-systems-eval-*.png
             artifacts/visual-review/english-series-mirror-*.png
+            artifacts/evaluating-ai-systems-browser-milestone/**
           if-no-files-found: warn
           retention-days: 1

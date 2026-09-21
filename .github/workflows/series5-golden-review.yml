@@ -30,6 +30,7 @@ on:
       - 'mkdocs.en.yml'
       - 'locales/en/manifest.yml'
       - '.github/workflows/series5-golden-review.yml'
+      - '.github/workflows/evaluating-ai-systems-live-qa.yml'
 
 permissions:
   contents: read
