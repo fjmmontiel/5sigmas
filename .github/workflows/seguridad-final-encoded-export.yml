@@ -1,4 +1,4 @@
-name: Seguridad IA complete encoded export
+name: Seguridad IA exact encoded validation
 
 on:
   workflow_dispatch:
@@ -12,12 +12,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: seguridad-ia-complete-encoded-export-${{ github.ref }}
+  group: seguridad-ia-exact-encoded-validation-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   encode-chapter:
-    name: encode chapter ${{ matrix.chapter }}
+    name: validate encoded chapter ${{ matrix.chapter }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     strategy:
@@ -64,99 +64,92 @@ jobs:
                 --out "$OUT"
             done
           done
-          test "$(find "$OUT" -name '*.mp4' | wc -l)" -eq 4
-          test "$(find "$OUT" -name '*.metadata.json' | wc -l)" -eq 4
-          test "$(find "$OUT" -name '*.visual-transcript.json' | wc -l)" -eq 4
-          test "$(find "$OUT" -name '*.poster.jpg' | wc -l)" -eq 4
-          python - "$OUT" <<'PY'
-          import json, sys
-          from pathlib import Path
-          root=Path(sys.argv[1])
-          metas=[json.loads(p.read_text(encoding='utf-8')) for p in root.glob('*.metadata.json')]
-          assert len(metas)==4
-          for meta in metas:
-              cues=meta.get('text_visual_cues',[])
-              assert len(cues)==5, (meta.get('job_id'), cues)
-              assert len({c['id'] for c in cues})==5
-              assert all(c.get('sentence_id') and c.get('concept_id') and c.get('visual_target_id') for c in cues)
-              assert all(c['text_at'] < c['visual_at'] < c['visual_end_at'] < c['scene_end_at'] for c in cues)
-          print(json.dumps({'metadata_cue_binding':'PASS','outputs':len(metas),'cues':sum(len(m['text_visual_cues']) for m in metas)}))
-          PY
 
-      - name: Preserve chapter outputs for one bounded release milestone
-        uses: actions/upload-artifact@v4
-        with:
-          name: seguridad-final-ch${{ matrix.chapter }}-${{ github.sha }}
-          path: motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}/
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
-  package-gate:
-    name: complete 24-output internal package gate
-    needs: encode-chapter
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download all six immutable chapter artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: seguridad-final-ch*-${{ github.sha }}
-          path: motion/dist/seguridad-ia-final-package
-          merge-multiple: true
-
-      - name: Install package review dependencies
+      - name: Independently validate the four ephemeral chapter encodes
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --disable-pip-version-check pillow
-          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq ffmpeg
-          fi
-
-      - name: Validate exact encodes without promoting owner review
-        shell: bash
-        run: |
-          set -euo pipefail
-          python motion/scripts/seguridad_final_package_check.py \
-            --package motion/dist/seguridad-ia-final-package \
-            --internal-only
-          python - <<'PY'
+          OUT="motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+          python - "$OUT" "$GITHUB_SHA" "${{ matrix.chapter }}" <<'PY'
+          import hashlib
           import json
+          import subprocess
+          import sys
           from pathlib import Path
-          p=Path('motion/dist/seguridad-ia-final-package/seguridad-ia-final-manifest.json')
-          d=json.loads(p.read_text(encoding='utf-8'))
-          assert d['output_count']==24
-          assert d['errors']==[]
-          assert d['technical_golden'] is False
-          assert d['owner_visual_approval']=='NOT_REQUESTED'
-          assert d['review_ready'] is False
-          assert d['state']=='CHANGES_REQUIRED'
-          admission=d.get('review_admission',{})
-          expected_prefixes=('MISSING_CURRENT_QA_RUBRIC','STALE_QA_BINDING','NO_INDEPENDENT_CRITIC',
-                             'STALE_OR_MISSING_DELIVERY_BINDING','MISSING_CURRENT_DISCOVERY_RUBRIC')
-          assert all(any(e.startswith(prefix) for e in admission.get('errors',[])) for prefix in expected_prefixes)
-          # The internal renderer/integrity package itself is complete; the missing
-          # independent QA/delivery/discovery evidence is intentionally fail-closed.
-          assert len(d['encoded_motion_check'])==24
-          assert len(d['es_en_parity'])==12
+
+          root = Path(sys.argv[1])
+          expected_head = sys.argv[2]
+          expected_chapter = int(sys.argv[3])
+
+          def sha256(path: Path) -> str:
+              h = hashlib.sha256()
+              with path.open("rb") as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          metas = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(root.glob("*.metadata.json"))]
+          assert len(metas) == 4, len(metas)
+          assert {(m["locale"], m["orientation"]) for m in metas} == {
+              ("es", "horizontal"), ("es", "vertical"),
+              ("en", "horizontal"), ("en", "vertical"),
+          }
+          for meta in metas:
+              assert int(meta["chapter"]) == expected_chapter
+              assert meta["source_head"] == expected_head
+              cues = meta.get("text_visual_cues", [])
+              assert len(cues) == 5
+              assert len({c["id"] for c in cues}) == 5
+              assert all(c.get("sentence_id") and c.get("concept_id") and c.get("visual_target_id") for c in cues)
+              assert all(c["text_at"] < c["visual_at"] < c["visual_end_at"] < c["scene_end_at"] for c in cues)
+
+              mp4 = root / meta["mp4"]["file"]
+              assert mp4.is_file()
+              assert sha256(mp4) == meta["mp4"]["sha256"]
+              expected_wh = (1920, 1080) if meta["orientation"] == "horizontal" else (1080, 1920)
+              probe = json.loads(subprocess.check_output([
+                  "ffprobe", "-v", "error", "-select_streams", "v:0",
+                  "-show_entries", "stream=codec_name,width,height,pix_fmt,r_frame_rate,nb_frames,duration",
+                  "-of", "json", str(mp4),
+              ], text=True))["streams"][0]
+              assert probe["codec_name"] == "h264"
+              assert (int(probe["width"]), int(probe["height"])) == expected_wh
+              assert probe["r_frame_rate"] == "60/1"
+              assert int(probe["nb_frames"]) == 3600
+              assert abs(float(probe["duration"]) - 60.0) < 0.05
+              subprocess.run(
+                  ["ffmpeg", "-v", "error", "-i", str(mp4), "-f", "null", "-"],
+                  check=True,
+              )
+
+          assert len(list(root.glob("*.mp4"))) == 4
+          assert len(list(root.glob("*.poster.jpg"))) == 4
+          assert len(list(root.glob("*.visual-transcript.json"))) == 4
           print(json.dumps({
-            'state':'INTERNAL_EXACT_24_ENCODE_COMPLETE_REVIEW_BLOCKED_AS_DESIGNED',
-            'outputs':d['output_count'],
-            'motion_scene_diagnostics':len(d['encoded_motion_check'])*5,
-            'parity_pairs':len(d['es_en_parity']),
-            'review_admission_errors':len(admission.get('errors',[])),
+              "state": "CHAPTER_EXACT_ENCODE_VALIDATED_EPHEMERAL_NOT_DELIVERY",
+              "chapter": expected_chapter,
+              "outputs": len(metas),
+              "semantic_review": "NOT_CLAIMED_BY_THIS_TECHNICAL_ENCODE_CHECK",
+              "delivery": "NOT_PERFORMED",
           }))
           PY
 
-      - name: Preserve exact 24-output internal QA package
-        uses: actions/upload-artifact@v4
-        with:
-          name: seguridad-ia-internal-exact24-${{ github.sha }}
-          path: motion/dist/seguridad-ia-final-package/
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
+      - name: Delete ephemeral encoded media before runner teardown
+        if: always()
+        shell: bash
+        run: |
+          rm -rf "motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+
+  validation-complete:
+    name: all six chapter encode validations completed
+    needs: encode-chapter
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Record bounded milestone result
+        shell: bash
+        run: |
+          printf '%s\n' \
+            'ENCODED_VALIDATION_COMPLETE_24_OUTPUTS_EPHEMERAL_NOT_DELIVERY' \
+            'No MP4 is retained or transported by GitHub Actions.' \
+            'Independent encoded visual review, Drive delivery and discovery staging remain separate fail-closed gates.'
