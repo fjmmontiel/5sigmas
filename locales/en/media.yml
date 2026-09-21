@@ -814,3 +814,105 @@ series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-t
   - name: "Acceptance requires SLO, cost, and constraints together"
     start: 24
     end: 36
+
+series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md:
+  video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
+  video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
+  video_title: "Model, component, workflow, trajectory, and system"
+  video_summary: "The right boundary contains the mechanism you want to attribute: a trajectory is evidence of one execution, while the outcome confirms whether the change matters to the system."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Start from the change and choose the smallest boundary"
+      start: 0
+      end: 12
+    - name: "A trajectory connects policy, components, and outcome"
+      start: 12
+      end: 24
+    - name: "Diagnose narrowly; confirm at the risk boundary"
+      start: 24
+      end: 36
+
+series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md:
+  video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
+  video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
+  video_title: "Eval sets: curation, hard negatives, leakage, and versioning"
+  video_summary: "A trustworthy eval set preserves provenance, separates banks by role, and freezes a release; hard pairs and distinct leakage channels test different failures without mutating the comparison."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Provenance and grouping come before the split"
+      start: 0
+      end: 12
+    - name: "Hard positive and hard negative cross one boundary"
+      start: 12
+      end: 24
+    - name: "Freeze the release; new failures feed v+1"
+      start: 24
+      end: 36
+
+series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md:
+  video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
+  video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
+  video_title: "LLM-as-judge, human evaluation, and calibration"
+  video_summary: "A judge is useful only when its criterion is calibrated against human evidence, disagreement is measured, and bias, variance, and stability are separated before using it as an acceptance signal."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Define the rubric before asking for a verdict"
+      start: 0
+      end: 12
+    - name: "Compare judge and humans on the same cases"
+      start: 12
+      end: 24
+    - name: "Calibrate bias, variance, and disagreement before the gate"
+      start: 24
+      end: 36
+
+series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md:
+  video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
+  video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
+  video_title: "Agent trajectories: success, efficiency, recovery, and policy"
+  video_summary: "An agentic trajectory is evaluated by outcome and process: tools and observed states explain how the result was reached, while recovery, cost, and policy separate clean success from corrupt success."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Action, tool result, and state form the trajectory"
+      start: 0
+      end: 12
+    - name: "Recovery must restore progress without hiding failures"
+      start: 12
+      end: 24
+    - name: "Success, efficiency, and policy are accepted together"
+      start: 24
+      end: 36
+
+series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md:
+  video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
+  video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
+  video_title: "Online evaluation: shadow, canary, A/B, and regression gates"
+  video_summary: "Online evaluation increases exposure under control: shadow observes without deciding, canary limits blast radius, A/B estimates effect, and guardrails or regression gates stop an unsafe promotion."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Shadow observes traffic without changing the decision"
+      start: 0
+      end: 12
+    - name: "Canary increases exposure only with green guardrails"
+      start: 12
+      end: 24
+    - name: "A/B measures effect; the regression gate promotes or rolls back"
+      start: 24
+      end: 36
+
+series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md:
+  video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
+  video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+  video_title: "Observability, failure taxonomies, and feedback loops"
+  video_summary: "Telemetry is not a verdict: production signals become reproducible failures, eval cases, and repairs that pass through the same gate before returning to production."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Telemetry detects symptoms; the taxonomy localizes failure"
+      start: 0
+      end: 12
+    - name: "A reproducible failure becomes an eval case"
+      start: 12
+      end: 24
+    - name: "Repair → candidate → eval → production closes the loop"
+      start: 24
+      end: 36

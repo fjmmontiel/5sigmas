@@ -9,6 +9,22 @@ tags:
   - Evaluación
   - Reliability
   - Producción
+# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
+video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
+video_title: "LLM-as-judge, evaluación humana y calibración"
+video_summary: "Un judge sólo es útil cuando su criterio se calibra contra evidencia humana, se mide su desacuerdo y se separan sesgo, varianza y estabilidad antes de usarlo como señal de aceptación."
+video_duration: PT36S
+video_chapters:
+  - name: "Define la rúbrica antes de pedir el veredicto"
+    start: 0
+    end: 12
+  - name: "Compara judge y humanos sobre los mismos casos"
+    start: 12
+    end: 24
+  - name: "Calibra sesgo, varianza y desacuerdo antes del gate"
+    start: 24
+    end: 36
 ---
 
 # Capítulo 3 — LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo
