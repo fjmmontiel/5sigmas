@@ -1,4 +1,4 @@
-schema_version: 16
+schema_version: 17
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
@@ -14,8 +14,9 @@ receipts:
   historical_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20.yml
   prior_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run11.yml
   prior_exact_mobile_review: quality/series-requalification/inference-manual-mobile-review-2026-09-20-run12.yml
-  latest_manual_pixel_pedagogy_review: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
+  prior_manual_pixel_pedagogy_review: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
   node_aware_edge_visibility_remediation: quality/series-requalification/inference-edge-visibility-remediation-2026-09-21.yml
+  latest_manual_pixel_pedagogy_review: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run14.yml
 history:
   - {head: 81fcc2e37cff611a17017b53ac6ca1a38f63e685, run: 35499330009, artifact: 10601915287, result: P1_SHARED_GIANT_CANVAS_ONLY}
   - {head: 9711ab0cf5c693824c9985f2f33cea2986dd1e97, run: 35510156711, artifact: 10605125706, result: P1_DIRECTED_GRAPH_LEGIBILITY_EDGE_ROUTING}
@@ -27,45 +28,37 @@ history:
   - {head: 57cb76c829bbd325b9cc1cdaac491419553956a4, run: 35531961728, artifact: 10611572106, result: ALL_NON_PIXEL_GATES_AND_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
   - {head: bd7dede2201655a6f151a459f3d213fa5f944163, merge_ref: 5333d24d99f72ba98fb0f98c36cbf1c99f35c4a3, run: 35534948096, artifact: 10613115508, result: INDEXABILITY_MEDIA_BROWSER_LIFECYCLE_RELATIONSHIPS_PASS_TEXT_FIT_FAIL_CH1_ES_ONLY}
   - {head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5, run: 35538317845, artifact: 10614520052, result: AUTOMATED_ALL_GREEN_MANUAL_PIXEL_PEDAGOGY_P1_EDGE_VISIBILITY}
-  - {head: 23632b14f5d4c4852f9615dd7ab6dec065a6ebbe, result: NODE_AWARE_EDGE_GEOMETRY_AND_SHORT_EDGE_NEGATIVE_MUTATION_IMPLEMENTED_PENDING_EXACT_RERENDER}
+  - {head: 23632b14f5d4c4852f9615dd7ab6dec065a6ebbe, result: NODE_AWARE_EDGE_GEOMETRY_AND_SHORT_EDGE_NEGATIVE_MUTATION_IMPLEMENTED}
   - {head: 837b6abacd1d8038d5d22d489381e45324894375, merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d, run: 35544170017, artifact: 10616606049, result: SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_RELATIONSHIPS_PASS_SHORT_EDGE_FAIL_CH1_CH6_E7}
+  - {head: ca2d50b3778b93a43127d42e4782fd4afadc0737, run: 35547227151, artifact: 10616942622, result: AUTOMATED_ALL_GREEN_MANUAL_PIXEL_PEDAGOGY_P1_DIRECTED_EDGE_SHAFT_VISIBILITY_DASH_PHASE}
 current_inspection:
-  evidence_head: 837b6abacd1d8038d5d22d489381e45324894375
-  merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d
-  run: 35544170017
-  job: 106167043073
-  artifact: 10616606049
-  artifact_sha256: eead8b1643c1de36889b9ae90dafa396a61443f9dd8161f20724a72e103aed4b
-  manual_pixel_pedagogy_performed_this_run: false
-  automated_result: PASS_SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_RELATIONSHIPS_THEN_FAIL_SHORT_EDGE_8_CONTEXTS
-  failing_rows: [01_es, 01_en, 06_es, 06_en]
-  failing_motion_contexts: [01_es_normal, 01_en_normal, 06_es_normal, 06_en_normal, 01_es_reduced, 01_en_reduced, 06_es_reduced, 06_en_reduced]
-  exact_failures:
-    - {row: 01_es_normal, edge: e7, length: 0.502, minimum: 1.5}
-    - {row: 01_en_normal, edge: e7, length: 0.504, minimum: 1.5}
-    - {row: 06_es_normal, edge: e7, length: 1.002, minimum: 1.5}
-    - {row: 06_en_normal, edge: e7, length: 1.001, minimum: 1.5}
-    - {row: 01_es_reduced, edge: e7, length: 0.502, minimum: 1.5}
-    - {row: 01_en_reduced, edge: e7, length: 0.504, minimum: 1.5}
-    - {row: 06_es_reduced, edge: e7, length: 1.002, minimum: 1.5}
-    - {row: 06_en_reduced, edge: e7, length: 1.001, minimum: 1.5}
-  root_cause: NODE_AWARE_BOUNDARY_GEOMETRY_IS_CORRECT_BUT_CH1_SCHEDULER_AND_CH6_ACCOUNT_WIDTH_BUDGETS_LEAVE_E7_WITH_INSUFFICIENT_VISIBLE_SEGMENT
-  remediation_site_head: 26d9b7b253ceb82aeef02a87e773afec46b90958
-  remediation_change: CH1_SCHEDULER_WIDTH_27_PERCENT_MAX_86PX_AND_CH6_ACCOUNT_WIDTH_29_PERCENT_MAX_92PX_WITH_12PX_FONT_AND_TOPOLOGY_UNCHANGED
-  remediation_status: IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW
+  evidence_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+  run: 35547227151
+  artifact: 10616942622
+  artifact_sha256: a04bc7c0949d2221700728f9d0d33c781ad74554f2b59ec58c581295837718d3
+  manual_pixel_pedagogy_performed_this_run: true
+  inspected_route_locale_rows: 12
+  inspected_mobile_motion_contexts: 24
+  desktop_and_video_evidence_inspected: true
+  automated_result: PASS_ALL_CURRENT_AUTOMATED_GATES
+  manual_result: CHANGES_REQUIRED_SHARED_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+  root_cause: MARKER_FOOTPRINT_PLUS_ANIMATED_DASH_PHASE_CAN_DOMINATE_SHORT_BOUNDARY_CLIPPED_PATHS_DESPITE_1_5_UNIT_MINIMUM
+  remediation_renderer_head: b600dee16e0105868c0988469ee2b54fdf860933
+  remediation_gate_head: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
+  remediation_status: IMPLEMENTED_PENDING_EXACT_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW
 prior_exact_head_automated_gates:
-  evidence_head: 837b6abacd1d8038d5d22d489381e45324894375
-  merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d
+  evidence_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
   SOURCE_PASS: 12/12
   BUILD_PASS: 12/12
   BROWSER_PASS: 12/12
   MEDIA_VISUAL_PASS: 12/12
   INDEXABILITY_PASS: 12/12
-  relationship_geometry_accessibility_nominal: PASS_12_ROWS_NORMAL_REDUCED
-  mobile_text_fit_negative_mutation: FAIL_8_CONTEXTS_CH1_CH6_EDGE_E7_VISIBLE_LENGTH_UNDER_1_5
-  reader_shell: NOT_RUN_AFTER_FAIL
+  relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+  mobile_text_fit_negative_mutation: PASS_AT_1_5_UNIT_CONTRACT
+  reader_shell: PASS
 current_target_gates:
-  site_facing_head: 26d9b7b253ceb82aeef02a87e773afec46b90958
+  site_facing_head: b600dee16e0105868c0988469ee2b54fdf860933
+  regression_gate_head: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
   SOURCE_PASS: 12/12
   BUILD_PASS: 0/12
   BROWSER_PASS: 0/12
@@ -74,25 +67,25 @@ current_target_gates:
   PIXEL_REVIEW: 0/12
   PEDAGOGY_REVIEW: 0/12
   ARTICLE_GOLDEN: 0/6
-  reason: NEW_SITE_FACING_NODE_WIDTH_BYTES_REQUIRE_EXACT_HEAD_RERENDER_AND_MANUAL_REVIEW
+  reason: SHARED_SITE_FACING_EDGE_RENDERER_CHANGED_AND_REQUIRES_EXACT_PR_HEAD_RERENDER_MANUAL_REVIEW
 known_defects:
   p0: 0
-  p1_open_rows: 4
+  p1_open_rows: 12
   p2: 0
   active:
     - severity: P1
-      code: INFERENCE_MOBILE_EDGE_VISIBLE_LENGTH_UNDER_MIN_CH1_CH6_E7
-      evidence_head: 837b6abacd1d8038d5d22d489381e45324894375
-      evidence_merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d
-      evidence_run: 35544170017
-      evidence_artifact: 10616606049
-      evidence_artifact_sha256: eead8b1643c1de36889b9ae90dafa396a61443f9dd8161f20724a72e103aed4b
-      scope: CH1_AND_CH6_ES_EN_MOBILE_NORMAL_REDUCED_EDGE_E7
+      code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+      evidence_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+      evidence_run: 35547227151
+      evidence_artifact: 10616942622
+      evidence_artifact_sha256: a04bc7c0949d2221700728f9d0d33c781ad74554f2b59ec58c581295837718d3
+      scope: SHARED_MOBILE_RENDERER_MULTIPLE_DIRECT_ADJACENT_EDGES_ACROSS_6_CHAPTERS_ES_EN
       root_cause_file: docs/assets/javascripts/inference-mobile-native.js
       regression_gate_file: scripts/validate_inference_mobile_text_fit.mjs
-      remediation_site_head: 26d9b7b253ceb82aeef02a87e773afec46b90958
+      remediation_renderer_head: b600dee16e0105868c0988469ee2b54fdf860933
+      remediation_gate_head: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
       status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW
-      next_action: CONSUME_CURRENT_HEAD_GATE_REQUIRE_E7_AT_LEAST_1_5_ALL_8_CONTEXTS_THEN_MANUAL_PIXEL_PEDAGOGY_REVIEW
+      next_action: REQUIRE_MIN_EDGE_3_AND_SHORT_EDGE_SOLID_NONANIMATED_ALL_12_ROWS_NORMAL_REDUCED_THEN_MANUAL_PIXEL_PEDAGOGY
   harness_closed:
     - severity: P1
       code: SERIES4_PREVIEW_SERVER_LACKED_RANGE_SEEK_CONTRACT
@@ -114,13 +107,13 @@ release:
   current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
   branch_status: DIVERGED
   main_reconciliation_required_before_ready_merge: true
-  iteration_count_changed_rows_this_run: 4
-  next_action: CONSUME_EXACT_CURRENT_HEAD_RERENDER_CLEAR_OR_ITERATE_CH1_CH6_E7_THEN_MANUAL_REVIEW_AND_RECONCILE_CURRENT_MAIN
+  iteration_count_changed_rows_this_run: 12
+  next_action: CONSUME_POST_REMEDIATION_EXACT_HEAD_GATE_MANUAL_REVIEW_THEN_RECONCILE_CURRENT_MAIN
 row_defaults: &row_defaults
-  iteration_count: 11
-  last_reviewed_head: 837b6abacd1d8038d5d22d489381e45324894375
-  last_manual_pixel_head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5
-  last_changed_site_head: 23632b14f5d4c4852f9615dd7ab6dec065a6ebbe
+  iteration_count: 12
+  last_reviewed_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+  last_manual_pixel_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+  last_changed_site_head: b600dee16e0105868c0988469ee2b54fdf860933
   SOURCE_PASS: true
   BUILD_PASS: false
   BROWSER_PASS: false
@@ -129,33 +122,29 @@ row_defaults: &row_defaults
   PIXEL_REVIEW: false
   PEDAGOGY_REVIEW: false
   VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
-  defects: []
+  defects:
+    - {severity: P1, code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE, status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW}
   factual_source_status: PASS_FRESH_2026_09_20
-  parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_PRIOR_EXACT_BROWSER_PARITY_PENDING_CURRENT_RENDER_REVERIFY
-  canonical_hreflang_sitemap_internal_discovery: EXACT_HEAD_837_PASS_PENDING_CURRENT_SITE_HEAD_RERUN
-  watch_video_lifecycle: EXACT_HEAD_837_PASS_PENDING_CURRENT_SITE_HEAD_RERUN
-  media_visual_status: EXACT_HEAD_837_PASS_PENDING_CURRENT_SITE_HEAD_RERUN
-  evidence_revision: 837b6abacd1d8038d5d22d489381e45324894375
-  pending_revision: 26d9b7b253ceb82aeef02a87e773afec46b90958
+  parity_status: PASS_FRESH_2026_09_20_SOURCE_AND_EXACT_CA2D50_BROWSER_PARITY_PENDING_POST_REMEDIATION_RENDER_REVERIFY
+  canonical_hreflang_sitemap_internal_discovery: EXACT_HEAD_CA2D50_PASS_PENDING_POST_REMEDIATION_RERUN
+  watch_video_lifecycle: EXACT_HEAD_CA2D50_PASS_PENDING_POST_REMEDIATION_RERUN
+  media_visual_status: EXACT_HEAD_CA2D50_PASS_PENDING_POST_REMEDIATION_RERUN
+  evidence_revision: ca2d50b3778b93a43127d42e4782fd4afadc0737
+  pending_site_revision: b600dee16e0105868c0988469ee2b54fdf860933
+  pending_gate_revision: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
   live_deploy_verification: PENDING_REQUALIFICATION_RELEASE
   gsc_observation: null
   next_action: RECONFIRM_EXACT_HEAD_GATES_AND_MANUAL_PIXEL_PEDAGOGY
   state: QA
-affected_defaults: &affected_defaults
-  <<: *row_defaults
-  last_changed_site_head: 26d9b7b253ceb82aeef02a87e773afec46b90958
-  defects:
-    - {severity: P1, code: INFERENCE_MOBILE_EDGE_VISIBLE_LENGTH_UNDER_MIN_CH1_CH6_E7, status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW}
-  next_action: VERIFY_E7_VISIBLE_LENGTH_AT_LEAST_1_5_NORMAL_REDUCED_THEN_MANUAL_PIXEL_PEDAGOGY
 ch1_defaults: &ch1_defaults
-  <<: *affected_defaults
-  iteration_count: 15
+  <<: *row_defaults
+  iteration_count: 16
 ch6_es_defaults: &ch6_es_defaults
-  <<: *affected_defaults
-  iteration_count: 13
+  <<: *row_defaults
+  iteration_count: 14
 ch6_en_defaults: &ch6_en_defaults
-  <<: *affected_defaults
-  iteration_count: 12
+  <<: *row_defaults
+  iteration_count: 13
 rows:
   - {<<: *ch1_defaults, route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, source_path: docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}
   - {<<: *ch1_defaults, route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, source_path: locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md}

@@ -1,4 +1,4 @@
-schema_version: 35
+schema_version: 36
 program: 5sigmas_GOLDEN_requalification
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
@@ -89,7 +89,7 @@ series_status:
     ledger: quality/series-requalification/context-article-ledger.yml
   llm-inference-engineering-economics:
     ledger: quality/series-requalification/inference-article-ledger.yml
-    latest_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run13.yml
+    latest_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run14.yml
     node_aware_remediation_receipt: quality/series-requalification/inference-edge-visibility-remediation-2026-09-21.yml
     active_branch: quality/llm-inference-requalification
     current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
@@ -98,37 +98,39 @@ series_status:
     route_locale_rows: 12
     chapter_count: 6
     has_series_presentation: false
-    iteration_count_ch1_es: 15
-    iteration_count_ch1_en: 15
-    iteration_count_ch2_to_ch5_es_en: 11
-    iteration_count_ch6_es: 13
-    iteration_count_ch6_en: 12
+    iteration_count_ch1_es: 16
+    iteration_count_ch1_en: 16
+    iteration_count_ch2_to_ch5_es_en: 12
+    iteration_count_ch6_es: 14
+    iteration_count_ch6_en: 13
     source: PASS_12_OF_12
-    build: PENDING_CURRENT_SITE_HEAD
-    browser: PENDING_CURRENT_SITE_HEAD
-    media_visual: PENDING_CURRENT_SITE_HEAD
-    indexability: PENDING_CURRENT_SITE_HEAD
-    pixel: BLOCKED_0_OF_12_P1_CH1_CH6_PENDING_RERENDER_AND_MANUAL_REVIEW
-    pedagogy: BLOCKED_0_OF_12_P1_CH1_CH6_PENDING_RERENDER_AND_MANUAL_REVIEW
+    build: PENDING_POST_REMEDIATION_EXACT_HEAD
+    browser: PENDING_POST_REMEDIATION_EXACT_HEAD
+    media_visual: PENDING_POST_REMEDIATION_EXACT_HEAD
+    indexability: PENDING_POST_REMEDIATION_EXACT_HEAD
+    pixel: BLOCKED_0_OF_12_SHARED_P1_PENDING_RERENDER_AND_MANUAL_REVIEW
+    pedagogy: BLOCKED_0_OF_12_SHARED_P1_PENDING_RERENDER_AND_MANUAL_REVIEW
     article_golden: 0/6
     voice_enhancement: DEFERRED_OWNER_LOCAL
     known_p0: 0
-    known_p1_open_rows: 4
+    known_p1_open_rows: 12
     known_p2: 0
-    known_defect: INFERENCE_MOBILE_EDGE_VISIBLE_LENGTH_UNDER_MIN_CH1_CH6_E7
-    prior_evidence_head: 837b6abacd1d8038d5d22d489381e45324894375
-    prior_evidence_merge_ref: c7b67e6b4c51a534bb59454281d86e45dd24752d
-    prior_evidence_run: 35544170017
-    prior_evidence_artifact: 10616606049
-    prior_evidence_artifact_sha256: eead8b1643c1de36889b9ae90dafa396a61443f9dd8161f20724a72e103aed4b
-    prior_automated_gates: SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_RELATIONSHIPS_PASS_TEXT_FIT_SHORT_EDGE_FAIL_8_CONTEXTS
-    remediation_site_head: 26d9b7b253ceb82aeef02a87e773afec46b90958
-    remediation: NODE_AWARE_BOUNDARIES_RETAINED_PLUS_TARGETED_CH1_SCHEDULER_AND_CH6_ACCOUNT_WIDTH_BUDGETS_WITH_SHORT_EDGE_NEGATIVE_MUTATION_UNCHANGED
+    known_defect: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+    exact_green_evidence_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+    exact_green_evidence_run: 35547227151
+    exact_green_evidence_artifact: 10616942622
+    exact_green_evidence_artifact_sha256: a04bc7c0949d2221700728f9d0d33c781ad74554f2b59ec58c581295837718d3
+    exact_green_automated_gates: SOURCE_BUILD_BROWSER_MEDIA_INDEXABILITY_RELATIONSHIPS_TEXT_FIT_READER_SHELL_PASS
+    manual_review_verdict: CHANGES_REQUIRED_DESPITE_AUTOMATED_GREEN
+    manual_review_scope: ALL_12_ROUTE_LOCALE_ROWS_MOBILE_NORMAL_REDUCED_PLUS_DESKTOP_AND_VIDEO_EVIDENCE
+    remediation_renderer_head: b600dee16e0105868c0988469ee2b54fdf860933
+    remediation_gate_head: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
+    remediation: SMALLER_ARROW_MARKER_SHORT_EDGES_SOLID_NONANIMATED_DIRECT_GAP_BUDGETS_PLUS_MIN_3_UNIT_AND_DASH_PHASE_NEGATIVE_GATE
     defect_status: FIX_IMPLEMENTED_PENDING_EXACT_CURRENT_HEAD_RERENDER_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW
     production_verified: false
     series_golden: false
     state: QA
-    next_action: CONSUME_EXACT_CURRENT_HEAD_CHECKPOINT_REQUIRE_CH1_CH6_E7_MIN_1_5_ALL_8_CONTEXTS_THEN_MANUAL_PIXEL_PEDAGOGY_REVIEW_CLEAR_OR_ITERATE_P1_THEN_RECONCILE_MAIN
+    next_action: CONSUME_POST_REMEDIATION_EXACT_HEAD_CHECKPOINT_REQUIRE_MIN_EDGE_3_AND_SHORT_EDGE_SOLID_NONANIMATED_ALL_12_ROWS_THEN_MANUAL_REVIEW_CLEAR_OR_ITERATE_P1_THEN_RECONCILE_MAIN
   evaluating-ai-systems-production:
     state: REOPENED_PUBLISHED_UNCERTIFIED
 release_coordination:

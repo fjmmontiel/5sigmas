@@ -1,0 +1,71 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_kind: MANUAL_PIXEL_PEDAGOGY_EXACT_ARTIFACT
+reviewed_at_utc: 2026-09-21T01:05:00Z
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+evidence:
+  branch_head: ca2d50b3778b93a43127d42e4782fd4afadc0737
+  run: 35547227151
+  run_conclusion: success
+  pr_visual_run: 35547227146
+  pr_visual_conclusion: success
+  artifact: 10616942622
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  artifact_sha256: a04bc7c0949d2221700728f9d0d33c781ad74554f2b59ec58c581295837718d3
+  route_locale_rows_inspected: 12
+  mobile_motion_contexts_inspected: 24
+  desktop_locale_surfaces_inspected: true
+  video_start_middle_final_inspected: true
+automated_exact_head:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+  mobile_text_fit_negative_mutation: PASS
+  reader_navigation_responsive_shell: PASS
+manual_verdict:
+  PIXEL_REVIEW: CHANGES_REQUIRED
+  PEDAGOGY_REVIEW: CHANGES_REQUIRED
+  p0: 0
+  p1: 1_shared
+  p2: 0
+  defect_code: INFERENCE_MOBILE_DIRECTED_EDGE_SHAFT_VISIBILITY_AND_DASH_PHASE
+  scope: SHARED_MOBILE_RENDERER_MULTIPLE_DIRECT_ADJACENT_EDGES_ACROSS_SERIES
+  finding: >-
+    Node text and page layout are readable, but the exact retained mobile pixels show multiple direct
+    relationships whose visible shaft is dominated by the arrowhead or can disappear into the animated
+    dash phase. The prior >=1.5 SVG-unit gate proved only path existence, not continuous visual causality.
+    This is visible most clearly in Ch1 and Ch6 and also recurs on adjacent-node relationships in the
+    other chapter graphs. Automated green therefore does not certify PIXEL/PEDAGOGY.
+  root_cause: >-
+    A 6x6 marker consumes a large fraction of very short boundary-clipped paths, while the 5/4 animated
+    dash pattern can phase the remaining shaft into a gap. The deterministic minimum of 1.5 SVG units
+    is too permissive for human-visible direction continuity.
+remediation:
+  renderer_commit: b600dee16e0105868c0988469ee2b54fdf860933
+  gate_commit: 90c7779e7b8c659f3247d9b3385b2c3375d001cb
+  renderer_changes:
+    - reduce_arrow_marker_6x6_to_4x4
+    - classify_paths_under_8_svg_units_as_short
+    - render_short_paths_solid_and_non_animated
+    - increase_direct_gap_budget_by_narrowing_ch1_scheduler_and_32_percent_overrides
+  regression_changes:
+    - raise_minimum_visible_path_from_1_5_to_3_svg_units
+    - require_paths_under_8_units_to_be_explicitly_short_solid_and_non_animated
+    - add_negative_dashed_short_edge_mutation
+  threshold_relaxation: false
+  typography_reduced: false
+  topology_removed: false
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+next_action: >-
+  Consume the exact post-remediation Series 4 checkpoint without manual rerun. Require the stricter
+  >=3-unit edge-length and short-edge solid/non-animated mutations to pass for all 12 route-locale rows
+  in normal and reduced motion; then manually inspect the retained mobile/desktop/video evidence again.
