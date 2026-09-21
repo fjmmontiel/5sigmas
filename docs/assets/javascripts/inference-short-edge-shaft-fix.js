@@ -8,6 +8,18 @@
   const FALLBACK_DETOUR = 7.0;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
+  const enforceGraphCoverage = (graph) => {
+    if (graph.dataset.inferenceMobileGraph !== '05') return;
+    const svg = graph.querySelector('svg');
+    if (!svg) return;
+    // The canonical Ch5 snippet owns `.s5v-routing-policy svg { height:auto }` for its desktop SVG.
+    // The injected native mobile graph lives inside the same section, so force its overlay SVG to
+    // cover the full 640px graph before any node-aware routing geometry is measured.
+    svg.style.height = '100%';
+    svg.style.overflow = 'hidden';
+    svg.dataset.mobileGraphCoverageFix = 'ch5-full-height-v1';
+  };
+
   const parsePoints = (value) => String(value || '').trim().split(/\s+/).map((point) => point.split(',').map(Number)).filter((point) => point.length === 2 && point.every(Number.isFinite));
   const serialize = (points) => points.map(([x, y]) => `${x.toFixed(3)},${y.toFixed(3)}`).join(' ');
 
@@ -114,6 +126,7 @@
   };
 
   const routeGraph = (graph) => {
+    enforceGraphCoverage(graph);
     const geometry = svgGeometry(graph);
     graph.querySelectorAll(EDGE_SELECTOR).forEach((edge) => routeEdge(graph, geometry, edge));
   };

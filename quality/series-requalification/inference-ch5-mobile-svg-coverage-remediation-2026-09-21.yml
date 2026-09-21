@@ -1,0 +1,69 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+created_utc: '2026-09-21T05:03:41Z'
+evidence:
+  head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+  series4_run: 35561130922
+  artifact: 10622267672
+  artifact_sha256: 288742056d4c33feeaa04c2fc40ae20e64425eff3a13ebcb05a0860c6cbd37b9
+automated_exact_head_before_remediation:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  ARTICLE_WATCH_LIFECYCLE: 12/12
+  RELATIONSHIP_ACCESSIBILITY: 12/12
+  MOBILE_TEXT_FIT: 12/12
+  MOBILE_EDGE_SHAFT_SHAPE: 12/12
+  READER_SHELL: 12/12
+manual_review:
+  mobile_route_locale_rows_inspected: 12
+  mobile_motion_contexts_inspected: 24
+  ch1_video_es_en_start_middle_final: PASS
+  pixel_pedagogy: CHANGES_REQUIRED_CH5_ES_EN
+  p0: 0
+  p1_open_rows: 2
+  p2: 0
+  defect: INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT
+  observed:
+    - 'Ch5 ES and EN, both normal and reduced-motion, render the lower causal relationships as missing/disconnected while the mobile nodes remain visible.'
+    - 'The top Request -> Eligible -> Response cache path remains visible, but Primary/SUCCESS/Fallback/Telemetry/Policy relationships are visually severed.'
+    - 'Ch1 repaired ES/EN visual-video start/middle/final frames are clean and THROUGHPUT fits inside its node.'
+diagnosis:
+  canonical_rule: '.s5v-routing-policy svg { display:block; width:100%; height:auto; overflow:visible; }'
+  mobile_overlay_intent: '.s5v-inference-mobile-native__graph svg { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }'
+  root_cause: 'The Ch5 canonical section selector also matches the injected native-mobile SVG and wins height:auto, collapsing the edge overlay while absolutely positioned nodes still use the full mobile graph height.'
+  deterministic_reproduction:
+    graph_rect_px: '288x640'
+    leaked_svg_rect_px: '288x288'
+    fixed_svg_rect_px: '288x640'
+    result: 'The leaked 288x288 overlay reproduces the exact retained Ch5 lower-edge disconnect; restoring full-height coverage restores the causal edge map.'
+  prior_sync_hypothesis: REJECTED_BY_DETERMINISTIC_CSS_REPRODUCTION
+remediation:
+  renderer_file: docs/assets/javascripts/inference-short-edge-shaft-fix.js
+  action: 'For graph 05 only, force the injected mobile edge-overlay SVG to height:100% and overflow:hidden before node-aware routing geometry is measured.'
+  scope: CH5_ES_EN_ONLY
+  route_version_preserved: orthogonal-clearance-v2
+  regression_gate_file: scripts/validate_inference_mobile_edge_shaft_shape.mjs
+  new_gate: 'Rendered SVG bounding rect must cover the rendered mobile graph rect within 1px for every 6 chapters x ES/EN x normal/reduced surface.'
+  negative_mutation: COMPRESSED_SVG_288X288_INSIDE_288X640_GRAPH
+  existing_shape_thresholds_preserved: true
+  thresholds_weakened: false
+ch1_video:
+  historical_defect: INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW
+  current_exact_head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+  automated_media_gate: PASS
+  manual_exact_video_frames_es_en_start_middle_final: PASS
+  status: CLOSED_EXACT_HEAD_40BAB616
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: '92 > 91 retained for the future voice/accessibility lane; it does not block current GOLDEN.'
+status: FIX_IMPLEMENTED_PENDING_EXACT_HEAD_RERENDER_AND_MANUAL_REVIEW
+next_action: 'Consume the automatically triggered exact-head Series4 integration; require full-height overlay coverage plus all existing gates; manually reinspect Ch5 ES/EN normal/reduced and then the exact retained full-series pixel/pedagogy evidence. Promote only with zero P0/P1/P2.'

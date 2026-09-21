@@ -1,0 +1,120 @@
+schema_version: 21
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+supersedes_for_current_state: quality/series-requalification/inference-run16-ledger-delta.yml
+evidence_head_before_remediation: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+evidence_run: 35561130922
+evidence_artifact: 10622267672
+evidence_artifact_sha256: 288742056d4c33feeaa04c2fc40ae20e64425eff3a13ebcb05a0860c6cbd37b9
+remediation_receipt: quality/series-requalification/inference-ch5-mobile-svg-coverage-remediation-2026-09-21.yml
+iteration_counts_after_this_review:
+  ch1_es: 21
+  ch1_en: 21
+  ch2_es: 17
+  ch2_en: 17
+  ch3_es: 17
+  ch3_en: 17
+  ch4_es: 17
+  ch4_en: 17
+  ch5_es: 17
+  ch5_en: 17
+  ch6_es: 19
+  ch6_en: 18
+iteration_reason: 'All 12 route×locale rows were actually inspected once in exact-head mobile normal/reduced evidence. Ch1 ES/EN exact current video start/middle/final frames were also inspected. No row increments more than once.'
+exact_head_40bab_automated_gates:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 12/12
+  BROWSER_PASS: 12/12
+  MEDIA_VISUAL_PASS: 12/12
+  INDEXABILITY_PASS: 12/12
+  ARTICLE_WATCH_LIFECYCLE: 12/12
+  RELATIONSHIP_ACCESSIBILITY: 12/12
+  MOBILE_TEXT_FIT: 12/12
+  MOBILE_EDGE_SHAFT_SHAPE: 12/12
+  READER_SHELL: 12/12
+  note: 'Automated exact-head results are retained as historical evidence only after the site-facing Ch5 overlay fix changes bytes.'
+manual_exact_head_40bab:
+  route_locale_rows_inspected: 12
+  mobile_motion_contexts: 24
+  PIXEL_REVIEW: 10/12_NO_KNOWN_DEFECT_AND_2/12_CHANGES_REQUIRED_CH5
+  PEDAGOGY_REVIEW: 10/12_NO_KNOWN_DEFECT_AND_2/12_CHANGES_REQUIRED_CH5
+  ARTICLE_GOLDEN: 0/6
+  known_p0: 0
+  known_p1_open_rows: 2
+  known_p2: 0
+  defect: INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT
+  diagnosis: 'Ch5 canonical .s5v-routing-policy svg height:auto collapses the injected mobile edge overlay to 288x288 inside a 288x640 graph. Nodes remain positioned across the full 640px graph, so lower causal edges are visually disconnected. Deterministic reproduction matches the retained artifact.'
+  ch1_video_es_en_start_middle_final: PASS
+closed_this_review:
+  - severity: P1
+    code: INFERENCE_CH1_VIDEO_THROUGHPUT_LABEL_OVERFLOW
+    scope: [CH1_ES_VIDEO, CH1_EN_VIDEO]
+    closed_head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+    proof: 'Exact automated MEDIA_VISUAL_PASS plus manual ES/EN start/middle/final frames show THROUGHPUT and surrounding labels within node bounds.'
+  - severity: P1
+    code: INFERENCE_MOBILE_DIRECTED_EDGE_NODE_CLEARANCE_VISIBILITY
+    scope: [CH1_ES_EN, CH2_ES_EN, CH3_ES_EN, CH4_ES_EN, CH6_ES_EN]
+    closed_head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+    proof: 'Exact 24-screen review no longer reproduces the prior shared renderer defect outside Ch5. Ch5 is reclassified to the deterministic section-specific SVG coverage defect below.'
+known_defects:
+  p0: 0
+  p1_open_rows: 2
+  p2: 0
+  active:
+    - severity: P1
+      code: INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT
+      scope: [CH5_ES, CH5_EN]
+      evidence_head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
+      evidence_run: 35561130922
+      evidence_artifact: 10622267672
+      root_cause_file: docs/snippets/articulos-tecnicos/inference-routing-fallback-cache-policy.html
+      renderer_file: docs/assets/javascripts/inference-short-edge-shaft-fix.js
+      regression_gate_file: scripts/validate_inference_mobile_edge_shaft_shape.mjs
+      status: FIX_IMPLEMENTED_PENDING_EXACT_RERENDER_MANUAL_REVIEW
+      next_action: 'Require Ch5 edge overlay SVG full-height coverage and manually reinspect ES/EN normal/reduced exact evidence.'
+current_post_remediation_target_fail_closed:
+  SOURCE_PASS: 12/12
+  BUILD_PASS: 0/12
+  BROWSER_PASS: 0/12
+  MEDIA_VISUAL_PASS: 0/12
+  INDEXABILITY_PASS: 0/12
+  PIXEL_REVIEW: 0/12
+  PEDAGOGY_REVIEW: 0/12
+  ARTICLE_GOLDEN: 0/6
+  reason: 'A site-facing renderer asset and regression gate changed. Exact-head evidence must be regenerated; no non-source PASS is carried forward to the new bytes.'
+rows:
+  - {route: /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: es, iteration_count: 21, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/, locale: en, iteration_count: 21, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: es, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/, locale: en, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: es, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/, locale: en, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: es, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/, locale: en, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: es, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT], state: QA, next_action: EXACT_HEAD_CH5_FULL_HEIGHT_RERENDER_MANUAL_REVIEW}
+  - {route: /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/, locale: en, iteration_count: 17, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [INFERENCE_CH5_MOBILE_SVG_HEIGHT_CASCADE_EDGE_DISCONNECT], state: QA, next_action: EXACT_HEAD_CH5_FULL_HEIGHT_RERENDER_MANUAL_REVIEW}
+  - {route: /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: es, iteration_count: 19, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+  - {route: /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/, locale: en, iteration_count: 18, SOURCE_PASS: true, BUILD_PASS: false, BROWSER_PASS: false, MEDIA_VISUAL_PASS: false, INDEXABILITY_PASS: false, PIXEL_REVIEW: false, PEDAGOGY_REVIEW: false, VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL, defects: [], state: QA, next_action: EXACT_HEAD_RERUN_AND_FINAL_PIXEL_PEDAGOGY_RECONFIRM}
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: '92 > 91 retained for future voice/accessibility; non-blocking.'
+release:
+  pr: 342
+  pr_state: OPEN_DRAFT
+  merge_allowed: false
+  deploy_verified: false
+  main_reconciliation_required_before_ready_merge: true
+release_contract_v2:
+  issue: fjmmontiel/5sigmas-tools-content#281
+  state: CHANGES_REQUIRED_BLOCKED
+  historical_72h_satisfied: true
+  remaining_gap: FRESH_NONCACHED_EXACT_REVISION_ES_EN_LIVE_PROOF
+  linkedin_writes_from_golden: 0
+  linkedin_queues_from_golden: 0
+  linkedin_activations_from_golden: 0
+next_action: 'Consume current exact-head Series4 CI without manual rerun; inspect Ch5 ES/EN normal/reduced and exact full-series evidence. With zero P0/P1/P2, reconcile current main, run one final integrated checkpoint, merge, deploy, and perform exact live ES/EN INDEXABILITY verification before SERIES_GOLDEN.'
