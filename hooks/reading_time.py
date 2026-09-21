@@ -153,9 +153,17 @@ def _projection_markup(spec: dict, language: str) -> str:
         )
     return (
         f'<div class="s5v-mobile-native" data-mobile-native="true" role="group" aria-label="{aria}">'
-        f'<div class="s5v-mobile-native__flow">{"".join(rows)}</div>'
+        f'<div class="s5v-mobile-native__flow'>{"".join(rows)}</div>'
         '</div>'
     )
+
+
+def _find_section_with_class(html: str, section_class: str) -> int:
+    """Return the opening <section> offset whose class list contains section_class."""
+    for match in re.finditer(r'<section\b[^>]*\bclass=(["\'])(?P<classes>.*?)\1[^>]*>', html, flags=re.IGNORECASE | re.DOTALL):
+        if section_class in match.group('classes').split():
+            return match.start()
+    return -1
 
 
 def _inject_mobile_native(html: str, config, *, final_document: bool) -> tuple[str, bool]:
@@ -169,8 +177,7 @@ def _inject_mobile_native(html: str, config, *, final_document: bool) -> tuple[s
     language = _content_language(config)
     changed = False
     for section_class, spec in MOBILE_NATIVE_PROJECTIONS.items():
-        marker = f'class="{section_class}'
-        section_start = html.find(marker)
+        section_start = _find_section_with_class(html, section_class)
         if section_start < 0:
             continue
         section_end = html.find('</section>', section_start)
