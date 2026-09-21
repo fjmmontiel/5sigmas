@@ -2,7 +2,7 @@
 import {Paint,clamp,lerp} from '../render/paint.mjs';
 import {sceneLayout,drawHeader,drawText} from '../render/layout.mjs';
 import {beatState,expectedBeatEvents} from './semantic-beats.mjs';
-import {CHAPTER01_THEME as THEME} from './chapter01.mjs';
+import {SEGURIDAD_THEME as THEME} from './theme.mjs';
 import {CHAPTER02} from './chapter02-data.mjs';
 const t=(s,k,l)=>{const v=s.labels[k]?.[l];if(typeof v!=='string')throw Error(`MISSING_LABEL:${s.id}/${k}/${l}`);return v;};
 function label(P,text,x,y,w,size=40,strong=false){const lines=P.lines(text,w,size,strong?600:400);lines.forEach((v,i)=>P.text(v,x,y+i*size*1.2,size,strong?P.T.accentText:P.T.ink,strong?600:400,'center',w));return lines.length*size*1.2;}
