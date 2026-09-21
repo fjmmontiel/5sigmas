@@ -19,7 +19,9 @@ def inspect(text,scroller,rels):
  if f".{scroller}" not in text or "display:none!important" not in text:f.append("MOBILE_LEGACY_CANVAS_NOT_HIDDEN")
  if 's5v-locale-es' not in text or 's5v-locale-en' not in text or 'html[lang^="en"]' not in text:f.append("MOBILE_LOCALE_PARITY_MISSING")
  for rel in rels:
-  if text.count(f'data-mobile-relationship="{rel}"')!=1:f.append(f"RELATIONSHIP_MISSING_OR_DUPLICATED:{rel}")
+  encoded=rel.replace(">", "&gt;")
+  count=text.count(f'data-mobile-relationship="{rel}"')+text.count(f'data-mobile-relationship="{encoded}"')
+  if count!=1:f.append(f"RELATIONSHIP_MISSING_OR_DUPLICATED:{rel}:count={count}")
  if text.count("data-mobile-node=")<len(rels)*2:f.append("MOBILE_NODE_COVERAGE_TOO_LOW")
  if text.count("data-mobile-edge=")<len(rels):f.append("MOBILE_EDGE_COVERAGE_TOO_LOW")
  return f
