@@ -9,7 +9,7 @@ const routes = [
   '05-model-routing-fallback-caching-workload-aware-serving',
   '06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints',
 ];
-const MIN_VISIBLE_EDGE_LENGTH = 3;
+const MIN_VISIBLE_EDGE_LENGTH = 6;
 const SHORT_EDGE_SOLID_THRESHOLD = 8;
 
 const within = (inner, outer, pad = 1) => Boolean(
@@ -66,6 +66,7 @@ const inspectGraph = async (page, selector) => page.locator(selector).evaluate((
       markerEnd: edge.getAttribute('marker-end') || '',
       length,
       shortEdge: edge.dataset.mobileGraphShortEdge === 'true',
+      routedShortEdge: edge.dataset.mobileGraphRoutedShortEdge === 'true',
       display: style.display,
       visibility: style.visibility,
       opacity: parseFloat(style.opacity || '1'),
@@ -127,6 +128,9 @@ const collectLayoutFailures = (result, prefix) => {
     if (!Number.isFinite(edge.length) || edge.length < MIN_VISIBLE_EDGE_LENGTH) {
       failures.push(`${prefix}: edge ${edge.id} visible path too short (${edge.length.toFixed(3)} < ${MIN_VISIBLE_EDGE_LENGTH})`);
     }
+    if (edge.shortEdge && !edge.routedShortEdge) {
+      failures.push(`${prefix}: short edge ${edge.id} lacks routed visible shaft`);
+    }
     if (edge.length < SHORT_EDGE_SOLID_THRESHOLD) {
       if (!edge.shortEdge) failures.push(`${prefix}: short edge ${edge.id} is not classified for solid rendering (${edge.length.toFixed(3)} < ${SHORT_EDGE_SOLID_THRESHOLD})`);
       if (!isSolidDash(edge.strokeDasharray)) failures.push(`${prefix}: short edge ${edge.id} retains dash gaps (${JSON.stringify(edge.strokeDasharray)})`);
@@ -153,6 +157,7 @@ const runNegativeMutation = async (browser) => {
         <defs><marker id="mutant-arrow" markerWidth="4" markerHeight="4" refX="3.5" refY="2" orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#000"/></marker></defs>
         <polyline points="10,10 12,10" marker-end="url(#mutant-arrow)" data-mobile-graph-edge="mutant-too-short"></polyline>
         <polyline points="20,20 24,20" marker-end="url(#mutant-arrow)" data-mobile-graph-edge="mutant-dashed-short"></polyline>
+        <polyline points="30,30 36,30" marker-end="url(#mutant-arrow)" data-mobile-graph-edge="mutant-unrouted-short" data-mobile-graph-short-edge="true" style="stroke-dasharray:none;animation:none"></polyline>
       </svg>
       <div id="n1" class="n" data-mobile-graph-node="mutant-a">THIS_LABEL_MUST_OVERFLOW</div>
       <div id="n2" class="n" data-mobile-graph-node="mutant-b">OVERLAP</div>
@@ -168,6 +173,7 @@ const runNegativeMutation = async (browser) => {
     failures.some((failure) => failure.includes('edge mutant-too-short visible path too short')),
     failures.some((failure) => failure.includes('short edge mutant-dashed-short is not classified')),
     failures.some((failure) => failure.includes('short edge mutant-dashed-short retains dash gaps')),
+    failures.some((failure) => failure.includes('short edge mutant-unrouted-short lacks routed visible shaft')),
   ];
   if (expected.some((detected) => !detected)) {
     throw new Error(`Negative mobile-layout mutations were not all detected: ${JSON.stringify(failures)}`);
@@ -219,4 +225,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`PASS: negative overflow/overlap/short-edge/dash-phase mutations fail as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text, avoid meaningful node/label collisions, retain directed visible edge paths >= ${MIN_VISIBLE_EDGE_LENGTH} SVG units, and render paths shorter than ${SHORT_EDGE_SOLID_THRESHOLD} units as non-animated solid shafts at 390px in normal/reduced motion.`);
+console.log(`PASS: negative overflow/overlap/short-edge/dash-phase/unrouted-short-edge mutations fail as expected; all 12 ES/EN inference mobile graphs fit node and edge-label text, avoid meaningful node/label collisions, retain directed visible edge paths >= ${MIN_VISIBLE_EDGE_LENGTH} SVG units, and route paths born shorter than ${SHORT_EDGE_SOLID_THRESHOLD} units as non-animated solid shafts at 390px in normal/reduced motion.`);
