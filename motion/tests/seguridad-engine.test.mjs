@@ -29,11 +29,17 @@ test('render matrix is exactly six chapters x two locales x two native orientati
   }
 });
 
-test('all 30 semantic concepts compile H/V with no generic topology fallback', () => {
+test('all 30 semantic concepts compile H/V and diversity counts real handlers rather than labels', () => {
   const evidence = validateSeguridadMechanismCoverage(spec, register);
   assert.equal(evidence.concepts, 30);
-  assert.ok(evidence.families >= 20);
-  assert.ok(evidence.maxFamilyUse <= 2);
+  assert.equal(evidence.declaredFamilies, 27);
+  assert.equal(evidence.effectiveHandlerFamilies, 25);
+  assert.equal(evidence.maxDeclaredFamilyUse, 2);
+  assert.equal(evidence.maxHandlerUse, 2);
+  assert.deepEqual(evidence.aliasedDeclaredFamilies, [
+    {handler:'orderedLevels', declaredFamilies:['outcome_ladder','privilege_ladder'], uses:2},
+    {handler:'parallelLanes', declaredFamilies:['parallel_evidence_lanes','parallel_mechanism_compare'], uses:2}
+  ]);
 
   const concepts = indexSeguridadRegister(register);
   for (const concept of concepts.values()) {
@@ -60,6 +66,31 @@ test('all 30 semantic concepts compile H/V with no generic topology fallback', (
       }
     }
   }
+});
+
+test('renaming families cannot hide a repeated real handler', () => {
+  const mutated = structuredClone(register);
+  const aliases = [
+    ['S00-C3','fake_family_a'],
+    ['S02-C4','fake_family_b']
+  ];
+  for (const [id, family] of aliases) {
+    for (const chapter of mutated.chapters) {
+      const concept = chapter.concepts.find(item => item.id === id);
+      if (concept) concept.perceptual_family = family;
+    }
+  }
+  const evidence = validateSeguridadMechanismCoverage(spec, mutated);
+  assert.equal(evidence.maxHandlerUse, 2);
+  assert.ok(evidence.aliasedDeclaredFamilies.some(row => row.handler === 'orderedLevels' && row.uses === 2));
+});
+
+test('a third topology alias to the same real handler fails the family cap', () => {
+  const mutated = structuredClone(register);
+  const concept = mutated.chapters[0].concepts[0];
+  concept.topology = 'three_parallel_lanes';
+  concept.perceptual_family = 'totally_new_name';
+  assert.throws(() => validateSeguridadMechanismCoverage(spec, mutated), /real handler repeat 3 exceeds cap/);
 });
 
 test('seek/replay is deterministic and independent of call order', () => {
