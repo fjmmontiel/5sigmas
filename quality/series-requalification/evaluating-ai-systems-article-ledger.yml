@@ -1,25 +1,25 @@
-schema_version: 5
+schema_version: 6
 program: 5sigmas_GOLDEN_requalification
 series: evaluating-ai-systems-production
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
-state: ARTICLE_GOLDEN_6_OF_6_RELEASED_LIVE_CURRENT_GATE_REVALIDATION_PENDING
+state: SERIES_GOLDEN_PRODUCTION_VERIFIED
 active_branch: quality/evaluating-ai-systems-live-qa-contract-fix
-base_main: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+base_main: e198072b35507406d8616824d90a15d17d3f5dc8
 release_pr: 352
 release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-deploy_run: 35649362206
-deployed_revision: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-live_qa_run: 35650849256
-live_qa_result: CHANGES_REQUIRED_QA_CONTRACT_STALE_MOBILE_CANVAS_VALIDATOR
 live_contract_fix_pr: 353
+live_contract_fix_merge_commit: e198072b35507406d8616824d90a15d17d3f5dc8
+deploy_run: 35658347258
+deployed_revision: e198072b35507406d8616824d90a15d17d3f5dc8
+live_qa_run: 35659933884
+live_qa_result: SUCCESS_ALL_CURRENT_NONDEFERRED_LIVE_GATES
 chapter_count: 6
 route_locale_rows: 12
 has_series_presentation: false
 iteration_policy: increment_only_when_route_locale_is_really_inspected_or_changed
 iteration_count_changed_this_run: false
-qa_contract_blockers:
-  - LIVE_QA_EXECUTED_RETIRED_GIANT_HORIZONTAL_MOBILE_CANVAS_VALIDATOR
+qa_contract_blockers: []
 
 latest_inspected_checkpoint:
   head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
@@ -42,26 +42,44 @@ latest_inspected_checkpoint:
   pedagogy_review: PASS_12_ROUTE_LOCALE_ROWS_DIRECTED_RELATIONSHIP_MECHANISMS
   video_start_middle_final_manual_review: PASS_12_NATIVE_ES_EN_VIDEOS_72_FRAMES
   known_p0_p1_p2: 0
-  production_verified: false
-  series_golden: false
+  production_verified: true
+  series_golden: true
+
+latest_series_audit:
+  head: 6b5cd877a754d9506bb0e217d993efd3477deb26
+  run: 35656657665
+  result: SUCCESS_ZERO_BASED_CURRENT_CONTRACT_SERIES_AUDIT
+  source_contracts: PASS
+  giant_mobile_canvas_regression: PASS_NATIVE_MOBILE_RELATIONSHIPS_REQUIRED
+  media_visual_voice_split: PASS
+  build_es_en: PASS
+  publication_contract: PASS
+  indexability_negative_mutations: PASS
+  rendered_indexability: PASS
+  browser_resources_bilingual_hub_locale_parity: PASS
+  native_relationship_runtime_accessibility: PASS
+  article_watch_playback_lifecycle: PASS
+  reader_navigation_responsive_shell: PASS
+  media_visual_gate: PASS
 
 live_release_checkpoint:
-  deployed_revision_exact: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
-  deploy_run: 35649362206
+  deployed_revision_exact: e198072b35507406d8616824d90a15d17d3f5dc8
+  deploy_run: 35658347258
   deploy_result: SUCCESS
-  live_qa_run: 35650849256
+  live_qa_run: 35659933884
+  live_qa_result: SUCCESS
   exact_revision: PASS
   INDEXABILITY_PASS: PASS_12_OF_12_ROUTE_LOCALE_24_ARTICLE_WATCH_SURFACES
-  browser_resources: PASS_14_PAGES_4_PROFILES_56_CONTEXTS
+  browser_resources: PASS_ALL_ES_EN_EVALUATION_ROUTES
   bilingual_hub_mirror: PASS
   locale_switching_reader_progression: PASS
-  current_owner_relationship_accessibility: NOT_EXECUTED_BY_LIVE_WORKFLOW
-  current_owner_article_watch_playback_lifecycle: NOT_EXECUTED_BY_LIVE_WORKFLOW
-  failure_classification: QA_CONTRACT_DEFECT_NOT_ARTICLE_DEFECT
-  failure_detail: HISTORICAL_CHAPTER_VALIDATOR_EXPECTED_RETIRED_HORIZONTAL_MOBILE_CANVAS_WHILE_CURRENT_GOLDEN_CONTRACT_REQUIRES_NATIVE_MOBILE_DIRECTED_RELATIONSHIPS
+  current_owner_relationship_accessibility: PASS_ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED
+  current_owner_article_watch_playback_lifecycle: PASS_NORMAL_AND_REDUCED_MOTION
+  qa_contract_defect: RESOLVED_BY_PR353
+  failure_classification: NONE_CURRENT
   repair_branch: quality/evaluating-ai-systems-live-qa-contract-fix
   repair_pr: 353
-  next_action: PASS_PR353_SERIES5_REVIEW_MERGE_DEPLOY_THEN_RUN_CURRENT_OWNER_LIVE_RELATIONSHIP_AND_PLAYBACK_GATES
+  next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
 
 historical_checkpoints:
   - head: cca79fe0976f96b41b3c23754b603b836727fe9a
@@ -74,6 +92,11 @@ historical_checkpoints:
     result: CHANGES_REQUIRED_BROWSER_RELATIONSHIP
     artifact: 10654414195
     artifact_sha256: e899c0af6041815f99432e6d09b892929964e2d5f440336460c6af90b4cf25e9
+  - deployed_revision: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    deploy_run: 35649362206
+    live_qa_run: 35650849256
+    result: CHANGES_REQUIRED_QA_CONTRACT_STALE_MOBILE_CANVAS_VALIDATOR
+    deterministic_article_defect_found: false
 
 summary_current_exact_head:
   SOURCE_PASS: 12/12
@@ -84,6 +107,8 @@ summary_current_exact_head:
   PIXEL_REVIEW: 12/12
   PEDAGOGY_REVIEW: 12/12
   ARTICLE_GOLDEN: 6/6
+  SERIES_GOLDEN: true
+  production_verified: true
   known_p0: 0
   known_p1_rows: 0
   known_p2: 0
@@ -117,6 +142,7 @@ media_visual:
   localized_es_en: true
   poster_title_summary_duration_key_moments: true
   article_watch_lifecycle: PASS_24_SURFACES_DESKTOP_MOBILE_NORMAL_REDUCED
+  live_article_watch_lifecycle: PASS_RUN_35659933884
   audio_required_now: false
   voice_enhancement: DEFERRED_OWNER_LOCAL
   historical_caption_transcript_threshold_debt: '92 > 91 retained for future voice/accessibility lane'
@@ -134,12 +160,12 @@ indexability:
   h1_title_meta_lang: PASS
   schema_visible_content_consistency: PASS
   negative_mutations: PASS
-  live_exact_revision: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+  live_exact_revision: e198072b35507406d8616824d90a15d17d3f5dc8
   live_exact_pass: true
-  live_run: 35650849256
+  live_run: 35659933884
   google_selection_asserted: false
   authenticated_gsc_observation: NONE_CONSUMED
-  release_requires_live_revalidation: CURRENT_RELATIONSHIP_AND_PLAYBACK_GATES_PENDING_PR353
+  release_requires_live_revalidation: false
 
 manual_review:
   desktop_mobile_normal_reduced: PASS_12_ROUTE_LOCALE_ROWS
@@ -176,9 +202,9 @@ articles:
     canonical_hreflang_sitemap_internal_discovery: PASS
     watch_video_lifecycle: PASS
     evidence_revision_exact: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
-    live_deploy_verification: DEPLOYED_SHA_1F5FEB9_INDEXABILITY_RESOURCES_LOCALE_PASS_CURRENT_RELATIONSHIP_PLAYBACK_REVALIDATION_PENDING
+    live_deploy_verification: DEPLOYED_SHA_E198072_INDEXABILITY_RESOURCES_HUB_LOCALE_RELATIONSHIP_ACCESSIBILITY_PLAYBACK_PASS
     gsc_observation: NONE_CONSUMED
-    next_action: LIVE_CURRENT_OWNER_RELATIONSHIP_AND_PLAYBACK_GATE_AFTER_PR353
+    next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
     state: GOLDEN
   - <<: *golden_row
     route: /en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/
