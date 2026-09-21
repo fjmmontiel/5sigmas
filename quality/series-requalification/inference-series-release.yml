@@ -1,0 +1,55 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+state: SERIES_GOLDEN_PRODUCTION_VERIFIED
+article_golden: 6/6
+route_locale_rows_golden: 12/12
+source: PASS_12_OF_12
+build: PASS_12_OF_12
+browser: PASS_12_OF_12
+media_visual: PASS_12_OF_12
+indexability: PASS_12_OF_12
+pixel: PASS_12_OF_12
+pedagogy: PASS_12_OF_12
+voice_enhancement: DEFERRED_OWNER_LOCAL
+known_p0_p1_p2: 0
+release_pr: 342
+release_merge_commit: 0a4b29a88048bfd7e222c20d2fd3075f38ccd2e2
+production_revision_verified: ff32ffeeaf2d66caa9984e181e39def112130b99
+deploy_run: 35594975702
+deploy_conclusion: SUCCESS
+dedicated_live_qa_run: 35596015267
+dedicated_live_qa_conclusion: SUCCESS
+live_verification:
+  exact_revision_wait: PASS
+  INDEXABILITY_PASS: PASS_12_OF_12
+  browser_resources_es_en: PASS
+  bilingual_hub_and_mirror: PASS
+  locale_switching_and_reader_progression: PASS
+  article_watch_visual_media_lifecycle: PASS
+  chapter_accessibility_visual_states: PASS_6_OF_6
+  mobile_text_fit_overlap: PASS
+  failure_artifact_upload: SKIPPED_NO_FAILURE
+indexability_scope:
+  direct_http_no_redirect_chain: PASS
+  canonical: PASS
+  robots_noindex_x_robots: PASS
+  localized_title_description_h1_lang: PASS
+  crawlable_text_and_jsonld_syntax: PASS
+  sitemap_hreflang: PASS
+  normal_and_video_sitemaps: PASS
+  article_watch_links: PASS
+  internal_discovery_no_orphans: PASS
+  google_selection_asserted: false
+manual_exact_revision_evidence:
+  integrated_site_revision: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  review_run: 35579062804
+  artifact: 10630580355
+  artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
+  receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run18-integrated.yml
+release_notes:
+  - The later ff32ffee production revision changed QA/harness bytes, not the reviewed inference article/media bytes; dedicated live QA nevertheless bound the production proof to ff32ffee exactly.
+  - VOICE narration/audio/captions/transcript/timings remain future owner-local enhancement debt and do not block current GOLDEN.
+  - Historical caption/transcript budget debt 92 > 91 remains preserved outside the current GOLDEN gate.
