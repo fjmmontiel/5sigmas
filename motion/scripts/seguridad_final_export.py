@@ -72,6 +72,7 @@ def main() -> None:
     frame_count = 0
     observed_families: set[str] = set()
     observed_topologies: set[str] = set()
+    scene_mechanisms: dict[str, dict[str, str]] = {}
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(executable_path=chrome, headless=True, args=["--no-sandbox", "--disable-dev-shm-usage"])
@@ -88,6 +89,11 @@ def main() -> None:
                     raise RuntimeError(f"render issues {job} t={t}: {result['issues']}")
                 observed_families.add(result["family"])
                 observed_topologies.add(result["topology"])
+                scene_mechanisms[result["scene"]] = {
+                    "concept_id": result["scene"],
+                    "declared_family": result["family"],
+                    "topology": result["topology"],
+                }
                 jpeg = base64.b64decode(item["jpeg"])
                 assert proc.stdin is not None
                 proc.stdin.write(jpeg)
@@ -103,6 +109,8 @@ def main() -> None:
         raise SystemExit(f"browser errors: {browser_errors}")
     if frame_count != FPS * DURATION:
         raise SystemExit(f"frame count mismatch: {frame_count}")
+    if len(scene_mechanisms) != 5:
+        raise SystemExit(f"expected five bound scene mechanisms, got {len(scene_mechanisms)}")
 
     probe = json.loads(subprocess.check_output([
         "ffprobe", "-v", "error", "-select_streams", "v:0",
@@ -141,6 +149,7 @@ def main() -> None:
     transcript.write_text(json.dumps(transcript_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     source_binding = spec["source_bindings"][args.chapter][args.locale]
+    ordered_scene_mechanisms = [scene_mechanisms[s["concept_id"]] for s in chapter["scenes"]]
     meta = {
         "schema_version": 1,
         "unit": "seguridad-ia",
@@ -173,6 +182,7 @@ def main() -> None:
             "size_bytes": transcript.stat().st_size,
         },
         "browser_errors": browser_errors,
+        "scene_mechanisms": ordered_scene_mechanisms,
         "observed_families": sorted(observed_families),
         "observed_topologies": sorted(observed_topologies),
         "technical_golden": False,
@@ -186,6 +196,7 @@ def main() -> None:
         "size_bytes": meta["mp4"]["size_bytes"],
         "frames": frame_count,
         "full_decode": "PASS",
+        "scene_mechanisms": ordered_scene_mechanisms,
     }))
 
 
