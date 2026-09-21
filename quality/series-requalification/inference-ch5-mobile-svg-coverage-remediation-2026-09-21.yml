@@ -1,9 +1,11 @@
-schema_version: 1
+schema_version: 2
 program: 5sigmas_GOLDEN_requalification
 series: llm-inference-engineering-economics
 owner_amendment_comment: 5716685049
 owner_indexability_amendment_comment: 5727362172
 created_utc: '2026-09-21T05:03:41Z'
+site_fix_commit: 01edaf025dbea95c94467c267c4e05711843cf95
+ci_checkpoint_reason: 'Site-facing Ch5 mobile SVG coverage fix + deterministic compressed-overlay mutation require one exact-head integration checkpoint.'
 evidence:
   head: 40bab616e8200fae2c2f7b912913deecb6e92d6e
   series4_run: 35561130922
@@ -66,4 +68,4 @@ voice:
   generated_captions_transcript_narration_timings: false
   historical_accessibility_debt: '92 > 91 retained for the future voice/accessibility lane; it does not block current GOLDEN.'
 status: FIX_IMPLEMENTED_PENDING_EXACT_HEAD_RERENDER_AND_MANUAL_REVIEW
-next_action: 'Consume the automatically triggered exact-head Series4 integration; require full-height overlay coverage plus all existing gates; manually reinspect Ch5 ES/EN normal/reduced and then the exact retained full-series pixel/pedagogy evidence. Promote only with zero P0/P1/P2.'
+next_action: 'Consume the exact-head Series4 integration triggered by this durable checkpoint commit; require full-height overlay coverage plus all existing gates; manually reinspect Ch5 ES/EN normal/reduced and then the exact retained full-series pixel/pedagogy evidence. Promote only with zero P0/P1/P2.'
