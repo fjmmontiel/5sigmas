@@ -40,7 +40,7 @@ jobs:
           test "$(git hash-object docs/articulos-tecnicos/voice-agent-architectures.md)" = "63591a3989937ea7c4dc84c39dd0666f52ad4efb"
           test "$(git hash-object locales/en/articulos-tecnicos/voice-agent-architectures.md)" = "3b6a0075c7e211caac3a46237d974797d26d8648"
 
-      - name: Verify exact deployed revision and fresh uncached ES/EN HTML
+      - name: Verify exact deployed revision and fresh uncached ES/EN HTML + sitemaps
         shell: bash
         run: |
           set -euo pipefail
@@ -55,15 +55,32 @@ jobs:
             'user-agent': '5sigmas-release-contract-281/1.0',
           };
           const attr = (tag, name) => {
-            const match = tag.match(new RegExp(`${name}=["']([^"']+)["']`, 'i'));
+            const match = tag.match(new RegExp(`${name}\\s*=\\s*["']([^"']+)["']`, 'i'));
             return match?.[1] || '';
           };
           const links = (html) => [...html.matchAll(/<link\b[^>]*>/gi)].map((m) => m[0]);
+          const anchors = (html) => [...html.matchAll(/<a\b[^>]*>/gi)].map((m) => m[0]);
           const findLink = (html, predicate) => links(html).find((tag) => predicate({
             rel: attr(tag, 'rel'),
             href: attr(tag, 'href'),
             hreflang: attr(tag, 'hreflang'),
           }));
+          const findAnchor = (html, predicate) => anchors(html).find((tag) => predicate({
+            href: attr(tag, 'href'),
+            hreflang: attr(tag, 'hreflang'),
+          }));
+          const sitemapBlocks = (xml) => [...xml.matchAll(/<url\b[^>]*>[\s\S]*?<\/url>/gi)].map((m) => m[0]);
+          const sitemapBlockFor = (xml, absoluteUrl) => sitemapBlocks(xml).find((block) => {
+            const match = block.match(/<loc\b[^>]*>([\s\S]*?)<\/loc>/i);
+            return match?.[1]?.trim() === absoluteUrl;
+          });
+          const sitemapAlternate = (block, locale, href) => [...block.matchAll(/<xhtml:link\b[^>]*\/?\s*>/gi)]
+            .map((m) => m[0])
+            .some((tag) =>
+              attr(tag, 'rel').toLowerCase() === 'alternate'
+              && attr(tag, 'hreflang').toLowerCase() === locale
+              && attr(tag, 'href') === href
+            );
           const sha256 = (text) => crypto.createHash('sha256').update(text).digest('hex');
           const h1Text = (html) => {
             const match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
@@ -77,6 +94,13 @@ jobs:
           const h1Fixture = '<h1>Reviewed title<a class="headerlink" href="#reviewed-title" title="Permanent link">¶</a></h1>';
           if (h1Text(h1Fixture) !== 'Reviewed title') {
             throw new Error('H1 parser failed to ignore the Material permalink');
+          }
+          const sitemapFixture = `<?xml version="1.0"?><urlset xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>${origin}/fixture/</loc><xhtml:link rel="alternate" hreflang="es" href="${origin}/fixture/" /><xhtml:link rel="alternate" hreflang="en" href="${origin}/en/fixture/" /></url></urlset>`;
+          const fixtureBlock = sitemapBlockFor(sitemapFixture, `${origin}/fixture/`);
+          if (!fixtureBlock
+              || !sitemapAlternate(fixtureBlock, 'es', `${origin}/fixture/`)
+              || !sitemapAlternate(fixtureBlock, 'en', `${origin}/en/fixture/`)) {
+            throw new Error('Sitemap hreflang parser regression');
           }
 
           async function fresh(path, label) {
@@ -97,6 +121,8 @@ jobs:
             throw new Error(`build.json revision ${buildData.revision || '<missing>'} != ${expected}`);
           }
 
+          const sitemapEs = await fresh('/sitemap.xml', 'sitemap-es');
+          const sitemapEn = await fresh('/en/sitemap.xml', 'sitemap-en');
           const routes = [
             {
               locale: 'es',
@@ -121,6 +147,14 @@ jobs:
               ],
             },
           ];
+          const localeTargets = {
+            es: '/articulos-tecnicos/voice-agent-architectures/',
+            en: '/en/articulos-tecnicos/voice-agent-architectures/',
+          };
+          const absoluteTargets = {
+            es: `${origin}${localeTargets.es}`,
+            en: `${origin}${localeTargets.en}`,
+          };
 
           for (const route of routes) {
             const { text: html, url } = await fresh(route.path, route.locale);
@@ -141,9 +175,10 @@ jobs:
               throw new Error(`${route.locale}: canonical mismatch; expected ${expectedCanonical}`);
             }
             for (const locale of ['es', 'en']) {
-              const alt = findLink(html, ({ rel, hreflang }) =>
-                rel.toLowerCase().split(/\s+/).includes('alternate') && hreflang.toLowerCase() === locale);
-              if (!alt) throw new Error(`${route.locale}: missing hreflang ${locale}`);
+              const selector = findAnchor(html, ({ hreflang }) => hreflang.toLowerCase() === locale);
+              if (!selector || attr(selector, 'href') !== localeTargets[locale]) {
+                throw new Error(`${route.locale}: language selector ${locale} mismatch; expected ${localeTargets[locale]}`);
+              }
             }
             const nativeMath = (html.match(/<math\b/gi) || []).length;
             if (nativeMath < 18) throw new Error(`${route.locale}: expected native MathML, found ${nativeMath} math nodes`);
@@ -155,11 +190,30 @@ jobs:
               bytes: Buffer.byteLength(html),
               native_math_nodes: nativeMath,
               canonical: expectedCanonical,
+              language_selector: localeTargets,
               cache_request: 'no-store + no-cache/no-store/max-age=0 + unique query',
             }));
           }
 
-          console.log(`Fresh uncached exact-revision ES+EN HTTP proof PASS for ${expected}`);
+          for (const [sitemapLocale, sitemap] of [['es', sitemapEs], ['en', sitemapEn]]) {
+            const currentUrl = absoluteTargets[sitemapLocale];
+            const block = sitemapBlockFor(sitemap.text, currentUrl);
+            if (!block) throw new Error(`${sitemapLocale} sitemap: missing route ${currentUrl}`);
+            for (const locale of ['es', 'en']) {
+              if (!sitemapAlternate(block, locale, absoluteTargets[locale])) {
+                throw new Error(`${sitemapLocale} sitemap: missing reciprocal hreflang ${locale} -> ${absoluteTargets[locale]}`);
+              }
+            }
+            console.log(JSON.stringify({
+              sitemap_locale: sitemapLocale,
+              sitemap_url: sitemap.url,
+              route: currentUrl,
+              reciprocal_hreflang: absoluteTargets,
+              sitemap_sha256: sha256(sitemap.text),
+            }));
+          }
+
+          console.log(`Fresh uncached exact-revision ES+EN HTTP+sitemap proof PASS for ${expected}`);
           NODE
 
       - name: Install browser QA runtime
