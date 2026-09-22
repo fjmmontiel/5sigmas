@@ -67,8 +67,17 @@ jobs:
           const sha256 = (text) => crypto.createHash('sha256').update(text).digest('hex');
           const h1Text = (html) => {
             const match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
-            return (match?.[1] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+            const inner = match?.[1] || '';
+            const withoutPermalink = inner.replace(
+              /<a\b[^>]*\bclass=["'][^"']*\bheaderlink\b[^"']*["'][^>]*>[\s\S]*?<\/a>/gi,
+              '',
+            );
+            return withoutPermalink.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
           };
+          const h1Fixture = '<h1>Reviewed title<a class="headerlink" href="#reviewed-title" title="Permanent link">¶</a></h1>';
+          if (h1Text(h1Fixture) !== 'Reviewed title') {
+            throw new Error('H1 parser failed to ignore the Material permalink');
+          }
 
           async function fresh(path, label) {
             const url = new URL(path, origin);
@@ -118,8 +127,9 @@ jobs:
             if (!new RegExp(`<html[^>]+lang=["']${route.locale}["']`, 'i').test(html)) {
               throw new Error(`${route.locale}: incorrect or missing html lang`);
             }
-            if (h1Text(html) !== route.title) {
-              throw new Error(`${route.locale}: live H1 does not match the reviewed article title`);
+            const actualH1 = h1Text(html);
+            if (actualH1 !== route.title) {
+              throw new Error(`${route.locale}: live H1 mismatch; expected ${JSON.stringify(route.title)}, got ${JSON.stringify(actualH1)}`);
             }
             if (!html.includes(route.title)) throw new Error(`${route.locale}: current reviewed title missing`);
             for (const anchor of route.anchors) {
