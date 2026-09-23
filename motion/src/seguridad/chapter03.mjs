@@ -20,7 +20,7 @@ function cross(P,x,y,r=12){P.path([[x-r,y-r],[x+r,y+r]],P.T.accentText,5);P.path
 function lifecycle(P,S,s,l,v){
  const q=S.cues.map(c=>c.progress),on=S.cues.map(c=>c.visible),pts=v?[[500,115],[800,330],[500,555],[200,330]]:[[500,100],[820,315],[500,615],[180,315]],keys=['write','retrieve','influence','forget'],fs=v?38:34;
  for(let i=0;i<4;i++){
-  if(on[Math.min(i,1)]){const [x,y]=pts[i];P.circle(x,y,72,i===3?P.T.accentSurface:P.T.background,i===3?P.T.accentText:P.T.accent,4);label(P,tr(s,keys[i],l),x,y-17,180,fs,i===3);}
+  if(on[Math.min(i,1)]){const [x,y]=pts[i],wide=keys[i]==='influence';P.circle(x,y,72,i===3?P.T.accentSurface:P.T.background,i===3?P.T.accentText:P.T.accent,4);label(P,tr(s,keys[i],l),x,y-17,wide?310:200,wide?Math.max(28,fs-5):fs,i===3);}
  }
  if(on[1])for(let i=0;i<4;i++)arrow(P,pts[i],pts[(i+1)%4],q[1],false);
  if(on[0])focus(P,pts[0][0],pts[0][1],q[0],80,false);
