@@ -4,7 +4,7 @@ import { seguridadFrameState, seguridadRenderMatrix, indexSeguridadRegister } fr
 import { seguridadTextState } from './timeline.mjs';
 import { seguridadChoreographyProfile, seguridadElementProgress } from './choreography.mjs';
 
-export const SEGURIDAD_THEME=Object.freeze({background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',bodyFont:'Arial',headlineFont:'Georgia',accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8',guideSurface:'#E8C8BE',guideText:'#5B2418'});
+export const SEGURIDAD_THEME=Object.freeze({background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',bodyFont:'Arial',headlineFont:'Georgia',accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8',guideSurface:'#D9A99A',guideText:'#4A1A12'});
 export const SEGURIDAD_MECHANISM_TEXT_CONTRACT=Object.freeze({horizontalNodeLabelPx:34,verticalNodeLabelPx:38,horizontalZoneLabelPx:32,verticalZoneLabelPx:36,horizontalAxisLabelPx:32,verticalAxisLabelPx:36,minimumHorizontalEmbedPx:16,minimumVerticalEmbedPx:12});
 const localized=(value,locale)=>typeof value==='object'&&value!==null?value[locale]:value;
 const pretty=value=>String(value??'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
