@@ -55,7 +55,7 @@ export function seguridadTextState(text,conceptId,localSeconds,durationSeconds,{
     const reveal=story?SEGURIDAD_SYNC_PROFILE.storyTextRevealSeconds:SEGURIDAD_SYNC_PROFILE.legacyTextRevealSeconds;
     const visible=reducedMotion||local>=start,alpha=reducedMotion?1:ease((local-start)/reveal);
     const emphasisIn=reducedMotion?0:ease((local-start)/.22),emphasisOut=reducedMotion?1:ease((local-(next-.3))/.28);
-    return Object.freeze({id:`${conceptId}.beat-${String(index+1).padStart(2,'0')}`,sentence_id:`${conceptId}.beat-${String(index+1).padStart(2,'0')}`,concept_id:conceptId,visual_target_id:`${conceptId}.phase-${index+1}`,action:'read_then_show_corresponding_phase',paragraph:0,range:Object.freeze(range),visible,alpha,emphasis:reducedMotion?0:emphasisIn*(1-emphasisOut),status:local<start?'future':local<next?'active':'read',text_at:start,visual_at:visualAt,locale});
+    return Object.freeze({id:`${conceptId}.beat-${String(index+1).padStart(2,'0')}`,sentence_id:`${conceptId}.beat-${String(index+1).padStart(2,'0')}`,concept_id:conceptId,visual_target_id:`${conceptId}.phase-${index+1}`,action:'read_then_show_corresponding_phase',paragraph:0,range:Object.freeze(range),visible,alpha,guideStrong:true,guideAlpha:reducedMotion?0:.82*emphasisIn*(1-emphasisOut),emphasis:reducedMotion?0:.78*emphasisIn*(1-emphasisOut),status:local<start?'future':local<next?'active':'read',text_at:start,visual_at:visualAt,locale});
   });
   return Object.freeze({activeId:cues.find(c=>c.status==='active')?.id??null,focus:conceptId,timeline:seguridadSemanticTimeline(conceptId,durationSeconds),cues:Object.freeze(cues)});
 }
