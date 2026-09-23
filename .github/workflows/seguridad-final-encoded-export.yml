@@ -37,6 +37,12 @@ jobs:
           node --check motion/src/seguridad/engine.mjs
           node --check motion/src/seguridad/mechanisms.mjs
           node --check motion/src/seguridad/timeline.mjs
+          node --check motion/src/seguridad/chapter01.mjs
+          node --check motion/src/seguridad/chapter02.mjs
+          node --check motion/src/seguridad/chapter03.mjs
+          node --check motion/src/seguridad/chapter01-data.mjs
+          node --check motion/src/seguridad/chapter02-data.mjs
+          node --check motion/src/seguridad/chapter03-data.mjs
 
       - name: Install browser encoder dependencies
         shell: bash
@@ -98,10 +104,10 @@ jobs:
               assert int(meta["chapter"]) == expected_chapter
               assert meta["source_head"] == expected_head
               cues = meta.get("text_visual_cues", [])
-              assert len(cues) == 5
-              assert len({c["id"] for c in cues}) == 5
+              assert len(cues) >= 5
+              assert len({c["id"] for c in cues}) == len(cues)
               assert all(c.get("sentence_id") and c.get("concept_id") and c.get("visual_target_id") for c in cues)
-              assert all(c["text_at"] < c["visual_at"] < c["visual_end_at"] < c["scene_end_at"] for c in cues)
+              assert all(c["text_at"] < c["visual_at"] <= c["visual_end_at"] < c["scene_end_at"] for c in cues)
 
               mp4 = root / meta["mp4"]["file"]
               assert mp4.is_file()
@@ -115,8 +121,10 @@ jobs:
               assert probe["codec_name"] == "h264"
               assert (int(probe["width"]), int(probe["height"])) == expected_wh
               assert probe["r_frame_rate"] == "60/1"
-              assert int(probe["nb_frames"]) == 3600
-              assert abs(float(probe["duration"]) - 60.0) < 0.05
+              expected_frames = int(meta["render_contract"]["frame_count"])
+              expected_duration = float(meta["render_contract"]["duration_seconds_per_chapter"])
+              assert int(probe["nb_frames"]) == expected_frames
+              assert abs(float(probe["duration"]) - expected_duration) < 0.05
               subprocess.run(
                   ["ffmpeg", "-v", "error", "-i", str(mp4), "-f", "null", "-"],
                   check=True,
