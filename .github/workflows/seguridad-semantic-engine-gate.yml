@@ -49,6 +49,7 @@ jobs:
               Path('motion/tests/seguridad-engine.test.mjs'),
               Path('motion/tests/seguridad-timeline.test.mjs'),
               Path('motion/tests/seguridad-choreography.test.mjs'),
+              Path('motion/tests/seguridad-guide-contrast.test.mjs'),
               Path('motion/tests/chapter03.test.mjs'),
               Path('motion/src/seguridad/chapter03-data.mjs'),
               Path('motion/src/seguridad/chapter03.mjs'),
@@ -83,6 +84,7 @@ jobs:
           node --check motion/tests/seguridad-engine.test.mjs
           node --check motion/tests/seguridad-timeline.test.mjs
           node --check motion/tests/seguridad-choreography.test.mjs
+          node --check motion/tests/seguridad-guide-contrast.test.mjs
           node --check motion/tests/chapter03.test.mjs
           node --check motion/src/seguridad/chapter03-data.mjs
           node --check motion/src/seguridad/chapter03.mjs
@@ -97,7 +99,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs motion/tests/seguridad-choreography.test.mjs motion/tests/chapter03.test.mjs
+          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs motion/tests/seguridad-choreography.test.mjs motion/tests/seguridad-guide-contrast.test.mjs motion/tests/chapter03.test.mjs
           python motion/tests/test_review_admission.py
 
       - name: Emit deterministic render coverage evidence
