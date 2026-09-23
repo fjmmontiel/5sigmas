@@ -29,7 +29,7 @@ export function beatState(scene,locale,seconds,reducedMotion=false) {
   const text=b.text[locale],start=offset;offset+=text.length+1;
   const next=scene.beats[i+1]?.at??scene.duration;
   const visible=t>=b.at,visualAt=Math.min(b.settledAt-.35,b.at+Math.min(.85,Math.max(.45,(b.settledAt-b.at)*.28)));
-  return {id:b.id,sentence_id:b.id,concept_id:scene.id,visual_target_id:b.target,action:b.action,paragraph:0,range:{start,end:start+text.length},visible,alpha:visible?1:0,guideStrong:true,guideAlpha:(visible&&t<next)?0.82:0,emphasis:(visible&&t<next)?0.78:0,status:!visible?'future':t<next?'active':'read',text_at:b.at,visual_at:visualAt,progress:reducedMotion?1:ease((t-visualAt)/(b.settledAt-visualAt))};
+  return {id:b.id,sentence_id:b.id,concept_id:scene.id,visual_target_id:b.target,action:b.action,paragraph:0,range:{start,end:start+text.length},visible,alpha:visible?1:0,guideStrong:true,guideAlpha:(visible&&t<next)?0.92:0,emphasis:(visible&&t<next)?0.90:0,status:!visible?'future':t<next?'active':'read',text_at:b.at,visual_at:visualAt,progress:reducedMotion?1:ease((t-visualAt)/(b.settledAt-visualAt))};
  });
  return {version:BEAT_VERSION,activeId:cues.find(c=>c.status==='active')?.id??null,cues,t,reducedMotion};
 }
