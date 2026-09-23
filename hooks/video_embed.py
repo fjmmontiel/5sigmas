@@ -10,11 +10,15 @@ from functools import lru_cache
 from html import escape
 import os
 from pathlib import Path
+import sys
 import re
 
 import yaml
 
-from hooks.video_publication_policy import is_video_source_published
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 
 ROOT = Path(__file__).resolve().parents[1]
