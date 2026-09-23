@@ -83,6 +83,7 @@ function literalFilter(P,S,s,l,v){
    }
   }
   label(P,words,359,y+24,590,fs,false);
+  if(on[1]&&i===1){P.path([[720,520],[960,520]],P.T.accent,4,q[1]);label(P,text(s,'action',l),840,536,300,v?34:30,true);}
   if(on[2]&&q[2]>.85){
    const value=text(s,i?'no_match':'match',l),size=v?43:40,iconX=842-P.measure(value,size,!i?600:400)/2-18;
    label(P,value,842,y+44,284,size,!i);if(!i)P.check(iconX,y+64,P.T.accentText,1.1);else P.circle(iconX,y+64,10,null,P.T.rule,3);
@@ -93,7 +94,7 @@ function literalFilter(P,S,s,l,v){
   arrow(P,[[354,568],[354,618],[500,618],[500,631]],q[3]);
   label(P,text(s,'action',l),500,652,960,v?39:34,true);label(P,text(s,'send',l),500,710,930,v?46:43,true);
  }
- return {signature:on[0]?'ignore':'absent',forms:on[1]?2:on[0]?1:0,matches:on[2]?['first']:[],not_matched:on[2]?['second']:[],meaning:on[3]?'same_requested_action':'unresolved',authority:'not_granted'};
+ return {signature:on[0]?'ignore':'absent',forms:on[1]?2:on[0]?1:0,objective:on[1]?'send_copy':'unresolved',matches:on[2]?['first']:[],not_matched:on[2]?['second']:[],meaning:on[3]?'same_requested_action':'unresolved',authority:'not_granted'};
 }
 
 // Append-only event evidence distinguishes a proposed call from the performed effect.
@@ -107,10 +108,11 @@ function evidenceTrace(P,S,s,l,v){
   P.path([[77,ys[i]+37],[90+q[i]*30,ys[i]+37]],P.T.accent,3);
   label(P,text(s,head[i],l),302,ys[i]+8,352,v?38:31,true);
   cell(P,text(s,values[i],l),510,ys[i]-3,445,118,fs,i===2);
+  if(i===1&&q[i]>.72){P.check(948,ys[i]+56,P.T.accentText,1.05);label(P,text(s,'evidence',l),500,747,900,v?31:27,true);}
   if(i===2&&q[i]>.85)cross(P,971,ys[i]+55,10);
   if(i===3&&q[i]>.85){P.path([[523,ys[i]+124],[941,ys[i]+124]],P.T.accentText,4);}
  }
- return {proposal:on[0]?'send_report':'absent',scope:on[1]?'read_only':'unrecorded',decision:on[2]?'deny_send':'pending',execution:on[3]?false:'unknown',result:on[3]?'no_external_send':'unverified'};
+ return {proposal:on[0]?'send_report':'absent',scope:on[1]?'read_only':'unrecorded',evidence:on[1]?'recorded':'missing',decision:on[2]?'deny_send':'pending',execution:on[3]?false:'unknown',result:on[3]?'no_external_send':'unverified'};
 }
 
 // Two compartments and one typed bridge, not a chain of unrestricted model calls.
@@ -126,6 +128,7 @@ function quarantine(P,S,s,l,v){
   if(on[1]){
    arrow(P,[[745,315],[745,374],[500,374],[500,410]],q[1]);
    cell(P,text(s,'fields',l),50,420,900,80,44,true);label(P,text(s,'contract',l),500,516,920,42,true);
+   P.rect(35,579,930,145,null,P.T.rule,5,3);cell(P,text(s,'executor',l),63,607,302,80,44,false);label(P,'?',577,622,120,54,true);
   }
   if(on[2]){
    P.rect(35,579,930,145,null,P.T.rule,5,3);cell(P,text(s,'executor',l),63,607,302,80,44,false);
@@ -143,6 +146,7 @@ function quarantine(P,S,s,l,v){
   if(on[1]){
    arrow(P,[[363,155],[418,155]],q[1]);cell(P,text(s,'fields',l),431,90,166,126,24,true);
    label(P,text(s,'contract',l),514,36,230,22,true);
+   P.rect(667,35,320,200,null,P.T.rule,3,2);label(P,text(s,'trusted',l),827,47,294,24,true);cell(P,text(s,'executor',l),689,115,141,70,25,false);label(P,'?',827,204,80,26,true);
   }
   if(on[2]){
    P.rect(667,35,320,200,null,P.T.rule,3,2);label(P,text(s,'trusted',l),827,47,294,24,true);
@@ -152,7 +156,7 @@ function quarantine(P,S,s,l,v){
   }
   if(on[3])label(P,text(s,'warning',l),500,265,930,28,true);
  }
- return {reader:on[0]?'untrusted_content':'absent',sensitive_tools:false,handoff:on[1]?'limited_validated_fields':'unvalidated',executor:on[2]?'independently_authorized':'not_active',claim:on[3]?'reduced_routes_not_immunity':'unspecified'};
+ return {reader:on[0]?'untrusted_content':'absent',sensitive_tools:false,handoff:on[1]?'limited_validated_fields':'unvalidated',executor:on[2]?'independently_authorized':on[1]?'uncontrolled':'not_active',claim:on[3]?'reduced_routes_not_immunity':'unspecified'};
 }
 const DRAWERS=[roleLedger,retrieval,literalFilter,evidenceTrace,quarantine],LAYOUT_CACHE=new Map();
 function wideLayout(P,scene,L){
