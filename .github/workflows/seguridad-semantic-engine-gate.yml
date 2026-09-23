@@ -51,6 +51,7 @@ jobs:
               Path('motion/tests/seguridad-choreography.test.mjs'),
               Path('motion/tests/chapter03.test.mjs'),
               Path('motion/src/seguridad/chapter03-data.mjs'),
+              Path('motion/src/seguridad/chapter03.mjs'),
               Path('motion/tests/test_review_admission.py'),
               Path('motion/scripts/review_admission.py'),
               Path('motion/scripts/seguridad_final_export.py'),
@@ -84,11 +85,13 @@ jobs:
           node --check motion/tests/seguridad-choreography.test.mjs
           node --check motion/tests/chapter03.test.mjs
           node --check motion/src/seguridad/chapter03-data.mjs
+          node --check motion/src/seguridad/chapter03.mjs
           python -m py_compile motion/scripts/review_admission.py motion/scripts/seguridad_final_export.py motion/scripts/seguridad_final_package_check.py motion/tests/test_review_admission.py
           node -e "import('./motion/src/seguridad/engine.mjs').then(m=>console.log('ENGINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
           node -e "import('./motion/src/seguridad/timeline.mjs').then(m=>console.log('TIMELINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
           node -e "import('./motion/src/seguridad/choreography.mjs').then(m=>console.log('CHOREOGRAPHY_IMPORT_PASS', Object.keys(m).sort().join(',')))"
           node -e "import('./motion/src/seguridad/render.mjs').then(m=>console.log('RENDER_IMPORT_PASS', Object.keys(m).sort().join(',')))"
+          node -e "import('./motion/src/seguridad/chapter03.mjs').then(m=>console.log('CHAPTER03_IMPORT_PASS', Object.keys(m).sort().join(',')))"
 
       - name: Run schema, semantic-engine, synchronization, choreography and admission regressions
         shell: bash
