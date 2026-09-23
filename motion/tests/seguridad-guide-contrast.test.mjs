@@ -5,6 +5,7 @@ import {SEGURIDAD_THEME as GENERIC_THEME} from '../src/seguridad/render.mjs';
 import {CHAPTER01_THEME} from '../src/seguridad/chapter01.mjs';
 import {SEGURIDAD_THEME as CHAPTER02_THEME} from '../src/seguridad/theme.mjs';
 import {CHAPTER03_THEME} from '../src/seguridad/chapter03.mjs';
+import {CHAPTER04_THEME} from '../src/seguridad/chapter04.mjs';
 import {CHAPTER03} from '../src/seguridad/chapter03-data.mjs';
 import {beatState} from '../src/seguridad/semantic-beats.mjs';
 
@@ -13,6 +14,7 @@ const themes=[
   ['prompt-injection',CHAPTER01_THEME],
   ['jailbreaks',CHAPTER02_THEME],
   ['poisoning',CHAPTER03_THEME],
+  ['red-teaming',CHAPTER04_THEME],
 ];
 
 test('Seguridad active reading guide is visibly distinct and high-contrast',()=>{
