@@ -117,6 +117,72 @@ def normalized_profile(result: dict) -> str | None:
     return result.get("choreographyProfile") or result.get("choreography") or result.get("family")
 
 
+def state_matches(actual, expected) -> bool:
+    if isinstance(expected, dict):
+        return isinstance(actual, dict) and all(key in actual and state_matches(actual[key], value) for key, value in expected.items())
+    if isinstance(expected, list):
+        return actual == expected
+    return actual == expected
+
+
+def validate_authored_semantic_motion(page) -> list[dict]:
+    issues = []
+    for chapter in (1, 2, 3):
+        authored = authored_chapter(chapter)
+        if not authored:
+            issues.append({"jobId": f"seguridad-ia-{chapter:02d}", "issue": {"type": "missing-authored-chapter"}})
+            continue
+        for locale in ("es", "en"):
+            for orientation in ("horizontal", "vertical"):
+                job = f"seguridad-ia-{chapter:02d}-{locale}-{orientation}"
+                for scene in authored["scenes"]:
+                    start = float(scene["start"])
+                    end = float(scene["end"])
+                    for beat in scene["beats"]:
+                        text_t = start + float(beat["at"]) + 0.08
+                        before_t = max(start + 0.02, start + float(beat["at"]) - 0.12)
+                        after_t = min(end - 0.02, start + float(beat["settledAt"]) + 0.12)
+                        text_row = page.evaluate("(a)=>window.draw(a.job,a.t)", {"job": job, "t": text_t})
+                        before_row = page.evaluate("(a)=>window.draw(a.job,a.t)", {"job": job, "t": before_t})
+                        after_row = page.evaluate("(a)=>window.draw(a.job,a.t)", {"job": job, "t": after_t})
+                        before_state = before_row.get("mechanismState")
+                        after_state = after_row.get("mechanismState")
+                        expected = beat["expected"]
+                        if before_state is None or after_state is None:
+                            issues.append({"jobId": job, "scene": scene["id"], "beat": beat["id"], "issue": {"type": "missing-mechanism-state"}})
+                            continue
+                        if not state_matches(before_state, expected["before"]):
+                            issues.append({
+                                "jobId": job, "scene": scene["id"], "beat": beat["id"],
+                                "issue": {"type": "semantic-state-before-mismatch", "expected": expected["before"], "actual": before_state},
+                            })
+                        if not state_matches(after_state, expected["after"]):
+                            issues.append({
+                                "jobId": job, "scene": scene["id"], "beat": beat["id"],
+                                "issue": {"type": "semantic-state-after-mismatch", "expected": expected["after"], "actual": after_state},
+                            })
+                        if before_state == after_state:
+                            issues.append({
+                                "jobId": job, "scene": scene["id"], "beat": beat["id"],
+                                "issue": {"type": "semantic-motion-no-state-change"},
+                            })
+                        cue_rows = text_row.get("textCue", {}).get("cues", [])
+                        cue = next((row for row in cue_rows if row.get("id") == beat["id"]), None)
+                        if not cue or not cue.get("visible") or cue.get("status") != "active":
+                            issues.append({
+                                "jobId": job, "scene": scene["id"], "beat": beat["id"],
+                                "issue": {"type": "active-text-cue-not-visible-before-motion", "cue": cue},
+                            })
+                        events = text_row.get("semanticTimeline", {}).get("events", [])
+                        event = next((row for row in events if row.get("id") == beat["id"]), None)
+                        if not event or not (event["text_at"] < event["visual_at"] < event["settled_at"] < event["scene_end_at"]):
+                            issues.append({
+                                "jobId": job, "scene": scene["id"], "beat": beat["id"],
+                                "issue": {"type": "invalid-text-visual-cue-order", "event": event},
+                            })
+    return issues
+
+
 def collect_preflight(page) -> tuple[list[dict], list[dict]]:
     sampled: list[dict] = []
     issues: list[dict] = []
@@ -204,6 +270,7 @@ def main() -> None:
         setup = page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
 
         sampled, issues = collect_preflight(page)
+        issues.extend(validate_authored_semantic_motion(page))
         profiles = sorted({profile for row in sampled if (profile := normalized_profile(row))})
         body_sizes = [row["bodySize"] for row in sampled if isinstance(row.get("bodySize"), (int, float))]
         mechanism_scales = [row["mechanismScale"] for row in sampled if isinstance(row.get("mechanismScale"), (int, float))]
