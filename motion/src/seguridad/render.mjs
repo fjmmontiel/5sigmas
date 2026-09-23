@@ -13,6 +13,103 @@ function centerOf(ref,plan){if(Number.isInteger(ref)){const node=plan.geometry.n
 function progressFor(plan,kind,index,total=1,element=null){if(element&&Number.isInteger(element.phase)){const cue=plan.cueProgress[element.phase];if(!cue)throw new Error(`seguridad: unknown authored phase ${element.phase}`);return cue.progress;}return seguridadElementProgress(plan,kind,index,total);}
 function eased(q){return smooth(clamp(q));}
 
+function semanticFocus(plan){
+  const values=(plan?.cueProgress??[]).map(item=>clamp(item?.progress??0));
+  if(!values.length)return {index:0,progress:0,settled:false};
+  let index=values.findIndex(value=>value>0.001&&value<0.999);
+  if(index<0){
+    const completed=values.map((value,i)=>value>.001?i:-1).filter(i=>i>=0);
+    index=completed.length?completed.at(-1):0;
+  }
+  return {index,progress:values[index]??0,settled:values[index]>=.999};
+}
+function focusRing(P,x,y,q,{radius=54,strong=false}={}){
+  if(!Number.isFinite(x)||!Number.isFinite(y)||q<=0)return;
+  const e=eased(q),r=radius+18*(1-e),c=P.c;c.save();c.globalAlpha*=.18+.72*e;
+  P.circle(x,y,r,null,strong?P.T.accentText:P.T.accent,strong?6:4);
+  if(e>.55)P.circle(x,y,Math.max(6,10*(e-.55)/.45),strong?P.T.accentText:P.T.accent,null,0);
+  c.restore();
+}
+function sweepLine(P,x1,y1,x2,y2,q,{strong=false,width=5}={}){
+  if(q<=0)return;const e=eased(q),x=x1+(x2-x1)*e,y=y1+(y2-y1)*e;
+  P.path([[x1,y1],[x,y]],strong?P.T.accentText:P.T.accent,width);
+  if(e<.995)P.circle(x,y,strong?9:7,strong?P.T.accentText:P.T.accent);
+}
+function drawSemanticMotionOverlay(P,plan){
+  const profile=seguridadChoreographyProfile(plan.choreography),focus=semanticFocus(plan),nodes=plan.geometry.nodes??[],zones=plan.geometry.zones??[],edges=plan.geometry.edges??[],q=focus.progress;
+  if(q<=0)return;
+  switch(profile){
+    case 'cycle': {
+      const cycleNodes=nodes.slice(0,Math.min(4,nodes.length));if(cycleNodes.length){
+        const node=cycleNodes[focus.index%cycleNodes.length];focusRing(P,node.x,node.y,q,{radius:58,strong:focus.index>=3});
+        const next=cycleNodes[(focus.index+1)%cycleNodes.length];sweepLine(P,node.x,node.y,next.x,next.y,q,{strong:false,width:5});
+      }
+      if((plan.cueProgress?.at(-1)?.progress??0)>.02&&nodes.length>cycleNodes.length){
+        const exit=nodes.at(-1),last=clamp(plan.cueProgress.at(-1).progress);focusRing(P,exit.x,exit.y,last,{radius:64,strong:true});
+      }
+      break;
+    }
+    case 'plot': {
+      const target=nodes[0]??nodes.at(-1);if(target){
+        const e=eased(q);P.path([[160,target.y],[160+(target.x-160)*e,target.y]],P.T.accent,4);
+        P.path([[target.x,650],[target.x,650+(target.y-650)*e]],P.T.accent,4);focusRing(P,target.x,target.y,q,{radius:50,strong:true});
+      }
+      break;
+    }
+    case 'fanout_revoke': {
+      if(nodes.length){const source=nodes[0];focusRing(P,source.x,source.y,clamp(plan.cueProgress?.[0]?.progress??q),{radius:52});
+        for(const node of nodes.slice(1))sweepLine(P,source.x,source.y,node.x,node.y,clamp(plan.cueProgress?.[1]?.progress??q),{width:4});
+      }
+      const revoke=clamp(plan.cueProgress?.at(-1)?.progress??0);if(revoke>.01&&zones.length){
+        const z=zones.at(-1),vertical=z.h>z.w;
+        if(vertical)sweepLine(P,z.x+z.w/2,z.y,z.x+z.w/2,z.y+z.h,revoke,{strong:true,width:7});
+        else sweepLine(P,z.x,z.y+z.h/2,z.x+z.w,z.y+z.h/2,revoke,{strong:true,width:7});
+      }
+      break;
+    }
+    case 'parallel_compare': {
+      if(zones.length>=2){
+        const a=zones[0],b=zones[1],qa=clamp(plan.cueProgress?.[0]?.progress??q),qb=clamp(plan.cueProgress?.[1]?.progress??0);
+        focusRing(P,a.x+a.w/2,a.y+a.h/2,qa,{radius:Math.min(86,Math.max(54,a.h*.22))});
+        if(qb>.01)focusRing(P,b.x+b.w/2,b.y+b.h/2,qb,{radius:Math.min(86,Math.max(54,b.h*.22)),strong:true});
+        const final=clamp(plan.cueProgress?.at(-1)?.progress??0);if(final>.01)sweepLine(P,a.x+a.w/2,a.y+a.h/2,b.x+b.w/2,b.y+b.h/2,final,{strong:true,width:5});
+      }
+      break;
+    }
+    case 'projection': {
+      if(nodes.length>1){
+        const decision=nodes.at(-1),attrs=nodes.slice(0,-1);
+        const qi=clamp(plan.cueProgress?.[Math.min(focus.index,Math.max(0,(plan.cueProgress?.length??1)-2))]?.progress??q);
+        for(const attr of attrs)sweepLine(P,attr.x,attr.y,decision.x,decision.y,qi,{width:4});
+        focusRing(P,decision.x,decision.y,clamp(plan.cueProgress?.at(-1)?.progress??0),{radius:66,strong:true});
+      }
+      break;
+    }
+    case 'cut': {
+      for(const z of zones){
+        const zi=zones.indexOf(z),zq=clamp(plan.cueProgress?.[Math.min(zi+1,(plan.cueProgress?.length??1)-1)]?.progress??q);
+        if(z.w<z.h)sweepLine(P,z.x+z.w/2,z.y,z.x+z.w/2,z.y+z.h,zq,{strong:true,width:7});
+        else sweepLine(P,z.x,z.y+z.h/2,z.x+z.w,z.y+z.h/2,zq,{strong:true,width:7});
+      }
+      break;
+    }
+    case 'handoff':
+    case 'trace':
+    case 'gated':
+    case 'audit_loop':
+    case 'trace_evidence':
+    case 'contract': {
+      const edge=edges[Math.min(focus.index,Math.max(0,edges.length-1))];
+      if(edge){const a=centerOf(edge.from,plan),b=centerOf(edge.to,plan);if(a&&b)sweepLine(P,a[0],a[1],b[0],b[1],q,{strong:profile==='gated',width:5});}
+      const node=nodes[Math.min(focus.index,Math.max(0,nodes.length-1))];if(node)focusRing(P,node.x,node.y,q,{radius:52,strong:profile==='gated'});
+      break;
+    }
+    default: {
+      const node=nodes[Math.min(focus.index,Math.max(0,nodes.length-1))];if(node)focusRing(P,node.x,node.y,q,{radius:50});
+    }
+  }
+}
+
 function drawAuthoredBox(P,node,q,plan){
   if(q<=0)return;const e=eased(q),c=P.c;c.save();c.globalAlpha*=.12+.88*e;const cx=node.x+node.w/2,cy=node.y+node.h/2,scale=.94+.06*e;c.translate(cx,cy+(1-e)*18);c.scale(scale,scale);c.translate(-cx,-cy);
   const strong=node.style==='accent',denied=node.style==='blocked',status=node.style==='status';
@@ -32,7 +129,7 @@ function drawNode(P,node,q,plan,{selected=false}={}){
   if(node.shape==='box')return drawAuthoredBox(P,node,q,plan);if(q<=0)return;const c=P.c;c.save();c.globalAlpha*=.15+.85*e;c.translate(0,(1-e)*14);const strong=selected||['effect','decision','authorization_result','release_state','terminal','high_privilege'].includes(node.role),radius=(selected?40:strong?42:36)*(.8+.2*e);P.circle(node.x,node.y,radius,strong?P.T.accentSurface:'#FFFFFF',strong?P.T.accentText:P.T.accent,strong?5:4);if(selected)P.circle(node.x,node.y,8*e,P.T.accentText,null,0);const label=node.label===''?'':localized(node.label,P.locale)||node.role;if(label&&e>.3){const size=mechanismLabelSize(plan,'node');P.text(pretty(label),node.x,node.y+52,size,strong?P.T.accentText:P.T.muted,strong?650:500,'center',420);}c.restore();
 }
 function drawAxes(P,plan){const axes=plan.geometry.axes;if(!axes)return;const q=progressFor(plan,'axis',0,1);if(q<=0)return;const e=eased(q),c=P.c;c.save();c.globalAlpha*=e;const size=mechanismLabelSize(plan,'axis');if(axes.x)P.text(pretty(axes.x),500,690,size,P.T.muted,650,'center',620);if(axes.y)P.text(pretty(axes.y),160,105,size,P.T.muted,650,'center',460);c.restore();}
-function drawMechanism(P,plan){const c=P.c;c.save();const zones=plan.geometry.zones??[],paths=plan.geometry.paths??[],edges=plan.geometry.edges??[],nodes=plan.geometry.nodes??[];for(const [i,z] of zones.entries())drawZone(P,z,progressFor(plan,'zone',i,zones.length,z),plan);for(const [i,path] of paths.entries())P.path(path,P.T.muted,4,eased(progressFor(plan,'path',i,paths.length)));drawAxes(P,plan);for(const [i,edge] of edges.entries()){const q=progressFor(plan,'edge',i,edges.length,edge);if(edge.points)drawAuthoredEdge(P,edge,q);else drawArrow(P,centerOf(edge.from,plan),centerOf(edge.to,plan),q,edge.role);}const selected=new Set(plan.geometry.selected??[]);for(const [i,node] of nodes.entries())drawNode(P,node,progressFor(plan,'node',i,nodes.length,node),plan,{selected:selected.has(i)});for(const [i,a] of (plan.geometry.annotations??[]).entries())drawAuthoredAnnotation(P,a,progressFor(plan,'annotation',i,1,a));c.restore();}
+function drawMechanism(P,plan){const c=P.c;c.save();const zones=plan.geometry.zones??[],paths=plan.geometry.paths??[],edges=plan.geometry.edges??[],nodes=plan.geometry.nodes??[];for(const [i,z] of zones.entries())drawZone(P,z,progressFor(plan,'zone',i,zones.length,z),plan);for(const [i,path] of paths.entries())P.path(path,P.T.muted,4,eased(progressFor(plan,'path',i,paths.length)));drawAxes(P,plan);for(const [i,edge] of edges.entries()){const q=progressFor(plan,'edge',i,edges.length,edge);if(edge.points)drawAuthoredEdge(P,edge,q);else drawArrow(P,centerOf(edge.from,plan),centerOf(edge.to,plan),q,edge.role);}const selected=new Set(plan.geometry.selected??[]);for(const [i,node] of nodes.entries())drawNode(P,node,progressFor(plan,'node',i,nodes.length,node),plan,{selected:selected.has(i)});for(const [i,a] of (plan.geometry.annotations??[]).entries())drawAuthoredAnnotation(P,a,progressFor(plan,'annotation',i,1,a));drawSemanticMotionOverlay(P,plan);c.restore();}
 function renderSpecForChapter(spec,register,frame){const chapter=spec.chapters.find(item=>item.chapter===frame.job.chapter),concepts=indexSeguridadRegister(register);return{brand:'5sigmas',series:frame.job.locale==='es'?'Seguridad en IA':'AI Security',locale:frame.job.locale,scenes:chapter.scenes.map((scene,index)=>({id:scene.concept_id,duration:scene.end-scene.start,kicker:localized(concepts.get(scene.concept_id).presentation?.footer,frame.job.locale)??`${String(index+1).padStart(2,'0')} · ${concepts.get(scene.concept_id).perceptual_family}`}))};}
 function sceneTransition(local,reduced){if(reduced)return{alpha:1,y:0};const enter=clamp(local/.42),leave=clamp((12-local)/.38),q=Math.min(eased(enter),eased(leave));return{alpha:.08+.92*q,y:(1-q)*18};}
 
