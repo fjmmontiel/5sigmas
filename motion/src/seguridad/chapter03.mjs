@@ -8,7 +8,7 @@ export const CHAPTER03_THEME=Object.freeze({
  background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',
  bodyFont:'Arial',headlineFont:'Georgia',
  accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8',
- guideSurface:'#E8C8BE',guideText:'#5B2418'
+ guideSurface:'#D9A99A',guideText:'#4A1A12'
 });
 const tr=(s,k,l)=>{const v=s.labels[k]?.[l];if(typeof v!=='string')throw Error(`MISSING_LABEL:${s.id}/${k}/${l}`);return v;};
 function label(P,text,x,y,w,size=40,strong=false,align='center'){const lines=P.lines(text,w,size,strong?650:450);lines.forEach((line,i)=>P.text(line,x,y+i*size*1.16,size,strong?P.T.accentText:P.T.ink,strong?650:450,align,w));return lines.length*size*1.16;}
