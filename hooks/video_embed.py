@@ -14,6 +14,8 @@ import re
 
 import yaml
 
+from hooks.video_publication_policy import is_video_source_published
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SPANISH_ARTICLE_AUDIO_INDEX = ROOT / "docs" / "series" / "article_audio.yml"
@@ -158,6 +160,8 @@ def _media_url(page, filename: str, config) -> str:
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
+    if not is_video_source_published(page.file.src_path):
+        return output
     meta = _video_meta(page, config)
     video_file = str(meta.get("video") or "").strip()
     if not video_file:
