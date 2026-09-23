@@ -7,6 +7,8 @@ on:
     paths:
       - 'motion/src/seguridad/**'
       - 'motion/tests/seguridad-*.test.mjs'
+      - 'motion/tests/chapter03.test.mjs'
+      - 'motion/src/seguridad/chapter03-data.mjs'
       - 'motion/tests/test_review_admission.py'
       - 'motion/scripts/review_admission.py'
       - 'motion/scripts/seguridad_final_export.py'
@@ -47,6 +49,8 @@ jobs:
               Path('motion/tests/seguridad-engine.test.mjs'),
               Path('motion/tests/seguridad-timeline.test.mjs'),
               Path('motion/tests/seguridad-choreography.test.mjs'),
+              Path('motion/tests/chapter03.test.mjs'),
+              Path('motion/src/seguridad/chapter03-data.mjs'),
               Path('motion/tests/test_review_admission.py'),
               Path('motion/scripts/review_admission.py'),
               Path('motion/scripts/seguridad_final_export.py'),
@@ -78,6 +82,8 @@ jobs:
           node --check motion/tests/seguridad-engine.test.mjs
           node --check motion/tests/seguridad-timeline.test.mjs
           node --check motion/tests/seguridad-choreography.test.mjs
+          node --check motion/tests/chapter03.test.mjs
+          node --check motion/src/seguridad/chapter03-data.mjs
           python -m py_compile motion/scripts/review_admission.py motion/scripts/seguridad_final_export.py motion/scripts/seguridad_final_package_check.py motion/tests/test_review_admission.py
           node -e "import('./motion/src/seguridad/engine.mjs').then(m=>console.log('ENGINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
           node -e "import('./motion/src/seguridad/timeline.mjs').then(m=>console.log('TIMELINE_IMPORT_PASS', Object.keys(m).sort().join(',')))"
@@ -88,7 +94,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs motion/tests/seguridad-choreography.test.mjs
+          node --test motion/tests/seguridad-schema.test.mjs motion/tests/seguridad-engine.test.mjs motion/tests/seguridad-timeline.test.mjs motion/tests/seguridad-choreography.test.mjs motion/tests/chapter03.test.mjs
           python motion/tests/test_review_admission.py
 
       - name: Emit deterministic render coverage evidence
