@@ -12,7 +12,7 @@ for(const l of ['es','en'])for(const s of CHAPTER02.scenes)test(`${s.id}/${l} ti
  }
  assert.ok(beatState(s,l,0,true).cues.every(c=>c.visible&&c.progress===1));
 });
-test('chapter duration is continuous and no footage implied outside bounds',()=>{let t=0;for(const s of CHAPTER02.scenes){assert.equal(t,s.start);t+=s.duration;assert.equal(s.end,t);}assert.equal(t,122);assert.equal(CHAPTER02.scenes.flatMap(s=>expectedBeatEvents(s,s.start)).length,21);});
+test('chapter duration is continuous and no footage implied outside bounds',()=>{let t=0;for(const s of CHAPTER02.scenes){assert.equal(t,s.start);t+=s.duration;assert.equal(s.end,t);}assert.equal(t,CHAPTER02.duration);assert.equal(t,130);assert.equal(CHAPTER02.scenes.length,7);assert.equal(CHAPTER02.scenes.flatMap(s=>expectedBeatEvents(s,s.start)).length,23);});
 test('full paragraph substituted for multiple ideas fails',()=>{const s=copy(CHAPTER02.scenes[0]);s.beats=[{...s.beats[0],text:s.text}];assert.throws(()=>validateBeatScene(s,'es'),/MULTI_IDEA/);});
 test('missing translation fails',()=>{const s=copy(CHAPTER02.scenes[0]);delete s.beats[0].text.en;assert.throws(()=>validateBeatScene(s,'en'),/LOCALE/)});
 test('duplicate id fails',()=>{const s=copy(CHAPTER02.scenes[0]);s.beats[1].id=s.beats[0].id;assert.throws(()=>validateBeatScene(s,'es'),/DUPLICATE/)});
