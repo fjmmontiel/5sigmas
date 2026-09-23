@@ -304,3 +304,11 @@ exclude_docs: |
   drafts/**
   assets/templates/**
   includes/
+  series/datacenters-espacio/*.mp4
+  series/seguridad-ia/*.mp4
+  series/agentes-ia/*.mp4
+  series/agentes-voz-tiempo-real/*.mp4
+  series/coding-agents-agent-harnesses/*.mp4
+  series/context-engineering-memory-mcp/*.mp4
+  series/llm-inference-engineering-economics/*.mp4
+  series/evaluating-ai-systems-production/*.mp4
