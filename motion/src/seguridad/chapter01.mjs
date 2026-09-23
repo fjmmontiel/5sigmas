@@ -5,7 +5,7 @@ import {Paint,clamp,lerp} from '../render/paint.mjs';
 import {sceneLayout,drawHeader,drawText} from '../render/layout.mjs';
 import {beatState,expectedBeatEvents} from './semantic-beats.mjs';
 import {CHAPTER01} from './chapter01-data.mjs';
-export const CHAPTER01_THEME=Object.freeze({background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',bodyFont:'Arial',headlineFont:'Georgia',accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8'});
+export const CHAPTER01_THEME=Object.freeze({background:'#FFFFFF',ink:'#191817',muted:'#66615D',rule:'#DDD8D3',bodyFont:'Arial',headlineFont:'Georgia',accent:'#B44B31',accentText:'#7F3525',accentSurface:'#F7ECE8',guideSurface:'#E8C8BE',guideText:'#5B2418'});
 const text=(s,key,l)=>{const v=s.labels[key]?.[l];if(typeof v!=='string')throw Error(`MISSING_LABEL:${s.id}/${key}/${l}`);return v;};
 function label(P,t,x,y,w,size=40,strong=false,align='center'){
  const lines=P.lines(t,w,size,strong?600:400);
