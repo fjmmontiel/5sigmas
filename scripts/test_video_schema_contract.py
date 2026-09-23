@@ -21,30 +21,23 @@ from hooks.video_sitemap_en import (
     _render_watch_page as render_watch_page_en,
     _video_schema as video_schema_en,
 )
+from hooks.video_publication_policy import is_video_source_published
 from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_frontmatter
 
 
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
 EN_LOCALE_ROOT = ROOT / "locales" / "en"
-# Exact surface inventory, not a quality threshold. Main historically carried 91 missing
-# voice/accessibility surfaces. Security requalification added one deliberately reviewed native
-# ES surface, yielding the historical 92 > 91 debt checkpoint. Realtime Voice added exactly
-# six ES + six EN native visual-video/watch surfaces, Coding Agents added another six ES + six EN,
-# Context Engineering added six ES + six EN, LLM Inference Engineering added another six ES + six EN,
-# and Evaluating AI Systems now adds six ES + six EN reviewed native visual-video/watch surfaces.
-# The truthful reviewed catalogue is therefore 152. Keep the 91 budget and historical 92 checkpoint
-# immutable: PROGRAM AMENDMENT 5716685049 makes fully missing narration-dependent
-# captions/transcripts deferred owner-local debt, not a current GOLDEN blocker. Any catalogue
-# change still fails closed until deliberately reconciled.
-EXPECTED_VIDEO_LOCALE_SURFACES = 152
-EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 12
-EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 12
-EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 12
-EXPECTED_LLM_INFERENCE_LOCALE_SURFACES = 12
-EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 12
+# Exact currently-published bilingual video/watch inventory after the owner-directed
+# emergency unpublish of series 06–13. Historical accessibility checkpoints below are
+# retained as history; unpublished VNext targets are not counted as current public surfaces.
+EXPECTED_VIDEO_LOCALE_SURFACES = 58
+EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 0
+EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 0
+EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 0
+EXPECTED_LLM_INFERENCE_LOCALE_SURFACES = 0
+EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 0
 HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
-
 
 def base_entry() -> dict:
     site_url = "https://5sigmas.com"
@@ -212,6 +205,8 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         if "noindex" in str(meta.get("robots") or "").lower():
             continue
         rel = md.relative_to(DOCS).as_posix()
+        if not is_video_source_published(rel):
+            continue
         state = _accessibility_state(meta, label=f"es:{rel}", source_dir=md.parent)
         state["locale"] = "es"
         records.append(state)
@@ -219,6 +214,8 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
     english_media = yaml.safe_load(EN_MEDIA_INDEX.read_text(encoding="utf-8")) or {}
     assert isinstance(english_media, dict), "English media index must be a mapping"
     for src_uri, declared in sorted(english_media.items()):
+        if not is_video_source_published(str(src_uri)):
+            continue
         if not isinstance(declared, dict) or not str(declared.get("video") or "").strip():
             continue
         source_md = DOCS / str(src_uri)
@@ -252,8 +249,6 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         f"{EXPECTED_REALTIME_VOICE_LOCALE_SURFACES}, observed {len(realtime_voice)}. "
         "Review the six ES + six EN native visual-video surfaces deliberately."
     )
-    assert sum(1 for row in realtime_voice if row["locale"] == "es") == 6
-    assert sum(1 for row in realtime_voice if row["locale"] == "en") == 6
 
     coding_agents = [
         row for row in records if "series/coding-agents-agent-harnesses/" in row["label"]
@@ -263,8 +258,6 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         f"{EXPECTED_CODING_AGENTS_LOCALE_SURFACES}, observed {len(coding_agents)}. "
         "Review the six ES + six EN native visual-video surfaces deliberately."
     )
-    assert sum(1 for row in coding_agents if row["locale"] == "es") == 6
-    assert sum(1 for row in coding_agents if row["locale"] == "en") == 6
 
     context_engineering = [
         row for row in records if "series/context-engineering-memory-mcp/" in row["label"]
@@ -274,8 +267,6 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         f"{EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES}, observed {len(context_engineering)}. "
         "Review the six ES + six EN native visual-video surfaces deliberately."
     )
-    assert sum(1 for row in context_engineering if row["locale"] == "es") == 6
-    assert sum(1 for row in context_engineering if row["locale"] == "en") == 6
 
     inference_engineering = [
         row for row in records if "series/llm-inference-engineering-economics/" in row["label"]
@@ -285,8 +276,6 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         f"{EXPECTED_LLM_INFERENCE_LOCALE_SURFACES}, observed {len(inference_engineering)}. "
         "Review the six ES + six EN native visual-video surfaces deliberately."
     )
-    assert sum(1 for row in inference_engineering if row["locale"] == "es") == 6
-    assert sum(1 for row in inference_engineering if row["locale"] == "en") == 6
 
     evaluating_ai_systems = [
         row for row in records if "series/evaluating-ai-systems-production/" in row["label"]
@@ -296,8 +285,6 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
         f"{EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES}, observed {len(evaluating_ai_systems)}. "
         "Review the six ES + six EN native visual-video surfaces deliberately."
     )
-    assert sum(1 for row in evaluating_ai_systems if row["locale"] == "es") == 6
-    assert sum(1 for row in evaluating_ai_systems if row["locale"] == "en") == 6
 
     missing = [row for row in records if not row["complete"]]
     debt_over_legacy_budget = max(
@@ -342,21 +329,21 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
 
 
 def assert_owner_voice_deferral_contract() -> None:
-    """Regression: preserve historical 92 > 91 while tracking current 152-surface debt."""
+    """Regression: preserve historical debt facts while auditing only public video surfaces."""
     summary = audit_published_accessibility_inventory(enforce_debt=True)
-    assert summary["realtime_voice_locale_surfaces"] == 12
-    assert summary["coding_agents_locale_surfaces"] == 12
-    assert summary["context_engineering_locale_surfaces"] == 12
-    assert summary["llm_inference_locale_surfaces"] == 12
-    assert summary["evaluating_ai_systems_locale_surfaces"] == 12
-    assert summary["captions_transcript_review"] == 152
+    assert summary["locale_surfaces"] == 58
+    assert summary["realtime_voice_locale_surfaces"] == 0
+    assert summary["coding_agents_locale_surfaces"] == 0
+    assert summary["context_engineering_locale_surfaces"] == 0
+    assert summary["llm_inference_locale_surfaces"] == 0
+    assert summary["evaluating_ai_systems_locale_surfaces"] == 0
+    assert summary["captions_transcript_review"] == 58
     assert summary["historical_missing_checkpoint"] == 92
     assert summary["historical_budget_exceeded_by"] == 1
     assert summary["legacy_missing_budget"] == 91
-    assert summary["legacy_budget_exceeded_by"] == 61
+    assert summary["legacy_budget_exceeded_by"] == 0
     assert summary["voice_enhancement"] == "DEFERRED_OWNER_LOCAL"
     assert summary["golden_blocking"] is False
-
 
 def main() -> None:
     global_root = "https://5sigmas.com"
