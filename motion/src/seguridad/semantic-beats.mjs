@@ -29,7 +29,7 @@ export function beatState(scene,locale,seconds,reducedMotion=false) {
   const text=b.text[locale],start=offset;offset+=text.length+1;
   const next=scene.beats[i+1]?.at??scene.duration;
   const visible=t>=b.at;
-  return {id:b.id,sentence_id:b.id,concept_id:scene.id,visual_target_id:b.target,action:b.action,paragraph:0,range:{start,end:start+text.length},visible,alpha:visible?1:0,emphasis:(visible&&t<next)?0.25:0,status:!visible?'future':t<next?'active':'read',progress:reducedMotion?1:ease((t-b.at)/(b.settledAt-b.at))};
+  return {id:b.id,sentence_id:b.id,concept_id:scene.id,visual_target_id:b.target,action:b.action,paragraph:0,range:{start,end:start+text.length},visible,alpha:visible?1:0,guideStrong:true,guideAlpha:(visible&&t<next)?0.82:0,emphasis:(visible&&t<next)?0.78:0,status:!visible?'future':t<next?'active':'read',progress:reducedMotion?1:ease((t-b.at)/(b.settledAt-b.at))};
  });
  return {version:BEAT_VERSION,activeId:cues.find(c=>c.status==='active')?.id??null,cues,t,reducedMotion};
 }
