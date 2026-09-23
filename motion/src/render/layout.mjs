@@ -60,8 +60,8 @@ export function drawText(P,s,L,alpha,state=null){const c=P.c,T=P.T;c.save();c.gl
   lineStart=p.text.indexOf(line,lineStart);const lineEnd=lineStart+line.length;
   for(const q of state.cues){if(q.paragraph!==pi||!q.visible)continue;const from=Math.max(lineStart,q.range.start),to=Math.min(lineEnd,q.range.end);if(from>=to)continue;
    const prefix=p.text.slice(lineStart,from),run=p.text.slice(from,to),x=L.left+P.measure(prefix,L.bodySize),w=P.measure(run,L.bodySize);c.save();c.globalAlpha*=q.alpha;
-   if(q.emphasis>0){c.save();c.globalAlpha*=q.emphasis;P.rect(x-3,y-3,w+6,L.bodySize*1.19,T.accentSurface,null,3);if(from===q.range.start)P.rect(L.left-16,y,4,L.bodySize*1.02,T.accent,null,2);c.restore();}
-   P.text(run,x,y,L.bodySize,mixHex(T.ink,T.accentText,q.emphasis),400,'left',L.textWidth);c.restore();
+   if(q.emphasis>0){c.save();const guideAlpha=q.guideAlpha??q.emphasis;c.globalAlpha*=guideAlpha;P.rect(x-5,y-5,w+10,L.bodySize*1.23,q.guideStrong?(T.guideSurface??T.accentSurface):T.accentSurface,null,5);if(from===q.range.start)P.rect(L.left-18,y-2,q.guideStrong?7:4,L.bodySize*1.08,T.accent,null,3);c.restore();}
+   P.text(run,x,y,L.bodySize,mixHex(T.ink,q.guideStrong?(T.guideText??T.accentText):T.accentText,q.emphasis),q.guideStrong&&q.emphasis>.25?500:400,'left',L.textWidth);c.restore();
   }lineStart=lineEnd;
  }}
  if(s.source){const y=L.sourceY;P.path([[L.left,y-10],[L.left+Math.min(L.textWidth,650),y-10]],T.rule,1);const lines=P.lines(s.source,L.textWidth,L.portrait?22:23);lines.forEach((line,i)=>P.text(line,L.left,y+i*28,L.portrait?22:23,T.muted,400,'left',L.textWidth));if(y+lines.length*28>L.height-64)P.issues.push({type:'source-footer-collision',scene:s.id});}
