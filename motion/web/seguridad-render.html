@@ -6,6 +6,7 @@ import {renderSeguridadFrame,validateSeguridadLayouts} from '../src/seguridad/re
 import {renderChapter01} from '../src/seguridad/chapter01.mjs';
 import {renderChapter02} from '../src/seguridad/chapter02.mjs';
 import {renderChapter03} from '../src/seguridad/chapter03.mjs';
+import {renderChapter04} from '../src/seguridad/chapter04.mjs';
 import {seguridadRenderMatrix,validateSeguridadMechanismCoverage} from '../src/seguridad/engine.mjs';
 const canvas=document.querySelector('#stage');
 window.setup=(spec,register)=>{window.S=spec;window.R=register;const jobs=seguridadRenderMatrix(spec,register);const coverage=validateSeguridadMechanismCoverage(spec,register);return {jobs,coverage};};
@@ -16,6 +17,7 @@ window.draw=(jobId,time,reduced=false)=>{
  if(chapter==='01')return renderChapter01(canvas,locale,orientation,time,{reducedMotion:reduced});
  if(chapter==='02')return renderChapter02(canvas,locale,orientation,time,{reducedMotion:reduced});
  if(chapter==='03')return renderChapter03(canvas,locale,orientation,time,{reducedMotion:reduced});
+ if(chapter==='04')return renderChapter04(canvas,locale,orientation,time,{reducedMotion:reduced});
  return renderSeguridadFrame(canvas,window.S,window.R,jobId,time,{reducedMotion:reduced});
 };
 window.frame=(jobId,time,reduced=false)=>{const result=window.draw(jobId,time,reduced);return {result,jpeg:canvas.toDataURL('image/jpeg',.95).split(',')[1]};};
