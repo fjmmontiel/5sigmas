@@ -15,10 +15,10 @@ function observation(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(
  if(on[2]){P.path([[144,657],[856,657]],P.T.accent,4,q[2]);label(P,t(s,'notall',l),500,681,900,v?43:37,false);}
  return {tested:on[0]?['original']:[],result:on[0]?'refused':'unobserved',scope:on[1]?'one_input':'unbound',claim:on[2]?'one_observation_only':'unspecified'};}
 function variants(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?42:37,keys=['wording','language','format'];
- if(on[0]){card(P,t(s,'objective',l),335,52,330,100,fs,true);for(let i=0;i<3;i++){const x=80+i*310;arrow(P,[[500,164],[500,185],[x+135,185],[x+135,210]],q[0]);card(P,t(s,keys[i],l),x,225,270,110,fs,false);}}
+ if(on[0]){card(P,t(s,'objective',l),335,52,330,100,fs,true);for(let i=0;i<3;i++){const x=80+i*310;arrow(P,[[500,164],[500,185],[x+135,185],[x+135,210]],q[0]);card(P,t(s,keys[i],l),x,225,270,110,fs,false);}card(P,t(s,'original',l),80,545,270,82,fs-3,false);P.check(322,586,P.T.accentText,1.05);}
  if(on[1])for(let i=0;i<3;i++){const x=80+i*310;arrow(P,[[x+135,347],[x+135,390]],q[1],P.T.rule,3);card(P,t(s,'test',l),x,405,270,90,fs,true);P.circle(x+135,540,12,null,P.T.rule,3);}
  if(on[2]){P.path([[61,604],[939,604]],P.T.accent,4,q[2]);label(P,t(s,'family',l),500,633,930,v?46:40,true);}
- return {variants:on[0]?keys:[],untested:on[1]?keys:[],surface:on[2]?'family':'single'};}
+ return {tested:on[0]?['original']:[],variants:on[0]?keys:[],untested:on[1]?keys:[],surface:on[2]?'family':'single'};}
 /** Budget counters and markers share one authored, conserved state. */
 export function budgetAt(total,plannedUsed,progress){
  if(!Number.isInteger(total)||total<1||!Number.isInteger(plannedUsed)||plannedUsed<0||plannedUsed>total||!Number.isFinite(progress))throw Error('INVALID_AUTHORED_BUDGET');
