@@ -7,6 +7,7 @@ import base64
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -18,7 +19,41 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC_PATH = ROOT / "migration/seguridad-ia-content-v1.json"
 REGISTER_PATH = ROOT / "migration/seguridad-ia-series-register.json"
 FPS = 60
-DURATION = 60
+
+def load_authored_chapter(chapter: int) -> dict | None:
+    path = ROOT / "src" / "seguridad" / f"chapter{chapter:02d}-data.mjs"
+    if not path.is_file():
+        return None
+    text = path.read_text(encoding="utf-8")
+    match = re.search(r"export const CHAPTER\d+ = (\{.*\});\s*$", text, re.S)
+    if not match:
+        raise SystemExit(f"cannot parse authored chapter data: {path}")
+    data = json.loads(match.group(1))
+    if data.get("chapter") != f"{chapter:02d}":
+        raise SystemExit(f"chapter data mismatch: {path}")
+    return data
+
+def cue_rows(scene: dict, semantic_timeline: dict) -> list[dict]:
+    if isinstance(semantic_timeline.get("events"), list):
+        rows = []
+        for event in semantic_timeline["events"]:
+            rows.append({
+                "id": event["id"],
+                "sentence_id": event["sentence_id"],
+                "concept_id": event["concept_id"],
+                "visual_target_id": event["visual_target_id"],
+                "action": event["action"],
+                "timeline_version": semantic_timeline["version"],
+                "text_at": float(event["text_at"]),
+                "text_reveal_end_at": float(event["visual_at"]),
+                "reading_hold_end_at": float(event["visual_at"]),
+                "visual_at": float(event["visual_at"]),
+                "visual_end_at": float(event["settled_at"]),
+                "scene_end_at": float(event["scene_end_at"]),
+                "expected": event.get("expected"),
+            })
+        return rows
+    return [cue_from_scene(scene, semantic_timeline)]
 
 
 def sha256(path: Path) -> str:
@@ -82,6 +117,9 @@ def main() -> None:
     spec = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     register = json.loads(REGISTER_PATH.read_text(encoding="utf-8"))
     chapter = spec["chapters"][args.chapter]
+    authored = load_authored_chapter(args.chapter)
+    duration = float(authored["duration"]) if authored else float(spec["render_contract"]["duration_seconds_per_chapter"])
+    source_scenes = authored["scenes"] if authored else chapter["scenes"]
     width, height = ((1920, 1080) if args.orientation == "horizontal" else (1080, 1920))
     slug = chapter["slug"]
     stem = f"{args.chapter:02d}-{slug}-{args.locale}-{args.orientation}"
@@ -94,6 +132,7 @@ def main() -> None:
 
     browser_errors: list[str] = []
     proc = subprocess.Popen(ffmpeg_encoder(mp4, width, height), stdin=subprocess.PIPE)
+    frame_budget = int(round(FPS * duration))
     frame_count = 0
     observed_families: set[str] = set()
     observed_topologies: set[str] = set()
@@ -106,7 +145,7 @@ def main() -> None:
             page.set_content(bundled_page())
             page.wait_for_function("window.ready===true", timeout=15000)
             page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
-            for i in range(FPS * DURATION):
+            for i in range(frame_budget):
                 t = i / FPS
                 item = page.evaluate("(a)=>window.frame(a.job,a.t)", {"job": job, "t": t})
                 result = item["result"]
@@ -133,10 +172,10 @@ def main() -> None:
         raise SystemExit(f"ffmpeg encode failed: {rc}")
     if browser_errors:
         raise SystemExit(f"browser errors: {browser_errors}")
-    if frame_count != FPS * DURATION:
-        raise SystemExit(f"frame count mismatch: {frame_count}")
-    if len(scene_mechanisms) != 5:
-        raise SystemExit(f"expected five bound scene mechanisms, got {len(scene_mechanisms)}")
+    if frame_count != frame_budget:
+        raise SystemExit(f"frame count mismatch: {frame_count} expected={frame_budget}")
+    if len(scene_mechanisms) != len(source_scenes):
+        raise SystemExit(f"scene mechanism mismatch: got={len(scene_mechanisms)} expected={len(source_scenes)}")
 
     probe = json.loads(subprocess.check_output([
         "ffprobe", "-v", "error", "-select_streams", "v:0",
@@ -156,32 +195,33 @@ def main() -> None:
         "locale": args.locale,
         "orientation": args.orientation,
         "audio": "silent",
-        "title": chapter["title"][args.locale],
+        "title": (authored["title"][args.locale] if authored else chapter["title"][args.locale]),
         "summary": chapter["summary"][args.locale],
-        "article_chapters": [
-            {"start": x["start"], "end": x["end"], "name": x["name"][args.locale]}
-            for x in chapter["article_chapters"]
-        ],
+        "article_chapters": (
+            [{"start": s["start"], "end": s["end"], "name": s["title"][args.locale]} for s in source_scenes]
+            if authored else
+            [{"start": x["start"], "end": x["end"], "name": x["name"][args.locale]} for x in chapter["article_chapters"]]
+        ),
         "scenes": [
             {
-                "concept_id": s["concept_id"],
+                "concept_id": s.get("id", s.get("concept_id")),
                 "start": s["start"],
                 "end": s["end"],
                 "text": s["text"][args.locale],
             }
-            for s in chapter["scenes"]
+            for s in source_scenes
         ],
     }
     transcript.write_text(json.dumps(transcript_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     source_binding = spec["source_bindings"][args.chapter][args.locale]
-    ordered_scene_mechanisms = [scene_mechanisms[s["concept_id"]] for s in chapter["scenes"]]
-    text_visual_cues = [
-        cue_from_scene(scene, scene_mechanisms[scene["concept_id"]]["semantic_timeline"])
-        for scene in chapter["scenes"]
-    ]
-    if len({cue["id"] for cue in text_visual_cues}) != 5:
-        raise SystemExit(f"expected five unique authored semantic cues, got {text_visual_cues}")
+    scene_ids = [s.get("id", s.get("concept_id")) for s in source_scenes]
+    ordered_scene_mechanisms = [scene_mechanisms[scene_id] for scene_id in scene_ids]
+    text_visual_cues = []
+    for scene, scene_id in zip(source_scenes, scene_ids):
+        text_visual_cues.extend(cue_rows(scene, scene_mechanisms[scene_id]["semantic_timeline"]))
+    if not text_visual_cues or len({cue["id"] for cue in text_visual_cues}) != len(text_visual_cues):
+        raise SystemExit(f"invalid authored semantic cues: {text_visual_cues}")
 
     meta = {
         "schema_version": 1,
@@ -194,7 +234,7 @@ def main() -> None:
         "orientation": args.orientation,
         "job_id": job,
         "source_binding": source_binding,
-        "render_contract": spec["render_contract"],
+        "render_contract": {**spec["render_contract"], "duration_seconds_per_chapter": duration, "frame_count": frame_budget},
         "theme": spec["theme"],
         "mp4": {
             "file": mp4.name,
