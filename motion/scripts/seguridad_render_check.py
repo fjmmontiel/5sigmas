@@ -266,7 +266,10 @@ def main() -> None:
         page = browser.new_page(viewport={"width": 1920, "height": 1920}, device_scale_factor=1)
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.set_content(bundled_page())
-        page.wait_for_function("window.ready===true", timeout=15000)
+        try:
+            page.wait_for_function("window.ready===true", timeout=15000)
+        except Exception as exc:
+            raise RuntimeError(f"browser bootstrap failed; page_errors={errors}") from exc
         setup = page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
 
         sampled, issues = collect_preflight(page)
