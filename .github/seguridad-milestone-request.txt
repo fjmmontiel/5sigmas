@@ -1,5 +1,6 @@
-Seguridad browser preflight request
-requested_for=owner-feedback-r2-contrast-motion-v2
-scope=all chapters ES/EN H/V authored cue before/during/after frames
-head_intent=strong guide contrast + text-before-motion + specialized chapter01-03 renderers
+Seguridad browser semantic-motion preflight request
+visual_source_head=4664ca8a4a5e5761b3e255079ae7877129d557cc
+evaluator_head=ecf802d394c12a16b54f57d6389aa6c5f5ea8c58
+scope=chapters01-03 ES/EN H/V every authored beat before/text/after plus whole-series layout sampling
+required=expected.before/after state match + text_at<visual_at<settled_at + no layout issues
 delivery_claim=false
