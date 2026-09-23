@@ -1,5 +1,7 @@
 Seguridad browser semantic-motion preflight request
-visual_source_head=4157bb02460f24845fda70387a5ec43491b32358
+visual_source_head=b73bc50d61092f8713f7190cc9edf5159bebeff5
+semantic_gate_run=35849801442
+semantic_gate=PASS
 evaluator=expected-before-after-state-v1
 scope=chapters01-03 ES/EN H/V every authored beat plus whole-series layout sampling
 required=expected.before/after match + text_at<visual_at<settled_at + no clipping/overflow
