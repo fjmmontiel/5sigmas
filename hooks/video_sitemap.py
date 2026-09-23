@@ -37,6 +37,7 @@ import json
 import logging
 import os
 from pathlib import Path
+import sys
 import re
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
@@ -44,7 +45,10 @@ from xml.sax.saxutils import escape as xml_escape
 from mkdocs.structure.files import File, Files
 import yaml
 
-from hooks.video_publication_policy import is_video_source_published
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 
 LOGGER = logging.getLogger("mkdocs.hooks.video_sitemap")
