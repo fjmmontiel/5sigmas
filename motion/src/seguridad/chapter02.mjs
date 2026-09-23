@@ -19,12 +19,17 @@ function variants(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>
  if(on[1])for(let i=0;i<3;i++){const x=80+i*310;arrow(P,[[x+135,347],[x+135,390]],q[1],P.T.rule,3);card(P,t(s,'test',l),x,405,270,90,fs,true);P.circle(x+135,540,12,null,P.T.rule,3);}
  if(on[2]){P.path([[61,604],[939,604]],P.T.accent,4,q[2]);label(P,t(s,'family',l),500,633,930,v?46:40,true);}
  return {variants:on[0]?keys:[],untested:on[1]?keys:[],surface:on[2]?'family':'single'};}
-function budget(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),n=s.budget,fs=v?42:37,x0=107,step=157;
+/** Budget counters and markers share one authored, conserved state. */
+export function budgetAt(total,plannedUsed,progress){
+ if(!Number.isInteger(total)||total<1||!Number.isInteger(plannedUsed)||plannedUsed<0||plannedUsed>total||!Number.isFinite(progress))throw Error('INVALID_AUTHORED_BUDGET');
+ const used=Math.floor(clamp(progress)*plannedUsed);return {total,used,remaining:total-used};
+}
+function budget(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),n=s.budget,planned=s.beats[1].expected.after.used,B=budgetAt(n,planned,on[1]?q[1]:0),fs=v?42:37,x0=107,step=157;
  if(on[0]){label(P,t(s,'available',l),500,42,900,fs,true);for(let i=0;i<n;i++)P.circle(x0+i*step,185,27,P.T.accentSurface,P.T.accent,2);}
- if(on[1]){label(P,t(s,'used',l),500,360,900,fs,true);for(let i=0;i<n;i++){const p=clamp(q[1]*3-i);P.circle(x0+i*step,185,27,p>=1?P.T.background:P.T.accentSurface,p>=1?P.T.rule:P.T.accent,2);P.circle(x0+i*step,475,27,p>=1?P.T.accentSurface:P.T.background,p>=1?P.T.accent:P.T.rule,2);}}
- if(on[0]){const used=on[1]?Math.min(3,Math.floor(q[1]*3)):0;P.rect(400,225,200,72,P.T.background);P.text(`${used} / ${n}`,500,250,v?62:58,P.T.accentText,600,'center',500);}
+ if(on[1]){label(P,t(s,'used',l),500,360,900,fs,true);for(let i=0;i<n;i++){const p=clamp(q[1]*planned-i);P.circle(x0+i*step,185,27,p>=1?P.T.background:P.T.accentSurface,p>=1?P.T.rule:P.T.accent,2);P.circle(x0+i*step,475,27,p>=1?P.T.accentSurface:P.T.background,p>=1?P.T.accent:P.T.rule,2);}}
+ if(on[0]){P.rect(400,225,200,72,P.T.background);P.text(`${B.remaining} / ${n}`,500,250,v?62:58,P.T.accentText,600,'center',500);}
  if(on[2]){card(P,t(s,'spec',l),180,615,260,95,fs,true);arrow(P,[[455,662],[548,662]],q[2]);card(P,t(s,'n',l),563,615,270,95,fs,false);label(P,t(s,'unit',l),500,742,900,v?34:29,false);}
- return {available:on[0]?n:0,used:on[1]?3:0,spec:on[2]?'N=6':'missing'};}
+ return {available:on[0]?B.remaining:0,used:B.used,spec:on[2]?s.beats[2].expected.after.spec:'missing'};}
 /** Connect card edges, never their labels. The gap is in mechanism coordinates. */
 export function cardEdgeSegment(a,b,halfWidth=125,halfHeight=48,gap=12){
  if(![...a,...b,halfWidth,halfHeight,gap].every(Number.isFinite)||halfWidth<=0||halfHeight<=0||gap<0)throw Error('INVALID_CARD_EDGE_GEOMETRY');
@@ -34,11 +39,11 @@ export function cardEdgeSegment(a,b,halfWidth=125,halfHeight=48,gap=12){
  if(offset>=.5)throw Error('OVERLAPPING_CARD_CONNECTOR');
  return [[a[0]+dx*offset,a[1]+dy*offset],[b[0]-dx*offset,b[1]-dy*offset]];
 }
-function feedback(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?40:35,pts=[[500,115],[815,340],[500,565],[185,340]],keys=['input','model','answer','adapt'];
+function feedback(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?40:35,pts=[[500,115],[815,340],[500,565],[185,340]],keys=['input','model','answer','adapt'],plan=s.beats[1].expected,B=budgetAt(plan.before.remaining,plan.before.remaining-plan.after.remaining,on[1]?q[1]:0);
  if(on[0]){for(let i=0;i<4;i++)arrow(P,cardEdgeSegment(pts[i],pts[(i+1)%4]),q[0],i===3?P.T.accent:P.T.rule,3);for(let i=0;i<4;i++){const [x,y]=pts[i];card(P,t(s,keys[i],l),x-125,y-48,250,96,fs,i===3);}}
- if(on[1]){label(P,t(s,'budget',l),500,662,420,fs,true);P.path([[275,730],[725,730]],P.T.rule,8);P.path([[275,730],[lerp(725,275,q[1]),730]],P.T.accent,8);P.text(String(Math.max(0,6-Math.floor(q[1]*6))),760,700,46,P.T.accentText,600,'left',120);}
- if(on[2]){P.rect(136,274,728,132,P.T.background);label(P,t(s,'stop',l),500,293,700,v?48:42,true);cross(P,500,385,15);label(P,t(s,'warning',l),500,449,850,v?40:35,false);}
- return {feedback:on[0],remaining:on[1]?0:6,next:on[2]?'blocked_by_budget':'possible',claim:on[2]?'not_invulnerable':'unspecified'};}
+ if(on[1]){label(P,t(s,'budget',l),500,662,420,fs,true);P.path([[275,730],[725,730]],P.T.rule,8);P.path([[275,730],[lerp(725,275,q[1]),730]],P.T.accent,8);P.text(String(B.remaining),760,700,46,P.T.accentText,600,'left',120);}
+ if(on[2]){P.rect(320,274,360,155,P.T.background);label(P,t(s,'stop',l),500,293,330,v?44:38,true);cross(P,500,410,15);label(P,t(s,'warning',l),500,449,850,v?40:35,false);}
+ return {feedback:on[0],remaining:B.remaining,next:on[2]?'blocked_by_budget':'possible',claim:on[2]?'not_invulnerable':'unspecified'};}
 function transfer(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?41:36;
  if(on[0]){P.rect(20,102,440,330,null,P.T.rule,4,3);label(P,t(s,'source',l),240,24,430,fs,true);label(P,t(s,'gradients',l),240,132,390,fs,false);arrow(P,[[240,220],[240,267]],q[0]);if(!on[1])card(P,t(s,'optimize',l),55,285,370,110,fs,true);}
  if(on[2])P.rect(540,102,440,330,null,P.T.rule,4,3);
