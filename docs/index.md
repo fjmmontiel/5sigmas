@@ -165,10 +165,10 @@ hide:
       <div class="s5-media-card__meta">Vídeo · Historia de la IA</div>
       <div class="s5-media-card__title">Por qué escalar cambió la inteligencia artificial</div>
     </a>
-    <a class="s5-media-card" href="/videos/series/datacenters-espacio/02-energia-calor-conectividad/">
-      <img class="s5-media-card__image" src="/series/datacenters-espacio/02-energia-calor-conectividad.jpg" alt="Visual sobre energía, calor y conectividad en datacenters espaciales" />
-      <div class="s5-media-card__meta">Vídeo · Infraestructura</div>
-      <div class="s5-media-card__title">Energía, calor y conectividad fuera de la Tierra</div>
+    <a class="s5-media-card" href="/videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/">
+      <img class="s5-media-card__image" src="/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg" alt="Visual sobre la IA como tecnología eléctrica" />
+      <div class="s5-media-card__meta">Vídeo · Energía</div>
+      <div class="s5-media-card__title">Por qué la IA también es una tecnología eléctrica</div>
     </a>
   </div>
 </section>
