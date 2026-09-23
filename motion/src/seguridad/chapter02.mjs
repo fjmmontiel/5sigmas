@@ -25,8 +25,17 @@ function budget(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.
  if(on[0]){const used=on[1]?Math.min(3,Math.floor(q[1]*3)):0;P.rect(400,225,200,72,P.T.background);P.text(`${used} / ${n}`,500,250,v?62:58,P.T.accentText,600,'center',500);}
  if(on[2]){card(P,t(s,'spec',l),180,615,260,95,fs,true);arrow(P,[[455,662],[548,662]],q[2]);card(P,t(s,'n',l),563,615,270,95,fs,false);label(P,t(s,'unit',l),500,742,900,v?34:29,false);}
  return {available:on[0]?n:0,used:on[1]?3:0,spec:on[2]?'N=6':'missing'};}
+/** Connect card edges, never their labels. The gap is in mechanism coordinates. */
+export function cardEdgeSegment(a,b,halfWidth=125,halfHeight=48,gap=12){
+ if(![...a,...b,halfWidth,halfHeight,gap].every(Number.isFinite)||halfWidth<=0||halfHeight<=0||gap<0)throw Error('INVALID_CARD_EDGE_GEOMETRY');
+ const dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);
+ if(!length)throw Error('COINCIDENT_CARD_CENTERS');
+ const edge=Math.min(dx?halfWidth/Math.abs(dx):Infinity,dy?halfHeight/Math.abs(dy):Infinity),offset=edge+gap/length;
+ if(offset>=.5)throw Error('OVERLAPPING_CARD_CONNECTOR');
+ return [[a[0]+dx*offset,a[1]+dy*offset],[b[0]-dx*offset,b[1]-dy*offset]];
+}
 function feedback(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?40:35,pts=[[500,115],[815,340],[500,565],[185,340]],keys=['input','model','answer','adapt'];
- if(on[0]){for(let i=0;i<4;i++){const [x,y]=pts[i];card(P,t(s,keys[i],l),x-125,y-48,250,96,fs,i===3);}for(let i=0;i<4;i++){const a=pts[i],b=pts[(i+1)%4];arrow(P,[a,b],q[0],i===3?P.T.accent:P.T.rule,3);}}
+ if(on[0]){for(let i=0;i<4;i++)arrow(P,cardEdgeSegment(pts[i],pts[(i+1)%4]),q[0],i===3?P.T.accent:P.T.rule,3);for(let i=0;i<4;i++){const [x,y]=pts[i];card(P,t(s,keys[i],l),x-125,y-48,250,96,fs,i===3);}}
  if(on[1]){label(P,t(s,'budget',l),500,662,420,fs,true);P.path([[275,730],[725,730]],P.T.rule,8);P.path([[275,730],[lerp(725,275,q[1]),730]],P.T.accent,8);P.text(String(Math.max(0,6-Math.floor(q[1]*6))),760,700,46,P.T.accentText,600,'left',120);}
  if(on[2]){P.rect(136,274,728,132,P.T.background);label(P,t(s,'stop',l),500,293,700,v?48:42,true);cross(P,500,385,15);label(P,t(s,'warning',l),500,449,850,v?40:35,false);}
  return {feedback:on[0],remaining:on[1]?0:6,next:on[2]?'blocked_by_budget':'possible',claim:on[2]?'not_invulnerable':'unspecified'};}
@@ -38,10 +47,20 @@ function transfer(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>
  if(on[3]){card(P,t(s,'test',l),590,650,320,92,fs,true);label(P,t(s,'warning',l),500,760,950,v?36:31,false);}
  return {access:on[0]?'model_gradients':'unspecified',suffix:on[1]?'selected':'candidate',target_input:on[2]?'same_suffix':'absent',target_result:on[3]?'requires_measurement':'unspecified'};}
 function outcomes(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=31,keys=['bypass','capability','proposal','execution'],details=['bypass_detail','capability_detail','proposal_detail','execution_detail'],x0=22,w=226,gap=20;
+ // Portrait uses stable full-width rows rather than shrinking four desktop columns.
+ if(v){
+  for(let i=0;i<4;i++){
+   const y=10+i*162;
+   if(on[0]){card(P,t(s,keys[i],l),20,y+5,290,144,42,true);label(P,t(s,details[i],l),382,y+10,580,44,false,'left');}
+   if(on[1]){arrow(P,[[324,y+123],[364,y+123]],q[1],P.T.rule,3);label(P,t(s,'evidence',l),382,y+102,580,40,true,'left');}
+  }
+  if(on[2]){P.path([[34,678],[966,678]],P.T.accent,4,q[2]);label(P,t(s,'warning',l),500,699,950,40,true);}
+  return {outcomes:on[0]?keys:[],evidence:on[1]?'per_outcome':'missing',inference:on[2]?'forbidden':'implicit'};
+ }
  if(on[0])for(let i=0;i<4;i++){const x=x0+i*(w+gap);card(P,t(s,keys[i],l),x,155,w,105,fs,true);label(P,t(s,details[i],l),x+w/2,292,w-8,fs,false);}
  if(on[1])for(let i=0;i<4;i++){const x=x0+i*(w+gap);arrow(P,[[x+w/2,398],[x+w/2,477]],q[1],P.T.rule,3);card(P,t(s,'evidence',l),x,495,w,95,fs,false);}
  if(on[2]){P.path([[34,665],[966,665]],P.T.accent,4,q[2]);label(P,t(s,'warning',l),500,694,950,v?38:33,true);}
- return {outcomes:on[0]?['bypass','capability','proposal','execution']:[],evidence:on[1]?'per_outcome':'missing',inference:on[2]?'forbidden':'implicit'};}
+ return {outcomes:on[0]?keys:[],evidence:on[1]?'per_outcome':'missing',inference:on[2]?'forbidden':'implicit'};}
 function channels(P,S,s,l,v){const q=S.cues.map(x=>x.progress),on=S.cues.map(x=>x.visible),fs=v?41:36;
  if(on[0]){P.circle(142,395,108,P.T.background,P.T.rule,3);label(P,t(s,'model',l),142,350,195,fs,false);P.path([[258,395],[360,215],[955,215]],P.T.rule,3,q[0]);P.path([[258,395],[360,595],[955,595]],P.T.rule,3,q[0]);label(P,t(s,'text',l),410,148,210,fs,true);label(P,t(s,'action',l),410,528,210,fs,true);}
  if(on[1]){label(P,t(s,'content',l),720,53,520,fs,true);P.circle(lerp(390,588,q[1]),215,17,P.T.accentSurface,P.T.accent,3);P.path([[638,162],[638,268]],P.T.accentText,5);cross(P,638,215,16);label(P,t(s,'blocked',l),785,272,330,fs,true);}
