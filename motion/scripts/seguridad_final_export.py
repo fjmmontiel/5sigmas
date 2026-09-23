@@ -151,12 +151,14 @@ def main() -> None:
                 result = item["result"]
                 if result["issues"]:
                     raise RuntimeError(f"render issues {job} t={t}: {result['issues']}")
-                observed_families.add(result["family"])
-                observed_topologies.add(result["topology"])
+                family = result["family"]
+                topology = result.get("topology", family)
+                observed_families.add(family)
+                observed_topologies.add(topology)
                 scene_mechanisms[result["scene"]] = {
                     "concept_id": result["scene"],
-                    "declared_family": result["family"],
-                    "topology": result["topology"],
+                    "declared_family": family,
+                    "topology": topology,
                     "semantic_timeline": result["semanticTimeline"],
                 }
                 jpeg = base64.b64decode(item["jpeg"])
