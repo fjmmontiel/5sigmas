@@ -1,4 +1,7 @@
 Seguridad exact encoded validation request
-requested_head=d731e7d07fd2c649d78d1f948061fa27042fbd3d
-reason=retry after specialized renderer metadata normalization and chapter03 lifecycle label geometry fix
-scope=all six chapters, ES/EN, H/V, ephemeral technical encode only; no QA/approval/delivery claim
+visual_source_head=4664ca8a4a5e5761b3e255079ae7877129d557cc
+browser_preflight_run=35848543607
+browser_preflight=PASS
+reason=owner feedback closure candidate: high-contrast guided reading + text-before-motion + mechanism-bound choreography + authored durations
+scope=all six chapters, ES/EN, H/V, ephemeral exact encode; independent semantic MP4 QA still required after encode
+delivery_claim=false
