@@ -34,6 +34,8 @@ import xml.etree.ElementTree as ET
 
 import yaml
 
+from hooks.video_publication_policy import is_video_source_published
+
 ROOT = Path(__file__).resolve().parents[1]
 GLOBAL_ORIGIN = "https://5sigmas.com"
 SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -114,6 +116,8 @@ def _generated_video_routes(locale: str, data: dict[str, Any]) -> frozenset[str]
         return frozenset(routes)
 
     for src_uri, declaration in media.items():
+        if not is_video_source_published(str(src_uri)):
+            continue
         if not isinstance(declaration, dict):
             continue
         video = str(declaration.get("video") or "").strip()
@@ -199,6 +203,8 @@ def _spanish_public_routes() -> frozenset[str]:
             continue
         routes.add(source_route)
 
+        if not is_video_source_published(source_path):
+            continue
         video = str(meta.get("video") or "").strip()
         if not video:
             continue
