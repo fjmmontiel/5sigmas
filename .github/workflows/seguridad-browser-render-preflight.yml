@@ -30,6 +30,14 @@ jobs:
           node --check motion/src/seguridad/render.mjs
           node --check motion/src/seguridad/engine.mjs
           node --check motion/src/seguridad/mechanisms.mjs
+          node --check motion/src/seguridad/semantic-beats.mjs
+          node --check motion/src/seguridad/chapter01-data.mjs
+          node --check motion/src/seguridad/chapter01.mjs
+          node --check motion/src/seguridad/chapter02-data.mjs
+          node --check motion/src/seguridad/chapter02.mjs
+          node --check motion/src/seguridad/chapter03-data.mjs
+          node --check motion/src/seguridad/chapter03.mjs
+          node --check motion/src/render/layout.mjs
 
       - name: Install browser-check Python dependencies
         shell: bash
