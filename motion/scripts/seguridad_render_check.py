@@ -127,7 +127,7 @@ def state_matches(actual, expected) -> bool:
 
 def validate_authored_semantic_motion(page) -> list[dict]:
     issues = []
-    for chapter in (1, 2, 3):
+    for chapter in (1, 2, 3, 4):
         authored = authored_chapter(chapter)
         if not authored:
             issues.append({"jobId": f"seguridad-ia-{chapter:02d}", "issue": {"type": "missing-authored-chapter"}})
