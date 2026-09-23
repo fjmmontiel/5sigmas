@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {cardEdgeSegment} from '../src/seguridad/chapter02.mjs';
+import {cardEdgeSegment,budgetAt} from '../src/seguridad/chapter02.mjs';
 
 const centers=[[500,115],[815,340],[500,565],[185,340]];
 const inside=(p,c)=>Math.abs(p[0]-c[0])<125 && Math.abs(p[1]-c[1])<48;
@@ -25,3 +25,12 @@ test('axis-aligned cards retain a positive label-free gap',()=>{
 test('invalid, overlapping and coincident card geometry fails closed',()=>{
  for(const args of [[[0,0],[0,0]],[[0,0],[10,0]],[[NaN,0],[300,0]],[[0,0],[400,0],125,48,-1]])assert.throws(()=>cardEdgeSegment(...args));
 });
+
+test('available + consumed stays equal to the authored budget at every progress step',()=>{
+ for(let i=0;i<=600;i++){const s=budgetAt(6,3,i/600);assert.equal(s.remaining+s.used,6);assert.ok(s.remaining>=3&&s.remaining<=6);assert.ok(s.used>=0&&s.used<=3);}
+ assert.deepEqual(budgetAt(6,3,0),{total:6,used:0,remaining:6});assert.deepEqual(budgetAt(6,3,1),{total:6,used:3,remaining:3});
+});
+test('adaptive budget exposes intermediate remaining values rather than an early zero',()=>{
+ assert.equal(budgetAt(6,6,.5).remaining,3);assert.equal(budgetAt(6,6,1).remaining,0);
+});
+test('invalid authored budgets are rejected',()=>{for(const args of [[0,0,0],[6,7,.5],[6,-1,0],[6,3,NaN],[6.5,3,.5]])assert.throws(()=>budgetAt(...args));});
