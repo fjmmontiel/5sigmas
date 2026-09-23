@@ -165,10 +165,10 @@ hide:
       <div class="s5-media-card__meta">Video · AI history</div>
       <div class="s5-media-card__title">Why scaling changed artificial intelligence</div>
     </a>
-    <a class="s5-media-card" href="/en/videos/series/datacenters-espacio/02-energia-calor-conectividad/">
-      <img class="s5-media-card__image" src="/en/series/datacenters-espacio/02-energia-calor-conectividad.jpg" alt="Visual about energy, heat and connectivity for orbital data centers" />
-      <div class="s5-media-card__meta">Video · Infrastructure</div>
-      <div class="s5-media-card__title">Energy, heat and connectivity beyond Earth</div>
+    <a class="s5-media-card" href="/en/videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/">
+      <img class="s5-media-card__image" src="/en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg" alt="Visual explaining AI as an electrical technology" />
+      <div class="s5-media-card__meta">Video · Energy</div>
+      <div class="s5-media-card__title">Why AI is also an electrical technology</div>
     </a>
   </div>
 </section>
