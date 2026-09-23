@@ -7,8 +7,6 @@ tags:
   - IA
   - Infraestructura
   - Energía
-video: "01-por-que-ahora.mp4"
-video_duration: "PT1M0S"
 ---
 
 # Capítulo 1 — Por qué ahora
