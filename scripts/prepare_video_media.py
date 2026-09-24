@@ -24,6 +24,10 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from hooks.video_publication_policy import is_video_source_published
+
 DOCS = ROOT / "docs"
 MKDOCS = ROOT / "mkdocs.yml"
 REMOTE_URL = re.compile(r"^https?://", re.IGNORECASE)
@@ -149,6 +153,8 @@ def collect() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
     patterns = exclude_patterns()
 
     for article in sorted(DOCS.rglob("*.md")):
+        if not is_video_source_published(article.relative_to(DOCS).as_posix()):
+            continue
         if is_excluded(article, patterns):
             continue
         meta = read_frontmatter(article)
