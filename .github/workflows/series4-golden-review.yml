@@ -118,7 +118,7 @@ jobs:
           echo $! > /tmp/5sigmas-series4-preview.pid
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null; then
-              status="$(curl --silent --output /dev/null --write-out '%{http_code}' -H 'Range: bytes=0-31' http://127.0.0.1:8000/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4 || true)"
+              status="$(curl --silent --output /dev/null --write-out '%{http_code}' -H 'Range: bytes=0-31' http://127.0.0.1:8000/series/seguridad-ia/01-prompt-injection.mp4 || true)"
               if [[ "$status" == '206' ]]; then
                 echo 'Preview server is ready with byte-range support.'
                 exit 0
