@@ -27,12 +27,18 @@ import ast
 from functools import lru_cache
 from html import escape
 from pathlib import Path
+import sys
 import re
 from typing import Any
 from urllib.parse import urlsplit
 import xml.etree.ElementTree as ET
 
 import yaml
+
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 ROOT = Path(__file__).resolve().parents[1]
 GLOBAL_ORIGIN = "https://5sigmas.com"
@@ -114,6 +120,8 @@ def _generated_video_routes(locale: str, data: dict[str, Any]) -> frozenset[str]
         return frozenset(routes)
 
     for src_uri, declaration in media.items():
+        if not is_video_source_published(str(src_uri)):
+            continue
         if not isinstance(declaration, dict):
             continue
         video = str(declaration.get("video") or "").strip()
@@ -199,6 +207,8 @@ def _spanish_public_routes() -> frozenset[str]:
             continue
         routes.add(source_route)
 
+        if not is_video_source_published(source_path):
+            continue
         video = str(meta.get("video") or "").strip()
         if not video:
             continue
