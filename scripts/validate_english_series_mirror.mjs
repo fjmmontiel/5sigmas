@@ -60,16 +60,6 @@ const nativePresentationMedia = new Map([
   ['agentes-ia', '00_presentacion_serie'],
 ]);
 
-const intentionallyUnpublishedVideoSeries = new Set([
-  'seguridad-ia',
-  'agentes-ia',
-  'agentes-voz-tiempo-real',
-  'coding-agents-agent-harnesses',
-  'context-engineering-memory-mcp',
-  'llm-inference-engineering-economics',
-  'evaluating-ai-systems-production',
-]);
-
 const forbidden = [
   'Prerrequisitos', 'Terminada', 'Técnico', 'Capítulos', 'Ver todas las series',
   'Reproducir ataque', 'Reiniciar', 'Idea clave', 'Cargar gráfico externo', 'Abrir OWID',
@@ -119,11 +109,7 @@ for (const [slug, expectedTitle] of presentations) {
   const nativeMedia = nativePresentationMedia.get(slug);
   const videos = page.locator('video[data-s5-inline-video-player]');
   const videoCount = await videos.count();
-  if (intentionallyUnpublishedVideoSeries.has(slug)) {
-    if (videoCount !== 0) {
-      failures.push(`${route}: intentionally unpublished series still exposes ${videoCount} video(s)`);
-    }
-  } else if (nativeMedia) {
+  if (nativeMedia) {
     if (videoCount !== 1) {
       failures.push(`${route}: expected one declared native-English presentation video, found ${videoCount}`);
     } else {
@@ -204,4 +190,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: all thirteen canonical series remain intact; series 07+ preserve English article content while intentionally exposing no video; Data Centers and earlier allowed media remain available; desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: thirteen canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, LLM Inference Engineering & Economics, and Evaluating AI Systems in Production; localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
