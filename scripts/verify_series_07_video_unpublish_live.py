@@ -176,6 +176,9 @@ def main() -> int:
             blocked_count += 1
             slug = md.stem
             stem = Path(video).stem
+            meta = frontmatter(md)
+            poster = str(meta.get("video_poster") or Path(video).with_suffix(".jpg").name).strip()
+            captions = str(meta.get("video_captions") or "").strip()
             assert_blocked_article(
                 f"{ORIGIN}/series/{series}/{slug}/",
                 f"{ORIGIN}/videos/series/{series}/{stem}/",
@@ -190,6 +193,12 @@ def main() -> int:
                 en_video,
                 en_catalog,
             )
+            for prefix in ("", "/en"):
+                for asset in filter(None, (video, poster, captions)):
+                    asset_url = f"{ORIGIN}{prefix}/series/{series}/{asset}"
+                    status, _ = fetch(asset_url)
+                    if status != 404:
+                        raise AssertionError(f"{asset_url}: blocked video asset still public (HTTP {status})")
     if blocked_count != 42:
         raise AssertionError(f"blocked inventory drift: expected 42, got {blocked_count}")
 
@@ -199,8 +208,8 @@ def main() -> int:
 
     print(
         "LIVE PASS: 42 series 07+ video entries removed from embeds/watch pages/catalogues/"
-        "video sitemaps while all ES/EN articles remain live; Datacenters and Modelos R2 "
-        "video surfaces remain live."
+        "video sitemaps/public video assets while all ES/EN articles remain live; Datacenters and "
+        "Modelos R2 video surfaces remain live."
     )
     return 0
 
