@@ -16,6 +16,10 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from hooks.video_publication_policy import is_video_source_published
+
 DOCS = ROOT / "docs"
 SITE = ROOT / "site"
 MKDOCS = ROOT / "mkdocs.yml"
@@ -210,6 +214,8 @@ def main() -> int:
     videos: list[tuple[Path, dict[str, Any]]] = []
 
     for md in sorted(DOCS.rglob("*.md")):
+        if not is_video_source_published(md.relative_to(DOCS).as_posix()):
+            continue
         if is_excluded(md, patterns):
             continue
         meta = read_frontmatter(md)
