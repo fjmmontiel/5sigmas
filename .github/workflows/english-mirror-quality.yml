@@ -12,6 +12,7 @@ on:
       - 'scripts/prepare_modelos_r2_ci_media.sh'
       - 'scripts/audit_english_full_parity.py'
       - 'scripts/validate_english_series_mirror.mjs'
+      - 'scripts/validate_english_series_video_rollback.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'scripts/validate_english_energy_ch1.mjs'
       - 'scripts/validate_english_energy_ch2.mjs'
@@ -107,8 +108,8 @@ jobs:
           cat /tmp/5sigmas-en-mirror.log
           exit 1
 
-      - name: Validate full English series mirror
-        run: node scripts/validate_english_series_mirror.mjs
+      - name: Validate English series mirror under series 07+ video rollback
+        run: node scripts/validate_english_series_video_rollback.mjs
 
       - name: Validate translated Test-Time Compute chapter
         env:

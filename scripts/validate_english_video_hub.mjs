@@ -95,6 +95,7 @@ if (catalogue) {
   if (catalogue.language !== 'en') failures.push(`catalogue language is ${JSON.stringify(catalogue.language)}`);
   if (!Array.isArray(catalogue.videos) || catalogue.videos.length === 0) failures.push('catalogue has no videos');
   if (catalogue.count !== catalogue.videos?.length) failures.push(`catalogue count ${catalogue.count} != videos.length ${catalogue.videos?.length}`);
+  if (catalogue.count !== 34) failures.push(`catalogue count must be 34 after the owner-directed series 07+ rollback, got ${catalogue.count}`);
 
   const topics = new Set();
   for (const video of catalogue.videos || []) {
@@ -110,7 +111,7 @@ if (catalogue) {
     else if (Number.isNaN(Date.parse(video.publication_date))) failures.push(`${video.id}: catalogue publication_date is invalid: ${JSON.stringify(video.publication_date)}`);
   }
 
-  for (const expectedTopic of ['foundations', 'history', 'multimodality', 'reasoning', 'impact', 'infrastructure', 'security', 'agents', 'engineering']) {
+  for (const expectedTopic of ['foundations', 'history', 'multimodality', 'reasoning', 'impact', 'infrastructure', 'engineering']) {
     if (!topics.has(expectedTopic)) failures.push(`catalogue missing canonical topic ${expectedTopic}`);
   }
 
@@ -189,4 +190,4 @@ if (failures.length) {
   }
   process.exit(1);
 }
-console.log(`English video hub QA passed: native-English library, watch pages, schema, sitemap, runtime filters and responsive layout are coherent (${catalogue?.count || 0} videos).`);
+console.log(`English video hub QA passed: published-only native-English library, watch pages, schema, sitemap, runtime filters and responsive layout are coherent (${catalogue?.count || 0} videos).`);
