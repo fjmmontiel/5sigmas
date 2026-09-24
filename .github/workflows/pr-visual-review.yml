@@ -98,6 +98,30 @@ jobs:
       - name: Validate exact series 07+ video unpublish scope
         run: python scripts/validate_series_07_video_unpublish.py
 
+      - name: Prove series content and protected video baselines are byte-untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          protected="$(
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
+              docs/series/seguridad-ia locales/en/series/seguridad-ia \
+              docs/series/agentes-ia locales/en/series/agentes-ia \
+              docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
+              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
+              docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
+              docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
+              docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production \
+              docs/series/datacenters-espacio locales/en/series/datacenters-espacio \
+              docs/series/modelos-razonadores locales/en/series/modelos-razonadores
+          )"
+          if [ -n "$protected" ]; then
+            echo "This rollback must not modify article/series source or Datacenters/Modelos assets:" >&2
+            echo "$protected" >&2
+            exit 1
+          fi
+          echo "PASS: series 07-13 source content is byte-untouched; Datacenters and Modelos R2 are byte-untouched."
+
+
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
 
