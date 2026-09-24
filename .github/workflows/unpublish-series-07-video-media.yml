@@ -1,4 +1,4 @@
-name: Enforce series 07+ video unpublish
+name: Enforce unapproved-series video unpublish
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: series-07-video-unpublish
+  group: unapproved-series-video-unpublish
   cancel-in-progress: false
 
 jobs:
