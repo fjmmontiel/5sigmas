@@ -62,6 +62,11 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install media probe dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Verify calculator math and pricing provenance
         run: node scripts/test_llm_cost_latency_tool.mjs
 
