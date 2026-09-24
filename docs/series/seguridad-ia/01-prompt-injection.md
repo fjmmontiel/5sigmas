@@ -13,17 +13,7 @@ video: "01-prompt-injection.mp4"
 video_poster: "01-prompt-injection.jpg"
 video_title: "Prompt injection"
 video_summary: "Cómo una orden escondida en un documento puede entrar en un sistema con IA y qué controles separan la lectura de una acción."
-video_duration: "PT1M0S"
-video_chapters:
-  - name: "Del documento al contexto"
-    start: 0
-    end: 24
-  - name: "Datos e instrucciones compiten por el control"
-    start: 24
-    end: 48
-  - name: "Separar lectura de acción y registrar permisos"
-    start: 48
-    end: 60
+video_duration: "PT1M30S"
 ---
 
 # Capítulo 1 — Prompt injection

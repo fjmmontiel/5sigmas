@@ -13,17 +13,7 @@ video: "05-controles-produccion.mp4"
 video_poster: "05-controles-produccion.jpg"
 video_title: "Controles de producción"
 video_summary: "Cómo mínimo privilegio, autorización independiente, kill paths, observabilidad y gates ligados a evidencia limitan el daño cuando el modelo falla."
-video_duration: "PT1M0S"
-video_chapters:
-  - name: "Separar lectura y acción privilegiada"
-    start: 0
-    end: 24
-  - name: "Mínimo privilegio y fronteras MCP"
-    start: 24
-    end: 48
-  - name: "Observabilidad, kill path y confirmación"
-    start: 48
-    end: 60
+video_duration: "PT1M30S"
 ---
 
 # Capítulo 5 — Controles de producción
