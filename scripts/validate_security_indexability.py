@@ -18,6 +18,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
+import sys
 
 SITE_ORIGIN = "https://5sigmas.com"
 SERIES = "seguridad-ia"
@@ -296,10 +297,18 @@ def audit_indexability(root: Path, site: Path) -> dict:
 
             if article not in normal[locale]:
                 blockers.append("article missing from normal sitemap")
-            if watch not in normal[locale]:
-                blockers.append("watch missing from normal sitemap")
-            if watch not in video[locale]:
-                blockers.append("watch missing from video sitemap")
+            if video_published:
+                if watch not in normal[locale]:
+                    blockers.append("watch missing from normal sitemap")
+                if watch not in video[locale]:
+                    blockers.append("watch missing from video sitemap")
+            else:
+                if watch in normal[locale]:
+                    blockers.append("disabled watch page unexpectedly present in normal sitemap")
+                if watch in video[locale]:
+                    blockers.append("disabled watch page unexpectedly present in video sitemap")
+                if _local_html(site, watch).is_file():
+                    blockers.append("disabled watch page unexpectedly rendered")
 
             expected_hreflang = "en" if locale == "es" else "es"
             if article in normal[locale] and normal[locale][article].get(expected_hreflang) != other_article:
@@ -307,7 +316,7 @@ def audit_indexability(root: Path, site: Path) -> dict:
                     f"article sitemap hreflang {expected_hreflang} is not reciprocal: "
                     f"{normal[locale][article].get(expected_hreflang)!r}"
                 )
-            if watch in normal[locale] and normal[locale][watch].get(expected_hreflang) != other_watch:
+            if video_published and watch in normal[locale] and normal[locale][watch].get(expected_hreflang) != other_watch:
                 blockers.append(
                     f"watch sitemap hreflang {expected_hreflang} is not reciprocal: "
                     f"{normal[locale][watch].get(expected_hreflang)!r}"
@@ -317,12 +326,15 @@ def audit_indexability(root: Path, site: Path) -> dict:
             watch_referrers = sorted(ref for ref in incoming.get(watch, set()) if ref != watch)
             if not article_referrers:
                 blockers.append("article is orphaned: no crawlable internal referrer")
-            if not watch_referrers:
-                blockers.append("watch is orphaned: no crawlable internal referrer")
-            if article_facts is not None and watch not in outgoing.get(article, []):
-                blockers.append("article does not crawlably link to watch page")
-            if watch_facts is not None and article not in outgoing.get(watch, []):
-                blockers.append("watch page does not crawlably link back to article")
+            if video_published:
+                if not watch_referrers:
+                    blockers.append("watch is orphaned: no crawlable internal referrer")
+                if article_facts is not None and watch not in outgoing.get(article, []):
+                    blockers.append("article does not crawlably link to watch page")
+                if watch_facts is not None and article not in outgoing.get(watch, []):
+                    blockers.append("watch page does not crawlably link back to article")
+            elif article_facts is not None and watch in outgoing.get(article, []):
+                blockers.append("article still crawlably links to disabled watch page")
 
             rows.append(
                 {
