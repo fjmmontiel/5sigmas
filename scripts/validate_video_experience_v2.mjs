@@ -32,7 +32,7 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  const expectedCatalogCount = 34; // 76 canonical video-bearing pages - 42 intentionally unpublished series 07+ entries.
+  const expectedCatalogCount = 40; // 76 canonical video-bearing pages - 36 still-unapproved entries.
   if (catalog.count !== expectedCatalogCount) {
     throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
   }

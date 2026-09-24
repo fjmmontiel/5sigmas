@@ -376,9 +376,14 @@ try {
 
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
-      if (videoCount !== 0) fail(chapter, `owner-unpublished series must expose zero videos, found ${videoCount}`);
-      if (await page.locator('.s5-video-embed, .s5-video-embed__watch').count()) {
-        fail(chapter, 'owner-unpublished video embed/watch link remains');
+      if (videoCount !== 1) fail(chapter, `expected one native-English video, found ${videoCount}`);
+      else {
+        const video = videos.first();
+        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        const root = '/en/series/seguridad-ia/';
+        if (sourceUrl.pathname !== `${root}${chapter.slug}.mp4`) fail(chapter, `video escaped native English media: ${sourceUrl.pathname}`);
+        if (posterUrl.pathname !== `${root}${chapter.slug}.jpg`) fail(chapter, `poster escaped native English media: ${posterUrl.pathname}`);
       }
       if (await page.locator('audio').count()) fail(chapter, 'unexpected inherited Spanish audio');
 
@@ -399,4 +404,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English AI Security QA passed: Chapters 1–5 and 18 canonical defensive visuals remain intact; owner-unpublished video embeds are absent; desktop/mobile clean.');
+console.log('Complete English AI Security QA passed: Chapters 1–5, 18 canonical defensive visuals, current jailbreak/persistence/red-team/production-control interactions, exact native-English video/poster pairs, desktop/mobile clean.');

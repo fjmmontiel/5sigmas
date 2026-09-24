@@ -61,7 +61,6 @@ const nativePresentationMedia = new Map([
 ]);
 
 const intentionallyUnpublishedVideoSeries = new Set([
-  'seguridad-ia',
   'agentes-ia',
   'agentes-voz-tiempo-real',
   'coding-agents-agent-harnesses',
@@ -204,4 +203,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: all thirteen canonical series remain intact; series 07+ preserve English article content while intentionally exposing no video; Data Centers and earlier allowed media remain available; desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: all canonical series remain intact; AI Security R5 and protected earlier media are live, while later unapproved series expose no video; desktop/mobile overflow clean.');

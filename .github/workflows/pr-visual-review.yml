@@ -49,6 +49,17 @@ jobs:
       - name: Prepare exact Modelos R2 media for discovery checks
         run: bash scripts/prepare_modelos_r2_ci_media.sh
 
+      - name: Regenerate AI Security R5 posters from exact MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          for root in docs/series/seguridad-ia locales/en/series/seguridad-ia; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+            done
+          done
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -104,7 +115,6 @@ jobs:
           set -euo pipefail
           protected="$(
             git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
-              docs/series/seguridad-ia locales/en/series/seguridad-ia \
               docs/series/agentes-ia locales/en/series/agentes-ia \
               docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
               docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
@@ -115,11 +125,11 @@ jobs:
               docs/series/modelos-razonadores locales/en/series/modelos-razonadores
           )"
           if [ -n "$protected" ]; then
-            echo "This rollback must not modify article/series source or Datacenters/Modelos assets:" >&2
+            echo "This release must not modify later-unapproved series or Datacenters/Modelos assets:" >&2
             echo "$protected" >&2
             exit 1
           fi
-          echo "PASS: series 07-13 source content is byte-untouched; Datacenters and Modelos R2 are byte-untouched."
+          echo "PASS: later-unapproved series plus Datacenters and Modelos R2 are byte-untouched."
 
 
       - name: Audit generated SEO crawl

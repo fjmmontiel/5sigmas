@@ -28,9 +28,9 @@ from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_front
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
 EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # Exact currently-published bilingual video/watch inventory after the owner-directed
-# emergency unpublish of series 07–13. Historical accessibility checkpoints below are
+# approval-gated publication policy after Security R5 release. Historical accessibility checkpoints below are
 # retained as history; unpublished VNext targets are not counted as current public surfaces.
-EXPECTED_VIDEO_LOCALE_SURFACES = 68
+EXPECTED_VIDEO_LOCALE_SURFACES = 80
 EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 0
 EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 0
 EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 0

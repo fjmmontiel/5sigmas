@@ -21,7 +21,6 @@ SITE = ROOT / "site"
 EN_MEDIA = ROOT / "locales" / "en" / "media.yml"
 
 BLOCKED = (
-    "seguridad-ia",
     "agentes-ia",
     "agentes-voz-tiempo-real",
     "coding-agents-agent-harnesses",
@@ -29,9 +28,9 @@ BLOCKED = (
     "llm-inference-engineering-economics",
     "evaluating-ai-systems-production",
 )
-KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores")
-EXPECTED_BLOCKED_ENTRIES = 42
-EXPECTED_PUBLIC_CATALOGUE = 34
+KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia")
+EXPECTED_BLOCKED_ENTRIES = 36
+EXPECTED_PUBLIC_CATALOGUE = 40
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
@@ -249,7 +248,7 @@ def main() -> int:
                 )
 
     print(
-        "Series 07+ video unpublish PASS: "
+        "Video publication policy PASS: "
         f"{EXPECTED_BLOCKED_ENTRIES} articles preserved in ES/EN with zero video embeds/watch pages/"
         "VideoObject/catalogue/sitemap/public media/Markdown video metadata; "
         "Data Centers in Space and Reasoning Models R2 remain video-live."

@@ -32,9 +32,13 @@ try {
 
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
-      if (videoCount !== 0) failures.push(`${route}: owner-unpublished series must expose zero videos, found ${videoCount}`);
-      if (await page.locator('.s5-video-embed, .s5-video-embed__watch').count()) {
-        failures.push(`${route}: owner-unpublished video embed/watch link remains`);
+      if (videoCount !== 1) failures.push(`${route}: expected one native-English video, found ${videoCount}`);
+      else {
+        const video = videos.first();
+        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        if (sourceUrl.pathname !== `${root}${slug}.mp4`) failures.push(`${route}: unexpected video path ${sourceUrl.pathname}`);
+        if (posterUrl.pathname !== `${root}${slug}.jpg`) failures.push(`${route}: unexpected poster path ${posterUrl.pathname}`);
       }
       if (await page.locator('audio').count()) failures.push(`${route}: unexpected inherited audio`);
       const sizes = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -52,4 +56,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Native English AI Security rollback QA passed: presentation + Chapters 1–5 remain intact and expose zero public video embeds on desktop/mobile.');
+console.log('Native English AI Security media QA passed: presentation + Chapters 1–5, exact /en/ MP4/poster pairs, desktop/mobile clean.');
