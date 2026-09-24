@@ -304,24 +304,3 @@ exclude_docs: |
   drafts/**
   assets/templates/**
   includes/
-  series/seguridad-ia/*.mp4
-  series/seguridad-ia/*.jpg
-  series/seguridad-ia/*.vtt
-  series/agentes-ia/*.mp4
-  series/agentes-ia/*.jpg
-  series/agentes-ia/*.vtt
-  series/agentes-voz-tiempo-real/*.mp4
-  series/agentes-voz-tiempo-real/*.jpg
-  series/agentes-voz-tiempo-real/*.vtt
-  series/coding-agents-agent-harnesses/*.mp4
-  series/coding-agents-agent-harnesses/*.jpg
-  series/coding-agents-agent-harnesses/*.vtt
-  series/context-engineering-memory-mcp/*.mp4
-  series/context-engineering-memory-mcp/*.jpg
-  series/context-engineering-memory-mcp/*.vtt
-  series/llm-inference-engineering-economics/*.mp4
-  series/llm-inference-engineering-economics/*.jpg
-  series/llm-inference-engineering-economics/*.vtt
-  series/evaluating-ai-systems-production/*.mp4
-  series/evaluating-ai-systems-production/*.jpg
-  series/evaluating-ai-systems-production/*.vtt
