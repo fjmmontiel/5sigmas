@@ -92,6 +92,25 @@ def on_files(files: Files, config, **kwargs) -> Files:
     site_url = str(config.get("site_url") or "https://5sigmas.com/en/").rstrip("/")
     media_origin = os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").strip().rstrip("/")
 
+    blocked_assets: set[str] = set()
+    for src_uri, declared in media_index.items():
+        if is_video_source_published(str(src_uri)) or not isinstance(declared, dict):
+            continue
+        video_file = str(declared.get("video") or "").strip()
+        if not video_file:
+            continue
+        parent = Path(str(src_uri)).parent
+        poster_file = str(declared.get("video_poster") or Path(video_file).with_suffix(".jpg").name).strip()
+        captions_file = str(declared.get("video_captions") or "").strip()
+        for asset in (video_file, poster_file, captions_file):
+            if asset and not _is_url(asset):
+                blocked_assets.add((parent / asset).as_posix())
+
+    for candidate in list(files):
+        candidate_uri = str(getattr(candidate, "src_uri", candidate.src_path))
+        if candidate_uri in blocked_assets:
+            files.remove(candidate)
+
     for source_file in list(files):
         if not source_file.is_documentation_page():
             continue
