@@ -37,12 +37,18 @@ import json
 import logging
 import os
 from pathlib import Path
+import sys
 import re
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
 from mkdocs.structure.files import File, Files
 import yaml
+
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 
 LOGGER = logging.getLogger("mkdocs.hooks.video_sitemap")
@@ -103,6 +109,8 @@ def on_files(files: Files, config, **kwargs) -> Files:
 
         src_uri = str(getattr(source_file, "src_uri", source_file.src_path))
         if src_uri.startswith("videos/"):
+            continue
+        if not is_video_source_published(src_uri):
             continue
 
         inclusion = getattr(source_file, "inclusion", None)
