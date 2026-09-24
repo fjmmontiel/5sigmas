@@ -290,10 +290,13 @@ def audit_indexability(root: Path, site: Path) -> dict:
             other_article = _expected(other, "article", slug)
             other_watch = _expected(other, "watch", slug)
             blockers: list[str] = []
+            video_published = is_video_source_published(f"series/{SERIES}/{slug}.md")
             article_errors, article_facts = _surface_errors(site, article, locale)
-            watch_errors, watch_facts = _surface_errors(site, watch, locale)
             blockers.extend(f"article: {item}" for item in article_errors)
-            blockers.extend(f"watch: {item}" for item in watch_errors)
+            watch_facts = None
+            if video_published:
+                watch_errors, watch_facts = _surface_errors(site, watch, locale)
+                blockers.extend(f"watch: {item}" for item in watch_errors)
 
             if article not in normal[locale]:
                 blockers.append("article missing from normal sitemap")
