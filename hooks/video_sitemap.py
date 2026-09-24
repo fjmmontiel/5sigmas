@@ -103,6 +103,33 @@ def on_files(files: Files, config, **kwargs) -> Files:
     site_url = str(config.get("site_url") or DEFAULT_SITE_URL).rstrip("/")
     media_origin = os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").strip().rstrip("/")
 
+    blocked_assets: set[str] = set()
+    for source_file in list(files):
+        if not source_file.is_documentation_page():
+            continue
+        src_uri = str(getattr(source_file, "src_uri", source_file.src_path))
+        if is_video_source_published(src_uri):
+            continue
+        try:
+            source_text = source_file.content_string
+        except (OSError, UnicodeDecodeError):
+            continue
+        meta, _ = _split_frontmatter(source_text)
+        video_file = str(meta.get("video") or "").strip()
+        if not video_file:
+            continue
+        parent = Path(src_uri).parent
+        poster_file = str(meta.get("video_poster") or Path(video_file).with_suffix(".jpg").name).strip()
+        captions_file = str(meta.get("video_captions") or "").strip()
+        for asset in (video_file, poster_file, captions_file):
+            if asset and not _is_url(asset):
+                blocked_assets.add((parent / asset).as_posix())
+
+    for candidate in list(files):
+        candidate_uri = str(getattr(candidate, "src_uri", candidate.src_path))
+        if candidate_uri in blocked_assets:
+            files.remove(candidate)
+
     for source_file in list(files):
         if not source_file.is_documentation_page():
             continue
