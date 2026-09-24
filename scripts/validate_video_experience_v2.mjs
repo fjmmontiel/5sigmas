@@ -32,7 +32,10 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  if (catalog.count < 40) throw new Error(`Unexpectedly small video catalog: ${catalog.count}.`);
+  const expectedCatalogCount = 34; // 76 canonical video-bearing pages - 42 intentionally unpublished series 07+ entries.
+  if (catalog.count !== expectedCatalogCount) {
+    throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
+  }
 
   const sources = await root.locator('img').evaluateAll((nodes) => nodes.map((node) => node.currentSrc || node.src));
   for (const src of sources) {
