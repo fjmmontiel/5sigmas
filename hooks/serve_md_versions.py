@@ -9,6 +9,7 @@ mirror layer.
 from pathlib import Path
 import shutil
 import sys
+import re
 
 HOOKS_DIR = Path(__file__).resolve().parent
 if str(HOOKS_DIR) not in sys.path:
@@ -42,7 +43,7 @@ def _strip_video_frontmatter(text: str) -> str:
     kept: list[str] = []
     skipping = False
     for line in lines[1:end]:
-        match = __import__("re").match(r"^([A-Za-z0-9_-]+):(?:\s|$)", line)
+        match = re.match(r"^([A-Za-z0-9_-]+):(?:\s|$)", line)
         if match:
             key = match.group(1)
             skipping = key == "video" or key.startswith("video_")
