@@ -21,6 +21,11 @@ from urllib.parse import urlsplit
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
+
 DISCOVERY_ROOT = ROOT / "discovery"
 SITE_ORIGIN = "https://5sigmas.com"
 SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -116,6 +121,11 @@ def _source_files(locale: str) -> list[tuple[Path, dict[str, Any]]]:
         except (OSError, json.JSONDecodeError) as exc:
             raise CONTRACT.ContractError(f"invalid discovery JSON: {path}") from exc
         if source.get("locale") != locale:
+            continue
+        article_path = urlsplit(str(source.get("article_url") or "")).path.lstrip("/")
+        if article_path.startswith("en/"):
+            article_path = article_path[3:]
+        if not is_video_source_published(article_path):
             continue
         CONTRACT.validate_source(source)
         rows.append((path, source))
