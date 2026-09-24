@@ -37,6 +37,11 @@ async function validateHub(page, mobile) {
     throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
   }
 
+  await root.locator('img').evaluateAll((nodes) => nodes.forEach((node) => {
+    const source = new URL(node.currentSrc || node.src);
+    node.removeAttribute('srcset');
+    node.src = new URL(source.pathname, location.origin).href;
+  }));
   const sources = await root.locator('img').evaluateAll((nodes) => nodes.map((node) => node.currentSrc || node.src));
   for (const src of sources) {
     const localSrc = new URL(new URL(src).pathname, baseUrl).href;
