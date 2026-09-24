@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { execFileSync } from 'node:child_process';
+
 /**
  * Fail-closed live INDEXABILITY gate for Context Engineering article + watch surfaces.
  *
@@ -14,6 +16,11 @@ const requestBase = (process.env.S5_PREVIEW_BASE || 'https://5sigmas.com').repla
 const canonicalOrigin = 'https://5sigmas.com';
 const expectedRevision = (process.env.S5_EXPECTED_SHA || '').trim();
 const series = 'context-engineering-memory-mcp';
+const videoPublished = execFileSync(
+  'python3',
+  ['-c', 'from hooks.video_publication_policy import is_video_source_published; print(is_video_source_published("series/context-engineering-memory-mcp/01-placeholder.md"))'],
+  { encoding: 'utf8' },
+).trim() === 'True';
 const slugs = [
   '01-context-engineering-vs-prompt-engineering',
   '02-context-budgets-prioritisation-compaction-provenance',
@@ -174,8 +181,10 @@ const inspectPage = async (locale, kind, slug) => {
     const normalized = normalizePublic(a.href, expected);
     if (normalized) outgoing.add(normalized);
   }
-  const paired = kind === 'article' ? publicUrl(locale, 'watch', slug) : publicUrl(locale, 'article', slug);
-  if (!outgoing.has(paired)) failures.push(`${label}: missing crawlable ${kind === 'article' ? 'article→watch' : 'watch→article'} link ${paired}`);
+  if (videoPublished) {
+    const paired = kind === 'article' ? publicUrl(locale, 'watch', slug) : publicUrl(locale, 'article', slug);
+    if (!outgoing.has(paired)) failures.push(`${label}: missing crawlable ${kind === 'article' ? 'article→watch' : 'watch→article'} link ${paired}`);
+  }
 
   pages.set(expected, { locale, kind, slug, outgoing });
 };
@@ -273,7 +282,7 @@ const inspectSitemaps = async () => {
       const normalPath = locale === 'en' ? '/en/sitemap.xml' : '/sitemap.xml';
       const videoPath = locale === 'en' ? '/en/video-sitemap.xml' : '/video-sitemap.xml';
       const other = locale === 'en' ? 'es' : 'en';
-      for (const kind of ['article', 'watch']) {
+      for (const kind of videoPublished ? ['article', 'watch'] : ['article']) {
         const expected = publicUrl(locale, kind, slug);
         const block = documents[normalPath] ? xmlUrlBlock(documents[normalPath], expected) : null;
         if (!block) {
@@ -289,6 +298,11 @@ const inspectSitemaps = async () => {
           failures.push(`${videoPath}: missing watch URL ${expected}`);
         }
       }
+      if (!videoPublished) {
+        const watch = publicUrl(locale, 'watch', slug);
+        if (documents[normalPath] && xmlUrlBlock(documents[normalPath], watch)) failures.push(`${normalPath}: unapproved watch URL remains ${watch}`);
+        if (documents[videoPath] && xmlUrlBlock(documents[videoPath], watch)) failures.push(`${videoPath}: unapproved watch URL remains ${watch}`);
+      }
     }
   }
 };
@@ -303,10 +317,15 @@ const inspectInternalGraph = () => {
   }
   for (const slug of slugs) {
     for (const locale of ['es', 'en']) {
-      for (const kind of ['article', 'watch']) {
-        const target = publicUrl(locale, kind, slug);
-        const refs = [...(incoming.get(target) || [])].filter((source) => source !== target);
-        if (!refs.length) failures.push(`${locale} ${kind} ${slug}: orphaned in live Context graph (no crawlable internal referrer)`);
+      const article = publicUrl(locale, 'article', slug);
+      const articleRefs = [...(incoming.get(article) || [])].filter((source) => source !== article);
+      if (!articleRefs.length) failures.push(`${locale} article ${slug}: orphaned in live Context graph (no crawlable internal referrer)`);
+      const watch = publicUrl(locale, 'watch', slug);
+      if (videoPublished) {
+        const watchRefs = [...(incoming.get(watch) || [])].filter((source) => source !== watch);
+        if (!watchRefs.includes(article)) failures.push(`${locale} watch ${slug}: no crawlable article referrer`);
+      } else if (incoming.has(watch)) {
+        failures.push(`${locale} unapproved watch ${slug}: remains crawlably linked`);
       }
     }
   }
@@ -332,10 +351,21 @@ await inspectRevision();
 await inspectRobots();
 await inspectSitemaps();
 for (const locale of ['es', 'en']) await inspectHub(locale);
+const inspectAbsentWatch = async (locale, slug) => {
+  const watch = publicUrl(locale, 'watch', slug);
+  try {
+    const response = await fetch(requestUrl(watch), { redirect: 'manual', headers: { 'cache-control': 'no-cache', pragma: 'no-cache' } });
+    if (![404, 410].includes(response.status)) failures.push(`${locale} unapproved watch ${slug}: expected 404/410, got ${response.status}`);
+  } catch (error) {
+    failures.push(`${locale} unapproved watch ${slug}: request failed: ${error.message}`);
+  }
+};
+
 for (const slug of slugs) {
   for (const locale of ['es', 'en']) {
     await inspectPage(locale, 'article', slug);
-    await inspectPage(locale, 'watch', slug);
+    if (videoPublished) await inspectPage(locale, 'watch', slug);
+    else await inspectAbsentWatch(locale, slug);
   }
 }
 inspectInternalGraph();
@@ -346,9 +376,11 @@ if (failures.length) {
   process.exit(1);
 }
 
+const surfaceSummary = videoPublished
+  ? '12 route×locale pairs / 24 article+watch surfaces; direct HTTPS/no redirect; article↔watch lifecycle'
+  : '12 indexed article surfaces / 12 blocked watch URLs verified absent from sitemaps and crawl graph';
 console.log(
-  `Context Engineering live INDEXABILITY PASS: deployed_revision=${expectedRevision || 'preview-not-required'}; ` +
-  '12 route×locale pairs / 24 article+watch surfaces; direct HTTPS/no redirect; canonical; robots/noindex/X-Robots; ' +
-  'localized metadata/H1/crawlable text/JSON-LD syntax; reciprocal sitemap hreflang; normal+video sitemap; ' +
-  'article↔watch lifecycle; internal discovery/no orphans. Google selection/index state intentionally not asserted.'
+  `Context Engineering live INDEXABILITY PASS: deployed_revision=${expectedRevision || 'preview-not-required'}; ${surfaceSummary}; ` +
+  'canonical; robots/noindex/X-Robots; localized metadata/H1/crawlable text/JSON-LD syntax; reciprocal sitemap hreflang; ' +
+  'internal discovery/no orphans. Google selection/index state intentionally not asserted.'
 );
