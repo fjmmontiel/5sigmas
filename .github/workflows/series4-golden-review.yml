@@ -64,6 +64,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Resolve inference video publication policy
+        id: video_policy
+        shell: bash
+        run: |
+          published="$(python - <<'PY'
+          from hooks.video_publication_policy import is_video_source_published
+          print('true' if is_video_source_published('series/llm-inference-engineering-economics/01-placeholder.md') else 'false')
+          PY
+          )"
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+
       - name: Validate complete Series 4 inventory and canonical publication surfaces
         run: node scripts/validate_inference_engineering_series4_release.mjs
       - name: Validate media declarations and signatures
@@ -119,8 +130,12 @@ jobs:
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8000/ >/dev/null && curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null; then
               status="$(curl --silent --output /dev/null --write-out '%{http_code}' -H 'Range: bytes=0-31' http://127.0.0.1:8000/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4 || true)"
-              if [[ "$status" == '206' ]]; then
-                echo 'Preview server is ready with byte-range support.'
+              if [[ "${{ steps.video_policy.outputs.published }}" == 'true' && "$status" == '206' ]]; then
+                echo 'Preview server is ready with published byte-range media.'
+                exit 0
+              fi
+              if [[ "${{ steps.video_policy.outputs.published }}" == 'false' && "$status" == '404' ]]; then
+                echo 'Preview server is ready; unapproved inference media correctly remains absent.'
                 exit 0
               fi
             fi
@@ -135,6 +150,7 @@ jobs:
           node scripts/validate_english_series_mirror.mjs
           node scripts/validate_locale_switching.mjs
       - name: Validate inference article/watch playback lifecycle
+        if: steps.video_policy.outputs.published == 'true'
         env:
           S5_PREVIEW_URL: http://127.0.0.1:8000
         run: node scripts/validate_inference_series_browser_milestone.mjs

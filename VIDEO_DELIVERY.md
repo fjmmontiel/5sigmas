@@ -5,7 +5,7 @@ The public site can serve video in two modes without changing article URLs:
 1. **Same-origin fallback:** media stays under `https://5sigmas.com/series/...` and is included in the GitHub Pages artifact.
 2. **Production media origin:** the same relative paths are published to Cloudflare R2 and pages use `https://media.5sigmas.com/...`.
 
-The build selects the second mode only when `S5_VIDEO_MEDIA_ORIGIN` is set. Removing that variable and redeploying returns the site to the same-origin fallback.
+The build selects the second mode only when `S5_VIDEO_MEDIA_ORIGIN` is set. Spanish objects preserve paths relative to `docs/`; published English locale media uses the `en/` prefix and its declarations in `locales/en/media.yml`. Removing the variable and redeploying returns the site to the same-origin fallback.
 
 ## Resulting architecture
 
@@ -114,7 +114,7 @@ python scripts/prepare_video_media.py --check
 python scripts/test_video_schema_contract.py
 ```
 
-The media command validates every **public** article that declares `video`:
+The media command validates every **public** Spanish article and each published English route with a media declaration:
 
 - MP4 exists and is non-empty.
 - Poster exists and is non-empty.

@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Fail-closed media validation for Security 00/01 requalification.
+"""Validate the owner-approved, silent Security R5 presentation and prompt videos.
 
 This focused gate validates the four native ES/EN Security presentation and
 Prompt Injection learning videos. It separates two independent contracts:
 
-1. Source/media metadata completeness: video, poster, title, summary, captions,
-   transcript and curated key moments must all be declared and their local
-   assets must exist.
-2. Binary facts from ffprobe: one H.264 1920x1080 yuv420p video stream, an audio
-   stream, and duration consistent with the declared ISO-8601 duration.
+1. Source/media metadata completeness: video, poster, title, summary and duration
+   must be declared and their local assets must exist. Chapters are optional and
+   are omitted until their R5 boundaries are verified from the actual videos.
+2. Binary facts from ffprobe: one silent H.264 1920x1080 yuv420p video stream
+   with duration consistent with the declared ISO-8601 duration.
 
-The gate NEVER creates narration, captions, transcripts or key moments. Missing
-authorized Francisco narration remains a hard media blocker rather than being
-silently substituted.
+The gate NEVER creates narration, captions, transcripts or key moments. R5 is a
+visual-only release, so audio and its dependent captions/transcript are not
+claimed in metadata.
 """
 from __future__ import annotations
 
@@ -39,8 +39,6 @@ MEDIA_KEYS = (
     "video_title",
     "video_summary",
     "video_duration",
-    "video_captions",
-    "video_transcript",
 )
 
 
@@ -180,9 +178,9 @@ def validate_metadata(
     chapters: list[dict[str, Any]] = (
         chapters_raw if isinstance(chapters_raw, list) else []
     )
-    if not chapters:
-        failures.append({"code": "VIDEO_CHAPTERS_MISSING", "detail": label})
-    else:
+    if chapters_raw is not None and not isinstance(chapters_raw, list):
+        failures.append({"code": "VIDEO_CHAPTERS_INVALID", "detail": label})
+    elif chapters:
         previous_end: float | None = None
         for index, chapter in enumerate(chapters):
             chapter_label = f"{label}:chapter[{index}]"
@@ -332,8 +330,8 @@ def validate_probe(
                 {"code": "VIDEO_PIXEL_FORMAT_INVALID", "detail": f"{path_label}: {video.get('pix_fmt')}"}
             )
 
-    if not audios:
-        failures.append({"code": "VIDEO_AUDIO_STREAM_MISSING", "detail": path_label})
+    if audios:
+        failures.append({"code": "VIDEO_AUDIO_STREAM_UNEXPECTED", "detail": path_label})
 
     declared_seconds = parse_iso_duration(declared_duration)
     if declared_seconds is None:
@@ -404,12 +402,6 @@ def run_self_test() -> None:
                 "height": 1080,
                 "pix_fmt": "yuv420p",
             },
-            {
-                "codec_type": "audio",
-                "codec_name": "aac",
-                "channels": 2,
-                "sample_rate": "48000",
-            },
         ],
     }
     failures, _ = validate_probe(
@@ -418,15 +410,15 @@ def run_self_test() -> None:
     if failures:
         raise AssertionError(f"valid probe fixture unexpectedly failed: {failures}")
 
-    silent_probe = {
-        "format": {"duration": "47.567", "format_name": "mov,mp4,m4a,3gp,3g2,mj2"},
-        "streams": [valid_probe["streams"][0]],
-    }
+    with_audio = dict(valid_probe)
+    with_audio["streams"] = valid_probe["streams"] + [
+        {"codec_type": "audio", "codec_name": "aac", "channels": 2, "sample_rate": "48000"}
+    ]
     failures, _ = validate_probe(
-        silent_probe, declared_duration="PT48S", path_label="fixture-silent"
+        with_audio, declared_duration="PT1M0S", path_label="fixture-with-audio"
     )
-    if "VIDEO_AUDIO_STREAM_MISSING" not in {item["code"] for item in failures}:
-        raise AssertionError("silent fixture must fail with VIDEO_AUDIO_STREAM_MISSING")
+    if "VIDEO_AUDIO_STREAM_UNEXPECTED" not in {item["code"] for item in failures}:
+        raise AssertionError("R5 fixture with an undeclared audio stream must fail")
 
     drift_probe = {
         "format": {"duration": "60.333", "format_name": "mov,mp4,m4a,3gp,3g2,mj2"},
@@ -447,12 +439,6 @@ def run_self_test() -> None:
             "video_title": "A useful title",
             "video_summary": "A useful summary of what this video teaches.",
             "video_duration": "PT1M0S",
-            "video_captions": "captions.vtt",
-            "video_transcript": "transcript.md",
-            "video_chapters": [
-                {"name": "Setup", "start": 0, "end": 30},
-                {"name": "Mechanism", "start": 30, "end": 60},
-            ],
         }
         target = Target(
             locale="es",
@@ -464,24 +450,6 @@ def run_self_test() -> None:
         failures, _ = validate_metadata(target)
         if failures:
             raise AssertionError(f"valid metadata fixture unexpectedly failed: {failures}")
-
-        missing = dict(valid_meta)
-        missing.pop("video_captions")
-        missing.pop("video_transcript")
-        missing.pop("video_chapters")
-        failures, _ = validate_metadata(
-            Target("es", "missing", target.source, asset_root, missing)
-        )
-        codes = {item["code"] for item in failures}
-        expected = {
-            "VIDEO_CAPTIONS_MISSING",
-            "VIDEO_TRANSCRIPT_MISSING",
-            "VIDEO_CHAPTERS_MISSING",
-        }
-        if not expected.issubset(codes):
-            raise AssertionError(
-                f"missing metadata fixture did not fail closed: {sorted(codes)}"
-            )
 
         bad_chapters = dict(valid_meta)
         bad_chapters["video_chapters"] = [
@@ -569,12 +537,8 @@ def main() -> int:
         "schema_version": 2,
         "scope": "security-00-01",
         "status": "FAIL" if failures else "PASS",
-        "golden": "NOT_CERTIFIED",
-        "voice_policy": (
-            "An authorized narration/audio stream is mandatory for the final "
-            "learning video. This gate never generates, clones or substitutes "
-            "Francisco's voice."
-        ),
+        "golden": "NOT_CERTIFIED_BY_MEDIA_GATE",
+        "voice_policy": "Owner-approved R5 is visual-only; no narration or audio is declared.",
         "contract": {
             "metadata": [
                 "video",
@@ -582,15 +546,12 @@ def main() -> int:
                 "video_title",
                 "video_summary",
                 "video_duration",
-                "video_captions",
-                "video_transcript",
-                "video_chapters",
             ],
             "binary": [
                 "h264",
                 "1920x1080",
                 "yuv420p",
-                "audio-stream",
+                "no-audio-stream",
                 "declared-vs-probed-duration",
             ],
         },

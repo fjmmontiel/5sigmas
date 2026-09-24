@@ -13,11 +13,17 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from hooks.video_publication_policy import is_video_source_published
 
 SITE_ORIGIN = "https://5sigmas.com"
 SERIES = "seguridad-ia"
@@ -283,6 +289,7 @@ def audit_indexability(root: Path, site: Path) -> dict:
     rows: list[dict] = []
     for slug in SLUGS:
         for locale in ("es", "en"):
+            video_published = is_video_source_published(f"series/{SERIES}/{slug}.md")
             article = _expected(locale, "article", slug)
             watch = _expected(locale, "watch", slug)
             other = "en" if locale == "es" else "es"
@@ -290,16 +297,10 @@ def audit_indexability(root: Path, site: Path) -> dict:
             other_watch = _expected(other, "watch", slug)
             blockers: list[str] = []
             article_errors, article_facts = _surface_errors(site, article, locale)
-            watch_errors, watch_facts = _surface_errors(site, watch, locale)
             blockers.extend(f"article: {item}" for item in article_errors)
-            blockers.extend(f"watch: {item}" for item in watch_errors)
 
             if article not in normal[locale]:
                 blockers.append("article missing from normal sitemap")
-            if watch not in normal[locale]:
-                blockers.append("watch missing from normal sitemap")
-            if watch not in video[locale]:
-                blockers.append("watch missing from video sitemap")
 
             expected_hreflang = "en" if locale == "es" else "es"
             if article in normal[locale] and normal[locale][article].get(expected_hreflang) != other_article:
@@ -307,22 +308,38 @@ def audit_indexability(root: Path, site: Path) -> dict:
                     f"article sitemap hreflang {expected_hreflang} is not reciprocal: "
                     f"{normal[locale][article].get(expected_hreflang)!r}"
                 )
-            if watch in normal[locale] and normal[locale][watch].get(expected_hreflang) != other_watch:
-                blockers.append(
-                    f"watch sitemap hreflang {expected_hreflang} is not reciprocal: "
-                    f"{normal[locale][watch].get(expected_hreflang)!r}"
-                )
-
             article_referrers = sorted(ref for ref in incoming.get(article, set()) if ref != article)
-            watch_referrers = sorted(ref for ref in incoming.get(watch, set()) if ref != watch)
             if not article_referrers:
                 blockers.append("article is orphaned: no crawlable internal referrer")
-            if not watch_referrers:
-                blockers.append("watch is orphaned: no crawlable internal referrer")
-            if article_facts is not None and watch not in outgoing.get(article, []):
-                blockers.append("article does not crawlably link to watch page")
-            if watch_facts is not None and article not in outgoing.get(watch, []):
-                blockers.append("watch page does not crawlably link back to article")
+
+            watch_referrers: list[str] = []
+            if video_published:
+                watch_errors, watch_facts = _surface_errors(site, watch, locale)
+                blockers.extend(f"watch: {item}" for item in watch_errors)
+                if watch not in normal[locale]:
+                    blockers.append("watch missing from normal sitemap")
+                if watch not in video[locale]:
+                    blockers.append("watch missing from video sitemap")
+                if watch in normal[locale] and normal[locale][watch].get(expected_hreflang) != other_watch:
+                    blockers.append(
+                        f"watch sitemap hreflang {expected_hreflang} is not reciprocal: "
+                        f"{normal[locale][watch].get(expected_hreflang)!r}"
+                    )
+                watch_referrers = sorted(ref for ref in incoming.get(watch, set()) if ref != watch)
+                if not watch_referrers:
+                    blockers.append("watch is orphaned: no crawlable internal referrer")
+                if article_facts is not None and watch not in outgoing.get(article, []):
+                    blockers.append("article does not crawlably link to watch page")
+                if watch_facts is not None and article not in outgoing.get(watch, []):
+                    blockers.append("watch page does not crawlably link back to article")
+            else:
+                if watch in normal[locale] or watch in video[locale]:
+                    blockers.append("unapproved watch page remains in a sitemap")
+                if _local_html(site, watch).is_file():
+                    blockers.append("unapproved watch page is still rendered")
+                watch_referrers = sorted(ref for ref in incoming.get(watch, set()) if ref != watch)
+                if watch_referrers or (article_facts is not None and watch in outgoing.get(article, [])):
+                    blockers.append("unapproved watch page remains crawlably linked")
 
             rows.append(
                 {
@@ -338,6 +355,7 @@ def audit_indexability(root: Path, site: Path) -> dict:
                     "internal_discovery_status": "PASS" if not any(("orphaned" in item or "crawlably link" in item) for item in blockers) else "FAIL",
                     "robots_status": "PASS" if robots_ok and not any("robots meta" in item for item in blockers) else "FAIL",
                     "blockers": blockers,
+                    "video_publication_status": "PUBLISHED" if video_published else "UNPUBLISHED",
                     "INDEXABILITY_PASS": not blockers and not global_errors,
                 }
             )

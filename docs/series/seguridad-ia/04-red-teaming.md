@@ -13,17 +13,8 @@ video: "04-red-teaming.mp4"
 video_poster: "04-red-teaming.jpg"
 video_title: "Red-teaming"
 video_summary: "Cómo probar la cadena causal completa desde una entrada adversaria hasta autorización, efecto externo, recuperación y una regresión reproducible de release."
-video_duration: "PT1M0S"
-video_chapters:
-  - name: "Del test a la cadena de ataque"
-    start: 0
-    end: 24
-  - name: "Cobertura adaptativa y validez del evaluador"
-    start: 24
-    end: 48
-  - name: "Evidencia y gate de release"
-    start: 48
-    end: 60
+video_duration: "PT1M30S"
+
 ---
 
 # Capítulo 4 — Red-teaming

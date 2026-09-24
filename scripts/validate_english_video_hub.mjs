@@ -95,7 +95,7 @@ if (catalogue) {
   if (catalogue.language !== 'en') failures.push(`catalogue language is ${JSON.stringify(catalogue.language)}`);
   if (!Array.isArray(catalogue.videos) || catalogue.videos.length === 0) failures.push('catalogue has no videos');
   if (catalogue.count !== catalogue.videos?.length) failures.push(`catalogue count ${catalogue.count} != videos.length ${catalogue.videos?.length}`);
-  if (catalogue.count !== 34) failures.push(`catalogue count must be 34 after the owner-directed series 07+ rollback, got ${catalogue.count}`);
+  if (catalogue.count !== 40) failures.push(`catalogue count must be 40 with AI Security R5 live and later unapproved series blocked, got ${catalogue.count}`);
 
   const topics = new Set();
   for (const video of catalogue.videos || []) {

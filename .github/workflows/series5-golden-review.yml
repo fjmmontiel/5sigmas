@@ -62,6 +62,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Resolve Evaluating AI video publication policy
+        id: video_policy
+        shell: bash
+        run: |
+          published="$(python - <<'PY'
+          from hooks.video_publication_policy import is_video_source_published
+          print('true' if is_video_source_published('series/evaluating-ai-systems-production/01-placeholder.md') else 'false')
+          PY
+          )"
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+
 
       - name: Validate current Series 5 source contracts
         run: |
@@ -160,6 +171,7 @@ jobs:
         run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
 
       - name: Validate article-watch playback lifecycle in normal and reduced motion
+        if: steps.video_policy.outputs.published == 'true'
         env:
           S5_PREVIEW_BASE: http://127.0.0.1:8000
         run: node scripts/validate_evaluating_ai_series_browser_milestone.mjs

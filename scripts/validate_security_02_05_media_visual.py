@@ -4,9 +4,10 @@
 Owner amendment #305 comment 5716685049 decouples Francisco's future
 owner-local narration from the current GOLDEN gate. Audio streams, captions and
 transcripts remain visible as VOICE_ENHANCEMENT debt but cannot fail this gate.
-Native video presence, poster, codec/dimensions/pixel format/duration,
-locale-specific metadata and curated non-voice chapters/key moments remain
-current MEDIA_VISUAL blockers.
+Native video presence, poster, codec/dimensions/pixel format/duration and
+locale-specific metadata remain current MEDIA_VISUAL blockers. The R5 release
+has no curated chapter boundaries, so its older chapter claims are removed until
+timestamps are verified against these exact binaries.
 
 The gate also captures deterministic visual samples from the exact MP4 bytes.
 Those frames are evidence for manual pixel/content review and chapter curation;
@@ -180,7 +181,6 @@ def self_test() -> None:
         {"code": "VIDEO_AUDIO_STREAM_MISSING", "detail": "voice"},
         {"code": "VIDEO_CAPTIONS_MISSING", "detail": "voice"},
         {"code": "VIDEO_TRANSCRIPT_MISSING", "detail": "voice"},
-        {"code": "VIDEO_CHAPTERS_MISSING", "detail": "visual"},
         {"code": "VIDEO_POSTER_MISSING", "detail": "visual"},
         {"code": "VIDEO_SUMMARY_MISSING", "detail": "visual"},
         {"code": "VIDEO_CODEC_INVALID", "detail": "visual"},
@@ -194,7 +194,6 @@ def self_test() -> None:
         "VIDEO_TRANSCRIPT_MISSING",
     }
     assert {
-        "VIDEO_CHAPTERS_MISSING",
         "VIDEO_POSTER_MISSING",
         "VIDEO_SUMMARY_MISSING",
         "VIDEO_CODEC_INVALID",

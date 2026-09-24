@@ -1,4 +1,4 @@
-name: Enforce series 07+ video unpublish
+name: Enforce unapproved-series video unpublish
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: series-07-video-unpublish
+  group: unapproved-series-video-unpublish
   cancel-in-progress: false
 
 jobs:
@@ -126,7 +126,6 @@ jobs:
           set -euo pipefail
           endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           for series in \
-            seguridad-ia \
             agentes-ia \
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
@@ -159,7 +158,6 @@ jobs:
           endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           failures=0
           for series in \
-            seguridad-ia \
             agentes-ia \
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
@@ -193,7 +191,6 @@ jobs:
           token = os.environ["CLOUDFLARE_API_TOKEN"]
           zone = os.environ["CLOUDFLARE_ZONE_ID"]
           blocked = {
-              "seguridad-ia",
               "agentes-ia",
               "agentes-voz-tiempo-real",
               "coding-agents-agent-harnesses",
@@ -241,7 +238,6 @@ jobs:
 
           origin = os.environ["S5_VIDEO_MEDIA_ORIGIN"].rstrip("/")
           blocked = {
-              "seguridad-ia",
               "agentes-ia",
               "agentes-voz-tiempo-real",
               "coding-agents-agent-harnesses",

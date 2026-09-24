@@ -67,6 +67,9 @@ jobs:
           EOF
           sha256sum -c /tmp/modelos-r2.sha256
 
+      - name: Verify exact owner-approved AI Security R5 MP4 bytes
+        run: sha256sum -c .github/receipts/seguridad-ia-r5.sha256
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
