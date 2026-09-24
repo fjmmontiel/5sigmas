@@ -68,6 +68,9 @@ jobs:
       - name: Verify model explorer math, frontier and provenance
         run: node scripts/test_model_price_performance_tool.mjs
 
+      - name: Verify model explorer release-ledger freshness
+        run: node scripts/audit_model_price_performance_freshness.mjs --max-age-days=8
+
       - name: Verify inference VRAM math and architecture provenance
         run: node scripts/test_inference_vram_tool.mjs
 
