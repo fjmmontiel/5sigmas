@@ -103,11 +103,18 @@ jobs:
         run: |
           set -euo pipefail
           for attempt in {1..60}; do
-            build="$(curl --fail --silent --show-error --location \"https://5sigmas.com/build.json?rev=$GITHUB_SHA\" || true)"
-            if grep -q "\\\"revision\\\":\\\"$GITHUB_SHA\\\"" <<< "$build"; then
+            revision="$(
+              curl --fail --silent --show-error --location \
+                -H 'Cache-Control: no-cache' \
+                "https://5sigmas.com/build.json?rev=$GITHUB_SHA" \
+              | python -c 'import json,sys; print((json.load(sys.stdin) or {}).get("revision",""))' \
+              || true
+            )"
+            if [ "$revision" = "$GITHUB_SHA" ]; then
               echo "Exact revision $GITHUB_SHA is live."
               exit 0
             fi
+            echo "Waiting for $GITHUB_SHA; observed ${revision:-none}"
             sleep 10
           done
           echo "Exact Pages revision $GITHUB_SHA did not become live within 10 minutes." >&2
