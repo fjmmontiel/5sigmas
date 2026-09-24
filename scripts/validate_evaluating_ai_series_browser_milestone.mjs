@@ -1,11 +1,16 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const baseUrl = process.env.S5_PREVIEW_BASE || process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/evaluating-ai-systems-browser-milestone');
 const timeoutMs = 10000;
 const series = 'evaluating-ai-systems-production';
+const videoPublished = execFileSync('python3', [
+  '-c',
+  'from hooks.video_publication_policy import is_video_source_published; print(is_video_source_published("series/evaluating-ai-systems-production/01-placeholder.md"))',
+], { encoding: 'utf8' }).trim() === 'True';
 const chapters = [
   '01-que-evaluar-modelo-componente-sistema-workflow-trayectoria',
   '02-offline-eval-sets-curation-hard-negatives-contamination-versioning',
@@ -186,6 +191,48 @@ const receipt = {
   codec,
   contexts: [],
 };
+if (!videoPublished) {
+  try {
+    for (const mode of modes) {
+      const context = await browser.newContext({
+        viewport: mode.viewport,
+        isMobile: mode.mobile,
+        hasTouch: mode.mobile,
+        reducedMotion: mode.reducedMotion,
+      });
+      try {
+        for (const locale of ['es', 'en']) for (const stem of chapters) {
+          const route = routes(locale, stem);
+          const page = await context.newPage();
+          const response = await page.goto(`${baseUrl}${route.article}`, { waitUntil: 'networkidle' });
+          if (!response?.ok()) throw new Error(`${locale}/${stem}/${mode.name}/article: HTTP ${response?.status() ?? 'no response'}`);
+          await assertPageBasics(page, locale, `${locale}/${stem}/${mode.name}/article`);
+          if (await page.locator('[data-s5-inline-video], [data-s5-inline-video-player]').count()) {
+            throw new Error(`${locale}/${stem}/${mode.name}/article: unpublished video remains embedded`);
+          }
+          const watch = await fetch(`${baseUrl}${route.watch}`, { redirect: 'manual' });
+          if (![404, 410].includes(watch.status)) {
+            throw new Error(`${locale}/${stem}/${mode.name}/watch: unpublished route must be absent (404 or 410), got ${watch.status}`);
+          }
+          receipt.contexts.push({ locale, stem, mode: mode.name, article: 'PASS', watch: watch.status });
+          await page.close();
+        }
+      } finally {
+        await context.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  receipt.routeLocaleRows = 12;
+  receipt.motionProfiles = ['normal', 'reduced'];
+  receipt.articleContexts = 12 * modes.length;
+  receipt.watchContexts = 12 * modes.length;
+  receipt.result = 'PASS_UNPUBLISHED';
+  await fs.writeFile(path.join(outDir, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
+  console.log(`PASS Evaluating AI Systems unpublished video policy: ${receipt.articleContexts} article routes stay readable; ${receipt.watchContexts} watch routes remain absent across motion, desktop, and mobile profiles.`);
+  process.exit(0);
+}
 try {
   for (const mode of modes) {
     const context = await browser.newContext({
