@@ -40,8 +40,6 @@
 - [Biblioteca completa de vídeos](https://5sigmas.com/videos/index.html.md): catálogo de explicaciones breves con resumen, ideas clave, artículo original y contenidos relacionados.
 - [Test-time compute en vídeo](https://5sigmas.com/videos/series/modelos-razonadores/03-test-time-compute/index.html.md): calidad, coste y latencia cuando el modelo dedica más cómputo a una respuesta.
 - [Arquitecturas multimodales en vídeo](https://5sigmas.com/videos/series/multimodalidad-iag/03-arquitecturas/index.html.md): familias para combinar texto, imagen, audio y vídeo.
-- [Prompt injection en vídeo](https://5sigmas.com/videos/series/seguridad-ia/01-prompt-injection/index.html.md): cómo contenido externo puede influir en un sistema que lee y actúa.
-- [Qué es un agente de IA en vídeo](https://5sigmas.com/videos/series/agentes-ia/01-que-es-un-agente/index.html.md): diferencia entre chatbot, workflow, copiloto y agente acotado.
 - [Energía, calor y conectividad orbital en vídeo](https://5sigmas.com/videos/series/datacenters-espacio/02-energia-calor-conectividad/index.html.md): límites físicos de la infraestructura espacial.
 
 ## Series publicadas
