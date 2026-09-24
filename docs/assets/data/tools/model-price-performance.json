@@ -277,8 +277,8 @@
       "ttft_seconds": 352.15,
       "sources": {
         "specs_pricing": {
-          "title": "GPT-6 Astra | OpenAI",
-          "url": "https://openai.com/index/gpt-6-astra/",
+          "title": "GPT-6 Astra Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
           "verified_on": "2026-09-24"
         },
         "benchmark": {
@@ -289,6 +289,11 @@
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
+      },
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2,
+        "output_multiplier": 1.5
       }
     },
     {
@@ -312,8 +317,8 @@
       "ttft_seconds": 171.68,
       "sources": {
         "specs_pricing": {
-          "title": "Introducing GPT-6 Sol and Luna | OpenAI",
-          "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+          "title": "GPT-6 Sol Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-6-sol",
           "verified_on": "2026-09-24"
         },
         "benchmark": {
@@ -347,8 +352,8 @@
       "ttft_seconds": 106.86,
       "sources": {
         "specs_pricing": {
-          "title": "Introducing GPT-6 Sol and Luna | OpenAI",
-          "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+          "title": "GPT-6 Luna Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
           "verified_on": "2026-09-24"
         },
         "benchmark": {
