@@ -1,16 +1,11 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/inference-browser-milestone');
 const timeoutMs = 10000;
 const series = 'llm-inference-engineering-economics';
-const videoPublished = execFileSync('python3', [
-  '-c',
-  'from hooks.video_publication_policy import is_video_source_published; print(is_video_source_published("series/llm-inference-engineering-economics/01-placeholder.md"))',
-], { encoding: 'utf8' }).trim() === 'True';
 const chapters = [
   '01-prefill-vs-decode-ttft-tpot-throughput-latency-budget',
   '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention',
@@ -117,38 +112,6 @@ let browser; try { browser = await chromium.launch({ headless: true, channel: 'c
 const probe = await browser.newPage(); const codec = await probe.evaluate(() => { const v = document.createElement('video'); return { mp4: v.canPlayType('video/mp4'), avc: v.canPlayType('video/mp4; codecs="avc1.42E01E"') }; }); await probe.close();
 if (!codec.mp4 || !codec.avc) { await browser.close(); throw new Error(`Chrome lacks MP4/AVC support ${JSON.stringify(codec)}`); }
 const receipt = { series, ownerVoiceAmendment: 5716685049, generatedAt: new Date().toISOString(), codec, contexts: [] };
-if (!videoPublished) {
-  try {
-    for (const mode of modes) {
-      const context = await browser.newContext({ viewport: mode.viewport, isMobile: mode.mobile, hasTouch: mode.mobile });
-      try {
-        for (const locale of ['es', 'en']) for (const stem of chapters) {
-          const r = routes(locale, stem);
-          const page = await context.newPage();
-          const response = await page.goto(`${baseUrl}${r.article}`, { waitUntil: 'networkidle' });
-          if (!response?.ok()) throw new Error(`${locale}/${stem}/${mode.name}/article: HTTP ${response?.status() ?? 'no response'}`);
-          await assertPageBasics(page, locale, `${locale}/${stem}/${mode.name}/article`);
-          if (await page.locator('[data-s5-inline-video], [data-s5-inline-video-player]').count()) {
-            throw new Error(`${locale}/${stem}/${mode.name}/article: unpublished video remains embedded`);
-          }
-          const watch = await fetch(`${baseUrl}${r.watch}`, { redirect: 'manual' });
-          if (![404, 410].includes(watch.status)) {
-            throw new Error(`${locale}/${stem}/${mode.name}/watch: unpublished route must be absent (404 or 410), got ${watch.status}`);
-          }
-          receipt.contexts.push({ locale, stem, mode: mode.name, article: 'PASS', watch: watch.status });
-          await page.close();
-        }
-      } finally { await context.close(); }
-    }
-  } finally { await browser.close(); }
-  receipt.routeLocaleRows = 12;
-  receipt.articleContexts = 12 * modes.length;
-  receipt.watchContexts = 12 * modes.length;
-  receipt.result = 'PASS_UNPUBLISHED';
-  await fs.writeFile(path.join(outDir, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
-  console.log(`PASS LLM Inference unpublished video policy: ${receipt.articleContexts} article routes stay readable; ${receipt.watchContexts} watch routes remain absent across desktop/mobile.`);
-  process.exit(0);
-}
 try {
   for (const mode of modes) {
     const context = await browser.newContext({ viewport: mode.viewport, isMobile: mode.mobile, hasTouch: mode.mobile, reducedMotion: 'no-preference' });
