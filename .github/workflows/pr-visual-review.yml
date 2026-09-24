@@ -95,6 +95,9 @@ jobs:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
+      - name: Validate exact series 07+ video unpublish scope
+        run: python scripts/validate_series_07_video_unpublish.py
+
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
 
