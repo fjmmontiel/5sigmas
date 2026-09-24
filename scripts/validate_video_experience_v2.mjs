@@ -32,15 +32,16 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  const expectedCatalogCount = 34; // 76 canonical video-bearing pages - 42 intentionally unpublished series 07+ entries.
+  const expectedCatalogCount = 40; // 76 canonical video-bearing pages - 36 later unapproved entries.
   if (catalog.count !== expectedCatalogCount) {
     throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
   }
 
   const sources = await root.locator('img').evaluateAll((nodes) => nodes.map((node) => node.currentSrc || node.src));
   for (const src of sources) {
-    const response = await page.request.get(src);
-    if (!response.ok()) throw new Error(`Poster unavailable: ${response.status()} ${src}`);
+    const localSrc = new URL(new URL(src).pathname, baseUrl).href;
+    const response = await page.request.get(localSrc);
+    if (!response.ok()) throw new Error(`Poster unavailable in preview: ${response.status()} ${localSrc}`);
   }
   const firstPoster = root.locator('img:visible').first();
   await firstPoster.evaluate((node) => node.decode?.());

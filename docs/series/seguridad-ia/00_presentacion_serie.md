@@ -11,18 +11,8 @@ tags:
 video: "00_presentacion_serie.mp4"
 video_poster: "00_presentacion_serie.jpg"
 video_title: "Seguridad en IA"
-video_duration: "PT1M0S"
+video_duration: "PT1M30S"
 video_summary: "Cómo una entrada no confiable puede influir en un sistema con IA y qué fronteras de autorización limitan que esa influencia se convierta en una acción."
-video_chapters:
-  - name: "Control y datos comparten el canal"
-    start: 0
-    end: 24
-  - name: "Jailbreaks y persistencia amplían el riesgo"
-    start: 24
-    end: 48
-  - name: "Autorización y permisos limitan el impacto"
-    start: 48
-    end: 60
 hide:
   - toc
 ---

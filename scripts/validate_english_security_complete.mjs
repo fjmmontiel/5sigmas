@@ -375,10 +375,20 @@ try {
       if (chapter.slug === '05-controles-produccion') await validateProductionControls(page, chapter);
 
       const videos = page.locator('video[data-s5-inline-video-player]');
-      const videoCount = await videos.count();
-      if (videoCount !== 0) fail(chapter, `owner-unpublished series must expose zero videos, found ${videoCount}`);
-      if (await page.locator('.s5-video-embed, .s5-video-embed__watch').count()) {
-        fail(chapter, 'owner-unpublished video embed/watch link remains');
+      if (await videos.count() !== 1) {
+        fail(chapter, `expected one approved R5 video, found ${await videos.count()}`);
+      } else {
+        const video = videos.first();
+        const source = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const poster = new URL((await video.getAttribute('poster')) || '', page.url());
+        const mediaRoot = `/en/series/seguridad-ia/${chapter.slug}`;
+        if (source.pathname !== `${mediaRoot}.mp4`) fail(chapter, `video source does not match approved English R5 asset: ${source.pathname}`);
+        if (poster.pathname !== `${mediaRoot}.jpg`) fail(chapter, `poster does not match approved English R5 asset: ${poster.pathname}`);
+      }
+      const watchLinks = page.locator('.s5-video-embed__watch a');
+      if (await watchLinks.count() !== 1) fail(chapter, 'approved video watch link is missing');
+      else if (!new URL((await watchLinks.first().getAttribute('href')) || '', page.url()).pathname.startsWith('/en/videos/series/seguridad-ia/')) {
+        fail(chapter, 'video watch link escaped the English video library');
       }
       if (await page.locator('audio').count()) fail(chapter, 'unexpected inherited Spanish audio');
 
@@ -399,4 +409,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English AI Security QA passed: Chapters 1–5 and 18 canonical defensive visuals remain intact; owner-unpublished video embeds are absent; desktop/mobile clean.');
+console.log('Complete English AI Security QA passed: Chapters 1–5, 18 canonical defensive visuals, approved R5 videos, and desktop/mobile layouts are intact.');

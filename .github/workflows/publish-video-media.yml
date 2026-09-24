@@ -28,6 +28,8 @@ jobs:
       R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
       R2_BUCKET_NAME: ${{ vars.R2_BUCKET_NAME }}
       S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
     steps:
       - uses: actions/checkout@v4
@@ -44,6 +46,57 @@ jobs:
 
       - name: Validate and stage declared video media
         run: python scripts/prepare_video_media.py --output .video-media
+
+      - name: Select exact approved AI Security R5 objects
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import shutil
+          from pathlib import Path
+
+          root = Path('.video-media')
+          manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
+          receipt = Path('.github/receipts/seguridad-ia-r5.sha256')
+          expected = {}
+          for line in receipt.read_text(encoding='utf-8').splitlines():
+              digest, source = line.split(maxsplit=1)
+              locale = 'en/' if source.startswith('locales/en/') else ''
+              source = source.removeprefix('docs/').removeprefix('locales/en/')
+              expected[f'{locale}{source}'] = digest
+
+          security = [
+              item for item in manifest['objects']
+              if re.fullmatch(r'(?:en/)?series/seguridad-ia/[^/]+\.(?:mp4|jpg)', item['key'])
+          ]
+          videos = {item['key']: item for item in security if item['kind'] == 'video'}
+          posters = [item for item in security if item['kind'] == 'poster']
+          if set(videos) != set(expected):
+              raise SystemExit(f'approved Security video key mismatch: {sorted(videos)}')
+          poster_keys = {item['key'] for item in posters}
+          expected_posters = {key.removesuffix('.mp4') + '.jpg' for key in expected}
+          if poster_keys != expected_posters:
+              raise SystemExit(f'approved Security poster key mismatch: {sorted(poster_keys)}')
+          if len(posters) != 12 or len(security) != 24:
+              raise SystemExit(f'expected 12 Security posters + 12 videos, found {len(posters)} posters / {len(security)} objects')
+          for key, digest in expected.items():
+              if videos[key]['sha256'] != digest:
+                  raise SystemExit(f'approved Security source hash mismatch for {key}')
+
+          target = root / 'security-r5'
+          if target.exists():
+              shutil.rmtree(target)
+          media_root = target / 'media'
+          for item in security:
+              destination = media_root / item['key']
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(Path(item['source']), destination)
+          (target / 'manifest.json').write_text(
+              json.dumps({'schema_version': 1, 'objects': security}, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
+          print('Selected exactly 12 receipt-verified R5 videos and their 12 posters.')
+          PY
 
       - name: Record deterministic media manifest in logs
         shell: bash
@@ -63,60 +116,115 @@ jobs:
           test -n "$R2_ACCOUNT_ID" || { echo "Missing R2_ACCOUNT_ID secret" >&2; exit 1; }
           test -n "$R2_BUCKET_NAME" || { echo "Missing R2_BUCKET_NAME repository variable" >&2; exit 1; }
           test -n "$S5_VIDEO_MEDIA_ORIGIN" || { echo "Missing S5_VIDEO_MEDIA_ORIGIN repository variable" >&2; exit 1; }
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "Missing CLOUDFLARE_API_TOKEN secret for exact media cache purge" >&2; exit 1; }
+          test -n "$CLOUDFLARE_ZONE_ID" || { echo "Missing CLOUDFLARE_ZONE_ID secret for exact media cache purge" >&2; exit 1; }
           [[ "$S5_VIDEO_MEDIA_ORIGIN" == https://* ]] || { echo "S5_VIDEO_MEDIA_ORIGIN must use HTTPS" >&2; exit 1; }
 
       - name: Publish media objects to R2
         if: inputs.publish
         run: |
-          aws s3 sync .video-media/media/ "s3://${R2_BUCKET_NAME}/" \
-            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
-            --cache-control "public,max-age=86400" \
-            --only-show-errors
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          endpoint = f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
+          bucket = os.environ['R2_BUCKET_NAME']
+          root = Path('.video-media/security-r5')
+          manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
+          for item in manifest['objects']:
+              subprocess.run([
+                  'aws', 's3', 'cp', str(root / 'media' / item['key']),
+                  f"s3://{bucket}/{item['key']}",
+                  '--endpoint-url', endpoint,
+                  '--cache-control', 'public,max-age=86400',
+                  '--content-type', item['content_type'],
+                  '--only-show-errors',
+              ], check=True)
+          print(f"Uploaded {len(manifest['objects'])} AI Security R5 objects.")
+          PY
           aws s3 cp .video-media/manifest.json "s3://${R2_BUCKET_NAME}/manifests/video-manifest.json" \
             --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
             --cache-control "no-cache" \
             --content-type "application/json" \
             --only-show-errors
 
-      - name: Verify public playback, byte ranges and CORS
+      - name: Purge exact AI Security R5 media URLs
         if: inputs.publish
         run: |
           python - <<'PY'
           import json
           import os
           from pathlib import Path
-          from urllib.parse import quote
           from urllib.request import Request, urlopen
 
-          manifest = json.loads(Path('.video-media/manifest.json').read_text(encoding='utf-8'))
+          manifest = json.loads(Path('.video-media/security-r5/manifest.json').read_text(encoding='utf-8'))
           origin = os.environ['S5_VIDEO_MEDIA_ORIGIN'].rstrip('/')
-          selected = []
-          for kind in ('video', 'poster', 'captions'):
-              match = next((item for item in manifest['objects'] if item['kind'] == kind), None)
-              if match:
-                  selected.append(match)
+          token = os.environ['CLOUDFLARE_API_TOKEN']
+          zone = os.environ['CLOUDFLARE_ZONE_ID']
+          urls = [f"{origin}/{item['key']}" for item in manifest['objects']]
+          endpoint = f'https://api.cloudflare.com/client/v4/zones/{zone}/purge_cache'
+          request = Request(
+              endpoint,
+              data=json.dumps({'files': urls}).encode(),
+              method='POST',
+              headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'},
+          )
+          with urlopen(request, timeout=30) as response:
+              result = json.loads(response.read().decode())
+          if not result.get('success'):
+              raise SystemExit(f"Cloudflare cache purge failed: {result}")
+          print(f'Purged {len(urls)} AI Security R5 media URLs.')
+          PY
 
-          for item in selected:
-              url = f"{origin}/{quote(item['key'], safe='/')}"
+      - name: Verify exact public R5 bytes, ranges and CORS
+        if: inputs.publish
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          manifest = json.loads(Path('.video-media/security-r5/manifest.json').read_text(encoding='utf-8'))
+          root = Path('.video-media/security-r5/media')
+          origin = os.environ['S5_VIDEO_MEDIA_ORIGIN'].rstrip('/')
+          for item in manifest['objects']:
+              path = root / item['key']
+              expected = hashlib.sha256(path.read_bytes()).hexdigest()
+              if expected != item['sha256']:
+                  raise SystemExit(f"staged hash mismatch: {item['key']}")
               request = Request(
-                  url,
-                  headers={
-                      'Origin': 'https://5sigmas.com',
-                      'Range': 'bytes=0-0',
-                      'User-Agent': '5sigmas-media-verifier/1.0',
-                  },
+                  f"{origin}/{item['key']}",
+                  headers={'Origin': 'https://5sigmas.com', 'User-Agent': '5sigmas-media-verifier/1.0'},
               )
-              with urlopen(request, timeout=30) as response:
-                  if response.status not in {200, 206}:
-                      raise RuntimeError(f"{url} returned {response.status}")
+              digest = hashlib.sha256()
+              with urlopen(request, timeout=60) as response:
+                  if response.status != 200:
+                      raise SystemExit(f"{item['key']} returned HTTP {response.status}")
                   allow_origin = response.headers.get('Access-Control-Allow-Origin')
                   if allow_origin not in {'https://5sigmas.com', '*'}:
-                      raise RuntimeError(f"{url} returned invalid CORS origin {allow_origin!r}")
-                  if item['kind'] == 'video' and response.status != 206:
-                      raise RuntimeError(f"{url} did not honor the byte-range request")
-                  if item['kind'] == 'video' and not response.headers.get('Content-Range'):
-                      raise RuntimeError(f"{url} omitted Content-Range")
+                      raise SystemExit(f"{item['key']} returned invalid CORS origin {allow_origin!r}")
                   if 'max-age' not in (response.headers.get('Cache-Control') or ''):
-                      raise RuntimeError(f"{url} omitted cache metadata")
-                  print(f"verified {item['kind']}: {url}")
+                      raise SystemExit(f"{item['key']} omitted cache metadata")
+                  for chunk in iter(lambda: response.read(1024 * 1024), b''):
+                      digest.update(chunk)
+              if digest.hexdigest() != expected:
+                  raise SystemExit(f"public bytes mismatch for {item['key']}: {digest.hexdigest()} != {expected}")
+              print(f"verified exact bytes: {item['key']} sha256={expected}")
+
+              if item['kind'] == 'video':
+                  ranged = Request(
+                      f"{origin}/{item['key']}",
+                      headers={
+                          'Origin': 'https://5sigmas.com',
+                          'Range': 'bytes=0-0',
+                          'User-Agent': '5sigmas-media-verifier/1.0',
+                      },
+                  )
+                  with urlopen(ranged, timeout=30) as response:
+                      if response.status != 206 or not response.headers.get('Content-Range'):
+                          raise SystemExit(f"{item['key']} did not honor byte-range request")
           PY

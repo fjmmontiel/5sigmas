@@ -11,17 +11,8 @@ video: "02-jailbreaks.mp4"
 video_poster: "02-jailbreaks.jpg"
 video_title: "Jailbreaks"
 video_summary: "Cómo los intentos repetidos y adaptativos cambian la superficie de ataque y por qué la autorización y los límites de intentos siguen importando después de una negativa."
-video_duration: "PT1M0S"
-video_chapters:
-  - name: "De una negativa a una búsqueda"
-    start: 0
-    end: 24
-  - name: "Optimización, transferencia y presupuesto"
-    start: 24
-    end: 48
-  - name: "Aleatoriedad y autorización como fronteras distintas"
-    start: 48
-    end: 60
+video_duration: "PT1M30S"
+
 ---
 
 # Capítulo 2 — Jailbreaks

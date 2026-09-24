@@ -16,7 +16,6 @@ import yaml
 ORIGIN = "https://5sigmas.com"
 REVISION = os.environ.get("GITHUB_SHA", "").strip()
 BLOCKED = (
-    "seguridad-ia",
     "agentes-ia",
     "agentes-voz-tiempo-real",
     "coding-agents-agent-harnesses",
@@ -24,7 +23,7 @@ BLOCKED = (
     "llm-inference-engineering-economics",
     "evaluating-ai-systems-production",
 )
-KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6}
+KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6}
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 
@@ -165,7 +164,7 @@ def main() -> int:
     es_catalog = catalogue(f"{ORIGIN}/videos/catalog.json")
     en_catalog = catalogue(f"{ORIGIN}/en/videos/catalog.json")
 
-    if es_catalog.get("count") != 34 or en_catalog.get("count") != 34:
+    if es_catalog.get("count") != 40 or en_catalog.get("count") != 40:
         raise AssertionError(
             f"catalogue count mismatch: ES={es_catalog.get('count')} EN={en_catalog.get('count')}"
         )
@@ -199,17 +198,17 @@ def main() -> int:
                     status, _ = fetch(asset_url)
                     if status != 404:
                         raise AssertionError(f"{asset_url}: blocked video asset still public (HTTP {status})")
-    if blocked_count != 42:
-        raise AssertionError(f"blocked inventory drift: expected 42, got {blocked_count}")
+    if blocked_count != 36:
+        raise AssertionError(f"blocked inventory drift: expected 36, got {blocked_count}")
 
     for series, expected in KEEP.items():
         assert_keep_live(series, expected, "", es_normal, es_video, es_catalog)
         assert_keep_live(series, expected, "/en", en_normal, en_video, en_catalog)
 
     print(
-        "LIVE PASS: 42 series 07+ video entries removed from embeds/watch pages/catalogues/"
+        "LIVE PASS: 36 unapproved series 07+ video entries removed from embeds/watch pages/catalogues/"
         "video sitemaps/public video assets while all ES/EN articles remain live; Datacenters and "
-        "Modelos R2 video surfaces remain live."
+        "Modelos R2 and AI Security R5 video surfaces remain live."
     )
     return 0
 

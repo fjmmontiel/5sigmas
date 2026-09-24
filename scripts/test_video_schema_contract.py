@@ -27,10 +27,10 @@ from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_front
 
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
 EN_LOCALE_ROOT = ROOT / "locales" / "en"
-# Exact currently-published bilingual video/watch inventory after the owner-directed
-# emergency unpublish of series 07–13. Historical accessibility checkpoints below are
+# Exact currently-published bilingual video/watch inventory with AI Security R5 live
+# and later unapproved series blocked. Historical accessibility checkpoints below are
 # retained as history; unpublished VNext targets are not counted as current public surfaces.
-EXPECTED_VIDEO_LOCALE_SURFACES = 68
+EXPECTED_VIDEO_LOCALE_SURFACES = 80
 EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 0
 EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 0
 EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 0
@@ -331,13 +331,13 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
 def assert_owner_voice_deferral_contract() -> None:
     """Regression: preserve historical debt facts while auditing only public video surfaces."""
     summary = audit_published_accessibility_inventory(enforce_debt=True)
-    assert summary["locale_surfaces"] == 68
+    assert summary["locale_surfaces"] == 80
     assert summary["realtime_voice_locale_surfaces"] == 0
     assert summary["coding_agents_locale_surfaces"] == 0
     assert summary["context_engineering_locale_surfaces"] == 0
     assert summary["llm_inference_locale_surfaces"] == 0
     assert summary["evaluating_ai_systems_locale_surfaces"] == 0
-    assert summary["captions_transcript_review"] == 68
+    assert summary["captions_transcript_review"] == 80
     assert summary["historical_missing_checkpoint"] == 92
     assert summary["historical_budget_exceeded_by"] == 1
     assert summary["legacy_missing_budget"] == 91
@@ -346,6 +346,9 @@ def assert_owner_voice_deferral_contract() -> None:
     assert summary["golden_blocking"] is False
 
 def main() -> None:
+    assert is_video_source_published("series/seguridad-ia/01-prompt-injection.md")
+    assert not is_video_source_published("series/agentes-ia/01-agente.md")
+
     global_root = "https://5sigmas.com"
     entry = base_entry()
 
