@@ -1,6 +1,15 @@
 name: Publish video media to Cloudflare R2
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/series/seguridad-ia/**'
+      - 'locales/en/series/seguridad-ia/**'
+      - 'locales/en/media.yml'
+      - 'hooks/video_publication_policy.py'
+      - 'scripts/prepare_video_media.py'
+      - '.github/workflows/publish-video-media.yml'
   workflow_dispatch:
     inputs:
       publish:
@@ -42,6 +51,17 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install PyYAML==6.0.3 awscli
 
+      - name: Regenerate AI Security R5 posters from exact MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          for root in docs/series/seguridad-ia locales/en/series/seguridad-ia; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+            done
+          done
+
       - name: Validate and stage declared video media
         run: python scripts/prepare_video_media.py --output .video-media
 
@@ -54,7 +74,7 @@ jobs:
           echo "manifest_bytes=$(stat -c %s .video-media/manifest.json)"
 
       - name: Validate R2 publishing configuration
-        if: inputs.publish
+        if: github.event_name == 'push' || inputs.publish
         shell: bash
         run: |
           set -euo pipefail
@@ -66,7 +86,7 @@ jobs:
           [[ "$S5_VIDEO_MEDIA_ORIGIN" == https://* ]] || { echo "S5_VIDEO_MEDIA_ORIGIN must use HTTPS" >&2; exit 1; }
 
       - name: Publish media objects to R2
-        if: inputs.publish
+        if: github.event_name == 'push' || inputs.publish
         run: |
           aws s3 sync .video-media/media/ "s3://${R2_BUCKET_NAME}/" \
             --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
@@ -79,7 +99,7 @@ jobs:
             --only-show-errors
 
       - name: Verify public playback, byte ranges and CORS
-        if: inputs.publish
+        if: github.event_name == 'push' || inputs.publish
         run: |
           python - <<'PY'
           import json

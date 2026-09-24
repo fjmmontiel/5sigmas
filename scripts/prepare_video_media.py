@@ -30,6 +30,8 @@ from hooks.video_publication_policy import is_video_source_published
 
 DOCS = ROOT / "docs"
 MKDOCS = ROOT / "mkdocs.yml"
+EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
+EN_ROOT = ROOT / "locales" / "en"
 REMOTE_URL = re.compile(r"^https?://", re.IGNORECASE)
 DURATION = re.compile(r"^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$")
 
@@ -202,6 +204,96 @@ def collect() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
             {
                 "source": article.relative_to(DOCS).as_posix(),
                 "title": str(meta.get("video_title") or meta.get("title") or "").strip(),
+                "duration": duration,
+                "video": video_key,
+                "poster": poster_key,
+                "captions": captions_key,
+            }
+        )
+
+    english_media = yaml.safe_load(EN_MEDIA_INDEX.read_text(encoding="utf-8")) or {}
+    if not isinstance(english_media, dict):
+        errors.append(f"{EN_MEDIA_INDEX.relative_to(ROOT)}: expected a mapping")
+        english_media = {}
+
+    for src_uri, declared in sorted(english_media.items()):
+        if not is_video_source_published(str(src_uri)):
+            continue
+        if not isinstance(declared, dict):
+            continue
+        video = str(declared.get("video") or "").strip()
+        if not video:
+            continue
+
+        source_article = DOCS / str(src_uri)
+        if not source_article.is_file() or is_excluded(source_article, patterns):
+            continue
+        source_meta = read_frontmatter(source_article)
+        if "noindex" in str(source_meta.get("robots") or "").lower():
+            continue
+        merged = dict(source_meta)
+        merged.update(declared)
+
+        duration = str(merged.get("video_duration") or "").strip()
+        if not DURATION.fullmatch(duration):
+            errors.append(
+                f"{EN_MEDIA_INDEX.relative_to(ROOT)}:{src_uri}: video_duration must be ISO 8601, found {duration!r}"
+            )
+
+        locale_article = EN_ROOT / str(src_uri)
+        parent = locale_article.parent
+        poster = str(
+            merged.get("video_poster")
+            or Path(video).with_suffix(".jpg").name
+        ).strip()
+        captions = str(merged.get("video_captions") or "").strip()
+
+        def add_en_object(kind: str, value: str) -> str:
+            if REMOTE_URL.match(value):
+                return value
+            source = (parent / value).resolve()
+            try:
+                rel = source.relative_to(EN_ROOT.resolve())
+            except ValueError:
+                errors.append(f"{EN_MEDIA_INDEX.relative_to(ROOT)}:{src_uri}: {kind}: media path escapes locales/en/: {value}")
+                return ""
+            key = f"en/{rel.as_posix()}"
+            if not source.is_file():
+                errors.append(f"{EN_MEDIA_INDEX.relative_to(ROOT)}:{src_uri}: missing {kind} file {rel.as_posix()}")
+                return key
+            if source.stat().st_size == 0:
+                errors.append(f"{EN_MEDIA_INDEX.relative_to(ROOT)}:{src_uri}: empty {kind} file {rel.as_posix()}")
+                return key
+            extension = source.suffix.lower()
+            allowed = {
+                "video": {".mp4"},
+                "poster": {".jpg", ".jpeg", ".webp", ".png"},
+                "captions": {".vtt"},
+            }[kind]
+            if extension not in allowed:
+                errors.append(f"{EN_MEDIA_INDEX.relative_to(ROOT)}:{src_uri}: unsupported {kind} extension {extension}")
+            record = {
+                "key": key,
+                "kind": kind,
+                "source": source.relative_to(ROOT).as_posix(),
+                "bytes": source.stat().st_size,
+                "sha256": sha256(source),
+                "content_type": content_type(source),
+            }
+            existing = objects.get(key)
+            if existing and existing["sha256"] != record["sha256"]:
+                errors.append(f"conflicting media objects resolve to the same R2 key: {key}")
+            else:
+                objects[key] = record
+            return key
+
+        video_key = add_en_object("video", video)
+        poster_key = add_en_object("poster", poster)
+        captions_key = add_en_object("captions", captions) if captions else ""
+        pages.append(
+            {
+                "source": f"en/{src_uri}",
+                "title": str(merged.get("video_title") or merged.get("title") or "").strip(),
                 "duration": duration,
                 "video": video_key,
                 "poster": poster_key,

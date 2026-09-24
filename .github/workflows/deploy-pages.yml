@@ -67,6 +67,17 @@ jobs:
           EOF
           sha256sum -c /tmp/modelos-r2.sha256
 
+      - name: Regenerate AI Security R5 posters from exact MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          for root in docs/series/seguridad-ia locales/en/series/seguridad-ia; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+            done
+          done
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
