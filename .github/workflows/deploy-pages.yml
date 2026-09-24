@@ -31,6 +31,43 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Prune owner-disabled series 07+ MP4s from R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET_NAME: ${{ vars.R2_BUCKET_NAME }}
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$S5_VIDEO_MEDIA_ORIGIN" ]; then
+            echo "No external video media origin configured; Pages build exclusion is authoritative."
+            exit 0
+          fi
+          test -n "$AWS_ACCESS_KEY_ID" || { echo "Missing R2_ACCESS_KEY_ID" >&2; exit 1; }
+          test -n "$AWS_SECRET_ACCESS_KEY" || { echo "Missing R2_SECRET_ACCESS_KEY" >&2; exit 1; }
+          test -n "$R2_ACCOUNT_ID" || { echo "Missing R2_ACCOUNT_ID" >&2; exit 1; }
+          test -n "$R2_BUCKET_NAME" || { echo "Missing R2_BUCKET_NAME" >&2; exit 1; }
+          if ! command -v aws >/dev/null 2>&1; then
+            python -m pip install awscli
+          fi
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          for series in \
+            seguridad-ia \
+            agentes-ia \
+            agentes-voz-tiempo-real \
+            coding-agents-agent-harnesses \
+            context-engineering-memory-mcp \
+            llm-inference-engineering-economics \
+            evaluating-ai-systems-production
+          do
+            aws s3 rm "s3://${R2_BUCKET_NAME}/series/${series}/" --recursive --exclude "*" --include "*.mp4" --endpoint-url "$endpoint" --only-show-errors
+            aws s3 rm "s3://${R2_BUCKET_NAME}/en/series/${series}/" --recursive --exclude "*" --include "*.mp4" --endpoint-url "$endpoint" --only-show-errors
+          done
+
       - name: Regenerate Modelos R2 posters from exact approved MP4s
         shell: bash
         run: |
@@ -315,15 +352,59 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_datacenters_media.mjs
 
-      - name: Validate live English AI Security media
+      - name: Verify owner-disabled series 07+ video surfaces are absent
         env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_english_security_media.mjs
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
 
-      - name: Validate live English AI Agents media
-        env:
-          S5_PREVIEW_BASE: https://5sigmas.com
-        run: node scripts/validate_english_agents_media.mjs
+          const base = 'https://5sigmas.com';
+          const media = (process.env.S5_VIDEO_MEDIA_ORIGIN || '').replace(/\/$/, '');
+          const series = [
+            'seguridad-ia',
+            'agentes-ia',
+            'agentes-voz-tiempo-real',
+            'coding-agents-agent-harnesses',
+            'context-engineering-memory-mcp',
+            'llm-inference-engineering-economics',
+            'evaluating-ai-systems-production',
+          ];
+
+          async function expectMissing(url) {
+            const response = await fetch(url, {
+              redirect: 'manual',
+              headers: { Range: 'bytes=0-0', 'Cache-Control': 'no-cache' },
+            });
+            if (response.status !== 404) {
+              throw new Error(`expected 404 for ${url}, got ${response.status}`);
+            }
+          }
+
+          let checked = 0;
+          for (const slug of series) {
+            const dir = path.join('docs', 'series', slug);
+            const stems = fs.readdirSync(dir)
+              .filter(name => /^\d{2}.*\.md$/.test(name))
+              .map(name => name.replace(/\.md$/, ''));
+            for (const stem of stems) {
+              await expectMissing(`${base}/videos/series/${slug}/${stem}/?unpublish=${process.env.GITHUB_SHA}`);
+              await expectMissing(`${base}/en/videos/series/${slug}/${stem}/?unpublish=${process.env.GITHUB_SHA}`);
+              await expectMissing(`${base}/series/${slug}/${stem}.mp4?unpublish=${process.env.GITHUB_SHA}`);
+              await expectMissing(`${base}/en/series/${slug}/${stem}.mp4?unpublish=${process.env.GITHUB_SHA}`);
+              if (media) {
+                await expectMissing(`${media}/series/${slug}/${stem}.mp4?unpublish=${process.env.GITHUB_SHA}`);
+                await expectMissing(`${media}/en/series/${slug}/${stem}.mp4?unpublish=${process.env.GITHUB_SHA}`);
+              }
+              checked += 1;
+            }
+          }
+          if (checked !== 42) throw new Error(`expected 42 disabled video entries, found ${checked}`);
+          console.log(`verified ${checked} disabled video entries across ES/EN watch and media surfaces`);
+          NODE
 
       - name: Validate live English Technical Articles
         env:
