@@ -2,6 +2,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
@@ -107,9 +108,17 @@ for (const [slug, expectedTitle] of presentations) {
   }
 
   const nativeMedia = nativePresentationMedia.get(slug);
+  const videoPublished = execFileSync('python3', [
+    '-c',
+    `from hooks.video_publication_policy import is_video_source_published; print(is_video_source_published("series/${slug}/00-placeholder.md"))`,
+  ], { encoding: 'utf8' }).trim() === 'True';
   const videos = page.locator('video[data-s5-inline-video-player]');
   const videoCount = await videos.count();
-  if (nativeMedia) {
+  if (!videoPublished) {
+    if (videoCount !== 0) {
+      failures.push(`${route}: intentionally unpublished series still exposes ${videoCount} video(s)`);
+    }
+  } else if (nativeMedia) {
     if (videoCount !== 1) {
       failures.push(`${route}: expected one declared native-English presentation video, found ${videoCount}`);
     } else {
