@@ -224,3 +224,6 @@ jobs:
               raise SystemExit("Blocked media still publicly reachable:\n" + "\n".join(failures))
           print(f"verified {len(set(urls))} public blocked media URLs return 404")
           PY
+
+      - name: Verify exact live article and indexing rollback
+        run: python scripts/verify_series_07_video_unpublish_live.py
