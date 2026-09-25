@@ -258,6 +258,7 @@ def _bind_catalogue(site_dir: Path, source: dict[str, Any], compiled: dict[str, 
     # but the resulting catalogue, schema, transcript and sitemap must converge.
     row["title"] = source["title"]
     row["description"] = source["description"]
+    row["publication_date"] = source["upload_date"]
     row["captions_url"] = source["vtt_url"]
     row["chapters"] = compiled["chapters"]
     row["discovery_source_sha256"] = compiled["source_sha256"]
@@ -292,7 +293,7 @@ def _bind_video_sitemap(site_dir: Path, source: dict[str, Any], locale: str) -> 
         value = (video.findtext(selector, default="", namespaces=ns) or "").strip()
         _require_equal(value, expected, surface="video sitemap", field=selector, source_id=source["id"])
 
-    for selector, value in (("v:title", source["title"]), ("v:description", source["description"])):
+    for selector, value in (("v:title", source["title"]), ("v:description", source["description"]), ("v:publication_date", source["upload_date"])):
         element = video.find(selector, ns)
         if element is None:
             raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")

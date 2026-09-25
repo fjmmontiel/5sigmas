@@ -434,4 +434,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    from test_video_discovery_date_parity import assert_date_parity
+    assert_date_parity()
     main()
