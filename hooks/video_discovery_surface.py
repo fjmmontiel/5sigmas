@@ -296,7 +296,12 @@ def _bind_video_sitemap(site_dir: Path, source: dict[str, Any], locale: str) -> 
     for selector, value in (("v:title", source["title"]), ("v:description", source["description"]), ("v:publication_date", source["upload_date"])):
         element = video.find(selector, ns)
         if element is None:
-            raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")
+            if selector == "v:publication_date":
+                # Publication date is optional in the legacy sitemap. The reviewed
+                # source supplies the exact value; never infer it from an article.
+                element = ET.SubElement(video, f"{{{VIDEO_NS}}}publication_date")
+            else:
+                raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")
         element.text = value
 
     ET.register_namespace("", SITEMAP_NS)

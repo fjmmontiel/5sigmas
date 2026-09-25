@@ -34,6 +34,14 @@ def assert_date_parity():
             assert payload['videos'][1]==untouched
             actual_date=ET.fromstring(sitemap.read_text()).findtext('.//{'+V+'}publication_date')
             assert actual_date==source['upload_date'], path
+            # Also cover a valid legacy sitemap that omitted the optional date.
+            doc_without_date=ET.fromstring(sitemap.read_text())
+            video_without_date=doc_without_date.find('.//{'+V+'}video')
+            for element in list(video_without_date):
+                if element.tag=='{'+V+'}publication_date': video_without_date.remove(element)
+            sitemap.write_text(ET.tostring(doc_without_date,encoding='unicode'))
+            _bind_video_sitemap(root,source,source['locale'])
+            assert ET.fromstring(sitemap.read_text()).findtext('.//{'+V+'}publication_date')==source['upload_date']
             before_catalog=catalog.read_bytes(); before_sitemap=sitemap.read_bytes()
             _bind_catalogue(root,source,compiled); _bind_video_sitemap(root,source,source['locale'])
             assert before_catalog==catalog.read_bytes() and before_sitemap==sitemap.read_bytes()
