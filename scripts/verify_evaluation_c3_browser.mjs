@@ -4,10 +4,16 @@ import assert from 'node:assert/strict';
 const origin=(process.env.S5_C3_ORIGIN||'http://127.0.0.1:8000').replace(/\/$/,'');
 const manifest=JSON.parse(fs.readFileSync('docs/evaluation-c3-release.json','utf8'));
 const preview=new URL(origin).hostname==='127.0.0.1'||new URL(origin).hostname==='localhost';
-const browser=await chromium.launch({headless:true});const rows=[];
-const report={status:'IN_PROGRESS',scope:'48 native route/viewport interaction probes, not full-duration viewings',origin,preview,rows};
+// The shipped headless shell need not contain proprietary H.264 codecs.
+// Test the unchanged MP4 in the installed production browser; never transcode a fixture.
+const browser=await chromium.launch({channel:'chrome',headless:true});const rows=[];
+const report={status:'IN_PROGRESS',scope:'48 native route/viewport interaction probes, not full-duration viewings',origin,preview,browser:browser.version(),channel:'chrome',rows};
 const save=()=>fs.writeFileSync('/tmp/evaluation-c3-browser.json',JSON.stringify(report,null,2));
 try {
+  const diagnostic=await browser.newPage();
+  report.codecSupport=await diagnostic.evaluate(()=>({h264:document.createElement('video').canPlayType('video/mp4; codecs="avc1.64002a"'),agent:navigator.userAgent}));
+  console.log('NATIVE_CODEC_PREFLIGHT',JSON.stringify(report.codecSupport));
+  assert.ok(report.codecSupport.h264,'Browser lacks the codec required by the approved MP4');await diagnostic.close();
   for(const width of [1440,390]) {
     const context=await browser.newContext({viewport:{width,height:width===390?844:1000}});
     // Local builds retain absolute canonical URLs. Route only those requests to the
@@ -64,7 +70,7 @@ try {
         const layout=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(layout.scroll<=layout.width+2,'horizontal overflow '+JSON.stringify(layout));
         rows.push({...label,...meta,...result,replay:true,paused,status:'PASS'});save();console.log('PASS C3',JSON.stringify(label));
       }catch(e){
-        report.status='FAIL';report.failure={...label,message:String(e),network,media:await page.locator('video').evaluateAll(vs=>vs.map(v=>({src:v.currentSrc,declared:v.outerHTML.slice(0,1800),ready:v.readyState,network:v.networkState,error:v.error?.code,paused:v.paused,time:v.currentTime}))).catch(()=>[])};save();console.error(JSON.stringify(report.failure));throw e;
+        report.status='FAIL';report.failure={...label,message:String(e),network,media:await page.locator('video').evaluateAll(vs=>vs.map(v=>({src:v.currentSrc,declared:v.outerHTML.slice(0,1800),ready:v.readyState,network:v.networkState,error:v.error?.code,paused:v.paused,time:v.currentTime,playError:window.__c3PlayError}))).catch(()=>[])};save();console.error(JSON.stringify(report.failure));throw e;
       }finally{await page.close();}
     }
     await context.close();
