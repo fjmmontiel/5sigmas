@@ -70,6 +70,9 @@ jobs:
       - name: Verify calculator math and pricing provenance
         run: node scripts/test_llm_cost_latency_tool.mjs
 
+      - name: Enforce cross-tool data freshness windows
+        run: node scripts/audit_volatile_tool_freshness.mjs
+
       - name: Verify model explorer math, frontier and provenance
         run: node scripts/test_model_price_performance_tool.mjs
 
