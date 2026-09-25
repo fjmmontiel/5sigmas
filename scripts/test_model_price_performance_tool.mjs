@@ -12,7 +12,7 @@ const root = path.resolve(__dirname, '..');
 const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-performance-core.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
 
-const SNAPSHOT = '2026-09-24';
+const SNAPSHOT = '2026-09-25';
 const close = (actual, expected, epsilon = 1e-10, label = '') => {
   assert.ok(Math.abs(actual - expected) <= epsilon, `${label}: expected ${expected}, got ${actual}`);
 };
@@ -50,9 +50,11 @@ for (const model of data.models) {
   for (const key of ['specs_pricing', 'benchmark']) {
     const source = model.sources?.[key];
     assert.match(source?.url || '', /^https:\/\//, `${model.id}: ${key} URL required`);
-    assert.equal(source?.verified_on, SNAPSHOT, `${model.id}: ${key} must be verified on current snapshot`);
+    const ageDays = (Date.parse(`${SNAPSHOT}T00:00:00Z`) - Date.parse(`${source.verified_on}T00:00:00Z`)) / 86_400_000;
+    assert.ok(ageDays >= 0 && ageDays <= data.freshness_policy.review_interval_days, `${model.id}: ${key} verification is stale`);
   }
-  assert.equal(model.sources.benchmark.performance_snapshot_on, SNAPSHOT, `${model.id}: performance snapshot must be current`);
+  const performanceAgeDays = (Date.parse(`${SNAPSHOT}T00:00:00Z`) - Date.parse(`${model.sources.benchmark.performance_snapshot_on}T00:00:00Z`)) / 86_400_000;
+  assert.ok(performanceAgeDays >= 0 && performanceAgeDays <= data.freshness_policy.performance_review_interval_days, `${model.id}: performance snapshot is stale`);
   assert.equal(model.sources.benchmark.index_family, 'Artificial Analysis Intelligence Index v4.3.2');
 }
 
@@ -81,6 +83,12 @@ assert.deepEqual([luna.intelligence_index, luna.input_usd_per_million, luna.outp
 assert.deepEqual([gemini.intelligence_index, gemini.input_usd_per_million, gemini.output_usd_per_million], [41, 0.75, 3.75]);
 assert.deepEqual([grok.intelligence_index, grok.input_usd_per_million, grok.output_usd_per_million], [46, 2, 6]);
 assert.deepEqual([deepseek.intelligence_index, deepseek.input_usd_per_million, deepseek.output_usd_per_million], [39, 0.3, 1.2]);
+assert.deepEqual(
+  [byId.get('anthropic-claude-fable-5-1-max').output_tokens_per_second, byId.get('anthropic-claude-fable-5-1-max').ttft_seconds],
+  [69.1, 261.52],
+  'Claude Fable Sep 25 performance snapshot',
+);
+assert.deepEqual([sol.output_tokens_per_second, sol.ttft_seconds], [98.4, 171.68], 'GPT-6 Sol Sep 25 performance snapshot');
 
 {
   const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');
