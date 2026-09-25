@@ -92,7 +92,7 @@ for (const spec of cases) {
     if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
     const sourceLinks = await page.locator('.s5-tool-method__notes a').evaluateAll((links) => links.map((link) => link.href));
-    for (const expected of ['platform.openai.com/docs/api-reference/realtime', 'developers.deepgram.com/docs/endpointing', 'elevenlabs.io/docs/developer-guides/reducing-latency', 'twilio.com/docs/voice/media-streams/websocket-messages', 'PMC2705608']) {
+    for (const expected of ['developers.openai.com/api/docs/models/gpt-live-1', 'platform.openai.com/docs/api-reference/realtime', 'developers.deepgram.com/docs/endpointing', 'elevenlabs.io/docs/developer-guides/reducing-latency', 'twilio.com/docs/voice/media-streams/websocket-messages', 'PMC2705608']) {
       if (!sourceLinks.some((href) => href.includes(expected))) failures.push(`${spec.route} ${viewport.name}: source missing ${expected}`);
     }
 
