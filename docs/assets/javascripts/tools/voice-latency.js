@@ -132,6 +132,7 @@
         bargeWithinTarget: result.bargeWithinTarget
       },
       provenance: [
+        'https://developers.openai.com/api/docs/models/gpt-live-1',
         'https://platform.openai.com/docs/api-reference/realtime',
         'https://developers.deepgram.com/docs/endpointing',
         'https://elevenlabs.io/docs/developer-guides/reducing-latency',
