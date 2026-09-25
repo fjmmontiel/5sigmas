@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+Training and inference require compute and physical capacity.
+
+2
+00:00:07.400 --> 00:00:14.100
+When jobs arrive faster than they are served, the queue grows.
+
+3
+00:00:14.100 --> 00:00:22.000
+Adding chips is not enough when the power supply remains limited.
+
+4
+00:00:22.700 --> 00:00:29.400
+Power, water, land, permits, heat and latency constrain projects differently.
+
+5
+00:00:29.400 --> 00:00:36.100
+A completed building cannot resolve a pending grid connection by itself.
+
+6
+00:00:36.100 --> 00:00:44.000
+Check each condition; do not add resources with different units.
+
+7
+00:00:44.700 --> 00:00:51.400
+Launch cost depends on mass and price per kilogram.
+
+8
+00:00:51.400 --> 00:00:58.100
+Lower that price in the example: only part of the budget changes.
+
+9
+00:00:58.100 --> 00:01:08.000
+Panels, radiators, links and operations still have a cost.
+
+10
+00:01:08.700 --> 00:01:15.400
+The processor is only part of the mass sent into orbit.
+
+11
+00:01:15.400 --> 00:01:22.100
+Add power generation, thermal control, structure and communications.
+
+12
+00:01:22.100 --> 00:01:30.000
+Evaluate the mass of the whole system, not just the accelerator.
+
+13
+00:01:30.700 --> 00:01:37.400
+When data originates in orbit, processing there may reduce downlink traffic.
+
+14
+00:01:37.400 --> 00:01:44.100
+When it originates on Earth, moving the job adds an uplink and a downlink.
+
+15
+00:01:44.100 --> 00:01:52.000
+Compare both paths for the same user need.
+
+16
+00:01:52.700 --> 00:01:59.400
+An economic forecast depends on launch, mass and lifetime assumptions.
+
+17
+00:01:59.400 --> 00:02:06.100
+Change one assumption and calculate the budget again.
+
+18
+00:02:06.100 --> 00:02:14.000
+Do not present the optimistic scenario as an achieved price.
+

@@ -8,8 +8,32 @@ tags:
   - IA
   - Infraestructura
   - Medioambiente
-video: "04-huella-real-datacenter.mp4"
-video_duration: "PT52S"
+video: 04-huella-real-datacenter.mp4
+video_poster: 04-huella-real-datacenter.jpg
+video_title: La huella real de un datacenter
+video_summary: Reutilizar componentes puede prolongar su servicio sin eliminar todos los impactos. Compara alternativas por el mismo trabajo útil y el ciclo completo.
+video_duration: PT2M16S
+video_captions: 04-huella-real-datacenter-visual-text.vtt
+video_transcript: 04-huella-real-datacenter-transcript.html
+video_chapters:
+- name: La misma demanda. Dos cuencas distintas.
+  start: 0
+  end: 22
+- name: Retirar agua no es lo mismo que consumirla.
+  start: 22
+  end: 44
+- name: La comparación exige el mismo denominador.
+  start: 44
+  end: 68
+- name: Más eficiencia no implica menos consumo total.
+  start: 68
+  end: 92
+- name: El hardware también tiene una cadena material.
+  start: 92
+  end: 114
+- name: Cambiar de lugar no borra la huella.
+  start: 114
+  end: 136
 ---
 
 # Capítulo 4 — La huella real de un datacenter
