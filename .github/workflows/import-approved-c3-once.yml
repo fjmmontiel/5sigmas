@@ -1,4 +1,4 @@
-name: Import approved Evaluacion C3 once
+name: Recover exact approved Evaluacion C3 release
 on:
   push:
     branches: [ops/import-approved-evaluation-c3-20260925]
@@ -9,63 +9,61 @@ concurrency:
   group: import-approved-evaluation-c3-once
   cancel-in-progress: false
 jobs:
-  import:
+  recover:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    container: debian:13.3-slim
+    timeout-minutes: 40
     steps:
-      - name: Recover only the owner-authorized public release payload
-        env:
-          PAYLOAD_URL: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-96c4-8210-901b-ceec9443ca01/raw?se=2026-09-25T10%3A41%3A08Z&sp=r&sv=2026-02-06&sr=b&scid=2dd7e03c-9238-5491-bc6a-6f9e2f30ecda&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T08%3A06%3A06Z&ske=2026-09-26T08%3A06%3A06Z&sks=b&skv=2026-02-06&sig=k9xCksPr%2BqNp1MehtbE%2BZKgUb1B3TpJmInHmmlYdLck%3D'
+      - name: Install the verified matching runtime
         run: |
-          python3 - <<'PY'
-          import os,hashlib,urllib.request
-          raw=urllib.request.urlopen(os.environ['PAYLOAD_URL'],timeout=120).read(60000000)
-          assert len(raw)==49017124
-          assert hashlib.sha256(raw).hexdigest()=='21441428d819847bd497dc11373bb85f1b55f5b04b7069dd2abb0c8c6ab25187'
-          open('/tmp/approved-c3.zip','wb').write(raw)
-          print('Approved public payload checksum verified. Contains no private source or credentials.')
-          PY
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo python3-yaml ffmpeg=7:7.1.5-0+deb13u1 fontconfig fonts-cabin fonts-noto-core fonts-noto-extra
+          printf '%s\n' '28b2901516089b2bf9d3c2b3dd86a1c875de7f3997bc4ebf4a651a8150aa49dc  /usr/share/fonts/opentype/cabin/Cabin-Regular.otf' 'f2a43add6a75ae9b203744857fe3e612a4b038b51585934208b1b5e5b7f455dd  /usr/share/fonts/opentype/cabin/Cabin-Bold.otf' 'bcdc596729c24044e28c54815ecbe6004f83b10169a49a51160b22f59116249f  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Regular.ttf' '8666c2488e681a31670f9fc0b5d59fa4f21f2a0664a76876fe49ebd832f673c7  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Bold.ttf' | sha256sum -c -
       - uses: actions/checkout@v4
         with:
-          ref: 271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec
+          ref: d7cfd910fd64450cc06b24b1ab44764d6ab59e66
+          path: recipe
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /.github/c3-approved-snapshot/**
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 8a0f9cada9fa33563c06434915baf775dd618ca1
+          path: site
           fetch-depth: 1
-      - name: Validate allowlist and materialize exact approved bytes
+      - name: Recover and qualify exact owner-approved media; reject every mismatch
+        run: python3 recipe/.github/c3-approved-snapshot/build_release.py --root site
+      - name: Validate scoped release payload
+        working-directory: site
         run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,zipfile
-          from pathlib import Path,PurePosixPath
-          roots=('docs/series/evaluating-ai-systems-production/','locales/en/series/evaluating-ai-systems-production/')
-          named={'locales/en/media.yml','hooks/video_publication_policy.py','scripts/validate_series_07_video_unpublish.py','scripts/verify_series_07_video_unpublish_live.py','scripts/verify_evaluation_c3_release.py','scripts/verify_evaluation_c3_browser.mjs','docs/evaluation-c3-release.json','.github/receipts/evaluation-c3.sha256','.github/workflows/deploy-pages.yml','.github/workflows/pr-visual-review.yml','.github/workflows/unpublish-series-07-video-media.yml'}
-          with zipfile.ZipFile('/tmp/approved-c3.zip') as z:
-            m=json.loads(z.read('RELEASE_FILES.json'))
-            assert m['base_commit']=='271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec'
-            assert len(m['files'])==53 and m['approved_video_count']==12
-            assert set(z.namelist())==set(m['files'])|{'RELEASE_FILES.json'}
-            assert len(z.namelist())==len(set(z.namelist()))
-            for name,item in m['files'].items():
-              p=PurePosixPath(name)
-              assert not p.is_absolute() and '..' not in p.parts
-              assert name in named or name.startswith(roots),name
-              assert p.suffix in {'.md','.html','.jpg','.mp4','.json','.yml','.py','.mjs','.sha256'}
-              raw=z.read(name)
-              assert len(raw)==item['size'] and hashlib.sha256(raw).hexdigest()==item['sha256'],name
-              out=Path(name);out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(raw)
-          print('53 allowlisted paths validated; no unrelated series or fonts changed.')
-          PY
+          set -eu
           sha256sum -c .github/receipts/evaluation-c3.sha256
           python3 -m py_compile scripts/verify_evaluation_c3_release.py hooks/video_publication_policy.py
-          node --check scripts/verify_evaluation_c3_browser.mjs
-      - name: Persist a clean release branch with no transport URL in its history
+          python3 - <<'PY'
+          import subprocess,yaml
+          from pathlib import Path
+          files=subprocess.check_output(['git','status','--porcelain','--untracked-files=all']).decode().splitlines()
+          roots=('docs/series/evaluating-ai-systems-production/','locales/en/series/evaluating-ai-systems-production/')
+          named={'locales/en/media.yml','hooks/video_publication_policy.py','scripts/validate_series_07_video_unpublish.py','scripts/verify_series_07_video_unpublish_live.py','scripts/verify_evaluation_c3_release.py','scripts/verify_evaluation_c3_browser.mjs','docs/evaluation-c3-release.json','.github/receipts/evaluation-c3.sha256','.github/workflows/deploy-pages.yml','.github/workflows/pr-visual-review.yml','.github/workflows/unpublish-series-07-video-media.yml'}
+          for line in files:
+              p=line[3:]
+              if '/__pycache__/' in p:continue
+              assert p in named or p.startswith(roots),p
+              assert not p.endswith(('.ttf','.otf','.woff','.woff2')),p
+          for p in Path('.github/workflows').glob('*.yml'):yaml.safe_load(p.read_text())
+          print('Scoped payload validated; five other withdrawn series and both prior Golden series remain unchanged.')
+          PY
+      - name: Persist clean release branch; no tooling or transport history
+        working-directory: site
         run: |
-          set -euo pipefail
+          set -eu
           target='release/evaluating-ai-c3-approved-20260925'
           test -z "$(git ls-remote origin "refs/heads/$target")"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production locales/en/media.yml hooks/video_publication_policy.py scripts/validate_series_07_video_unpublish.py scripts/verify_series_07_video_unpublish_live.py scripts/verify_evaluation_c3_release.py scripts/verify_evaluation_c3_browser.mjs docs/evaluation-c3-release.json .github/receipts/evaluation-c3.sha256 .github/workflows/deploy-pages.yml .github/workflows/pr-visual-review.yml .github/workflows/unpublish-series-07-video-media.yml
           tree="$(git write-tree)"
-          commit="$(printf '%s\n' 'Release approved Evaluacion IA C3 exact videos and bilingual discovery' | git commit-tree "$tree" -p 271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec)"
+          commit="$(printf '%s\n' 'Release exact owner-approved Evaluacion IA C3 media and bilingual discovery' | git commit-tree "$tree" -p 8a0f9cada9fa33563c06434915baf775dd618ca1)"
           git push origin "$commit:refs/heads/$target"
           printf 'C3_RELEASE_BRANCH=%s\nC3_RELEASE_COMMIT=%s\n' "$target" "$commit"
-          echo "Prepared clean release commit $commit on $target. Merge, deployment and live verification have NOT occurred." >> "$GITHUB_STEP_SUMMARY"
+          echo "Exact-byte release branch prepared at $commit. PR checks, merge, deployment and live verification remain separate." >> "$GITHUB_STEP_SUMMARY"
