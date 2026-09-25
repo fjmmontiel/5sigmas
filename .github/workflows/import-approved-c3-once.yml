@@ -1,0 +1,71 @@
+name: Import approved Evaluacion C3 once
+on:
+  push:
+    branches: [ops/import-approved-evaluation-c3-20260925]
+    paths: [.github/workflows/import-approved-c3-once.yml]
+permissions:
+  contents: write
+concurrency:
+  group: import-approved-evaluation-c3-once
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Recover only the owner-authorized public release payload
+        env:
+          PAYLOAD_URL: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-96c4-8210-901b-ceec9443ca01/raw?se=2026-09-25T10%3A41%3A08Z&sp=r&sv=2026-02-06&sr=b&scid=2dd7e03c-9238-5491-bc6a-6f9e2f30ecda&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T08%3A06%3A06Z&ske=2026-09-26T08%3A06%3A06Z&sks=b&skv=2026-02-06&sig=k9xCksPr%2BqNp1MehtbE%2BZKgUb1B3TpJmInHmmlYdLck%3D'
+        run: |
+          python3 - <<'PY'
+          import os,hashlib,urllib.request
+          raw=urllib.request.urlopen(os.environ['PAYLOAD_URL'],timeout=120).read(60000000)
+          assert len(raw)==49017124
+          assert hashlib.sha256(raw).hexdigest()=='21441428d819847bd497dc11373bb85f1b55f5b04b7069dd2abb0c8c6ab25187'
+          open('/tmp/approved-c3.zip','wb').write(raw)
+          print('Approved public payload checksum verified. Contains no private source or credentials.')
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec
+          fetch-depth: 1
+      - name: Validate allowlist and materialize exact approved bytes
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,zipfile
+          from pathlib import Path,PurePosixPath
+          roots=('docs/series/evaluating-ai-systems-production/','locales/en/series/evaluating-ai-systems-production/')
+          named={'locales/en/media.yml','hooks/video_publication_policy.py','scripts/validate_series_07_video_unpublish.py','scripts/verify_series_07_video_unpublish_live.py','scripts/verify_evaluation_c3_release.py','scripts/verify_evaluation_c3_browser.mjs','docs/evaluation-c3-release.json','.github/receipts/evaluation-c3.sha256','.github/workflows/deploy-pages.yml','.github/workflows/pr-visual-review.yml','.github/workflows/unpublish-series-07-video-media.yml'}
+          with zipfile.ZipFile('/tmp/approved-c3.zip') as z:
+            m=json.loads(z.read('RELEASE_FILES.json'))
+            assert m['base_commit']=='271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec'
+            assert len(m['files'])==53 and m['approved_video_count']==12
+            assert set(z.namelist())==set(m['files'])|{'RELEASE_FILES.json'}
+            assert len(z.namelist())==len(set(z.namelist()))
+            for name,item in m['files'].items():
+              p=PurePosixPath(name)
+              assert not p.is_absolute() and '..' not in p.parts
+              assert name in named or name.startswith(roots),name
+              assert p.suffix in {'.md','.html','.jpg','.mp4','.json','.yml','.py','.mjs','.sha256'}
+              raw=z.read(name)
+              assert len(raw)==item['size'] and hashlib.sha256(raw).hexdigest()==item['sha256'],name
+              out=Path(name);out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(raw)
+          print('53 allowlisted paths validated; no unrelated series or fonts changed.')
+          PY
+          sha256sum -c .github/receipts/evaluation-c3.sha256
+          python3 -m py_compile scripts/verify_evaluation_c3_release.py hooks/video_publication_policy.py
+          node --check scripts/verify_evaluation_c3_browser.mjs
+      - name: Persist a clean release branch with no transport URL in its history
+        run: |
+          set -euo pipefail
+          target='release/evaluating-ai-c3-approved-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production locales/en/media.yml hooks/video_publication_policy.py scripts/validate_series_07_video_unpublish.py scripts/verify_series_07_video_unpublish_live.py scripts/verify_evaluation_c3_release.py scripts/verify_evaluation_c3_browser.mjs docs/evaluation-c3-release.json .github/receipts/evaluation-c3.sha256 .github/workflows/deploy-pages.yml .github/workflows/pr-visual-review.yml .github/workflows/unpublish-series-07-video-media.yml
+          tree="$(git write-tree)"
+          commit="$(printf '%s\n' 'Release approved Evaluacion IA C3 exact videos and bilingual discovery' | git commit-tree "$tree" -p 271ec76ea5f21ccbe8fd04ad29f494e341ffb3ec)"
+          git push origin "$commit:refs/heads/$target"
+          printf 'C3_RELEASE_BRANCH=%s\nC3_RELEASE_COMMIT=%s\n' "$target" "$commit"
+          echo "Prepared clean release commit $commit on $target. Merge, deployment and live verification have NOT occurred." >> "$GITHUB_STEP_SUMMARY"
