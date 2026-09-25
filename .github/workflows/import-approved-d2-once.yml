@@ -5,6 +5,7 @@ on:
     paths: [.github/workflows/import-approved-d2-once.yml]
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: import-approved-datacenters-d2-once
   cancel-in-progress: false
@@ -14,7 +15,7 @@ jobs:
     container: debian:13.3-slim
     timeout-minutes: 35
     steps:
-      - name: Install pinned author runtime for exact-byte recovery
+      - name: Install pinned author runtime
         run: |
           apt-get update -qq
           apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo python3-yaml python3-venv python3-dev libcairo2-dev pkg-config gcc ffmpeg=7:7.1.5-0+deb13u1 fontconfig fonts-cabin fonts-noto-core fonts-noto-extra > /tmp/install.log 2>&1 || { tail -40 /tmp/install.log; exit 1; }
@@ -23,7 +24,7 @@ jobs:
           printf '%s\n' '28b2901516089b2bf9d3c2b3dd86a1c875de7f3997bc4ebf4a651a8150aa49dc  /usr/share/fonts/opentype/cabin/Cabin-Regular.otf' 'f2a43add6a75ae9b203744857fe3e612a4b038b51585934208b1b5e5b7f455dd  /usr/share/fonts/opentype/cabin/Cabin-Bold.otf' 'bcdc596729c24044e28c54815ecbe6004f83b10169a49a51160b22f59116249f  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Regular.ttf' '8666c2488e681a31670f9fc0b5d59fa4f21f2a0664a76876fe49ebd832f673c7  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Bold.ttf' | sha256sum -c -
       - uses: actions/checkout@v4
         with:
-          ref: 3ac8db5cc7a8b0e098b9177dd652c35080b41818
+          ref: 0c2735386db94566cf12f56436023da2779d3d43
           path: recipe
           sparse-checkout-cone-mode: false
           sparse-checkout: /.github/d2-approved-snapshot/**
@@ -34,11 +35,40 @@ jobs:
           path: site
           fetch-depth: 1
           persist-credentials: false
-      - name: Recover approved bytes, assemble scoped files and persist verified blobs
+      - uses: actions/download-artifact@v4
+        with:
+          name: datacenters-d2-exact-recovery-receipt
+          run-id: 36155098957
+          github-token: ${{ github.token }}
+          path: recipe/.github/d2-approved-snapshot
+      - name: Restore original EN bytes and preserve all successful recovered media
+        run: |
+          /tmp/d2-venv/bin/python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,base64
+          root=Path('recipe/.github/d2-approved-snapshot');d=json.loads((root/'00-en-exact-delta.json').read_text());p=root/'recovered/00-en.mp4';old=p.read_bytes()
+          assert hashlib.sha256(old).hexdigest()==d['preimage_sha256']
+          out=[]
+          for op in d['operations']:
+              if 'copy' in op:
+                  start,size=op['copy'];assert 0<=start and 0<=size and start+size<=len(old);out.append(old[start:start+size])
+              else:out.append(base64.b64decode(op['data'],validate=True))
+          raw=b''.join(out);assert len(raw)==d['approved_size'] and hashlib.sha256(raw).hexdigest()==d['approved_sha256'];p.write_bytes(raw)
+          receipt=json.loads(p.with_suffix('.json').read_text());receipt.update(sha256=d['approved_sha256'],size=len(raw),state='EXACT_APPROVED_ORIGINAL_RECOVERED_BY_HASH_BOUND_DELTA');p.with_suffix('.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          build=root/'build_release.py';s=build.read_text()
+          check=" assert sha(p)==HASHES[(ch['chapter'],lang)],('UNAPPROVED_BYTES',p.name,sha(p))"
+          assert s.count(check)==1;s=s.replace(check," print('RECOVERY_CHECK',p.name,sha(p),sha(p)==HASHES[(ch['chapter'],lang)],flush=True)")
+          marker=" print('TEN_EXACT_APPROVED_D2_HASHES_RECOVERED',flush=True)"
+          assert s.count(marker)==1
+          s=s.replace(marker," mismatches=[(p.name,sha(p),HASHES[(ch['chapter'],lang)]) for ch,lang,p in recovered if sha(p)!=HASHES[(ch['chapter'],lang)]]\n assert not mismatches,('NO_RELEASE_UNAPPROVED_BYTES',mismatches)\n"+marker)
+          build.write_text(s)
+          print('Exact approved EN intro restored; all release hash gates retained. Existing approved files will not re-encode.')
+          PY
+      - name: Recover remaining bytes, assemble scoped files and persist verified blobs
         env:
           GH_TOKEN: ${{ github.token }}
         run: /tmp/d2-venv/bin/python recipe/.github/d2-approved-snapshot/build_release.py site
-      - name: Preserve recovery and exact blob receipt without repeating encodes
+      - name: Preserve outputs and exact receipts
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -50,4 +80,4 @@ jobs:
             recipe/.github/d2-approved-snapshot/release-paths.json
           include-hidden-files: true
           if-no-files-found: warn
-          retention-days: 1
+          retention-days: 2
