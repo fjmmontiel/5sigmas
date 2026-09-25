@@ -1,0 +1,53 @@
+name: C3 source runtime diagnostic
+on:
+  push:
+    branches: [ops/import-approved-evaluation-c3-20260925]
+    paths: [.github/workflows/c3-source-runtime-diagnostic.yml]
+permissions:
+  contents: write
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    container: debian:13.3-slim
+    timeout-minutes: 12
+    steps:
+      - name: Install bounded diagnostic dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo python3-yaml python3-venv python3-dev libcairo2-dev pkg-config gcc ffmpeg=7:7.1.5-0+deb13u1 fontconfig fonts-cabin fonts-noto-core fonts-noto-extra > /tmp/install.log 2>&1 || { tail -40 /tmp/install.log; exit 1; }
+          dpkg-query -W libcairo2 libfreetype6 libharfbuzz0b python3-cairo
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /.github/c3-approved-snapshot/**
+      - name: Compare baseline source pixels
+        run: |
+          python3 .github/c3-approved-snapshot/diagnose_runtime.py || test "$?" = 2
+          cp /tmp/c3-source-diagnostic.json /tmp/c3-before.json
+      - name: Match the author's Pycairo version and compare again
+        run: |
+          python3 -m venv --system-site-packages /tmp/c3-venv
+          /tmp/c3-venv/bin/pip install --quiet pycairo==1.29.0
+          /tmp/c3-venv/bin/python .github/c3-approved-snapshot/diagnose_runtime.py
+          cp /tmp/c3-source-diagnostic.json /tmp/c3-after.json
+      - name: Recover only chapter02 ES and persist only an exact approved match
+        run: |
+          /tmp/c3-venv/bin/python - <<'PY'
+          import sys,os,hashlib,subprocess
+          from pathlib import Path
+          p=Path('.github/c3-approved-snapshot');sys.path.insert(0,str(p));import render as r
+          os.environ['ENCODE_THREADS']='2';os.environ['ENCODE_PRESET']='veryfast'
+          out=p/'recovered/02-eval-sets-es-h.mp4'
+          r.render_video(r.STORY['chapters'][1],'es','h',out,60)
+          sha=hashlib.sha256(out.read_bytes()).hexdigest();print('EXACT_SHA',sha,flush=True)
+          assert sha=='2fa16609049b6b25d2720a262197ed6131be9cb40f46437d85a8cd135e428f81'
+          subprocess.run(['ffmpeg','-v','error','-xerror','-i',str(out),'-f','null','-'],check=True)
+          PY
+          test "$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)" = "$GITHUB_SHA"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .github/c3-approved-snapshot/recovered/02-eval-sets-es-h.mp4
+          git commit -m 'release(video): retain exact approved chapter02 ES bytes with matching author runtime'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo 'Approved chapter02 recovered without changing its SHA; no deployment performed.'
