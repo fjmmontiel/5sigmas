@@ -13,8 +13,13 @@ function close(actual, expected, rel = 1e-9) {
 }
 
 Core.assertDataset(dataset);
+if (dataset.updated !== '2026-09-25') throw new Error('Training hardware snapshot must be current');
 const h100 = Core.presetById(dataset, 'h100-sxm-bf16');
+const b200 = Core.presetById(dataset, 'b200-sxm-bf16');
+const b300 = Core.presetById(dataset, 'b300-sxm-bf16');
 if (h100.peak_tflops !== 989 || h100.tdp_w !== 700) throw new Error('H100 reference preset drifted');
+if (b200.peak_tflops !== 4500 || b200.tdp_w !== 1000) throw new Error('B200 reference preset drifted');
+if (b300.peak_tflops !== 4500 || b300.tdp_w !== 1100) throw new Error('B300 reference preset drifted');
 if (!dataset.sources['hoffmann-2022']?.url.includes('2203.15556')) throw new Error('Missing dense-training compute provenance');
 if (!dataset.sources['green-grid-pue']?.url.includes('thegreengrid.org')) throw new Error('Missing PUE provenance');
 
@@ -64,7 +69,7 @@ const payload = Core.exportPayload(dataset, h100, {
   gpus: 1024, durationHours: 720, mfuPct: 45, powerUtilizationPct: 85, otherITPct: 15, pue: 1.2,
   parametersB: 70, tokensB: 1400, computeFactor: 6, peakTflops: 989, tdpW: 700
 });
-if (payload.methodologyVersion !== Core.METHODOLOGY_VERSION || payload.sourceReviewDate !== '2026-08-22') throw new Error('Export provenance metadata missing');
+if (payload.methodologyVersion !== Core.METHODOLOGY_VERSION || payload.sourceReviewDate !== dataset.updated) throw new Error('Export provenance metadata missing');
 if (payload.hardware.source.organization !== 'NVIDIA') throw new Error('Hardware source omitted from export');
 if (!payload.methodologySources.pue.url.includes('thegreengrid.org')) throw new Error('PUE source omitted from export');
 
