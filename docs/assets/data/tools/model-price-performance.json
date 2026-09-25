@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-09-24",
+  "updated_at": "2026-09-25",
   "currency": "USD",
   "freshness_policy": {
     "review_interval_days": 7,
@@ -10,7 +10,7 @@
   },
   "release_coverage": {
     "previous_snapshot": "2026-08-21",
-    "reviewed_through": "2026-09-24",
+    "reviewed_through": "2026-09-25",
     "source": {
       "title": "Language Model Releases | Artificial Analysis",
       "url": "https://artificialanalysis.ai/models/releases"
@@ -313,7 +313,7 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 48,
-      "output_tokens_per_second": 107,
+      "output_tokens_per_second": 98.4,
       "ttft_seconds": 171.68,
       "sources": {
         "specs_pricing": {
@@ -324,8 +324,8 @@
         "benchmark": {
           "title": "GPT-6 Sol (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-sol",
-          "verified_on": "2026-09-24",
-          "performance_snapshot_on": "2026-09-24",
+          "verified_on": "2026-09-25",
+          "performance_snapshot_on": "2026-09-25",
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
