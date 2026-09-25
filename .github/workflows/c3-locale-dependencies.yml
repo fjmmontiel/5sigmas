@@ -1,0 +1,48 @@
+name: Register native C3 locale dependencies
+on:
+  push:
+    branches: [ops/import-approved-evaluation-c3-20260925]
+    paths: [.github/workflows/c3-locale-dependencies.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 815f00a897caba5606246b40ec622476d479235f
+      - name: Declare exact translated transcripts and visual-text tracks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          m=json.loads(Path('docs/evaluation-c3-release.json').read_text())
+          p=Path('locales/en/manifest.yml');s=p.read_text();assert s.count('\ncoverage:\n')==1
+          paths=[]
+          for r in m['objects']:
+              if r['locale']!='en': continue
+              for name in [r['path'].removeprefix('en/').removesuffix('.mp4')+'-transcript.html',r['captions_path'].removeprefix('en/')]:
+                  f=Path('locales/en')/name;assert f.is_file() and f.stat().st_size>0
+                  assert f'  - {name}\n' not in s
+                  paths.append(name)
+          assert len(paths)==len(set(paths))==12
+          s=s.replace('\ncoverage:\n','\n'+''.join('  - '+x+'\n' for x in paths)+'coverage:\n')
+          p.write_text(s)
+          print('Added twelve existing native-English files to the locale publication manifest, no media changes.')
+          PY
+          sha256sum -c .github/receipts/evaluation-c3.sha256
+          git diff --check
+          git diff --stat
+      - name: Persist clean single-file repair for interactive fast-forward
+        run: |
+          set -euo pipefail
+          target='ops/c3-locale-dependencies-reviewed-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add locales/en/manifest.yml
+          git commit -m 'Include C3 English transcripts and visual-text tracks in locale build'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'DEPENDENCIES_COMMIT=%s\n' "$(git rev-parse HEAD)"
