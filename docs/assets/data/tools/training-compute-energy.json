@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-08-22",
+  "updated": "2026-09-25",
   "scope": "Training-compute and facility-energy estimator for accelerator clusters. Hardware values are reference presets; utilization, power draw, non-accelerator IT overhead and PUE remain explicit user assumptions.",
   "freshness_policy": "Review hardware presets on upstream NVIDIA specification changes and at least every 90 days. Methodology sources are reviewed when MFU, dense-training compute or PUE semantics materially change.",
   "presets": [
@@ -23,6 +23,26 @@
       "source": "nvidia-h200",
       "note_es": "El H200 SXM publica 1.979 TFLOP/s BF16 con sparsity; el preset usa la mitad como pico denso. El TDP máximo configurable publicado es 700 W.",
       "note_en": "H200 SXM publishes 1,979 BF16 TFLOP/s with sparsity; this preset uses half as the dense peak. Published configurable maximum TDP is 700 W."
+    },
+    {
+      "id": "b200-sxm-bf16",
+      "title_es": "NVIDIA B200 SXM · BF16 denso",
+      "title_en": "NVIDIA B200 SXM · dense BF16",
+      "peak_tflops": 4500,
+      "tdp_w": 1000,
+      "source": "nvidia-b200",
+      "note_es": "HGX B200 publica 36 PFLOP/s FP16/BF16 densos para 8 GPU: 4,5 PFLOP/s por GPU. 1.000 W es el límite máximo documentado, no consumo medio.",
+      "note_en": "HGX B200 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs: 4.5 PFLOP/s per GPU. 1,000 W is the documented maximum limit, not average draw."
+    },
+    {
+      "id": "b300-sxm-bf16",
+      "title_es": "NVIDIA B300 SXM · BF16 denso",
+      "title_en": "NVIDIA B300 SXM · dense BF16",
+      "peak_tflops": 4500,
+      "tdp_w": 1100,
+      "source": "nvidia-b300",
+      "note_es": "HGX B300 publica 36 PFLOP/s FP16/BF16 densos para 8 GPU: 4,5 PFLOP/s por GPU. La guía de despliegue muestra B300 SXM6 AC configurada a 1.100 W.",
+      "note_en": "HGX B300 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs: 4.5 PFLOP/s per GPU. NVIDIA's deployment guide shows B300 SXM6 AC configured at 1,100 W."
     }
   ],
   "sources": {
@@ -31,14 +51,14 @@
       "title": "H100 Tensor Core GPU product specifications and NVIDIA BF16 training guidance",
       "url": "https://www.nvidia.com/en-us/data-center/h100/",
       "secondary_url": "https://docs.nvidia.com/bionemo-recipes/latest/main/recipes/recipes/opengenome2_llama_native_te/",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "NVIDIA lists H100 SXM maximum TDP up to 700 W. Current NVIDIA training documentation uses 989 TFLOP/s/GPU as the maximum theoretical dense BF16 throughput for H100 when calculating MFU."
     },
     "nvidia-h200": {
       "organization": "NVIDIA",
       "title": "H200 Tensor Core GPU product specifications",
       "url": "https://www.nvidia.com/en-us/data-center/h200/",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "NVIDIA lists H200 SXM at 1,979 BF16 TFLOP/s with sparsity and up to 700 W configurable maximum TDP. The dense BF16 preset is therefore represented as half the sparsity-assisted figure."
     },
     "hoffmann-2022": {
@@ -52,8 +72,24 @@
       "organization": "The Green Grid",
       "title": "Power Usage Effectiveness (PUE)",
       "url": "https://www.thegreengrid.org/node/372",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "PUE is defined as total data-center energy divided by IT equipment energy. The estimator applies PUE after accelerator plus non-accelerator IT energy."
+    },
+    "nvidia-b200": {
+      "organization": "NVIDIA",
+      "title": "HGX B200 specifications and NVIDIA B200 power guidance",
+      "url": "https://www.nvidia.com/en-us/data-center/hgx/",
+      "secondary_url": "https://docs.nvidia.com/dgx/dgxb200-user-guide/power-capping.html",
+      "reviewed": "2026-09-25",
+      "notes": "HGX B200 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs (4.5 PFLOP/s/GPU). NVIDIA documents B200 power limits up to 1,000 W."
+    },
+    "nvidia-b300": {
+      "organization": "NVIDIA",
+      "title": "HGX B300 specifications and DGX B300 deployment guidance",
+      "url": "https://www.nvidia.com/en-us/data-center/hgx/",
+      "secondary_url": "https://docs.nvidia.com/dgx-basepod/deployment-guides/dgx-basepod-b200/latest/b300/b300-nmc.html",
+      "reviewed": "2026-09-25",
+      "notes": "HGX B300 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs (4.5 PFLOP/s/GPU). Current NVIDIA deployment output shows B300 SXM6 AC configured at an 1,100 W cap."
     }
   }
 }
