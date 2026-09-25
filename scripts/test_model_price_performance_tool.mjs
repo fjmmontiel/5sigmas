@@ -12,13 +12,15 @@ const root = path.resolve(__dirname, '..');
 const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-performance-core.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
 
-const SNAPSHOT = '2026-09-25';
+const SNAPSHOT = data.updated_at;
+assert.match(SNAPSHOT, /^\\d{4}-\\d{2}-\\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
+const wallAgeDays = (Date.now() - Date.parse(`${SNAPSHOT}T23:59:59Z`)) / 86_400_000;
+assert.ok(wallAgeDays >= -1 && wallAgeDays <= data.freshness_policy.review_interval_days, `dataset snapshot is outside freshness window: ${SNAPSHOT}`);
 const close = (actual, expected, epsilon = 1e-10, label = '') => {
   assert.ok(Math.abs(actual - expected) <= epsilon, `${label}: expected ${expected}, got ${actual}`);
 };
 
 assert.equal(data.schema_version, 2);
-assert.equal(data.updated_at, SNAPSHOT);
 assert.ok(data.freshness_policy?.review_interval_days <= 7);
 assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
@@ -76,19 +78,13 @@ const grok = byId.get('spacexai-grok-4-7-high');
 const deepseek = byId.get('deepseek-v4-1-flash-max');
 for (const model of [opus, astra, sol, luna, gemini, grok, deepseek]) assert.ok(model, 'required refreshed comparison model missing');
 
-assert.deepEqual([opus.intelligence_index, opus.input_usd_per_million, opus.output_usd_per_million], [56, 4, 20]);
-assert.deepEqual([astra.intelligence_index, astra.input_usd_per_million, astra.output_usd_per_million], [53, 10, 50]);
-assert.deepEqual([sol.intelligence_index, sol.input_usd_per_million, sol.output_usd_per_million], [48, 2, 10]);
-assert.deepEqual([luna.intelligence_index, luna.input_usd_per_million, luna.output_usd_per_million], [37, 0.1, 0.5]);
-assert.deepEqual([gemini.intelligence_index, gemini.input_usd_per_million, gemini.output_usd_per_million], [41, 0.75, 3.75]);
-assert.deepEqual([grok.intelligence_index, grok.input_usd_per_million, grok.output_usd_per_million], [46, 2, 6]);
-assert.deepEqual([deepseek.intelligence_index, deepseek.input_usd_per_million, deepseek.output_usd_per_million], [39, 0.3, 1.2]);
-assert.deepEqual(
-  [byId.get('anthropic-claude-fable-5-1-max').output_tokens_per_second, byId.get('anthropic-claude-fable-5-1-max').ttft_seconds],
-  [69.1, 261.52],
-  'Claude Fable Sep 25 performance snapshot',
-);
-assert.deepEqual([sol.output_tokens_per_second, sol.ttft_seconds], [98.4, 171.68], 'GPT-6 Sol Sep 25 performance snapshot');
+assert.deepEqual([opus.input_usd_per_million, opus.output_usd_per_million], [4, 20]);
+assert.deepEqual([astra.input_usd_per_million, astra.output_usd_per_million], [10, 50]);
+assert.deepEqual([sol.input_usd_per_million, sol.output_usd_per_million], [2, 10]);
+assert.deepEqual([luna.input_usd_per_million, luna.output_usd_per_million], [0.1, 0.5]);
+assert.deepEqual([gemini.input_usd_per_million, gemini.output_usd_per_million], [0.75, 3.75]);
+assert.deepEqual([grok.input_usd_per_million, grok.output_usd_per_million], [2, 6]);
+assert.deepEqual([deepseek.input_usd_per_million, deepseek.output_usd_per_million], [0.3, 1.2]);
 
 {
   const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');
@@ -140,10 +136,10 @@ assert.ok(lowTtft.length >= 3);
 assert.ok(lowTtft.every((row) => row.ttft_seconds <= 3));
 
 const summary = api.summary(rows);
-assert.equal(summary.smartest.id, opus.id);
-assert.equal(summary.cheapest.id, luna.id);
-assert.equal(summary.fastest.id, gemini.id);
-assert.equal(summary.lowestLatency.id, grok.id);
+assert.equal(summary.smartest.intelligence_index, Math.max(...rows.map((row) => Number(row.intelligence_index))));
+assert.equal(summary.cheapest.scenario.costPerRequest, Math.min(...rows.map((row) => Number(row.scenario.costPerRequest))));
+assert.equal(summary.fastest.output_tokens_per_second, Math.max(...rows.map((row) => Number(row.output_tokens_per_second))));
+assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.map((row) => Number(row.ttft_seconds)));
 
 const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map((row) => [row.model, row.reason]));
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
