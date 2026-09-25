@@ -30,6 +30,8 @@ assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligenc
 assert.ok(Array.isArray(data.release_coverage?.included_release_names) && data.release_coverage.included_release_names.length > 0);
 assert.ok(Array.isArray(data.release_coverage?.reviewed_not_charted));
 assert.ok(data.release_coverage.reviewed_not_charted.every((entry) => entry.model && entry.reason), 'every non-charted release needs a reason');
+assert.ok(Array.isArray(data.release_coverage?.supersession_events), 'supersession events ledger missing');
+assert.ok(data.release_coverage.supersession_events.every((entry) => entry.model && entry.status && entry.detected_on && entry.reason && Array.isArray(entry.sources) && entry.sources.length > 0), 'every supersession event needs status, date, reason and sources');
 
 for (const model of data.models || []) {
   for (const key of ['specs_pricing', 'benchmark']) {
