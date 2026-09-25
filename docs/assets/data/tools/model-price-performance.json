@@ -254,7 +254,7 @@
       "output_usd_per_million": 20,
       "intelligence_index": 56,
       "output_tokens_per_second": 91.5,
-      "ttft_seconds": 146.18,
+      "ttft_seconds": 147.14,
       "sources": {
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
@@ -313,8 +313,8 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 53.7,
-      "ttft_seconds": 367.59,
+      "output_tokens_per_second": 54.6,
+      "ttft_seconds": 364.45,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
@@ -353,8 +353,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 48,
-      "output_tokens_per_second": 98.4,
-      "ttft_seconds": 171.68,
+      "output_tokens_per_second": 93.5,
+      "ttft_seconds": 178.3,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Sol Model | OpenAI API",
@@ -388,8 +388,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 37,
-      "output_tokens_per_second": 140.1,
-      "ttft_seconds": 108.47,
+      "output_tokens_per_second": 145.4,
+      "ttft_seconds": 109.29,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
@@ -423,8 +423,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 42,
-      "output_tokens_per_second": 86.8,
-      "ttft_seconds": 211.09,
+      "output_tokens_per_second": 88.8,
+      "ttft_seconds": 188.6,
       "sources": {
         "specs_pricing": {
           "title": "GPT-5.6 Terra Model | OpenAI API",
@@ -460,7 +460,7 @@
       },
       "intelligence_index": 41,
       "output_tokens_per_second": 287.6,
-      "ttft_seconds": 16.38,
+      "ttft_seconds": 16.41,
       "sources": {
         "specs_pricing": {
           "title": "What's new in Gemini 3.8 Flash | Google AI for Developers",
@@ -493,8 +493,8 @@
         "output_multiplier": 2
       },
       "intelligence_index": 46,
-      "output_tokens_per_second": 52.4,
-      "ttft_seconds": 0.85,
+      "output_tokens_per_second": 54.1,
+      "ttft_seconds": 0.88,
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
@@ -522,7 +522,7 @@
       "input_usd_per_million": 0.3,
       "output_usd_per_million": 1.2,
       "intelligence_index": 39,
-      "output_tokens_per_second": 232.8,
+      "output_tokens_per_second": 233.1,
       "ttft_seconds": 0.97,
       "sources": {
         "specs_pricing": {
@@ -553,8 +553,8 @@
       "input_usd_per_million": 2,
       "output_usd_per_million": 6,
       "intelligence_index": 45,
-      "output_tokens_per_second": 38.9,
-      "ttft_seconds": 3.07,
+      "output_tokens_per_second": 38.5,
+      "ttft_seconds": 3.1,
       "sources": {
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
@@ -614,7 +614,7 @@
       "output_usd_per_million": 4.25,
       "intelligence_index": 48,
       "output_tokens_per_second": 214.5,
-      "ttft_seconds": 26.25,
+      "ttft_seconds": 25.37,
       "sources": {
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
@@ -643,8 +643,8 @@
       "input_usd_per_million": 0.435,
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
-      "output_tokens_per_second": 42.3,
-      "ttft_seconds": 3.26,
+      "output_tokens_per_second": 41.1,
+      "ttft_seconds": 3.36,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
@@ -673,7 +673,7 @@
       "input_usd_per_million": 1,
       "output_usd_per_million": 2.7,
       "intelligence_index": 44,
-      "output_tokens_per_second": 77.3,
+      "output_tokens_per_second": 73.9,
       "ttft_seconds": 2.85,
       "sources": {
         "specs_pricing": {
@@ -703,8 +703,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.5,
       "intelligence_index": 42,
-      "output_tokens_per_second": 42.6,
-      "ttft_seconds": 3.7,
+      "output_tokens_per_second": 42.8,
+      "ttft_seconds": 3.67,
       "sources": {
         "specs_pricing": {
           "title": "Z.AI API pricing",
@@ -721,5 +721,11 @@
         }
       }
     }
-  ]
+  ],
+  "performance_refresh": {
+    "refreshed_on": "2026-09-25",
+    "source": "Artificial Analysis model pages via the repository upstream checker",
+    "changed_model_count": 13,
+    "note": "Serving speed and TTFT are volatile point-in-time measurements. Intelligence Index v4.3.2 scores remained unchanged in this refresh."
+  }
 }

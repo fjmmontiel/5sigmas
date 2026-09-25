@@ -14,7 +14,7 @@
       infeasible: 'El objetivo ya se supera antes de asignar tiempo al modelo: primero reduce transporte, detección de turno, STT/TTS o buffering.',
       stageNames: { ingressMs: 'Entrada de audio', endpointMs: 'Fin de turno', sttMs: 'STT residual', modelMs: 'Primera salida del modelo', ttsMs: 'Primer audio TTS', egressMs: 'Salida de audio', bufferMs: 'Buffer de reproducción' },
       bargeRead: (ms, target, ok) => ok ? `El camino de interrupción suma ${ms} ms frente a tu objetivo de ${target} ms.` : `El camino de interrupción suma ${ms} ms y excede tu objetivo de ${target} ms.`,
-      architecture: { cascade: 'Cascada STT → LLM → TTS', halfCascade: 'Half-cascade / audio → modelo → TTS', speechToSpeech: 'Speech-to-speech' }
+      architecture: { cascade: 'Cascada STT → LLM → TTS', halfCascade: 'Half-cascade / audio → modelo → TTS', speechToSpeech: 'Speech-to-speech full-duplex' }
     },
     en: {
       copied: 'Link copied.', copyFailed: 'Automatic copy failed. Copy the browser URL instead.', reset: 'Scenario reset.', downloaded: 'JSON generated.',
@@ -23,7 +23,7 @@
       infeasible: 'The target is already exceeded before assigning any model time: reduce transport, turn detection, STT/TTS or buffering first.',
       stageNames: { ingressMs: 'Audio ingress', endpointMs: 'Turn end', sttMs: 'Residual STT', modelMs: 'Model first output', ttsMs: 'TTS first audio', egressMs: 'Audio egress', bufferMs: 'Playback buffer' },
       bargeRead: (ms, target, ok) => ok ? `The interruption path totals ${ms} ms against your ${target} ms target.` : `The interruption path totals ${ms} ms and exceeds your ${target} ms target.`,
-      architecture: { cascade: 'STT → LLM → TTS cascade', halfCascade: 'Half-cascade / audio → model → TTS', speechToSpeech: 'Speech-to-speech' }
+      architecture: { cascade: 'STT → LLM → TTS cascade', halfCascade: 'Half-cascade / audio → model → TTS', speechToSpeech: 'Full-duplex speech-to-speech' }
     }
   }[locale];
 
@@ -132,7 +132,7 @@
         bargeWithinTarget: result.bargeWithinTarget
       },
       provenance: [
-        'https://platform.openai.com/docs/api-reference/realtime',
+        'https://developers.openai.com/api/docs/models/gpt-live-1',
         'https://developers.deepgram.com/docs/endpointing',
         'https://elevenlabs.io/docs/developer-guides/reducing-latency',
         'https://www.twilio.com/docs/voice/media-streams/websocket-messages',

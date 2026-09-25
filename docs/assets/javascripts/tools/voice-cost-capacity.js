@@ -11,13 +11,13 @@
       copied: 'Enlace copiado.', copyFailed: 'No se pudo copiar automáticamente. Copia la URL del navegador.',
       reset: 'Escenario restablecido.', downloaded: 'JSON generado.', unlimited: 'Sin límite configurado',
       within: (n) => `${formatNumber(n, 1)} de margen`, over: (n) => `${formatNumber(Math.abs(n), 1)} por encima`,
-      presetNote: 'Tarifas y supuestos públicos verificados el 21-08-2026; edítalos para reflejar tu contrato, región y arquitectura.'
+      presetNote: 'Tarifas y supuestos públicos verificados el 25-09-2026; edítalos para reflejar tu contrato, región y arquitectura.'
     },
     en: {
       copied: 'Link copied.', copyFailed: 'Automatic copy failed. Copy the browser URL instead.',
       reset: 'Scenario reset.', downloaded: 'JSON generated.', unlimited: 'No limit configured',
       within: (n) => `${formatNumber(n, 1)} headroom`, over: (n) => `${formatNumber(Math.abs(n), 1)} over`,
-      presetNote: 'Public rates and assumptions verified on 2026-08-21; edit them to match your contract, region and architecture.'
+      presetNote: 'Public rates and assumptions verified on 2026-09-25; edit them to match your contract, region and architecture.'
     }
   }[locale];
 

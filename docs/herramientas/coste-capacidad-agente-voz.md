@@ -85,8 +85,8 @@ hide:
       <div class="s5-tool-field-grid">
         <div class="s5-tool-field"><label for="s5-vcc-es-it">Tokens de entrada</label><input id="s5-vcc-es-it" data-field="llmInputTokensPerCall" type="number" min="0" step="100" value="1400" /></div>
         <div class="s5-tool-field"><label for="s5-vcc-es-ot">Tokens de salida</label><input id="s5-vcc-es-ot" data-field="llmOutputTokensPerCall" type="number" min="0" step="50" value="220" /></div>
-        <div class="s5-tool-field"><label for="s5-vcc-es-ip">Entrada (USD/MTok)</label><input id="s5-vcc-es-ip" data-field="llmInputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.2" /></div>
-        <div class="s5-tool-field"><label for="s5-vcc-es-op">Salida (USD/MTok)</label><input id="s5-vcc-es-op" data-field="llmOutputUsdPerMillionTokens" type="number" min="0" step="0.01" value="1.2" /></div>
+        <div class="s5-tool-field"><label for="s5-vcc-es-ip">Entrada (USD/MTok)</label><input id="s5-vcc-es-ip" data-field="llmInputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.1" /></div>
+        <div class="s5-tool-field"><label for="s5-vcc-es-op">Salida (USD/MTok)</label><input id="s5-vcc-es-op" data-field="llmOutputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.5" /></div>
       </div>
       <div class="s5-tool-actions" aria-label="Acciones del escenario">
         <button class="s5-tool-action" type="button" data-action="share">Copiar enlace</button>
@@ -127,12 +127,12 @@ hide:
     </div>
 
     <div class="s5-voice-cost-reference">
-      <div><small>Snapshot de referencia</small><strong data-field="presetLabel">Referencia España · cascada</strong><p data-output="presetNote">Tarifas y supuestos públicos verificados el 21-08-2026; edítalos para reflejar tu contrato, región y arquitectura.</p></div>
-      <strong>Datos: <span data-output="sourceUpdated">2026-08-21</span></strong>
+      <div><small>Snapshot de referencia</small><strong data-field="presetLabel">Referencia España · cascada</strong><p data-output="presetNote">Tarifas y supuestos públicos verificados el 25-09-2026; edítalos para reflejar tu contrato, región y arquitectura.</p></div>
+      <strong>Datos: <span data-output="sourceUpdated">2026-09-25</span></strong>
     </div>
 
     <aside class="s5-tool-source" aria-label="Procedencia del escenario">
-      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verificado 21-08-2026</span></div>
+      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verificado 25-09-2026</span></div>
       <p>El preset usa 0,0178 USD/min para una llamada saliente local a España y 0,0044 USD/min para Media Streams. Móvil, entrante, SIP/BYOC, impuestos, números mensuales y descuentos pueden cambiar la factura.</p>
     </aside>
   </section>
@@ -150,10 +150,10 @@ hide:
     <div class="s5-tool-method__formula">stt_concurrency ≈ peak_calls × stt_sessions_per_call</div>
     <p><strong>TTS.</strong> No uses el porcentaje de audio reproducido como concurrencia de proveedor. ElevenLabs documenta que, con WebSocket, solo cuenta el tiempo durante el que el modelo genera audio y señala que un límite de 5 puede soportar aproximadamente 100 conversaciones equilibradas. El 5% inicial reproduce esa heurística (5/100); es editable y no sustituye una medición p95/p99 de tus peticiones.</p>
     <div class="s5-tool-method__formula">tts_concurrency ≈ peak_calls × generation_duty</div>
-    <p><strong>Tarifas iniciales.</strong> A 21-08-2026: Twilio España publica 0,0178 USD/min para llamada saliente local y 0,0044 USD/min para Media Streams; OpenAI publica GPT Live Transcribe a 0,017 USD/min de audio y GPT-5.6 Luna a 0,20/1,20 USD por MTok de entrada/salida; ElevenLabs publica Flash/Turbo TTS a 0,05 USD por 1.000 caracteres. Todas las cifras siguen siendo editables.</p>
+    <p><strong>Tarifas iniciales.</strong> A 25-09-2026: Twilio España publica 0,0178 USD/min para llamada saliente local y 0,0044 USD/min para Media Streams; OpenAI publica GPT Live Transcribe a 0,017 USD/min de audio y GPT-6 Luna a 0,10/0,50 USD por MTok de entrada/salida; ElevenLabs publica Flash/Turbo TTS a 0,05 USD por 1.000 caracteres. Todas las cifras siguen siendo editables. GPT-Live 1 full-duplex se revisa, pero no se fuerza en este preset porque su facturación por sesión live más backend no es compatible con la descomposición STT + LLM de texto + TTS de esta calculadora.</p>
     <div class="s5-voice-cost-note"><strong>No es una factura ni un SLA.</strong> No incluye número telefónico mensual, impuestos, recording, observability, tool calls, storage, transferencias, descuentos por volumen ni mínimos contractuales. Los límites de concurrencia dependen del plan/proveedor y deben introducirse desde tu cuenta real.</div>
     <p>Para optimizar tiempo de respuesta, usa también el <a href="/herramientas/latencia-agente-voz/">explorador de latencia de agentes de voz</a>. Para comparar arquitecturas, consulta <a href="/articulos-tecnicos/voice-agent-architectures/">tres arquitecturas para agentes de voz</a>.</p>
-    <p><strong>Fuentes:</strong> <a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio Voice Spain</a> · <a href="https://www.twilio.com/docs/voice/media-streams" target="_blank" rel="noopener noreferrer">Twilio Media Streams</a> · <a href="https://developers.openai.com/api/docs/models/gpt-live-transcribe" target="_blank" rel="noopener noreferrer">OpenAI GPT Live Transcribe</a> · <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener noreferrer">OpenAI GPT-5.6 Luna</a> · <a href="https://elevenlabs.io/pricing/api" target="_blank" rel="noopener noreferrer">ElevenLabs API pricing</a> · <a href="https://elevenlabs.io/docs/overview/models" target="_blank" rel="noopener noreferrer">ElevenLabs concurrency</a>. Revisadas el 21-08-2026.</p>
+    <p><strong>Fuentes:</strong> <a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio Voice Spain</a> · <a href="https://www.twilio.com/docs/voice/media-streams" target="_blank" rel="noopener noreferrer">Twilio Media Streams</a> · <a href="https://developers.openai.com/api/docs/models/gpt-live-transcribe" target="_blank" rel="noopener noreferrer">OpenAI GPT Live Transcribe</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-luna" target="_blank" rel="noopener noreferrer">OpenAI GPT-6 Luna</a> · <a href="https://elevenlabs.io/pricing/api" target="_blank" rel="noopener noreferrer">ElevenLabs API pricing</a> · <a href="https://elevenlabs.io/docs/overview/models" target="_blank" rel="noopener noreferrer">ElevenLabs concurrency</a>. Revisadas el 25-09-2026.</p>
   </div>
 </section>
 

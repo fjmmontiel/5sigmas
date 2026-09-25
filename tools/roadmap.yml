@@ -4,7 +4,7 @@ quality_states:
   - planned
   - in_progress
   - excellent
-updated: 2026-08-22
+updated: 2026-09-25
 tools:
   - id: llm-cost-latency
     order: 1
@@ -16,13 +16,13 @@ tools:
     en_route: /en/tools/llm-cost-latency/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: primary_sources_verified_2026-08-21
-    data_freshness: provider_pricing_review_every_14_days_and_on_release
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: openai_anthropic_google_primary_pricing_verified_2026-09-25
+    data_freshness: provider_pricing_review_every_7_days_and_on_release
     validated_head: f780b156b879ff7357b3b9613c5a6bd3915c2250
     release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
-    last_reviewed: 2026-08-21
+    last_reviewed: 2026-09-25
   - id: model-price-performance
     order: 2
     es_title: Explorador precio/rendimiento de modelos
@@ -33,12 +33,12 @@ tools:
     en_route: /en/tools/model-price-performance/
     es_parity: true
     en_parity: true
-    tests: required_full_pr_ci_2026-09-25
-    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    tests: passing_full_ci_2026-09-25
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-09-25
     provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-09-25
     data_freshness: release_feed_daily_performance_daily_provider_pricing_weekly_and_on_release
-    validated_head: pending_pr_validation
-    release_commit: pending_pr_merge
+    validated_head: 8a0f9cada9fa33563c06434915baf775dd618ca1
+    release_commit: 8a0f9cada9fa33563c06434915baf775dd618ca1
     last_reviewed: 2026-09-25
   - id: inference-vram
     order: 3
@@ -50,13 +50,13 @@ tools:
     en_route: /en/tools/inference-vram/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: meta_primary_architecture_sources_plus_vllm_verified_2026-08-21
-    data_freshness: static_architecture_presets_review_on_upstream_source_change
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: meta_llama3_1_llama4_plus_vllm_reviewed_2026-09-25
+    data_freshness: architecture_presets_review_every_90_days_and_on_upstream_change
     validated_head: 263a3913742ed0a17e3348a6788782f91e567e5b
     release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
-    last_reviewed: 2026-08-21
+    last_reviewed: 2026-09-25
   - id: kv-cache-context
     order: 4
     es_title: Explorador de KV cache y ventana de contexto
@@ -67,13 +67,13 @@ tools:
     en_route: /en/tools/kv-cache-context/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: meta_llama_primary_architecture_sources_plus_vllm_verified_2026-08-21
-    data_freshness: static_architecture_presets_review_on_upstream_source_change
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: meta_llama3_1_llama4_plus_vllm_reviewed_2026-09-25
+    data_freshness: architecture_presets_review_every_90_days_and_on_upstream_change
     validated_head: ed2bac4464c91eab54e5a154caae4d8f1017a061
     release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
-    last_reviewed: 2026-08-21
+    last_reviewed: 2026-09-25
   - id: transformer-attention
     order: 5
     es_title: Visualizador de atención Transformer
@@ -153,13 +153,13 @@ tools:
     en_route: /en/tools/voice-latency-budget/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21_head_f356e518
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: openai_realtime_deepgram_endpointing_elevenlabs_latency_twilio_media_streams_and_stivers_turn_taking_verified_2026-08-21
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: gpt_live_1_openai_vad_deepgram_elevenlabs_twilio_reviewed_2026-09-25
     data_freshness: static_method_review_on_voice_api_semantics_change
     validated_head: f356e518fc4d939280ab81a4a9b06cbce4c39f48
     release_commit: b574917abed951ae735f5b0f667ef524474cd39a
-    last_reviewed: 2026-08-21
+    last_reviewed: 2026-09-25
   - id: voice-cost-capacity
     order: 10
     es_title: Planificador de coste y capacidad para agentes de voz
@@ -170,13 +170,13 @@ tools:
     en_route: /en/tools/voice-cost-capacity/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21_head_bdaca00b
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: twilio_spain_openai_live_transcribe_gpt_5_6_luna_elevenlabs_pricing_and_concurrency_verified_2026-08-21
-    data_freshness: provider_pricing_review_every_14_days_and_on_release
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: twilio_spain_openai_live_transcribe_gpt_6_luna_elevenlabs_verified_2026-09-25
+    data_freshness: provider_pricing_review_every_7_days_and_on_release
     validated_head: bdaca00b8dbc9006250207cfe8d9c0caf7925bb3
     release_commit: 252e139933eca56d1a21c08174e30a63eda076f0
-    last_reviewed: 2026-08-21
+    last_reviewed: 2026-09-25
   - id: agent-reliability
     order: 11
     es_title: Entorno interactivo de fiabilidad y evaluación de agentes
@@ -238,13 +238,13 @@ tools:
     en_route: /en/tools/model-capability-timeline/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-22_head_18e589c4
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
-    provenance: openai_release_tables_gpt4_1_through_gpt5_6_verified_2026-08-21
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: openai_release_tables_gpt4_1_through_gpt6_astra_verified_2026-09-25
     data_freshness: review_on_relevant_model_release_and_every_30_days
     validated_head: 18e589c4015a880bafcd1c101b172b1a0846e1c4
     release_commit: 5b5eff61a7162084c235a6fe55d6d3cf64df2857
-    last_reviewed: 2026-08-22
+    last_reviewed: 2026-09-25
   - id: scaling-laws
     order: 15
     es_title: Explorador de leyes de escalado
@@ -272,13 +272,13 @@ tools:
     en_route: /en/tools/training-compute-energy/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-22_head_2ff70175
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
-    provenance: nvidia_h100_h200_hoffmann_2022_green_grid_pue_verified_2026-08-22
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: nvidia_h100_h200_b200_b300_hoffmann_green_grid_verified_2026-09-25
     data_freshness: hardware_presets_review_every_90_days_and_on_upstream_change
     validated_head: 2ff70175a76f1513ebe9f43a2af287172eab9ef9
     release_commit: adf651cd8a1dcf387de66890677b0709f329b476
-    last_reviewed: 2026-08-22
+    last_reviewed: 2026-09-25
   - id: datacenter-ai-capacity
     order: 17
     es_title: Explorador de capacidad de IA en datacenters
@@ -289,13 +289,13 @@ tools:
     en_route: /en/tools/datacenter-ai-capacity/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-22_head_f0280f6f
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
-    provenance: nvidia_h100_h200_hgx_b200_dgx_b200_rack_and_green_grid_pue_verified_2026-08-22
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: nvidia_h100_h200_b200_b300_rack_and_green_grid_verified_2026-09-25
     data_freshness: hardware_presets_review_every_90_days_and_on_upstream_change
     validated_head: f0280f6f7696efbe0026ce26906cd9bb8bf5f0d8
     release_commit: 548a89dd0d15d3f8c79411d1f8c18da9d528daf5
-    last_reviewed: 2026-08-22
+    last_reviewed: 2026-09-25
   - id: global-ai-ecosystem
     order: 18
     es_title: Explorador del ecosistema global de IA
@@ -306,10 +306,10 @@ tools:
     en_route: /en/tools/global-ai-ecosystem/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-22_head_92f4ffae
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
-    provenance: stanford_ai_index_2026_stanford_ai_index_2025_linkedin_oxford_gair_2025_corrected_verified_2026-08-22
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: stanford_ai_index_2026_oxford_2025_sources_revalidated_2026-09-25
     data_freshness: source_snapshot_review_every_30_days_and_on_source_revision
     validated_head: 92f4ffae09bd19f38ca6cc1ad0c2e1096e49b25b
     release_commit: 3fc7ad5ccb24d34eb3589b6621e3ba6d6b45b955
-    last_reviewed: 2026-08-22
+    last_reviewed: 2026-09-25

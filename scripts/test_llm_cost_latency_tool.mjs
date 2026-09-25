@@ -97,44 +97,45 @@ const base = {
 
 const presets = new Map(pricing.presets.map((preset) => [preset.id, preset]));
 const sonnet5 = presets.get('anthropic-claude-sonnet-5');
-const gemini36 = presets.get('google-gemini-3-6-flash');
-const gemini37 = presets.get('google-gemini-3-7-flash');
-const gemini35Lite = presets.get('google-gemini-3-5-flash-lite');
+const astra = presets.get('openai-gpt-6-astra');
+const sol6 = presets.get('openai-gpt-6-sol');
+const luna6 = presets.get('openai-gpt-6-luna');
+const sol56 = presets.get('openai-gpt-5-6-sol');
+const gemini38 = presets.get('google-gemini-3-8-flash');
 
-assert.ok(sonnet5, 'Claude Sonnet 5 preset required');
-assert.ok(gemini36, 'Gemini 3.6 Flash preset required');
-assert.ok(gemini37, 'Gemini 3.7 Flash preset required');
-assert.ok(gemini35Lite, 'Gemini 3.5 Flash-Lite preset required');
+for (const [label, preset] of [
+  ['Claude Sonnet 5', sonnet5], ['GPT-6 Astra', astra], ['GPT-6 Sol', sol6],
+  ['GPT-6 Luna', luna6], ['GPT-5.6 Sol', sol56], ['Gemini 3.8 Flash', gemini38]
+]) assert.ok(preset, `${label} preset required`);
 
-{
-  const active = resolvePricing(sonnet5, '2026-08-21T12:00:00Z');
-  close(active.input_usd_per_million, 2, 1e-12, 'Sonnet 5 introductory input rate');
-  close(active.cached_input_usd_per_million, 0.2, 1e-12, 'Sonnet 5 introductory cache-read rate');
-  close(active.output_usd_per_million, 10, 1e-12, 'Sonnet 5 introductory output rate');
-  assert.equal(active.active_price_effective_from, undefined);
-
-  const future = resolvePricing(sonnet5, '2026-09-01T00:00:00Z');
-  close(future.input_usd_per_million, 3, 1e-12, 'Sonnet 5 standard input rate');
-  close(future.cached_input_usd_per_million, 0.3, 1e-12, 'Sonnet 5 standard cache-read rate');
-  close(future.output_usd_per_million, 15, 1e-12, 'Sonnet 5 standard output rate');
-  assert.equal(future.active_price_effective_from, '2026-09-01');
-}
+assert.deepEqual([sonnet5.input_usd_per_million, sonnet5.cached_input_usd_per_million, sonnet5.output_usd_per_million], [2, 0.2, 10]);
+assert.equal(sonnet5.future_price, undefined, 'Cancelled Sonnet 5 September increase must not remain encoded');
+assert.deepEqual([astra.input_usd_per_million, astra.cached_input_usd_per_million, astra.output_usd_per_million], [10, 1, 50]);
+assert.deepEqual([sol6.input_usd_per_million, sol6.cached_input_usd_per_million, sol6.output_usd_per_million], [2, 0.2, 10]);
+assert.deepEqual([luna6.input_usd_per_million, luna6.cached_input_usd_per_million, luna6.output_usd_per_million], [0.1, 0.01, 0.5]);
+assert.deepEqual([sol56.input_usd_per_million, sol56.cached_input_usd_per_million, sol56.output_usd_per_million], [4, 0.4, 20]);
 
 {
-  const current = resolvePricing(gemini36, '2026-08-21T12:00:00Z');
-  close(current.input_usd_per_million, 0.75, 1e-12, 'Gemini 3.6 promotional input rate');
-  close(current.cached_input_usd_per_million, 0.075, 1e-12, 'Gemini 3.6 promotional cache rate');
-  close(current.output_usd_per_million, 3.75, 1e-12, 'Gemini 3.6 promotional output rate');
+  const current = resolvePricing(gemini38, '2026-09-25T12:00:00Z');
+  close(current.input_usd_per_million, 0.75, 1e-12, 'Gemini 3.8 promotional input rate');
+  close(current.cached_input_usd_per_million, 0.075, 1e-12, 'Gemini 3.8 promotional cache rate');
+  close(current.output_usd_per_million, 3.75, 1e-12, 'Gemini 3.8 promotional output rate');
 
-  const future = resolvePricing(gemini36, '2027-01-01T00:00:00Z');
-  close(future.input_usd_per_million, 1.5, 1e-12, 'Gemini 3.6 2027 input rate');
-  close(future.cached_input_usd_per_million, 0.15, 1e-12, 'Gemini 3.6 2027 cache rate');
-  close(future.output_usd_per_million, 7.5, 1e-12, 'Gemini 3.6 2027 output rate');
+  const future = resolvePricing(gemini38, '2027-01-01T00:00:00Z');
+  close(future.input_usd_per_million, 1.5, 1e-12, 'Gemini 3.8 2027 input rate');
+  close(future.cached_input_usd_per_million, 0.15, 1e-12, 'Gemini 3.8 2027 cache rate');
+  close(future.output_usd_per_million, 7.5, 1e-12, 'Gemini 3.8 2027 output rate');
   assert.equal(future.active_price_effective_from, '2027-01-01');
 }
 
-assert.ok(pricing.presets.length >= 8, 'expected at least eight sourced pricing presets');
-assert.equal(pricing.freshness_policy?.review_interval_days, 14, 'pricing freshness policy must be explicit');
+assert.equal(pricing.schema_version, 3);
+assert.equal(pricing.updated_at, '2026-09-25');
+assert.equal(pricing.freshness_policy?.review_interval_days, 7, 'pricing freshness policy must be explicit');
+assert.ok(pricing.release_coverage?.corrections?.some((row) => row.model === 'Claude Sonnet 5'));
+assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.6 Flash'));
+assert.equal(presets.has('google-gemini-3-6-flash'), false, 'Previous-generation Gemini 3.6 preset must be retired');
+assert.ok(pricing.presets.length >= 10, 'expected a current, sourced pricing preset set');
+
 for (const preset of pricing.presets) {
   assert.match(preset.id, /^[a-z0-9-]+$/);
   assert.ok(preset.provider && preset.model, `${preset.id}: provider/model required`);
@@ -142,7 +143,7 @@ for (const preset of pricing.presets) {
   assert.ok(Number.isFinite(preset.output_usd_per_million), `${preset.id}: output rate required`);
   assert.ok(preset.cached_input_usd_per_million === null || Number.isFinite(preset.cached_input_usd_per_million), `${preset.id}: cache-read rate must be null or numeric`);
   assert.match(preset.source?.url || '', /^https:\/\//, `${preset.id}: primary-source URL required`);
-  assert.match(preset.source?.verified_on || '', /^2026-\d{2}-\d{2}$/, `${preset.id}: verification date required`);
+  assert.equal(preset.source?.verified_on, pricing.updated_at, `${preset.id}: verification date must match current pricing snapshot`);
   if (preset.future_price) {
     assert.match(preset.future_price.effective_from || '', /^20\d{2}-\d{2}-\d{2}$/, `${preset.id}: future effective date required`);
     assert.ok(Number.isFinite(preset.future_price.input_usd_per_million), `${preset.id}: future input rate required`);
@@ -152,5 +153,4 @@ for (const preset of pricing.presets) {
     }
   }
 }
-
 console.log(`LLM cost/latency math passed: ${pricing.presets.length} sourced presets; cache, scheduled pricing, long-context, latency and capacity cases verified.`);

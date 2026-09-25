@@ -105,7 +105,11 @@ if (!updates.length && !checkpointDue) {
 }
 
 if (!write) {
-  console.error(`Model explorer refresh required: ${updates.length} metric changes; checkpointDue=${checkpointDue}.`);
+  console.error(`Model explorer refresh required: ${updates.length} model metric snapshots changed; checkpointDue=${checkpointDue}.`);
+  for (const update of updates) {
+    const stored = data.models.find((model) => model.id === update.id);
+    console.error(` - ${update.id}: intelligence ${stored.intelligence_index} -> ${update.intelligence}; speed ${stored.output_tokens_per_second} -> ${update.speed}; TTFT ${stored.ttft_seconds} -> ${update.ttft}`);
+  }
   process.exit(2);
 }
 

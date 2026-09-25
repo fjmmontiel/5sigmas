@@ -52,7 +52,7 @@ hide:
           <select id="s5-voice-latency-es-architecture" data-field="architecture">
             <option value="cascade">Cascada STT → LLM → TTS</option>
             <option value="halfCascade">Half-cascade / audio → modelo → TTS</option>
-            <option value="speechToSpeech">Speech-to-speech</option>
+            <option value="speechToSpeech">Full-duplex speech-to-speech</option>
           </select>
           <small>Los presets son escenarios didácticos editables, no mediciones de proveedores.</small>
         </div>
@@ -115,7 +115,7 @@ hide:
     </div>
 
     <aside class="s5-tool-source" aria-label="Procedencia metodológica">
-      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Fuentes revisadas 21-08-2026</span></div>
+      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Fuentes revisadas 25-09-2026</span></div>
       <p>El fin de turno es una decisión, no latencia gratis: los sistemas de endpointing esperan evidencia de silencio o de finalización semántica. El valor correcto depende de tu dominio y debe medirse con falsos cortes y esperas excesivas, no solo con milisegundos.</p>
     </aside>
   </section>
@@ -126,14 +126,14 @@ hide:
   <div class="s5-tool-method__body">
     <p><strong>Frontera de medida.</strong> Esta herramienta define la latencia de respuesta como el tiempo desde el final acústico del turno en el borde de captura hasta el primer audio del agente en el borde de escucha. Si tu telemetría usa otra frontera, cambia los componentes para que todos compartan la misma referencia.</p>
     <div class="s5-tool-method__formula">first_audio = ingress + turn_detection + residual_STT + model_first_output + TTS_first_audio + egress + playback_buffer</div>
-    <p><strong>Arquitectura.</strong> En una cascada completa aparece STT y TTS externos. En el preset half-cascade, la comprensión de audio está dentro del modelo y se mantiene TTS externo. En speech-to-speech, STT y TTS externos quedan a cero. Son presets didácticos: no implican que una arquitectura sea siempre más rápida.</p>
+    <p><strong>Arquitectura.</strong> En una cascada completa aparece STT y TTS externos. En el preset half-cascade, la comprensión de audio está dentro del modelo y se mantiene TTS externo. En speech-to-speech full-duplex, STT y TTS externos quedan a cero. GPT-Live 1 es una referencia actual de esta clase: escucha y habla simultáneamente y puede delegar trabajo complejo a un backend. Son presets didácticos: no implican que una arquitectura sea siempre más rápida.</p>
     <p><strong>Fin de turno.</strong> Deepgram documenta endpointing por VAD con un tiempo de silencio configurable. OpenAI Realtime distingue <code>server_vad</code> y <code>semantic_vad</code>; la detección semántica puede esperar más cuando estima que el usuario no ha terminado. Reducir este tramo sin medir falsos cortes puede empeorar la conversación.</p>
     <p><strong>TTS.</strong> ElevenLabs separa el tiempo de inferencia del tiempo extremo a extremo y recomienda streaming/WebSocket para reducir tiempo hasta primer byte/audio. El buffering de texto puede añadir espera antes de iniciar síntesis. Por eso aquí se usa “primer audio TTS”, no duración total de generación.</p>
     <p><strong>Barge-in.</strong> El camino de interrupción no es la latencia de respuesta al revés. Incluye recibir nueva voz, detectarla, cancelar la generación/reproducción y vaciar audio ya en cola. En Media Streams bidireccional, Twilio documenta <code>clear</code> para vaciar el buffer y <code>mark</code> para seguir qué audio terminó o fue limpiado.</p>
     <div class="s5-tool-method__formula">barge_in_stop = ingress + speech_start_detection + cancel/control + output_buffer_clear</div>
     <div class="s5-voice-latency-caveat"><p><strong>No son benchmarks.</strong> Los números iniciales son deliberadamente redondos para que exista un escenario manipulable. Sustitúyelos por percentiles de tus trazas. Una media puede ocultar colas largas; para gates de producción conviene mirar al menos distribución por región, proveedor, idioma, tipo de turno y arquitectura.</p></div>
     <p>La investigación sobre turn-taking humano muestra una tendencia transversal a minimizar silencios y solapamientos, pero no define un SLA universal para agentes de voz. El objetivo de 750/800/900 ms de los presets es una hipótesis editable, no una recomendación científica.</p>
-    <p class="s5-tool-method__notes">Fuentes: <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a> y <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
+    <p class="s5-tool-method__notes">Fuentes: <a href="https://developers.openai.com/api/docs/models/gpt-live-1">OpenAI GPT-Live 1</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a> y <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
   </div>
 </section>
 

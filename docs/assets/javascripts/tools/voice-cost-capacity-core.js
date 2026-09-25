@@ -43,8 +43,8 @@
       charactersPerAgentMinute: nonNegative(raw.charactersPerAgentMinute, 1000),
       llmInputTokensPerCall: nonNegative(raw.llmInputTokensPerCall, 1400),
       llmOutputTokensPerCall: nonNegative(raw.llmOutputTokensPerCall, 220),
-      llmInputUsdPerMillionTokens: nonNegative(raw.llmInputUsdPerMillionTokens, 0.2),
-      llmOutputUsdPerMillionTokens: nonNegative(raw.llmOutputUsdPerMillionTokens, 1.2),
+      llmInputUsdPerMillionTokens: nonNegative(raw.llmInputUsdPerMillionTokens, 0.1),
+      llmOutputUsdPerMillionTokens: nonNegative(raw.llmOutputUsdPerMillionTokens, 0.5),
       fixedUsdPerCall: nonNegative(raw.fixedUsdPerCall, 0)
     };
   }

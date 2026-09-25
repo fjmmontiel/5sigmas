@@ -238,7 +238,7 @@ hide:
   <div class="s5-section-head">
     <h2 id="s5-tool-sources">Fuentes de precios</h2>
   </div>
-  <p>La capa de datos guarda la organización, URL primaria y fecha de verificación de cada configuración. En esta versión se incluyen páginas oficiales de <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener noreferrer">Anthropic</a> y <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>. Los precios pueden cambiar; revisa siempre el enlace mostrado para el modelo seleccionado antes de tomar una decisión contractual.</p>
+  <p>La capa de datos guarda la organización, URL primaria y fecha de verificación de cada configuración. Snapshot verificado el 25-09-2026: incluye GPT-6 Astra/Sol/Luna, GPT-5.6, Claude Sonnet 5 y Gemini 3.8/3.7/3.5/2.5 con páginas oficiales de <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer">Anthropic</a> y <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>. La subida previamente anunciada de Claude Sonnet 5 fue cancelada y no se aplica. Los precios pueden cambiar; revisa siempre el enlace mostrado para el modelo seleccionado antes de tomar una decisión contractual.</p>
 </section>
 
 </div>
