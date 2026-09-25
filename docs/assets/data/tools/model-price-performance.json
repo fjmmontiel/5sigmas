@@ -639,7 +639,7 @@
       "input_usd_per_million": 0.435,
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
-      "output_tokens_per_second": 48.7,
+      "output_tokens_per_second": 42.3,
       "ttft_seconds": 3.26,
       "sources": {
         "specs_pricing": {
