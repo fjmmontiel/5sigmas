@@ -326,6 +326,18 @@ published_files:
   - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
   - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
   - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete
