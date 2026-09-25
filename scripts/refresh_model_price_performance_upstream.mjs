@@ -70,6 +70,9 @@ for (const model of data.models || []) {
   assert.match(url || '', /^https:\/\/artificialanalysis\.ai\/models\//, `${model.id}: benchmark must use an Artificial Analysis model page`);
   const html = await fetchHtml(url);
   const text = decode(html);
+  if (/\bThis model is deprecated\b/i.test(text)) {
+    throw new Error(`${model.id}: MODEL_DEPRECATED on Artificial Analysis; review provider lineage and remove or replace the chart row before refreshing metrics.`);
+  }
   if (!text.includes(`Artificial Analysis Intelligence Index ${benchmarkVersion}`)) {
     throw new Error(`${model.id}: benchmark methodology drift; expected ${benchmarkVersion}`);
   }

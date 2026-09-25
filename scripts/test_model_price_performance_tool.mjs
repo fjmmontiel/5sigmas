@@ -26,7 +26,7 @@ assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
 assert.equal(data.release_coverage?.reviewed_through, SNAPSHOT);
 assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialanalysis\.ai\/models\/releases/);
-assert.ok(data.models.length >= 16, 'expected the refreshed current comparison set');
+assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
 
 for (const requiredRelease of [
   'Claude Opus 5.5', 'GPT-6 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
@@ -63,7 +63,8 @@ for (const model of data.models) {
 for (const retiredId of [
   'anthropic-claude-opus-5-max',
   'openai-gpt-5-6-sol-max',
-  'openai-gpt-5-6-luna-max'
+  'openai-gpt-5-6-luna-max',
+  'google-gemini-3-6-flash-high'
 ]) {
   assert.ok(!ids.has(retiredId), `${retiredId}: superseded row must not remain in current chart`);
 }
@@ -145,5 +146,10 @@ const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map(
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
 assert.match(excluded.get('Grok 4.6') || '', /Superseded/i);
 assert.ok(excluded.size >= 25, 'release coverage ledger should record every reviewed-but-not-charted release');
+const supersession = new Map((data.release_coverage.supersession_events || []).map((row) => [row.model, row]));
+assert.equal(data.release_coverage.retained_active_baselines.includes('Gemini 3.6 Flash'), false);
+assert.match(supersession.get('Gemini 3.6 Flash')?.reason || '', /deprecated|historical/i);
+assert.equal(supersession.get('Gemini 3.6 Flash')?.replacement, 'Gemini 3.8 Flash');
+assert.match(supersession.get('Gemini 3.7 Flash')?.reason || '', /deprecated|supersession/i);
 
 console.log(`Model price/performance tests passed: ${data.models.length} current configurations; v4.3.2 provenance, release coverage, pricing rules, filters, sorting and Pareto frontier verified.`);
