@@ -1,0 +1,36 @@
+name: Prepare approved Agents A2 release
+on:
+  push:
+    branches: [ops/agents-a2-approved-20260925]
+    paths: [.github/workflows/agents-a2-release-transport.yml]
+permissions:
+  contents: read
+jobs:
+  source-snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 294928de8cadf3f0f36592e55b6bcb66a4161c50
+          persist-credentials: false
+      - name: Archive exact public text sources without binaries
+        run: |
+          python3 - <<'PY'
+          import pathlib,subprocess,zipfile,json,hashlib
+          allowed={'.py','.mjs','.yml','.yaml','.json','.md','.html','.js','.css','.txt','.toml'}
+          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile('/tmp/agents-release-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
+              manifest={}
+              for name in names:
+                  p=pathlib.Path(name)
+                  if p.is_file() and p.suffix in allowed:
+                      b=p.read_bytes();z.writestr(name,b);manifest[name]=hashlib.sha256(b).hexdigest()
+              z.writestr('SNAPSHOT_PROVENANCE.json',json.dumps({'revision':'294928de8cadf3f0f36592e55b6bcb66a4161c50','sha256':manifest},indent=2))
+          print('Text source archive complete; no branch, media or deployment mutation.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agents-a2-pinned-public-sources
+          path: /tmp/agents-release-sources.zip
+          retention-days: 2
