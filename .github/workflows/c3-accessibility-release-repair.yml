@@ -1,0 +1,120 @@
+name: Complete C3 release accessibility
+on:
+  push:
+    branches: [ops/import-approved-evaluation-c3-20260925]
+    paths: [.github/workflows/c3-accessibility-release-repair.yml]
+permissions:
+  contents: write
+concurrency:
+  group: c3-accessibility-release-repair
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 551ef8e2c6a132b74872565dece0d34eff5da053
+      - name: Complete real timed visual-text tracks and exact reviewed inventory
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,json,html,hashlib,subprocess
+          root=Path('.')
+          mp=root/'docs/evaluation-c3-release.json';m=json.loads(mp.read_text())
+          assert len(m['objects'])==12 and m['owner_approval']=='APPROVED_2026-09-25'
+          enpath=root/'locales/en/media.yml';en=enpath.read_text();original_en=en
+          changed=[]
+          def timestamp(x):
+              n=round(x*1000);return f'{n//3600000:02}:{n//60000%60:02}:{n//1000%60:02}.{n%1000:03}'
+          def untag(s):return html.unescape(re.sub('<[^>]+>','',s)).strip()
+          for row in m['objects']:
+              prefix='docs/' if row['locale']=='es' else 'locales/'
+              video=root/(prefix+row['path']);assert hashlib.sha256(video.read_bytes()).hexdigest()==row['sha256']
+              tr=video.with_name(video.stem+'-transcript.html');text=tr.read_text()
+              sections=re.findall(r'<h3>(.*?)</h3>(.*?)(?=<h3>|\Z)',text,re.S)
+              assert len(sections)==len(row['chapters'])==6
+              chunks=['WEBVTT','','NOTE Visual text from the silent video. This is not a speech transcript.','']
+              for i,((heading,body),chapter) in enumerate(zip(sections,row['chapters'])):
+                  mm=re.match(r'(\d+):(\d+)\s+—\s+(.*)',untag(heading));assert mm
+                  assert int(mm[1])*60+int(mm[2])==chapter['start']
+                  assert mm[3]==chapter['name']
+                  clauses=[untag(p) for p in re.findall(r'<p>(.*?)</p>',body,re.S) if '<em>' not in p]
+                  assert len(clauses)==3 and all(clauses)
+                  # These are the unchanged authored clause onsets of the approved C3 timeline.
+                  for j,clause in enumerate(clauses):
+                      start=chapter['start']+[.7,7.4,14.1][j]
+                      end=chapter['start']+[7.4,14.1,chapter['end']-chapter['start']][j]
+                      assert start<end<=row['duration'] and '-->' not in clause
+                      chunks += [f'{i+1:02}-{j+1}',f'{timestamp(start)} --> {timestamp(end)}',html.escape(clause,quote=False),'']
+              vtt=video.with_name(video.stem+'-visual-text.vtt');vtt.write_text('\n'.join(chunks)+'\n')
+              assert vtt.read_text().count(' --> ')==18
+              if row['locale']=='es':
+                  md=video.with_suffix('.md');source=md.read_text();a,front,body=source.split('---',2)
+                  assert 'video_captions:' not in front
+                  front=front.replace('video_transcript:',f'video_captions: {vtt.name}\nvideo_transcript:',1)
+                  md.write_text(a+'---'+front+'---'+body)
+                  assert md.read_text().split('---',2)[2]==body
+                  changed.append(str(md))
+              else:
+                  key=row['path'].removeprefix('en/').removesuffix('.mp4')+'.md:'
+                  start=en.index(key);end=en.find('\nseries/',start+len(key));end=len(en) if end<0 else end
+                  block=en[start:end];assert '  video_captions:' not in block
+                  block=block.replace('  video_transcript:',f'  video_captions: {vtt.name}\n  video_transcript:',1)
+                  en=en[:start]+block+en[end:]
+              row['captions_path']=row['path'].removesuffix('.mp4')+'-visual-text.vtt'
+              row['captions_sha256']=hashlib.sha256(vtt.read_bytes()).hexdigest()
+              row['captions_scope']='Timed visual text, silent video; no invented narration'
+              changed.append(str(vtt))
+          enpath.write_text(en)
+          assert en.count('video_captions:')-original_en.count('video_captions:')==6
+          mp.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n')
+          p=root/'scripts/test_video_schema_contract.py';s=p.read_text()
+          for old,new in [('EXPECTED_VIDEO_LOCALE_SURFACES = 80','EXPECTED_VIDEO_LOCALE_SURFACES = 92'),('EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 0','EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 12'),('assert summary["locale_surfaces"] == 80','assert summary["locale_surfaces"] == 92'),('assert summary["evaluating_ai_systems_locale_surfaces"] == 0','assert summary["evaluating_ai_systems_locale_surfaces"] == 12\n    assert summary["captions_transcript_complete"] == 12')]:
+              assert s.count(old)==1,old;s=s.replace(old,new)
+          s=s.replace('# and later unapproved series blocked. Historical accessibility checkpoints below are','# plus the 12 approved C3 surfaces; other unapproved series stay blocked. Checkpoints are')
+          p.write_text(s)
+          p=root/'scripts/validate_english_video_hub.mjs';s=p.read_text()
+          old='  if (catalogue.count !== 40) failures.push(`catalogue count must be 40 with AI Security R5 live and later unapproved series blocked, got ${catalogue.count}`);'
+          assert s.count(old)==1
+          new="""  if (catalogue.count !== 46) failures.push(`catalogue count must be 46 after the six approved Evaluation C3 videos, got ${catalogue.count}`);
+            const evaluation = catalogue.videos.filter(v => String(v.source_url).includes('/series/evaluating-ai-systems-production/'));
+            if (evaluation.length !== 6) failures.push(`expected six approved native-English C3 surfaces, got ${evaluation.length}`);
+            for (const series of ['agentes-ia','agentes-voz-tiempo-real','coding-agents-agent-harnesses','context-engineering-memory-mcp','llm-inference-engineering-economics']) {
+              if (catalogue.videos.some(v => String(v.source_url).includes(`/series/${series}/`))) failures.push(`unapproved video series restored: ${series}`);
+            }"""
+          p.write_text(s.replace(old,new))
+          p=root/'scripts/verify_evaluation_c3_release.py';s=p.read_text()
+          old="        assert 's5-video-watch__transcript' in watch"
+          assert s.count(old)==1
+          new="""        assert hashlib.sha256(get(row['captions_path'])).hexdigest() == row['captions_sha256']
+                  captions_text = get(row['captions_path']).decode()
+                  assert captions_text.startswith('WEBVTT') and captions_text.count(' --> ') == 18
+                  assert row['captions_path'] in watch and '<track' in watch
+                  assert 's5-video-watch__transcript' in watch"""
+          # Dedent continuation lines to the same eight-space loop indentation.
+          lines=new.splitlines();new=lines[0]+'\n'+'\n'.join('        '+line.lstrip() for line in lines[1:])
+          p.write_text(s.replace(old,new))
+          receipt={'scope':'C3 release accessibility; exact approved MP4s unchanged','source_commit':'551ef8e2c6a132b74872565dece0d34eff5da053','native_visual_text_tracks':12,'cues_per_track':18,'clause_onsets_seconds':[.7,7.4,14.1],'public_surfaces':92,'english_video_count':46,'evaluation_surfaces':12,'other_blocked_series_preserved':True,'legacy_debt_budget_unchanged':91,'missing_accessibility_checkpoint_unchanged':80,'tracks':[{'path':x['captions_path'],'sha256':x['captions_sha256']} for x in m['objects']]}
+          Path('.github/receipts/evaluation-c3-accessibility.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps(receipt,indent=2))
+          PY
+          python3 -m py_compile scripts/test_video_schema_contract.py scripts/verify_evaluation_c3_release.py
+          node --check scripts/validate_english_video_hub.mjs
+          sha256sum -c .github/receipts/evaluation-c3.sha256
+          git diff --check
+      - name: Persist clean repair commit for interactive review
+        run: |
+          set -euo pipefail
+          target='ops/c3-accessibility-reviewed-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production locales/en/media.yml docs/evaluation-c3-release.json scripts/test_video_schema_contract.py scripts/validate_english_video_hub.mjs scripts/verify_evaluation_c3_release.py .github/receipts/evaluation-c3-accessibility.json
+          git diff --cached --stat
+          git commit -m 'Complete C3 visual-text captions and exact bilingual publication checkpoints'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'REPAIR_COMMIT=%s\n' "$(git rev-parse HEAD)"
+          echo 'Prepared clean repair branch only. PR branch, main and deployed site have not been changed.' >> "$GITHUB_STEP_SUMMARY"
