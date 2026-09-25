@@ -243,8 +243,8 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 65.8,
-      "ttft_seconds": 274.43,
+      "output_tokens_per_second": 69.1,
+      "ttft_seconds": 261.52,
       "sources": {
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
@@ -254,8 +254,8 @@
         "benchmark": {
           "title": "Claude Fable 5.1 (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-fable-5-1/",
-          "verified_on": "2026-09-24",
-          "performance_snapshot_on": "2026-09-24",
+          "verified_on": "2026-09-25",
+          "performance_snapshot_on": "2026-09-25",
           "performance_surface": "English model page; first-party Anthropic API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
