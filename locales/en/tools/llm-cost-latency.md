@@ -238,7 +238,7 @@ hide:
   <div class="s5-section-head">
     <h2 id="s5-tool-sources">Preset sources</h2>
   </div>
-  <p>The data layer stores the source organization, primary URL and verification date for every preset. This version uses official pages from <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener noreferrer">Anthropic</a> and <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>. Prices can change; check the source shown for the selected model before making a contractual decision.</p>
+  <p>The data layer stores the source organization, primary URL and verification date for every preset. This version uses official pages from <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener noreferrer">Anthropic</a>, <a href="https://ai.google.dev/gemini-api/docs/latest-model" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>, and <a href="https://docs.x.ai/developers/models/grok-4.7" target="_blank" rel="noopener noreferrer">SpaceXAI</a>. The Sep 25, 2026 snapshot includes GPT-6 Astra/Sol/Luna, Claude Opus 5.5, Gemini 3.8 Flash, and Grok 4.7; the announced Claude Sonnet 5 price increase was cancelled and is not applied. Prices can change; check the source shown for the selected model before making a contractual decision.</p>
 </section>
 
 </div>
