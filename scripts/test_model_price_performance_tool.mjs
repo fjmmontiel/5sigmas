@@ -139,7 +139,7 @@ const summary = api.summary(rows);
 assert.equal(summary.smartest.intelligence_index, Math.max(...rows.map((row) => Number(row.intelligence_index))));
 assert.equal(summary.cheapest.scenario.costPerRequest, Math.min(...rows.map((row) => Number(row.scenario.costPerRequest))));
 assert.equal(summary.fastest.output_tokens_per_second, Math.max(...rows.map((row) => Number(row.output_tokens_per_second))));
-assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.map((row) => Number(row.ttft_seconds)));
+assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.map((row) => Number(row.ttft_seconds))));
 
 const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map((row) => [row.model, row.reason]));
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
