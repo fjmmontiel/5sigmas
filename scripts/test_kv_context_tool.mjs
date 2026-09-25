@@ -77,6 +77,13 @@ if (llama8) {
   assert(llama8.kv_heads === 8, 'Llama 3.1 8B KV-head count drifted');
   assert(llama8.max_context_tokens === 131072, 'Llama 3.1 8B context limit drifted from 128K/131072');
 }
+const dataAgeDays = (Date.now() - Date.parse(`${data.updated}T23:59:59Z`)) / 86_400_000;
+assert(dataAgeDays >= -1 && dataAgeDays <= data.freshness_policy.review_interval_days, `shared architecture dataset is stale: ${data.updated}`);
+assert(data.architecture_coverage.reviewed_through === data.updated, 'Llama architecture coverage must match snapshot');
+for (const model of ['Llama 4 Scout','Llama 4 Maverick']) {
+  const row = data.architecture_coverage.reviewed_not_preset.find((entry) => entry.model === model);
+  assert(Boolean(row) && /No dimensions are fabricated/.test(row.reason), `${model} must be reviewed without an invented KV preset`);
+}
 const sourceIds = new Set(data.sources.map((source) => source.id));
 for (const required of ['meta-llama-model-skus', 'meta-llama-3-1-model-card', 'vllm-kv-cache']) {
   assert(sourceIds.has(required), `required KV-cache provenance source missing: ${required}`);
