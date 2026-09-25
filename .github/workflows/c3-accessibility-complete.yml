@@ -1,0 +1,88 @@
+name: Complete C3 visual accessibility
+on:
+  push:
+    branches: [ops/import-approved-evaluation-c3-20260925]
+    paths: [.github/workflows/c3-accessibility-complete.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 551ef8e2c6a132b74872565dece0d34eff5da053
+          path: site
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 4eeb774b346587a117693c37f08ec5c8340d2f90
+          path: recipe
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /.github/c3-approved-snapshot/story*.json
+          persist-credentials: false
+      - name: Add truthful visual-text captions without changing approved MP4s
+        run: |
+          python3 - <<'PY'
+          import hashlib,html,json,re
+          from pathlib import Path
+          import yaml
+          root=Path('site');rp=Path('recipe/.github/c3-approved-snapshot')
+          chapters=json.loads((rp/'story1.json').read_text())+json.loads((rp/'story2.json').read_text())
+          mpath=root/'docs/evaluation-c3-release.json';m=json.loads(mpath.read_text());ep=root/'locales/en/media.yml';et=ep.read_text();before=yaml.safe_load(et)
+          changed=[]
+          def ts(t):
+              ms=round(t*1000);return f'{ms//3600000:02}:{ms//60000%60:02}:{ms//1000%60:02}.{ms%1000:03}'
+          for row in m['objects']:
+              n=int(Path(row['path']).name[:2]);ch=chapters[n-1];lang=row['locale'];prefix='docs/' if lang=='es' else 'locales/en/'
+              file=prefix+row['path'].removeprefix('en/');p=root/file
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256']
+              vtt=['WEBVTT','','NOTE','Visual-text transcript; no spoken narration. Timings follow the approved C3 visible-text timeline.','']
+              offset=0
+              for sc in ch[4]:
+                  key,duration,illustrative,tes,ten,ces,cen=sc;title=tes if lang=='es' else ten;cues=ces if lang=='es' else cen
+                  chunks=[(offset,offset+.7,title)]+[(offset+t,offset+end,text) for t,end,text in zip([.7,7.4,14.1],[7.4,14.1,duration],cues)]
+                  for j,(start,end,text) in enumerate(chunks):vtt.extend([f'{key}-{j}',f'{ts(start)} --> {ts(end)}',html.escape(text.replace('\n',' '),quote=False),''])
+                  offset+=duration
+              vpath=p.with_suffix('.vtt');vpath.write_text('\n'.join(vtt)+'\n');changed.append(vpath.relative_to(root).as_posix())
+              row['captions_path']=row['path'][:-4]+'.vtt';row['captions_sha256']=hashlib.sha256(vpath.read_bytes()).hexdigest()
+              if lang=='es':
+                  md=p.with_suffix('.md');text=md.read_text();needle='video_transcript: ';assert needle in text
+                  md.write_text(text.replace(needle,'video_captions: '+vpath.name+'\n'+needle,1));changed.append(md.relative_to(root).as_posix())
+              else:
+                  key='series/evaluating-ai-systems-production/'+p.with_suffix('.md').name;block=re.search(r'(?ms)^'+re.escape(key)+r':\n.*?(?=^\S|\Z)',et);assert block
+                  old=block.group();new=old.replace('  video_transcript: ','  video_captions: '+vpath.name+'\n  video_transcript: ',1);assert old!=new;et=et[:block.start()]+new+et[block.end():]
+          ep.write_text(et);after=yaml.safe_load(et);assert all(before[k]==after[k] for k in before if not k.startswith('series/evaluating-ai-systems-production/'))
+          mpath.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n');changed.extend(['locales/en/media.yml','docs/evaluation-c3-release.json'])
+          t=root/'scripts/test_video_schema_contract.py';text=t.read_text()
+          for old,new in [('EXPECTED_VIDEO_LOCALE_SURFACES = 80','EXPECTED_VIDEO_LOCALE_SURFACES = 92'),('EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 0','EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 12'),('assert summary["locale_surfaces"] == 80','assert summary["locale_surfaces"] == 92'),('assert summary["evaluating_ai_systems_locale_surfaces"] == 0','assert summary["evaluating_ai_systems_locale_surfaces"] == 12')]:
+              assert old in text; text=text.replace(old,new)
+          text=text.replace('assert summary["captions_transcript_review"] == 80','assert summary["captions_transcript_review"] == 80\n    assert summary["captions_transcript_complete"] == 12')
+          t.write_text(text);changed.append(t.relative_to(root).as_posix())
+          v=root/'scripts/verify_evaluation_c3_release.py';text=v.read_text();needle="  assert hashlib.sha256(get(row['poster_path'])).hexdigest()==row['poster_sha256']"
+          assert needle in text;text=text.replace(needle,needle+"\n  captions=get(row['captions_path']);assert captions.startswith(b'WEBVTT') and hashlib.sha256(captions).hexdigest()==row['captions_sha256']")
+          v.write_text(text);changed.append(v.relative_to(root).as_posix())
+          Path('/tmp/changed.json').write_text(json.dumps(changed));print('22 scoped caption/metadata/checkpoint paths;12 MP4 unchanged;80 preexisting accessibility-debt surfaces preserved.')
+          PY
+      - name: Validate paired assets and source syntax
+        working-directory: site
+        run: |
+          sha256sum -c .github/receipts/evaluation-c3.sha256
+          python3 -m py_compile scripts/test_video_schema_contract.py scripts/verify_evaluation_c3_release.py
+      - name: Persist small exact change as commit without moving any ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,os,urllib.request
+          from pathlib import Path
+          def api(path,data=None):
+              q=urllib.request.Request('https://api.github.com/repos/fjmmontiel/5sigmas'+path,data=None if data is None else json.dumps(data).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'})
+              with urllib.request.urlopen(q,timeout=60) as r:return json.load(r)
+          parent='551ef8e2c6a132b74872565dece0d34eff5da053';tree=[]
+          for name in json.loads(Path('/tmp/changed.json').read_text()):tree.append({'path':name,'mode':'100644','type':'blob','content':(Path('site')/name).read_text()})
+          t=api('/git/trees',{'base_tree':api('/git/commits/'+parent)['tree']['sha'],'tree':tree})['sha']
+          c=api('/git/commits',{'message':'Complete approved C3 visual-text captions and exact accessibility inventory','tree':t,'parents':[parent]})['sha']
+          print('C3_CAPTIONS_COMMIT='+c,flush=True)
+          PY
