@@ -18,8 +18,8 @@ const h100 = Core.presetById(dataset, 'h100-sxm-bf16');
 const b200 = Core.presetById(dataset, 'b200-sxm-bf16');
 const b300 = Core.presetById(dataset, 'b300-sxm-bf16');
 if (h100.peak_tflops !== 989 || h100.tdp_w !== 700) throw new Error('H100 reference preset drifted');
-if (b200.peak_tflops !== 4500 || b200.tdp_w !== 1000) throw new Error('B200 reference preset drifted');
-if (b300.peak_tflops !== 4500 || b300.tdp_w !== 1100) throw new Error('B300 reference preset drifted');
+if (b200.peak_tflops !== 2250 || b200.tdp_w !== 1000) throw new Error('B200 reference preset drifted');
+if (b300.peak_tflops !== 2250 || b300.tdp_w !== 1100) throw new Error('B300 reference preset drifted');
 if (!dataset.sources['hoffmann-2022']?.url.includes('2203.15556')) throw new Error('Missing dense-training compute provenance');
 if (!dataset.sources['green-grid-pue']?.url.includes('thegreengrid.org')) throw new Error('Missing PUE provenance');
 
