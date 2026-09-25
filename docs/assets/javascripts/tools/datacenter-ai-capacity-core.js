@@ -6,7 +6,7 @@
   'use strict';
 
   const METHODOLOGY_VERSION = '1.0.0';
-  const SOURCE_REVIEW_DATE = '2026-08-22';
+  const SOURCE_REVIEW_DATE = '2026-09-25';
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
