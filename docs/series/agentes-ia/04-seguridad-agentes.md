@@ -9,21 +9,32 @@ tags:
   - Agentes
   - Seguridad
   - Prompt Injection
-video: "04-seguridad-agentes.mp4"
-video_poster: "04-seguridad-agentes.jpg"
-video_title: "Seguridad de agentes"
-video_summary: "Cómo el contenido no confiable puede influir en una acción, y por qué autorización, mínimo privilegio y verificaciones independientes deben vivir fuera del prompt."
-video_duration: "PT59S"
+video: 04-seguridad-agentes.mp4
+video_poster: 04-seguridad-agentes.jpg
+video_title: Seguridad y autorización
+video_summary: Las restricciones de herramientas deben seguir limitando su ejecución. Combina controles y auditoría; este ejemplo no garantiza inmunidad.
+video_duration: PT2M12S
+video_captions: 04-seguridad-agentes-visual-text.vtt
+video_transcript: 04-seguridad-agentes-transcript.html
 video_chapters:
-  - name: "Datos no confiables y prompt injection"
-    start: 0
-    end: 20
-  - name: "Policy, identidad y autorización"
-    start: 20
-    end: 40
-  - name: "Defensas múltiples y acciones irreversibles"
-    start: 40
-    end: 59
+- name: Los datos externos pueden proponer órdenes.
+  start: 0
+  end: 22
+- name: Conserva la frontera entre dato e instrucción.
+  start: 22
+  end: 44
+- name: Limita la acción y también el recurso.
+  start: 44
+  end: 66
+- name: Aprueba una acción, no cualquier continuación.
+  start: 66
+  end: 88
+- name: Una autorización puede dejar de ser válida.
+  start: 88
+  end: 110
+- name: Una sola defensa no basta.
+  start: 110
+  end: 132
 ---
 
 # Capítulo 4 — Seguridad: cuando leer datos se convierte en actuar

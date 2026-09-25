@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+La política permite cinco llamadas para esta tarea ilustrativa.
+
+2
+00:00:07.400 --> 00:00:14.100
+Al consumir la quinta, una sexta propuesta no debe ejecutarse.
+
+3
+00:00:14.100 --> 00:00:22.000
+Devuelve el estado parcial o deriva el caso; no inventes un éxito.
+
+4
+00:00:22.700 --> 00:00:30.100
+Un 429 pide esperar; repetir un argumento inválido no lo corrige.
+
+5
+00:00:30.100 --> 00:00:37.500
+Un timeout puede ocultar una operación que sí llegó a ejecutarse.
+
+6
+00:00:37.500 --> 00:00:46.000
+Elige espera, corrección o comprobación de estado según el contrato.
+
+7
+00:00:46.700 --> 00:00:54.100
+La petición K7 crea una operación, pero su respuesta se pierde.
+
+8
+00:00:54.100 --> 00:01:01.500
+El reintento conserva K7 y la API devuelve la operación ya existente.
+
+9
+00:01:01.500 --> 00:01:10.000
+Esa garantía depende del contrato de idempotencia del sistema, no del prompt.
+
+10
+00:01:10.700 --> 00:01:17.400
+Cuando se agotan los reintentos, la operación debe abandonar «en curso».
+
+11
+00:01:17.400 --> 00:01:24.100
+Marca el fallo terminal y deriva el caso a una cola o revisión con responsable.
+
+12
+00:01:24.100 --> 00:01:32.000
+No dejes una tarea pendiente indefinidamente y sin dueño.
+
+13
+00:01:32.700 --> 00:01:40.100
+Dos tools trabajan mientras la conversación sigue su propio turno.
+
+14
+00:01:40.100 --> 00:01:47.500
+El primer resultado no cierra un lote que aún tiene trabajo pendiente.
+
+15
+00:01:47.500 --> 00:01:56.000
+Cuando el lote termina, entrega un cierre único por la vía elegida.
+
+16
+00:01:56.700 --> 00:02:03.400
+Si el recorrido ya es conocido, una función o un workflow puede resolverlo.
+
+17
+00:02:03.400 --> 00:02:10.100
+Reserva la decisión del modelo para el tramo que depende de la situación.
+
+18
+00:02:10.100 --> 00:02:18.000
+Mantén límites, verificación y una alternativa operable alrededor de ese tramo.

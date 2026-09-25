@@ -358,104 +358,170 @@ articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
 series/agentes-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI Agents
-  video_summary: "A visual map of what turns a model that answers into a system that chooses actions: loops, evaluation, security, and bounded operation."
-  video_duration: PT32S
+  video_title: AI agents
+  video_summary: Conversation can continue while the tool is working. Only a verified result supports reporting that the task finished.
+  video_duration: PT2M12S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
   video_chapters:
-    - name: "From answering to acting"
-      start: 0
-      end: 11
-    - name: "System boundary and five design questions"
-      start: 11
-      end: 22
-    - name: "Bounded, observable, interruptible autonomy"
-      start: 22
-      end: 32
+  - name: An answer does not create an outcome.
+    start: 0
+    end: 22
+  - name: The result changes the next step.
+    start: 22
+    end: 44
+  - name: Autonomy within a defined scope.
+    start: 44
+    end: 66
+  - name: Evaluate the task, not just the text.
+    start: 66
+    end: 88
+  - name: Reading a document does not grant authority.
+    start: 88
+    end: 110
+  - name: Accepted does not mean completed.
+    start: 110
+    end: 132
 
 series/agentes-ia/01-que-es-un-agente.md:
   video: 01-que-es-un-agente.mp4
   video_poster: 01-que-es-un-agente.jpg
-  video_title: What an AI agent is—and is not
-  video_summary: "Contrasts an answer, a workflow, and a bounded agent, showing how state, tool limits, supervision, and stopping conditions define useful autonomy."
-  video_duration: PT32S
+  video_title: What an agent is
+  video_summary: The tool result identifies draft D4 and its state. Check that evidence and stop without taking extra actions.
+  video_duration: PT2M12S
+  video_captions: 01-que-es-un-agente-visual-text.vtt
+  video_transcript: 01-que-es-un-agente-transcript.html
   video_chapters:
-    - name: "Answer, workflow, and agent"
-      start: 0
-      end: 11
-    - name: "State visibility and tool boundaries"
-      start: 11
-      end: 22
-    - name: "Contracts and stopping conditions"
-      start: 22
-      end: 32
+  - name: A workflow can be enough.
+    start: 0
+    end: 22
+  - name: A proposal is not authorization.
+    start: 22
+    end: 44
+  - name: Choose actions from the observation.
+    start: 44
+    end: 66
+  - name: The model proposes. The runtime executes.
+    start: 66
+    end: 88
+  - name: Permissions name concrete operations.
+    start: 88
+    end: 110
+  - name: Define what proves the task is complete.
+    start: 110
+    end: 132
 
 series/agentes-ia/02-anatomia-de-un-agente.md:
   video: 02-anatomia-de-un-agente.mp4
   video_poster: 02-anatomia-de-un-agente.jpg
-  video_title: The anatomy of an agent
-  video_summary: "Separates what the model proposes from what the runtime decides, then maps tool contracts, memory, state, context, and termination."
-  video_duration: PT32S
+  video_title: Tools, memory and state
+  video_summary: Keep its provenance and check evidence before using it. Memory needs rules for correction, expiration and deletion.
+  video_duration: PT2M14S
+  video_captions: 02-anatomia-de-un-agente-visual-text.vtt
+  video_transcript: 02-anatomia-de-un-agente-transcript.html
   video_chapters:
-    - name: "Model proposal versus runtime execution"
-      start: 0
-      end: 11
-    - name: "Tool contracts, memory, and state"
-      start: 11
-      end: 22
-    - name: "Context, permissions, and termination"
-      start: 22
-      end: 32
+  - name: An ambiguous name is not a recipient.
+    start: 0
+    end: 22
+  - name: A partial result is not complete success.
+    start: 22
+    end: 44
+  - name: Context, memory and state are different.
+    start: 44
+    end: 68
+  - name: Reserve space before filling it.
+    start: 68
+    end: 90
+  - name: State governs the visible message.
+    start: 90
+    end: 112
+  - name: Memory needs provenance and freshness.
+    start: 112
+    end: 134
 
 series/agentes-ia/03-como-evaluar-un-agente.md:
   video: 03-como-evaluar-un-agente.mp4
   video_poster: 03-como-evaluar-un-agente.jpg
-  video_title: "Tutorial: how to evaluate an AI agent"
-  video_summary: "A practical tutorial for evaluating the agent's whole task: outcome, trajectory, permissions, cost, recovery, and abstention. A correct final answer is not enough."
-  video_duration: PT32S
+  video_title: How to evaluate an agent
+  video_summary: Separate task permissions from the verifier’s resources. Record out-of-scope attempts and inspect the trajectory.
+  video_duration: PT2M14S
+  video_captions: 03-como-evaluar-un-agente-visual-text.vtt
+  video_transcript: 03-como-evaluar-un-agente-transcript.html
   video_chapters:
-    - name: "Outcome and trajectory"
-      start: 0
-      end: 11
-    - name: "Evaluation dimensions and counterexamples"
-      start: 11
-      end: 22
-    - name: "Evidence for safe autonomy"
-      start: 22
-      end: 32
+  - name: The test starts with an initial state.
+    start: 0
+    end: 24
+  - name: The same result can require more steps.
+    start: 24
+    end: 46
+  - name: A policy violation invalidates success.
+    start: 46
+    end: 68
+  - name: The mean can hide the tail.
+    start: 68
+    end: 90
+  - name: Check the sum, not the wording.
+    start: 90
+    end: 112
+  - name: The agent must not rewrite its own test.
+    start: 112
+    end: 134
 
 series/agentes-ia/04-seguridad-agentes.md:
   video: 04-seguridad-agentes.mp4
   video_poster: 04-seguridad-agentes.jpg
-  video_title: Agent security
-  video_summary: "Shows how untrusted content can influence actions and why provenance, capability, authorization, and policy need independent enforcement outside the prompt."
-  video_duration: PT32S
+  video_title: Security and authorization
+  video_summary: Tool restrictions must still constrain execution. Combine controls and auditing; this example does not guarantee immunity.
+  video_duration: PT2M12S
+  video_captions: 04-seguridad-agentes-visual-text.vtt
+  video_transcript: 04-seguridad-agentes-transcript.html
   video_chapters:
-    - name: "From untrusted input to attempted action"
-      start: 0
-      end: 11
-    - name: "Independent provenance and authorization barriers"
-      start: 11
-      end: 22
-    - name: "Blocked paths and defense in depth"
-      start: 22
-      end: 32
+  - name: External data can carry instructions.
+    start: 0
+    end: 22
+  - name: Keep the boundary between data and rules.
+    start: 22
+    end: 44
+  - name: Limit both the action and the resource.
+    start: 44
+    end: 66
+  - name: Approve one action, not any continuation.
+    start: 66
+    end: 88
+  - name: Authorization can stop being valid.
+    start: 88
+    end: 110
+  - name: One defense is not enough.
+    start: 110
+    end: 132
 
 series/agentes-ia/05-de-la-demo-a-produccion.md:
   video: 05-de-la-demo-a-produccion.mp4
   video_poster: 05-de-la-demo-a-produccion.jpg
   video_title: From demo to production
-  video_summary: "Shows what makes an agent operable under failure: budgets, retries, idempotency, traces, explicit closure, and when a deterministic workflow is the safer design."
-  video_duration: PT32S
+  video_summary: Reserve model decisions for the part that depends on the situation. Keep boundaries, verification and an operable fallback around that part.
+  video_duration: PT2M18S
+  video_captions: 05-de-la-demo-a-produccion-visual-text.vtt
+  video_transcript: 05-de-la-demo-a-produccion-transcript.html
   video_chapters:
-    - name: "From demo to service"
-      start: 0
-      end: 11
-    - name: "Failure containment and observable traces"
-      start: 11
-      end: 22
-    - name: "Production contracts and when not to use an agent"
-      start: 22
-      end: 32
+  - name: The budget defines when to stop.
+    start: 0
+    end: 22
+  - name: Classify the failure before retrying.
+    start: 22
+    end: 46
+  - name: A retry must not duplicate the intent.
+    start: 46
+    end: 70
+  - name: Failure needs a state and an owner.
+    start: 70
+    end: 92
+  - name: A complete result. One completion message.
+    start: 92
+    end: 116
+  - name: Use an agent where the sequence needs one.
+    start: 116
+    end: 138
 
 series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md:
   video: 01-arquitecturas-de-voz.mp4

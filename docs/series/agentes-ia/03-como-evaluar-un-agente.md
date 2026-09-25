@@ -9,21 +9,32 @@ tags:
   - Agentes
   - Evaluación
   - Observabilidad
-video: "03-como-evaluar-un-agente.mp4"
-video_poster: "03-como-evaluar-un-agente.jpg"
-video_duration: "PT60S"
-video_title: "Tutorial: cómo evaluar un agente de IA"
-video_summary: "Tutorial práctico para evaluar la tarea completa de un agente: resultado, trayectoria, permisos, coste, recuperación y abstención. Una respuesta final correcta no basta."
+video: 03-como-evaluar-un-agente.mp4
+video_poster: 03-como-evaluar-un-agente.jpg
+video_title: Cómo evaluar un agente
+video_summary: Separa los permisos de la tarea de los recursos del verificador. Registra los intentos fuera de alcance e inspecciona la trayectoria.
+video_duration: PT2M14S
+video_captions: 03-como-evaluar-un-agente-visual-text.vtt
+video_transcript: 03-como-evaluar-un-agente-transcript.html
 video_chapters:
-  - name: "Evaluar resultado y trayectoria"
-    start: 0
-    end: 20
-  - name: "Trazas, fallos y condiciones de prueba"
-    start: 20
-    end: 40
-  - name: "Benchmarks, evidencia y autonomía"
-    start: 40
-    end: 60
+- name: La prueba empieza con un estado inicial.
+  start: 0
+  end: 24
+- name: El mismo resultado puede costar más pasos.
+  start: 24
+  end: 46
+- name: Violar un permiso invalida el éxito.
+  start: 46
+  end: 68
+- name: La media puede ocultar la cola.
+  start: 68
+  end: 90
+- name: Comprueba la suma, no la redacción.
+  start: 90
+  end: 112
+- name: El agente no debe reescribir su examen.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 3 — Cómo evaluar un agente de IA

@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+El modelo puede escribir «borrador listo» sin guardar ningún documento.
+
+2
+00:00:07.400 --> 00:00:14.100
+La herramienta debe crear el borrador y devolver su identificador.
+
+3
+00:00:14.100 --> 00:00:22.000
+El resultado se comprueba en el sistema, no sólo en la frase final.
+
+4
+00:00:22.700 --> 00:00:29.400
+Una búsqueda por nombre puede devolver dos clientes distintos.
+
+5
+00:00:29.400 --> 00:00:36.100
+El agente observa la ambigüedad y cambia de plan: pide un identificador.
+
+6
+00:00:36.100 --> 00:00:44.000
+Elegir la siguiente acción depende de lo que acaba de ocurrir.
+
+7
+00:00:44.700 --> 00:00:51.400
+La tarea permite consultar facturas, calcular y preparar un borrador.
+
+8
+00:00:51.400 --> 00:00:58.100
+Enviar el mensaje es una acción distinta y requiere otra autorización.
+
+9
+00:00:58.100 --> 00:01:06.000
+El agente no puede ampliar sus propios permisos para terminar antes.
+
+10
+00:01:06.700 --> 00:01:13.400
+Dos ejecuciones pueden terminar con el mismo total de facturas.
+
+11
+00:01:13.400 --> 00:01:20.100
+Una guarda un borrador; la otra lo envía sin permiso.
+
+12
+00:01:20.100 --> 00:01:28.000
+El mismo texto final no implica el mismo resultado de evaluación.
+
+13
+00:01:28.700 --> 00:01:35.400
+Una fuente externa puede mezclar datos útiles con una orden maliciosa.
+
+14
+00:01:35.400 --> 00:01:42.100
+La orden intenta influir en una herramienta disponible.
+
+15
+00:01:42.100 --> 00:01:50.000
+La política del runtime debe limitar qué acciones pueden ejecutarse.
+
+16
+00:01:50.700 --> 00:01:57.400
+Aceptar una operación sólo confirma que el sistema la ha recibido.
+
+17
+00:01:57.400 --> 00:02:04.100
+La conversación puede continuar mientras la herramienta trabaja.
+
+18
+00:02:04.100 --> 00:02:12.000
+Sólo el resultado verificado permite comunicar que la tarea terminó.

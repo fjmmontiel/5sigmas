@@ -76,6 +76,9 @@ jobs:
       - name: Verify exact owner-approved Datacenters D2 MP4 bytes
         run: sha256sum -c .github/receipts/datacenters-d2.sha256
 
+      - name: Verify exact owner-approved Agents A2 MP4 bytes
+        run: sha256sum -c .github/receipts/agents-a2.sha256
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -299,6 +302,14 @@ jobs:
         env:
           S5_D2_ORIGIN: https://5sigmas.com
         run: node scripts/verify_datacenters_d2_browser.mjs
+
+      - name: Verify live approved A2 bytes and discovery
+        run: python3 scripts/verify_agents_a2_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
+
+      - name: Verify live A2 native desktop and mobile playback
+        env:
+          S5_A2_ORIGIN: https://5sigmas.com
+        run: node scripts/verify_agents_a2_browser.mjs
 
       - name: Audit live Spanish resources
         env:

@@ -118,7 +118,6 @@ jobs:
           set -euo pipefail
           protected="$(
             git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
-              docs/series/agentes-ia locales/en/series/agentes-ia \
               docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
               docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
               docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
@@ -137,7 +136,10 @@ jobs:
         run: python scripts/verify_evaluation_c3_release.py
 
       - name: Verify exact approved D2 bytes and unchanged article bodies
-        run: python scripts/verify_datacenters_d2_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
+        run: python scripts/verify_datacenters_d2_release.py
+
+      - name: Verify exact approved A2 bytes and unchanged article bodies
+        run: python scripts/verify_agents_a2_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -186,6 +188,9 @@ jobs:
 
       - name: Verify D2 native desktop and mobile video consumers
         run: node scripts/verify_datacenters_d2_browser.mjs
+
+      - name: Verify A2 native desktop and mobile video consumers
+        run: node scripts/verify_agents_a2_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs

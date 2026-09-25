@@ -276,16 +276,28 @@ published_files:
   - series/modelos-razonadores/05-riesgos.jpg
   - series/agentes-ia/00_presentacion_serie.mp4
   - series/agentes-ia/00_presentacion_serie.jpg
+  - series/agentes-ia/00_presentacion_serie-transcript.html
+  - series/agentes-ia/00_presentacion_serie-visual-text.vtt
   - series/agentes-ia/01-que-es-un-agente.mp4
   - series/agentes-ia/01-que-es-un-agente.jpg
+  - series/agentes-ia/01-que-es-un-agente-transcript.html
+  - series/agentes-ia/01-que-es-un-agente-visual-text.vtt
   - series/agentes-ia/02-anatomia-de-un-agente.mp4
   - series/agentes-ia/02-anatomia-de-un-agente.jpg
+  - series/agentes-ia/02-anatomia-de-un-agente-transcript.html
+  - series/agentes-ia/02-anatomia-de-un-agente-visual-text.vtt
   - series/agentes-ia/03-como-evaluar-un-agente.mp4
   - series/agentes-ia/03-como-evaluar-un-agente.jpg
+  - series/agentes-ia/03-como-evaluar-un-agente-transcript.html
+  - series/agentes-ia/03-como-evaluar-un-agente-visual-text.vtt
   - series/agentes-ia/04-seguridad-agentes.mp4
   - series/agentes-ia/04-seguridad-agentes.jpg
+  - series/agentes-ia/04-seguridad-agentes-transcript.html
+  - series/agentes-ia/04-seguridad-agentes-visual-text.vtt
   - series/agentes-ia/05-de-la-demo-a-produccion.mp4
   - series/agentes-ia/05-de-la-demo-a-produccion.jpg
+  - series/agentes-ia/05-de-la-demo-a-produccion-transcript.html
+  - series/agentes-ia/05-de-la-demo-a-produccion-visual-text.vtt
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
   - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
