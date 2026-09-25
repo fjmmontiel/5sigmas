@@ -1,31 +1,46 @@
 ---
-title: "Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política"
-description: "Cómo evaluar un agente más allá del resultado final: tool selection, argumentos, side effects, retries, recuperación, stop conditions, eficiencia y cumplimiento de política."
+title: 'Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación
+  y cumplimiento de política'
+description: 'Cómo evaluar un agente más allá del resultado final: tool selection,
+  argumentos, side effects, retries, recuperación, stop conditions, eficiencia y cumplimiento
+  de política.'
 date: 2026-09-13
 date_modified: 2026-09-13
-keywords: "agent evaluation, trajectory evaluation, tool calls, policy compliance, recovery, retries, efficiency, agent traces, outcome evaluation"
+keywords: agent evaluation, trajectory evaluation, tool calls, policy compliance,
+  recovery, retries, efficiency, agent traces, outcome evaluation
 tags:
-  - IA
-  - Evaluación
-  - Agentes
-  - Reliability
-  - Producción
-# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+- IA
+- Evaluación
+- Agentes
+- Reliability
+- Producción
 video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
 video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
-video_title: "Trayectorias de agentes: éxito, eficiencia, recovery y policy"
-video_summary: "Una trayectoria agentic se evalúa por outcome y por proceso: tools y estados observados explican cómo se llegó al resultado, mientras recovery, coste y policy separan éxito limpio de éxito corrupto."
-video_duration: PT36S
+video_title: El resultado y el camino
+video_summary: Una violación dura bloquea aunque otras métricas mejoren. Guarda la
+  trayectoria y el motivo del veredicto para poder reproducirlo.
+video_duration: PT2M16S
+video_captions: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
+video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
 video_chapters:
-  - name: "Acción, tool result y estado forman la trayectoria"
-    start: 0
-    end: 12
-  - name: "El recovery debe restaurar progreso sin ocultar fallos"
-    start: 12
-    end: 24
-  - name: "Éxito, eficiencia y policy se aceptan conjuntamente"
-    start: 24
-    end: 36
+- name: No cuentes llamadas. Sigue el estado.
+  start: 0
+  end: 22
+- name: Un éxito no compensa un permiso violado.
+  start: 22
+  end: 44
+- name: Timeout no significa «no se ejecutó».
+  start: 44
+  end: 68
+- name: Primero reconcilia. Después decide.
+  start: 68
+  end: 92
+- name: Puede haber varios caminos correctos.
+  start: 92
+  end: 114
+- name: El gate debe explicar por qué se detiene.
+  start: 114
+  end: 136
 ---
 
 # Capítulo 4 — Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política

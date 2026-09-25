@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+La telemetría muestra que algo ocurrió, no necesariamente por qué.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Reconstruye la secuencia con versiones, estados y respuestas relevantes.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Separa el síntoma observado de la causa todavía no demostrada.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+El usuario recibió «reembolso completado», pero el backend registra un duplicado.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+La trace revela write, timeout ambiguo y reintento sin reconciliación.
+
+02-3
+00:00:36.100 --> 00:00:46.000
+La hipótesis causal apunta a la recuperación, no al estilo de la respuesta.
+
+03-1
+00:00:46.700 --> 00:00:53.400
+Agrupa incidentes que comparten el mismo mecanismo de fallo.
+
+03-2
+00:00:53.400 --> 00:01:00.100
+Añade un timeout anterior al write y una operación de sólo lectura.
+
+03-3
+00:01:00.100 --> 00:01:08.000
+La reparación debe resolver el fallo sin romper esos casos vecinos.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Depura datos sensibles y conserva las condiciones que explican el fallo.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Fija estado inicial, respuestas de tools, versiones y verificador.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+Sin evidencia suficiente, registra la limitación; no inventes una causa.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Reproduce el fallo con la versión anterior antes de atribuir una mejora.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Cambia la recuperación y repite la prueba junto a los casos vecinos.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Comprueba también que no cambió el grader para ocultar el fallo.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Una regresión aprobada permite avanzar, no declarar cerrado el incidente.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Después de la release, mide recurrencia y exposición durante la ventana acordada.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Cierra el ciclo con evidencia de producción y una persona responsable.
+

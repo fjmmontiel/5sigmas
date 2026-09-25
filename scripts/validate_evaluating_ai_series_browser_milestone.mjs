@@ -6,6 +6,8 @@ const baseUrl = process.env.S5_PREVIEW_BASE || process.env.S5_PREVIEW_URL || 'ht
 const outDir = path.resolve('artifacts/evaluating-ai-systems-browser-milestone');
 const timeoutMs = 10000;
 const series = 'evaluating-ai-systems-production';
+const approvedManifest = JSON.parse(await fs.readFile(path.resolve('docs/evaluation-c3-release.json'), 'utf8'));
+if (approvedManifest.round !== 'C3' || approvedManifest.owner_approval !== 'APPROVED_2026-09-25' || approvedManifest.objects.length !== 12) throw new Error('Exact approved C3 manifest required');
 const chapters = [
   '01-que-evaluar-modelo-componente-sistema-workflow-trayectoria',
   '02-offline-eval-sets-curation-hard-negatives-contamination-versioning',
@@ -101,7 +103,10 @@ async function exercise(video, label, { start = true } = {}) {
     const final = await seek(Math.max(0, duration - 0.35));
     return { duration, middle, final, paused: node.paused, readyState: node.readyState };
   }, { timeoutMs, start });
-  if (!(result.duration >= 35 && result.duration <= 37)
+  const [locale, stem] = label.split('/');
+  const expected = approvedManifest.objects.filter(row => row.locale === locale && row.path.endsWith(`/${stem}.mp4`));
+  if (expected.length !== 1 || !Number.isFinite(expected[0].duration)) throw new Error(`${label}: no unique approved duration`);
+  if (Math.abs(result.duration - expected[0].duration) > 0.025
       || result.middle < result.duration * 0.45
       || result.final < result.duration - 1
       || result.final <= result.middle

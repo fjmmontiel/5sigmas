@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+Si el resultado se comprueba con código, empieza por una prueba determinista.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Usa un juez de lenguaje para criterios que exigen interpretación.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Escala a humanos cuando el riesgo o la ambigüedad lo requieren.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+«Suena bien» no define qué cuenta como una respuesta correcta.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Divide el criterio: afirmación, evidencia y condiciones de rechazo.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+Recoge juicios humanos independientes antes de resolver desacuerdos.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+En este ejemplo, humanos y juez coinciden en 16 de 20 casos.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+Eso es un 80% de acuerdo observado, no un 80% de calidad del sistema.
+
+03-3
+00:00:58.100 --> 00:01:08.000
+También pueden coincidir usando un criterio equivocado.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Presenta el mismo par de respuestas en ambos órdenes.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Comprueba si la preferencia sigue a la respuesta o a su posición.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+Una inversión de preferencia exige investigar; no prueba por sí sola la causa.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Repite el juicio manteniendo fijos el caso y la rúbrica.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Separa variación del juez y desacuerdo sobre la propia tarea.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Registra abstenciones y diferencias por tipo de caso, no sólo una media.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Ajusta la rúbrica con ejemplos de calibración y adjudicación humana.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Congela la versión del juez antes de comprobar un set separado.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Acepta, limita o rechaza su uso según el riesgo y la evidencia.
+

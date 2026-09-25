@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+Shadow observes the candidate without serving its answer to the user.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Canary limits real exposure while checking operational risk.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+A/B uses randomized assignment to study causal effects.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+The stable version responds; the candidate receives a copy for observation.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Candidate writes must be isolated, suppressed or executed in a safe environment.
+
+02-3
+00:00:36.100 --> 00:00:46.000
+Shadow does not directly measure a changed user experience.
+
+03-1
+00:00:46.700 --> 00:00:53.400
+This 5% is an illustrative starting exposure, not a universal threshold.
+
+03-2
+00:00:53.400 --> 00:01:00.100
+Predeclare limits for errors, latency and prohibited actions.
+
+03-3
+00:01:00.100 --> 00:01:08.000
+Insufficient evidence requires a pause; it does not mean PASS.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+A conversation with memory may need stable assignment by user.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Switching variants every turn mixes treatments and contexts.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+Record assignment, exposure and the unit of analysis.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Check assignment, exposure, logging and metric integrity.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Investigate imbalances inconsistent with the design before reading lift.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+An observed canary difference is not automatically causal.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Combine hard constraints, reliability and evidence for the current stage.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+A violation blocks; insufficient data keeps the rollout paused.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Choose stages for the change and its risk; not every release needs them all.
+

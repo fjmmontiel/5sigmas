@@ -21,9 +21,8 @@ BLOCKED = (
     "coding-agents-agent-harnesses",
     "context-engineering-memory-mcp",
     "llm-inference-engineering-economics",
-    "evaluating-ai-systems-production",
 )
-KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6}
+KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6, "evaluating-ai-systems-production": 6}
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 

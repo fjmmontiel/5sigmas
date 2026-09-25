@@ -1,31 +1,45 @@
 ---
-title: "Offline eval sets: curación, hard negatives, contaminación y versionado"
-description: "Cómo construir conjuntos de evaluación offline que sigan midiendo el comportamiento que importa: procedencia, cobertura, hard negatives, leakage, contaminación, holdouts y versionado reproducible."
+title: 'Offline eval sets: curación, hard negatives, contaminación y versionado'
+description: 'Cómo construir conjuntos de evaluación offline que sigan midiendo el
+  comportamiento que importa: procedencia, cobertura, hard negatives, leakage, contaminación,
+  holdouts y versionado reproducible.'
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "offline evals, dataset curation, hard negatives, data contamination, eval versioning, benchmark leakage, holdout, AI evaluation"
+keywords: offline evals, dataset curation, hard negatives, data contamination, eval
+  versioning, benchmark leakage, holdout, AI evaluation
 tags:
-  - IA
-  - Evaluación
-  - Datasets
-  - Producción
-  - Reliability
-# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+- IA
+- Evaluación
+- Datasets
+- Producción
+- Reliability
 video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
 video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
-video_title: "Eval sets: curación, hard negatives, leakage y versionado"
-video_summary: "Un eval set fiable conserva provenance, separa bancos por función y congela una release; hard pairs y canales de leakage distintos prueban fallos distintos sin mutar la comparación."
-video_duration: PT36S
+video_title: Casos que ponen a prueba
+video_summary: Cambiar una etiqueta o un grader puede cambiar el score sin mejorar
+  el modelo. Publica una nueva versión; no reescribas el resultado anterior en silencio.
+video_duration: PT2M14S
+video_captions: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
+video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
 video_chapters:
-  - name: "Provenance y grouping preceden al split"
-    start: 0
-    end: 12
-  - name: "Hard positive y hard negative cruzan una sola frontera"
-    start: 12
-    end: 24
-  - name: "La release se congela; fallos nuevos alimentan v+1"
-    start: 24
-    end: 36
+- name: Un eval es más que sus preguntas.
+  start: 0
+  end: 22
+- name: Busca cobertura. No sólo volumen.
+  start: 22
+  end: 44
+- name: Cambia una condición. Debe cambiar la decisión.
+  start: 44
+  end: 68
+- name: Separa familias. No sólo filas.
+  start: 68
+  end: 90
+- name: Desarrollar no es medir la release.
+  start: 90
+  end: 112
+- name: Cambió el criterio. Cambió la evaluación.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 2 — Offline eval sets: curación, hard negatives, contaminación y versionado

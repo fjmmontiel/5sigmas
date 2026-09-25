@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+When code can verify the result, start with a deterministic check.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Use a language-model judge for criteria requiring interpretation.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Escalate to people when risk or ambiguity requires it.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+“Sounds good” does not define a correct answer.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Separate the claim, supporting evidence and rejection conditions.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+Collect independent human judgments before adjudicating disagreements.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+In this example, human and model judgments agree on 16 of 20 cases.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+That is 80% observed agreement, not 80% system quality.
+
+03-3
+00:00:58.100 --> 00:01:08.000
+They may also agree while applying the wrong criterion.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Present the same response pair in both orders.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Check whether preference follows the answer or its position.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+A preference reversal calls for investigation; it does not prove the cause alone.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Repeat judgments while holding the case and rubric fixed.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Separate evaluator variation from disagreement about the task itself.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Record abstentions and differences by case type, not just an average.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Refine the rubric using calibration examples and human adjudication.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Freeze the judge version before testing it on a separate set.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Accept, restrict or reject its use according to risk and evidence.
+

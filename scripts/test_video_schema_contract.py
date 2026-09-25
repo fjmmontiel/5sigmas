@@ -28,14 +28,14 @@ from audit_video_indexing import DOCS, exclude_patterns, is_excluded, read_front
 EN_MEDIA_INDEX = ROOT / "locales" / "en" / "media.yml"
 EN_LOCALE_ROOT = ROOT / "locales" / "en"
 # Exact currently-published bilingual video/watch inventory with AI Security R5 live
-# and later unapproved series blocked. Historical accessibility checkpoints below are
+# plus the 12 approved C3 surfaces; other unapproved series stay blocked. Checkpoints are
 # retained as history; unpublished VNext targets are not counted as current public surfaces.
-EXPECTED_VIDEO_LOCALE_SURFACES = 80
+EXPECTED_VIDEO_LOCALE_SURFACES = 92
 EXPECTED_REALTIME_VOICE_LOCALE_SURFACES = 0
 EXPECTED_CODING_AGENTS_LOCALE_SURFACES = 0
 EXPECTED_CONTEXT_ENGINEERING_LOCALE_SURFACES = 0
 EXPECTED_LLM_INFERENCE_LOCALE_SURFACES = 0
-EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 0
+EXPECTED_EVALUATING_AI_SYSTEMS_LOCALE_SURFACES = 12
 HISTORICAL_MISSING_CAPTIONS_TRANSCRIPT_SURFACES = 92
 LEGACY_MISSING_CAPTIONS_TRANSCRIPT_BUDGET = 91
 
@@ -331,12 +331,13 @@ def audit_published_accessibility_inventory(*, enforce_debt: bool = True) -> dic
 def assert_owner_voice_deferral_contract() -> None:
     """Regression: preserve historical debt facts while auditing only public video surfaces."""
     summary = audit_published_accessibility_inventory(enforce_debt=True)
-    assert summary["locale_surfaces"] == 80
+    assert summary["locale_surfaces"] == 92
     assert summary["realtime_voice_locale_surfaces"] == 0
     assert summary["coding_agents_locale_surfaces"] == 0
     assert summary["context_engineering_locale_surfaces"] == 0
     assert summary["llm_inference_locale_surfaces"] == 0
-    assert summary["evaluating_ai_systems_locale_surfaces"] == 0
+    assert summary["evaluating_ai_systems_locale_surfaces"] == 12
+    assert summary["captions_transcript_complete"] == 12
     assert summary["captions_transcript_review"] == 80
     assert summary["historical_missing_checkpoint"] == 92
     assert summary["historical_budget_exceeded_by"] == 1

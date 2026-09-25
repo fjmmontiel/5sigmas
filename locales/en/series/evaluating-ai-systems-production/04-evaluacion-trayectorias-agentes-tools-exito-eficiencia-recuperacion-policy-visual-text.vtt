@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+An action can change the environment before the agent observes it.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Connect the precondition, call, observation and resulting state.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+The task succeeds when its success condition is actually true.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+A refund can complete while violating a mandatory policy.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Check authorization before the write, not after the result.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+A hard constraint cannot be averaged away by quality or speed.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+The backend can commit an operation before its response is lost.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+The agent sees an unknown result, not necessarily a failed operation.
+
+03-3
+00:00:58.100 --> 00:01:08.000
+A blind retry may execute the same side effect twice.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Query the operation state using a stable identifier.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+If it is already committed, do not repeat the write.
+
+04-3
+00:01:22.100 --> 00:01:32.000
+Safe retries depend on the tool’s idempotency contract.
+
+05-1
+00:01:32.700 --> 00:01:39.400
+Do not require the agent to copy one preferred call sequence.
+
+05-2
+00:01:39.400 --> 00:01:46.100
+Evaluate the constraints and final state the task requires.
+
+05-3
+00:01:46.100 --> 00:01:54.000
+Compare cost among valid trajectories; fewer steps are not always better.
+
+06-1
+00:01:54.700 --> 00:02:01.400
+Separate task success, policy, state integrity and reliability.
+
+06-2
+00:02:01.400 --> 00:02:08.100
+A hard violation blocks release even when other metrics improve.
+
+06-3
+00:02:08.100 --> 00:02:16.000
+Save the trajectory and the verdict reason so the result is reproducible.
+
