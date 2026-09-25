@@ -85,8 +85,8 @@ hide:
       <div class="s5-tool-field-grid">
         <div class="s5-tool-field"><label for="s5-vcc-en-it">Input tokens</label><input id="s5-vcc-en-it" data-field="llmInputTokensPerCall" type="number" min="0" step="100" value="1400" /></div>
         <div class="s5-tool-field"><label for="s5-vcc-en-ot">Output tokens</label><input id="s5-vcc-en-ot" data-field="llmOutputTokensPerCall" type="number" min="0" step="50" value="220" /></div>
-        <div class="s5-tool-field"><label for="s5-vcc-en-ip">Input (USD/MTok)</label><input id="s5-vcc-en-ip" data-field="llmInputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.2" /></div>
-        <div class="s5-tool-field"><label for="s5-vcc-en-op">Output (USD/MTok)</label><input id="s5-vcc-en-op" data-field="llmOutputUsdPerMillionTokens" type="number" min="0" step="0.01" value="1.2" /></div>
+        <div class="s5-tool-field"><label for="s5-vcc-en-ip">Input (USD/MTok)</label><input id="s5-vcc-en-ip" data-field="llmInputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.1" /></div>
+        <div class="s5-tool-field"><label for="s5-vcc-en-op">Output (USD/MTok)</label><input id="s5-vcc-en-op" data-field="llmOutputUsdPerMillionTokens" type="number" min="0" step="0.01" value="0.5" /></div>
       </div>
       <div class="s5-tool-actions" aria-label="Scenario actions">
         <button class="s5-tool-action" type="button" data-action="share">Copy link</button>
