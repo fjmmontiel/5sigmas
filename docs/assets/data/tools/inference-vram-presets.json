@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "updated": "2026-08-21",
+  "version": 2,
+  "updated": "2026-09-25",
   "methodology": {
     "weight_memory": "Nominal parameter count × bits per stored weight, plus an explicit editable metadata overhead. Nominal family sizes are approximate rather than exact serialized tensor counts.",
     "kv_cache": "Standard decoder-only attention approximation: layers × 2 (K,V) × KV heads × head dimension × KV bytes × tokens × concurrent sequences.",
@@ -12,7 +12,7 @@
       "organization": "Meta",
       "title": "llama-models · model SKU definitions",
       "url": "https://github.com/meta-llama/llama-models/blob/main/models/sku_list.py",
-      "verified_on": "2026-08-21",
+      "verified_on": "2026-09-25",
       "notes": "Primary source for Llama 3.1 hidden dimension, layer count, attention-head count, KV-head count and the distinct 405B MP8/MP16 geometries."
     },
     {
@@ -20,7 +20,7 @@
       "organization": "Meta",
       "title": "Llama 3.1 model card",
       "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/MODEL_CARD.md",
-      "verified_on": "2026-08-21",
+      "verified_on": "2026-09-25",
       "notes": "Primary source for nominal model sizes, 128k context and use of grouped-query attention."
     },
     {
@@ -28,8 +28,16 @@
       "organization": "vLLM",
       "title": "vLLM configuration and KV-cache capacity",
       "url": "https://docs.vllm.ai/en/latest/api/vllm/config/index.html",
-      "verified_on": "2026-08-21",
+      "verified_on": "2026-09-25",
       "notes": "Primary serving documentation showing that KV cache is an explicit GPU-memory budget and that capacity is expressed in bytes/tokens."
+    },
+    {
+      "id": "meta-llama-4-model-card",
+      "organization": "Meta",
+      "title": "Llama 4 model card",
+      "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama4/MODEL_CARD.md",
+      "verified_on": "2026-09-25",
+      "notes": "Primary source confirms Llama 4 Scout/Maverick are MoE, multimodal models with 10M/1M context. They are reviewed but intentionally not encoded as standard dense-decoder presets because this estimator's simple parameter×bits and KV formula does not represent their routed-expert and hybrid/local-attention behavior faithfully."
     }
   ],
   "presets": [
@@ -42,7 +50,10 @@
       "attention_heads": 32,
       "kv_heads": 8,
       "max_context_tokens": 131072,
-      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "source_ids": [
+        "meta-llama-model-skus",
+        "meta-llama-3-1-model-card"
+      ],
       "note_es": "El tamaño 8B es la denominación nominal de la familia. La memoria de pesos es una estimación, no el tamaño exacto de un checkpoint concreto.",
       "note_en": "8B is the family's nominal size. Weight memory is an estimate, not the exact serialized size of a specific checkpoint."
     },
@@ -55,7 +66,10 @@
       "attention_heads": 64,
       "kv_heads": 8,
       "max_context_tokens": 131072,
-      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "source_ids": [
+        "meta-llama-model-skus",
+        "meta-llama-3-1-model-card"
+      ],
       "note_es": "El tamaño 70B es nominal. La arquitectura usa GQA con 8 cabezas KV frente a 64 cabezas de atención.",
       "note_en": "70B is a nominal family size. The architecture uses GQA with 8 KV heads versus 64 attention heads."
     },
@@ -68,7 +82,10 @@
       "attention_heads": 128,
       "kv_heads": 8,
       "max_context_tokens": 131072,
-      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "source_ids": [
+        "meta-llama-model-skus",
+        "meta-llama-3-1-model-card"
+      ],
       "note_es": "Geometría BF16 MP8 publicada por Meta: 128 cabezas de atención y 8 cabezas KV. El tamaño 405B sigue siendo nominal.",
       "note_en": "Meta's published BF16 MP8 geometry: 128 attention heads and 8 KV heads. The 405B parameter count remains nominal."
     },
@@ -81,9 +98,22 @@
       "attention_heads": 128,
       "kv_heads": 16,
       "max_context_tokens": 131072,
-      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "source_ids": [
+        "meta-llama-model-skus",
+        "meta-llama-3-1-model-card"
+      ],
       "note_es": "Geometría BF16 MP16 publicada por Meta: 128 cabezas de atención y 16 cabezas KV. La KV cache resultante es mayor que en la variante MP8.",
       "note_en": "Meta's published BF16 MP16 geometry: 128 attention heads and 16 KV heads. Its KV cache is therefore larger than the MP8 variant."
     }
-  ]
+  ],
+  "architecture_coverage": {
+    "reviewed_through": "2026-09-25",
+    "included_family": "Llama 3.1 dense-decoder reference geometries",
+    "reviewed_not_preset": [
+      {
+        "family": "Llama 4 Scout / Maverick",
+        "reason": "MoE + multimodal architecture; forcing total/activated parameters and hybrid attention into the standard dense-decoder estimator would create misleading VRAM/KV results."
+      }
+    ]
+  }
 }
