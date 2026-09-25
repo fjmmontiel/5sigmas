@@ -78,6 +78,8 @@ if (llama8) {
   assert(llama8.max_context_tokens === 131072, 'Llama 3.1 8B context limit drifted from 128K/131072');
 }
 const sourceIds = new Set(data.sources.map((source) => source.id));
+assert(data.updated === '2026-09-25', 'shared architecture review date must be current');
+assert(data.architecture_coverage?.reviewed_not_preset?.some((row) => row.family.includes('Llama 4')), 'Llama 4 hybrid/MoE exclusion must be explicit');
 for (const required of ['meta-llama-model-skus', 'meta-llama-3-1-model-card', 'vllm-kv-cache']) {
   assert(sourceIds.has(required), `required KV-cache provenance source missing: ${required}`);
 }
