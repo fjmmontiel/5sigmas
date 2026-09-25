@@ -14,9 +14,11 @@ function close(actual, expected, tolerance = 1e-9) {
   if (Math.abs(actual - expected) > tolerance) throw new Error(`Expected ${actual} ≈ ${expected}`);
 }
 
-assert(data.snapshot_date === '2026-08-22', 'Dataset snapshot date drifted');
-assert(data.methodology_version === '2026-08-22-v2', 'Methodology version drifted');
+assert(data.snapshot_date === '2026-09-25', 'Dataset snapshot date drifted');
+assert(data.methodology_version === '2026-09-25-v3', 'Methodology version drifted');
 assert(data.metrics.length === 6, 'Expected six independently selectable signals');
+assert(data.freshness_policy?.review_interval_days === 30, 'Global ecosystem freshness interval must remain explicit');
+assert(/source-year values remain 2024\/2025/i.test(data.scope_note), 'Snapshot must distinguish revalidation date from source-data year');
 assert(data.countries.length === 28, `Expected 28 explicit country records, got ${data.countries.length}`);
 assert(new Set(data.countries.map((country) => country.id)).size === data.countries.length, 'Country ids must be unique');
 
@@ -76,7 +78,7 @@ const sourceIds = new Set(data.sources.map((source) => source.id));
 data.metrics.forEach((metric) => assert(sourceIds.has(metric.source_id), `Missing source ${metric.source_id}`));
 data.sources.forEach((source) => {
   assert(/^https:\/\//.test(source.url), `Source ${source.id} must have an HTTPS URL`);
-  assert(source.retrieved === '2026-08-22', `Source ${source.id} must carry the current retrieval date`);
+  assert(source.retrieved === data.snapshot_date, `Source ${source.id} must carry the current retrieval date`);
 });
 
 const investmentCountries = data.countries.filter((country) => country.values.private_investment_2025 !== null);
