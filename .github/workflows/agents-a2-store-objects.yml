@@ -1,0 +1,67 @@
+name: Store verified A2 release objects
+on:
+  push:
+    branches: [ops/agents-a2-approved-20260925]
+    paths: [.github/workflows/agents-a2-store-objects.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  objects:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: approved-agents-a2-exact-import
+          run-id: 36171321928
+          github-token: ${{ github.token }}
+          path: /tmp/a2-source
+      - uses: actions/checkout@v4
+        with:
+          ref: e6f6402a46e8c19678a9e9fa2d4ce891cf4c97fa
+          path: recipe
+          sparse-checkout: .github/workflows
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 294928de8cadf3f0f36592e55b6bcb66a4161c50
+          path: site
+          persist-credentials: false
+      - name: Reuse reviewed assembly with all hash and scope checks
+        run: |
+          echo '323530ca49d3b74190d58d3c813e111ff8697f27c3f798bfa8a84f894cd88f84  /tmp/a2-source/agents-a2-approved.zip' | sha256sum -c -
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          text=Path('recipe/.github/workflows/agents-a2-release-transport.yml').read_text()
+          block=text.split('      - name: Apply exact files and normalize only derived VTT line endings\n        run: |\n',1)[1].split('\n      - name:',1)[0]
+          command='\n'.join(line[10:] if line.startswith('          ') else line for line in block.splitlines())
+          subprocess.run(['bash','-euo','pipefail','-c',command],cwd='site',check=True)
+          PY
+      - name: Store blobs only; the connector applies authorized workflow updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,hashlib,base64,urllib.request,os
+          root=pathlib.Path('site');receipt=json.loads(pathlib.Path('/tmp/agents-a2-import-receipt.json').read_text());entries=[]
+          assert len(receipt['files'])==69
+          for row in receipt['files']:
+              raw=(root/row['path']).read_bytes();assert hashlib.sha256(raw).hexdigest()==row['sha256']
+              request=urllib.request.Request('https://api.github.com/repos/fjmmontiel/5sigmas/git/blobs',data=json.dumps({'encoding':'base64','content':base64.b64encode(raw).decode()}).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'})
+              with urllib.request.urlopen(request,timeout=90) as response:blob=json.load(response)['sha']
+              assert blob==hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              entries.append({'path':row['path'],'mode':'100644','type':'blob','sha':blob})
+          pathlib.Path('/tmp/agents-a2-objects.json').write_text(json.dumps({'base':receipt['base'],'tree':entries,'ref_mutated':False},indent=2)+'\n')
+          print('A2_OBJECTS_VERIFIED',len(entries),'No branch or workflow ref changed.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agents-a2-verified-git-objects
+          path: |
+            /tmp/agents-a2-objects.json
+            /tmp/agents-a2-import-receipt.json
+          if-no-files-found: warn
+          retention-days: 2
