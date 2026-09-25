@@ -1,0 +1,53 @@
+name: Prepare exact approved Datacenters D2 release
+on:
+  push:
+    branches: [ops/import-approved-datacenters-d2-20260925]
+    paths: [.github/workflows/import-approved-d2-once.yml]
+permissions:
+  contents: write
+concurrency:
+  group: import-approved-datacenters-d2-once
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    container: debian:13.3-slim
+    timeout-minutes: 35
+    steps:
+      - name: Install pinned author runtime for exact-byte recovery
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo python3-yaml python3-venv python3-dev libcairo2-dev pkg-config gcc ffmpeg=7:7.1.5-0+deb13u1 fontconfig fonts-cabin fonts-noto-core fonts-noto-extra > /tmp/install.log 2>&1 || { tail -40 /tmp/install.log; exit 1; }
+          python3 -m venv --system-site-packages /tmp/d2-venv
+          /tmp/d2-venv/bin/pip install --quiet pycairo==1.29.0
+          printf '%s\n' '28b2901516089b2bf9d3c2b3dd86a1c875de7f3997bc4ebf4a651a8150aa49dc  /usr/share/fonts/opentype/cabin/Cabin-Regular.otf' 'f2a43add6a75ae9b203744857fe3e612a4b038b51585934208b1b5e5b7f455dd  /usr/share/fonts/opentype/cabin/Cabin-Bold.otf' 'bcdc596729c24044e28c54815ecbe6004f83b10169a49a51160b22f59116249f  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Regular.ttf' '8666c2488e681a31670f9fc0b5d59fa4f21f2a0664a76876fe49ebd832f673c7  /usr/share/fonts/truetype/noto/NotoSerifDisplay-Bold.ttf' | sha256sum -c -
+      - uses: actions/checkout@v4
+        with:
+          ref: 3ac8db5cc7a8b0e098b9177dd652c35080b41818
+          path: recipe
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /.github/d2-approved-snapshot/**
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 6f65cfa69080f6cc441c81e66bf2fe1b647a214f
+          path: site
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Recover approved bytes, assemble scoped files and persist verified blobs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: /tmp/d2-venv/bin/python recipe/.github/d2-approved-snapshot/build_release.py site
+      - name: Preserve recovery and exact blob receipt without repeating encodes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: datacenters-d2-exact-recovery-receipt
+          path: |
+            recipe/.github/d2-approved-snapshot/recovered/*.mp4
+            recipe/.github/d2-approved-snapshot/recovered/*.json
+            recipe/.github/d2-approved-snapshot/d2-release-entries.json
+            recipe/.github/d2-approved-snapshot/release-paths.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
