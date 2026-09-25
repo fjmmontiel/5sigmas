@@ -1,0 +1,105 @@
+name: Repair reviewed video date parity
+on:
+  push:
+    branches: [ops/agents-a2-approved-20260925]
+    paths: [.github/workflows/agents-a2-discovery-date-repair.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: eb006011eab323bcde5ab83b8b4e7d87fa30a1c3
+      - name: Reproduce and fix the existing recorded-date divergence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/test_video_discovery_date_parity.py')
+          p.write_text('''#!/usr/bin/env python3
+          """Keep reviewed video dates consistent; article publication dates are not video dates."""
+          import json
+          import sys
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from xml.etree import ElementTree as ET
+          ROOT = Path(__file__).resolve().parents[1]
+          sys.path.insert(0, str(ROOT))
+          from hooks.video_discovery_surface import CONTRACT, _bind_catalogue, _bind_video_sitemap
+          S = "http://www.sitemaps.org/schemas/sitemap/0.9"
+          V = "http://www.google.com/schemas/sitemap-video/1.1"
+          def assert_date_parity():
+              sources = sorted((ROOT / 'discovery/modelos-razonadores').glob('*.json'))
+              assert len(sources) == 12
+              for path in sources:
+                  source = json.loads(path.read_text())
+                  compiled = CONTRACT.compile_source(source)
+                  with TemporaryDirectory() as temp:
+                      root = Path(temp); (root / 'videos').mkdir()
+                      row = dict(watch_url=source['watch_url'], video_url=source['video_url'], thumb_url=source['poster_url'], duration_seconds=source['duration_ms']//1000, publication_date='2026-04-10T00:00:00+00:00')
+                      untouched = dict(watch_url='https://5sigmas.com/unrelated/', publication_date='2026-01-01T00:00:00Z')
+                      catalog = root / 'videos/catalog.json'
+                      catalog.write_text(json.dumps({'version':2,'videos':[row,untouched]}))
+                      doc = ET.Element('{'+S+'}urlset'); url = ET.SubElement(doc,'{'+S+'}url')
+                      ET.SubElement(url,'{'+S+'}loc').text=source['watch_url']
+                      video = ET.SubElement(url,'{'+V+'}video')
+                      for key,value in {'thumbnail_loc':source['poster_url'],'content_loc':source['video_url'],'duration':str(source['duration_ms']//1000),'title':'Legacy title','description':'Legacy description','publication_date':row['publication_date']}.items():
+                          ET.SubElement(video,'{'+V+'}'+key).text=value
+                      sitemap = root / 'video-sitemap.xml'; sitemap.write_text(ET.tostring(doc,encoding='unicode'))
+                      _bind_catalogue(root,source,compiled); _bind_video_sitemap(root,source,source['locale'])
+                      payload=json.loads(catalog.read_text()); actual=payload['videos'][0]
+                      assert actual['publication_date']==compiled['schema']['uploadDate']==source['upload_date'], path
+                      assert payload['videos'][1]==untouched
+                      actual_date=ET.fromstring(sitemap.read_text()).findtext('.//{'+V+'}publication_date')
+                      assert actual_date==source['upload_date'], path
+                      before_catalog=catalog.read_bytes(); before_sitemap=sitemap.read_bytes()
+                      _bind_catalogue(root,source,compiled); _bind_video_sitemap(root,source,source['locale'])
+                      assert before_catalog==catalog.read_bytes() and before_sitemap==sitemap.read_bytes()
+                      bad=dict(source,video_url='https://5sigmas.com/unauthorized.mp4')
+                      for operation,args in [(_bind_catalogue,(root,bad,compiled)),(_bind_video_sitemap,(root,bad,source['locale']))]:
+                          try: operation(*args)
+                          except CONTRACT.ContractError: pass
+                          else: raise AssertionError('Media identity mismatch must fail closed')
+              print('PASS reviewed date parity:12 exact ES/EN records, unaffected rows, idempotency and24 immutable-media negative checks')
+          if __name__=='__main__': assert_date_parity()
+          ''')
+          PY
+          if python3 scripts/test_video_discovery_date_parity.py > /tmp/date-reproduction.log 2>&1; then
+            echo 'Expected existing date-parity failure did not reproduce'; exit 1
+          fi
+          grep -q AssertionError /tmp/date-reproduction.log
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('hooks/video_discovery_surface.py');s=p.read_text()
+          old='    row["description"] = source["description"]\n'
+          assert s.count(old)==1
+          s=s.replace(old,old+'    row["publication_date"] = source["upload_date"]\n')
+          old='    for selector, value in (("v:title", source["title"]), ("v:description", source["description"])):'
+          assert s.count(old)==1
+          s=s.replace(old,'    for selector, value in (("v:title", source["title"]), ("v:description", source["description"]), ("v:publication_date", source["upload_date"])):')
+          p.write_text(s)
+          p=Path('scripts/test_video_schema_contract.py');s=p.read_text()
+          marker='if __name__ == "__main__":\n';assert s.count(marker)==1
+          s=s.replace(marker,marker+'    from test_video_discovery_date_parity import assert_date_parity\n    assert_date_parity()\n')
+          p.write_text(s)
+          PY
+          python3 scripts/test_video_discovery_date_parity.py
+          python3 -m py_compile hooks/video_discovery_surface.py scripts/test_video_schema_contract.py scripts/test_video_discovery_date_parity.py
+          sha256sum -c .github/receipts/agents-a2.sha256
+          sha256sum -c .github/receipts/datacenters-d2.sha256
+          sha256sum -c .github/receipts/evaluation-c3.sha256
+          git diff --check
+      - name: Persist reviewed repair branch only
+        run: |
+          set -euo pipefail
+          target='ops/agents-a2-discovery-dates-reviewed-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hooks/video_discovery_surface.py scripts/test_video_discovery_date_parity.py scripts/test_video_schema_contract.py
+          git diff --cached --stat
+          git commit -m 'Keep exact reviewed upload dates consistent across video discovery surfaces'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'DATE_PARITY_REPAIR=%s\n' "$(git rev-parse HEAD)"
