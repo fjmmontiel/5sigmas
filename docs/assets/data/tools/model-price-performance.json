@@ -191,7 +191,8 @@
         "status": "reviewed_not_charted",
         "reason": "No priced comparable API entry in the AA release snapshot."
       }
-    ]
+    ],
+    "latest_release_slug": "claude-opus-5-5"
   },
   "methodology": {
     "benchmark": "Artificial Analysis Intelligence Index v4.3.2 plus current English model-page snapshots of output speed and TTFT. The Intelligence Index is a broad composite benchmark, not a universal definition of model quality; reasoning-effort variants are distinct configurations.",
