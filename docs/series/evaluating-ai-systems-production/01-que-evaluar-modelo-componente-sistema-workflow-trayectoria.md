@@ -19,6 +19,7 @@ video_title: Qué estamos evaluando
 video_summary: Una prueba amplia comprueba la tarea, las políticas y los efectos reales.
   Conserva versiones, casos y protocolo para poder comparar.
 video_duration: PT2M12S
+video_captions: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
 video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
 video_chapters:
 - name: La respuesta no es el resultado.

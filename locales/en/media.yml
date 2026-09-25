@@ -762,6 +762,7 @@ series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema
   video_summary: A broader test checks the task, policies and real effects. Preserve
     versions, cases and protocol to make comparisons reproducible.
   video_duration: PT2M12S
+  video_captions: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
   video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
   video_chapters:
   - name: The answer is not the outcome.
@@ -790,6 +791,7 @@ series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negat
   video_summary: Changing a label or grader can change the score without improving
     the model. Create a new version; do not silently rewrite the earlier result.
   video_duration: PT2M14S
+  video_captions: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
   video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
   video_chapters:
   - name: An eval is more than its questions.
@@ -818,6 +820,7 @@ series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibr
   video_summary: Freeze the judge version before testing it on a separate set. Accept,
     restrict or reject its use according to risk and evidence.
   video_duration: PT2M14S
+  video_captions: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
   video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
   video_chapters:
   - name: Choose the verifier the task needs.
@@ -846,6 +849,7 @@ series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools
   video_summary: A hard violation blocks release even when other metrics improve.
     Save the trajectory and the verdict reason so the result is reproducible.
   video_duration: PT2M16S
+  video_captions: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
   video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
   video_chapters:
   - name: Do not count calls. Follow the state.
@@ -874,6 +878,7 @@ series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-gu
   video_summary: A violation blocks; insufficient data keeps the rollout paused. Choose
     stages for the change and its risk; not every release needs them all.
   video_duration: PT2M14S
+  video_captions: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
   video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
   video_chapters:
   - name: Three methods. Three different questions.
@@ -902,6 +907,7 @@ series/evaluating-ai-systems-production/06-observability-failure-taxonomies-prod
   video_summary: After release, measure recurrence and exposure over the agreed observation
     window. Close the loop with production evidence and an accountable owner.
   video_duration: PT2M14S
+  video_captions: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
   video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
   video_chapters:
   - name: An alert is not a diagnosis.

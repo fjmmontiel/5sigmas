@@ -18,6 +18,7 @@ video_title: Cómo evaluar al evaluador
 video_summary: Congela la versión del juez antes de comprobar un set separado. Acepta,
   limita o rechaza su uso según el riesgo y la evidencia.
 video_duration: PT2M14S
+video_captions: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
 video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
 video_chapters:
 - name: Elige el verificador que necesita la tarea.

@@ -20,6 +20,7 @@ video_title: El resultado y el camino
 video_summary: Una violación dura bloquea aunque otras métricas mejoren. Guarda la
   trayectoria y el motivo del veredicto para poder reproducirlo.
 video_duration: PT2M16S
+video_captions: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
 video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
 video_chapters:
 - name: No cuentes llamadas. Sigue el estado.

@@ -19,6 +19,7 @@ video_title: Evidencia antes de ampliar
 video_summary: 'Una violación bloquea; datos insuficientes mantienen la pausa. El
   protocolo depende del cambio y su riesgo: no exige siempre todas las etapas.'
 video_duration: PT2M14S
+video_captions: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
 video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
 video_chapters:
 - name: Tres métodos. Tres preguntas distintas.

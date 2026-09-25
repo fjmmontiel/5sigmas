@@ -19,6 +19,7 @@ video_title: Casos que ponen a prueba
 video_summary: Cambiar una etiqueta o un grader puede cambiar el score sin mejorar
   el modelo. Publica una nueva versión; no reescribas el resultado anterior en silencio.
 video_duration: PT2M14S
+video_captions: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
 video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
 video_chapters:
 - name: Un eval es más que sus preguntas.

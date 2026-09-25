@@ -47,6 +47,10 @@ def main():
   article=get(row['article']).decode();watch=get(row['watch']).decode()
   assert '<video' in article and 's5-video-embed' in article and row['watch'] in article
   assert row['article'] in watch and 's5-video-watch__transcript' in watch
+  assert hashlib.sha256(get(row['captions_path'])).hexdigest()==row['captions_sha256']
+  captions_text=get(row['captions_path']).decode()
+  assert captions_text.startswith('WEBVTT') and captions_text.count(' --> ')==18
+  assert row['captions_path'] in watch and '<track' in watch
   assert ('Vídeo sin narración' if row['locale']=='es' else 'video has no narration') in watch
   found=[]
   for text in re.findall(r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',watch,re.S):

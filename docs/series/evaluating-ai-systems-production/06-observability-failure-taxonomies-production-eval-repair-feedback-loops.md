@@ -19,6 +19,7 @@ video_title: Del incidente a la reparación
 video_summary: Después de la release, mide recurrencia y exposición durante la ventana
   acordada. Cierra el ciclo con evidencia de producción y una persona responsable.
 video_duration: PT2M14S
+video_captions: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
 video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
 video_chapters:
 - name: Una alerta no es un diagnóstico.

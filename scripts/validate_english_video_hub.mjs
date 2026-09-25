@@ -95,7 +95,12 @@ if (catalogue) {
   if (catalogue.language !== 'en') failures.push(`catalogue language is ${JSON.stringify(catalogue.language)}`);
   if (!Array.isArray(catalogue.videos) || catalogue.videos.length === 0) failures.push('catalogue has no videos');
   if (catalogue.count !== catalogue.videos?.length) failures.push(`catalogue count ${catalogue.count} != videos.length ${catalogue.videos?.length}`);
-  if (catalogue.count !== 40) failures.push(`catalogue count must be 40 with AI Security R5 live and later unapproved series blocked, got ${catalogue.count}`);
+  if (catalogue.count !== 46) failures.push(`catalogue count must be 46 after the six approved Evaluation C3 videos, got ${catalogue.count}`);
+  const evaluation = catalogue.videos.filter(v => String(v.source_url).includes('/series/evaluating-ai-systems-production/'));
+  if (evaluation.length !== 6) failures.push(`expected six approved native-English C3 surfaces, got ${evaluation.length}`);
+  for (const series of ['agentes-ia','agentes-voz-tiempo-real','coding-agents-agent-harnesses','context-engineering-memory-mcp','llm-inference-engineering-economics']) {
+    if (catalogue.videos.some(v => String(v.source_url).includes(`/series/${series}/`))) failures.push(`unapproved video series restored: ${series}`);
+  }
 
   const topics = new Set();
   for (const video of catalogue.videos || []) {

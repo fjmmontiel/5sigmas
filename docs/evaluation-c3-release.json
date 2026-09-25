@@ -51,7 +51,10 @@
           "start": 110,
           "end": 132
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt",
+      "captions_sha256": "153050b7ec8864b176e35956eecb862d9f2550e532e3e64c23b1037c4fb4229e",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4",
@@ -98,7 +101,10 @@
           "start": 110,
           "end": 132
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt",
+      "captions_sha256": "dd0d97064adfa8c5fb3b65d2dcf9067f4c3053cfaa709553e0d8323fdbed9e24",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4",
@@ -145,7 +151,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt",
+      "captions_sha256": "cce8558b229cb89e256441d70b967942ed52c74a639752578727ce458436d1a9",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4",
@@ -192,7 +201,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt",
+      "captions_sha256": "48597812b8d22f2ed17cf2d65f7e19816853bc36381a41a2a1e1fe58d16c6587",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4",
@@ -239,7 +251,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt",
+      "captions_sha256": "1d4795f92fd20394560c66cff6fc43aa073e87a79e25d2c9f99fa7ab87babf1d",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4",
@@ -286,7 +301,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt",
+      "captions_sha256": "0b398de3d844b390c0a54ddcfd699ed7f50dd08d8821a0658a5121b9f144a6b5",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4",
@@ -333,7 +351,10 @@
           "start": 114,
           "end": 136
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt",
+      "captions_sha256": "798e4938aeb31c156eec2982ba873ea6bfaf7180df198de5be549d720b270da7",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4",
@@ -380,7 +401,10 @@
           "start": 114,
           "end": 136
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt",
+      "captions_sha256": "48b567fb3cd9baff5f315d21640d32a922c52b84cfbad6125e4c3aa4a0e6bce5",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4",
@@ -427,7 +451,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt",
+      "captions_sha256": "2a59af0a1d89aff62bd668523418a00da4498530d552743876ac4c3886da4cbb",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4",
@@ -474,7 +501,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt",
+      "captions_sha256": "7fa6bb8c77435c1b661e1c7b5030a154ec744e3bff5da39638e607f0e77acda2",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4",
@@ -521,7 +551,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt",
+      "captions_sha256": "b524b2a57443f306144728aa35c23568e75699a48e1562508db046100221d475",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     },
     {
       "path": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4",
@@ -568,7 +601,10 @@
           "start": 112,
           "end": 134
         }
-      ]
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt",
+      "captions_sha256": "4aa1ecc90fca6f14e8b46d29cd4a928de2433ba3f4b969a09eee1b9382d8bf8c",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
     }
   ]
 }

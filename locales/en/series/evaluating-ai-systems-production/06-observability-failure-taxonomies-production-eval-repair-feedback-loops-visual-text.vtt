@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+Telemetry shows that something happened, not necessarily why.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Reconstruct the sequence with versions, states and relevant responses.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Separate the observed symptom from an unproven cause.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+The user received “refund complete”, but the backend records a duplicate.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+The trace reveals a write, an ambiguous timeout and a retry without reconciliation.
+
+02-3
+00:00:36.100 --> 00:00:46.000
+The causal hypothesis concerns recovery, not answer style.
+
+03-1
+00:00:46.700 --> 00:00:53.400
+Group incidents that share the same failure mechanism.
+
+03-2
+00:00:53.400 --> 00:01:00.100
+Add a timeout before the write and a read-only operation.
+
+03-3
+00:01:00.100 --> 00:01:08.000
+The repair must fix the failure without breaking neighboring cases.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Remove sensitive data while preserving the conditions behind the failure.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Pin initial state, tool responses, versions and the verifier.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+When evidence is insufficient, record the limitation; do not invent a cause.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Reproduce the failure on the old version before attributing improvement.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Change recovery, then rerun the failure case and neighboring cases.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Check that a grader change did not merely hide the failure.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Passing regression allows progress; it does not close the incident by itself.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+After release, measure recurrence and exposure over the agreed observation window.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Close the loop with production evidence and an accountable owner.
+
