@@ -86,10 +86,17 @@ for (const required of [
   'https://www.twilio.com/en-us/voice/pricing/es',
   'https://www.twilio.com/docs/voice/media-streams',
   'https://developers.openai.com/api/docs/models/gpt-live-transcribe',
-  'https://developers.openai.com/api/docs/models/gpt-5.6-luna',
+  'https://developers.openai.com/api/docs/models/gpt-6-luna',
   'https://elevenlabs.io/pricing/api',
   'https://elevenlabs.io/docs/overview/models'
 ]) assert.ok(urls.includes(required), `missing provenance source ${required}`);
-for (const source of preset.sources) assert.equal(source.verified_on, '2026-08-21');
+assert.equal(data.updated_at, '2026-09-25');
+const ageDays = (Date.now() - Date.parse(`${data.updated_at}T23:59:59Z`)) / 86_400_000;
+assert.ok(ageDays >= -1 && ageDays <= data.freshness_policy.review_interval_days, `voice cost dataset is stale: ${data.updated_at}`);
+for (const source of preset.sources) assert.equal(source.verified_on, data.updated_at);
+assert.equal(preset.rates.llm_input_usd_per_million_tokens, 0.1);
+assert.equal(preset.rates.llm_output_usd_per_million_tokens, 0.5);
+assert.match(data.architecture_coverage.reviewed_not_folded_into_cascade[0].reason, /\$0\.05\/min|0\.05\/min/);
+assert.match(data.architecture_coverage.reviewed_not_folded_into_cascade[0].source.url, /gpt-live-1/);
 
 console.log('voice cost/capacity tool: numerical, provider-concurrency and provenance gates passed');
