@@ -28,21 +28,21 @@
       "id": "b200-sxm-bf16",
       "title_es": "NVIDIA B200 SXM · BF16 denso",
       "title_en": "NVIDIA B200 SXM · dense BF16",
-      "peak_dense_tflops": 4500,
+      "peak_dense_tflops": 2250,
       "tdp_w": 1000,
       "source": "nvidia-b200",
-      "note_es": "HGX B200 publica 36 PFLOP/s FP16/BF16 densos para 8 GPU; el preset deriva 4,5 PFLOP/s por GPU. La guía DGX B200 documenta un límite máximo por GPU de hasta 1.000 W.",
-      "note_en": "HGX B200 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs; this preset derives 4.5 PFLOP/s per GPU. The DGX B200 guide documents a maximum per-GPU limit up to 1,000 W."
+      "note_es": "HGX B200 publica 36 PFLOP/s FP16/BF16 con sparsity para 8 GPU; NVIDIA indica que el valor denso es la mitad, por lo que el preset usa 2,25 PFLOP/s densos por GPU. La guía DGX B200 documenta un límite máximo por GPU de hasta 1.000 W.",
+      "note_en": "HGX B200 publishes 36 FP16/BF16 PFLOP/s with sparsity across 8 GPUs; NVIDIA states dense is half, so this preset uses 2.25 dense PFLOP/s per GPU. The DGX B200 guide documents a maximum per-GPU limit up to 1,000 W."
     },
     {
       "id": "b300-sxm-bf16",
       "title_es": "NVIDIA B300 SXM · BF16 denso",
       "title_en": "NVIDIA B300 SXM · dense BF16",
-      "peak_dense_tflops": 4500,
+      "peak_dense_tflops": 2250,
       "tdp_w": 1100,
       "source": "nvidia-b300",
-      "note_es": "HGX B300 publica 36 PFLOP/s FP16/BF16 densos para 8 GPU; el preset deriva 4,5 PFLOP/s por GPU. NVIDIA muestra B300 SXM6 AC con un power cap configurado de 1.100 W en su guía de despliegue.",
-      "note_en": "HGX B300 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs; this preset derives 4.5 PFLOP/s per GPU. NVIDIA shows B300 SXM6 AC with a configured 1,100 W power cap in its deployment guide."
+      "note_es": "HGX B300 publica 36 PFLOP/s FP16/BF16 con sparsity para 8 GPU; NVIDIA indica que el valor denso es la mitad, por lo que el preset usa 2,25 PFLOP/s densos por GPU. La guía de despliegue muestra B300 SXM6 AC configurada a 1.100 W.",
+      "note_en": "HGX B300 publishes 36 FP16/BF16 PFLOP/s with sparsity across 8 GPUs; NVIDIA states dense is half, so this preset uses 2.25 dense PFLOP/s per GPU. NVIDIA's deployment guide shows B300 SXM6 AC configured at 1,100 W."
     }
   ],
   "sources": {
@@ -66,7 +66,7 @@
       "url": "https://www.nvidia.com/en-us/data-center/hgx/",
       "secondary_url": "https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html",
       "reviewed": "2026-09-25",
-      "notes": "HGX B200 publishes 36 dense FP16/BF16 PFLOP/s across 8 GPUs, or 4.5 PFLOP/s per GPU. DGX B200 documentation reports maximum per-GPU power up to 1,000 W under the full-power PSU configuration."
+      "notes": "HGX B200 publishes 36 FP16/BF16 PFLOP/s with sparsity across 8 GPUs; NVIDIA states dense is half, yielding 2.25 dense PFLOP/s per GPU. DGX B200 documentation reports maximum per-GPU power up to 1,000 W."
     },
     "nvidia-b200-rack": {
       "organization": "NVIDIA",
@@ -88,7 +88,7 @@
       "url": "https://www.nvidia.com/en-us/data-center/hgx/",
       "secondary_url": "https://docs.nvidia.com/dgx/dgxb300-user-guide/redfish-api-supp.html",
       "reviewed": "2026-09-25",
-      "notes": "HGX B300 publishes 36 PFLOP/s FP16/BF16 dense across 8 GPUs, i.e. 4.5 PFLOP/s per GPU. NVIDIA DGX B300 deployment documentation shows B300 SXM6 AC at a 1,100 W configured power cap; power remains an editable planning assumption."
+      "notes": "HGX B300 publishes 36 FP16/BF16 PFLOP/s with sparsity across 8 GPUs; NVIDIA states dense is half, yielding 2.25 dense PFLOP/s per GPU. Current NVIDIA deployment output shows B300 SXM6 AC configured at an 1,100 W cap."
     }
   }
 }
