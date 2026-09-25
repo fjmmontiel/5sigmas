@@ -1,0 +1,64 @@
+name: Agents A2 live QA completion
+on:
+  push:
+    branches: [ops/agents-a2-live-completion-20260925]
+    paths: [.github/workflows/agents-a2-live-completion.yml]
+permissions:
+  contents: read
+concurrency:
+  group: agents-a2-live-completion
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      S5_PREVIEW_BASE: https://5sigmas.com
+      S5_REQUIRE_EN_TTC_MEDIA: '1'
+      APPROVED_REVISION: 917af6242b2e37331827ad49209eba20a9be26ae
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 917af6242b2e37331827ad49209eba20a9be26ae
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify the already deployed revision
+        run: |
+          python3 - <<'PY'
+          import json,os,urllib.request
+          rev=os.environ['APPROVED_REVISION']
+          with urllib.request.urlopen('https://5sigmas.com/build.json?completion='+rev) as r:m=json.load(r)
+          assert m['revision']==rev,m
+          print('EXACT_ALREADY_DEPLOYED_REVISION',rev)
+          PY
+      - name: Install the existing browser-test dependency
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Complete the interrupted concepts check
+        run: node scripts/validate_english_concepts.mjs
+      - name: Complete the visual hub check
+        run: node scripts/validate_english_visual_hub.mjs
+      - name: Complete the video hub check
+        run: node scripts/validate_english_video_hub.mjs
+      - name: Complete the Test-Time Compute regression check
+        run: node scripts/validate_english_reasoning_ttc.mjs
+      - name: Record completion without rewriting historical cancelled result
+        run: |
+          python3 - <<'PY'
+          import json,os,urllib.request,datetime
+          from pathlib import Path
+          rev=os.environ['APPROVED_REVISION']
+          with urllib.request.urlopen('https://5sigmas.com/build.json?completion-final='+rev) as r:m=json.load(r)
+          assert m['revision']==rev,m
+          result={'state':'REMAINING_FOUR_GENERAL_LIVE_CHECKS_PASS','revision':rev,'original_deploy_run':36185610259,'original_live_job':108239315021,'original_job_status':'CANCELLED_AT_15_MINUTE_TIMEOUT_AFTER_ALL_RELEASE_SPECIFIC_TESTS_PASSED','completion_run':os.environ['GITHUB_RUN_ID'],'completed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'checks':['validate_english_concepts.mjs','validate_english_visual_hub.mjs','validate_english_video_hub.mjs','validate_english_reasoning_ttc.mjs'],'rebuild':False,'redeploy':False,'changed_media':False,'public_writes':False}
+          Path('/tmp/agents-a2-live-completion.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agents-a2-live-completion
+          path: /tmp/agents-a2-live-completion.json
+          if-no-files-found: error
+          retention-days: 3
