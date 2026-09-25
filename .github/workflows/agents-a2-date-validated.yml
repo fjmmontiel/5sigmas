@@ -1,0 +1,51 @@
+name: Validate reviewed optional-date repair
+on:
+  push:
+    branches: [ops/agents-a2-approved-20260925]
+    paths: [.github/workflows/agents-a2-date-validated.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d7a078dcb98c40aca394c809f03b3a9f0f664111
+          path: recipe
+          sparse-checkout: .github/workflows
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 0ba132d4b22dd02ee5ada607af34506af4cd6890
+          path: site
+      - name: Install exact decoder prerequisites and deterministic Golden posters
+        working-directory: site
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
+      - name: Apply reviewed optional-date repair and run its complete tests
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          text=Path('recipe/.github/workflows/agents-a2-optional-date-completion.yml').read_text()
+          marker='      - name: Complete only optional date metadata; retain mandatory and media guards\n        run: |\n'
+          assert text.count(marker)==1
+          block=text.split(marker,1)[1].split('\n      - name:',1)[0]
+          command='\n'.join(line[10:] if line.startswith('          ') else line for line in block.splitlines())
+          subprocess.run(['bash','-euo','pipefail','-c',command],cwd='site',check=True)
+          PY
+      - name: Persist only the two inspected repair files
+        working-directory: site
+        run: |
+          set -euo pipefail
+          target='ops/agents-a2-optional-date-reviewed-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hooks/video_discovery_surface.py scripts/test_video_discovery_date_parity.py
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          git diff --cached --check
+          git commit -m 'Complete optional sitemap dates from authoritative reviewed records'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'OPTIONAL_DATE_REPAIR=%s\n' "$(git rev-parse HEAD)"
