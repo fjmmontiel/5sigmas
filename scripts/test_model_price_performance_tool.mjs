@@ -13,7 +13,7 @@ const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-p
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
 
 const SNAPSHOT = data.updated_at;
-assert.match(SNAPSHOT, /^\\d{4}-\\d{2}-\\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
+assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
 const wallAgeDays = (Date.now() - Date.parse(`${SNAPSHOT}T23:59:59Z`)) / 86_400_000;
 assert.ok(wallAgeDays >= -1 && wallAgeDays <= data.freshness_policy.review_interval_days, `dataset snapshot is outside freshness window: ${SNAPSHOT}`);
 const close = (actual, expected, epsilon = 1e-10, label = '') => {
