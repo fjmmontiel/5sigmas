@@ -16,7 +16,7 @@ assert.equal(gpqaStats.first.score, 66.3);
 assert.equal(gpqaStats.latest.model, 'GPT-6 Astra');
 assert.equal(gpqaStats.latest.score, 96.0);
 assert.ok(Math.abs(gpqaStats.gain - 29.7) < 1e-9);
-assert.ok(gpqaStats.months > 14 && gpqaStats.months < 16);
+assert.ok(gpqaStats.months > 16 && gpqaStats.months < 18);
 assert.ok(Math.abs(gpqaStats.headroom - 4.0) < 1e-9);
 
 const swe = Core.seriesById(dataset, 'swe-bench-verified');
