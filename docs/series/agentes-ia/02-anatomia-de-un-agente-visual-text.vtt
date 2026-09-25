@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+«Ana» puede referirse a más de un contacto.
+
+2
+00:00:07.400 --> 00:00:14.100
+La validación debe exigir una identidad sin ambigüedad, no una conjetura.
+
+3
+00:00:14.100 --> 00:00:22.000
+Resolver el argumento no sustituye la aprobación para enviar.
+
+4
+00:00:22.700 --> 00:00:29.400
+La consulta esperaba tres registros, pero sólo recibió dos.
+
+5
+00:00:29.400 --> 00:00:36.100
+La herramienta devuelve los datos disponibles y marca el resultado parcial.
+
+6
+00:00:36.100 --> 00:00:44.000
+El runtime conserva lo que falta para recuperar la operación o detenerse.
+
+7
+00:00:44.700 --> 00:00:52.100
+El contexto es la vista que recibe el modelo en este turno.
+
+8
+00:00:52.100 --> 00:00:59.500
+La memoria conserva información; el runtime mantiene operaciones y eventos.
+
+9
+00:00:59.500 --> 00:01:08.000
+Sólo la información necesaria se proyecta al contexto de decisión.
+
+10
+00:01:08.700 --> 00:01:15.400
+La ventana debe alojar instrucciones, tools, historial y datos de trabajo.
+
+11
+00:01:15.400 --> 00:01:22.100
+También necesita una reserva para la salida y un margen de seguridad.
+
+12
+00:01:22.100 --> 00:01:30.000
+Si la recuperación crece demasiado, selecciona contexto; no borres esas reservas.
+
+13
+00:01:30.700 --> 00:01:37.400
+Una operación puede ser aceptada y seguir en ejecución.
+
+14
+00:01:37.400 --> 00:01:44.100
+Si falla, puede pasar por un reintento antes de terminar en error.
+
+15
+00:01:44.100 --> 00:01:52.000
+Ese recorrido no permite decir «completado» como si hubiera tenido éxito.
+
+16
+00:01:52.700 --> 00:01:59.400
+Un hecho guardado puede quedar desactualizado o contradecir otra fuente.
+
+17
+00:01:59.400 --> 00:02:06.100
+Conserva su procedencia y comprueba la evidencia antes de usarlo.
+
+18
+00:02:06.100 --> 00:02:14.000
+La memoria necesita reglas de corrección, caducidad y borrado.

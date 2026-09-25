@@ -8,21 +8,32 @@ tags:
   - IA
   - Agentes
   - Tool Calling
-video: "01-que-es-un-agente.mp4"
-video_poster: "01-que-es-un-agente.jpg"
-video_title: "Qué es un agente de IA y qué no lo es"
-video_summary: "Diferencia entre respuesta, workflow y agente acotado, mostrando que la autonomía depende del sistema, los permisos, la evidencia y una condición de parada."
-video_duration: "PT60S"
+video: 01-que-es-un-agente.mp4
+video_poster: 01-que-es-un-agente.jpg
+video_title: Qué es un agente
+video_summary: La respuesta de la herramienta identifica el borrador D4 y su estado. Comprueba esa evidencia y detente sin ejecutar acciones adicionales.
+video_duration: PT2M12S
+video_captions: 01-que-es-un-agente-visual-text.vtt
+video_transcript: 01-que-es-un-agente-transcript.html
 video_chapters:
-  - name: "Responder no es actuar"
-    start: 0
-    end: 20
-  - name: "Workflow frente a autonomía acotada"
-    start: 20
-    end: 40
-  - name: "Sistema, evidencia y condición de parada"
-    start: 40
-    end: 60
+- name: Un workflow puede ser suficiente.
+  start: 0
+  end: 22
+- name: Proponer no es autorizar.
+  start: 22
+  end: 44
+- name: Elige acciones según la observación.
+  start: 44
+  end: 66
+- name: El modelo propone. El runtime ejecuta.
+  start: 66
+  end: 88
+- name: Los permisos son operaciones concretas.
+  start: 88
+  end: 110
+- name: Define qué prueba que has terminado.
+  start: 110
+  end: 132
 ---
 
 # Capítulo 1 — Qué es un agente de IA y qué no lo es

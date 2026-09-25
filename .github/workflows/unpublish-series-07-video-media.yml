@@ -126,7 +126,6 @@ jobs:
           set -euo pipefail
           endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           for series in \
-            agentes-ia \
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
@@ -157,7 +156,6 @@ jobs:
           endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           failures=0
           for series in \
-            agentes-ia \
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
@@ -189,7 +187,6 @@ jobs:
           token = os.environ["CLOUDFLARE_API_TOKEN"]
           zone = os.environ["CLOUDFLARE_ZONE_ID"]
           blocked = {
-              "agentes-ia",
               "agentes-voz-tiempo-real",
               "coding-agents-agent-harnesses",
               "context-engineering-memory-mcp",
@@ -235,7 +232,6 @@ jobs:
 
           origin = os.environ["S5_VIDEO_MEDIA_ORIGIN"].rstrip("/")
           blocked = {
-              "agentes-ia",
               "agentes-voz-tiempo-real",
               "coding-agents-agent-harnesses",
               "context-engineering-memory-mcp",

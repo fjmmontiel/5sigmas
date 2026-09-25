@@ -9,21 +9,32 @@ tags:
   - Agentes
   - Arquitectura
   - Tool Calling
-video: "02-anatomia-de-un-agente.mp4"
-video_poster: "02-anatomia-de-un-agente.jpg"
-video_title: "La anatomía de un agente"
-video_summary: "Separa lo que propone el modelo de lo que decide el runtime y muestra cómo tools, memoria, estado, contexto, permisos y salida forman contratos distintos."
-video_duration: "PT60S"
+video: 02-anatomia-de-un-agente.mp4
+video_poster: 02-anatomia-de-un-agente.jpg
+video_title: Tools, memoria y estado
+video_summary: Conserva su procedencia y comprueba la evidencia antes de usarlo. La memoria necesita reglas de corrección, caducidad y borrado.
+video_duration: PT2M14S
+video_captions: 02-anatomia-de-un-agente-visual-text.vtt
+video_transcript: 02-anatomia-de-un-agente-transcript.html
 video_chapters:
-  - name: "Modelo y runtime: propuesta frente a ejecución"
-    start: 0
-    end: 20
-  - name: "Tools, memoria y estado como contratos distintos"
-    start: 20
-    end: 40
-  - name: "Contexto, permisos y condición de salida"
-    start: 40
-    end: 60
+- name: Un nombre ambiguo no es un destinatario.
+  start: 0
+  end: 22
+- name: Un resultado parcial no es un éxito completo.
+  start: 22
+  end: 44
+- name: Contexto, memoria y estado no son lo mismo.
+  start: 44
+  end: 68
+- name: Reserva espacio antes de llenarlo.
+  start: 68
+  end: 90
+- name: Los estados gobiernan el mensaje visible.
+  start: 90
+  end: 112
+- name: Un recuerdo necesita procedencia y vigencia.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 2 — La anatomía de un agente

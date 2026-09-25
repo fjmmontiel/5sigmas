@@ -32,7 +32,7 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  const expectedCatalogCount = 46; // Existing 40 plus six explicitly approved Evaluation C3 videos.
+  const expectedCatalogCount = 52; // Previous46 plus six explicitly approved Agents A2 videos.
   if (catalog.count !== expectedCatalogCount) {
     throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
   }

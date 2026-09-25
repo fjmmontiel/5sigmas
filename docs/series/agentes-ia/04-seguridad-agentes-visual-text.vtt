@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+Una factura recuperada incluye una orden para cambiar el destinatario.
+
+2
+00:00:07.400 --> 00:00:14.100
+Leerla como dato no autoriza esa modificación.
+
+3
+00:00:14.100 --> 00:00:22.000
+En este ejemplo, la validación de alcance bloquea el cambio propuesto.
+
+4
+00:00:22.700 --> 00:00:29.400
+Las reglas confiables y los documentos consultados tienen distinto origen.
+
+5
+00:00:29.400 --> 00:00:36.100
+La evidencia puede justificar una respuesta sin convertirse en política.
+
+6
+00:00:36.100 --> 00:00:44.000
+Representa datos, instrucciones, acciones y evidencia por separado.
+
+7
+00:00:44.700 --> 00:00:51.400
+La autorización permite leer pedidos del cliente C7.
+
+8
+00:00:51.400 --> 00:00:58.100
+No permite cambiar su cuenta ni consultar los datos de C8.
+
+9
+00:00:58.100 --> 00:01:06.000
+El mínimo privilegio reduce qué puede dañar una decisión equivocada.
+
+10
+00:01:06.700 --> 00:01:13.400
+La confirmación muestra el destinatario y el borrador que se enviarán.
+
+11
+00:01:13.400 --> 00:01:20.100
+Si cambia el destinatario, la acción ya no coincide con lo aprobado.
+
+12
+00:01:20.100 --> 00:01:28.000
+Detén el envío y solicita una autorización para el nuevo alcance.
+
+13
+00:01:28.700 --> 00:01:35.400
+Los permisos también tienen un ámbito temporal y pueden revocarse.
+
+14
+00:01:35.400 --> 00:01:42.100
+Comprueba que siguen vigentes cuando va a ejecutarse la acción.
+
+15
+00:01:42.100 --> 00:01:50.000
+Una comprobación anterior no concede autoridad indefinida.
+
+16
+00:01:50.700 --> 00:01:57.400
+El modelo puede proponer una acción indebida pese a las instrucciones.
+
+17
+00:01:57.400 --> 00:02:04.100
+Las restricciones de herramientas deben seguir limitando su ejecución.
+
+18
+00:02:04.100 --> 00:02:12.000
+Combina controles y auditoría; este ejemplo no garantiza inmunidad.

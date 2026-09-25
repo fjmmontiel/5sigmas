@@ -9,21 +9,32 @@ tags:
   - Agentes
   - Producción
   - Arquitectura
-video: "05-de-la-demo-a-produccion.mp4"
-video_poster: "05-de-la-demo-a-produccion.jpg"
-video_title: "De la demo a producción"
-video_summary: "Qué hace operable a un agente bajo fallos: presupuestos, retries, idempotencia, trazas, cierres honestos y criterio para preferir un workflow determinista."
-video_duration: "PT60S"
+video: 05-de-la-demo-a-produccion.mp4
+video_poster: 05-de-la-demo-a-produccion.jpg
+video_title: De la demo a producción
+video_summary: Reserva la decisión del modelo para el tramo que depende de la situación. Mantén límites, verificación y una alternativa operable alrededor de ese tramo.
+video_duration: PT2M18S
+video_captions: 05-de-la-demo-a-produccion-visual-text.vtt
+video_transcript: 05-de-la-demo-a-produccion-transcript.html
 video_chapters:
-  - name: "Producción empieza con el fallo"
-    start: 0
-    end: 20
-  - name: "Idempotencia, retries y observabilidad"
-    start: 20
-    end: 40
-  - name: "Cierre honesto y cuándo no usar un agente"
-    start: 40
-    end: 60
+- name: El presupuesto define cuándo detenerse.
+  start: 0
+  end: 22
+- name: Clasifica el fallo antes de reintentar.
+  start: 22
+  end: 46
+- name: Un reintento no debe duplicar la intención.
+  start: 46
+  end: 70
+- name: Un fallo necesita estado y responsable.
+  start: 70
+  end: 92
+- name: Un resultado completo. Un único cierre.
+  start: 92
+  end: 116
+- name: Usa un agente donde la secuencia lo necesite.
+  start: 116
+  end: 138
 ---
 
 # Capítulo 5 — De la demo a un sistema operable

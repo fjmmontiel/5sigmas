@@ -1,0 +1,609 @@
+{
+  "schema": 1,
+  "series": "agentes-ia",
+  "round": "A2",
+  "owner_approval": "APPROVED_2026-09-25",
+  "public_scope": "12 exact owner-approved horizontal originals;12 vertical originals preserved separately",
+  "objects": [
+    {
+      "path": "series/agentes-ia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "sha256": "e896e7f3447963b44e8defe4915c86d8d5adf1e6f8f91133217ba16c2bd3824c",
+      "bytes": 3404104,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/00_presentacion_serie/",
+      "watch": "videos/series/agentes-ia/00_presentacion_serie/",
+      "poster_path": "series/agentes-ia/00_presentacion_serie.jpg",
+      "poster_sha256": "abd065dd5008ca723c740b2f252fd4d818411194d22b1af0f56f02a2d4058633",
+      "chapters": [
+        {
+          "name": "Una respuesta no crea un resultado.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "El resultado cambia el siguiente paso.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Autonomía dentro de un alcance.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Evalúa la tarea, no sólo el texto.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Leer un documento no le da autoridad.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Aceptado no significa completado.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/agentes-ia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "f0c726a94253d62dc66cf10c0e952c1fb552da52d853c2485cf160e3f527d074",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "sha256": "492878d859f5e849babb8e0c756e925854c62107dfe373680c304b16151d6e2f",
+      "bytes": 3267646,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/00_presentacion_serie/",
+      "watch": "en/videos/series/agentes-ia/00_presentacion_serie/",
+      "poster_path": "en/series/agentes-ia/00_presentacion_serie.jpg",
+      "poster_sha256": "0ad8ee7a02a742a3e1901e372a272db50a7b35ac6026d074c8631c1d83c7c790",
+      "chapters": [
+        {
+          "name": "An answer does not create an outcome.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "The result changes the next step.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Autonomy within a defined scope.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Evaluate the task, not just the text.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Reading a document does not grant authority.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Accepted does not mean completed.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "002ee8c961ca7de34799c19a7e91a5849ff79bc54621b7a978f38bbeabb61d30",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/agentes-ia/01-que-es-un-agente.mp4",
+      "kind": "video",
+      "sha256": "ed07fbbd443099c146f7f395351d3dddd457ccd51ab934fc0d2a35dd23db914a",
+      "bytes": 3482022,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/01-que-es-un-agente/",
+      "watch": "videos/series/agentes-ia/01-que-es-un-agente/",
+      "poster_path": "series/agentes-ia/01-que-es-un-agente.jpg",
+      "poster_sha256": "05054e9406a9a0b601d3b55a1813a8a5a34d1c890c2768241953de6112ce1057",
+      "chapters": [
+        {
+          "name": "Un workflow puede ser suficiente.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Proponer no es autorizar.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Elige acciones según la observación.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "El modelo propone. El runtime ejecuta.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Los permisos son operaciones concretas.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Define qué prueba que has terminado.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/agentes-ia/01-que-es-un-agente-visual-text.vtt",
+      "captions_sha256": "59fc37dd2ce4f15263819d7bd93d8e26a5b3daffcb8e056b1ffa08a716278c04",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/01-que-es-un-agente.mp4",
+      "kind": "video",
+      "sha256": "c91154e7e0a833e97bef08c9d0d41631b831b202c273f5756f6dd8e5cb776f2d",
+      "bytes": 3310684,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/01-que-es-un-agente/",
+      "watch": "en/videos/series/agentes-ia/01-que-es-un-agente/",
+      "poster_path": "en/series/agentes-ia/01-que-es-un-agente.jpg",
+      "poster_sha256": "9bc76ec6ca305ca759c36b24d59bf7d2c4246f49a6100e690034350799e4d3d3",
+      "chapters": [
+        {
+          "name": "A workflow can be enough.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "A proposal is not authorization.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Choose actions from the observation.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "The model proposes. The runtime executes.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Permissions name concrete operations.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Define what proves the task is complete.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/01-que-es-un-agente-visual-text.vtt",
+      "captions_sha256": "a985b071983c987ef1054ad2d678a309334b2188560263d3e9eed99631e41da1",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/agentes-ia/02-anatomia-de-un-agente.mp4",
+      "kind": "video",
+      "sha256": "9fac345ec49f6ceb6ab7f33b9f8319e02c35258204f7f70ef859085982bea71a",
+      "bytes": 3599886,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/02-anatomia-de-un-agente/",
+      "watch": "videos/series/agentes-ia/02-anatomia-de-un-agente/",
+      "poster_path": "series/agentes-ia/02-anatomia-de-un-agente.jpg",
+      "poster_sha256": "041a0e071b471c782622b3335dea8b0e26213cba2e09f3a7a83b46249a95aba2",
+      "chapters": [
+        {
+          "name": "Un nombre ambiguo no es un destinatario.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Un resultado parcial no es un éxito completo.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Contexto, memoria y estado no son lo mismo.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Reserva espacio antes de llenarlo.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Los estados gobiernan el mensaje visible.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Un recuerdo necesita procedencia y vigencia.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/agentes-ia/02-anatomia-de-un-agente-visual-text.vtt",
+      "captions_sha256": "7375ededc05086ca9ba8f15474cec5ea73a81a77fd339bf689128e2afe6e4808",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/02-anatomia-de-un-agente.mp4",
+      "kind": "video",
+      "sha256": "b679e49b85051762a0bccaa491f79e2d084fb53cfac73d4318945a1f658ccb45",
+      "bytes": 3335779,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/02-anatomia-de-un-agente/",
+      "watch": "en/videos/series/agentes-ia/02-anatomia-de-un-agente/",
+      "poster_path": "en/series/agentes-ia/02-anatomia-de-un-agente.jpg",
+      "poster_sha256": "c3fa9cdefb7b4c24490e3007c8637788f1e5ed373186da1328ed91c407d7ca7c",
+      "chapters": [
+        {
+          "name": "An ambiguous name is not a recipient.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "A partial result is not complete success.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Context, memory and state are different.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Reserve space before filling it.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "State governs the visible message.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Memory needs provenance and freshness.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/02-anatomia-de-un-agente-visual-text.vtt",
+      "captions_sha256": "baf5a9e0adc68ca355921c28268c1b7ce3d655deae99d3d5e6c18a5bbcc226f2",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/agentes-ia/03-como-evaluar-un-agente.mp4",
+      "kind": "video",
+      "sha256": "beca1ecea97eabe56afc78dd68a75290f6bac2723920ba8153ae1c1d87c884fe",
+      "bytes": 3533475,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/03-como-evaluar-un-agente/",
+      "watch": "videos/series/agentes-ia/03-como-evaluar-un-agente/",
+      "poster_path": "series/agentes-ia/03-como-evaluar-un-agente.jpg",
+      "poster_sha256": "5dab8fd22f937deae4ff9fdbc5642f060dd87c04fbb09eb84765be5786e68e7c",
+      "chapters": [
+        {
+          "name": "La prueba empieza con un estado inicial.",
+          "start": 0,
+          "end": 24
+        },
+        {
+          "name": "El mismo resultado puede costar más pasos.",
+          "start": 24,
+          "end": 46
+        },
+        {
+          "name": "Violar un permiso invalida el éxito.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "La media puede ocultar la cola.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Comprueba la suma, no la redacción.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "El agente no debe reescribir su examen.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/agentes-ia/03-como-evaluar-un-agente-visual-text.vtt",
+      "captions_sha256": "f226d46f9ed6a296a52792f92c25e90ffed5ea08105870f274552d9e996f83d4",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/03-como-evaluar-un-agente.mp4",
+      "kind": "video",
+      "sha256": "23703851c2f5d65b0163cbdd0b91925342c7bf0592298f4c42c1e5499ab79406",
+      "bytes": 3321218,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/03-como-evaluar-un-agente/",
+      "watch": "en/videos/series/agentes-ia/03-como-evaluar-un-agente/",
+      "poster_path": "en/series/agentes-ia/03-como-evaluar-un-agente.jpg",
+      "poster_sha256": "a136235437de74d318eb965a9bf4e2c92214fb125bf2bf81db57819b7aa0865b",
+      "chapters": [
+        {
+          "name": "The test starts with an initial state.",
+          "start": 0,
+          "end": 24
+        },
+        {
+          "name": "The same result can require more steps.",
+          "start": 24,
+          "end": 46
+        },
+        {
+          "name": "A policy violation invalidates success.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "The mean can hide the tail.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Check the sum, not the wording.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "The agent must not rewrite its own test.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/03-como-evaluar-un-agente-visual-text.vtt",
+      "captions_sha256": "829183fe1441f39e9bc8ae1bce7cea3451daaa0815d70512d31d4ebe923f4f10",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/agentes-ia/04-seguridad-agentes.mp4",
+      "kind": "video",
+      "sha256": "0f00e57bdb4eebbd0aa59e9bef7da9cb7b4e245c0189bf7c4ca5d9d16302c532",
+      "bytes": 3534805,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/04-seguridad-agentes/",
+      "watch": "videos/series/agentes-ia/04-seguridad-agentes/",
+      "poster_path": "series/agentes-ia/04-seguridad-agentes.jpg",
+      "poster_sha256": "a9be34e8be41bc86ea6f331392ce05f9e8977c5418268b1c17f5f20d6206f1df",
+      "chapters": [
+        {
+          "name": "Los datos externos pueden proponer órdenes.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Conserva la frontera entre dato e instrucción.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Limita la acción y también el recurso.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Aprueba una acción, no cualquier continuación.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Una autorización puede dejar de ser válida.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Una sola defensa no basta.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/agentes-ia/04-seguridad-agentes-visual-text.vtt",
+      "captions_sha256": "71f353b423265c02568850e8c9e4d3e6412b01c1bf23be577144b62722c0c38c",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/04-seguridad-agentes.mp4",
+      "kind": "video",
+      "sha256": "83cb02ccd2ddc6addc1bbea9f1a2e3c3b45a95e7278126794bd4bd4bb596cdfd",
+      "bytes": 3276167,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/04-seguridad-agentes/",
+      "watch": "en/videos/series/agentes-ia/04-seguridad-agentes/",
+      "poster_path": "en/series/agentes-ia/04-seguridad-agentes.jpg",
+      "poster_sha256": "769a62f7ac02649950c76f1b71103d632db91108ece753963ad1f3b09c0d5582",
+      "chapters": [
+        {
+          "name": "External data can carry instructions.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Keep the boundary between data and rules.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Limit both the action and the resource.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Approve one action, not any continuation.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Authorization can stop being valid.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "One defense is not enough.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/04-seguridad-agentes-visual-text.vtt",
+      "captions_sha256": "796decedafb7625e68bfb081258697f6a2f422d6ba110936a121202acd912b2d",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/agentes-ia/05-de-la-demo-a-produccion.mp4",
+      "kind": "video",
+      "sha256": "c029295a2506ede0965acf0156bd5cab76733355b9f88407ec7bc726abab2800",
+      "bytes": 3693211,
+      "duration": 138,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-ia/05-de-la-demo-a-produccion/",
+      "watch": "videos/series/agentes-ia/05-de-la-demo-a-produccion/",
+      "poster_path": "series/agentes-ia/05-de-la-demo-a-produccion.jpg",
+      "poster_sha256": "074435561acc1fdc732fbb3afa656ee0adb74e233ebdcbcb99b7dad5fd1c391e",
+      "chapters": [
+        {
+          "name": "El presupuesto define cuándo detenerse.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Clasifica el fallo antes de reintentar.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "Un reintento no debe duplicar la intención.",
+          "start": 46,
+          "end": 70
+        },
+        {
+          "name": "Un fallo necesita estado y responsable.",
+          "start": 70,
+          "end": 92
+        },
+        {
+          "name": "Un resultado completo. Un único cierre.",
+          "start": 92,
+          "end": 116
+        },
+        {
+          "name": "Usa un agente donde la secuencia lo necesite.",
+          "start": 116,
+          "end": 138
+        }
+      ],
+      "captions_path": "series/agentes-ia/05-de-la-demo-a-produccion-visual-text.vtt",
+      "captions_sha256": "c7bad674e7705bd4512164cba3b6f637e4e7ed7b7ed9eb6ee47e342c33ba482e",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/agentes-ia/05-de-la-demo-a-produccion.mp4",
+      "kind": "video",
+      "sha256": "ace39dd13c04cd1089d4dd72a21596ec7ef1b0fcb65abece10111ba36dc2c762",
+      "bytes": 3459720,
+      "duration": 138,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-ia/05-de-la-demo-a-produccion/",
+      "watch": "en/videos/series/agentes-ia/05-de-la-demo-a-produccion/",
+      "poster_path": "en/series/agentes-ia/05-de-la-demo-a-produccion.jpg",
+      "poster_sha256": "9465b213c80ef7786721031e986760d2c3ba6f3c9131877b43ffa6aeb38e0dab",
+      "chapters": [
+        {
+          "name": "The budget defines when to stop.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Classify the failure before retrying.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "A retry must not duplicate the intent.",
+          "start": 46,
+          "end": 70
+        },
+        {
+          "name": "Failure needs a state and an owner.",
+          "start": 70,
+          "end": 92
+        },
+        {
+          "name": "A complete result. One completion message.",
+          "start": 92,
+          "end": 116
+        },
+        {
+          "name": "Use an agent where the sequence needs one.",
+          "start": 116,
+          "end": 138
+        }
+      ],
+      "captions_path": "en/series/agentes-ia/05-de-la-demo-a-produccion-visual-text.vtt",
+      "captions_sha256": "9a200aeb060a737f5d75d84140dc647b3aba306154be7c6aeadc1e5e9f50fdfa",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    }
+  ]
+}

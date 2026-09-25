@@ -31,10 +31,19 @@ try {
       if (!body.includes(marker)) failures.push(`${route}: missing English marker ${JSON.stringify(marker)}`);
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
-      if (videoCount !== 0) failures.push(`${route}: owner-unpublished series must expose zero videos, found ${videoCount}`);
-      if (await page.locator('.s5-video-embed, .s5-video-embed__watch').count()) {
-        failures.push(`${route}: owner-unpublished video embed/watch link remains`);
+      if (videoCount !== 1) {
+        failures.push(`${route}: expected one approved A2 video, found ${videoCount}`);
+      } else {
+        const expected = `${root}${slug}.mp4`;
+        const source = await videos.first().locator('source').getAttribute('src');
+        // MkDocs may emit a relative URL. Resolve it exactly as the browser does.
+        const resolved = source ? new URL(source, page.url()).pathname : null;
+        if (resolved !== expected) failures.push(`${route}: incorrect native-English source ${resolved}; expected ${expected}`);
+        const poster = await videos.first().getAttribute('poster');
+        const resolvedPoster = poster ? new URL(poster, page.url()).pathname : null;
+        if (resolvedPoster !== `${root}${slug}.jpg`) failures.push(`${route}: incorrect native-English poster ${resolvedPoster}`);
       }
+      if (!(await page.locator(`a[href*="/en/videos/series/agentes-ia/${slug}/"]`).count())) failures.push(`${route}: missing native watch link`);
       if (await page.locator('audio').count()) failures.push(`${route}: unexpected inherited audio`);
       const sizes = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
       if (sizes.scroll > sizes.client + 2) failures.push(`${route}: ${label} horizontal overflow ${sizes.scroll - sizes.client}px`);
@@ -51,4 +60,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Native English AI Agents rollback QA passed: presentation + Chapters 1–5 remain intact and expose zero public video embeds on desktop/mobile.');
+console.log('Native English AI Agents A2 QA passed: six articles expose approved native media, posters and watch links on desktop/mobile.');
