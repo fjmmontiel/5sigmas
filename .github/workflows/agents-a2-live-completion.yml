@@ -24,15 +24,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify the already deployed revision
+      - name: Verify the already deployed revision via established release manifest
         run: |
-          python3 - <<'PY'
-          import json,os,urllib.request
-          rev=os.environ['APPROVED_REVISION']
-          with urllib.request.urlopen('https://5sigmas.com/build.json?completion='+rev) as r:m=json.load(r)
-          assert m['revision']==rev,m
-          print('EXACT_ALREADY_DEPLOYED_REVISION',rev)
-          PY
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const rev=process.env.APPROVED_REVISION;
+          const r=await fetch('https://5sigmas.com/modelos-r2-release.json?rev='+rev,{cache:'no-store'});
+          assert.equal(r.status,200);const m=await r.json();assert.equal(m.revision,rev);
+          console.log('EXACT_ALREADY_DEPLOYED_REVISION',rev);
+          JS
       - name: Install the existing browser-test dependency
         run: |
           npm install --no-save playwright@1.55.0
@@ -47,15 +47,14 @@ jobs:
         run: node scripts/validate_english_reasoning_ttc.mjs
       - name: Record completion without rewriting historical cancelled result
         run: |
-          python3 - <<'PY'
-          import json,os,urllib.request,datetime
-          from pathlib import Path
-          rev=os.environ['APPROVED_REVISION']
-          with urllib.request.urlopen('https://5sigmas.com/build.json?completion-final='+rev) as r:m=json.load(r)
-          assert m['revision']==rev,m
-          result={'state':'REMAINING_FOUR_GENERAL_LIVE_CHECKS_PASS','revision':rev,'original_deploy_run':36185610259,'original_live_job':108239315021,'original_job_status':'CANCELLED_AT_15_MINUTE_TIMEOUT_AFTER_ALL_RELEASE_SPECIFIC_TESTS_PASSED','completion_run':os.environ['GITHUB_RUN_ID'],'completed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'checks':['validate_english_concepts.mjs','validate_english_visual_hub.mjs','validate_english_video_hub.mjs','validate_english_reasoning_ttc.mjs'],'rebuild':False,'redeploy':False,'changed_media':False,'public_writes':False}
-          Path('/tmp/agents-a2-live-completion.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
-          PY
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';
+          const rev=process.env.APPROVED_REVISION;
+          const r=await fetch('https://5sigmas.com/modelos-r2-release.json?rev='+rev,{cache:'no-store'});
+          assert.equal(r.status,200);const m=await r.json();assert.equal(m.revision,rev);
+          const result={state:'REMAINING_FOUR_GENERAL_LIVE_CHECKS_PASS',revision:rev,original_deploy_run:36185610259,original_live_job:108239315021,original_job_status:'CANCELLED_AT_15_MINUTE_TIMEOUT_AFTER_ALL_RELEASE_SPECIFIC_TESTS_PASSED',completion_run:process.env.GITHUB_RUN_ID,completed_at:new Date().toISOString(),checks:['validate_english_concepts.mjs','validate_english_visual_hub.mjs','validate_english_video_hub.mjs','validate_english_reasoning_ttc.mjs'],rebuild:false,redeploy:false,changed_media:false,public_writes:false};
+          fs.writeFileSync('/tmp/agents-a2-live-completion.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+          JS
       - uses: actions/upload-artifact@v4
         with:
           name: agents-a2-live-completion
