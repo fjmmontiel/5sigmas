@@ -33,13 +33,13 @@ tools:
     en_route: /en/tools/model-price-performance/
     es_parity: true
     en_parity: true
-    tests: passing_full_ci_2026-08-21
-    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
-    provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-08-21
-    data_freshness: pricing_and_benchmark_review_every_14_days_and_performance_daily_during_active_review
-    validated_head: 2384b6a0311683f4bf5be584bf54a6891683bf49
-    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
-    last_reviewed: 2026-08-21
+    tests: required_full_pr_ci_2026-09-25
+    visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
+    provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-09-25
+    data_freshness: release_feed_daily_performance_daily_provider_pricing_weekly_and_on_release
+    validated_head: pending_pr_validation
+    release_commit: pending_pr_merge
+    last_reviewed: 2026-09-25
   - id: inference-vram
     order: 3
     es_title: Calculadora de VRAM para inferencia
