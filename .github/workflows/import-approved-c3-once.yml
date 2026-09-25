@@ -31,8 +31,17 @@ jobs:
           ref: 8a0f9cada9fa33563c06434915baf775dd618ca1
           path: site
           fetch-depth: 1
-      - name: Recover and qualify exact owner-approved media; reject every mismatch
-        run: python3 recipe/.github/c3-approved-snapshot/build_release.py --root site
+      - name: Recover exact approved files in isolated processes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('recipe/.github/c3-approved-snapshot/build_release.py');s=p.read_text()
+          old='ProcessPoolExecutor(max_workers=2)';assert old in s
+          s=s.replace(old,'ProcessPoolExecutor(max_workers=2,max_tasks_per_child=1)')
+          s=s.replace("assert sha(out)==HASHES[name],f'Not approved bytes: {name}'", "assert sha(out)==HASHES[name],f'Not approved bytes: {name}: {sha(out)} != {HASHES[name]}'")
+          p.write_text(s)
+          PY
+          python3 recipe/.github/c3-approved-snapshot/build_release.py --root site
       - name: Validate scoped release payload
         working-directory: site
         run: |
@@ -51,7 +60,7 @@ jobs:
               assert p in named or p.startswith(roots),p
               assert not p.endswith(('.ttf','.otf','.woff','.woff2')),p
           for p in Path('.github/workflows').glob('*.yml'):yaml.safe_load(p.read_text())
-          print('Scoped payload validated; five other withdrawn series and both prior Golden series remain unchanged.')
+          print('Scoped payload validated; other withdrawn series and prior Golden series remain unchanged.')
           PY
       - name: Persist clean release branch; no tooling or transport history
         working-directory: site
