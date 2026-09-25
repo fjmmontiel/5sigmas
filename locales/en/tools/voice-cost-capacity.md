@@ -127,12 +127,12 @@ hide:
     </div>
 
     <div class="s5-voice-cost-reference">
-      <div><small>Reference snapshot</small><strong data-field="presetLabel">Spain reference · cascade</strong><p data-output="presetNote">Public rates and assumptions verified on 2026-08-21; edit them to match your contract, region and architecture.</p></div>
-      <strong>Data: <span data-output="sourceUpdated">2026-08-21</span></strong>
+      <div><small>Reference snapshot</small><strong data-field="presetLabel">Spain reference · cascade</strong><p data-output="presetNote">Public rates and assumptions verified on 2026-09-25; edit them to match your contract, region and architecture.</p></div>
+      <strong>Data: <span data-output="sourceUpdated">2026-09-25</span></strong>
     </div>
 
     <aside class="s5-tool-source" aria-label="Scenario provenance">
-      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verified 2026-08-21</span></div>
+      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verified 2026-09-25</span></div>
       <p>The preset uses $0.0178/min for a local outbound call to Spain and $0.0044/min for Media Streams. Mobile, inbound, SIP/BYOC, taxes, monthly numbers and discounts can change the invoice.</p>
     </aside>
   </section>
@@ -150,10 +150,11 @@ hide:
     <div class="s5-tool-method__formula">stt_concurrency ≈ peak_calls × stt_sessions_per_call</div>
     <p><strong>TTS.</strong> Do not use audio playback share as provider concurrency. ElevenLabs documents that with WebSockets only time spent generating audio counts toward concurrency and says a limit of 5 can typically support about 100 balanced voice-agent conversations. The initial 5% factor reproduces that heuristic (5/100); it is editable and does not replace p95/p99 measurements from your own requests.</p>
     <div class="s5-tool-method__formula">tts_concurrency ≈ peak_calls × generation_duty</div>
-    <p><strong>Reference rates.</strong> On 2026-08-21: Twilio Spain lists $0.0178/min for a local outbound call and $0.0044/min for Media Streams; OpenAI lists GPT Live Transcribe at $0.017/audio-minute and GPT-5.6 Luna at $0.20/$1.20 per MTok input/output; ElevenLabs lists Flash/Turbo TTS at $0.05 per 1,000 characters. Every rate remains editable.</p>
+    <p><strong>Reference rates.</strong> On 2026-09-25: Twilio Spain lists $0.0178/min for a local outbound call and $0.0044/min for Media Streams; OpenAI lists GPT Live Transcribe at $0.017/audio-minute and GPT-6 Luna at $0.10/$0.50 per MTok input/output; ElevenLabs lists Flash/Turbo TTS at $0.05 per 1,000 characters. Every rate remains editable.</p>
+    <p><strong>Full-duplex architecture.</strong> GPT-Live 1 bills active session duration at $0.05/min, can listen and speak at the same time, and bills backend reasoning/tool use separately. It is not folded into this cascade preset because forcing it into STT + LLM + TTS would mislabel units and can double-count cost.</p>
     <div class="s5-voice-cost-note"><strong>Not an invoice or SLA.</strong> The model excludes monthly phone numbers, taxes, recording, observability, tool calls, storage, transfers, volume discounts and contractual minimums. Provider concurrency limits depend on plan and account and must come from your real configuration.</div>
     <p>To optimize response time as well as cost, use the <a href="/en/tools/voice-latency-budget/">voice-agent latency explorer</a>. For architecture trade-offs, read <a href="/en/articulos-tecnicos/voice-agent-architectures/">three architectures for voice agents</a>.</p>
-    <p><strong>Sources:</strong> <a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio Voice Spain</a> · <a href="https://www.twilio.com/docs/voice/media-streams" target="_blank" rel="noopener noreferrer">Twilio Media Streams</a> · <a href="https://developers.openai.com/api/docs/models/gpt-live-transcribe" target="_blank" rel="noopener noreferrer">OpenAI GPT Live Transcribe</a> · <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener noreferrer">OpenAI GPT-5.6 Luna</a> · <a href="https://elevenlabs.io/pricing/api" target="_blank" rel="noopener noreferrer">ElevenLabs API pricing</a> · <a href="https://elevenlabs.io/docs/overview/models" target="_blank" rel="noopener noreferrer">ElevenLabs concurrency</a>. Verified 2026-08-21.</p>
+    <p><strong>Sources:</strong> <a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio Voice Spain</a> · <a href="https://www.twilio.com/docs/voice/media-streams" target="_blank" rel="noopener noreferrer">Twilio Media Streams</a> · <a href="https://developers.openai.com/api/docs/models/gpt-live-transcribe" target="_blank" rel="noopener noreferrer">OpenAI GPT Live Transcribe</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-luna" target="_blank" rel="noopener noreferrer">OpenAI GPT-6 Luna</a> · <a href="https://elevenlabs.io/pricing/api" target="_blank" rel="noopener noreferrer">ElevenLabs API pricing</a> · <a href="https://elevenlabs.io/docs/overview/models" target="_blank" rel="noopener noreferrer">ElevenLabs concurrency</a>. Verified 2026-09-25.</p>
   </div>
 </section>
 
