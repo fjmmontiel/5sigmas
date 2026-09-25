@@ -255,60 +255,67 @@
       x: item.x * plotWidth,
       y: item.y * plotHeight
     }));
-    const candidates = [
-      [0, -34], [0, 34],
-      [48, -28], [-48, -28], [48, 28], [-48, 28],
-      [58, 0], [-58, 0],
-      [0, -68], [0, 68],
-      [92, -34], [-92, -34], [92, 34], [-92, 34],
-      [100, 0], [-100, 0]
-    ];
     const placed = [];
-    const ordered = [...items].sort((a, b) => a.y - b.y || a.x - b.x || a.row.id.localeCompare(b.row.id));
+    const density = (item) => anchors.reduce((score, anchor) => {
+      const distance = Math.hypot(item.x * plotWidth - anchor.x, item.y * plotHeight - anchor.y);
+      return score + (distance > 0 && distance < 140 ? 140 - distance : 0);
+    }, 0);
+    const ordered = [...items].sort((a, b) =>
+      density(b) - density(a) || a.y - b.y || a.x - b.x || a.row.id.localeCompare(b.row.id)
+    );
 
     for (const item of ordered) {
       const width = item.point.offsetWidth;
       const height = item.point.offsetHeight;
       const anchorX = item.x * plotWidth;
       const anchorY = item.y * plotHeight;
-      let chosen = null;
+      const candidates = [];
 
-      for (const [dx, dy] of candidates) {
+      for (const radius of [34, 48, 64, 82, 102, 126, 154, 186, 222]) {
+        for (let step = 0; step < 16; step += 1) {
+          const angle = (Math.PI * 2 * step) / 16;
+          const x = anchorX + Math.cos(angle) * radius;
+          const y = anchorY + Math.sin(angle) * radius;
+          candidates.push({ x, y, score: radius });
+        }
+      }
+
+      for (let y = height / 2 + 4; y <= plotHeight - height / 2 - 4; y += 6) {
+        for (let x = width / 2 + 4; x <= plotWidth - width / 2 - 4; x += 6) {
+          candidates.push({ x, y, score: 240 + Math.hypot(x - anchorX, y - anchorY) });
+        }
+      }
+      candidates.sort((a, b) => a.score - b.score || a.y - b.y || a.x - b.x);
+
+      let chosen = null;
+      for (const candidate of candidates) {
         const box = {
-          left: anchorX + dx - width / 2,
-          right: anchorX + dx + width / 2,
-          top: anchorY + dy - height / 2,
-          bottom: anchorY + dy + height / 2
+          left: candidate.x - width / 2,
+          right: candidate.x + width / 2,
+          top: candidate.y - height / 2,
+          bottom: candidate.y + height / 2
         };
         const inside = box.left >= 2 && box.right <= plotWidth - 2 && box.top >= 2 && box.bottom <= plotHeight - 2;
-        const clearsLabels = !placed.some((other) => boxesOverlap(box, other));
-        const clearsAnchors = anchors.every((anchor) => !boxContainsAnchor(box, anchor));
+        const clearsLabels = !placed.some((other) => boxesOverlap(box, other, 3));
+        const clearsAnchors = anchors.every((anchor) => !boxContainsAnchor(box, anchor, 4));
         if (inside && clearsLabels && clearsAnchors) {
-          chosen = { dx, dy, box };
+          chosen = { x: candidate.x, y: candidate.y, box };
           break;
         }
       }
 
       if (!chosen) {
-        const dx = anchorX < plotWidth / 2 ? 104 : -104;
-        const dy = anchorY < plotHeight / 2 ? 72 : -72;
-        chosen = {
-          dx,
-          dy,
-          box: {
-            left: anchorX + dx - width / 2,
-            right: anchorX + dx + width / 2,
-            top: anchorY + dy - height / 2,
-            bottom: anchorY + dy + height / 2
-          }
-        };
+        item.point.dataset.placementFailed = 'true';
+        continue;
       }
 
-      item.point.style.transform = `translate(calc(-50% + ${chosen.dx}px), calc(-50% + ${chosen.dy}px))`;
-      item.point.dataset.labelOffsetX = String(chosen.dx);
-      item.point.dataset.labelOffsetY = String(chosen.dy);
+      const dx = chosen.x - anchorX;
+      const dy = chosen.y - anchorY;
+      item.point.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      item.point.dataset.labelOffsetX = String(dx);
+      item.point.dataset.labelOffsetY = String(dy);
       placed.push(chosen.box);
-      appendChartAnnotation(item, anchorX, anchorY, chosen.dx, chosen.dy);
+      appendChartAnnotation(item, anchorX, anchorY, dx, dy);
     }
   }
 
@@ -317,6 +324,10 @@
     const xMetric = axis[state.xAxis] || axis.cost;
     const yMetric = axis[state.yAxis] || axis.intelligence;
     const drawable = rows.filter((row) => metricValue(row, state.xAxis) !== null && metricValue(row, state.yAxis) !== null);
+    const compactPlot = window.matchMedia('(max-width: 640px)').matches;
+    const minHeight = compactPlot ? 640 : 560;
+    const perModel = compactPlot ? 40 : 34;
+    chart.style.setProperty('--s5-model-chart-height', `${Math.max(minHeight, drawable.length * perModel)}px`);
     outputs.chartXLabel.textContent = xMetric.label;
     outputs.chartYLabel.textContent = yMetric.label;
     chartPoints.replaceChildren();
@@ -370,12 +381,25 @@
   }
 
   function shortName(row) {
-    if (row.model.includes('Opus')) return 'Opus 5';
-    if (row.model.includes('Sol')) return 'Sol';
-    if (row.model.includes('Terra')) return 'Terra';
-    if (row.model.includes('Luna')) return 'Luna';
-    if (row.model.includes('Gemini')) return 'Gemini 3.6';
-    return row.model;
+    const names = {
+      'anthropic-claude-opus-5-5-xhigh': 'Opus 5.5',
+      'anthropic-claude-fable-5-1-max': 'Fable 5.1',
+      'openai-gpt-6-astra-max': 'Astra',
+      'openai-gpt-6-sol-max': 'Sol',
+      'openai-gpt-6-luna-max': 'Luna',
+      'openai-gpt-5-6-terra-max': 'Terra',
+      'google-gemini-3-8-flash-high': 'Gemini 3.8',
+      'google-gemini-3-6-flash-high': 'Gemini 3.6',
+      'spacexai-grok-4-7-high': 'Grok 4.7',
+      'deepseek-v4-1-flash-max': 'DeepSeek 4.1',
+      'alibaba-qwen-3-8-max-0902': 'Qwen Max',
+      'alibaba-qwen-3-8-flash-next': 'Qwen Flash',
+      'meta-muse-spark-1-3-max': 'Muse 1.3',
+      'xiaomi-mimo-v2-6-pro': 'MiMo 2.6',
+      'stepfun-step-5-preview': 'Step 5',
+      'zai-glm-5-3-flash': 'GLM 5.3'
+    };
+    return names[row.id] || row.model;
   }
 
   function renderTable(rows) {
