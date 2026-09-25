@@ -33,6 +33,14 @@ for (const spec of cases) {
     const h1 = (await page.locator('h1').first().textContent() || '').trim();
     if (!h1) failures.push(`${spec.route} ${viewport.name}: H1 missing`);
 
+    const data = await page.evaluate(async () => {
+      const response = await fetch('/assets/data/tools/model-price-performance.json', { cache: 'no-store' });
+      return response.json();
+    });
+    const expectedCount = data.models.length;
+    const expectedOpenAi = data.models.filter((model) => model.provider === 'OpenAI').length;
+    const expectedLowLatency = data.models.filter((model) => Number(model.ttft_seconds) <= 30).length;
+
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflow > 1) failures.push(`${spec.route} ${viewport.name}: page horizontal overflow ${overflow}px`);
 
@@ -42,28 +50,27 @@ for (const spec of cases) {
     }).length);
     if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack labels`);
 
-    await page.waitForFunction(() => document.querySelectorAll('[data-model-table-body] tr').length >= 5);
-    const visible = (await page.locator('[data-output="visibleCount"]').textContent() || '').trim();
-    if (visible !== '5') failures.push(`${spec.route} ${viewport.name}: expected 5 visible models, got ${visible}`);
+    await page.waitForFunction((count) => document.querySelectorAll('[data-model-table-body] tr').length === count, expectedCount);
+    const visible = Number((await page.locator('[data-output="visibleCount"]').textContent() || '').replace(/\D/g, ''));
+    if (visible !== expectedCount) failures.push(`${spec.route} ${viewport.name}: expected ${expectedCount} visible models, got ${visible}`);
+
+    const tableText = await page.locator('[data-model-table-body]').innerText();
+    for (const sentinel of ['Claude Opus 5.5', 'GPT-6 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'DeepSeek V4.1 Flash']) {
+      if (!tableText.includes(sentinel)) failures.push(`${spec.route} ${viewport.name}: refreshed model missing from table: ${sentinel}`);
+    }
 
     const points = await page.locator('.s5-model-point').count();
-    if (points !== 5) failures.push(`${spec.route} ${viewport.name}: expected 5 chart points, got ${points}`);
+    if (points !== expectedCount) failures.push(`${spec.route} ${viewport.name}: expected ${expectedCount} chart points, got ${points}`);
     const frontierPoints = await page.locator('.s5-model-point[data-frontier="true"]').count();
-    if (frontierPoints !== 3) failures.push(`${spec.route} ${viewport.name}: expected 3 default frontier points, got ${frontierPoints}`);
+    if (frontierPoints < 1) failures.push(`${spec.route} ${viewport.name}: no default Pareto frontier points rendered`);
     const anchors = await page.locator('[data-model-anchor]').count();
     const leaders = await page.locator('[data-model-leader]').count();
     if (anchors !== points || leaders !== points) failures.push(`${spec.route} ${viewport.name}: expected one anchor and leader per chart label, got ${anchors}/${leaders} for ${points} labels`);
 
     const labelGeometry = await page.locator('[data-model-chart-points]').evaluate((container) => {
       const bounds = container.getBoundingClientRect();
-      const labels = [...container.querySelectorAll('.s5-model-point')].map((node) => ({
-        id: node.dataset.modelId,
-        rect: node.getBoundingClientRect()
-      }));
-      const anchors = [...container.querySelectorAll('[data-model-anchor]')].map((node) => ({
-        id: node.dataset.modelAnchor,
-        rect: node.getBoundingClientRect()
-      }));
+      const labels = [...container.querySelectorAll('.s5-model-point')].map((node) => ({ id: node.dataset.modelId, rect: node.getBoundingClientRect() }));
+      const anchors = [...container.querySelectorAll('[data-model-anchor]')].map((node) => ({ id: node.dataset.modelAnchor, rect: node.getBoundingClientRect() }));
       const overlaps = [];
       for (let i = 0; i < labels.length; i += 1) {
         for (let j = i + 1; j < labels.length; j += 1) {
@@ -99,13 +106,13 @@ for (const spec of cases) {
 
     await page.locator('[data-field="provider"]').selectOption('OpenAI');
     const openAiRows = await page.locator('[data-model-table-body] tr').count();
-    if (openAiRows !== 3) failures.push(`${spec.route} ${viewport.name}: provider filter expected 3 OpenAI rows, got ${openAiRows}`);
+    if (openAiRows !== expectedOpenAi) failures.push(`${spec.route} ${viewport.name}: provider filter expected ${expectedOpenAi} OpenAI rows, got ${openAiRows}`);
 
     await page.locator('[data-field="provider"]').selectOption('all');
     await page.locator('[data-field="maxTtftSeconds"]').fill('30');
     await page.locator('[data-field="maxTtftSeconds"]').dispatchEvent('input');
     const lowLatencyRows = await page.locator('[data-model-table-body] tr').count();
-    if (lowLatencyRows !== 1) failures.push(`${spec.route} ${viewport.name}: TTFT filter expected 1 row, got ${lowLatencyRows}`);
+    if (lowLatencyRows !== expectedLowLatency) failures.push(`${spec.route} ${viewport.name}: TTFT filter expected ${expectedLowLatency} rows, got ${lowLatencyRows}`);
 
     await page.locator('[data-action="reset"]').click();
     const costBefore = (await page.locator('[data-model-table-body] tr').first().locator('td').nth(1).textContent() || '').trim();
@@ -114,8 +121,7 @@ for (const spec of cases) {
     const costAfter = (await page.locator('[data-model-table-body] tr').first().locator('td').nth(1).textContent() || '').trim();
     if (costAfter === costBefore) failures.push(`${spec.route} ${viewport.name}: workload change did not update scenario costs`);
 
-    const share = page.locator('[data-action="share"]');
-    await share.click();
+    await page.locator('[data-action="share"]').click();
     if (!page.url().includes('?') || !page.url().includes('in=300000')) failures.push(`${spec.route} ${viewport.name}: share action did not encode workload`);
 
     const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
@@ -149,4 +155,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, filters, workload updates, Pareto frontier, collision-free anchored chart labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');
+console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, dynamic release count, filters, workload updates, Pareto frontier, collision-free anchored chart labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');

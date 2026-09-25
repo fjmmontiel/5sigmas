@@ -39,13 +39,13 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas · Modelos · 02</div>
   <h1>Compara modelos para tu carga, no con un ranking único.</h1>
-  <p>Define el tamaño de una solicitud y filtra por inteligencia medida, latencia, contexto o coste. El explorador mantiene separados el precio del proveedor y las mediciones independientes de Artificial Analysis para que puedas ver el compromiso entre calidad, velocidad y gasto.</p>
+  <p>Define el tamaño de una solicitud y filtra por inteligencia medida, latencia, contexto o coste. El explorador mantiene separada la procedencia del precio API de las mediciones independientes de Artificial Analysis para que puedas ver el compromiso entre calidad, velocidad y gasto. Se priorizan tarifas USD publicadas por el proveedor; si no existe una tabla USD pública, la fila indica el uso de la tarifa observada por Artificial Analysis sobre la API first-party.</p>
 </section>
 
 <div class="s5-tool-summary-strip" aria-label="Datos utilizados en la comparación">
   <div><small>Calidad</small><strong>Intelligence Index</strong></div>
   <div><small>Rendimiento</small><strong>tokens/s + TTFT</strong></div>
-  <div><small>Precio</small><strong>API oficial vigente</strong></div>
+  <div><small>Precio</small><strong>API first-party con fuente</strong></div>
 </div>
 
 <div class="s5-tool-workbench s5-model-workbench">
@@ -192,7 +192,7 @@ hide:
     <p><strong>Intelligence Index.</strong> Es el índice compuesto de Artificial Analysis para la configuración indicada. Resume varias evaluaciones de razonamiento, conocimiento, código y trabajo con herramientas. Es una señal útil para comparar, no una medida universal de «inteligencia» ni un sustituto de tus evals.</p>
     <p><strong>Velocidad y TTFT.</strong> Artificial Analysis los mide contra APIs reales. <em>tokens/s</em> describe la velocidad una vez iniciada la salida; TTFT mide el tiempo hasta el primer token. En modelos razonadores, la latencia puede estar dominada por el tiempo de deliberación y cambiar mucho con el esfuerzo elegido.</p>
     <p><strong>Frontera.</strong> No se calcula una puntuación secreta ni se asignan pesos arbitrarios. La frontera de Pareto solo identifica configuraciones que no están dominadas simultáneamente en coste e Intelligence Index.</p>
-    <p class="s5-tool-method__notes">Datos verificados el 21 de agosto de 2026. Las mediciones de rendimiento y los benchmarks cambian; la selección es deliberadamente pequeña y solo incluye configuraciones para las que podemos mantener precio, especificaciones y rendimiento con procedencia explícita.</p>
+    <p class="s5-tool-method__notes">Datos verificados el 25 de septiembre de 2026 contra Artificial Analysis Intelligence Index v4.3.2. El registro de releases revisa todas las entradas nuevas desde el snapshot anterior; el gráfico contiene 16 configuraciones actuales con procedencia completa de precio, contexto, Intelligence Index, velocidad y TTFT. Las releases revisadas que todavía no cumplen ese contrato quedan registradas en el dataset con un motivo explícito de exclusión.</p>
   </div>
 </section>
 

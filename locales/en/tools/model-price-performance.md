@@ -39,13 +39,13 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Tools · Models · 02</div>
   <h1>Compare models for your workload, not with one universal ranking.</h1>
-  <p>Set request size and filter by measured intelligence, latency, context or cost. The explorer keeps provider pricing separate from independent Artificial Analysis measurements so you can see the trade-off among quality, speed and spend.</p>
+  <p>Set request size and filter by measured intelligence, latency, context or cost. The explorer keeps API pricing provenance separate from independent Artificial Analysis measurements so you can see the trade-off among quality, speed and spend. Provider-published USD rates are preferred; when a public USD table is unavailable, the row explicitly falls back to Artificial Analysis's observed first-party API rate.</p>
 </section>
 
 <div class="s5-tool-summary-strip" aria-label="Data used in the comparison">
   <div><small>Quality</small><strong>Intelligence Index</strong></div>
   <div><small>Performance</small><strong>tokens/s + TTFT</strong></div>
-  <div><small>Price</small><strong>current first-party API</strong></div>
+  <div><small>Price</small><strong>sourced first-party API</strong></div>
 </div>
 
 <div class="s5-tool-workbench s5-model-workbench">
@@ -192,7 +192,7 @@ hide:
     <p><strong>Intelligence Index.</strong> This is Artificial Analysis's composite index for the named configuration. It aggregates multiple evaluations covering reasoning, knowledge, coding and tool use. It is a useful comparison signal, not a universal measure of "intelligence" and not a substitute for your own evals.</p>
     <p><strong>Output speed and TTFT.</strong> Artificial Analysis measures them against live APIs. <em>tokens/s</em> describes generation speed after output starts; TTFT measures time to the first token. For reasoning models, latency can be dominated by deliberation and vary substantially with the selected reasoning effort.</p>
     <p><strong>Frontier.</strong> There is no hidden composite score and no arbitrary weighting. The Pareto frontier only identifies configurations that are not simultaneously dominated on both cost and Intelligence Index.</p>
-    <p class="s5-tool-method__notes">Data verified August 21, 2026. Performance measurements and benchmarks change; this is deliberately a small curated set containing only configurations for which price, specifications and performance can be maintained with explicit provenance.</p>
+    <p class="s5-tool-method__notes">Data verified September 25, 2026 against Artificial Analysis Intelligence Index v4.3.2. The release ledger reviews every new entry since the previous snapshot; the chart contains 16 current configurations with complete price, context, Intelligence Index, output-speed and TTFT provenance. Reviewed releases that cannot yet meet that comparison contract remain recorded in the dataset with an explicit exclusion reason.</p>
   </div>
 </section>
 

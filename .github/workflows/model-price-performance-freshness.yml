@@ -1,0 +1,135 @@
+name: Model price-performance freshness
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: model-price-performance-freshness
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Discover upstream drift and refresh safe metrics
+        id: refresh
+        continue-on-error: true
+        run: node scripts/refresh_model_price_performance_upstream.mjs --write 2>&1 | tee /tmp/model-refresh.log
+
+      - name: Surface releases, pricing or methodology changes for review
+        if: steps.refresh.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Model price/performance upstream review required"
+          body="$(cat /tmp/model-refresh.log)"
+          existing="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+          exit 1
+
+      - name: Detect generated dataset change
+        id: diff
+        run: |
+          if git diff --quiet -- docs/assets/data/tools/model-price-performance.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enforce release-ledger and provenance freshness
+        run: node scripts/audit_model_price_performance_freshness.mjs --max-age-days=8
+
+      - name: Verify model explorer math and provenance
+        run: node scripts/test_model_price_performance_tool.mjs
+
+      - uses: actions/setup-python@v5
+        if: steps.diff.outputs.changed == 'true'
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install preview dependencies
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Spanish preview strictly
+        if: steps.diff.outputs.changed == 'true'
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and build English preview strictly
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Install Playwright
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Validate refreshed explorer in ES/EN on mobile and desktop
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python -m http.server 8000 --directory site > /tmp/model-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/herramientas/precio-rendimiento-modelos/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-price-performance/ > /dev/null && break
+            if [ "$attempt" -eq 30 ]; then
+              cat /tmp/model-preview.log
+              exit 1
+            fi
+            sleep 1
+          done
+          S5_PREVIEW_BASE=http://127.0.0.1:8000 node scripts/validate_model_price_performance_tool.mjs
+
+      - name: Open or update freshness PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="automation/model-price-performance-refresh"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$branch"
+          git add docs/assets/data/tools/model-price-performance.json
+          git commit -m "data(tools): refresh model price-performance snapshot"
+          git push --force origin "HEAD:$branch"
+          existing="$(gh pr list --state open --head "$branch" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" \
+              --title "data(tools): automated model price-performance refresh" \
+              --body "Automated upstream refresh. Release feed unchanged; benchmark methodology and API pricing gates passed; deterministic tests plus ES/EN 390px and 1440px browser QA passed before push."
+          else
+            gh pr create \
+              --head "$branch" \
+              --base main \
+              --title "data(tools): automated model price-performance refresh" \
+              --body "Automated upstream refresh. Release feed unchanged; benchmark methodology and API pricing gates passed; deterministic tests plus ES/EN 390px and 1440px browser QA passed before push."
+          fi

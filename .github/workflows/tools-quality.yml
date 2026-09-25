@@ -62,11 +62,22 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install media probe dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Verify calculator math and pricing provenance
         run: node scripts/test_llm_cost_latency_tool.mjs
 
       - name: Verify model explorer math, frontier and provenance
         run: node scripts/test_model_price_performance_tool.mjs
+
+      - name: Verify model explorer release-ledger freshness
+        run: node scripts/audit_model_price_performance_freshness.mjs --max-age-days=8
+
+      - name: Verify model explorer against current upstream
+        run: node scripts/refresh_model_price_performance_upstream.mjs
 
       - name: Verify inference VRAM math and architecture provenance
         run: node scripts/test_inference_vram_tool.mjs
