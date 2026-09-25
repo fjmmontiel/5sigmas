@@ -48,7 +48,7 @@ summary: Break down a voice agent's latency across transport, turn end, STT, mod
           <select id="s5-voice-latency-en-architecture" data-field="architecture">
             <option value="cascade">STT → LLM → TTS cascade</option>
             <option value="halfCascade">Half-cascade / audio → model → TTS</option>
-            <option value="speechToSpeech">Speech-to-speech</option>
+            <option value="speechToSpeech">Full-duplex speech-to-speech</option>
           </select>
           <small>Presets are editable teaching scenarios, not provider measurements.</small>
         </div>
@@ -111,7 +111,7 @@ summary: Break down a voice agent's latency across transport, turn end, STT, mod
     </div>
 
     <aside class="s5-tool-source" aria-label="Method provenance">
-      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Sources reviewed 2026-08-21</span></div>
+      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Sources reviewed 2026-09-25</span></div>
       <p>Turn end is a decision, not free latency: endpointing systems wait for evidence of silence or semantic completion. The right value depends on the domain and should be evaluated against false cuts and excessive waits, not milliseconds alone.</p>
     </aside>
   </section>
@@ -122,14 +122,14 @@ summary: Break down a voice agent's latency across transport, turn end, STT, mod
   <div class="s5-tool-method__body">
     <p><strong>Measurement boundary.</strong> This tool defines response latency as the time from the acoustic end of the user's turn at the capture edge to the first agent audio at the listening edge. If your telemetry uses another boundary, adjust components so every stage uses the same reference.</p>
     <div class="s5-tool-method__formula">first_audio = ingress + turn_detection + residual_STT + model_first_output + TTS_first_audio + egress + playback_buffer</div>
-    <p><strong>Architecture.</strong> A full cascade exposes external STT and TTS. In the half-cascade preset, audio understanding lives inside the model while TTS remains external. In speech-to-speech, external STT and TTS are set to zero. These are teaching presets, not a claim that one architecture is always faster.</p>
+    <p><strong>Architecture.</strong> A full cascade exposes external STT and TTS. In the half-cascade preset, audio understanding lives inside the model while TTS remains external. In full-duplex speech-to-speech, external STT and TTS are set to zero. GPT-Live 1 is a current reference for this class: it can listen and speak simultaneously while delegating complex work to a backend. These are teaching presets, not a claim that one architecture is always faster.</p>
     <p><strong>Turn end.</strong> Deepgram documents VAD endpointing with a configurable silence duration. OpenAI Realtime distinguishes <code>server_vad</code> from <code>semantic_vad</code>; semantic turn detection can wait longer when it estimates the user has not finished. Reducing this stage without tracking false cuts can make the interaction worse.</p>
     <p><strong>TTS.</strong> ElevenLabs separates model inference time from end-to-end latency and recommends streaming/WebSockets to reduce time to first byte/audio. Text buffering can delay the start of synthesis. That is why this tool asks for “TTS first audio”, not total synthesis duration.</p>
     <p><strong>Barge-in.</strong> Interruption is not response latency in reverse. It includes receiving new speech, detecting it, cancelling generation/playback and clearing audio already queued. In bidirectional Media Streams, Twilio documents <code>clear</code> to empty the audio buffer and <code>mark</code> to track audio that finished or was cleared.</p>
     <div class="s5-tool-method__formula">barge_in_stop = ingress + speech_start_detection + cancel/control + output_buffer_clear</div>
     <div class="s5-voice-latency-caveat"><p><strong>These are not benchmarks.</strong> Initial values are intentionally round so the scenario is manipulable. Replace them with percentiles from your traces. A mean can hide long tails; production gates should inspect distributions by region, provider, language, turn type and architecture.</p></div>
     <p>Research on human turn-taking shows a broad tendency to minimize silence and overlap, but it does not define a universal SLA for voice agents. The 750/800/900 ms preset targets are editable hypotheses, not scientific recommendations.</p>
-    <p class="s5-tool-method__notes">Sources: <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a>, and <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
+    <p class="s5-tool-method__notes">Sources: <a href="https://developers.openai.com/api/docs/models/gpt-live-1">OpenAI GPT-Live 1</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a>, and <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
   </div>
 </section>
 
