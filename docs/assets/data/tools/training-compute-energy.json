@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-08-22",
+  "updated": "2026-09-25",
   "scope": "Training-compute and facility-energy estimator for accelerator clusters. Hardware values are reference presets; utilization, power draw, non-accelerator IT overhead and PUE remain explicit user assumptions.",
   "freshness_policy": "Review hardware presets on upstream NVIDIA specification changes and at least every 90 days. Methodology sources are reviewed when MFU, dense-training compute or PUE semantics materially change.",
   "presets": [
@@ -23,6 +23,26 @@
       "source": "nvidia-h200",
       "note_es": "El H200 SXM publica 1.979 TFLOP/s BF16 con sparsity; el preset usa la mitad como pico denso. El TDP máximo configurable publicado es 700 W.",
       "note_en": "H200 SXM publishes 1,979 BF16 TFLOP/s with sparsity; this preset uses half as the dense peak. Published configurable maximum TDP is 700 W."
+    },
+    {
+      "id": "b200-sxm-bf16",
+      "title_es": "NVIDIA B200 SXM · BF16 denso",
+      "title_en": "NVIDIA B200 SXM · dense BF16",
+      "peak_tflops": 2250,
+      "tdp_w": 1000,
+      "source": "nvidia-b200",
+      "note_es": "2,25 PFLOP/s BF16 denso por GPU se deriva de 36 PFLOP/s con sparsity para 8 GPU. El límite de potencia de referencia es 1.000 W.",
+      "note_en": "2.25 dense BF16 PFLOP/s per GPU is derived from 36 sparse PFLOP/s across 8 GPUs. The reference power limit is 1,000 W."
+    },
+    {
+      "id": "b300-sxm-bf16",
+      "title_es": "NVIDIA B300 SXM · BF16 denso",
+      "title_en": "NVIDIA B300 SXM · dense BF16",
+      "peak_tflops": 2250,
+      "tdp_w": 1100,
+      "source": "nvidia-b300",
+      "note_es": "El pico BF16 denso publicado por HGX sigue siendo 2,25 PFLOP/s por GPU; Blackwell Ultra mejora otras precisiones y atención que este estimador BF16 no convierte en FLOP equivalentes. Referencia de potencia: 1.100 W.",
+      "note_en": "HGX's published dense BF16 peak remains 2.25 PFLOP/s per GPU; Blackwell Ultra improves other precisions and attention paths that this BF16 estimator does not convert into equivalent FLOPs. Reference power: 1,100 W."
     }
   ],
   "sources": {
@@ -31,14 +51,14 @@
       "title": "H100 Tensor Core GPU product specifications and NVIDIA BF16 training guidance",
       "url": "https://www.nvidia.com/en-us/data-center/h100/",
       "secondary_url": "https://docs.nvidia.com/bionemo-recipes/latest/main/recipes/recipes/opengenome2_llama_native_te/",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "NVIDIA lists H100 SXM maximum TDP up to 700 W. Current NVIDIA training documentation uses 989 TFLOP/s/GPU as the maximum theoretical dense BF16 throughput for H100 when calculating MFU."
     },
     "nvidia-h200": {
       "organization": "NVIDIA",
       "title": "H200 Tensor Core GPU product specifications",
       "url": "https://www.nvidia.com/en-us/data-center/h200/",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "NVIDIA lists H200 SXM at 1,979 BF16 TFLOP/s with sparsity and up to 700 W configurable maximum TDP. The dense BF16 preset is therefore represented as half the sparsity-assisted figure."
     },
     "hoffmann-2022": {
@@ -52,8 +72,24 @@
       "organization": "The Green Grid",
       "title": "Power Usage Effectiveness (PUE)",
       "url": "https://www.thegreengrid.org/node/372",
-      "reviewed": "2026-08-22",
+      "reviewed": "2026-09-25",
       "notes": "PUE is defined as total data-center energy divided by IT equipment energy. The estimator applies PUE after accelerator plus non-accelerator IT energy."
+    },
+    "nvidia-b200": {
+      "organization": "NVIDIA",
+      "title": "HGX B200 specifications and current power-limit reference",
+      "url": "https://www.nvidia.com/en-us/data-center/hgx/",
+      "secondary_url": "https://docs.nvidia.com/bionemo/inference-runtime/references/benchmark/",
+      "reviewed": "2026-09-25",
+      "notes": "HGX B200 publishes 36 PFLOP/s FP16/BF16 with sparsity across 8 GPUs; dense is half the sparse figure, or 2.25 PFLOP/s per GPU. NVIDIA's current benchmark reference lists a 1,000 W B200 power limit."
+    },
+    "nvidia-b300": {
+      "organization": "NVIDIA",
+      "title": "HGX B300 specifications and current power-limit reference",
+      "url": "https://www.nvidia.com/en-us/data-center/hgx/",
+      "secondary_url": "https://docs.nvidia.com/bionemo/inference-runtime/references/benchmark/",
+      "reviewed": "2026-09-25",
+      "notes": "HGX B300 publishes 36 PFLOP/s FP16/BF16 with sparsity across 8 GPUs; dense is half the sparse figure, or 2.25 PFLOP/s per GPU. NVIDIA's current benchmark reference lists a 1,100 W B300 SXM6 AC power limit. The estimator intentionally does not translate Blackwell Ultra FP8/FP4 or attention gains into BF16."
     }
   }
 }

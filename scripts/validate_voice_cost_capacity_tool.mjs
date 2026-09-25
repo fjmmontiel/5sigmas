@@ -110,7 +110,7 @@ for (const spec of cases) {
       'twilio.com/en-us/voice/pricing/es',
       'twilio.com/docs/voice/media-streams',
       'developers.openai.com/api/docs/models/gpt-live-transcribe',
-      'developers.openai.com/api/docs/models/gpt-5.6-luna',
+      'developers.openai.com/api/docs/models/gpt-6-luna',
       'elevenlabs.io/pricing/api',
       'elevenlabs.io/docs/overview/models'
     ]) {

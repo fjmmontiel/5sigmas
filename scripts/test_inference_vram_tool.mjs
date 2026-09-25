@@ -60,6 +60,14 @@ assert(data.version >= 1, 'preset dataset version missing');
 assert(/^2026-\d{2}-\d{2}$/.test(data.updated), 'preset dataset must carry an update date');
 assert(Array.isArray(data.presets) && data.presets.length >= 3, 'expected at least three sourced architecture presets');
 assert(Array.isArray(data.sources) && data.sources.length >= 3, 'expected explicit primary-source records');
+const dataAgeDays = (Date.now() - Date.parse(`${data.updated}T23:59:59Z`)) / 86_400_000;
+assert(dataAgeDays >= -1 && dataAgeDays <= data.freshness_policy.review_interval_days, `architecture dataset is stale: ${data.updated}`);
+assert(data.architecture_coverage.reviewed_through === data.updated, 'architecture coverage must match snapshot');
+for (const model of ['Llama 4 Scout','Llama 4 Maverick']) {
+  const row = data.architecture_coverage.reviewed_not_preset.find((entry) => entry.model === model);
+  assert(Boolean(row), `${model} coverage decision missing`);
+  assert(/No dimensions are fabricated/.test(row.reason), `${model} exclusion must be explicit`);
+}
 const sourceIds = new Set(data.sources.map((source) => source.id));
 for (const source of data.sources) {
   assert(source.organization && source.title, `source ${source.id} needs organization/title`);

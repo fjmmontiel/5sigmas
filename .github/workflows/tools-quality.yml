@@ -76,6 +76,9 @@ jobs:
       - name: Verify model explorer release-ledger freshness
         run: node scripts/audit_model_price_performance_freshness.mjs --max-age-days=8
 
+      - name: Verify volatile tool-data freshness
+        run: node scripts/audit_tool_data_freshness.mjs
+
       - name: Verify model explorer against current upstream
         run: node scripts/refresh_model_price_performance_upstream.mjs
 
