@@ -14,6 +14,8 @@ function close(actual, expected, rel = 1e-9) {
 
 Core.assertDataset(dataset);
 const h200 = Core.presetById(dataset, 'h200-sxm-bf16');
+const b300 = Core.presetById(dataset, 'b300-sxm-bf16');
+if (b300.peak_dense_tflops !== 2250 || b300.tdp_w !== 1100) throw new Error('B300 current reference preset drifted');
 const b200 = Core.presetById(dataset, 'b200-sxm-bf16');
 if (h200.peak_dense_tflops !== 989.5 || h200.tdp_w !== 700) throw new Error('H200 reference preset drifted');
 if (b200.peak_dense_tflops !== 2250 || b200.tdp_w !== 1000) throw new Error('B200 reference preset drifted');
@@ -81,7 +83,7 @@ const state = Core.queryState('?hw=h200-sxm-bf16&fac=20&pue=1.15&res=0&r=100&ins
 if (state.facilityMW !== 20 || state.facilityReservePct !== 0 || state.measuredTokensPerSecPerAccelerator !== 0 || state.avgOutputTokens !== 256) throw new Error('Deep-link state parsing drifted');
 
 const payload = Core.exportPayload(dataset, h200, { ...defaults, peakTflops: 989.5, tdpW: 700 });
-if (payload.methodologyVersion !== Core.METHODOLOGY_VERSION || payload.sourceReviewDate !== '2026-08-22') throw new Error('Export provenance metadata missing');
+if (payload.methodologyVersion !== Core.METHODOLOGY_VERSION || payload.sourceReviewDate !== '2026-09-25') throw new Error('Export provenance metadata missing');
 if (payload.hardware.source.organization !== 'NVIDIA') throw new Error('Hardware source omitted from export');
 if (!payload.methodologySources.rackPowerCooling.url.includes('nvidia-dgx-superpod')) throw new Error('Rack methodology source omitted from export');
 if (!payload.methodologySources.pue.url.includes('thegreengrid.org')) throw new Error('PUE source omitted from export');
