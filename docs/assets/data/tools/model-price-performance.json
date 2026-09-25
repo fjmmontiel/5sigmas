@@ -640,7 +640,7 @@
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
       "output_tokens_per_second": 48.7,
-      "ttft_seconds": 2.93,
+      "ttft_seconds": 3.26,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
