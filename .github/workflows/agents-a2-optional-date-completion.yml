@@ -1,0 +1,68 @@
+name: Complete reviewed optional sitemap dates
+on:
+  push:
+    branches: [ops/agents-a2-approved-20260925]
+    paths: [.github/workflows/agents-a2-optional-date-completion.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0ba132d4b22dd02ee5ada607af34506af4cd6890
+      - name: Complete only optional date metadata; retain mandatory and media guards
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('hooks/video_discovery_surface.py');s=p.read_text()
+          old='''        if element is None:
+                      raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")
+                  element.text = value'''
+          # Normalize literal indentation to the actual eight/twelve-space block.
+          old='\n'.join([old.splitlines()[0]]+['            '+old.splitlines()[1].lstrip(),'        '+old.splitlines()[2].lstrip()])
+          assert s.count(old)==1
+          new='''        if element is None:
+                      if selector == "v:publication_date":
+                          # Publication date is optional in the legacy sitemap. The reviewed
+                          # source supplies the exact value; never infer it from an article.
+                          element = ET.SubElement(video, f"{{{VIDEO_NS}}}publication_date")
+                      else:
+                          raise CONTRACT.ContractError(f"video sitemap field missing for {source['id']}: {selector}")
+                  element.text = value'''
+          lines=new.splitlines();new='\n'.join([lines[0],'            '+lines[1].lstrip(),'                '+lines[2].lstrip(),'                '+lines[3].lstrip(),'                '+lines[4].lstrip(),'            '+lines[5].lstrip(),'                '+lines[6].lstrip(),'        '+lines[7].lstrip()])
+          p.write_text(s.replace(old,new))
+          p=Path('scripts/test_video_discovery_date_parity.py');s=p.read_text()
+          marker="            before_catalog=catalog.read_bytes(); before_sitemap=sitemap.read_bytes()"
+          assert s.count(marker)==1
+          replacement='''            # Also cover a valid legacy sitemap that omitted the optional date.
+                      doc_without_date=ET.fromstring(sitemap.read_text())
+                      video_without_date=doc_without_date.find('.//{'+V+'}video')
+                      for element in list(video_without_date):
+                          if element.tag=='{'+V+'}publication_date': video_without_date.remove(element)
+                      sitemap.write_text(ET.tostring(doc_without_date,encoding='unicode'))
+                      _bind_video_sitemap(root,source,source['locale'])
+                      assert ET.fromstring(sitemap.read_text()).findtext('.//{'+V+'}publication_date')==source['upload_date']
+                      before_catalog=catalog.read_bytes(); before_sitemap=sitemap.read_bytes()'''
+          lines=replacement.splitlines();replacement='\n'.join([lines[0]]+['            '+line.lstrip() if i!=4 else '                '+line.lstrip() for i,line in enumerate(lines[1:],1)])
+          p.write_text(s.replace(marker,replacement))
+          PY
+          python3 -m py_compile hooks/video_discovery_surface.py scripts/test_video_discovery_date_parity.py
+          python3 scripts/test_video_discovery_date_parity.py
+          python3 -m unittest tests.test_video_discovery_contract tests.test_video_discovery_surface tests.test_modelos_r2_discovery_inventory
+          sha256sum -c .github/receipts/agents-a2.sha256
+          git diff --check
+      - name: Persist clean reviewed repair only
+        run: |
+          set -euo pipefail
+          target='ops/agents-a2-optional-date-reviewed-20260925'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hooks/video_discovery_surface.py scripts/test_video_discovery_date_parity.py
+          git diff --cached --stat
+          git commit -m 'Complete optional sitemap dates from the authoritative reviewed source'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'OPTIONAL_DATE_REPAIR=%s\n' "$(git rev-parse HEAD)"
