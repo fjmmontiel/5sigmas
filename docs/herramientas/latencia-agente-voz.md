@@ -115,7 +115,7 @@ hide:
     </div>
 
     <aside class="s5-tool-source" aria-label="Procedencia metodológica">
-      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Fuentes revisadas 21-08-2026</span></div>
+      <div class="s5-tool-source__head"><a href="https://developers.deepgram.com/docs/endpointing" target="_blank" rel="noopener noreferrer">Deepgram · Endpointing</a><span>Fuentes revisadas 25-09-2026</span></div>
       <p>El fin de turno es una decisión, no latencia gratis: los sistemas de endpointing esperan evidencia de silencio o de finalización semántica. El valor correcto depende de tu dominio y debe medirse con falsos cortes y esperas excesivas, no solo con milisegundos.</p>
     </aside>
   </section>
@@ -133,7 +133,7 @@ hide:
     <div class="s5-tool-method__formula">barge_in_stop = ingress + speech_start_detection + cancel/control + output_buffer_clear</div>
     <div class="s5-voice-latency-caveat"><p><strong>No son benchmarks.</strong> Los números iniciales son deliberadamente redondos para que exista un escenario manipulable. Sustitúyelos por percentiles de tus trazas. Una media puede ocultar colas largas; para gates de producción conviene mirar al menos distribución por región, proveedor, idioma, tipo de turno y arquitectura.</p></div>
     <p>La investigación sobre turn-taking humano muestra una tendencia transversal a minimizar silencios y solapamientos, pero no define un SLA universal para agentes de voz. El objetivo de 750/800/900 ms de los presets es una hipótesis editable, no una recomendación científica.</p>
-    <p class="s5-tool-method__notes">Fuentes: <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a> y <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
+    <p class="s5-tool-method__notes">Fuentes: <a href="https://developers.openai.com/api/docs/models/gpt-live-1">OpenAI GPT-Live 1</a>, <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a>, <a href="https://developers.deepgram.com/docs/endpointing">Deepgram Endpointing</a>, <a href="https://elevenlabs.io/docs/developer-guides/reducing-latency">ElevenLabs Latency Optimization</a>, <a href="https://www.twilio.com/docs/voice/media-streams/websocket-messages">Twilio Media Streams</a> y <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2705608/">Stivers et al. (PNAS, 2009)</a>.</p>
   </div>
 </section>
 
