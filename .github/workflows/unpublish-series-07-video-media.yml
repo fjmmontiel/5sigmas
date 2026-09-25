@@ -130,8 +130,7 @@ jobs:
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
-            llm-inference-engineering-economics \
-            evaluating-ai-systems-production
+            llm-inference-engineering-economics
           do
             for prefix in "series/${series}/" "en/series/${series}/"; do
               aws s3 rm "s3://${R2_BUCKET_NAME}/${prefix}" --recursive \
@@ -162,8 +161,7 @@ jobs:
             agentes-voz-tiempo-real \
             coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
-            llm-inference-engineering-economics \
-            evaluating-ai-systems-production
+            llm-inference-engineering-economics
           do
             for prefix in "series/${series}/" "en/series/${series}/"; do
               remaining="$(aws s3 ls "s3://${R2_BUCKET_NAME}/${prefix}" --recursive --endpoint-url "$endpoint" 2>/dev/null | grep -E '\.(mp4|jpg|vtt)$' || true)"
@@ -196,7 +194,6 @@ jobs:
               "coding-agents-agent-harnesses",
               "context-engineering-memory-mcp",
               "llm-inference-engineering-economics",
-              "evaluating-ai-systems-production",
           }
           urls = []
           for locale_prefix, source_root in (("", root / "docs/series"), ("en/", root / "locales/en/series")):
@@ -243,7 +240,6 @@ jobs:
               "coding-agents-agent-harnesses",
               "context-engineering-memory-mcp",
               "llm-inference-engineering-economics",
-              "evaluating-ai-systems-production",
           }
           urls = []
           for locale_prefix, source_root in (("", Path("docs/series")), ("en/", Path("locales/en/series"))):

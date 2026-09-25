@@ -123,7 +123,6 @@ jobs:
               docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
               docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
               docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
-              docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production \
               docs/series/datacenters-espacio locales/en/series/datacenters-espacio \
               docs/series/modelos-razonadores locales/en/series/modelos-razonadores
           )"
@@ -134,6 +133,9 @@ jobs:
           fi
           echo "PASS: later-unapproved series plus Datacenters and Modelos R2 are byte-untouched."
 
+
+      - name: Verify exact approved C3 bytes and discovery
+        run: python scripts/verify_evaluation_c3_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -176,6 +178,9 @@ jobs:
           done
           cat /tmp/5sigmas-preview.log
           exit 1
+
+      - name: Verify C3 native desktop and mobile video consumers
+        run: node scripts/verify_evaluation_c3_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs

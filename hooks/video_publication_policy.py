@@ -14,7 +14,6 @@ UNPUBLISHED_VIDEO_SERIES = frozenset(
         "coding-agents-agent-harnesses",
         "context-engineering-memory-mcp",
         "llm-inference-engineering-economics",
-        "evaluating-ai-systems-production",
     }
 )
 

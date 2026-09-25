@@ -758,101 +758,168 @@ series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-t
 series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md:
   video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
   video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
-  video_title: "Model, component, workflow, trajectory, and system"
-  video_summary: "The right boundary contains the mechanism you want to attribute: a trajectory is evidence of one execution, while the outcome confirms whether the change matters to the system."
-  video_duration: PT36S
+  video_title: What are we evaluating?
+  video_summary: A broader test checks the task, policies and real effects. Preserve
+    versions, cases and protocol to make comparisons reproducible.
+  video_duration: PT2M12S
+  video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
   video_chapters:
-    - name: "Start from the change and choose the smallest boundary"
-      start: 0
-      end: 12
-    - name: "A trajectory connects policy, components, and outcome"
-      start: 12
-      end: 24
-    - name: "Diagnose narrowly; confirm at the risk boundary"
-      start: 24
-      end: 36
+  - name: The answer is not the outcome.
+    start: 0
+    end: 22
+  - name: Isolate the change. Evaluate the model.
+    start: 22
+    end: 44
+  - name: Missing evidence. Do not change everything.
+    start: 44
+    end: 66
+  - name: The workflow defines what can happen.
+    start: 66
+    end: 88
+  - name: The trajectory shows what happened.
+    start: 88
+    end: 110
+  - name: Diagnose narrowly. Confirm in the system.
+    start: 110
+    end: 132
 
 series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md:
   video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
   video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
-  video_title: "Eval sets: curation, hard negatives, leakage, and versioning"
-  video_summary: "A trustworthy eval set preserves provenance, separates banks by role, and freezes a release; hard pairs and distinct leakage channels test different failures without mutating the comparison."
-  video_duration: PT36S
+  video_title: Cases that test the system
+  video_summary: Changing a label or grader can change the score without improving
+    the model. Create a new version; do not silently rewrite the earlier result.
+  video_duration: PT2M14S
+  video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
   video_chapters:
-    - name: "Provenance and grouping come before the split"
-      start: 0
-      end: 12
-    - name: "Hard positive and hard negative cross one boundary"
-      start: 12
-      end: 24
-    - name: "Freeze the release; new failures feed v+1"
-      start: 24
-      end: 36
+  - name: An eval is more than its questions.
+    start: 0
+    end: 22
+  - name: Seek coverage. Not just volume.
+    start: 22
+    end: 44
+  - name: Change one condition. The decision must change.
+    start: 44
+    end: 68
+  - name: Separate families. Not just rows.
+    start: 68
+    end: 90
+  - name: Development is not release measurement.
+    start: 90
+    end: 112
+  - name: The criterion changed. The evaluation changed.
+    start: 112
+    end: 134
 
 series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md:
   video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
   video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
-  video_title: "LLM-as-judge, human evaluation, and calibration"
-  video_summary: "A judge is useful only when its criterion is calibrated against human evidence, disagreement is measured, and bias, variance, and stability are separated before using it as an acceptance signal."
-  video_duration: PT36S
+  video_title: How to evaluate the evaluator
+  video_summary: Freeze the judge version before testing it on a separate set. Accept,
+    restrict or reject its use according to risk and evidence.
+  video_duration: PT2M14S
+  video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
   video_chapters:
-    - name: "Define the rubric before asking for a verdict"
-      start: 0
-      end: 12
-    - name: "Compare judge and humans on the same cases"
-      start: 12
-      end: 24
-    - name: "Calibrate bias, variance, and disagreement before the gate"
-      start: 24
-      end: 36
+  - name: Choose the verifier the task needs.
+    start: 0
+    end: 22
+  - name: A concrete rubric. The same evidence.
+    start: 22
+    end: 44
+  - name: Measure agreement. Do not call it truth.
+    start: 44
+    end: 68
+  - name: Reverse the order. Keep the content.
+    start: 68
+    end: 90
+  - name: A single judgment can be unstable.
+    start: 90
+    end: 112
+  - name: Calibrate on dev. Test separately.
+    start: 112
+    end: 134
 
 series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md:
   video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
   video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
-  video_title: "Agent trajectories: success, efficiency, recovery, and policy"
-  video_summary: "An agentic trajectory is evaluated by outcome and process: tools and observed states explain how the result was reached, while recovery, cost, and policy separate clean success from corrupt success."
-  video_duration: PT36S
+  video_title: The result and the path
+  video_summary: A hard violation blocks release even when other metrics improve.
+    Save the trajectory and the verdict reason so the result is reproducible.
+  video_duration: PT2M16S
+  video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
   video_chapters:
-    - name: "Action, tool result, and state form the trajectory"
-      start: 0
-      end: 12
-    - name: "Recovery must restore progress without hiding failures"
-      start: 12
-      end: 24
-    - name: "Success, efficiency, and policy are accepted together"
-      start: 24
-      end: 36
+  - name: Do not count calls. Follow the state.
+    start: 0
+    end: 22
+  - name: Success cannot cancel a permission violation.
+    start: 22
+    end: 44
+  - name: Timeout does not mean “nothing happened”.
+    start: 44
+    end: 68
+  - name: Reconcile first. Then decide.
+    start: 68
+    end: 92
+  - name: There can be several correct paths.
+    start: 92
+    end: 114
+  - name: The gate must explain why it stops.
+    start: 114
+    end: 136
 
 series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md:
   video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
   video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
-  video_title: "Online evaluation: shadow, canary, A/B, and regression gates"
-  video_summary: "Online evaluation increases exposure under control: shadow observes without deciding, canary limits blast radius, A/B estimates effect, and guardrails or regression gates stop an unsafe promotion."
-  video_duration: PT36S
+  video_title: Evidence before expanding
+  video_summary: A violation blocks; insufficient data keeps the rollout paused. Choose
+    stages for the change and its risk; not every release needs them all.
+  video_duration: PT2M14S
+  video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
   video_chapters:
-    - name: "Shadow observes traffic without changing the decision"
-      start: 0
-      end: 12
-    - name: "Canary increases exposure only with green guardrails"
-      start: 12
-      end: 24
-    - name: "A/B measures effect; the regression gate promotes or rolls back"
-      start: 24
-      end: 36
+  - name: Three methods. Three different questions.
+    start: 0
+    end: 22
+  - name: Not serving the answer does not remove effects.
+    start: 22
+    end: 46
+  - name: Expose a little. Define when to stop.
+    start: 46
+    end: 68
+  - name: Randomize the unit that preserves context.
+    start: 68
+    end: 90
+  - name: Before the effect, validate measurement.
+    start: 90
+    end: 112
+  - name: Expansion requires sufficient evidence.
+    start: 112
+    end: 134
 
 series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md:
   video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
   video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
-  video_title: "Observability, failure taxonomies, and feedback loops"
-  video_summary: "Telemetry is not a verdict: production signals become reproducible failures, eval cases, and repairs that pass through the same gate before returning to production."
-  video_duration: PT36S
+  video_title: From incident to repair
+  video_summary: After release, measure recurrence and exposure over the agreed observation
+    window. Close the loop with production evidence and an accountable owner.
+  video_duration: PT2M14S
+  video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
   video_chapters:
-    - name: "Telemetry detects symptoms; the taxonomy localizes failure"
-      start: 0
-      end: 12
-    - name: "A reproducible failure becomes an eval case"
-      start: 12
-      end: 24
-    - name: "Repair → candidate → eval → production closes the loop"
-      start: 24
-      end: 36
+  - name: An alert is not a diagnosis.
+    start: 0
+    end: 22
+  - name: The same answer. Two writes.
+    start: 22
+    end: 46
+  - name: One mechanism. Its neighboring cases too.
+    start: 46
+    end: 68
+  - name: Turn the incident into a reproducible test.
+    start: 68
+    end: 90
+  - name: Test the repair. Not just the symptom.
+    start: 90
+    end: 112
+  - name: Green tests are not production verification.
+    start: 112
+    end: 134
+

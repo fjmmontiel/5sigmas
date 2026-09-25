@@ -26,11 +26,10 @@ BLOCKED = (
     "coding-agents-agent-harnesses",
     "context-engineering-memory-mcp",
     "llm-inference-engineering-economics",
-    "evaluating-ai-systems-production",
 )
-KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia")
-EXPECTED_BLOCKED_ENTRIES = 36
-EXPECTED_PUBLIC_CATALOGUE = 40
+KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia", "evaluating-ai-systems-production")
+EXPECTED_BLOCKED_ENTRIES = 30
+EXPECTED_PUBLIC_CATALOGUE = 46
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 

@@ -70,6 +70,9 @@ jobs:
       - name: Verify exact owner-approved AI Security R5 MP4 bytes
         run: sha256sum -c .github/receipts/seguridad-ia-r5.sha256
 
+      - name: Verify exact owner-approved Evaluating AI C3 MP4 bytes
+        run: sha256sum -c .github/receipts/evaluation-c3.sha256
+
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
@@ -277,6 +280,14 @@ jobs:
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
+
+      - name: Verify exact live approved C3 media and discovery
+        run: python3 scripts/verify_evaluation_c3_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
+
+      - name: Verify live C3 native desktop and mobile playback
+        env:
+          S5_C3_ORIGIN: https://5sigmas.com
+        run: node scripts/verify_evaluation_c3_browser.mjs
 
       - name: Audit live Spanish resources
         env:

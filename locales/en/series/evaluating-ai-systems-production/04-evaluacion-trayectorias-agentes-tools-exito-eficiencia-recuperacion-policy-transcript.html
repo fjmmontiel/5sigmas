@@ -1,0 +1,31 @@
+<p>Visual-text transcript. This video has no narration.</p>
+<h3>00:00 — Do not count calls. Follow the state.</h3>
+<p>An action can change the environment before the agent observes it.</p>
+<p>Connect the precondition, call, observation and resulting state.</p>
+<p>The task succeeds when its success condition is actually true.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>00:22 — Success cannot cancel a permission violation.</h3>
+<p>A refund can complete while violating a mandatory policy.</p>
+<p>Check authorization before the write, not after the result.</p>
+<p>A hard constraint cannot be averaged away by quality or speed.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>00:44 — Timeout does not mean “nothing happened”.</h3>
+<p>The backend can commit an operation before its response is lost.</p>
+<p>The agent sees an unknown result, not necessarily a failed operation.</p>
+<p>A blind retry may execute the same side effect twice.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>01:08 — Reconcile first. Then decide.</h3>
+<p>Query the operation state using a stable identifier.</p>
+<p>If it is already committed, do not repeat the write.</p>
+<p>Safe retries depend on the tool’s idempotency contract.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>01:32 — There can be several correct paths.</h3>
+<p>Do not require the agent to copy one preferred call sequence.</p>
+<p>Evaluate the constraints and final state the task requires.</p>
+<p>Compare cost among valid trajectories; fewer steps are not always better.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>01:54 — The gate must explain why it stops.</h3>
+<p>Separate task success, policy, state integrity and reliability.</p>
+<p>A hard violation blocks release even when other metrics improve.</p>
+<p>Save the trajectory and the verdict reason so the result is reproducible.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>

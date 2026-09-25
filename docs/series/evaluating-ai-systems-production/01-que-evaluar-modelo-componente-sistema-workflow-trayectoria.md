@@ -1,31 +1,44 @@
 ---
-title: "Qué evaluar: modelo, componente, sistema, workflow y trayectoria"
-description: "Cómo elegir la frontera correcta de evaluación en sistemas de IA, separar diagnóstico local de evidencia end-to-end y evitar atribuir al modelo fallos o mejoras que pertenecen al workflow, a componentes o al sistema completo."
+title: 'Qué evaluar: modelo, componente, sistema, workflow y trayectoria'
+description: Cómo elegir la frontera correcta de evaluación en sistemas de IA, separar
+  diagnóstico local de evidencia end-to-end y evitar atribuir al modelo fallos o mejoras
+  que pertenecen al workflow, a componentes o al sistema completo.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "evaluación de sistemas de IA, evals, model eval, component eval, system eval, workflow eval, trajectory eval, agent evals, trace grading"
+keywords: evaluación de sistemas de IA, evals, model eval, component eval, system
+  eval, workflow eval, trajectory eval, agent evals, trace grading
 tags:
-  - IA
-  - Evaluación
-  - Agentes
-  - Producción
-  - Reliability
-# GOLDEN visual media; VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL
+- IA
+- Evaluación
+- Agentes
+- Producción
+- Reliability
 video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
 video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
-video_title: "Modelo, componente, workflow, trayectoria y sistema"
-video_summary: "La frontera correcta contiene el mecanismo que quieres atribuir: una trayectoria es evidencia de una ejecución, mientras el outcome confirma si el cambio importa al sistema."
-video_duration: PT36S
+video_title: Qué estamos evaluando
+video_summary: Una prueba amplia comprueba la tarea, las políticas y los efectos reales.
+  Conserva versiones, casos y protocolo para poder comparar.
+video_duration: PT2M12S
+video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
 video_chapters:
-  - name: "Empieza por el cambio y elige la frontera mínima"
-    start: 0
-    end: 12
-  - name: "Una trayectoria conecta policy, componentes y outcome"
-    start: 12
-    end: 24
-  - name: "Diagnostica estrecho; confirma en la frontera del riesgo"
-    start: 24
-    end: 36
+- name: La respuesta no es el resultado.
+  start: 0
+  end: 22
+- name: Aísla el cambio. Evalúa el modelo.
+  start: 22
+  end: 44
+- name: Falta la evidencia. No cambies todo.
+  start: 44
+  end: 66
+- name: El workflow decide qué puede ocurrir.
+  start: 66
+  end: 88
+- name: La trayectoria muestra qué ocurrió.
+  start: 88
+  end: 110
+- name: Diagnostica en pequeño. Confirma en el sistema.
+  start: 110
+  end: 132
 ---
 
 # Capítulo 1 — Qué evaluar: modelo, componente, sistema, workflow y trayectoria
