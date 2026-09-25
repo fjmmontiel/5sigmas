@@ -35,15 +35,15 @@ try {
       const title = (await page.locator('[data-output="series-title"]').textContent() || '').toLowerCase();
       if (!title.includes('gpqa')) failures.push(`${spec.route} ${viewport.name}: default GPQA series missing`);
       const latest = (await page.locator('[data-output="latest"]').textContent() || '').trim();
-      if (!latest.includes('94') || !latest.includes('6')) failures.push(`${spec.route} ${viewport.name}: default latest GPQA value should be 94.6%`);
+      if (!latest.includes('96')) failures.push(`${spec.route} ${viewport.name}: default latest GPQA value should be 96.0%`);
       const rows = await page.locator('[data-output="table-body"] tr').count();
-      if (rows !== 6) failures.push(`${spec.route} ${viewport.name}: GPQA should render six points, got ${rows}`);
+      if (rows !== 7) failures.push(`${spec.route} ${viewport.name}: GPQA should render seven points, got ${rows}`);
       const sourceCount = await page.locator('[data-output="sources"] li').count();
       if (sourceCount < 4) failures.push(`${spec.route} ${viewport.name}: point-level source coverage is incomplete`);
       const chart = page.locator('[data-output="chart"] svg');
       if (await chart.count() !== 1) failures.push(`${spec.route} ${viewport.name}: SVG timeline missing`);
       const pointCount = await chart.locator('.s5-timeline-point').count();
-      if (pointCount !== 6) failures.push(`${spec.route} ${viewport.name}: expected six chart points, got ${pointCount}`);
+      if (pointCount !== 7) failures.push(`${spec.route} ${viewport.name}: expected seven chart points, got ${pointCount}`);
 
       await page.locator('[data-field="series"]').selectOption('swe-bench-verified');
       const breakText = (await page.locator('[data-output="breaks"]').textContent() || '').toLowerCase();
@@ -59,7 +59,7 @@ try {
       if (!response?.ok()) failures.push(`${spec.route} ${viewport.name}: deep-link failed`);
       const arcTitle = (await page.locator('[data-output="series-title"]').textContent() || '').toLowerCase();
       if (!arcTitle.includes('arc-agi-2')) failures.push(`${spec.route} ${viewport.name}: deep-link series not restored`);
-      if ((await page.locator('[data-output="table-body"] tr').count()) !== 3) failures.push(`${spec.route} ${viewport.name}: ARC-AGI-2 should stop at three sourced points`);
+      if ((await page.locator('[data-output="table-body"] tr').count()) !== 5) failures.push(`${spec.route} ${viewport.name}: ARC-AGI-2 should include GPT-5.6 Sol and GPT-6 Astra`);
 
       const tableRegion = page.locator('.s5-timeline-table-wrap');
       if ((await tableRegion.getAttribute('role')) !== 'region' || !(await tableRegion.getAttribute('aria-label'))) failures.push(`${spec.route} ${viewport.name}: table scroller must be labelled`);
