@@ -337,8 +337,8 @@ def assert_owner_voice_deferral_contract() -> None:
     assert summary["context_engineering_locale_surfaces"] == 0
     assert summary["llm_inference_locale_surfaces"] == 0
     assert summary["evaluating_ai_systems_locale_surfaces"] == 12
-    assert summary["captions_transcript_complete"] == 12
-    assert summary["captions_transcript_review"] == 80
+    assert summary["captions_transcript_complete"] == 22
+    assert summary["captions_transcript_review"] == 70
     assert summary["historical_missing_checkpoint"] == 92
     assert summary["historical_budget_exceeded_by"] == 1
     assert summary["legacy_missing_budget"] == 91

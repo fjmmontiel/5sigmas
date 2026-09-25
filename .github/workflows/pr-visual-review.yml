@@ -123,19 +123,21 @@ jobs:
               docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
               docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
               docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
-              docs/series/datacenters-espacio locales/en/series/datacenters-espacio \
               docs/series/modelos-razonadores locales/en/series/modelos-razonadores
           )"
           if [ -n "$protected" ]; then
-            echo "This release must not modify later-unapproved series or Datacenters/Modelos assets:" >&2
+            echo "This release must not modify later-unapproved series or Modelos assets:" >&2
             echo "$protected" >&2
             exit 1
           fi
-          echo "PASS: later-unapproved series plus Datacenters and Modelos R2 are byte-untouched."
+          echo "PASS: later-unapproved series plus Modelos R2 are byte-untouched."
 
 
       - name: Verify exact approved C3 bytes and discovery
-        run: python scripts/verify_evaluation_c3_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
+        run: python scripts/verify_evaluation_c3_release.py
+
+      - name: Verify exact approved D2 bytes and unchanged article bodies
+        run: python scripts/verify_datacenters_d2_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -181,6 +183,9 @@ jobs:
 
       - name: Verify C3 native desktop and mobile video consumers
         run: node scripts/verify_evaluation_c3_browser.mjs
+
+      - name: Verify D2 native desktop and mobile video consumers
+        run: node scripts/verify_datacenters_d2_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs

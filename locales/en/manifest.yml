@@ -232,14 +232,24 @@ published_files:
   - series/from-cave-to-agi/05-mas-alla.jpg
   - series/datacenters-espacio/00_presentacion_serie.mp4
   - series/datacenters-espacio/00_presentacion_serie.jpg
+  - series/datacenters-espacio/00_presentacion_serie-transcript.html
+  - series/datacenters-espacio/00_presentacion_serie-visual-text.vtt
   - series/datacenters-espacio/01-por-que-ahora.mp4
   - series/datacenters-espacio/01-por-que-ahora.jpg
+  - series/datacenters-espacio/01-por-que-ahora-transcript.html
+  - series/datacenters-espacio/01-por-que-ahora-visual-text.vtt
   - series/datacenters-espacio/02-energia-calor-conectividad.mp4
   - series/datacenters-espacio/02-energia-calor-conectividad.jpg
+  - series/datacenters-espacio/02-energia-calor-conectividad-transcript.html
+  - series/datacenters-espacio/02-energia-calor-conectividad-visual-text.vtt
   - series/datacenters-espacio/03-que-es-datacenter-espacio.mp4
   - series/datacenters-espacio/03-que-es-datacenter-espacio.jpg
+  - series/datacenters-espacio/03-que-es-datacenter-espacio-transcript.html
+  - series/datacenters-espacio/03-que-es-datacenter-espacio-visual-text.vtt
   - series/datacenters-espacio/04-huella-real-datacenter.mp4
   - series/datacenters-espacio/04-huella-real-datacenter.jpg
+  - series/datacenters-espacio/04-huella-real-datacenter-transcript.html
+  - series/datacenters-espacio/04-huella-real-datacenter-visual-text.vtt
   - series/seguridad-ia/00_presentacion_serie.mp4
   - series/seguridad-ia/00_presentacion_serie.jpg
   - series/seguridad-ia/01-prompt-injection.mp4

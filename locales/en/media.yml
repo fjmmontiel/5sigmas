@@ -170,32 +170,142 @@ series/modelos-razonadores/05-riesgos.md:
 series/datacenters-espacio/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: Data Centers in Space
-  video_duration: PT53S
+  video_title: Data centers in space
+  video_summary: Include power, cooling, links, launch and end of life. One local advantage does not prove that the whole system is better.
+  video_duration: PT2M12S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Moving compute changes the constraints.
+    start: 0
+    end: 22
+  - name: Cold surroundings do not carry heat away.
+    start: 22
+    end: 44
+  - name: Solar energy depends on the orbit.
+    start: 44
+    end: 66
+  - name: Process before transmitting.
+    start: 66
+    end: 88
+  - name: A demonstration is not a service at scale.
+    start: 88
+    end: 110
+  - name: Compare the system. Not one advantage.
+    start: 110
+    end: 132
 
 series/datacenters-espacio/01-por-que-ahora.md:
   video: 01-por-que-ahora.mp4
   video_poster: 01-por-que-ahora.jpg
-  video_title: Why now
-  video_duration: PT53S
+  video_title: Why now?
+  video_summary: Change one assumption and calculate the budget again. Do not present the optimistic scenario as an achieved price.
+  video_duration: PT2M14S
+  video_captions: 01-por-que-ahora-visual-text.vtt
+  video_transcript: 01-por-que-ahora-transcript.html
+  video_chapters:
+  - name: More requests. The same infrastructure.
+    start: 0
+    end: 22
+  - name: Six conditions. All of them matter.
+    start: 22
+    end: 44
+  - name: A lower launch cost does not erase the rest.
+    start: 44
+    end: 68
+  - name: You also launch what supports the chip.
+    start: 68
+    end: 90
+  - name: Where the data originates matters.
+    start: 90
+    end: 112
+  - name: A projection is not an observed result.
+    start: 112
+    end: 134
 
 series/datacenters-espacio/02-energia-calor-conectividad.md:
   video: 02-energia-calor-conectividad.mp4
   video_poster: 02-energia-calor-conectividad.jpg
-  video_title: Energy, heat and connectivity
-  video_duration: PT53S
+  video_title: Power, heat and connectivity
+  video_summary: Error correction and redundancy help within their limits. An unrecoverable failure needs another plan; maintenance is not free.
+  video_duration: PT2M18S
+  video_captions: 02-energia-calor-conectividad-visual-text.vtt
+  video_transcript: 02-energia-calor-conectividad-transcript.html
+  video_chapters:
+  - name: Energy ends up in a thermal balance.
+    start: 0
+    end: 24
+  - name: More power requires more radiating area.
+    start: 24
+    end: 48
+  - name: Energy is the area under the power curve.
+    start: 48
+    end: 70
+  - name: A direct link exists only during contact.
+    start: 70
+    end: 92
+  - name: 'Rate times time: the link budget.'
+    start: 92
+    end: 116
+  - name: Detecting an error does not fix everything.
+    start: 116
+    end: 138
 
 series/datacenters-espacio/03-que-es-datacenter-espacio.md:
   video: 03-que-es-datacenter-espacio.mp4
   video_poster: 03-que-es-datacenter-espacio.jpg
-  video_title: What a data center in space actually is
-  video_duration: PT53S
+  video_title: What orbital computing means
+  video_summary: Include link coordination, failure handling and retirement at end of life. The proposal must explain who operates it, who is accountable and how it ends.
+  video_duration: PT2M12S
+  video_captions: 03-que-es-datacenter-espacio-visual-text.vtt
+  video_transcript: 03-que-es-datacenter-espacio-transcript.html
+  video_chapters:
+  - name: It is not one kind of infrastructure.
+    start: 0
+    end: 22
+  - name: Keep what the task actually needs.
+    start: 22
+    end: 44
+  - name: Separate evidence from extrapolation.
+    start: 44
+    end: 66
+  - name: Storing a copy does not guarantee recovery.
+    start: 66
+    end: 88
+  - name: Sending software does not replace hardware.
+    start: 88
+    end: 110
+  - name: The mission includes its end.
+    start: 110
+    end: 132
 
 series/datacenters-espacio/04-huella-real-datacenter.md:
   video: 04-huella-real-datacenter.mp4
   video_poster: 04-huella-real-datacenter.jpg
   video_title: The real footprint of a data center
-  video_duration: PT53S
+  video_summary: Reusing components can extend service without eliminating every impact. Compare alternatives for the same useful work over the complete lifecycle.
+  video_duration: PT2M16S
+  video_captions: 04-huella-real-datacenter-visual-text.vtt
+  video_transcript: 04-huella-real-datacenter-transcript.html
+  video_chapters:
+  - name: The same demand. Two different basins.
+    start: 0
+    end: 22
+  - name: Water withdrawal is not water consumption.
+    start: 22
+    end: 44
+  - name: A comparison needs the same denominator.
+    start: 44
+    end: 68
+  - name: Higher efficiency need not mean lower total consumption.
+    start: 68
+    end: 92
+  - name: Hardware also has a material supply chain.
+    start: 92
+    end: 114
+  - name: Changing location does not erase the footprint.
+    start: 114
+    end: 136
 
 series/seguridad-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4

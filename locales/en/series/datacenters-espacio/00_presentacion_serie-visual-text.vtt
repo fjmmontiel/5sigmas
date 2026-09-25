@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+A server needs power, a way to reject heat and communication.
+
+2
+00:00:07.400 --> 00:00:14.100
+Moving it into orbit changes the paths supporting all three functions.
+
+3
+00:00:14.100 --> 00:00:22.000
+The question is not just whether it works, but which task justifies it.
+
+4
+00:00:22.700 --> 00:00:29.400
+On Earth, air or water can carry heat away.
+
+5
+00:00:29.400 --> 00:00:36.100
+In the outside vacuum, no air flows through the server.
+
+6
+00:00:36.100 --> 00:00:44.000
+Heat must reach a surface that radiates it into space.
+
+7
+00:00:44.700 --> 00:00:51.400
+Above the atmosphere, a panel avoids atmospheric absorption.
+
+8
+00:00:51.400 --> 00:00:58.100
+But an orbit can cross Earth’s shadow and lose sunlight.
+
+9
+00:00:58.100 --> 00:01:06.000
+Compare useful energy over the mission, not just power in sunlight.
+
+10
+00:01:06.700 --> 00:01:13.400
+An orbital sensor can produce more data than it can send.
+
+11
+00:01:13.400 --> 00:01:20.100
+When the task allows it, process onboard and transmit a smaller result.
+
+12
+00:01:20.100 --> 00:01:28.000
+The reduction must preserve the information needed for that task.
+
+13
+00:01:28.700 --> 00:01:35.400
+Running one device demonstrates that test under its conditions.
+
+14
+00:01:35.400 --> 00:01:42.100
+More devices also need more power, heat rejection and communication.
+
+15
+00:01:42.100 --> 00:01:50.000
+Reliability at a larger scale needs evidence of its own.
+
+16
+00:01:50.700 --> 00:01:57.400
+Hold the task and required service level constant.
+
+17
+00:01:57.400 --> 00:02:04.100
+Include power, cooling, links, launch and end of life.
+
+18
+00:02:04.100 --> 00:02:12.000
+One local advantage does not prove that the whole system is better.
+

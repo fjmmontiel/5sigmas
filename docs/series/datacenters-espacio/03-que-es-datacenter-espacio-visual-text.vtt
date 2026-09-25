@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Texto visual de un vídeo silencioso.
+
+1
+00:00:00.700 --> 00:00:07.400
+Procesar en un satélite sensor no es lo mismo que operar una cloud orbital.
+
+2
+00:00:07.400 --> 00:00:14.100
+Cambian el origen de los datos, la escala y el servicio esperado.
+
+3
+00:00:14.100 --> 00:00:22.000
+Sitúa cada propuesta en su caso de uso antes de compararla.
+
+4
+00:00:22.700 --> 00:00:29.400
+Una imagen puede contener información irrelevante para una detección concreta.
+
+5
+00:00:29.400 --> 00:00:36.100
+El ejemplo conserva regiones seleccionadas y transmite un resultado menor.
+
+6
+00:00:36.100 --> 00:00:44.000
+Esa selección debe validarse: descartar información también puede perder eventos.
+
+7
+00:00:44.700 --> 00:00:51.400
+Un prototipo acredita una combinación concreta de potencia, tiempo y entorno.
+
+8
+00:00:51.400 --> 00:00:58.100
+Un servicio requiere además disponibilidad, mantenimiento y capacidad sostenida.
+
+9
+00:00:58.100 --> 00:01:06.000
+La región no probada sigue siendo una hipótesis, aunque el piloto funcione.
+
+10
+00:01:06.700 --> 00:01:13.400
+Separar copias reduce algunos riesgos compartidos por una ubicación terrestre.
+
+11
+00:01:13.400 --> 00:01:20.100
+Para restaurar datos también necesitas enlaces, claves y un sistema operativo.
+
+12
+00:01:20.100 --> 00:01:28.000
+Prueba la recuperación completa, no sólo que el archivo existe.
+
+13
+00:01:28.700 --> 00:01:35.400
+Una actualización remota puede cambiar instrucciones y configuración.
+
+14
+00:01:35.400 --> 00:01:42.100
+No añade memoria física ni sustituye automáticamente un componente dañado.
+
+15
+00:01:42.100 --> 00:01:50.000
+Diseña autonomía, redundancia y fin de misión desde el principio.
+
+16
+00:01:50.700 --> 00:01:57.400
+El análisis no termina al desplegar el equipo y empezar a procesar.
+
+17
+00:01:57.400 --> 00:02:04.100
+Incluye coordinación de enlaces, gestión de fallos y retirada al final de vida.
+
+18
+00:02:04.100 --> 00:02:12.000
+La propuesta debe explicar quién opera, quién responde y cómo se cierra.
+

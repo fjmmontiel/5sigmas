@@ -7,8 +7,32 @@ tags:
   - IA
   - Infraestructura
   - Espacio
-video: "03-que-es-datacenter-espacio.mp4"
-video_duration: "PT1M0S"
+video: 03-que-es-datacenter-espacio.mp4
+video_poster: 03-que-es-datacenter-espacio.jpg
+video_title: Qué significa computar en órbita
+video_summary: Incluye coordinación de enlaces, gestión de fallos y retirada al final de vida. La propuesta debe explicar quién opera, quién responde y cómo se cierra.
+video_duration: PT2M12S
+video_captions: 03-que-es-datacenter-espacio-visual-text.vtt
+video_transcript: 03-que-es-datacenter-espacio-transcript.html
+video_chapters:
+- name: No es un único tipo de infraestructura.
+  start: 0
+  end: 22
+- name: Conserva lo necesario para la tarea.
+  start: 22
+  end: 44
+- name: Distingue evidencia y extrapolación.
+  start: 44
+  end: 66
+- name: Guardar una copia no garantiza recuperarla.
+  start: 66
+  end: 88
+- name: Mandar software no cambia el hardware.
+  start: 88
+  end: 110
+- name: La misión incluye su cierre.
+  start: 110
+  end: 132
 ---
 
 # Capítulo 3 — Qué es "un datacenter en el espacio"

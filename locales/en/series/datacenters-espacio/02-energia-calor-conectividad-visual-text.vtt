@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+The equipment converts much of the electricity it uses into heat.
+
+2
+00:00:07.400 --> 00:00:14.100
+If it generates heat faster than it rejects it, energy accumulates and temperature rises.
+
+3
+00:00:14.100 --> 00:00:24.000
+At equilibrium, thermal inputs and outputs must balance.
+
+4
+00:00:24.700 --> 00:00:31.400
+Assume net heat rejection of 500 watts per square metre.
+
+5
+00:00:31.400 --> 00:00:38.100
+Rejecting 2 megawatts then requires 4,000 square metres under that assumption.
+
+6
+00:00:38.100 --> 00:00:48.000
+Real capacity depends on temperature, surface properties and absorbed heat.
+
+7
+00:00:48.700 --> 00:00:55.400
+Two panels with the same instantaneous power need not deliver the same energy.
+
+8
+00:00:55.400 --> 00:01:02.100
+Illumination and eclipses change how long they generate power.
+
+9
+00:01:02.100 --> 00:01:10.000
+The design must also cover periods without generation.
+
+10
+00:01:10.700 --> 00:01:17.400
+A ground station sees only part of a low Earth orbit.
+
+11
+00:01:17.400 --> 00:01:24.100
+Data waits outside contact and can be downlinked during a pass.
+
+12
+00:01:24.100 --> 00:01:32.000
+More stations or relays change coverage but add infrastructure.
+
+13
+00:01:32.700 --> 00:01:39.400
+Here, 1 Gbit/s for 300 seconds allows at most 37.5 GB.
+
+14
+00:01:39.400 --> 00:01:46.100
+A 60 GB dataset does not fit; a 20 GB result fits that ideal budget.
+
+15
+00:01:46.100 --> 00:01:56.000
+Protocols, errors and other users reduce useful capacity.
+
+16
+00:01:56.700 --> 00:02:03.400
+Radiation can change a memory state or damage components.
+
+17
+00:02:03.400 --> 00:02:10.100
+Error correction and redundancy help within their limits.
+
+18
+00:02:10.100 --> 00:02:18.000
+An unrecoverable failure needs another plan; maintenance is not free.
+
