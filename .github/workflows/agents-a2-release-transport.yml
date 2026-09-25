@@ -5,6 +5,7 @@ on:
     paths: [.github/workflows/agents-a2-release-transport.yml]
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: approved-agents-a2-transport
   cancel-in-progress: false
@@ -13,23 +14,24 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
-      - name: Receive approved public-only payload before transport URL expires
-        env:
-          PUBLIC_PAYLOAD_URL: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-58d0-8210-ae24-4f5c29e1008f/raw?se=2026-09-25T18%3A10%3A57Z&sp=r&sv=2026-02-06&sr=b&scid=a69856ef-01d5-5a36-b3b1-d714b4854041&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T15%3A00%3A57Z&ske=2026-09-26T15%3A00%3A57Z&sks=b&skv=2026-02-06&sig=bh5PNN4BeupB/1Gp4br%2BVeS35HNAgQjwyGmya%2Beso9c%3D'
-        run: |
-          set -euo pipefail
-          curl --fail --silent --show-error --location --max-time 120 "$PUBLIC_PAYLOAD_URL" -o /tmp/agents-a2-approved.zip
-          echo '323530ca49d3b74190d58d3c813e111ff8697f27c3f798bfa8a84f894cd88f84  /tmp/agents-a2-approved.zip' | sha256sum -c -
+      - uses: actions/download-artifact@v4
+        with:
+          name: approved-agents-a2-exact-import
+          run-id: 36171321928
+          github-token: ${{ github.token }}
+          path: /tmp/a2-source
+      - name: Verify retained approved public payload
+        run: echo '323530ca49d3b74190d58d3c813e111ff8697f27c3f798bfa8a84f894cd88f84  /tmp/a2-source/agents-a2-approved.zip' | sha256sum -c -
       - uses: actions/checkout@v4
         with:
           ref: 294928de8cadf3f0f36592e55b6bcb66a4161c50
-      - name: Apply exact scoped files, not an arbitrary archive or executable
+      - name: Apply exact files and normalize only derived VTT line endings
         run: |
           python3 - <<'PY'
           from pathlib import Path,PurePosixPath
           import zipfile,json,hashlib,subprocess
           base='294928de8cadf3f0f36592e55b6bcb66a4161c50'
-          z=zipfile.ZipFile('/tmp/agents-a2-approved.zip');m=json.loads(z.read('RELEASE_FILES.json'))
+          z=zipfile.ZipFile('/tmp/a2-source/agents-a2-approved.zip');m=json.loads(z.read('RELEASE_FILES.json'))
           assert m['base_revision']==base and m['approved_media']==12 and m['public_only'] is True
           entries=m['entries'];names=[r['path'] for r in entries]
           assert len(names)==len(set(names))==69
@@ -43,17 +45,22 @@ jobs:
               target=Path(name)
               if r['preimage_sha256']:assert hashlib.sha256(target.read_bytes()).hexdigest()==r['preimage_sha256'],name
               target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
-          manifest=json.loads(Path('docs/agents-a2-release.json').read_text());assert len(manifest['objects'])==12 and manifest['owner_approval']=='APPROVED_2026-09-25'
-          subprocess.run(['sha256sum','-c','.github/receipts/agents-a2.sha256'],check=True)
+          mp=Path('docs/agents-a2-release.json');manifest=json.loads(mp.read_text());assert len(manifest['objects'])==12 and manifest['owner_approval']=='APPROVED_2026-09-25'
           for r in manifest['objects']:
-              path=('docs/' if r['locale']=='es' else 'locales/')+r['path']
-              assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==r['sha256']
+              prefix='docs/' if r['locale']=='es' else 'locales/'
+              assert hashlib.sha256(Path(prefix+r['path']).read_bytes()).hexdigest()==r['sha256']
+              captions=Path(prefix+r['captions_path']);original=captions.read_bytes();clean=original.rstrip(b'\n')+b'\n'
+              assert original.startswith(clean) and clean.count(b' --> ')==18
+              captions.write_bytes(clean);r['captions_sha256']=hashlib.sha256(clean).hexdigest()
+          mp.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          subprocess.run(['sha256sum','-c','.github/receipts/agents-a2.sha256'],check=True)
           for p in Path('docs/series/agentes-ia').glob('*.md'):
               old=subprocess.check_output(['git','show',base+':'+p.as_posix()]).decode()
               assert old.split('---',2)[2]==p.read_text().split('---',2)[2]
           subprocess.run(['git','add','--',*names],check=True)
           changed=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines();assert set(changed)==set(names)
-          Path('/tmp/agents-a2-import-receipt.json').write_text(json.dumps({'base':base,'files':entries,'exact_original_mp4':12,'reencodes':0},indent=2)+'\n')
+          receipt={'base':base,'exact_original_mp4':12,'reencodes':0,'normalization':'Twelve derived VTT tracks: final blank line removed, cues unchanged; dependent caption hashes updated','files':[{'path':n,'sha256':hashlib.sha256(Path(n).read_bytes()).hexdigest()} for n in names]}
+          Path('/tmp/agents-a2-import-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
           PY
           git diff --cached --check
       - name: Persist clean release branch only
@@ -66,13 +73,10 @@ jobs:
           git commit -m 'Release exact owner-approved Agents A2 originals and complete bilingual discovery'
           git push origin "HEAD:refs/heads/$target"
           printf 'RELEASE_HEAD=%s\n' "$(git rev-parse HEAD)"
-      - name: Preserve exact import receipt and public payload
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: approved-agents-a2-exact-import
-          path: |
-            /tmp/agents-a2-import-receipt.json
-            /tmp/agents-a2-approved.zip
+          name: approved-agents-a2-clean-import-receipt
+          path: /tmp/agents-a2-import-receipt.json
           if-no-files-found: warn
           retention-days: 2
