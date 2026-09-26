@@ -313,7 +313,7 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 58.2,
+      "output_tokens_per_second": 60.9,
       "ttft_seconds": 332.03,
       "sources": {
         "specs_pricing": {
@@ -388,7 +388,7 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 37,
-      "output_tokens_per_second": 143.7,
+      "output_tokens_per_second": 146.2,
       "ttft_seconds": 122.3,
       "sources": {
         "specs_pricing": {
@@ -423,7 +423,7 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 42,
-      "output_tokens_per_second": 99.6,
+      "output_tokens_per_second": 100.5,
       "ttft_seconds": 166.45,
       "sources": {
         "specs_pricing": {
@@ -494,7 +494,7 @@
       },
       "intelligence_index": 46,
       "output_tokens_per_second": 64.9,
-      "ttft_seconds": 1.77,
+      "ttft_seconds": 2.95,
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
@@ -554,7 +554,7 @@
       "output_usd_per_million": 6,
       "intelligence_index": 45,
       "output_tokens_per_second": 39.7,
-      "ttft_seconds": 3.01,
+      "ttft_seconds": 3.07,
       "sources": {
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
@@ -583,8 +583,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.47,
       "intelligence_index": 40,
-      "output_tokens_per_second": 55,
-      "ttft_seconds": 2.78,
+      "output_tokens_per_second": 54.5,
+      "ttft_seconds": 2.68,
       "sources": {
         "specs_pricing": {
           "title": "Alibaba Cloud Model Studio pricing",
@@ -613,8 +613,8 @@
       "input_usd_per_million": 1.25,
       "output_usd_per_million": 4.25,
       "intelligence_index": 48,
-      "output_tokens_per_second": 214.5,
-      "ttft_seconds": 24.72,
+      "output_tokens_per_second": 218.1,
+      "ttft_seconds": 25.37,
       "sources": {
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
@@ -643,8 +643,8 @@
       "input_usd_per_million": 0.435,
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
-      "output_tokens_per_second": 44.7,
-      "ttft_seconds": 3.38,
+      "output_tokens_per_second": 46.1,
+      "ttft_seconds": 3.53,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
@@ -703,8 +703,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.5,
       "intelligence_index": 42,
-      "output_tokens_per_second": 43.8,
-      "ttft_seconds": 3.39,
+      "output_tokens_per_second": 45.8,
+      "ttft_seconds": 3.37,
       "sources": {
         "specs_pricing": {
           "title": "Z.AI API pricing",
