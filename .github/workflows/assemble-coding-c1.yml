@@ -49,12 +49,15 @@ jobs:
           assert render.STORY['source_commit']=='52a96b50136a725ae94ede3bf15463b2736b293c'
           print(subprocess.check_output(['ffmpeg','-version']).decode().splitlines()[0],flush=True)
           subprocess.run(['fc-match','Cabin'],check=True);subprocess.run(['fc-match','Noto Serif Display'],check=True)
+          worker="import render,sys; render.render_video(render.STORY['chapters'][int(sys.argv[1])-1],sys.argv[2],'h',sys.argv[3],60)"
           def recover(row):
               chapter=render.STORY['chapters'][row['chapter']-1]
               folder=root/('docs' if row['language']=='es' else 'locales/en')/'series/coding-agents-agent-harnesses'
               target=folder/(chapter['slug']+'.mp4');folder.mkdir(parents=True,exist_ok=True)
               if not target.exists() or render.sha256(target)!=row['sha256']:
-                  render.render_video(chapter,row['language'],'h',target,60)
+                  # The original producer used max_tasks_per_child=1. Each output must
+                  # receive a fresh Cairo/font/layout process, not a reused thread.
+                  subprocess.run([sys.executable,'-u','-c',worker,str(row['chapter']),row['language'],str(target)],cwd=src,check=True)
               observed=render.sha256(target)
               print('EXACT_CHECK',str(target.relative_to(root)),observed,row['sha256'],target.stat().st_size,row['size'],flush=True)
               assert observed==row['sha256'] and target.stat().st_size==row['size'], 'BYTE_IDENTITY_MISMATCH: preserve approved originals; do not publish reconstructed substitutes'
@@ -65,9 +68,12 @@ jobs:
               assert int(v['nb_frames'])==round(render.chapter_duration(chapter)*60)
               subprocess.run(['ffmpeg','-v','error','-xerror','-threads','1','-i',str(target),'-f','null','-'],check=True)
               return str(target.relative_to(root))
-          paths=[recover(approved['files'][0])]
-          with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-              paths+=list(pool.map(recover,approved['files'][1:]))
+          # Exercise the previously mismatched ES file before any other recovery.
+          canary=next(r for r in approved['files'] if r['chapter']==1 and r['language']=='es')
+          paths=[recover(canary)]
+          remaining=[r for r in approved['files'] if r is not canary]
+          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+              paths+=list(pool.map(recover,remaining))
           assert len(paths)==12
           (state/'verified-paths.json').write_text(json.dumps(paths))
           print('APPROVED_C1_EXACT_BYTES_RECOVERED_12_OF_12',flush=True)
