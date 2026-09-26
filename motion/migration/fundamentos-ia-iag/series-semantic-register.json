@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "unit": "fundamentos-ia-iag",
+  "state": "COMPLETE_SOURCE_BOUND_SEMANTIC_REGISTER_NOT_RENDERED",
+  "source_main": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "render_contract": {
+    "languages": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "fps": 60,
+    "target_duration_seconds": 75,
+    "scenes_per_output": 5,
+    "scene_seconds": 15,
+    "silent": true,
+    "native_vertical": true,
+    "whole_chunk_reveal": true,
+    "reduced_motion_required": true
+  },
+  "theme_lock": {
+    "base": "#FAFAF8",
+    "accent": "#2D6A9F",
+    "accent_dark": "#1F4E75",
+    "accent_surface": "#E8F1F7",
+    "style": "neutral-flat-editorial",
+    "forbidden": ["gradients", "glow", "textures", "decorative multicolor"]
+  },
+  "source_bindings": [
+    {
+      "chapter": "00_presentacion_serie",
+      "es": {"path": "docs/series/fundamentos-ia-iag/00_presentacion_serie.md", "blob_sha": "f399f0245e6dd162883d19c1983ae7af497de24d"},
+      "en": {"path": "locales/en/series/fundamentos-ia-iag/00_presentacion_serie.md", "blob_sha": "86a210bc38d38700fc8d4ff90b57b71917365d67"},
+      "baseline_duration_seconds": 59
+    },
+    {
+      "chapter": "01-que-es-ia",
+      "es": {"path": "docs/series/fundamentos-ia-iag/01-que-es-ia.md", "blob_sha": "c8333bb1f5506cec58583c699f4b939cdd9f172f"},
+      "en": {"path": "locales/en/series/fundamentos-ia-iag/01-que-es-ia.md", "blob_sha": "7565f9140c25b107b559b27861a4eaa53789796a"},
+      "baseline_duration_seconds": 86
+    },
+    {
+      "chapter": "02-que-es-ia-generativa",
+      "es": {"path": "docs/series/fundamentos-ia-iag/02-que-es-ia-generativa.md", "blob_sha": "16c52847249dd8953ee11fa93c9d791a7b0dea48"},
+      "en": {"path": "locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.md", "blob_sha": "4df680cbf00ee4b56c526af5a7d06bb9250f30b3"},
+      "baseline_duration_seconds": 74
+    },
+    {
+      "chapter": "03-ia-vs-ia-generativa",
+      "es": {"path": "docs/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md", "blob_sha": "01f53e1cec67a11b0ef588db0d356a7602c9b4d4"},
+      "en": {"path": "locales/en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md", "blob_sha": "a6b24c65e579506a98262604a2d8727e927814e1"},
+      "baseline_duration_seconds": 75
+    },
+    {
+      "chapter": "04-agi",
+      "es": {"path": "docs/series/fundamentos-ia-iag/04-agi.md", "blob_sha": "15d2c78630033d2bd6a67cddb277e3115878b681"},
+      "en": {"path": "locales/en/series/fundamentos-ia-iag/04-agi.md", "blob_sha": "f81cabe3cdf4bc393850411ee5785e0a9eee721f"},
+      "baseline_duration_seconds": 70
+    }
+  ],
+  "concepts": [
+    {
+      "id": "fnd00-01",
+      "chapter": "00_presentacion_serie",
+      "question": "¿Qué mapa mental organiza toda la serie?",
+      "evidence": "La serie separa IA, IA generativa, criterios de elección y AGI como cuatro preguntas conectadas.",
+      "mechanism": "capability-lattice",
+      "semantic_rationale": "Un mapa de dependencias muestra que los conceptos se construyen unos sobre otros sin confundir producto, modelo y capacidad.",
+      "perceptual_family": "concept-lattice",
+      "topology": "four-node dependency lattice",
+      "choreography": "orient on AI, expand GenAI branch, reveal decision comparison, finish at AGI boundary",
+      "composition": "wide horizontal lattice / stacked native vertical lattice",
+      "cues": [0, 3, 7, 11],
+      "copy": {
+        "es": {"title": "Un mapa, cuatro preguntas", "body": "Qué es IA → qué cambia con GenAI → cuándo usar cada sistema → qué significaría AGI."},
+        "en": {"title": "One map, four questions", "body": "What AI is → what GenAI changes → when to use each system → what AGI would mean."}
+      }
+    },
+    {
+      "id": "fnd00-02",
+      "chapter": "00_presentacion_serie",
+      "question": "¿Cómo se relacionan IA, ML, DL y GenAI?",
+      "evidence": "IA es el concepto amplio; ML aprende de datos; DL usa redes profundas; GenAI se orienta a generar contenido.",
+      "mechanism": "nested-containment",
+      "semantic_rationale": "La inclusión visual evita presentar las etiquetas como tecnologías rivales del mismo nivel.",
+      "perceptual_family": "nested-containment",
+      "topology": "nested semantic regions",
+      "choreography": "outer AI region appears, then ML, DL and GenAI nest inward",
+      "composition": "nested editorial regions with persistent labels",
+      "cues": [0, 3, 6, 9],
+      "copy": {
+        "es": {"title": "IA contiene familias distintas", "body": "IA ⊃ ML ⊃ DL; GenAI es una familia generativa dentro del ecosistema moderno."},
+        "en": {"title": "AI contains different families", "body": "AI ⊃ ML ⊃ DL; GenAI is a generative family inside the modern AI ecosystem."}
+      }
+    },
+    {
+      "id": "fnd00-03",
+      "chapter": "00_presentacion_serie",
+      "question": "¿Qué tres preguntas describen un sistema de IA?",
+      "evidence": "Familia tecnológica, origen de la señal de aprendizaje y mecanismo de ajuste.",
+      "mechanism": "three-axis-diagnostic",
+      "semantic_rationale": "Tres ejes ortogonales impiden mezclar tipo de modelo, supervisión y parámetros ajustados.",
+      "perceptual_family": "diagnostic-axes",
+      "topology": "three orthogonal diagnostic axes",
+      "choreography": "lock family axis, add learning-signal axis, add adjustment axis, converge on one system profile",
+      "composition": "three labeled rails feeding a profile card",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Describe el sistema en tres ejes", "body": "Familia tecnológica · señal de aprendizaje · qué parámetros cambian."},
+        "en": {"title": "Describe the system on three axes", "body": "Technology family · learning signal · which parameters change."}
+      }
+    },
+    {
+      "id": "fnd00-04",
+      "chapter": "00_presentacion_serie",
+      "question": "¿Qué cambia entre software clásico e IA?",
+      "evidence": "En software clásico las reglas se escriben; en IA parte de la lógica emerge del entrenamiento sobre datos.",
+      "mechanism": "equation-transform",
+      "semantic_rationale": "Transformar una ecuación de flujo en otra hace visible dónde reside la lógica.",
+      "perceptual_family": "algebraic-transform",
+      "topology": "two equations with transformed middle term",
+      "choreography": "show input + human rules → output, morph rules into learned parameters, replay with training data",
+      "composition": "paired equations with stable operands",
+      "cues": [0, 5, 10],
+      "copy": {
+        "es": {"title": "La lógica cambia de lugar", "body": "Software clásico: reglas escritas. IA: parámetros aprendidos a partir de datos y objetivo."},
+        "en": {"title": "The logic moves", "body": "Classical software: written rules. AI: parameters learned from data and an objective."}
+      }
+    },
+    {
+      "id": "fnd00-05",
+      "chapter": "00_presentacion_serie",
+      "question": "¿Qué recorrido seguirá el lector?",
+      "evidence": "La serie avanza de fundamentos de IA a GenAI, comparación operacional y AGI.",
+      "mechanism": "learning-roadmap",
+      "semantic_rationale": "Una ruta progresiva orienta sin convertir la apertura en una lista estática.",
+      "perceptual_family": "progressive-roadmap",
+      "topology": "four-stage learning path",
+      "choreography": "advance one stage at a time while prior stages remain visible",
+      "composition": "horizontal path / vertical stepped path",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Fundamentos antes que titulares", "body": "Primero mecanismos. Después sistemas. Luego decisiones. Al final, AGI y sus límites."},
+        "en": {"title": "Foundations before headlines", "body": "First mechanisms. Then systems. Then decisions. Finally, AGI and its limits."}
+      }
+    },
+    {
+      "id": "fnd01-01",
+      "chapter": "01-que-es-ia",
+      "question": "¿Qué es un sistema de IA en términos operativos?",
+      "evidence": "Es un sistema construido para optimizar una tarea contra un objetivo medible, normalmente usando datos y aprendizaje.",
+      "mechanism": "input-objective-output-loop",
+      "semantic_rationale": "El bucle muestra que la IA no es una mente: conecta datos, objetivo, modelo y resultado medible.",
+      "perceptual_family": "objective-loop",
+      "topology": "input → model → measurable output → objective feedback",
+      "choreography": "data enters, model produces output, objective scores it, feedback returns",
+      "composition": "closed loop with measurable score anchor",
+      "cues": [0, 3, 7, 11],
+      "copy": {
+        "es": {"title": "IA = tarea + objetivo + aprendizaje", "body": "No es una mente autónoma: optimiza una tarea y mejora contra una señal medible."},
+        "en": {"title": "AI = task + objective + learning", "body": "It is not an autonomous mind: it optimizes a task and improves against a measurable signal."}
+      }
+    },
+    {
+      "id": "fnd01-02",
+      "chapter": "01-que-es-ia",
+      "question": "¿De dónde sale el profesor?",
+      "evidence": "Supervisado, no supervisado, auto-supervisado y RL describen cómo se construye la señal de aprendizaje.",
+      "mechanism": "teacher-source-switchboard",
+      "semantic_rationale": "Un conmutador visual diferencia fuentes de señal sin tratarlas como familias de modelos.",
+      "perceptual_family": "signal-switchboard",
+      "topology": "four signal sources feeding one learner",
+      "choreography": "activate labels, latent structure, self-target and reward paths one by one",
+      "composition": "four-source switchboard into shared learner",
+      "cues": [0, 3, 6, 9, 12],
+      "copy": {
+        "es": {"title": "Cambiar el profesor cambia la señal", "body": "Etiquetas · estructura sin etiquetas · objetivo auto-generado · recompensa."},
+        "en": {"title": "Changing the teacher changes the signal", "body": "Labels · unlabeled structure · self-generated target · reward."}
+      }
+    },
+    {
+      "id": "fnd01-03",
+      "chapter": "01-que-es-ia",
+      "question": "¿Cuál es el bucle universal de aprendizaje?",
+      "evidence": "Predecir, medir error, ajustar parámetros y repetir.",
+      "mechanism": "closed-feedback-cycle",
+      "semantic_rationale": "El ciclo explica aprendizaje como actualización repetida, no como una transformación mágica de una sola pasada.",
+      "perceptual_family": "feedback-cycle",
+      "topology": "prediction → error → update → next iteration",
+      "choreography": "cycle once slowly, then show reduced error on second pass",
+      "composition": "circular loop with persistent error gauge",
+      "cues": [0, 3, 6, 9, 12],
+      "copy": {
+        "es": {"title": "Aprender es iterar", "body": "Predice → mide el error → ajusta parámetros → repite con menos error."},
+        "en": {"title": "Learning is iteration", "body": "Predict → measure error → update parameters → repeat with less error."}
+      }
+    },
+    {
+      "id": "fnd01-04",
+      "chapter": "01-que-es-ia",
+      "question": "¿Qué cambia dentro de algoritmos distintos?",
+      "evidence": "Árboles ajustan reglas y umbrales; Naive Bayes probabilidades; k-means centros; redes neuronales pesos y sesgos.",
+      "mechanism": "parameter-mechanism-comparison",
+      "semantic_rationale": "Comparar qué parámetro se mueve revela que 'entrenar' no significa lo mismo físicamente en cada familia.",
+      "perceptual_family": "mechanism-comparison",
+      "topology": "four mechanisms sharing one training objective",
+      "choreography": "move split threshold, update counts, reposition centroid, nudge neural weights",
+      "composition": "four equal evidence panes with synchronized update cue",
+      "cues": [0, 3, 6, 9, 12],
+      "copy": {
+        "es": {"title": "Entrenar = mover parámetros distintos", "body": "Umbrales · probabilidades · centroides · pesos y sesgos."},
+        "en": {"title": "Training moves different parameters", "body": "Thresholds · probabilities · centroids · weights and biases."}
+      }
+    },
+    {
+      "id": "fnd01-05",
+      "chapter": "01-que-es-ia",
+      "question": "¿Por qué un modelo puede degradarse tras desplegarse?",
+      "evidence": "Generaliza mientras el futuro se parece al entrenamiento; la deriva de datos puede reducir el rendimiento y exigir monitorización/reentrenamiento.",
+      "mechanism": "distribution-shift",
+      "semantic_rationale": "Dos distribuciones que se separan muestran por qué un modelo válido ayer puede fallar hoy sin cambiar su código.",
+      "perceptual_family": "distribution-shift",
+      "topology": "training distribution versus moving production distribution",
+      "choreography": "start overlapping, shift production curve, drop performance gauge, trigger monitor/retrain",
+      "composition": "distribution plot plus compact performance trace",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "El mundo cambia; el modelo no", "body": "Si producción se aleja del entrenamiento, cae la generalización: monitoriza y reentrena."},
+        "en": {"title": "The world changes; the model does not", "body": "When production drifts from training data, generalization falls: monitor and retrain."}
+      }
+    },
+    {
+      "id": "fnd02-01",
+      "chapter": "02-que-es-ia-generativa",
+      "question": "¿Cómo se vuelve matemático el significado?",
+      "evidence": "Tokens se representan como vectores y el entrenamiento organiza su geometría semántica.",
+      "mechanism": "semantic-vector-space",
+      "semantic_rationale": "Mover conceptos en un espacio vectorial enseña proximidad semántica mejor que una lista de definiciones.",
+      "perceptual_family": "vector-space",
+      "topology": "labeled points in semantic embedding space",
+      "choreography": "raw token vectors scatter, training pulls related concepts together, analogy vector resolves",
+      "composition": "2D semantic projection with explanatory side equation",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "El significado se vuelve geometría", "body": "Tokens → vectores → posiciones aprendidas donde contextos similares quedan cerca."},
+        "en": {"title": "Meaning becomes geometry", "body": "Tokens → vectors → learned positions where similar contexts end up nearby."}
+      }
+    },
+    {
+      "id": "fnd02-02",
+      "chapter": "02-que-es-ia-generativa",
+      "question": "¿Qué resuelve la atención?",
+      "evidence": "El Transformer relaciona cada token con el contexto relevante en paralelo.",
+      "mechanism": "token-attention-web",
+      "semantic_rationale": "Las conexiones ponderadas hacen visible qué contexto resuelve una ambigüedad sin reglas explícitas.",
+      "perceptual_family": "attention-web",
+      "topology": "token row with weighted contextual edges",
+      "choreography": "focus ambiguous token, raise relevant edges, suppress irrelevant edge, resolve interpretation",
+      "composition": "stable token rail with weighted arcs",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Atención = contexto relevante", "body": "Cada token pondera otros tokens del contexto para construir la representación útil."},
+        "en": {"title": "Attention = relevant context", "body": "Each token weights other context tokens to build the representation it needs."}
+      }
+    },
+    {
+      "id": "fnd02-03",
+      "chapter": "02-que-es-ia-generativa",
+      "question": "¿Qué relacionan las leyes de escala?",
+      "evidence": "Rendimiento, parámetros, datos y cómputo siguen relaciones empíricas predecibles bajo balances adecuados.",
+      "mechanism": "compute-data-parameter-budget",
+      "semantic_rationale": "Un presupuesto que se reparte entre datos y parámetros muestra que escalar no es solo hacer el modelo mayor.",
+      "perceptual_family": "budget-allocation",
+      "topology": "fixed compute budget split across data and parameters with performance contour",
+      "choreography": "hold compute fixed, sweep allocation, find better region, then expand compute envelope",
+      "composition": "budget bars linked to simple performance surface",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Escalar exige equilibrio", "body": "Datos + parámetros + cómputo: el rendimiento depende de cómo crecen juntos."},
+        "en": {"title": "Scaling requires balance", "body": "Data + parameters + compute: performance depends on how they grow together."}
+      }
+    },
+    {
+      "id": "fnd02-04",
+      "chapter": "02-que-es-ia-generativa",
+      "question": "¿Por qué un modelo fundacional sirve para muchas tareas?",
+      "evidence": "Un mismo modelo preentrenado puede redactar, resumir, traducir, clasificar, extraer y generar código.",
+      "mechanism": "foundation-hub-capabilities",
+      "semantic_rationale": "Un centro compartido con tareas periféricas comunica reutilización del mismo modelo sin fingir modelos separados.",
+      "perceptual_family": "capability-hub",
+      "topology": "single model hub connected to multiple task endpoints",
+      "choreography": "keep model stable while activating task endpoints one by one",
+      "composition": "central model hub with six functional spokes",
+      "cues": [0, 3, 5, 7, 9, 11],
+      "copy": {
+        "es": {"title": "Un modelo, muchas tareas", "body": "El preentrenamiento compartido permite adaptar el mismo modelo a múltiples usos."},
+        "en": {"title": "One model, many tasks", "body": "Shared pretraining lets the same model adapt to many different uses."}
+      }
+    },
+    {
+      "id": "fnd02-05",
+      "chapter": "02-que-es-ia-generativa",
+      "question": "¿Qué añade RAG y qué añade un agente?",
+      "evidence": "RAG recupera contexto externo antes de generar; un agente además planifica, usa herramientas y actúa en bucles.",
+      "mechanism": "llm-rag-agent-capability-stack",
+      "semantic_rationale": "Añadir capas funcionales sobre el mismo LLM evita presentar RAG o agente como modelos distintos.",
+      "perceptual_family": "capability-stack",
+      "topology": "LLM base + retrieval layer + planning/tool loop",
+      "choreography": "start plain LLM, attach retrieval path, then add planner/tools loop with explicit complexity cost",
+      "composition": "stacked architecture with cost/control axis",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Más sistema, no otro modelo", "body": "LLM → + recuperación (RAG) → + planificación y herramientas (agente)."},
+        "en": {"title": "More system, not a different model", "body": "LLM → + retrieval (RAG) → + planning and tools (agent)."}
+      }
+    },
+    {
+      "id": "fnd03-01",
+      "chapter": "03-ia-vs-ia-generativa",
+      "question": "¿Cómo cambia el espacio de salida?",
+      "evidence": "ML clásico suele producir etiquetas/números en un espacio finito; GenAI produce salidas abiertas o generativas.",
+      "mechanism": "finite-open-output-space",
+      "semantic_rationale": "Contrastar un conjunto cerrado con un abanico abierto muestra la diferencia estructural sin reducirla a 'texto vs tablas'.",
+      "perceptual_family": "output-space-contrast",
+      "topology": "finite discrete bins versus expanding generative manifold",
+      "choreography": "classical outputs snap into bins while generative path branches into many valid continuations",
+      "composition": "split comparison with matched input anchors",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Espacio finito vs salida abierta", "body": "ML suele elegir entre respuestas definidas; GenAI construye una salida nueva."},
+        "en": {"title": "Finite space vs open output", "body": "ML often chooses among defined answers; GenAI constructs a new output."}
+      }
+    },
+    {
+      "id": "fnd03-02",
+      "chapter": "03-ia-vs-ia-generativa",
+      "question": "¿Por qué GenAI es menos reproducible?",
+      "evidence": "La generación token a token usa distribuciones de probabilidad; pequeñas diferencias tempranas pueden cambiar trayectorias posteriores.",
+      "mechanism": "probability-fanout",
+      "semantic_rationale": "Un árbol de continuaciones probabilísticas hace visible la divergencia acumulativa.",
+      "perceptual_family": "probabilistic-fanout",
+      "topology": "token probability tree with two diverging continuations",
+      "choreography": "same prompt reaches one token distribution, select two close alternatives, let trajectories diverge",
+      "composition": "shared prefix feeding branching token paths",
+      "cues": [0, 4, 7, 11],
+      "copy": {
+        "es": {"title": "Una decisión temprana cambia la secuencia", "body": "GenAI genera token a token; rutas plausibles distintas producen respuestas distintas."},
+        "en": {"title": "An early choice changes the sequence", "body": "GenAI generates token by token; different plausible paths produce different answers."}
+      }
+    },
+    {
+      "id": "fnd03-03",
+      "chapter": "03-ia-vs-ia-generativa",
+      "question": "¿Cómo cambia la trazabilidad?",
+      "evidence": "Árboles o regresiones pueden ser directamente interpretables; LLMs son internamente opacos aunque generen explicaciones fluidas.",
+      "mechanism": "traceability-spectrum",
+      "semantic_rationale": "Un espectro de observabilidad separa explicación post-hoc de mecanismo interno trazable.",
+      "perceptual_family": "traceability-spectrum",
+      "topology": "interpretable → approximated → opaque mechanism continuum",
+      "choreography": "walk from explicit rule path through feature attribution to opaque LLM internals",
+      "composition": "single horizontal spectrum / vertical graduated scale",
+      "cues": [0, 5, 9, 12],
+      "copy": {
+        "es": {"title": "Explicar no es observar el mecanismo", "body": "La trazabilidad disminuye al pasar de reglas interpretables a modelos internos más opacos."},
+        "en": {"title": "Explaining is not observing the mechanism", "body": "Traceability decreases from interpretable rules toward more opaque internal models."}
+      }
+    },
+    {
+      "id": "fnd03-04",
+      "chapter": "03-ia-vs-ia-generativa",
+      "question": "¿Por qué evaluar GenAI requiere otro pipeline?",
+      "evidence": "ML clásico usa métricas objetivas sobre etiquetas; GenAI suele combinar métricas de tarea, LLM-as-judge y revisión humana.",
+      "mechanism": "evaluation-pipeline",
+      "semantic_rationale": "Dos pipelines de evaluación muestran que el cuello de botella cambia cuando no existe una única respuesta correcta.",
+      "perceptual_family": "evaluation-pipeline",
+      "topology": "labeled metric path versus multi-signal generative evaluation path",
+      "choreography": "classical path closes on one metric block; generative path merges task metric, judge and human sample",
+      "composition": "parallel pipelines converging on acceptance gate",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Sin criterio de calidad no hay iteración", "body": "GenAI necesita combinar señales de evaluación cuando no existe una única etiqueta correcta."},
+        "en": {"title": "No quality criterion, no iteration", "body": "GenAI needs multiple evaluation signals when there is no single correct label."}
+      }
+    },
+    {
+      "id": "fnd03-05",
+      "chapter": "03-ia-vs-ia-generativa",
+      "question": "¿Cómo elegir reglas, ML, LLM, RAG, workflow o agente?",
+      "evidence": "La elección depende de espacio de salida, lenguaje/contexto, necesidad de conocimiento externo, planificación, coste y control.",
+      "mechanism": "operational-decision-routing",
+      "semantic_rationale": "Un árbol de decisión convierte criterios abstractos en una ruta de arquitectura concreta.",
+      "perceptual_family": "decision-routing",
+      "topology": "branching decision tree ending in six architecture leaves",
+      "choreography": "ask one criterion per beat and prune incompatible architecture leaves",
+      "composition": "progressive decision tree with persistent eliminated paths",
+      "cues": [0, 3, 6, 9, 12],
+      "copy": {
+        "es": {"title": "Empieza por el problema, no por el modelo", "body": "Salida · contexto · conocimiento externo · planificación · coste · control."},
+        "en": {"title": "Start with the problem, not the model", "body": "Output · context · external knowledge · planning · cost · control."}
+      }
+    },
+    {
+      "id": "fnd04-01",
+      "chapter": "04-agi",
+      "question": "¿Por qué AGI no tiene una definición única?",
+      "evidence": "Las definiciones cognitiva, económica y de seguridad priorizan propiedades distintas.",
+      "mechanism": "definition-conflict-map",
+      "semantic_rationale": "Áreas parcialmente solapadas muestran que desacuerdo no significa ausencia de criterios, sino criterios distintos.",
+      "perceptual_family": "definition-overlap",
+      "topology": "three overlapping definition regions",
+      "choreography": "reveal cognitive, economic and safety regions, then highlight non-overlapping requirements",
+      "composition": "three-region overlap with explicit criteria labels",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "AGI depende del criterio", "body": "Capacidad cognitiva · trabajo económicamente valioso · autonomía y control."},
+        "en": {"title": "AGI depends on the criterion", "body": "Cognitive capability · economically valuable work · autonomy and control."}
+      }
+    },
+    {
+      "id": "fnd04-02",
+      "chapter": "04-agi",
+      "question": "¿Qué aporta pensar AGI como espectro?",
+      "evidence": "El marco de DeepMind separa rendimiento y generalidad mediante seis niveles de capacidad.",
+      "mechanism": "capability-ladder",
+      "semantic_rationale": "Una escalera evita el falso binario AGI/no-AGI y mantiene explícita la dimensión de generalidad.",
+      "perceptual_family": "capability-ladder",
+      "topology": "six-step capability ladder with generality axis",
+      "choreography": "climb levels while a separate generality indicator stays visible",
+      "composition": "stepped ladder / vertical native ladder with two-axis labels",
+      "cues": [0, 2, 5, 8, 11, 13],
+      "copy": {
+        "es": {"title": "Rendimiento alto no implica generalidad", "body": "Los niveles distinguen cuánto rinde un sistema y cuán amplia es la gama de tareas."},
+        "en": {"title": "High performance does not imply generality", "body": "Capability levels separate how well a system performs from how broadly it generalizes."}
+      }
+    },
+    {
+      "id": "fnd04-03",
+      "chapter": "04-agi",
+      "question": "¿Dónde está la frontera de los sistemas actuales?",
+      "evidence": "Los sistemas actuales combinan grandes fortalezas con límites en causalidad robusta, mundo físico, memoria persistente y calibración de incertidumbre.",
+      "mechanism": "capability-boundary-radar",
+      "semantic_rationale": "Un contorno irregular comunica que la frontera no avanza igual en todos los dominios.",
+      "perceptual_family": "boundary-radar",
+      "topology": "multi-axis capability boundary with strengths and gaps",
+      "choreography": "grow strong language/coding axes, hold causal/physical/memory axes behind, label gap",
+      "composition": "radar-like boundary with textual evidence outside chart",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "La frontera es irregular", "body": "Mucho rendimiento en algunos dominios no elimina límites en causalidad, mundo físico, memoria o incertidumbre."},
+        "en": {"title": "The frontier is uneven", "body": "Strong performance in some domains does not remove limits in causality, the physical world, memory, or uncertainty."}
+      }
+    },
+    {
+      "id": "fnd04-04",
+      "chapter": "04-agi",
+      "question": "¿Qué cambiaría si la capacidad general aumentara mucho?",
+      "evidence": "El capítulo separa impactos económicos y científicos, con velocidades y mecanismos distintos.",
+      "mechanism": "parallel-impact-paths",
+      "semantic_rationale": "Dos trayectorias paralelas evitan colapsar impactos económicos y científicos en una sola promesa abstracta.",
+      "perceptual_family": "parallel-impact-paths",
+      "topology": "economic and scientific paths sharing a capability source",
+      "choreography": "common capability node splits into work automation path and discovery acceleration path",
+      "composition": "two parallel lanes with distinct outcome nodes",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Más capacidad cambia sistemas distintos", "body": "Economía: automatización cognitiva. Ciencia: hipótesis, experimentos y descubrimiento más rápidos."},
+        "en": {"title": "More capability changes different systems", "body": "Economy: cognitive automation. Science: faster hypotheses, experiments, and discovery."}
+      }
+    },
+    {
+      "id": "fnd04-05",
+      "chapter": "04-agi",
+      "question": "¿Qué es el problema de alineación?",
+      "evidence": "Un sistema muy capaz puede optimizar un objetivo especificado que no capture exactamente lo que los humanos realmente valoran.",
+      "mechanism": "objective-gap",
+      "semantic_rationale": "Separar objetivo especificado de valor deseado hace visible el fallo de especificación sin antropomorfizar el sistema.",
+      "perceptual_family": "objective-gap",
+      "topology": "specified objective trajectory diverging from intended value trajectory",
+      "choreography": "paths begin aligned, small objective mismatch accumulates, final outcomes separate, control gate appears",
+      "composition": "two trajectories with persistent gap measure",
+      "cues": [0, 4, 8, 12],
+      "copy": {
+        "es": {"title": "Capacidad sin objetivo correcto amplifica el error", "body": "Alineación = reducir la distancia entre lo especificado y lo que realmente queremos conseguir."},
+        "en": {"title": "Capability amplifies a wrong objective", "body": "Alignment means reducing the gap between what is specified and what we actually want to achieve."}
+      }
+    }
+  ],
+  "diversity_summary": {
+    "canonical_concepts": 25,
+    "perceptual_families": 25,
+    "max_family_uses": 1,
+    "target_max_family_uses": 2,
+    "third_use_requires_explicit_semantic_justification": true,
+    "four_or_more_is_failure": true
+  },
+  "next_action": "Implement schema-validated specs and semantic mechanism compiler from this source-bound register, then browser preflight for native H/V before encoded MP4 work."
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "unit": "fundamentos-ia-iag",
+  "recorded_at": "2026-09-20T05:59:00Z",
+  "stage": "SOURCE_BOUND_SEMANTIC_AUTHORING_COMPLETE_NOT_RENDERED",
+  "source_main": "b6821a5077681531fba6610298dd0bb02b85813a",
+  "branch": "migration/video-golden-fundamentos-ia-iag",
+  "branch_created_from_main": true,
+  "semantic_register_commit": "3c36f53cc74ea42e4df054ab7b2dc46c9c755135",
+  "sources": {
+    "chapters": 5,
+    "languages": ["es", "en"],
+    "source_files_bound": 10,
+    "source_blob_shas_bound": 10,
+    "chapter_slugs": [
+      "00_presentacion_serie",
+      "01-que-es-ia",
+      "02-que-es-ia-generativa",
+      "03-ia-vs-ia-generativa",
+      "04-agi"
+    ]
+  },
+  "authoring": {
+    "canonical_concepts": 25,
+    "concepts_per_chapter": 5,
+    "perceptual_families": 25,
+    "max_family_use": 1,
+    "explicit_mechanisms": 25,
+    "generic_fallbacks": 0,
+    "native_vertical_planned": true,
+    "languages_authored": ["es", "en"]
+  },
+  "theme_lock": {
+    "base": "#FAFAF8",
+    "accent": "#2D6A9F",
+    "accent_dark": "#1F4E75",
+    "accent_surface": "#E8F1F7",
+    "measured_accent_on_base_contrast": 5.4696305776,
+    "measured_dark_on_base_contrast": 8.3556927327,
+    "flat_editorial": true
+  },
+  "gates": {
+    "source_binding": "PASS_FOR_REGISTER",
+    "series_diversity_register": "PASS_FOR_AUTHORING_MAX_FAMILY_USE_1",
+    "schema_framework": "NOT_YET_IMPLEMENTED",
+    "browser_hv": "NOT_RUN",
+    "encoded_motion": "NOT_RUN",
+    "media_integrity": "NOT_RUN",
+    "owner_visual_approval": "NOT_REQUESTED",
+    "technical_golden": false,
+    "published": false
+  },
+  "next_action": "Implement the schema/spec compiler and deterministic semantic renderer from the committed register, then run UTF-8/control-byte/syntax/import/unit gates before browser H/V rendering. Do not create a final PR or Drive review package until the complete block is rendered and inspected."
+}

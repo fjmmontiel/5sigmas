@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-20",
+  "unit": "fundamentos-ia-iag",
+  "state": "CHANGES_REQUIRED",
+  "review_ready": false,
+  "owner_visual_approval": "CHANGES_REQUIRED",
+  "technical_golden": false,
+  "published": false,
+  "supersedes": "PENDING_OWNER_REVIEW for snapshot 154b04bfb111a511403d62e8c9987c500e7101fa; old decode/hash/ID checks remain diagnostics, not visual acceptance",
+  "confirmed_root_causes": [
+    "The source register declares whole_chunk_reveal, but render/layout draws the complete scene.body at every frame without textual cue state",
+    "Four pairs of differently named visual styles dispatch to the same drawGraph/drawGrid/drawLoop/drawPipeline handlers; declared unique families did not establish perceptual diversity",
+    "The bounded motion probe checked unique source JPEG frames and whole-frame RGB differences, not semantic text/action alignment in final encoded MP4s",
+    "The former packager promoted structural hash/frame/ID checks to a complete review-candidate state without requiring independent visual QA or individual playable MP4 delivery",
+    "New-series implementations and their permissive evaluators bypassed the approved quality contract instead of preserving it as an executable acceptance boundary"
+  ],
+  "implemented": [
+    "Shared fail-closed review_admission.py wired INSIDE all three existing package entrypoints in PRs 336, 338 and 340",
+    "Current independent QA rubric, exact asset/evidence binding, authored text/action cues and observations, all quality gates, and complete individual MP4 delivery required",
+    "Content-ready and delivery-ready are distinct; default package execution cannot return success for missing/failed/stale evidence",
+    "Internal diagnostic packaging remains allowed explicitly, without review promotion; outer and embedded ZIP manifests agree on rejection",
+    "A reusable independent decoded-text diagnostic and 26 contract/regression tests are checked in"
+  ],
+  "code": {
+    "shared_admission_blob_sha": "a1d2de6024e7df0ebd47fbbaec8c057c2b23f1d3",
+    "shared_regression_tests_blob_sha": "d00a4ff56ac7d1663f1edc3dbf5097d610508573",
+    "fundamentos_packager_commit": "5b61f7b4da71412308bf1b2a24c8a5229579a899",
+    "cave_recovery_commit": "1a037d436dc2a69d768c9339ce078651e2d2a1c4",
+    "seguridad_recovery_commit": "891dd13668c713a2927cd45ab1e9eb31a405532d"
+  },
+  "observed_verification": {
+    "local_contract_regression_tests_passed": 26,
+    "positive_fixtures_are_synthetic_not_video_certification": true,
+    "fundamentos_real_outputs_checked_by_complete_packager": 20,
+    "fundamentos_packager_exit_code": 1,
+    "fundamentos_outer_and_embedded_zip_state": "CHANGES_REQUIRED",
+    "cave_real_outputs_checked_by_complete_packager": 24,
+    "cave_packager_exit_code": 1,
+    "seguridad_real_mp4_metadata_pairs_checked_by_new_admission": 24,
+    "seguridad_new_admission_result": "REVIEW_BLOCKED",
+    "seguridad_legacy_full_decode_motion_loop_rerun": false,
+    "decoded_text_audit": {
+      "scope": "Five canonical Fundamentos ES horizontal videos; fixed legacy text region only",
+      "videos": 5,
+      "scenes": 25,
+      "decoded_frames": 75,
+      "sample_local_seconds": [0.1, 7.5, 13.5],
+      "text_static_across_samples_scenes": 25,
+      "maximum_observed_text_mask_change_fraction": 0.000474025974025974,
+      "diagnostic_threshold": 0.003,
+      "semantic_or_full_aesthetic_certification": false,
+      "concrete_visual_check": "The first scene already shows all four textual questions at 0.1 s while its numbered diagram nodes activate later; text remains unchanged at 7.5 and 13.5 s"
+    },
+    "new_repaired_rendered_outputs": 0,
+    "new_review_ready_outputs": 0,
+    "ci_dispatched": false,
+    "published": false
+  },
+  "continuation": {
+    "priority": "REPAIR_ACTUAL_AUTHORING_AND_RENDERERS_NEXT_NOT_REPEAT_DIAGNOSIS_OR_START_ANOTHER_FLAWED_SERIES",
+    "steps": [
+      "Use the exact owner-approved Modelos R2 media as the quality reference without modifying its approved bytes",
+      "Author per-concept sentence/action cues, semantic diagram labels/data and appropriate reading/observation holds; do not auto-split arbitrary prose or match cues merely by word count",
+      "Make renderer and export consume the same versioned timeline; preserve stable pre-laid text positions and sync during seek/pause/reduced motion",
+      "Replace generic numbered/semantically empty diagrams and repeated chapter choreography with content-specific explanatory mechanisms; normalize real handler and perceptual reuse across the complete series",
+      "Compare actually rendered palette, typography, readability and purposeful motion to the Golden baseline; a theme constant alone is insufficient",
+      "Run negative behavioral and decoded-media tests, then independently inspect final exact MP4s and persist genuine timestamped findings; do not fill PASS receipts as a substitute for inspection",
+      "When content-ready, stage every ES/EN/H/V MP4 individually in the existing private review location; confirm hashes and actual playback before review-ready",
+      "Continue using the same complete-block PRs, preserve approved units and advance the remaining migration without a per-run volume quota"
+    ],
+    "gate_limitation": "review_admission validates evidence and readiness, not aesthetic truth by itself; an independently performed encoded-media review is still mandatory",
+    "review_delivery": "ZIP is internal backup only, never the owner-facing review deliverable",
+    "owner_approved_modelos_round2_unchanged": true
+  },
+  "private_delivery_receipts_and_chat_routing_remain_private": true
+}

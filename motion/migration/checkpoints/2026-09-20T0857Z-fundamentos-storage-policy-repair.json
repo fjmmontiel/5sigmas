@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-20T08:56:35Z",
+  "unit": "fundamentos-ia-iag",
+  "branch": "migration/video-golden-fundamentos-ia-iag",
+  "state": "COMPLETE_REVIEW_PACKAGE_DELIVERED_PENDING_OWNER_REVIEW_CI_STORAGE_POLICY_REPAIRED",
+  "media_snapshot": "154b04bfb111a511403d62e8c9987c500e7101fa",
+  "repair_parent": "154b04bfb111a511403d62e8c9987c500e7101fa",
+  "repair_head": "8f7293273d1a4722ea2117af25a37bce8e08f6ab",
+  "change_scope": "CI_STORAGE_POLICY_ONLY_NO_MEDIA_SOURCE_SPEC_THEME_TIMELINE_CHANGE",
+  "workflow_repairs": [
+    {
+      "commit": "c2df1b1e5334a24348f0787c02eee86fefdf776c",
+      "workflow": ".github/workflows/fundamentos-semantic-engine.yml",
+      "result": "successful browser evidence is no longer retained; failure evidence only, one-day retention"
+    },
+    {
+      "commit": "cd260a1e34e34772871d39cdfd5ce10582f5ce58",
+      "workflow": ".github/workflows/fundamentos-encoded-motion-gate.yml",
+      "result": "successful encoded-motion evidence is no longer retained; failure evidence only, one-day retention"
+    },
+    {
+      "commit": "8f7293273d1a4722ea2117af25a37bce8e08f6ab",
+      "workflow": ".github/workflows/fundamentos-final-review-package.yml",
+      "result": "complete package validation remains available by explicit dispatch but successful generic Actions artifacts are not retained; durable owner-review delivery stays in the single private Drive review root"
+    }
+  ],
+  "observed_ci": {
+    "storage_policy_run": 35500941983,
+    "storage_policy_result": "SUCCESS",
+    "semantic_engine_run": 35500941975,
+    "semantic_engine_result": "SUCCESS"
+  },
+  "review_package": {
+    "outputs": 20,
+    "full_decode_pass": 20,
+    "es_en_pairs": 10,
+    "native_hv_pairs": 10,
+    "bytes": 30735836,
+    "sha256": "23f045c511d46ac612ccdd6546beb89bdfdc706e41fd8fd6418c12b8d8d194d0",
+    "github_artifact_equals_private_drive_readback": true,
+    "zip_integrity": "PASS",
+    "media_bytes_changed_by_ci_repair": false
+  },
+  "owner_visual_approval": "PENDING_EXPLICIT_DECISION",
+  "repeat_review_required_due_to_ci_repair": false,
+  "technical_golden": false,
+  "published": false,
+  "next_action": "Keep the frozen review snapshot unchanged while awaiting an explicit owner decision; do not rerender or resend review because of this CI-only repair. Continue safe independent migration work."
+}
