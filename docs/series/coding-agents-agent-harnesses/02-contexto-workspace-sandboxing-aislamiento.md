@@ -11,6 +11,21 @@ tags:
   - Coding agents
   - Arquitectura
   - Seguridad
+video: 02-contexto-workspace-sandboxing-aislamiento.mp4
+video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
+video_title: "Workspace, worktrees y sandboxing"
+video_summary: "El aislamiento separa estado Git, filesystem, procesos y recursos; la integración final vuelve a validar el estado combinado."
+video_duration: PT36S
+video_chapters:
+- name: "Una tarea, un estado observable"
+  start: 0
+  end: 12
+- name: "Aislar también recursos de ejecución"
+  start: 12
+  end: 24
+- name: "Integrar contra el target actual"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 2 — Contexto de repositorio, workspace, sandboxing, worktrees/branches y aislamiento

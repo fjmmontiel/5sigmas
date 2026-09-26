@@ -64,6 +64,41 @@ jobs:
 
               return '\n'.join(lines[start:end])
 
+          def unwrap_condition(expression):
+              condition = expression.strip()
+              if condition.startswith('$' + '{{') and condition.endswith('}' + '}'):
+                  condition = condition[3:-2].strip()
+              return condition
+
+          def is_failure_only(expression):
+              """Accept only predicates that logically require failure()."""
+              condition = unwrap_condition(expression)
+              if condition == 'failure()':
+                  return True
+              return condition.startswith('failure() && ') and '||' not in condition
+
+          def is_short_lived_golden_review_evidence(path, block, expression):
+              """Allow only named one-day artifacts used for real GOLDEN pixel review."""
+              if unwrap_condition(expression) != 'always()':
+                  return False
+              allowed = {
+                  'realtime-voice-browser-milestone.yml': 'realtime-voice-browser-pixel-evidence',
+                  'coding-browser-visual-milestone.yml': 'coding-agents-browser-visual-evidence',
+                  'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',
+                  'context-media-bootstrap.yml': 'context-engineering-browser-visual-evidence',
+                  'inference-media-bootstrap.yml': 'inference-engineering-browser-visual-evidence',
+                  'series4-golden-review.yml': 'inference-engineering-series4-pr-gate-visual-evidence',
+                  'evaluating-ai-systems-media-bootstrap.yml': 'evaluating-ai-systems-media-bootstrap-evidence',
+                  'series5-golden-review.yml': 'ai-systems-evaluation-series5-pr-gate-visual-evidence',
+              }
+              artifact_name = allowed.get(path.name)
+              if artifact_name is None:
+                  return False
+              return bool(re.search(
+                  rf'(?m)^\s*name:\s*{re.escape(artifact_name)}\s*$',
+                  block,
+              ))
+
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
               for index, line in enumerate(lines):
@@ -86,9 +121,13 @@ jobs:
                       )
                   else:
                       expression = if_match.group(1).split('#', 1)[0].strip()
-                      if expression != 'failure()':
+                      if not (
+                          is_failure_only(expression)
+                          or is_short_lived_golden_review_evidence(path, block, expression)
+                      ):
                           errors.append(
-                              f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
+                              f'{path}:{index + 1}: generic upload-artifact must be failure-only unless it is an '
+                              'explicit named one-day GOLDEN pixel-review evidence artifact; '
                               f'found if: {expression}'
                           )
 
@@ -151,7 +190,8 @@ jobs:
               raise SystemExit(1)
 
           print(
-              'CI storage policy OK: generic artifacts are failure-only with one-day maximum retention, '
-              'old generic artifacts are purged hourly, and the single required Pages artifact is deleted after deployment.'
+              'CI storage policy OK: generic artifacts are failure-only except explicit named one-day '
+              'GOLDEN pixel-review evidence artifacts; old generic artifacts are purged hourly, and the single '
+              'required Pages artifact is deleted after deployment.'
           )
           PY

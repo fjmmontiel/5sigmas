@@ -60,6 +60,9 @@ assert(data.version >= 1, 'preset dataset version missing');
 assert(/^2026-\d{2}-\d{2}$/.test(data.updated), 'preset dataset must carry an update date');
 assert(Array.isArray(data.presets) && data.presets.length >= 3, 'expected at least three sourced architecture presets');
 assert(Array.isArray(data.sources) && data.sources.length >= 3, 'expected explicit primary-source records');
+assert(data.updated === '2026-09-25', 'architecture preset review date must be current');
+assert(data.sources.some((source) => source.id === 'meta-llama-4-model-card'), 'Llama 4 review source missing');
+assert(data.architecture_coverage?.reviewed_not_preset?.some((row) => row.family.includes('Llama 4')), 'Llama 4 exclusion rationale missing');
 const sourceIds = new Set(data.sources.map((source) => source.id));
 for (const source of data.sources) {
   assert(source.organization && source.title, `source ${source.id} needs organization/title`);

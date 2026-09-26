@@ -1,0 +1,13 @@
+{
+  "capture_revision": 87,
+  "scope": "security_00_01_curated_nonvoice_key_moments_exact_head",
+  "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
+  "requested_head_parent": "7d5668f770690233cad2a550ad8cb83d3c9c2bc5",
+  "site_facing_bytes_changed": true,
+  "reason": "Persist the Security00/01 ES/EN chapter maps curated from six manually reviewed visual positions per native video under owner amendment 5716685049, then rebuild and recapture the exact head. These chapter/key-moment maps are based only on the real visual timeline; they do not infer narration, transcript, captions or narration timing. Verify strict ES/EN, article/watch rendering, lifecycle and non-voice media metadata. VOICE_ENHANCEMENT remains DEFERRED_OWNER_LOCAL and is not a current GOLDEN blocker.",
+  "contract_issue": 305,
+  "owner_amendment_comment": 5716685049,
+  "voice_enhancement": "DEFERRED_OWNER_LOCAL",
+  "voice_is_blocker": false,
+  "narration_or_transcript_inference": false
+}

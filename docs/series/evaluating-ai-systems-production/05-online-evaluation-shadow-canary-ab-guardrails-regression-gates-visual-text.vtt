@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+Shadow observa al candidato sin usar su respuesta para el usuario.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Canary limita exposición real mientras comprueba riesgo operativo.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+A/B usa asignación aleatoria para estudiar el efecto causal.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+La variante estable responde; la candidata recibe una copia para observarla.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Sus writes deben aislarse, bloquearse o ejecutarse en un entorno seguro.
+
+02-3
+00:00:36.100 --> 00:00:46.000
+Shadow no mide directamente cómo cambia la experiencia del usuario.
+
+03-1
+00:00:46.700 --> 00:00:53.400
+Este 5% es sólo un ejemplo de exposición inicial, no un umbral universal.
+
+03-2
+00:00:53.400 --> 00:01:00.100
+Declara antes los límites de errores, latencia y acciones no permitidas.
+
+03-3
+00:01:00.100 --> 00:01:08.000
+Falta de evidencia exige pausa; no equivale a PASS.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Una conversación con memoria puede necesitar asignación estable por usuario.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Cambiar de variante en cada turno mezcla tratamientos y contextos.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+Registra asignación, exposición y unidad de análisis.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Comprueba asignación, exposición, logging e integridad de las métricas.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Investiga desequilibrios incompatibles con el diseño antes de leer el lift.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Una diferencia observada en un canary no es automáticamente causal.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Combina restricciones duras, fiabilidad y evidencia de la etapa.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Una violación bloquea; datos insuficientes mantienen la pausa.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+El protocolo depende del cambio y su riesgo: no exige siempre todas las etapas.
+

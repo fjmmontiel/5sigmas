@@ -1,0 +1,610 @@
+{
+  "schema": 1,
+  "series": "evaluating-ai-systems-production",
+  "round": "C3",
+  "owner_approval": "APPROVED_2026-09-25",
+  "description": "Exact approved landscape videos in12 ES/EN article/watch routes;24 original H/V files registered in the private Golden dataset. No portrait-site-consumption claim.",
+  "source_renderer_sha256": "e4a3e6ed79e7d1080f5cf11813ddb5868c955f5bea7fda9081949e825e75a052",
+  "objects": [
+    {
+      "path": "series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4",
+      "kind": "video",
+      "sha256": "8c8350056bb6865cf58a6207118ff5ea7b74be32386aca6ea46f7cd3c0f56558",
+      "bytes": 3878072,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/",
+      "watch": "videos/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/",
+      "poster_path": "series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg",
+      "poster_sha256": "9cdefa9dd73c8b40e319a18f075056fc051892e7ebf24323a042b21064c95aeb",
+      "chapters": [
+        {
+          "name": "La respuesta no es el resultado.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Aísla el cambio. Evalúa el modelo.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Falta la evidencia. No cambies todo.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "El workflow decide qué puede ocurrir.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "La trayectoria muestra qué ocurrió.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Diagnostica en pequeño. Confirma en el sistema.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt",
+      "captions_sha256": "153050b7ec8864b176e35956eecb862d9f2550e532e3e64c23b1037c4fb4229e",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4",
+      "kind": "video",
+      "sha256": "e1fe61c11948c38b57c8272786b5e0676e8cc70125243ee44c87c99483702f53",
+      "bytes": 3766252,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/",
+      "poster_path": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg",
+      "poster_sha256": "452cceae529f8aa2a3cca4b492b792b3b9250c8959216dd37ad758cc49aaf8c8",
+      "chapters": [
+        {
+          "name": "The answer is not the outcome.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Isolate the change. Evaluate the model.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Missing evidence. Do not change everything.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "The workflow defines what can happen.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "The trajectory shows what happened.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Diagnose narrowly. Confirm in the system.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt",
+      "captions_sha256": "dd0d97064adfa8c5fb3b65d2dcf9067f4c3053cfaa709553e0d8323fdbed9e24",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4",
+      "kind": "video",
+      "sha256": "2fa16609049b6b25d2720a262197ed6131be9cb40f46437d85a8cd135e428f81",
+      "bytes": 3869489,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/",
+      "watch": "videos/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/",
+      "poster_path": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg",
+      "poster_sha256": "a7de821a1d97028fef137f4eeaad3f0a85b745b65df2c36eb44b74021322800c",
+      "chapters": [
+        {
+          "name": "Un eval es más que sus preguntas.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Busca cobertura. No sólo volumen.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Cambia una condición. Debe cambiar la decisión.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Separa familias. No sólo filas.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Desarrollar no es medir la release.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Cambió el criterio. Cambió la evaluación.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt",
+      "captions_sha256": "cce8558b229cb89e256441d70b967942ed52c74a639752578727ce458436d1a9",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4",
+      "kind": "video",
+      "sha256": "6bfe21e4c7f2a7bdcc2291e5f90b83f6c6c951f9862370c9875736f664fa90e6",
+      "bytes": 3727795,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/",
+      "poster_path": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg",
+      "poster_sha256": "24541075ed9783e506b81eb44a13301d7c95c5cf61c1d8ccfd7f40f4020bb9ba",
+      "chapters": [
+        {
+          "name": "An eval is more than its questions.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Seek coverage. Not just volume.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Change one condition. The decision must change.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Separate families. Not just rows.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Development is not release measurement.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "The criterion changed. The evaluation changed.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt",
+      "captions_sha256": "48597812b8d22f2ed17cf2d65f7e19816853bc36381a41a2a1e1fe58d16c6587",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4",
+      "kind": "video",
+      "sha256": "c22024833d6d8111e7018de791acb13ab841c6c603bb09224ac822322f046921",
+      "bytes": 4126273,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/",
+      "watch": "videos/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/",
+      "poster_path": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg",
+      "poster_sha256": "c49e7a32530e7f64d9f626f9bc10e8cf8b3ed87ac3c56b6320ecf6311e42fd71",
+      "chapters": [
+        {
+          "name": "Elige el verificador que necesita la tarea.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Una rúbrica concreta. La misma evidencia.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Mide el acuerdo. No lo llames verdad.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Invierte el orden. Conserva el contenido.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Un juicio aislado puede ser inestable.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Calibra en dev. Comprueba fuera.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt",
+      "captions_sha256": "1d4795f92fd20394560c66cff6fc43aa073e87a79e25d2c9f99fa7ab87babf1d",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4",
+      "kind": "video",
+      "sha256": "6c055e7276052453c81937150248c383c7b8014d3eae8d187d6c1a3a5e301fe6",
+      "bytes": 3998131,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/",
+      "poster_path": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg",
+      "poster_sha256": "6b80163d3c5950c9d34ed9bfc81e16d9deace469c4aa6f319b54142f82187430",
+      "chapters": [
+        {
+          "name": "Choose the verifier the task needs.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "A concrete rubric. The same evidence.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Measure agreement. Do not call it truth.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Reverse the order. Keep the content.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "A single judgment can be unstable.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Calibrate on dev. Test separately.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt",
+      "captions_sha256": "0b398de3d844b390c0a54ddcfd699ed7f50dd08d8821a0658a5121b9f144a6b5",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4",
+      "kind": "video",
+      "sha256": "384b7ba855918e40e09b44881c35d9632109788650668cb4080f7d205910e595",
+      "bytes": 3914924,
+      "duration": 136,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/",
+      "watch": "videos/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/",
+      "poster_path": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg",
+      "poster_sha256": "2e1da8825f2fc6f11668c786361ee9c456900f865c049287189f5e585b8567df",
+      "chapters": [
+        {
+          "name": "No cuentes llamadas. Sigue el estado.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Un éxito no compensa un permiso violado.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Timeout no significa «no se ejecutó».",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Primero reconcilia. Después decide.",
+          "start": 68,
+          "end": 92
+        },
+        {
+          "name": "Puede haber varios caminos correctos.",
+          "start": 92,
+          "end": 114
+        },
+        {
+          "name": "El gate debe explicar por qué se detiene.",
+          "start": 114,
+          "end": 136
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt",
+      "captions_sha256": "798e4938aeb31c156eec2982ba873ea6bfaf7180df198de5be549d720b270da7",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4",
+      "kind": "video",
+      "sha256": "39850a9d765d52d003ab6b3f6df6954240854215feaa5c3f0f70d59c845d2deb",
+      "bytes": 3624720,
+      "duration": 136,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/",
+      "poster_path": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg",
+      "poster_sha256": "bce52eda1639dd02fd6358ef9b346313c4f2949a568c2cbc5736fc514070f535",
+      "chapters": [
+        {
+          "name": "Do not count calls. Follow the state.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Success cannot cancel a permission violation.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Timeout does not mean “nothing happened”.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Reconcile first. Then decide.",
+          "start": 68,
+          "end": 92
+        },
+        {
+          "name": "There can be several correct paths.",
+          "start": 92,
+          "end": 114
+        },
+        {
+          "name": "The gate must explain why it stops.",
+          "start": 114,
+          "end": 136
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt",
+      "captions_sha256": "48b567fb3cd9baff5f315d21640d32a922c52b84cfbad6125e4c3aa4a0e6bce5",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4",
+      "kind": "video",
+      "sha256": "317ef8b608fe00537d73ae02cf9d69e447c06811a92d175632b6d5f416f5acf8",
+      "bytes": 4126685,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/",
+      "watch": "videos/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/",
+      "poster_path": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg",
+      "poster_sha256": "3e1afb01d7750273dbf19e2370c14dc04725882cda94713b7c9954525ac7984e",
+      "chapters": [
+        {
+          "name": "Tres métodos. Tres preguntas distintas.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "No servir la respuesta no elimina los efectos.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "Expón poco. Define cuándo parar.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "Randomiza la unidad que conserva el contexto.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Antes del efecto, valida la medición.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Ampliar requiere evidencia suficiente.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt",
+      "captions_sha256": "2a59af0a1d89aff62bd668523418a00da4498530d552743876ac4c3886da4cbb",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4",
+      "kind": "video",
+      "sha256": "8a415aeb02683745468768de64b4892ed851f8473fc2bfd9c7bfc2ea2c6fa9d3",
+      "bytes": 3960211,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/",
+      "poster_path": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg",
+      "poster_sha256": "2eda5fda436824b5a269e62cc19144575acd169db36bb019c7c50349698b9980",
+      "chapters": [
+        {
+          "name": "Three methods. Three different questions.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Not serving the answer does not remove effects.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "Expose a little. Define when to stop.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "Randomize the unit that preserves context.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Before the effect, validate measurement.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Expansion requires sufficient evidence.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt",
+      "captions_sha256": "7fa6bb8c77435c1b661e1c7b5030a154ec744e3bff5da39638e607f0e77acda2",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4",
+      "kind": "video",
+      "sha256": "229287765f648da399ba7a1969b6fe517277dc12708d3f9f7f5e138eff246195",
+      "bytes": 4143777,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/",
+      "watch": "videos/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/",
+      "poster_path": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg",
+      "poster_sha256": "5c2e6c7fcb0fa68aba05a308c5e3ac58c8258126a6de122bdc28f5f840df344f",
+      "chapters": [
+        {
+          "name": "Una alerta no es un diagnóstico.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "La misma respuesta. Dos writes.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "Un mecanismo. También sus vecinos.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "Convierte el incidente en una prueba reproducible.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Prueba la reparación. No sólo el síntoma.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Tests verdes no son verificación en producción.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt",
+      "captions_sha256": "b524b2a57443f306144728aa35c23568e75699a48e1562508db046100221d475",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4",
+      "kind": "video",
+      "sha256": "92af362202b5647bd0c83897d7ab2f1ee9d55deee4c6d5b01e31b5aa213a77df",
+      "bytes": 3991436,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/",
+      "watch": "en/videos/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/",
+      "poster_path": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg",
+      "poster_sha256": "17aec28ead74dcf9488223d9a812c32af92818e55b9a327aba7b92b4859fcc6f",
+      "chapters": [
+        {
+          "name": "An alert is not a diagnosis.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "The same answer. Two writes.",
+          "start": 22,
+          "end": 46
+        },
+        {
+          "name": "One mechanism. Its neighboring cases too.",
+          "start": 46,
+          "end": 68
+        },
+        {
+          "name": "Turn the incident into a reproducible test.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Test the repair. Not just the symptom.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Green tests are not production verification.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt",
+      "captions_sha256": "4aa1ecc90fca6f14e8b46d29cd4a928de2433ba3f4b969a09eee1b9382d8bf8c",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    }
+  ]
+}

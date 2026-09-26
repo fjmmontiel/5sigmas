@@ -1,0 +1,266 @@
+name: Security capture direct execution
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/capture-request.json']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-capture-direct-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Record exact capture request
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/capture-request.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install existing build dependencies
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Install existing Playwright version
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve built preview with byte-range media support
+        run: |
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/security-capture-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/security-capture-preview.log
+          exit 1
+
+      - name: Validate shared Material tooltip overflow fix and negative mutation
+        run: node scripts/validate_material_tooltip_overflow.mjs
+
+      - name: Capture whole-article and per-asset editorial evidence for active Security 00/01
+        id: editorial_capture
+        continue-on-error: true
+        timeout-minutes: 12
+        env:
+          S5_SECURITY_EDITORIAL_DIR: artifacts/security-requalification/editorial-evidence
+        run: |
+          node scripts/capture_security_editorial_evidence.mjs
+          test -s artifacts/security-requalification/editorial-evidence/report.json
+
+      - name: Capture semantic start intermediate and final trace checkpoints with real viewport chrome
+        id: trace_checkpoints
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          S5_SECURITY_TRACE_DIR: artifacts/security-requalification/trace-checkpoints
+        run: |
+          node scripts/capture_security_trace_checkpoints.mjs
+          test -s artifacts/security-requalification/trace-checkpoints/report.json
+
+      - name: Re-run Prompt Injection state gate across normal/reduced motion
+        id: prompt_states
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          node scripts/validate_security_prompt_visual_states.mjs
+          test -s artifacts/security-requalification/prompt-states/report.json
+
+      - name: Re-run canonical poster play pause seek end next lifecycle gate
+        id: video_lifecycle
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          node scripts/validate_security_video_lifecycle.mjs --self-test
+          node scripts/validate_security_video_lifecycle.mjs
+          test -s artifacts/security-requalification/video-lifecycle/report.json
+
+      - name: Retain bounded Security00 lifecycle state pixels for manual review
+        id: lifecycle_state_capture
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          S5_SECURITY_LIFECYCLE_STATE_DIR: artifacts/security-requalification/video-lifecycle-states
+        run: |
+          node scripts/capture_security_video_lifecycle_states.mjs
+          test -s artifacts/security-requalification/video-lifecycle-states/report.json
+
+      - name: Capture Security00 watch summary pixels in both locales and motion modes
+        id: watch_summary_capture
+        timeout-minutes: 5
+        env:
+          S5_SECURITY_WATCH_SUMMARY_DIR: artifacts/security-requalification/watch-summary
+        run: |
+          node scripts/capture_security_watch_summary.mjs
+          test -s artifacts/security-requalification/watch-summary/report.json
+
+      - name: Summarize technical capture without editorial certification
+        if: always()
+        env:
+          EDITORIAL_OUTCOME: ${{ steps.editorial_capture.outcome }}
+          TRACE_OUTCOME: ${{ steps.trace_checkpoints.outcome }}
+          PROMPT_STATES_OUTCOME: ${{ steps.prompt_states.outcome }}
+          VIDEO_LIFECYCLE_OUTCOME: ${{ steps.video_lifecycle.outcome }}
+          LIFECYCLE_STATE_CAPTURE_OUTCOME: ${{ steps.lifecycle_state_capture.outcome }}
+          WATCH_SUMMARY_CAPTURE_OUTCOME: ${{ steps.watch_summary_capture.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          editorial_path = Path('artifacts/security-requalification/editorial-evidence/report.json')
+          trace_path = Path('artifacts/security-requalification/trace-checkpoints/report.json')
+          prompt_path = Path('artifacts/security-requalification/prompt-states/report.json')
+          lifecycle_path = Path('artifacts/security-requalification/video-lifecycle/report.json')
+          lifecycle_states_path = Path('artifacts/security-requalification/video-lifecycle-states/report.json')
+          watch_summary_path = Path('artifacts/security-requalification/watch-summary/report.json')
+          summary = {
+              'editorial_capture_outcome': os.environ.get('EDITORIAL_OUTCOME', ''),
+              'trace_checkpoints_outcome': os.environ.get('TRACE_OUTCOME', ''),
+              'prompt_states_outcome': os.environ.get('PROMPT_STATES_OUTCOME', ''),
+              'video_lifecycle_outcome': os.environ.get('VIDEO_LIFECYCLE_OUTCOME', ''),
+              'lifecycle_state_capture_outcome': os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME', ''),
+              'watch_summary_capture_outcome': os.environ.get('WATCH_SUMMARY_CAPTURE_OUTCOME', ''),
+              'editorial_report_present': editorial_path.exists(),
+              'trace_report_present': trace_path.exists(),
+              'prompt_report_present': prompt_path.exists(),
+              'video_lifecycle_report_present': lifecycle_path.exists(),
+              'lifecycle_state_report_present': lifecycle_states_path.exists(),
+              'watch_summary_report_present': watch_summary_path.exists(),
+              'golden': False,
+              'media_pass': False,
+              'pixel_review': 'PENDING_MANUAL_INSPECTION_OF_ALL_RETAINED_ACTIVE_ARTICLE_WATCH_IMAGES_VIDEO_STATES_AND_REAL_VIEWPORT_TRACE_CHECKPOINTS',
+              'pedagogy_review': 'PENDING_MANUAL_EDITORIAL_REVIEW; TECHNICAL_CAPTURE_CANNOT_CERTIFY',
+          }
+          if editorial_path.exists():
+              data = json.loads(editorial_path.read_text())
+              rows = data.get('contexts', [])
+              failures = data.get('failures', [])
+              screenshots = []
+              for row in rows:
+                  if row.get('fullPageScreenshot'):
+                      screenshots.append(row['fullPageScreenshot'])
+                  for asset in row.get('assets', []):
+                      screenshots.extend(asset.get('screenshots', []))
+              summary.update({
+                  'editorial_contexts_expected': data.get('expected_contexts'),
+                  'editorial_contexts_observed': len(rows),
+                  'editorial_failure_count': len(failures),
+                  'editorial_failures': failures,
+                  'retained_screenshot_count': len(screenshots),
+                  'profiles': data.get('profiles', []),
+                  'locales': data.get('locales', []),
+                  'browser': data.get('browser', {}),
+                  'post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+                  'runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+              })
+          if trace_path.exists():
+              data = json.loads(trace_path.read_text())
+              rows = data.get('contexts', [])
+              failures = data.get('failures', [])
+              summary.update({
+                  'trace_contexts_expected': data.get('expected_contexts'),
+                  'trace_contexts_observed': len(rows),
+                  'trace_failure_count': len(failures),
+                  'trace_failures': failures,
+                  'trace_checkpoint_count': sum(len(row.get('checkpoints', [])) for row in rows),
+                  'trace_runtime_unexpected_total': sum(len(row.get('runtimeUnexpected', [])) for row in rows),
+                  'trace_post_teardown_contexts': sum(1 for row in rows if row.get('verdictBasis') == 'POST_CONTEXT_TEARDOWN'),
+              })
+          if prompt_path.exists():
+              data = json.loads(prompt_path.read_text())
+              evidence = data.get('evidence', [])
+              failures = data.get('failures', [])
+              summary.update({
+                  'prompt_contexts_observed': len(evidence),
+                  'prompt_failure_count': len(failures),
+                  'prompt_runtime_unexpected_total': sum(len(row.get('runtime_unexpected', [])) for row in evidence),
+              })
+          if lifecycle_path.exists():
+              data = json.loads(lifecycle_path.read_text())
+              summary.update({
+                  'video_lifecycle_contexts_expected': data.get('contexts_expected'),
+                  'video_lifecycle_contexts_observed': data.get('contexts_observed'),
+                  'video_lifecycle_failure_count': len(data.get('failures', [])),
+              })
+          if lifecycle_states_path.exists():
+              data = json.loads(lifecycle_states_path.read_text())
+              summary.update({
+                  'lifecycle_state_contexts_expected': data.get('expected_contexts'),
+                  'lifecycle_state_contexts_observed': data.get('contexts_observed'),
+                  'lifecycle_state_screenshots_observed': data.get('screenshots_observed'),
+                  'lifecycle_state_failure_count': len(data.get('failures', [])),
+                  'lifecycle_state_media_audio_evidence': data.get('media_audio_evidence'),
+              })
+          if watch_summary_path.exists():
+              data = json.loads(watch_summary_path.read_text())
+              summary.update({
+                  'watch_summary_contexts_expected': data.get('expected_contexts'),
+                  'watch_summary_contexts_observed': data.get('contexts_observed'),
+                  'watch_summary_failure_count': len(data.get('failures', [])),
+                  'watch_summary_failures': data.get('failures', []),
+                  'watch_summary_media_audio_evidence': data.get('media_audio_evidence'),
+              })
+          print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+          ok = all([
+              os.environ.get('EDITORIAL_OUTCOME') == 'success',
+              os.environ.get('TRACE_OUTCOME') == 'success',
+              os.environ.get('PROMPT_STATES_OUTCOME') == 'success',
+              os.environ.get('VIDEO_LIFECYCLE_OUTCOME') == 'success',
+              os.environ.get('LIFECYCLE_STATE_CAPTURE_OUTCOME') == 'success',
+              os.environ.get('WATCH_SUMMARY_CAPTURE_OUTCOME') == 'success',
+          ])
+          raise SystemExit(0 if ok else 1)
+          PY
+
+      - name: Retain bounded active-article diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-capture-direct-report
+          path: |
+            artifacts/security-requalification/editorial-evidence/report.json
+            artifacts/security-requalification/editorial-evidence/screenshots/*.jpg
+            artifacts/security-requalification/trace-checkpoints/report.json
+            artifacts/security-requalification/trace-checkpoints/screenshots/*.jpg
+            artifacts/security-requalification/prompt-states/report.json
+            artifacts/security-requalification/video-lifecycle/report.json
+            artifacts/security-requalification/video-lifecycle-states/report.json
+            artifacts/security-requalification/video-lifecycle-states/screenshots/*.jpg
+            artifacts/security-requalification/watch-summary/report.json
+            artifacts/security-requalification/watch-summary/screenshots/*.jpg
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true

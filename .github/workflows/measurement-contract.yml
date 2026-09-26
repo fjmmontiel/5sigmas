@@ -1,0 +1,35 @@
+name: First-party measurement contract
+
+on:
+  pull_request:
+    paths:
+      - 'docs/assets/javascripts/measurement.js'
+      - 'docs/javascripts/external-links.js'
+      - 'scripts/test_measurement_contract.mjs'
+      - 'MEASUREMENT.md'
+      - '.github/workflows/measurement-contract.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/assets/javascripts/measurement.js'
+      - 'docs/javascripts/external-links.js'
+      - 'scripts/test_measurement_contract.mjs'
+      - 'MEASUREMENT.md'
+      - '.github/workflows/measurement-contract.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate privacy and event semantics
+        run: node scripts/test_measurement_contract.mjs
+      - name: Verify runtime syntax
+        run: node --check docs/assets/javascripts/measurement.js

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-intro-es",
+  "locale": "es",
+  "title": "Modelos razonadores — test-time compute, cadenas de pensamiento y fallos sistemáticos",
+  "description": "Cinco capítulos sobre cómo razonan los LLMs: test-time compute, fallos, latencia, coste y riesgos cuando usan herramientas.",
+  "watch_url": "https://5sigmas.com/videos/series/modelos-razonadores/00_presentacion_serie/",
+  "article_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie/",
+  "video_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie.mp4",
+  "poster_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie.jpg",
+  "vtt_url": "https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie.visual-text.vtt",
+  "video_sha256": "e45db8339e97972c672f1d13aa5705bc9f6b25c5fcebfb28556d1c42d40487d6",
+  "video_bytes": 4051574,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 75000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/00-presentacion.es.json",
+    "text_timing_candidate_git_blob": "889e11453d101cef17849e9b1e021fd177760fc3",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "process",
+      "name": "Razonar es un proceso.",
+      "start_ms": 0,
+      "end_ms": 15000,
+      "cues": [
+        {"id": "process-01", "start_ms": 700, "end_ms": 3372, "text": "Un problema complejo puede dividirse en pasos."},
+        {"id": "process-02", "start_ms": 3372, "end_ms": 5727, "text": "Esos pasos consumen tiempo y cómputo."},
+        {"id": "process-03", "start_ms": 5727, "end_ms": 15000, "text": "Y también pueden fallar."}
+      ],
+      "visual_description": ["La multiplicación ilustrativa 17 × 6 se descompone en 10 × 6 y 7 × 6: 60 + 42 = 102. Una respuesta 104 aparece marcada como incorrecta. La cuadrícula representa la descomposición del cálculo, no un resultado de benchmark."]
+    },
+    {
+      "id": "budget",
+      "name": "El presupuesto también se decide.",
+      "start_ms": 15000,
+      "end_ms": 35000,
+      "cues": [
+        {"id": "budget-01", "start_ms": 15700, "end_ms": 20277, "text": "En inferencia puedes invertir más pasos, más muestras, verificación o interacción con herramientas."},
+        {"id": "budget-02", "start_ms": 20277, "end_ms": 35000, "text": "En algunas tareas eso puede mejorar la respuesta, pero también aumenta coste y latencia."}
+      ],
+      "visual_description": ["Doce unidades de cómputo se reparten entre pasos, muestras y verificación. El reparto es ilustrativo: muestra que un presupuesto se puede asignar de distintas formas, no que exista una distribución óptima universal."]
+    },
+    {
+      "id": "roadmap",
+      "name": "Una serie, cinco preguntas.",
+      "start_ms": 35000,
+      "end_ms": 58000,
+      "cues": [
+        {"id": "roadmap-01", "start_ms": 35700, "end_ms": 38372, "text": "Primero: qué significa razonar para un LLM."},
+        {"id": "roadmap-02", "start_ms": 38372, "end_ms": 40410, "text": "Segundo: cómo fallan estos sistemas."},
+        {"id": "roadmap-03", "start_ms": 40410, "end_ms": 43082, "text": "Tercero: cómo usar más cómputo en inferencia."},
+        {"id": "roadmap-04", "start_ms": 43082, "end_ms": 46389, "text": "Cuarto: qué ocurre con la latencia y el streaming."},
+        {"id": "roadmap-05", "start_ms": 46389, "end_ms": 58000, "text": "Quinto: cuándo más razonamiento introduce nuevos riesgos."}
+      ],
+      "visual_description": ["El mapa conecta razonar con cinco preguntas: qué significa, cómo falla, cómo usar test-time compute, qué ocurre con la latencia y qué riesgos introduce. Calidad, coste y tiempo aparecen como decisiones relacionadas."]
+    },
+    {
+      "id": "tradeoff",
+      "name": "Pensar más no es gratis.",
+      "start_ms": 58000,
+      "end_ms": 75000,
+      "cues": [
+        {"id": "tradeoff-01", "start_ms": 58700, "end_ms": 61690, "text": "Más razonamiento puede mejorar la calidad en tareas adecuadas."},
+        {"id": "tradeoff-02", "start_ms": 61690, "end_ms": 64044, "text": "También consume tiempo, cómputo y dinero."},
+        {"id": "tradeoff-03", "start_ms": 64044, "end_ms": 75000, "text": "Y puede introducir sobrepensamiento, errores o nuevas superficies de ataque."}
+      ],
+      "visual_description": ["Un triángulo relaciona calidad, coste y latencia, y riesgo alrededor de la tarea. Es una comparación cualitativa: la posición no representa una puntuación ni una medida de rendimiento."]
+    }
+  ]
+}

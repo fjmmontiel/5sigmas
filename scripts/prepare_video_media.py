@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Validate and stage the public video media declared by 5sigmas articles.
 
-The destination preserves every path relative to ``docs/``. That means a file
-such as ``docs/series/modelos-razonadores/03-test-time-compute.mp4`` becomes the
-R2 object ``series/modelos-razonadores/03-test-time-compute.mp4``. The MkDocs
-video hooks use the same mapping when ``S5_VIDEO_MEDIA_ORIGIN`` is configured.
+Spanish files preserve paths relative to ``docs/``. Published English files
+come from ``locales/en/manifest.yml`` and ``locales/en/media.yml`` and use the
+``en/`` prefix in the R2 key. The MkDocs video hooks use the same mapping when
+``S5_VIDEO_MEDIA_ORIGIN`` is configured.
 """
 
 from __future__ import annotations
@@ -24,7 +24,12 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from hooks.video_publication_policy import is_video_source_published
+
 DOCS = ROOT / "docs"
+EN_LOCALE = ROOT / "locales" / "en"
 MKDOCS = ROOT / "mkdocs.yml"
 REMOTE_URL = re.compile(r"^https?://", re.IGNORECASE)
 DURATION = re.compile(r"^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$")
@@ -67,15 +72,17 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def local_asset(article: Path, raw_value: str) -> tuple[Path, Path]:
+def local_asset(
+    article: Path, raw_value: str, *, asset_root: Path = DOCS
+) -> tuple[Path, Path]:
     value = raw_value.strip()
     if not value:
         raise ValueError("empty media path")
     candidate = (article.parent / value).resolve()
     try:
-        relative = candidate.relative_to(DOCS.resolve())
+        relative = candidate.relative_to(asset_root.resolve())
     except ValueError as exc:
-        raise ValueError(f"media path escapes docs/: {value}") from exc
+        raise ValueError(f"media path escapes {asset_root.name}/: {value}") from exc
     return candidate, relative
 
 
@@ -93,17 +100,19 @@ def add_object(
     value: str,
     objects: dict[str, dict[str, Any]],
     errors: list[str],
+    asset_root: Path = DOCS,
+    key_prefix: str = "",
 ) -> str:
     if REMOTE_URL.match(value):
         return value
 
     try:
-        source, relative = local_asset(article, value)
+        source, relative = local_asset(article, value, asset_root=asset_root)
     except ValueError as exc:
         errors.append(f"{article.relative_to(ROOT)}: {kind}: {exc}")
         return ""
 
-    key = relative.as_posix()
+    key = f"{key_prefix}/{relative.as_posix()}" if key_prefix else relative.as_posix()
     if not source.is_file():
         errors.append(
             f"{article.relative_to(ROOT)}: missing {kind} file {relative.as_posix()}"
@@ -149,6 +158,8 @@ def collect() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
     patterns = exclude_patterns()
 
     for article in sorted(DOCS.rglob("*.md")):
+        if not is_video_source_published(article.relative_to(DOCS).as_posix()):
+            continue
         if is_excluded(article, patterns):
             continue
         meta = read_frontmatter(article)
@@ -196,6 +207,70 @@ def collect() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
             {
                 "source": article.relative_to(DOCS).as_posix(),
                 "title": str(meta.get("video_title") or meta.get("title") or "").strip(),
+                "duration": duration,
+                "video": video_key,
+                "poster": poster_key,
+                "captions": captions_key,
+            }
+        )
+
+    en_manifest_path = EN_LOCALE / "manifest.yml"
+    en_media_path = EN_LOCALE / "media.yml"
+    en_manifest = yaml.safe_load(en_manifest_path.read_text(encoding="utf-8")) or {}
+    en_media = yaml.safe_load(en_media_path.read_text(encoding="utf-8")) or {}
+    if not isinstance(en_manifest, dict) or not isinstance(en_media, dict):
+        errors.append("English locale manifest and media index must be mappings")
+        en_routes: list[str] = []
+    else:
+        raw_routes = en_manifest.get("published_routes") or []
+        if not isinstance(raw_routes, list):
+            errors.append("English published_routes must be a list")
+            en_routes = []
+        else:
+            en_routes = [str(route).strip() for route in raw_routes]
+
+    for source_uri in sorted(en_routes):
+        if not is_video_source_published(source_uri):
+            continue
+        article = EN_LOCALE / source_uri
+        canonical_article = DOCS / source_uri
+        if not article.is_file():
+            errors.append(f"locales/en/{source_uri}: published article is missing")
+            continue
+        source_meta = read_frontmatter(canonical_article) if canonical_article.is_file() else {}
+        meta = en_media.get(source_uri) or {}
+        if not isinstance(meta, dict):
+            errors.append(f"locales/en/media.yml: invalid media declaration for {source_uri}")
+            continue
+        video = str(meta.get("video") or "").strip()
+        if not video or "noindex" in str(source_meta.get("robots") or "").lower():
+            continue
+
+        duration = str(meta.get("video_duration") or "").strip()
+        if not DURATION.fullmatch(duration):
+            errors.append(
+                f"locales/en/{source_uri}: video_duration must be ISO 8601, found {duration!r}"
+            )
+        poster = str(meta.get("video_poster") or Path(video).with_suffix(".jpg").name).strip()
+        captions = str(meta.get("video_captions") or "").strip()
+        video_key = add_object(
+            article=article, kind="video", value=video, objects=objects, errors=errors,
+            asset_root=EN_LOCALE, key_prefix="en",
+        )
+        poster_key = add_object(
+            article=article, kind="poster", value=poster, objects=objects, errors=errors,
+            asset_root=EN_LOCALE, key_prefix="en",
+        )
+        captions_key = ""
+        if captions:
+            captions_key = add_object(
+                article=article, kind="captions", value=captions, objects=objects, errors=errors,
+                asset_root=EN_LOCALE, key_prefix="en",
+            )
+        pages.append(
+            {
+                "source": f"en/{source_uri}",
+                "title": str(meta.get("video_title") or source_meta.get("title") or "").strip(),
                 "duration": duration,
                 "video": video_key,
                 "poster": poster_key,

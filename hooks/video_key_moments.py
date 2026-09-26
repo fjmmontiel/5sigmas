@@ -1,12 +1,9 @@
 """Publish one machine-readable key-moment contract for every generated video page.
 
-The video generators already emit Google-supported VideoObject markup:
-- explicit Clip nodes when curated video_chapters exist;
-- SeekToAction for every other watch page so Google can discover key moments from ?t=.
-
-This hook mirrors that contract into /videos/key-moments.json and enriches the public
-video catalogue without inventing timestamps that were not editorially reviewed.
-It also finalizes the public-only learning-path contract before deployment.
+The video generators emit Google-supported VideoObject markup. During the Golden
+migration, byte-bound discovery records additionally replace legacy SeekToAction
+fallbacks with independently validated chapters, visual-text VTT and crawlable
+transcripts before this hook writes the final key-moment catalogue.
 """
 
 from __future__ import annotations
@@ -14,20 +11,37 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import sys
 from typing import Any
 
 
-_contract_spec = importlib.util.spec_from_file_location(
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def _load_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+_learning_contract = _load_module(
     "s5_agent_learning_public_contract",
     Path(__file__).with_name("agent_learning_public_contract.py"),
 )
-if _contract_spec is None or _contract_spec.loader is None:
-    raise RuntimeError("Unable to load hooks/agent_learning_public_contract.py")
-_learning_contract = importlib.util.module_from_spec(_contract_spec)
-_contract_spec.loader.exec_module(_learning_contract)
+_discovery_surface = _load_module(
+    "s5_video_discovery_surface",
+    Path(__file__).with_name("video_discovery_surface.py"),
+)
 
 
 def on_post_build(config, **kwargs) -> None:
+    # The adapter is fail-closed for every discovery record present in the
+    # current locale. It re-verifies exact MP4 bytes before mutating public HTML.
+    _discovery_surface.apply_discovery_surface(config)
     _learning_contract.on_post_build(config, **kwargs)
 
     site_dir = Path(config["site_dir"])
@@ -38,7 +52,7 @@ def on_post_build(config, **kwargs) -> None:
     catalogue = json.loads(catalogue_path.read_text(encoding="utf-8"))
     videos = catalogue.get("videos") or []
     if not isinstance(videos, list):
-        return
+        raise RuntimeError("Video catalogue 'videos' must be a list")
 
     entries: list[dict[str, Any]] = []
     clip_videos = 0
@@ -46,28 +60,15 @@ def on_post_build(config, **kwargs) -> None:
 
     for video in videos:
         if not isinstance(video, dict):
-            continue
+            raise RuntimeError("Video catalogue contains a non-object entry")
         watch_url = str(video.get("watch_url") or "").strip()
+        if not watch_url:
+            raise RuntimeError("Video catalogue entry is missing watch_url")
         chapters = video.get("chapters") or []
+        clips = _discovery_surface.validated_clips(chapters, watch_url)
         moments: dict[str, Any]
-        if isinstance(chapters, list) and chapters:
+        if clips:
             clip_videos += 1
-            clips = []
-            for chapter in chapters:
-                if not isinstance(chapter, dict):
-                    continue
-                start = chapter.get("start")
-                if not isinstance(start, (int, float)):
-                    continue
-                clip = {
-                    "name": str(chapter.get("name") or "").strip(),
-                    "start": int(start),
-                    "url": f"{watch_url}?t={int(start)}",
-                }
-                end = chapter.get("end")
-                if isinstance(end, (int, float)) and end > start:
-                    clip["end"] = int(end)
-                clips.append(clip)
             moments = {"mode": "clip", "clips": clips}
         else:
             seek_videos += 1
@@ -87,7 +88,7 @@ def on_post_build(config, **kwargs) -> None:
             }
         )
 
-    catalogue["version"] = max(2, int(catalogue.get("version") or 1))
+    catalogue["version"] = max(3, int(catalogue.get("version") or 1))
     catalogue["key_moment_coverage"] = {
         "videos": len(entries),
         "clip": clip_videos,
@@ -103,7 +104,7 @@ def on_post_build(config, **kwargs) -> None:
     target.write_text(
         json.dumps(
             {
-                "version": 1,
+                "version": 2,
                 "locale": str((config.get("extra") or {}).get("content_language") or "es"),
                 "coverage": catalogue["key_moment_coverage"],
                 "videos": entries,

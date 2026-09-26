@@ -7,17 +7,17 @@ const dataset = JSON.parse(fs.readFileSync(new URL('../docs/assets/data/tools/mo
 
 Core.assertDataset(dataset);
 assert.equal(dataset.series.length, 6, 'Expected six distinct benchmark series in v1');
-assert.equal(dataset.updated, '2026-08-21');
+assert.equal(dataset.updated, '2026-09-25');
 
 const gpqa = Core.seriesById(dataset, 'gpqa-diamond');
 const gpqaStats = Core.stats(gpqa);
 assert.equal(gpqaStats.first.model, 'GPT-4.1');
 assert.equal(gpqaStats.first.score, 66.3);
-assert.equal(gpqaStats.latest.model, 'GPT-5.6 Sol');
-assert.equal(gpqaStats.latest.score, 94.6);
-assert.ok(Math.abs(gpqaStats.gain - 28.3) < 1e-9);
-assert.ok(gpqaStats.months > 14 && gpqaStats.months < 16);
-assert.ok(Math.abs(gpqaStats.headroom - 5.4) < 1e-9);
+assert.equal(gpqaStats.latest.model, 'GPT-6 Astra');
+assert.equal(gpqaStats.latest.score, 96.0);
+assert.ok(Math.abs(gpqaStats.gain - 29.7) < 1e-9);
+assert.ok(gpqaStats.months > 16 && gpqaStats.months < 18);
+assert.ok(Math.abs(gpqaStats.headroom - 4.0) < 1e-9);
 
 const swe = Core.seriesById(dataset, 'swe-bench-verified');
 const sweStats = Core.stats(swe);
@@ -44,13 +44,16 @@ for (const series of dataset.series) {
   assert.equal(csv.split('\n').length, series.points.length + 1);
   const exported = Core.exportPayload(dataset, series);
   assert.equal(exported.methodologyVersion, '1.0.0');
-  assert.equal(exported.sourceReviewDate, '2026-08-21');
+  assert.equal(exported.sourceReviewDate, dataset.updated);
   assert.equal(exported.series.id, series.id);
 }
 
 assert.equal(Core.queryState('?series=toolathlon', dataset).series, 'toolathlon');
 assert.equal(Core.queryState('?series=does-not-exist', dataset).series, 'gpqa-diamond');
 const domain = Core.chartDomain(gpqa);
-assert.ok(domain.min <= 66.3 && domain.max >= 94.6 && domain.min >= 0 && domain.max <= 100);
+assert.ok(domain.min <= 66.3 && domain.max >= 96.0 && domain.min >= 0 && domain.max <= 100);
+assert.ok(dataset.sources.gpt6astra?.url.includes('/gpt-6-astra/'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Sol' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Luna' && row.status === 'reviewed_not_added'));
 
 console.log('model capability timeline: numerical, protocol, export and provenance gates passed');

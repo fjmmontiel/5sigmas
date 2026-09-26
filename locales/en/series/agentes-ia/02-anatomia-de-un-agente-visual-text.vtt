@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+“Ana” can refer to more than one contact.
+
+2
+00:00:07.400 --> 00:00:14.100
+Validation must require an unambiguous identity, not a guess.
+
+3
+00:00:14.100 --> 00:00:22.000
+Resolving the argument does not replace approval to send.
+
+4
+00:00:22.700 --> 00:00:29.400
+The query expected three records but received only two.
+
+5
+00:00:29.400 --> 00:00:36.100
+The tool returns the available data and marks the result as partial.
+
+6
+00:00:36.100 --> 00:00:44.000
+The runtime keeps track of what is missing so it can recover or stop.
+
+7
+00:00:44.700 --> 00:00:52.100
+Context is the working view the model receives for this turn.
+
+8
+00:00:52.100 --> 00:00:59.500
+Memory retains information; the runtime keeps operations and events.
+
+9
+00:00:59.500 --> 00:01:08.000
+Only relevant information is projected into the decision context.
+
+10
+00:01:08.700 --> 00:01:15.400
+The window must hold instructions, tools, history and working data.
+
+11
+00:01:15.400 --> 00:01:22.100
+It also needs an output reserve and safety headroom.
+
+12
+00:01:22.100 --> 00:01:30.000
+When retrieval grows too large, select context rather than erasing those reserves.
+
+13
+00:01:30.700 --> 00:01:37.400
+An operation can be accepted and still be running.
+
+14
+00:01:37.400 --> 00:01:44.100
+After a failure, it may retry before ending in an error.
+
+15
+00:01:44.100 --> 00:01:52.000
+That path does not justify reporting successful completion.
+
+16
+00:01:52.700 --> 00:01:59.400
+A stored fact can become stale or conflict with another source.
+
+17
+00:01:59.400 --> 00:02:06.100
+Keep its provenance and check evidence before using it.
+
+18
+00:02:06.100 --> 00:02:14.000
+Memory needs rules for correction, expiration and deletion.

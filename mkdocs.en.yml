@@ -31,12 +31,6 @@ extra:
   global_site_root: https://5sigmas.com/
   generator: false
   video_watch_pages: true
-  locale_video_pages:
-    series/modelos-razonadores/03-test-time-compute.md:
-      video: 03-test-time-compute.mp4
-      video_poster: 03-test-time-compute.jpg
-      video_title: Test-Time Compute
-      video_duration: PT1M0S
   alternate:
     - name: Español
       link: /
@@ -241,6 +235,8 @@ markdown_extensions:
   - footnotes
   - toc:
       permalink: true
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.superfences:
   - pymdownx.highlight:
       auto_title: true
@@ -313,3 +309,5 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/reader-direct-navigation.js
     defer: true
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

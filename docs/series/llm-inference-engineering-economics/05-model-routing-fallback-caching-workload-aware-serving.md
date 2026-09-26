@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Serving
   - Routing
+video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
+video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
+video_title: "Routing, fallback, caching y serving adaptativo"
+video_summary: "Un router asigna cada request según capacidad, calidad, coste y latencia; cache y fallback cambian la ruta sin eliminar verificación ni límites de política."
+video_duration: PT36S
+video_chapters:
+- name: "Routing separa workloads antes de servir"
+  start: 0
+  end: 12
+- name: "Un cache hit evita trabajo cuando la clave es válida"
+  start: 12
+  end: 24
+- name: "Fallback recupera el servicio bajo fallo o saturación"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 5 — Model routing, fallback, caching y serving adaptado al workload

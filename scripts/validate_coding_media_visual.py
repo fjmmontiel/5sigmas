@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""MEDIA_VISUAL gate for Coding Agents with VOICE explicitly deferred.
+
+Owner amendment 5716685049 keeps future narration/audio/captions/transcript out of
+the current GOLDEN gate. Native ES/EN visual video identity, poster, metadata,
+codec/dimensions/duration and honest non-voice key moments remain blocking.
+Manual PIXEL/PEDAGOGY review is never inferred from this script.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import yaml
+
+import generate_coding_agent_visual_media as mobile_gen
+import validate_voice_media_visual as base
+
+SERIES = "coding-agents-agent-harnesses"
+ARTICLES = (
+    "01-que-es-agent-harness.md",
+    "02-contexto-workspace-sandboxing-aislamiento.md",
+    "03-specs-planificacion-task-decomposition-checkpoints.md",
+    "04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md",
+    "05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md",
+    "06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md",
+)
+
+
+def configure() -> None:
+    base.SERIES = SERIES
+    base.ARTICLES = ARTICLES
+
+
+def mobile_safe_contract() -> dict[str, float | int | bool]:
+    """Fail closed on the exact mobile legibility + native-controls safe-area contract."""
+    contract = mobile_gen.assert_mobile_safe_contract()
+    assert contract["mobile_inline_width_css_px"] == 356
+    assert float(contract["min_material_projected_css_px"]) >= 12.0
+    assert float(contract["reserved_control_projected_css_px"]) >= 50.0
+    assert contract["material_content_below_safe_zone"] is False
+    assert contract["voice_generated"] is False
+    return contract
+
+
+def self_test() -> None:
+    configure()
+    fixture = [
+        {"code": "VIDEO_AUDIO_STREAM_MISSING", "detail": "future owner voice"},
+        {"code": "VIDEO_CAPTIONS_MISSING", "detail": "future owner voice"},
+        {"code": "VIDEO_TRANSCRIPT_MISSING", "detail": "future owner voice"},
+        {"code": "VIDEO_CHAPTERS_MISSING", "detail": "visual"},
+        {"code": "VIDEO_POSTER_MISSING", "detail": "visual"},
+        {"code": "VIDEO_SUMMARY_MISSING", "detail": "visual"},
+        {"code": "VIDEO_CODEC_INVALID", "detail": "visual"},
+    ]
+    result = base.classify(fixture)
+    deferred = {item["code"] for item in result["voice_enhancement_debt"]}
+    blocking = {item["code"] for item in result["media_visual_blockers"]}
+    assert deferred == {
+        "VIDEO_AUDIO_STREAM_MISSING",
+        "VIDEO_CAPTIONS_MISSING",
+        "VIDEO_TRANSCRIPT_MISSING",
+    }
+    assert {
+        "VIDEO_CHAPTERS_MISSING",
+        "VIDEO_POSTER_MISSING",
+        "VIDEO_SUMMARY_MISSING",
+        "VIDEO_CODEC_INVALID",
+    }.issubset(blocking)
+    assert len(ARTICLES) == 6
+    assert base.sample_timestamps(36.0) == [0.0, 7.2, 14.4, 21.6, 28.8, 35.28]
+    contract = mobile_safe_contract()
+    # Negative regression fixtures: either historical parameter would now fail closed.
+    assert 60 * (356 / 1920) < 12.0
+    assert (1080 - 830) * (356 / 1920) < 50.0
+    assert contract["min_material_source_px"] >= 68
+    assert contract["safe_zone_start_source_y"] <= 800
+    print("PASS Coding MEDIA_VISUAL/VOICE split + exact-video sampling + mobile-safe typography/control-safe-area fixtures")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=base.ROOT)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/coding-requalification/coding-media-visual.json"),
+    )
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+
+    configure()
+    if args.self_test:
+        self_test()
+        return 0
+
+    root = args.root.resolve()
+    output = args.output if args.output.is_absolute() else root / args.output
+    samples_root = output.parent / "video-frames"
+    try:
+        contract = mobile_safe_contract()
+        results = [
+            base.inspect_target(root, target, samples_root=samples_root)
+            for target in base.load_targets(root)
+        ]
+    except (AssertionError, OSError, RuntimeError, ValueError, yaml.YAMLError) as exc:
+        print(f"CODING_MEDIA_CONFIG_ERROR: {exc}", file=sys.stderr)
+        return 2
+
+    visual = [item for result in results for item in result["media_visual_blockers"]]
+    voice = [item for result in results for item in result["voice_enhancement_debt"]]
+    report = {
+        "schema_version": 2,
+        "owner_amendment_comment": 5716685049,
+        "series": SERIES,
+        "route_locale_obligations": len(results),
+        "MEDIA_VISUAL_PASS": not visual,
+        "VOICE_ENHANCEMENT": "DEFERRED_OWNER_LOCAL" if voice else "READY",
+        "PIXEL_REVIEW": "MANUAL_REVIEW_REQUIRED",
+        "PEDAGOGY_REVIEW": "MANUAL_REVIEW_REQUIRED",
+        "mobile_safe_source_contract": contract,
+        "visual_sample_policy": (
+            "six deterministic frames per exact native MP4; evidence only, "
+            "never automatic certification or narration-derived timing"
+        ),
+        "media_visual_blockers": visual,
+        "voice_enhancement_debt": voice,
+        "results": results,
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 1 if visual else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

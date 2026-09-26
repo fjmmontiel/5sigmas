@@ -1,0 +1,102 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: evaluating-ai-systems-production
+state: REQUALIFICATION_QA
+program_series_golden: 6/7
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+branch: quality/evaluating-ai-systems-requalification
+base_main_observed_before_delta: ff32ffeeaf2d66caa9984e181e39def112130b99
+site_facing_head_observed: 8d289eca914119c591086fbc8621f56deab0d248
+pr: 352
+pr_state: OPEN_DRAFT_CHANGES_REQUIRED
+iteration_count_changed_this_run: false
+iteration_counts_preserved:
+  route_locale_rows: 12
+  value_per_row: 1
+
+historical_checkpoint_preserved:
+  head: cca79fe0976f96b41b3c23754b603b836727fe9a
+  run: 35598982706
+  artifact: 10637648202
+  artifact_sha256: 1f56d416c1d2ed81c6e0ceb7b3060f78935ebde7eb8e2a8907247815a1164316
+  result: CHANGES_REQUIRED_MEDIA_VISUAL
+  note: Historical receipts remain intact; this delta does not overwrite the original ledger checkpoint.
+
+current_head_source_observation:
+  native_visual_media_implementation: PRESENT_12_OF_12_PENDING_EXACT_GATE
+  generator: scripts/generate_evaluating_ai_visual_media.py
+  locale_native: [es, en]
+  visual_video_obligations: 12
+  source_geometry: 1920x1080
+  duration_seconds: 36
+  scenes_per_video: 3
+  seconds_per_scene: 12
+  posters_source_tree: PRESENT_12_OF_12
+  title_summary_duration_key_moments: PRESENT_IN_SOURCE_DECLARATIONS_PENDING_EXACT_GATE
+  material_text_mobile_projection_floor_css_px: 12
+  voice_generated: false
+  captions_generated: false
+  transcript_generated: false
+  narration_dependent_timing_generated: false
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+
+browser_hardening_source_observation:
+  normal_and_reduced_motion: IMPLEMENTED_PENDING_EXACT_GATE
+  runtime_error_listeners_persist_through_interaction_and_teardown: IMPLEMENTED_PENDING_EXACT_GATE
+  real_touch_gesture_instead_of_programmatic_scrollLeft: IMPLEMENTED_PENDING_EXACT_GATE
+  giant_mobile_canvas: OPEN_P1
+  ch1_reproduced_source_evidence: "mobile stage remains min-width:1180px at max-width:700px"
+  ch2_reproduced_source_evidence: "mobile stage remains min-width:1220px"
+  owner_gate_implication: "Current runtime reachability is not sufficient to certify PIXEL/PEDAGOGY while primary relationships still depend on giant horizontal canvases."
+
+indexability_gate_source_observation:
+  separate_INDEXABILITY_PASS: PRESENT
+  rendered_audit: PRESENT
+  negative_mutations:
+    - accidental_noindex
+    - cross_locale_canonical
+    - missing_h1
+  sitemap_hreflang_orphan_checks: RETAINED_FROM_HARDENED_BASE
+  current_head_result: NOT_EXECUTED
+
+current_ci:
+  workflow: Series 5 GOLDEN review
+  run: 35609360503
+  exact_site_facing_head: 8d289eca914119c591086fbc8621f56deab0d248
+  status: completed
+  conclusion: action_required
+  jobs_executed: 0
+  gate_effect: NO_CURRENT_HEAD_AUTOMATED_PASS_INFERRED
+  action: NO_MANUAL_RERUN_REQUESTED
+
+current_head_gates_fail_closed:
+  SOURCE_PASS: 0/12
+  BUILD_PASS: 0/12
+  BROWSER_PASS: 0/12
+  MEDIA_VISUAL_PASS: 0/12
+  INDEXABILITY_PASS: 0/12
+  PIXEL_REVIEW: 0/12
+  PEDAGOGY_REVIEW: 0/12
+  ARTICLE_GOLDEN: 0/6
+
+known_defects:
+  P0: []
+  P1:
+    - code: MOBILE_GIANT_CANVAS_NOT_NATIVE_390PX
+      scope: SHARED_12_ROUTE_LOCALE_ROWS_PENDING_EXACT_PER_ROUTE_REVIEW
+  P2: []
+  external_evidence_blockers:
+    - code: CURRENT_HEAD_CI_ACTION_REQUIRED_ZERO_JOBS
+      note: "No build/browser/media/indexability PASS may be inferred from a workflow that executed zero jobs."
+
+media_status_transition:
+  historical_state: VIDEO_VISUAL_CONTRACT_MISSING_12_OF_12
+  current_source_state: FIX_IMPLEMENTED_PENDING_EXACT_GATE_AND_VISUAL_FRAME_REVIEW
+  voice_debt_blocks_current_golden: false
+
+next_action:
+  - Replace giant horizontal primary relationship surfaces with a genuinely readable mobile-native ~390px contract across Ch1-Ch6 ES/EN.
+  - Add deterministic source/render regression coverage that rejects giant primary relationship canvases rather than rewarding horizontal scroll.
+  - Batch the responsive fix with any required validator updates before one justified exact-head checkpoint; do not cadence-rerun the current action_required run.
+  - After an exact-head checkpoint passes SOURCE/BUILD/BROWSER/MEDIA_VISUAL/INDEXABILITY, inspect ~390/~1440 normal+reduced and video start/intermediate/final before PIXEL/PEDAGOGY promotion.

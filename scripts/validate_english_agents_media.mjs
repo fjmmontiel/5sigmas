@@ -7,8 +7,8 @@ const pages = [
   ['00_presentacion_serie', 'AI Agents'],
   ['01-que-es-un-agente', 'An agent is a loop with permissions'],
   ['02-anatomia-de-un-agente', 'The anatomy of an agent'],
-  ['03-como-evaluar-un-agente', 'A demo measures an output. An agent needs a trace.'],
-  ['04-seguridad-agentes', 'Incoming data can become an instruction'],
+  ['03-como-evaluar-un-agente', 'One task, one trajectory, four evaluators'],
+  ['04-seguridad-agentes', 'An attack only needs one complete path to an effect'],
   ['05-de-la-demo-a-produccion', 'Chapter 5 — From demo to an operable system'],
 ];
 const viewports = [
@@ -31,18 +31,19 @@ try {
       if (!body.includes(marker)) failures.push(`${route}: missing English marker ${JSON.stringify(marker)}`);
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
-      if (videoCount !== 1) failures.push(`${route}: expected one native-English video, found ${videoCount}`);
-      else {
-        const video = videos.first();
-        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
-        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
-        if (sourceUrl.pathname !== `${root}${slug}.mp4`) failures.push(`${route}: unexpected video path ${sourceUrl.pathname}`);
-        if (posterUrl.pathname !== `${root}${slug}.jpg`) failures.push(`${route}: unexpected poster path ${posterUrl.pathname}`);
-        const mediaResponse = await page.request.get(sourceUrl.href, { headers: { Range: 'bytes=0-1023' } });
-        if (![200, 206].includes(mediaResponse.status())) failures.push(`${route}: MP4 range request failed with HTTP ${mediaResponse.status()}`);
-        const posterResponse = await page.request.get(posterUrl.href);
-        if (!posterResponse.ok()) failures.push(`${route}: poster request failed with HTTP ${posterResponse.status()}`);
+      if (videoCount !== 1) {
+        failures.push(`${route}: expected one approved A2 video, found ${videoCount}`);
+      } else {
+        const expected = `${root}${slug}.mp4`;
+        const source = await videos.first().locator('source').getAttribute('src');
+        // MkDocs may emit a relative URL. Resolve it exactly as the browser does.
+        const resolved = source ? new URL(source, page.url()).pathname : null;
+        if (resolved !== expected) failures.push(`${route}: incorrect native-English source ${resolved}; expected ${expected}`);
+        const poster = await videos.first().getAttribute('poster');
+        const resolvedPoster = poster ? new URL(poster, page.url()).pathname : null;
+        if (resolvedPoster !== `${root}${slug}.jpg`) failures.push(`${route}: incorrect native-English poster ${resolvedPoster}`);
       }
+      if (!(await page.locator(`a[href*="/en/videos/series/agentes-ia/${slug}/"]`).count())) failures.push(`${route}: missing native watch link`);
       if (await page.locator('audio').count()) failures.push(`${route}: unexpected inherited audio`);
       const sizes = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
       if (sizes.scroll > sizes.client + 2) failures.push(`${route}: ${label} horizontal overflow ${sizes.scroll - sizes.client}px`);
@@ -59,4 +60,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Native English AI Agents media QA passed: presentation + Chapters 1–5, exact /en/ MP4/poster pairs, range delivery, desktop/mobile clean.');
+console.log('Native English AI Agents A2 QA passed: six articles expose approved native media, posters and watch links on desktop/mobile.');

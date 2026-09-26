@@ -7,8 +7,32 @@ tags:
   - IA
   - Infraestructura
   - Energía
-video: "02-energia-calor-conectividad.mp4"
-video_duration: "PT52S"
+video: 02-energia-calor-conectividad.mp4
+video_poster: 02-energia-calor-conectividad.jpg
+video_title: Energía, calor y conectividad
+video_summary: La corrección de errores y la redundancia ayudan dentro de sus límites. Un fallo no recuperable exige otro plan; el mantenimiento no es gratuito.
+video_duration: PT2M18S
+video_captions: 02-energia-calor-conectividad-visual-text.vtt
+video_transcript: 02-energia-calor-conectividad-transcript.html
+video_chapters:
+- name: La energía termina en un balance térmico.
+  start: 0
+  end: 24
+- name: Más potencia exige más superficie.
+  start: 24
+  end: 48
+- name: La energía es el área bajo la potencia.
+  start: 48
+  end: 70
+- name: El enlace sólo existe durante el contacto.
+  start: 70
+  end: 92
+- name: 'Velocidad por tiempo: el presupuesto del enlace.'
+  start: 92
+  end: 116
+- name: Detectar un error no equivale a repararlo todo.
+  start: 116
+  end: 138
 ---
 
 # Capítulo 2 — Energía, calor y conectividad

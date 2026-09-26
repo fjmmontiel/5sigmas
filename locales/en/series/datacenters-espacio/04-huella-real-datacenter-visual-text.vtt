@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+An aggregate volume does not describe a basin’s local pressure by itself.
+
+2
+00:00:07.400 --> 00:00:14.100
+The same withdrawal matters more when less water is available.
+
+3
+00:00:14.100 --> 00:00:22.000
+Compare location, period and competing uses, not just national totals.
+
+4
+00:00:22.700 --> 00:00:29.400
+Withdrawal is the water taken from a source into the system.
+
+5
+00:00:29.400 --> 00:00:36.100
+Some may evaporate; some may leave as blowdown requiring treatment.
+
+6
+00:00:36.100 --> 00:00:44.000
+Distinguish inputs, consumption and return before comparing facilities.
+
+7
+00:00:44.700 --> 00:00:51.400
+WUE relates water consumption to energy delivered to computing equipment.
+
+8
+00:00:51.400 --> 00:00:58.100
+For the same 1 MWh, 2 L/kWh means 2,000 litres; 0.2 L/kWh means 200.
+
+9
+00:00:58.100 --> 00:01:08.000
+These are facility examples, not a universal water cost per query.
+
+10
+00:01:08.700 --> 00:01:15.400
+PUE divides total facility energy by the energy used by IT equipment.
+
+11
+00:01:15.400 --> 00:01:22.100
+For 1 MWh of IT energy, lowering PUE from 2 to 1.2 reduces the total to 1.2 MWh.
+
+12
+00:01:22.100 --> 00:01:32.000
+If the IT load grows to 3 MWh, the same PUE gives 3.6 MWh in total.
+
+13
+00:01:32.700 --> 00:01:39.400
+Chips, interconnects, batteries and supporting systems need different materials.
+
+14
+00:01:39.400 --> 00:01:46.100
+Extraction, refining and manufacturing add impacts outside the data center itself.
+
+15
+00:01:46.100 --> 00:01:54.000
+Launching the equipment does not remove that earlier supply chain.
+
+16
+00:01:54.700 --> 00:02:01.400
+Count manufacturing, operation, repair, reuse and end of life.
+
+17
+00:02:01.400 --> 00:02:08.100
+Reusing components can extend service without eliminating every impact.
+
+18
+00:02:08.100 --> 00:02:16.000
+Compare alternatives for the same useful work over the complete lifecycle.
+

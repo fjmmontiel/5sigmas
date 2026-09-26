@@ -1,0 +1,29 @@
+<p>Visual-text transcript. This video has no narration.</p>
+<h3>00:00 — An alert is not a diagnosis.</h3>
+<p>Telemetry shows that something happened, not necessarily why.</p>
+<p>Reconstruct the sequence with versions, states and relevant responses.</p>
+<p>Separate the observed symptom from an unproven cause.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>00:22 — The same answer. Two writes.</h3>
+<p>The user received “refund complete”, but the backend records a duplicate.</p>
+<p>The trace reveals a write, an ambiguous timeout and a retry without reconciliation.</p>
+<p>The causal hypothesis concerns recovery, not answer style.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>00:46 — One mechanism. Its neighboring cases too.</h3>
+<p>Group incidents that share the same failure mechanism.</p>
+<p>Add a timeout before the write and a read-only operation.</p>
+<p>The repair must fix the failure without breaking neighboring cases.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>01:08 — Turn the incident into a reproducible test.</h3>
+<p>Remove sensitive data while preserving the conditions behind the failure.</p>
+<p>Pin initial state, tool responses, versions and the verifier.</p>
+<p>When evidence is insufficient, record the limitation; do not invent a cause.</p>
+<h3>01:30 — Test the repair. Not just the symptom.</h3>
+<p>Reproduce the failure on the old version before attributing improvement.</p>
+<p>Change recovery, then rerun the failure case and neighboring cases.</p>
+<p>Check that a grader change did not merely hide the failure.</p>
+<p><em>Illustrative example, not a benchmark result.</em></p>
+<h3>01:52 — Green tests are not production verification.</h3>
+<p>Passing regression allows progress; it does not close the incident by itself.</p>
+<p>After release, measure recurrence and exposure over the agreed observation window.</p>
+<p>Close the loop with production evidence and an accountable owner.</p>

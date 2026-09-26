@@ -1,0 +1,171 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+
+scope:
+  series: seguridad-ia
+  pages: [00_presentacion_serie, 01-prompt-injection]
+  state: REQUALIFICATION_QA
+  article_golden: false
+  next_article_blocked: 02-jailbreaks
+  site_facing_bytes_changed: false
+
+action:
+  revision: 55
+  run_id: 35039168019
+  job_id: 104614934816
+  exact_head: 5fe98f976d8f0d828d31bb508ee0c6012a43ccd3
+  conclusion: failure
+  diagnostic_scope: focused_security_00_01
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+  reason: EXACT_QA_SHARED_BROWSER_RESOURCE_HARDENING_WITH_REFERENCE_REGRESSION
+
+exact_results:
+  negative_regression_fixtures: PASS_26_OF_26
+  publication_discovery_fixtures: PASS_5_OF_5
+  publication_discovery:
+    public_series: 13
+    presentation_first: 8
+    chapter_first: 5
+    public_chapters: 67
+    public_pages: 75
+    errors: 0
+  strict_es_build: PASS
+  strict_en_build: PASS
+  publication_contract: PASS
+  structured_provenance_locale: PASS
+  article_watch_contract: PASS
+  focused_security_browser: PASS
+  security_contrast:
+    state: PASS
+    state_context_records: 128
+    minimum_contrast_ratio: 4.5
+    verdict: POST_CONTEXT_TEARDOWN
+  security_text_visibility:
+    state: PASS
+    contexts: 8
+    states_per_context: 4
+    verdict: POST_CONTEXT_TEARDOWN
+  security_video_lifecycle: PASS_POST_TEARDOWN_REQUEST_CORRELATED
+  security_article_watch_touch: PASS_REAL_MOBILE_TAP_ES_EN_NORMAL_REDUCED
+  security_prompt_states: PASS_TECHNICAL_PIXEL_PEDAGOGY_NOT_CERTIFIED
+  security_keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  security_listener_lifetime:
+    state: PASS
+    contexts_expected: 16
+    contexts_observed: 16
+    verdict: POST_CONTEXT_TEARDOWN
+  source_pass: false
+  rendered_pass: false
+  media_pass: false
+
+shared_browser_resource_exact_qa:
+  state: FAIL
+  requested_routes: 16
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  contexts: 64
+  failing_contexts: 64
+  failure_signature:
+    event: requestfailed
+    error: net::ERR_ABORTED
+    resource_type: media
+    phase: lazy-load
+    navigation_request: false
+  affected_scope: SECURITY_PLUS_DATACENTERS_PLUS_PRE_DATACENTERS_REFERENCE_ROUTES_ES_EN
+  browser_pass_granted: false
+  diagnosis: >-
+    The hardened shared gate forced video.load() during its lazy-resource exercise even when a native MP4 request was already
+    active, and its classifier accepted ERR_ABORTED only during context teardown. Chromium can cancel a valid MP4 metadata/range
+    request after successful response headers or when a same-source request supersedes it. Revision 55 therefore exposed a
+    deterministic shared-gate false positive rather than evidence that all 64 published contexts had broken media.
+
+repair_after_revision55:
+  state: IMPLEMENTED_PENDING_EXACT_QA
+  classifier_repair_commit: 47cde00854142114f43837001f6bdf23a5ddfb79
+  artifact_policy_repair_commit: e5d099251be264d4752de40a34c8b300e5994dc0
+  path: scripts/audit_browser_resources.mjs
+  thresholds_lowered: false
+  blanket_err_aborted_allowlist: false
+  changes:
+    - DO_NOT_RESET_ALREADY_ACTIVE_VIDEO_REQUEST_WITH_UNCONDITIONAL_LOAD
+    - STABLE_REQUEST_IDENTITY_PER_CONTEXT
+    - CAPTURE_MEDIA_200_206_RESPONSE_SEQUENCE
+    - CAPTURE_FINAL_VIDEO_HEALTH_READY_NETWORK_ERROR_DURATION
+    - ACCEPT_LAZY_OR_SETTLE_MEDIA_ABORT_ONLY_WITH_MATCHING_HEALTHY_VIDEO_AND_CORRELATED_RESPONSE_PROOF
+    - KEEP_GENERIC_NAVIGATION_NON_MEDIA_UNPROVEN_AND_NON_ABORT_FAILURES_FATAL
+    - KEEP_LISTENERS_THROUGH_CONTEXT_CLOSE_AND_VERDICT_POST_TEARDOWN
+    - EMIT_SHARED_BROWSER_RESOURCE_JSON_REPORT
+    - EXPAND_NEGATIVE_AND_POSITIVE_CLASSIFIER_MUTATIONS_TO_11
+  precommit_syntax_check: PASS_NODE_CHECK
+  exact_browser_execution_after_repair: PENDING
+
+artifact_cost:
+  revision55_artifact:
+    id: 10423809929
+    files_from_upload_log: 171
+    bytes: 44518360
+    retention_days: 1
+    expires_at: 2026-09-17T00:28:00Z
+  state: P2_REOPENED_REVISION55_REPAIR_IMPLEMENTED_PENDING_VERIFICATION
+  reason: FOCUSED_FAILURE_UPLOAD_INCLUDED_ENTIRE_SCREENSHOT_TREES
+  repair: >-
+    Focused failed diagnostics now upload only bounded JSON reports, including the new shared-browser report. Full artifact trees
+    remain available only for an explicitly full-catalogue diagnostic. No new Action was launched merely to verify artifact size.
+
+coverage_debt:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  RAW_TEX_RENDERED: 28
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_NOT_RENDERED: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+
+security_media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  native_es_en_mp4_distinct: true
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+manual_review:
+  whole_article_pixel_review_this_revision: NOT_PERFORMED
+  whole_article_pedagogy_review_this_revision: NOT_PERFORMED
+  pixel_or_pedagogy_pass_from_technical_gates: false
+  last_whole_active_set_review: REVISION_43_SAME_AGENT_NOT_INDEPENDENT
+
+sources_and_locales:
+  material_claims_changed: false
+  factual_research_reopened: false
+  strict_es: PASS_REVISION55
+  strict_en: PASS_REVISION55
+  note: No claim, benchmark, unit, formula, caveat, reference, locale copy or site-facing visual changed.
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: VERIFY_SHARED_BROWSER_RESOURCE_REQUEST_CORRELATION_ON_EXACT_QA
+  prerequisite_before_next_action: BOUNDED_FOCUSED_ARTIFACT_POLICY_IMPLEMENTED
+  do_not_advance_to: 02-jailbreaks
+  first_external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO
+  dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  whole_article_pixel_and_pedagogy_recertification_required_before_golden: true
+  global_source_rendered_media_debt_still_fail_closed: true

@@ -1,0 +1,166 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+revision: 57
+state: REQUALIFICATION_QA_NO_GOLDEN
+active_scope: seguridad-ia_00_plus_01
+article_golden: false
+next_article_blocked: 02-jailbreaks
+site_facing_bytes_changed: false
+
+canonical_contract_read:
+  issue_305_body_and_all_comments: true
+  amendment_5655569434_applied: true
+  issue_281_body_and_all_current_comments: true
+  linkedin_write_queue_activation_publish: false
+
+exact_qa:
+  run_id: 35050844662
+  job_id: 104650666002
+  exact_head: 042d2db0d5ab80ae8cf96586a43c35613910e5c3
+  conclusion: FAIL_CLOSED
+  requested_matrix:
+    routes: 16
+    profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+    contexts: 64
+    includes_security: true
+    includes_datacenters_and_pre_datacenters_regression: true
+  focused_security_gates:
+    strict_es: PASS
+    strict_en: PASS
+    publication_discovery: PASS_5_OF_5_FIXTURES
+    publication_contract: PASS_13_PUBLIC_SERIES_67_CHAPTERS_75_PAGES
+    structured_provenance_locale: PASS
+    article_watch_contract: PASS
+    focused_browser: PASS
+    contrast: PASS_128_STATE_CONTEXT_RECORDS
+    text_visibility: PASS_8_CONTEXTS_X_4_STATES
+    video_lifecycle: PASS
+    real_mobile_touch: PASS_ES_EN_NORMAL_REDUCED
+    prompt_states: PASS_TECHNICAL_ONLY
+    keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+    listener_lifetime: PASS_16_OF_16_POST_CONTEXT_TEARDOWN
+  shared_browser_resources:
+    state: FAIL_TIMEOUT
+    timeout_minutes: 12
+    contexts_expected: 64
+    report_completed: false
+    report_uploaded: false
+    interpretation: >-
+      The exact shared Security plus Datacenters/pre-Datacenters browser-resource matrix did not produce a verdict. The step exhausted
+      its 12-minute budget before completing the serial 64-context sweep, so BROWSER_PASS remains false. This timeout is not a PASS and
+      is not evidence that the published media failed; it is an execution-boundedness defect in the strengthened shared gate.
+  global_browser_sweep: INTENTIONALLY_SKIPPED_FOCUSED_RUN
+  source: FAIL
+  rendered: FAIL
+  media: FAIL
+  golden: false
+
+artifact:
+  id: 10429576757
+  compressed_bytes: 124477
+  retention_days: 1
+  expires_at: 2026-09-17T03:34:47Z
+  uploaded_files_observed:
+    - security-requalification/article-watch-touch-report.json
+    - security-requalification/media-report.json
+    - security-requalification/report.json
+    - series-experience/report.json
+  shared_browser_report_missing_due_to_timeout: true
+  p2_cost_verdict: CLOSED_FOR_FOCUSED_FAILURE_PATH
+
+coverage:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  public_series_discovered: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+  open_debt:
+    RAW_TEX_RENDERED: 28
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_NOT_RENDERED: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+
+security_media:
+  state: FAIL
+  reason: VOICE_MISSING
+  blockers: 16
+  audio_streams_missing: 4
+  captions_missing: 4
+  transcripts_missing: 4
+  curated_key_moment_maps_missing: 4
+  existing_mp4s_distinct_es_en: true
+  existing_mp4_codec: H264_1920X1080_YUV420P
+  generated_cloned_or_substituted_francisco_voice: false
+  fabricated_transcript_or_timings: false
+
+pixel_pedagogy:
+  new_whole_article_review_this_revision: false
+  latest_applicable_whole_active_set_revision: 43
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT_HISTORICAL
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT_HISTORICAL
+  independent_reviewer: false
+  grants_article_golden: false
+
+sources_locales:
+  material_claims_changed: false
+  factual_research_reopened: false
+  strict_es: PASS_REVISION57
+  strict_en: PASS_REVISION57
+
+repair_after_revision57:
+  commit: a3802a05da6d2d37048514f175448d671cf59df8
+  path: scripts/audit_browser_resources.mjs
+  state: IMPLEMENTED_PENDING_EXACT_QA
+  root_cause: SERIAL_64_CONTEXT_SWEEP_EXCEEDED_STEP_TIME_BUDGET
+  changes:
+    - PRESERVE_ALL_16_ROUTES_X_4_PROFILES_64_CONTEXTS
+    - EXECUTE_BOUNDED_PARALLEL_BATCHES_DEFAULT_CONCURRENCY_4_MAX_8
+    - KEEP_ONE_ISOLATED_BROWSER_CONTEXT_PER_ROUTE_PROFILE
+    - RETAIN_LISTENERS_THROUGH_CONTEXT_CLOSE_AND_POST_TEARDOWN_VERDICT
+    - RETAIN_HEALTHY_METADATA_AND_REQUEST_RESPONSE_CORRELATION_REQUIREMENTS
+    - RETAIN_ALL_11_FAILURE_CLASSIFIER_MUTATIONS
+    - WRITE_INCREMENTAL_REPORT_AFTER_EACH_BATCH_FOR_TIMEOUT_DIAGNOSIS
+    - RECORD_CONTEXT_ELAPSED_MS_AND_TOTAL_ELAPSED_MS
+    - PRESERVE_DETERMINISTIC_CONTEXT_ORDER_IN_FINAL_REPORT
+  thresholds_lowered: false
+  coverage_reduced: false
+  blanket_err_aborted_allowlist: false
+  source_or_site_facing_change: false
+  preview_server_parallel_safe: THREADING_HTTP_SERVER
+  local_syntax_check: PASS_NODE_CHECK
+  action_triggered_by_repair_commit: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  linkedin_action_by_this_lane: false
+  seventy_two_hour_clock_restarted: false
+  preserve_279: true
+
+release:
+  pr: 0
+  merge: 0
+  deploy: 0
+  datacenters_or_pre_datacenters_modified: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  draft_323: OPEN_DRAFT_ORTHOGONAL
+
+next_gap:
+  stay_on: seguridad-ia_00_plus_01
+  immediate: EXACT_QA_SHARED_BROWSER_RESOURCE_BOUNDED_PARALLEL_64_CONTEXT_MATRIX
+  required_regression_matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+  do_not_advance_to: 02-jailbreaks
+  whole_article_pixel_and_pedagogy_recertification_required_before_golden: true
+  first_external_blocker_after_independent_repairs: AUTHORIZED_NARRATION_AUDIO
+  dependent_external_work: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  golden_forbidden_until_all_conjunctive_gates_pass: true

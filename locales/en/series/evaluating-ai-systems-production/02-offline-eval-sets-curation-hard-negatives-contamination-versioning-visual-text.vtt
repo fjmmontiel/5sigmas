@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+A case needs an input, context and a verifiable expected result.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+The rubric and harness determine what is observed and scored.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Version the complete evaluation, not just a list of prompts.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+Start with the tasks and failures that matter.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Cover relevant conditions: permissions, limits and partial failures.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+Many easy cases cannot compensate for an untested boundary.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+Suppose returns are allowed through day 30.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+Two otherwise identical orders at 29 and 31 days require different decisions.
+
+03-3
+00:00:58.100 --> 00:01:08.000
+The pair exposes the shortcut “asks for a return, so approve”.
+
+04-1
+00:01:08.700 --> 00:01:15.400
+A paraphrase can leak a development case into the test set.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Group variants by document, entity or seed before splitting.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+A duplicate scanner cannot prove the absence of contamination.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Use dev for tuning and a regression bank for known failures.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Reserve a controlled-access holdout for the release decision.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Repeatedly tuning against that holdout destroys its independence.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Freeze cases, references, rubric, harness and protocol.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Changing a label or grader can change the score without improving the model.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Create a new version; do not silently rewrite the earlier result.
+

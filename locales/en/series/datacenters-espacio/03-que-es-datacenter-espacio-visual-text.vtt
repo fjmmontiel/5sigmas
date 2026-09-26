@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+Processing on a sensing satellite is not the same as operating an orbital cloud.
+
+2
+00:00:07.400 --> 00:00:14.100
+Data origins, scale and expected service are different.
+
+3
+00:00:14.100 --> 00:00:22.000
+Identify each proposal’s use case before comparing them.
+
+4
+00:00:22.700 --> 00:00:29.400
+A full image may contain information irrelevant to a specific detection task.
+
+5
+00:00:29.400 --> 00:00:36.100
+This example keeps selected regions and transmits a smaller result.
+
+6
+00:00:36.100 --> 00:00:44.000
+Validate that selection: discarding information can also lose events.
+
+7
+00:00:44.700 --> 00:00:51.400
+A prototype tests a particular combination of power, duration and environment.
+
+8
+00:00:51.400 --> 00:00:58.100
+A service also needs availability, maintenance and sustained capacity.
+
+9
+00:00:58.100 --> 00:01:06.000
+The untested region remains a hypothesis even when the pilot works.
+
+10
+00:01:06.700 --> 00:01:13.400
+Separated copies reduce some risks shared by a ground location.
+
+11
+00:01:13.400 --> 00:01:20.100
+Restoring data also needs links, keys and a working system.
+
+12
+00:01:20.100 --> 00:01:28.000
+Test the complete recovery, not merely the existence of the archive.
+
+13
+00:01:28.700 --> 00:01:35.400
+A remote update can change instructions and configuration.
+
+14
+00:01:35.400 --> 00:01:42.100
+It does not add physical memory or automatically replace a damaged component.
+
+15
+00:01:42.100 --> 00:01:50.000
+Design autonomy, redundancy and end of mission from the start.
+
+16
+00:01:50.700 --> 00:01:57.400
+The analysis does not end when hardware deploys and starts processing.
+
+17
+00:01:57.400 --> 00:02:04.100
+Include link coordination, failure handling and retirement at end of life.
+
+18
+00:02:04.100 --> 00:02:12.000
+The proposal must explain who operates it, who is accountable and how it ends.
+

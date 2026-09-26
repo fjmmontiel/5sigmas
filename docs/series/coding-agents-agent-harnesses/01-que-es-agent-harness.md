@@ -10,6 +10,21 @@ tags:
   - Software
   - Coding agents
   - Arquitectura
+video: 01-que-es-agent-harness.mp4
+video_poster: 01-que-es-agent-harness.jpg
+video_title: "Qué añade un agent harness al modelo"
+video_summary: "El harness convierte propuestas del modelo en una trayectoria operativa con política, tools, estado y observaciones reales."
+video_duration: PT36S
+video_chapters:
+- name: "Propuesta frente a efecto"
+  start: 0
+  end: 12
+- name: "El feedback loop cambia la siguiente observación"
+  start: 12
+  end: 24
+- name: "Control externo y condición de parada"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 1 — Qué es un agent harness y qué añade sobre un modelo o coding assistant

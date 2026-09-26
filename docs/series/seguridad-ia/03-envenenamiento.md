@@ -2,7 +2,7 @@
 title: Envenenamiento — cuando una instrucción peligrosa se queda en el sistema
 description: "Qué ocurre cuando un documento o una memoria conserva una instrucción peligrosa y el sistema la vuelve a usar más tarde."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: envenenamiento RAG, memoria agentes, sleeper agents, memory poisoning, backdoors LLM, unlearning
 tags:
   - IA
@@ -10,7 +10,11 @@ tags:
   - LLMs
   - Agentes
 video: "03-envenenamiento.mp4"
-video_duration: "PT1M0S"
+video_poster: "03-envenenamiento.jpg"
+video_title: "Envenenamiento"
+video_summary: "Cómo una entrada no confiable puede convertirse en memoria persistente, reaparecer en una decisión futura y sobrevivir a un borrado incompleto mediante estado derivado."
+video_duration: "PT1M30S"
+
 ---
 
 # Capítulo 3 — Envenenamiento
@@ -43,7 +47,9 @@ El resultado no debe interpretarse como una tasa universal de ataque para cualqu
 
 *From Untrusted Input to Trusted Memory* amplía el problema identificando cuatro canales de escritura de memoria y nueve vulnerabilidades estructurales en capacidades del modelo, prompts de sistema y arquitectura del agente. Su conclusión más útil para diseño es que los agentes que escriben y recuperan memoria de forma más agresiva también pueden aumentar su superficie de ataque ([Dash et al., 2026](https://arxiv.org/abs/2606.04329)).
 
-La señal más reciente es *MemSecBench*, publicado como preprint en julio de 2026. Su protocolo Write–Execute–Forget sigue la misma semántica maliciosa desde que se almacena hasta que causa una consecuencia y después intenta repararse. En 24 configuraciones de agentes, memorias y modelos, el trabajo reporta persistencia maliciosa en el 84,2% de los casos y éxito end-to-end de la cadena Write–Execute en el 50,3%. Es evidencia preliminar y dependiente del harness, pero mejora mucho la pregunta experimental: no solo si el poison entra, sino si llega a una acción y puede retirarse después ([Chen et al., 2026](https://arxiv.org/abs/2607.27080)).
+*MemSecBench*, publicado como preprint en julio de 2026, propone un protocolo Write–Execute–Forget que sigue la misma semántica maliciosa desde que se almacena hasta que causa una consecuencia y después intenta repararse. En 24 configuraciones de agentes, memorias y modelos, el trabajo reporta persistencia maliciosa en el 84,2% de los casos y éxito end-to-end de la cadena Write–Execute en el 50,3%. Es evidencia preliminar y dependiente del harness, pero mejora mucho la pregunta experimental: no solo si el poison entra, sino si llega a una acción y puede retirarse después ([Chen et al., 2026](https://arxiv.org/abs/2607.27080)).
+
+Un preprint posterior, publicado en septiembre de 2026, evalúa *Persistent Memory Poisoning Attack* (PMPA) sobre OpenClaw y Claude Code. En los setups estudiados reporta promedios de `ISR/C-ASR` del 73,7%/55,5% en OpenClaw y 66,9%/81,7% en Claude Code; además, una defensa dirigida a nivel de prompt reduce muchas escrituras maliciosas, pero ofrece protección limitada una vez que la memoria persistente ya está contaminada. Son resultados de esos harnesses concretos, no tasas esperables para cualquier agente ([Huang et al., 2026](https://arxiv.org/abs/2609.13889)).
 
 OWASP ya trata este riesgo de forma explícita en su Top 10 para aplicaciones agénticas de 2026 bajo **ASI06: Memory & Context Poisoning**: la memoria y el contexto dejan de ser simples features de producto y pasan a ser activos que necesitan procedencia, aislamiento y controles de escritura ([OWASP, 2026](https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/)).
 
@@ -116,6 +122,7 @@ El envenenamiento describe, en último término, un problema de estado: **qué g
 - Pulipaka et al. (2026), [*Hidden in Memory: Sleeper Memory Poisoning in LLM Agents*](https://arxiv.org/abs/2605.15338).
 - Dash et al. (2026), [*From Untrusted Input to Trusted Memory: A Systematic Study of Memory Poisoning Attacks in LLM Agents*](https://arxiv.org/abs/2606.04329).
 - Chen et al. (2026), [*MemSecBench: Tracking Agent Memory Poisoning from Persistence to Consequence and Repair*](https://arxiv.org/abs/2607.27080) — preprint.
+- Huang et al. (2026), [*When Malicious Instructions Persist: Persistent Memory Poisoning Attack on Harness-Based Agents*](https://arxiv.org/abs/2609.13889) — preprint.
 - Hubinger et al. (2024), [*Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training*](https://arxiv.org/abs/2401.05566).
 - OWASP (2026), [*Memory Is a Feature. It Is Also an Attack Surface*](https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/).
 - OWASP, [*AI Agent Security Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-01-es",
+  "locale": "es",
+  "title": "Qué significa razonar en un LLM",
+  "description": "Qué significa razonar para un modelo de lenguaje, qué aportan o1 y DeepSeek R1, y por qué evaluar razonamiento exige mirar pasos, coste y fallos.",
+  "watch_url": "https://5sigmas.com/videos/series/modelos-razonadores/01-que-es-razonar/",
+  "article_url": "https://5sigmas.com/series/modelos-razonadores/01-que-es-razonar/",
+  "video_url": "https://5sigmas.com/series/modelos-razonadores/01-que-es-razonar.mp4",
+  "poster_url": "https://5sigmas.com/series/modelos-razonadores/01-que-es-razonar.jpg",
+  "vtt_url": "https://5sigmas.com/series/modelos-razonadores/01-que-es-razonar.visual-text.vtt",
+  "video_sha256": "a357ab3df54ff2d8344a362307a5d4625201797d86f534fb840ae03817c48807",
+  "video_bytes": 4686122,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 82000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/01-que-es-razonar.es.json",
+    "text_timing_candidate_git_blob": "1ecdf24c57b4a4cc90f21c19d2513d8fb1e4b0e0",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media at chapter boundaries; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "definition",
+      "name": "Qué significa “razonar”?",
+      "start_ms": 0,
+      "end_ms": 17000,
+      "cues": [
+        {"id": "definition-01", "start_ms": 700, "end_ms": 4426, "text": "Operativamente, nos interesa un proceso que descompone problemas en pasos."},
+        {"id": "definition-02", "start_ms": 4426, "end_ms": 6216, "text": "Consume recursos y tiempo."},
+        {"id": "definition-03", "start_ms": 6216, "end_ms": 8652, "text": "Y puede fallar de forma sistemática."}
+      ],
+      "visual_description": ["Un ejemplo aritmético verificable muestra 17 × 6 y lo descompone como (10 + 7) × 6 = 60 + 42 = 102. El propio vídeo aclara que es un ejemplo exacto, no una cadena interna observada en un LLM."]
+    },
+    {
+      "id": "training",
+      "name": "Verificar resultados, reforzar estrategias.",
+      "start_ms": 17000,
+      "end_ms": 39000,
+      "cues": [
+        {"id": "training-01", "start_ms": 17700, "end_ms": 22394, "text": "RLVR usa tareas con resultados verificables para convertir corrección en señal de recompensa."},
+        {"id": "training-02", "start_ms": 22394, "end_ms": 27087, "text": "DeepSeek R1 usa GRPO para comparar intentos del mismo problema de forma relativa."},
+        {"id": "training-03", "start_ms": 27087, "end_ms": 32103, "text": "En inferencia, el modelo puede dedicar más pasos antes de producir la respuesta final."},
+        {"id": "training-04", "start_ms": 32103, "end_ms": 34861, "text": "Entrenamiento e inferencia son dos momentos distintos."}
+      ],
+      "visual_description": ["Un esquema separa ENTRENAMIENTO e INFERENCIA. En entrenamiento, una señal de recompensa verificable actualiza los pesos W y refuerza estrategias; en inferencia, los pesos permanecen fijados mientras un presupuesto de razonamiento conduce a la respuesta final."]
+    },
+    {
+      "id": "benchmark",
+      "name": "Más razonamiento, más de una palanca.",
+      "start_ms": 39000,
+      "end_ms": 62000,
+      "cues": [
+        {"id": "benchmark-01", "start_ms": 39700, "end_ms": 42458, "text": "Una respuesta puede usar una sola muestra"},
+        {"id": "benchmark-02", "start_ms": 42458, "end_ms": 45216, "text": "o combinar varias y decidir por consenso."},
+        {"id": "benchmark-03", "start_ms": 45216, "end_ms": 48297, "text": "Son estrategias distintas y deben medirse por separado."},
+        {"id": "benchmark-04", "start_ms": 48297, "end_ms": 51700, "text": "En AIME 2024, o1 obtuvo 74% con una muestra"},
+        {"id": "benchmark-05", "start_ms": 51700, "end_ms": 54458, "text": "y 83% con consenso entre 64 muestras."},
+        {"id": "benchmark-06", "start_ms": 54458, "end_ms": 57861, "text": "Es evidencia de ese experimento, no una garantía general."}
+      ],
+      "visual_description": ["La animación distingue un ejemplo aritmético ilustrativo con varios intentos de una comparación de resultados reportados para o1 en AIME 2024: 74% con una muestra y 83% con 64 muestras más consenso. El vídeo advierte que consenso y corrección no son equivalentes."]
+    },
+    {
+      "id": "limits",
+      "name": "La etiqueta importa menos que la curva de fallos.",
+      "start_ms": 62000,
+      "end_ms": 82000,
+      "cues": [
+        {"id": "limits-01", "start_ms": 62700, "end_ms": 68684, "text": "Los modelos pueden producir cadenas deliberadas y aun así colapsar cuando cambia la complejidad o el presupuesto."},
+        {"id": "limits-02", "start_ms": 68684, "end_ms": 73055, "text": "Los resultados dependen también del diseño del benchmark y de la evaluación."},
+        {"id": "limits-03", "start_ms": 73055, "end_ms": 78071, "text": "La práctica útil es medir dónde funciona el razonamiento, cuánto cuesta y cómo falla."}
+      ],
+      "visual_description": ["Una matriz de diseño experimental cruza tarea, presupuesto y verificación con condiciones A, B y C. Las celdas contienen trazos y signos de interrogación: el propio vídeo indica que son condiciones de experimento y no resultados medidos."]
+    }
+  ]
+}

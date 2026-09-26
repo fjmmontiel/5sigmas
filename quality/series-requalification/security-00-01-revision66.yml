@@ -1,0 +1,100 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+status: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+series: seguridad-ia
+active_article: 00_presentacion_serie
+technical_companion_page: 01-prompt-injection
+article_golden: false
+series_golden: false
+
+revision:
+  label: 66
+  exact_head: 059b8c781436d0c0f66b33326877b9a7e9fa4410
+  poster_materializer_commit: 7c2c9df08a7641cdb6b487c6fed3b909c752f311
+  main_base: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+
+poster_repair:
+  defect: ES_SECURITY00_POSTER_BAKED_HEADLINE_CLIPPING
+  state: REPAIRED_AND_EXACTLY_REVIEWED
+  source: scripts/generate_security_series_poster.py
+  output: docs/series/seguridad-ia/00_presentacion_serie.jpg
+  dimensions: 1920x1080
+  safe_area_assertions: true
+  css_mask_used: false
+
+exact_qa:
+  poster_repair_run: 35084072750
+  editorial_capture_run: 35084200309
+  editorial_capture_conclusion: success
+  contexts_expected: 16
+  contexts_observed: 16
+  capture_failures: 0
+  locales: [es, en]
+  profiles: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  strict_es: PASS
+  strict_en: PASS
+  byte_range_preview: PASS
+  tooltip_negative_mutation: PASS
+  semantic_trace_checkpoints: PASS
+  prompt_injection_states: PASS
+  technical_gate_can_self_certify_editorial: false
+
+manual_review_security00:
+  performed: true
+  independent_reviewer: false
+  exact_revision_bound: true
+  whole_page_contexts_inspected: 8
+  semantic_checkpoints_inspected: 32
+  PIXEL_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+  PEDAGOGY_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+  findings:
+    - ES poster headline is fully visible with bottom clearance on desktop/mobile under normal/reduced motion; EN also fits.
+    - No visible raw TeX/HTML, clipping, overlap, global horizontal overflow, pathological mobile canvas or broken Security00 composition was found in the inspected contexts.
+    - secpath represents a causal hostile-content trajectory from source through retrieval/context/proposal to an authorization boundary and modeled external effect.
+    - Least-privilege plus external authorization terminates at BLOCKED while broad permissions continue to EFFECT.
+    - Mobile reflows the causal relation vertically; reduced motion preserves semantic states without relying on animation.
+  security01_editorial_pass_inherited: false
+
+media:
+  MEDIA_PASS: false
+  state: VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  blockers:
+    - VIDEO_AUDIO_STREAM_MISSING
+    - VIDEO_CAPTIONS_MISSING
+    - VIDEO_TRANSCRIPT_MISSING
+    - VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  inventoried_locale_pages: 84
+  current_receipt_advances_manual_requalification_only_for: seguridad-ia/00_presentacion_serie
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  blocker: FRESH_UNCACHED_LIVE_ES_EN_VERIFICATION_OR_DEPLOY_MISMATCH_REPAIR
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  independent_work_while_voice_missing:
+    - reconcile durable manifest with revision 66 evidence
+    - complete the global 84-page browser sweep now that the shared browser-resource classifier is hardened
+    - continue source/rendered/media coverage repairs without advancing the active article
+  media_completion_when_authorized_narration_exists:
+    - native ES and EN narration
+    - captions
+    - transcript
+    - curated key moments
+    - article-watch poster-play-pause-seek-end-next lifecycle
+  do_not_advance_to: 02-jailbreaks

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+Un caso necesita entrada, contexto y un resultado esperado verificable.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+La rúbrica y el harness determinan cómo se observa y puntúa.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Versiona el conjunto completo, no sólo una lista de prompts.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+Empieza por las tareas y los fallos que importa detectar.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Cruza condiciones relevantes: permisos, límites y fallos parciales.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+Muchos casos fáciles no compensan una frontera sin comprobar.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+Supón una devolución permitida hasta el día 30.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+Dos pedidos iguales, salvo 29 frente a 31 días, requieren decisiones distintas.
+
+03-3
+00:00:58.100 --> 00:01:08.000
+El par detecta el atajo «pide devolución, entonces aprobar».
+
+04-1
+00:01:08.700 --> 00:01:15.400
+Una paráfrasis puede revelar en el test un caso ya usado en desarrollo.
+
+04-2
+00:01:15.400 --> 00:01:22.100
+Agrupa variantes por documento, entidad o semilla antes de separar.
+
+04-3
+00:01:22.100 --> 00:01:30.000
+Un detector de duplicados no demuestra ausencia de contaminación.
+
+05-1
+00:01:30.700 --> 00:01:37.400
+Usa dev para ajustar y un banco de regresión para fallos conocidos.
+
+05-2
+00:01:37.400 --> 00:01:44.100
+Reserva un holdout para la decisión de release, con acceso controlado.
+
+05-3
+00:01:44.100 --> 00:01:52.000
+Ajustar repetidamente contra ese holdout destruye su independencia.
+
+06-1
+00:01:52.700 --> 00:01:59.400
+Congela casos, referencias, rúbrica, harness y protocolo.
+
+06-2
+00:01:59.400 --> 00:02:06.100
+Cambiar una etiqueta o un grader puede cambiar el score sin mejorar el modelo.
+
+06-3
+00:02:06.100 --> 00:02:14.000
+Publica una nueva versión; no reescribas el resultado anterior en silencio.
+

@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+Recuperar, validar y guardar puede seguir un recorrido conocido.
+
+2
+00:00:07.400 --> 00:00:14.100
+Los datos avanzan por esas etapas sin que el modelo elija la secuencia.
+
+3
+00:00:14.100 --> 00:00:22.000
+La complejidad del flujo no lo convierte, por sí sola, en un agente.
+
+4
+00:00:22.700 --> 00:00:29.400
+El copiloto prepara un mensaje y muestra a quién se enviaría.
+
+5
+00:00:29.400 --> 00:00:36.100
+El borrador permanece detenido hasta recibir una aprobación concreta.
+
+6
+00:00:36.100 --> 00:00:44.000
+La persona conserva el control del paso con consecuencias externas.
+
+7
+00:00:44.700 --> 00:00:51.400
+Si falta el cliente, pregunta; si ya está identificado, consulta sus facturas.
+
+8
+00:00:51.400 --> 00:00:58.100
+El objetivo permanece fijo aunque la siguiente herramienta cambie.
+
+9
+00:00:58.100 --> 00:01:06.000
+La política limita las opciones disponibles en cada decisión.
+
+10
+00:01:06.700 --> 00:01:13.400
+El modelo produce una llamada propuesta con nombre y argumentos.
+
+11
+00:01:13.400 --> 00:01:20.100
+El runtime valida el contrato y la autorización antes de llamar a la API.
+
+12
+00:01:20.100 --> 00:01:28.000
+Después devuelve el resultado real al contexto de decisión.
+
+13
+00:01:28.700 --> 00:01:35.400
+Un agente de soporte puede leer pedidos del cliente autorizado.
+
+14
+00:01:35.400 --> 00:01:42.100
+Eso no le permite borrar registros ni concederse permisos de escritura.
+
+15
+00:01:42.100 --> 00:01:50.000
+Expresa la autonomía como recursos y acciones, no como una etiqueta.
+
+16
+00:01:50.700 --> 00:01:57.400
+El objetivo pide un borrador guardado, no un mensaje enviado.
+
+17
+00:01:57.400 --> 00:02:04.100
+La respuesta de la herramienta identifica el borrador D4 y su estado.
+
+18
+00:02:04.100 --> 00:02:12.000
+Comprueba esa evidencia y detente sin ejecutar acciones adicionales.

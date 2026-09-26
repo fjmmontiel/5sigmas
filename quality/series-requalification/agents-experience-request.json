@@ -1,0 +1,14 @@
+{
+  "series": "agentes-ia",
+  "revision": 2,
+  "requested_parent_head": "82fe828b5d9b0535abe9a95fe85519e969706172",
+  "scope": "all_6_articles_es_en_desktop_mobile_normal_reduced",
+  "browser_gate": "full_interaction_lifecycle_keyboard_touch_focus_playback_teardown",
+  "pixel_evidence": "full_page_start_and_final_exact_revision",
+  "pedagogy_review": "manual_required_after_artifact_inspection",
+  "voice_enhancement": "DEFERRED_OWNER_LOCAL",
+  "owner_amendments": [5716685049, 5727362172],
+  "recovery_from_run": 35404863029,
+  "recovery_reason": "validator sequentially opened reader modal then attempted background controls; all 48 failures were ARTICLE_CONTROL_INTERACTION_FAILED from correct modal pointer interception and no other error class was present",
+  "purpose": "single justified rerun after correcting validator sequencing without changing site-facing bytes or relaxing any gate"
+}

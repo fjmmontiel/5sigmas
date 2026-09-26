@@ -1,14 +1,44 @@
 ---
-title: "LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo"
-description: "Cómo convertir juicios humanos y model-based graders en evidencia fiable: rúbricas, calibración, acuerdo, repetición, position bias, adjudicación y gates de producción."
+title: 'LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo'
+description: 'Cómo convertir juicios humanos y model-based graders en evidencia fiable:
+  rúbricas, calibración, acuerdo, repetición, position bias, adjudicación y gates
+  de producción.'
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "LLM-as-judge, human evaluation, grader calibration, inter-rater agreement, Cohen kappa, position bias, evaluator variance, AI evaluation"
+keywords: LLM-as-judge, human evaluation, grader calibration, inter-rater agreement,
+  Cohen kappa, position bias, evaluator variance, AI evaluation
 tags:
-  - IA
-  - Evaluación
-  - Reliability
-  - Producción
+- IA
+- Evaluación
+- Reliability
+- Producción
+video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
+video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
+video_title: Cómo evaluar al evaluador
+video_summary: Congela la versión del juez antes de comprobar un set separado. Acepta,
+  limita o rechaza su uso según el riesgo y la evidencia.
+video_duration: PT2M14S
+video_captions: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
+video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
+video_chapters:
+- name: Elige el verificador que necesita la tarea.
+  start: 0
+  end: 22
+- name: Una rúbrica concreta. La misma evidencia.
+  start: 22
+  end: 44
+- name: Mide el acuerdo. No lo llames verdad.
+  start: 44
+  end: 68
+- name: Invierte el orden. Conserva el contenido.
+  start: 68
+  end: 90
+- name: Un juicio aislado puede ser inestable.
+  start: 90
+  end: 112
+- name: Calibra en dev. Comprueba fuera.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 3 — LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo

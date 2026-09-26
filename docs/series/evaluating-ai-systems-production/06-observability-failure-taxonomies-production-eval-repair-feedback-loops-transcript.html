@@ -1,0 +1,29 @@
+<p>Transcripción del texto visual. Vídeo sin narración.</p>
+<h3>00:00 — Una alerta no es un diagnóstico.</h3>
+<p>La telemetría muestra que algo ocurrió, no necesariamente por qué.</p>
+<p>Reconstruye la secuencia con versiones, estados y respuestas relevantes.</p>
+<p>Separa el síntoma observado de la causa todavía no demostrada.</p>
+<p><em>Ejemplo ilustrativo, no resultado de benchmark.</em></p>
+<h3>00:22 — La misma respuesta. Dos writes.</h3>
+<p>El usuario recibió «reembolso completado», pero el backend registra un duplicado.</p>
+<p>La trace revela write, timeout ambiguo y reintento sin reconciliación.</p>
+<p>La hipótesis causal apunta a la recuperación, no al estilo de la respuesta.</p>
+<p><em>Ejemplo ilustrativo, no resultado de benchmark.</em></p>
+<h3>00:46 — Un mecanismo. También sus vecinos.</h3>
+<p>Agrupa incidentes que comparten el mismo mecanismo de fallo.</p>
+<p>Añade un timeout anterior al write y una operación de sólo lectura.</p>
+<p>La reparación debe resolver el fallo sin romper esos casos vecinos.</p>
+<p><em>Ejemplo ilustrativo, no resultado de benchmark.</em></p>
+<h3>01:08 — Convierte el incidente en una prueba reproducible.</h3>
+<p>Depura datos sensibles y conserva las condiciones que explican el fallo.</p>
+<p>Fija estado inicial, respuestas de tools, versiones y verificador.</p>
+<p>Sin evidencia suficiente, registra la limitación; no inventes una causa.</p>
+<h3>01:30 — Prueba la reparación. No sólo el síntoma.</h3>
+<p>Reproduce el fallo con la versión anterior antes de atribuir una mejora.</p>
+<p>Cambia la recuperación y repite la prueba junto a los casos vecinos.</p>
+<p>Comprueba también que no cambió el grader para ocultar el fallo.</p>
+<p><em>Ejemplo ilustrativo, no resultado de benchmark.</em></p>
+<h3>01:52 — Tests verdes no son verificación en producción.</h3>
+<p>Una regresión aprobada permite avanzar, no declarar cerrado el incidente.</p>
+<p>Después de la release, mide recurrencia y exposición durante la ventana acordada.</p>
+<p>Cierra el ciclo con evidencia de producción y una persona responsable.</p>

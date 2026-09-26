@@ -31,14 +31,19 @@ try {
       if (!body.includes(title)) failures.push(`${route}: missing English title ${JSON.stringify(title)}`);
 
       const videos = page.locator('video[data-s5-inline-video-player]');
-      const videoCount = await videos.count();
-      if (videoCount !== 1) failures.push(`${route}: expected one native-English video, found ${videoCount}`);
+      if (await videos.count() !== 1) failures.push(`${route}: expected one approved R5 video, found ${await videos.count()}`);
       else {
         const video = videos.first();
-        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
-        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
-        if (sourceUrl.pathname !== `${root}${slug}.mp4`) failures.push(`${route}: unexpected video path ${sourceUrl.pathname}`);
-        if (posterUrl.pathname !== `${root}${slug}.jpg`) failures.push(`${route}: unexpected poster path ${posterUrl.pathname}`);
+        const source = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const poster = new URL((await video.getAttribute('poster')) || '', page.url());
+        const mediaRoot = `/en/series/seguridad-ia/${slug}`;
+        if (source.pathname !== `${mediaRoot}.mp4`) failures.push(`${route}: video source does not match approved English R5 asset: ${source.pathname}`);
+        if (poster.pathname !== `${mediaRoot}.jpg`) failures.push(`${route}: poster does not match approved English R5 asset: ${poster.pathname}`);
+      }
+      const watchLinks = page.locator('.s5-video-embed__watch a');
+      if (await watchLinks.count() !== 1) failures.push(`${route}: approved video watch link is missing`);
+      else if (!new URL((await watchLinks.first().getAttribute('href')) || '', page.url()).pathname.startsWith('/en/videos/series/seguridad-ia/')) {
+        failures.push(`${route}: video watch link escaped the English video library`);
       }
       if (await page.locator('audio').count()) failures.push(`${route}: unexpected inherited audio`);
       const sizes = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -56,4 +61,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Native English AI Security media QA passed: presentation + Chapters 1–5, exact /en/ MP4/poster pairs, desktop/mobile clean.');
+console.log('Native English AI Security media QA passed: presentation + Chapters 1–5 expose approved R5 videos on desktop/mobile.');

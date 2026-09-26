@@ -1,0 +1,52 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+source_evidence:
+  head: 9e652b494cb91047a422e1e1775daa99b79c9374
+  merge_ref: a0419466e1c0add83b1f3c0db57a725dac155297
+  run: 35550339841
+  artifact: 10618611606
+  artifact_sha256: 9bcaccda65a1d55759b66722c24e477166b2a28de05024a9077d8e19d7c95754
+  automated_gates_before_failure:
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    article_watch_lifecycle: PASS_24_ARTICLE_24_WATCH
+    relationship_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+  failure:
+    gate: MOBILE_TEXT_FIT_LAYOUT
+    route_locale_motion:
+      - 01/es/normal
+      - 01/es/reduced
+    defect: 'scheduler text clips/overflows (72x44 > 70x44) "Scheduler"'
+manual_pixel_observation:
+  mobile_native_rows_reviewed: 12
+  mobile_motion_contexts_reviewed: 24
+  desktop_video_reinspection_this_run: false
+  verdict: CHANGES_REQUIRED
+  additional_observation: DIRECT_ADJACENT_EDGES_CAN_REMAIN_VISUALLY_COLLAPSED_TO_ARROWHEADS_DESPITE_DOM_LENGTH_AND_SHORT_EDGE_SOLID_CONTRACT
+remediation:
+  renderer_commit: 39e368937307535c369b67745df2c23eb5953d58
+  gate_commit: 7149506ca5af54bd0e4048a2d72bf3da23ed7b85
+  renderer_changes:
+    - KEEP_CH1_SCHEDULER_OUTER_GEOMETRY_AND_REDUCE_PADDING_INLINE_TO_3PX_FOR_TEXT_FIT
+    - REROUTE_DIRECT_EDGES_BORN_SHORTER_THAN_8_SVG_UNITS_THROUGH_A_3_25_UNIT_PERPENDICULAR_DOGLEG
+    - KEEP_SHORT_EDGES_SOLID_AND_NONANIMATED
+    - PRESERVE_NODE_AWARE_BOUNDARY_CLIPPING_TO_REAL_RENDERED_NODE_BOXES
+  regression_changes:
+    - MIN_VISIBLE_EDGE_LENGTH_RAISED_FROM_3_TO_6_SVG_UNITS
+    - REQUIRE_SHORT_EDGES_TO_HAVE_ROUTED_VISIBLE_SHAFT_METADATA
+    - ADD_UNROUTED_SHORT_EDGE_NEGATIVE_MUTATION
+  invariants:
+    font_min_px: 12
+    topology_preserved: true
+    branching_preserved: true
+    feedback_loops_preserved: true
+    voice_generated: false
+    captions_transcript_narration_timings_generated: false
+voice_enhancement: DEFERRED_OWNER_LOCAL
+status: FIX_IMPLEMENTED_PENDING_EXACT_HEAD_AUTOMATED_AND_MANUAL_PIXEL_PEDAGOGY_REVIEW

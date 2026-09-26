@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-production-feedback-loop.html",
-  "source_blob_sha": "1e2dba0ad6992114ad5235a014f75214c2d943d7",
+  "source_blob_sha": "d4c557e4fd635ccc15021ead857e9a358849ba5b",
   "replacements": {
     "Feedback loop desde señales de producción hasta eval, reparación y verificación live": "Feedback loop from production signals to eval, repair, and live verification",
     "TELEMETRÍA ≠ VEREDICTO": "TELEMETRY ≠ VERDICT",

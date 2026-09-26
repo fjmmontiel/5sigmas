@@ -1,0 +1,97 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: '2026-09-21'
+review_kind: EXACT_INTEGRATED_CURRENT_MAIN_MANUAL_PIXEL_PEDAGOGY_RELEASE_REVIEW
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+status: PASS_ARTICLES_GOLDEN_RELEASE_READY_PENDING_MERGE_DEPLOY_LIVE
+exact_evidence:
+  head: 09f3b0b7501d6c0894b5cba8b2709156ba281b17
+  base_main: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
+  run: 35579062804
+  run_conclusion: SUCCESS
+  artifact: 10630580355
+  artifact_sha256: 74a15da8dc5e1fe5b7316a85514af32ed034770c2550bf70639f2c2b126dfc46
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  automated_gates:
+    SOURCE_PASS: 12/12
+    BUILD_PASS: 12/12
+    BROWSER_PASS: 12/12
+    MEDIA_VISUAL_PASS: 12/12
+    INDEXABILITY_PASS: 12/12
+    article_watch_lifecycle: PASS_24_ARTICLE_24_WATCH
+    relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+    mobile_text_fit_negative_mutation: PASS
+    routed_short_edge_shaft_negative_mutations: PASS
+    reader_navigation_responsive_shell: PASS
+manual_review:
+  route_locale_rows_inspected: 12
+  mobile_normal_reduced_contexts: 24
+  desktop_normal_reduced_contexts: 24
+  video_key_frames_inspected: 36
+  pixel_review: PASS_12_OF_12
+  pedagogy_review: PASS_12_OF_12
+  known_p0: 0
+  known_p1: 0
+  known_p2: 0
+  prior_article_golden_comparison:
+    prior_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+    prior_artifact: 10626503761
+    prior_artifact_sha256: d7adb22eafa57c20bc6822f6bc698e08266e3aea4f25a9196bbf9054853a8430
+    screenshot_files_total: 98
+    byte_identical: 82
+    changed: 16
+    changed_files_manually_reinspected: 16
+    missing: 0
+  observations:
+  - All six native mobile mechanisms remain legible in ES/EN under normal and reduced motion; the repaired full-height edge overlays preserve causal relationships without the historical lower-edge collapse.
+  - Desktop visual states remain readable and structurally equivalent across locales with no observed clipping, overlap, page-level overflow, or locale leakage in the reviewed evidence.
+  - Video start/intermediate/final samples remain localized and visually coherent for all six chapters and both locales; no placeholder or fallback media was observed.
+  - Integrated main-side changes do not modify the inference mobile renderer; observed shared media/manifest reconciliation is compatible with the inference evidence.
+indexability:
+  INDEXABILITY_PASS: true
+  report_global_errors: []
+  rows: 12
+  canonical: PASS_12_OF_12
+  hreflang: PASS_12_OF_12
+  sitemap: PASS_12_OF_12
+  internal_discovery: PASS_12_OF_12
+  robots_noindex: PASS_12_OF_12
+  google_selection_required: false
+  gsc_observation: null
+media:
+  MEDIA_VISUAL_PASS: true
+  media_visual_blockers: []
+  video_rows: 12
+  codec_dimensions: H264_1920x1080_yuv420p
+  voice_enhancement: DEFERRED_OWNER_LOCAL
+  voice_debt_count: 36
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: 92 > 91 retained unchanged for future voice/accessibility lane; non-blocking.
+iteration_counts_after_real_inspection:
+  ch1_es: 24
+  ch1_en: 24
+  ch2_es: 20
+  ch2_en: 20
+  ch3_es: 20
+  ch3_en: 20
+  ch4_es: 20
+  ch4_en: 20
+  ch5_es: 20
+  ch5_en: 20
+  ch6_es: 22
+  ch6_en: 21
+release:
+  pr: 342
+  main_reconciled: true
+  production_verified: false
+  series_golden: false
+  next_action: MARK_READY_MERGE_THEN_DEPLOY_AND_EXACT_LIVE_ES_EN_INDEXABILITY_FINAL_SERIES_AUDIT
+linkedin:
+  writes: 0
+  queues: 0
+  activations: 0
+  issue_279_preserved: true
+  release_contract_281_preserved: true

@@ -1,0 +1,252 @@
+schema_version: 45
+program: 5sigmas_GOLDEN_requalification
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+canonical_series_order:
+- seguridad-ia
+- agentes-ia
+- agentes-voz-tiempo-real
+- coding-agents-agent-harnesses
+- context-engineering-memory-mcp
+- llm-inference-engineering-economics
+- evaluating-ai-systems-production
+active_series: NONE_ALL_CANONICAL_SERIES_GOLDEN
+series_golden_count: 7/7
+series_status:
+  seguridad-ia:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    indexability: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 330
+    merge_commit: 2d453e473fdf56fcb82ac83ba66730ce0db3bb89
+    deploy_run: 35392652259
+    state: SERIES_GOLDEN
+    production_verified: true
+    receipt: quality/series-requalification/security-series-release.yml
+  agentes-ia:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    indexability: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 331
+    merge_commit: e4e565cef40d5c235c09a1b6c6ef7e8f39e4017c
+    deploy_run: 35423089825
+    state: SERIES_GOLDEN
+    production_verified: true
+    ledger: quality/series-requalification/agents-article-ledger.yml
+  agentes-voz-tiempo-real:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    indexability: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 334
+    merge_commit: 878627846ab92184efc5057339390565bd890394
+    dedicated_live_qa_run: 35463064615
+    state: SERIES_GOLDEN
+    production_verified: true
+    receipt: quality/series-requalification/realtime-voice-release.yml
+  coding-agents-agent-harnesses:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    release_pr: 337
+    merge_commit: b6821a5077681531fba6610298dd0bb02b85813a
+    dedicated_live_qa_run: 35486401426
+    state: SERIES_GOLDEN
+    production_verified: true
+    ledger: quality/series-requalification/coding-article-ledger.yml
+  context-engineering-memory-mcp:
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0_p1_p2: 0
+    article_release_pr: 339
+    article_release_merge: 61d9b3afcfa9fbe53c2971ea8902a0e94696e815
+    live_indexability_hardening_pr: 341
+    live_indexability_hardening_merge: 7d543dd664f1dca420fbc366739d0355e38b32b2
+    dedicated_live_qa_run: 35502173179
+    state: SERIES_GOLDEN
+    production_verified: true
+    ledger: quality/series-requalification/context-article-ledger.yml
+  llm-inference-engineering-economics:
+    ledger: quality/series-requalification/inference-article-ledger.yml
+    release_receipt: quality/series-requalification/inference-series-release.yml
+    latest_manual_review_receipt: quality/series-requalification/inference-manual-pixel-pedagogy-review-2026-09-21-run18-integrated.yml
+    route_locale_rows: 12
+    chapter_count: 6
+    has_series_presentation: false
+    iteration_count_ch1_es: 24
+    iteration_count_ch1_en: 24
+    iteration_count_ch2_es: 20
+    iteration_count_ch2_en: 20
+    iteration_count_ch3_es: 20
+    iteration_count_ch3_en: 20
+    iteration_count_ch4_es: 20
+    iteration_count_ch4_en: 20
+    iteration_count_ch5_es: 20
+    iteration_count_ch5_en: 20
+    iteration_count_ch6_es: 22
+    iteration_count_ch6_en: 21
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0: 0
+    known_p1_open_rows: 0
+    known_p2: 0
+    release_pr: 342
+    release_merge_commit: 0a4b29a88048bfd7e222c20d2fd3075f38ccd2e2
+    production_revision_verified: ff32ffeeaf2d66caa9984e181e39def112130b99
+    deploy_run: 35594975702
+    dedicated_live_qa_run: 35596015267
+    latest_automated_result: PASS_ALL_CURRENT_NONDEFERRED_GATES_EXACT_LIVE_REVISION
+    latest_manual_review: PASS_12_ROUTE_LOCALE_ROWS_MOBILE_DESKTOP_VIDEO_INTEGRATED_CURRENT_MAIN
+    production_verified: true
+    series_golden: true
+    state: SERIES_GOLDEN_PRODUCTION_VERIFIED
+    next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
+  evaluating-ai-systems-production:
+    ledger: quality/series-requalification/evaluating-ai-systems-article-ledger.yml
+    active_branch: quality/evaluating-ai-systems-live-qa-contract-fix
+    release_pr: 352
+    release_pr_state: MERGED_ARTICLE_GOLDEN_SERIES_GOLDEN_PRODUCTION_VERIFIED
+    base_main: e198072b35507406d8616824d90a15d17d3f5dc8
+    release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+    live_contract_fix_pr: 353
+    live_contract_fix_merge_commit: e198072b35507406d8616824d90a15d17d3f5dc8
+    deploy_run: 35674836490
+    deployed_revision: 02a38998b9f027474063ebf443cdb970d37eba01
+    dedicated_live_qa_run: 35675597144
+    dedicated_live_qa_attempt: 2
+    live_exact_revision: PASS
+    live_indexability: PASS_12_OF_12_ROUTE_LOCALE_24_ARTICLE_WATCH_SURFACES
+    live_browser_resources: PASS_ALL_ES_EN_EVALUATION_ROUTES
+    live_hub_mirror: PASS
+    live_locale_switching_reader_progression: PASS
+    live_current_owner_relationship_accessibility: PASS_ALL_6_CHAPTERS_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED
+    live_current_owner_article_watch_playback: PASS_NORMAL_AND_REDUCED_MOTION
+    live_qa_failure_class: NONE_CURRENT_TRANSIENT_TIMEOUT_ATTEMPT_1_CLOSED_BY_ATTEMPT_2_SUCCESS
+    route_locale_rows: 12
+    chapter_count: 6
+    has_series_presentation: false
+    iteration_count_ch1_es: 3
+    iteration_count_ch1_en: 3
+    iteration_count_ch2_es: 3
+    iteration_count_ch2_en: 3
+    iteration_count_ch3_es: 3
+    iteration_count_ch3_en: 3
+    iteration_count_ch4_es: 3
+    iteration_count_ch4_en: 3
+    iteration_count_ch5_es: 3
+    iteration_count_ch5_en: 3
+    iteration_count_ch6_es: 3
+    iteration_count_ch6_en: 3
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    pixel: PASS_12_OF_12
+    pedagogy: PASS_12_OF_12
+    article_golden: 6/6
+    route_locale_rows_golden: 12/12
+    voice_enhancement: DEFERRED_OWNER_LOCAL
+    known_p0: 0
+    known_p1_rows_inspected: 0
+    known_p2: 0
+    exact_qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+    site_facing_revision: 98087d2ea0213205ac2db9a59a637e66124e8788
+    mirror_pin_revision: aca3db5938be9a57b556ac0278a18112e92d0302
+    exact_checkpoint_run: 35640790841
+    exact_checkpoint_result: SUCCESS_ALL_CURRENT_NONDEFERRED_ARTICLE_GATES
+    exact_checkpoint_artifact: 10658961724
+    exact_checkpoint_artifact_sha256: b9676c2e34493a63814ddefa3d7ee682fe3575111da06747d29eb401691f4a6d
+    final_series_audit_head: 6b5cd877a754d9506bb0e217d993efd3477deb26
+    final_series_audit_run: 35656657665
+    final_series_audit_result: SUCCESS
+    manual_pixel_pedagogy: PASS_12_ROUTE_LOCALE_ROWS_DESKTOP_MOBILE_NORMAL_REDUCED
+    manual_video_frames: PASS_12_NATIVE_ES_EN_VIDEOS_72_INSPECTED_FRAMES
+    primary_source_review: PASS_CURRENT_PRIMARY_CLAIMS_NO_MATERIAL_CONTRADICTIONS
+    shared_gates_hardened: true
+    series5_indexability_gate_added: true
+    series5_indexability_negative_mutations_added: true
+    series5_media_visual_voice_split_added: true
+    live_exact_revision_gate_added: true
+    qa_contract_defect_resolved: true
+    production_verified: true
+    series_golden: true
+    state: SERIES_GOLDEN_PRODUCTION_VERIFIED
+    next_action: NONE_CURRENT_PROGRAM_ONLY_FUTURE_VOICE_ENHANCEMENT_DEFERRED
+release_coordination:
+  current_main: 02a38998b9f027474063ebf443cdb970d37eba01
+  inference_release_pr: 342
+  inference_release_pr_merged: true
+  inference_release_merge_commit: 0a4b29a88048bfd7e222c20d2fd3075f38ccd2e2
+  inference_deploy_run: 35594975702
+  inference_dedicated_live_qa_run: 35596015267
+  inference_exact_live_indexability: PASS
+  evaluation_branch: quality/evaluating-ai-systems-live-qa-contract-fix
+  evaluation_release_pr: 352
+  evaluation_release_pr_draft: false
+  evaluation_release_pr_merged: true
+  evaluation_release_merge_commit: 1f5feb945d3bb8d44fd10c12aed618ec662d3505
+  evaluation_live_contract_fix_pr: 353
+  evaluation_live_contract_fix_merge_commit: e198072b35507406d8616824d90a15d17d3f5dc8
+  evaluation_deploy_run: 35674836490
+  evaluation_dedicated_live_qa_run: 35675597144
+  evaluation_dedicated_live_qa_attempt: 2
+  evaluation_live_indexability: PASS
+  evaluation_live_relationship_accessibility: PASS
+  evaluation_live_article_watch_playback: PASS
+  evaluation_first_checkpoint_run: 35598982706
+  evaluation_first_checkpoint_result: CHANGES_REQUIRED_MEDIA_VISUAL
+  evaluation_latest_exact_qa_run: 35640790841
+  evaluation_latest_exact_qa_head: 7bec9a7a7cf3386f0bba10735c5e23ec7b20f4e7
+  evaluation_article_golden: 6/6
+  evaluation_series_golden: true
+  draft_34:
+    state: OPEN_DRAFT_UNMERGED
+    head: 459aca905454175bdbdf86c31f0af02cddd576a4
+    mergeable_observed: false
+    reuse_policy: NEVER_BLIND_MERGE
+release_contract_281:
+  state: CHANGES_REQUIRED_BLOCKED_LINKEDIN_ONLY
+  historical_72h_satisfied: true
+  live_article_change_since_clock: false
+  latest_article_lane_receipt: ARTICLE_LIVE_VERIFIED_COMMENT_5770306323
+  latest_article_lane_proof_run: 35675597092
+  latest_article_lane_proof_revision: 02a38998b9f027474063ebf443cdb970d37eba01
+  latest_pm_receipt: PM_CONTINUITY_2026_09_21
+  remaining_gap: LINKEDIN_FRESH_REVALIDATION_PUBLISH_REAL_ID_READBACK_OWNER_LANE
+  no_72h_reset: true
+linkedin:
+  writes_from_this_program: 0
+  queues_from_this_program: 0
+  activations_from_this_program: 0
+  release_contract_281_ownership_preserved: true
+  issue_279_preserved: true

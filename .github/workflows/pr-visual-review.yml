@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - 'locales/**'
+      - 'discovery/**'
       - 'overrides/**'
       - 'overrides_locale/**'
       - 'hooks/**'
@@ -31,7 +32,7 @@ concurrency:
 jobs:
   build-and-capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -44,6 +45,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
+
+      - name: Install FFmpeg for exact video validation
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
+
+      - name: Regenerate AI Security R5 posters from exact MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          for root in docs/series/seguridad-ia locales/en/series/seguridad-ia; do
+            for video in "$root"/*.mp4; do
+              poster="${video%.mp4}.jpg"
+              ffmpeg -hide_banner -loglevel error -y -ss 5 -i "$video" -frames:v 1 -q:v 2 "$poster"
+            done
+          done
 
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
@@ -81,8 +99,6 @@ jobs:
             echo "No public MP4 changed; full-catalogue frame review is available on demand."
             exit 0
           fi
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
           python scripts/capture_video_density_review.py "${changed_videos[@]}"
 
       - name: Prepare English locale for combined browser QA
@@ -93,43 +109,46 @@ jobs:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
+      - name: Validate exact series 07+ video unpublish scope
+        run: python scripts/validate_series_07_video_unpublish.py
+
+      - name: Prove series content and protected video baselines are byte-untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          protected="$(
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
+              docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
+              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
+              docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
+              docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
+              docs/series/modelos-razonadores locales/en/series/modelos-razonadores
+          )"
+          if [ -n "$protected" ]; then
+            echo "This release must not modify later-unapproved series or Modelos assets:" >&2
+            echo "$protected" >&2
+            exit 1
+          fi
+          echo "PASS: later-unapproved series plus Modelos R2 are byte-untouched."
+
+
+      - name: Verify exact approved C3 bytes and discovery
+        run: python scripts/verify_evaluation_c3_release.py
+
+      - name: Verify exact approved D2 bytes and unchanged article bodies
+        run: python scripts/verify_datacenters_d2_release.py
+
+      - name: Verify exact approved A2 bytes and unchanged article bodies
+        run: python scripts/verify_agents_a2_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
+
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
 
       - name: Test SEO audit crawler
         run: python -m unittest scripts.tests.test_audit_seo_site
 
-      - name: Restore reviewed English TTC media
-        id: en-ttc-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .localized-media/en/ttc-v1
-          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
-
-      - name: Seed reviewed English TTC media from verified PR artifact
-        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: english-ttc-reviewed-seed
-          path: .localized-media/en/ttc-v1
-          run-id: 31689108864
-          github-token: ${{ github.token }}
-
-      - name: Verify and stage reviewed English TTC media for browser QA
-        shell: bash
-        run: |
-          set -euo pipefail
-          media='.localized-media/en/ttc-v1'
-          mp4="$media/03-test-time-compute.mp4"
-          jpg="$media/03-test-time-compute.jpg"
-          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
-          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
-          test "$(stat -c %s "$mp4")" = '4337214'
-          test "$(stat -c %s "$jpg")" = '105949'
-          target='site/en/series/modelos-razonadores'
-          mkdir -p "$target"
-          cp "$mp4" "$target/03-test-time-compute.mp4"
-          cp "$jpg" "$target/03-test-time-compute.jpg"
+      # Modelos R2 English media is now manifest-declared and comes directly
+      # from locales/en. Do not overwrite it with the historical TTC cache.
 
       - uses: actions/setup-node@v4
         with:
@@ -163,6 +182,15 @@ jobs:
           done
           cat /tmp/5sigmas-preview.log
           exit 1
+
+      - name: Verify C3 native desktop and mobile video consumers
+        run: node scripts/verify_evaluation_c3_browser.mjs
+
+      - name: Verify D2 native desktop and mobile video consumers
+        run: node scripts/verify_datacenters_d2_browser.mjs
+
+      - name: Verify A2 native desktop and mobile video consumers
+        run: node scripts/verify_agents_a2_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs
@@ -345,6 +373,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en

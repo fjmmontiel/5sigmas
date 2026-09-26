@@ -1,0 +1,84 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: 2026-09-21
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+status: PASS_ARTICLES_GOLDEN_PENDING_SERIES_RELEASE
+exact_evidence:
+  site_facing_head: 094938cb9b1f7dd3a4b5f17ca1dfb3f73ce17147
+  run: 35572557014
+  artifact: 10626503761
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  artifact_sha256: d7adb22eafa57c20bc6822f6bc698e08266e3aea4f25a9196bbf9054853a8430
+  automated_result: PASS
+  automated_gates:
+    source: PASS_12_OF_12
+    build: PASS_12_OF_12
+    browser: PASS_12_OF_12
+    media_visual: PASS_12_OF_12
+    indexability: PASS_12_OF_12
+    article_watch_lifecycle: PASS_24_ARTICLE_24_WATCH
+    relationship_geometry_accessibility: PASS_12_ROWS_NORMAL_REDUCED
+    mobile_text_fit_negative_mutation: PASS
+    routed_short_edge_shape_negative_mutations: PASS
+    full_height_edge_overlay_contract: PASS_12_ROWS_NORMAL_REDUCED
+    reader_navigation_responsive_shell: PASS
+manual_review:
+  performed: true
+  route_locale_rows: 12
+  mobile_contexts: 24
+  desktop_contexts: 24
+  video_key_frames: 36
+  mobile_modes: [normal, reduced]
+  desktop_modes: [normal, reduced]
+  video_moments: [start, intermediate, final]
+  pixel_review: PASS_12_OF_12
+  pedagogy_review: PASS_12_OF_12
+  media_visual_review: PASS_12_OF_12
+  known_p0: 0
+  known_p1: 0
+  known_p2: 0
+  result: PASS
+observations:
+  ch1: 'Prefill/KV/decode/output to concurrency/scheduler/goodput remains connected and legible; normal/reduced states and repaired ES/EN video labels are clean.'
+  ch2: 'Block table/pool, release/free, waiting/scheduler/admit and host-tier relationships remain visually explicit.'
+  ch3: 'Weights/precision/kernel through bytes, parallelism/collectives and hardware outcome remains legible and causal.'
+  ch4: 'Prefix hit/miss and speculative draft/verify/accept/reject/commit/rewind relations remain complete and readable.'
+  ch5: 'Routing/placement/primary/success/fallback/telemetry/policy graph is fully connected after full-height SVG overlay remediation.'
+  ch6: 'Workload/SUT/metrics/goodput/SLO/power/cost/accounting/load-sweep/operating-region relations remain visible and readable.'
+  desktop: 'No inspected clipping, overflow, broken resources, locale leakage or lost causal relationship observed in ES/EN normal/reduced evidence.'
+  video: 'All six chapters have real native ES/EN visual video, posters and voice-independent key moments; inspected start/intermediate/final frames are readable and non-placeholder.'
+iteration_counts_after_review:
+  ch1_es: 23
+  ch1_en: 23
+  ch2_es: 19
+  ch2_en: 19
+  ch3_es: 19
+  ch3_en: 19
+  ch4_es: 19
+  ch4_en: 19
+  ch5_es: 19
+  ch5_en: 19
+  ch6_es: 21
+  ch6_en: 20
+iteration_reason: 'All 12 route×locale rows were genuinely inspected in exact-head mobile and desktop normal/reduced evidence plus the required ES/EN video start/intermediate/final evidence; each row increments exactly once.'
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: '92 > 91 retained for the future voice/accessibility lane; current GOLDEN thresholds are unchanged.'
+release:
+  article_golden: 6/6
+  route_locale_rows_golden: 12/12
+  series_golden: false
+  merge_allowed_now: false
+  deploy_verified: false
+  current_main_observed: 603d0a1a4d3f5fe639eb472cf33230651fd6e4f1
+  branch_requires_main_reconciliation: true
+  reason_series_not_golden: 'Final current-main reconciliation, an exact integrated candidate checkpoint/manual audit, merge/deploy, exact-revision live ES/EN INDEXABILITY verification, and final series graph/canonical/hreflang/sitemap reconciliation remain required.'
+next_action:
+  - 'Reconcile current main into the series branch without blind conflict resolution or force-push.'
+  - 'Run one exact integrated Series 4 checkpoint and inspect retained evidence again if site-facing bytes differ.'
+  - 'Only with zero P0/P1/P2 and all gates green: ready/merge PR #342, deploy, verify exact live ES/EN canonical/robots/noindex/hreflang/sitemaps/internal discovery, and perform the final series audit before SERIES_GOLDEN.'

@@ -1,0 +1,97 @@
+schema_version: 2
+program: 5sigmas_GOLDEN_requalification
+created_at_utc: 2026-09-17T14:03:44Z
+updated_at_utc: 2026-09-17T14:03:44Z
+state: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+series: seguridad-ia
+article: 00_presentacion_serie
+severity: P2
+
+finding:
+  id: SECURITY00_PREVENTION_VS_IMPACT_CONTROL_CONFLATION
+  summary: >-
+    The series introduction used the broad statement that many apparently reasonable
+    mitigations only buy time without closing the underlying path. That framing
+    conflated two different mechanisms: controls that reduce the probability that
+    untrusted content changes model behavior, and controls that constrain reachable
+    data, tools and actions when influence still occurs.
+  old_es_fragment: "muchas mitigaciones que parecen razonables solo compran tiempo sin cerrar el camino de fondo"
+  old_en_fragment: "many seemingly reasonable mitigations buy time without closing the underlying path"
+
+repair:
+  es: >-
+    El objetivo ahora separa explícitamente qué controles reducen la probabilidad de
+    que contenido no confiable altere el comportamiento del modelo y qué controles
+    limitan las consecuencias —datos accesibles, herramientas y acciones— incluso
+    cuando esa influencia ocurre.
+  en: >-
+    The goal now explicitly separates controls that reduce the chance that untrusted
+    content changes model behavior from controls that limit the consequences—
+    accessible data, tools and actions—even when that influence occurs.
+  material_es_en_parity: true
+  datacenters_or_pre_datacenters_modified: false
+
+primary_sources_revalidated:
+  - OWASP LLM Prompt Injection Prevention Cheat Sheet
+  - OWASP AI Agent Security Cheat Sheet
+  - OWASP RAG Security Cheat Sheet
+  rationale: >-
+    Current OWASP guidance separates prompt/data handling and prompt-injection
+    mitigations from least privilege, independent authorization and decision/execution
+    controls that bound downstream impact.
+
+commits:
+  es: e61e939daefd4b7f7583bcf61e1664f3ed59d11b
+  en: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  deterministic_guard: 820b977714f9c9691846e76624828038b4d75b3b
+  current_site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+
+qa:
+  source_parity_editorial_review: PASS_FOR_THIS_CLAIM
+  deterministic_guard: scripts/validate_security_source_claims.py
+  deterministic_negative_mutation_for_new_boundary: ADDED_NOT_YET_EXECUTED_ON_EXACT_CURRENT_HEAD
+  positive_current_source_fixture_in_guard: ADDED_NOT_YET_EXECUTED
+  strict_es_exact_current_head: PENDING
+  strict_en_exact_current_head: PENDING
+  browser_exact_current_head: PENDING
+  pixel_review_exact_current_head: PENDING_STALE_AFTER_SITE_FACING_CHANGE
+  pedagogy_review_exact_current_head: PENDING_STALE_AFTER_SITE_FACING_CHANGE
+  media_pass: false
+  article_golden: false
+  series_golden: false
+  previous_rev94_pixel_pedagogy_evidence_preserved_as_historical_only: true
+
+coverage_unchanged:
+  route_locale_video_obligations: 84
+  curriculum_h2_obligations: 1198
+  video_accessibility_incomplete_surfaces: 92
+  legacy_video_accessibility_budget: 91
+  threshold_raised: false
+
+media_blocker_unchanged:
+  state: VOICE_MISSING
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+actions:
+  launched_this_fix: false
+  reason: >-
+    This is a small source/parity/guard repair cluster. Per the cost contract, CI is
+    deferred until a justified integration milestone rather than triggering Actions
+    every hour.
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate:
+    - RUN_SOURCE_GUARD_SELF_TEST_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_FOR_NEXT_CONCRETE_DEFECT
+    - RECAPTURE_AND_MANUALLY_REVIEW_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_SITE_FACING_CLUSTER
+    - KEEP_92_GT_91_AND_ALL_1198_H2_OBLIGATIONS_FAIL_CLOSED
+  do_not_advance_to: 02-jailbreaks

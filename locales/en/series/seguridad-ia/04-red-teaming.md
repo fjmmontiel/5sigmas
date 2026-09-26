@@ -2,7 +2,7 @@
 title: Red teaming — test the full path before an incident
 description: "How to test the path from an incoming document to the action the system can execute, before an incident occurs."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: AI red teaming, security evaluation, human uplift, attack budget, AI agents, LLM benchmarks
 tags:
   - AI
@@ -61,7 +61,7 @@ That detail also matters for regressions. If a new version changes the system pr
 
 ## Automating attacks can also mislead the evaluation
 
-*Constitutional Classifiers* describes an automated red-teaming pipeline that generates long, multi-turn attacks. An attack model proposes a structure, fills it with variants and uses the results to produce new attempts ([Anthropic, 2025](https://www.anthropic.com/research/constitutional-classifiers)).
+A more precise example for long-horizon agents is *Strengthening Red Teams: A Modular Scaffold for Control Evaluations*. In SHADE-Arena, the work decomposes an attack policy into suspicion modeling, attack selection, planning, execution and subtlety, and tunes components of the scaffold with a probabilistic model calibrated from real trajectories. That scaffold belongs to the evaluation harness: it does not establish that the base model has those capabilities on its own or that its parameters transfer to other environments ([Anthropic, 2025](https://alignment.anthropic.com/2025/strengthening-red-teams/)).
 
 Automation increases coverage, but it also creates an evaluation risk. If the grader rewards particular words or long responses, the attacker can learn to game the rubric without finding a useful attack path.
 
@@ -146,5 +146,5 @@ That is the role of red teaming in this series: turn an abstract risk into an ob
 
 - OWASP (2026), [*AI Security Solutions Landscape for AI and Agentic Red Teaming Q2 2026*](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/).
 - OWASP (2026), [*Top 10 for Agentic Applications*](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
-- Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- Anthropic (2025), [*Strengthening Red Teams: A Modular Scaffold for Control Evaluations*](https://alignment.anthropic.com/2025/strengthening-red-teams/).
 - NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).

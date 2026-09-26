@@ -1,0 +1,511 @@
+{
+  "schema": 1,
+  "series": "datacenters-espacio",
+  "round": "D2",
+  "owner_approval": "APPROVED_2026-09-25",
+  "description": "10 exact approved horizontal ES/EN files in existing article/watch consumers; 10 approved vertical originals remain in the owner collection.",
+  "source_renderer_sha256": "68f3f270221287bafc7920399f571578838a9c19c9ce6c216181d3234efdd82d",
+  "source_story_sha256": "64d46792753f714ca337b367c88c11e267431a2bd330a22e8575c07042cdb0f9",
+  "objects": [
+    {
+      "path": "series/datacenters-espacio/00_presentacion_serie.mp4",
+      "kind": "video",
+      "sha256": "76780b4414f571e4bb7d77d7d86f5efeeed79a40c6ad6d6caeab0896d0e6d30b",
+      "bytes": 4226526,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/datacenters-espacio/00_presentacion_serie/",
+      "watch": "videos/series/datacenters-espacio/00_presentacion_serie/",
+      "poster_path": "series/datacenters-espacio/00_presentacion_serie.jpg",
+      "poster_sha256": "86caae34154dc9903bc8cbab8e5e1db0fc47c21ab6c9387fb55e25e2763c6358",
+      "chapters": [
+        {
+          "name": "Mover el cómputo cambia los límites.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "El frío no se lleva el calor por sí solo.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "La energía solar depende de la órbita.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Procesa antes de transmitir.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Una prueba no es un servicio a escala.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Compara el sistema. No una sola ventaja.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/datacenters-espacio/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "858ec3e2c71c158a2139dcc030e0ab61504b173059561450f66ff068d20123fe",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/datacenters-espacio/00_presentacion_serie.mp4",
+      "kind": "video",
+      "sha256": "00f1f2fa937e742a6d1c7d6ddf29210ce3a64145a4c911c559079c1fe6c68bc5",
+      "bytes": 4057574,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/datacenters-espacio/00_presentacion_serie/",
+      "watch": "en/videos/series/datacenters-espacio/00_presentacion_serie/",
+      "poster_path": "en/series/datacenters-espacio/00_presentacion_serie.jpg",
+      "poster_sha256": "2d5e32dcf8ed8c9f4cb900eb74c10aefaf6d334e5032ed518907154a10f0601e",
+      "chapters": [
+        {
+          "name": "Moving compute changes the constraints.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Cold surroundings do not carry heat away.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Solar energy depends on the orbit.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Process before transmitting.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "A demonstration is not a service at scale.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "Compare the system. Not one advantage.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/datacenters-espacio/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "6721aceaac4643860d81c4e6ec1ec18b33dace20ea8ab86a31158b4b5ba519df",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/datacenters-espacio/01-por-que-ahora.mp4",
+      "kind": "video",
+      "sha256": "a764cc49ddbfaeef5deb23d440d8db7b149f6eb2694099757d469883d28bba08",
+      "bytes": 4135563,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/datacenters-espacio/01-por-que-ahora/",
+      "watch": "videos/series/datacenters-espacio/01-por-que-ahora/",
+      "poster_path": "series/datacenters-espacio/01-por-que-ahora.jpg",
+      "poster_sha256": "8411f12791d704d96eab44af577d2b55b026d979335dc23a3b8880803815d6b4",
+      "chapters": [
+        {
+          "name": "Más solicitudes. La misma infraestructura.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Seis condiciones. Todas importan.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Bajar el coste por kilo no elimina el resto.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "También lanzas lo que sostiene al chip.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Importa dónde nace el dato.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "Una proyección no es un resultado.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "series/datacenters-espacio/01-por-que-ahora-visual-text.vtt",
+      "captions_sha256": "92b52733c3e0ed98d07584381d58d21e22075cf85bd56d2c0abf852b6be5bf17",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/datacenters-espacio/01-por-que-ahora.mp4",
+      "kind": "video",
+      "sha256": "f0a92be446cbd47923017f9735eeea41ef3537bee62ef16dead568c56a183bbd",
+      "bytes": 4013535,
+      "duration": 134,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/datacenters-espacio/01-por-que-ahora/",
+      "watch": "en/videos/series/datacenters-espacio/01-por-que-ahora/",
+      "poster_path": "en/series/datacenters-espacio/01-por-que-ahora.jpg",
+      "poster_sha256": "3d8984edaced304c8da678e0fe3ad7a75875913f647f1c4eee5c3852d56449b2",
+      "chapters": [
+        {
+          "name": "More requests. The same infrastructure.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Six conditions. All of them matter.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "A lower launch cost does not erase the rest.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "You also launch what supports the chip.",
+          "start": 68,
+          "end": 90
+        },
+        {
+          "name": "Where the data originates matters.",
+          "start": 90,
+          "end": 112
+        },
+        {
+          "name": "A projection is not an observed result.",
+          "start": 112,
+          "end": 134
+        }
+      ],
+      "captions_path": "en/series/datacenters-espacio/01-por-que-ahora-visual-text.vtt",
+      "captions_sha256": "fbc0ac5f0c76573f0c43bb2d63ae5131c5e73851876456b22c431320f255dab0",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/datacenters-espacio/02-energia-calor-conectividad.mp4",
+      "kind": "video",
+      "sha256": "094807e548a5b1621036145f879a385c0e071c19c99624c577d8d3c7f8d47b56",
+      "bytes": 4404844,
+      "duration": 138,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/datacenters-espacio/02-energia-calor-conectividad/",
+      "watch": "videos/series/datacenters-espacio/02-energia-calor-conectividad/",
+      "poster_path": "series/datacenters-espacio/02-energia-calor-conectividad.jpg",
+      "poster_sha256": "2efa751805d03194d52961da0d4b8a0813f56b3403a373c97a5ac087ff9ab0de",
+      "chapters": [
+        {
+          "name": "La energía termina en un balance térmico.",
+          "start": 0,
+          "end": 24
+        },
+        {
+          "name": "Más potencia exige más superficie.",
+          "start": 24,
+          "end": 48
+        },
+        {
+          "name": "La energía es el área bajo la potencia.",
+          "start": 48,
+          "end": 70
+        },
+        {
+          "name": "El enlace sólo existe durante el contacto.",
+          "start": 70,
+          "end": 92
+        },
+        {
+          "name": "Velocidad por tiempo: el presupuesto del enlace.",
+          "start": 92,
+          "end": 116
+        },
+        {
+          "name": "Detectar un error no equivale a repararlo todo.",
+          "start": 116,
+          "end": 138
+        }
+      ],
+      "captions_path": "series/datacenters-espacio/02-energia-calor-conectividad-visual-text.vtt",
+      "captions_sha256": "c0603d14f68f09a893ca0403afe1b9d2e4b9771a29c76f1f2b43b1726ebe08cc",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/datacenters-espacio/02-energia-calor-conectividad.mp4",
+      "kind": "video",
+      "sha256": "1b4e061be957e880134c6505e9b3c724fbb13b568d4e43fe54fe3d46b2d4bc34",
+      "bytes": 4161344,
+      "duration": 138,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/datacenters-espacio/02-energia-calor-conectividad/",
+      "watch": "en/videos/series/datacenters-espacio/02-energia-calor-conectividad/",
+      "poster_path": "en/series/datacenters-espacio/02-energia-calor-conectividad.jpg",
+      "poster_sha256": "791f9b1b0b6b80a47689957bc48335329d75bb70a33d1da55b391c8dfd5222e3",
+      "chapters": [
+        {
+          "name": "Energy ends up in a thermal balance.",
+          "start": 0,
+          "end": 24
+        },
+        {
+          "name": "More power requires more radiating area.",
+          "start": 24,
+          "end": 48
+        },
+        {
+          "name": "Energy is the area under the power curve.",
+          "start": 48,
+          "end": 70
+        },
+        {
+          "name": "A direct link exists only during contact.",
+          "start": 70,
+          "end": 92
+        },
+        {
+          "name": "Rate times time: the link budget.",
+          "start": 92,
+          "end": 116
+        },
+        {
+          "name": "Detecting an error does not fix everything.",
+          "start": 116,
+          "end": 138
+        }
+      ],
+      "captions_path": "en/series/datacenters-espacio/02-energia-calor-conectividad-visual-text.vtt",
+      "captions_sha256": "529375a616cb016e7131c98fb530c7bbadd5b24b73c523f07ea07e80e46f330d",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/datacenters-espacio/03-que-es-datacenter-espacio.mp4",
+      "kind": "video",
+      "sha256": "0c4825e4b2793ef47f07b47adc23e7430adc7be8f91b32e68f42a97b426048ad",
+      "bytes": 4305258,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/datacenters-espacio/03-que-es-datacenter-espacio/",
+      "watch": "videos/series/datacenters-espacio/03-que-es-datacenter-espacio/",
+      "poster_path": "series/datacenters-espacio/03-que-es-datacenter-espacio.jpg",
+      "poster_sha256": "3ab8ba594653415984fea0bc00729b49f1a7b4026bcc51a3a8f59bdf40cbf144",
+      "chapters": [
+        {
+          "name": "No es un único tipo de infraestructura.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Conserva lo necesario para la tarea.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Distingue evidencia y extrapolación.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Guardar una copia no garantiza recuperarla.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Mandar software no cambia el hardware.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "La misión incluye su cierre.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "series/datacenters-espacio/03-que-es-datacenter-espacio-visual-text.vtt",
+      "captions_sha256": "8adff42d2d3648238ff629b4b2e162e91bf4bc5b5fdbb9021cbd37957fe54cb1",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/datacenters-espacio/03-que-es-datacenter-espacio.mp4",
+      "kind": "video",
+      "sha256": "ba7b7d625cde0df2430d5556abcc0a5ba45a454d6e8b7eae29496ea0e94a6ca4",
+      "bytes": 4156956,
+      "duration": 132,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/datacenters-espacio/03-que-es-datacenter-espacio/",
+      "watch": "en/videos/series/datacenters-espacio/03-que-es-datacenter-espacio/",
+      "poster_path": "en/series/datacenters-espacio/03-que-es-datacenter-espacio.jpg",
+      "poster_sha256": "e12eb7c3d521e637d1aebdb0388adf1fbcbca6204c15e5c0d99f9734eac27ed6",
+      "chapters": [
+        {
+          "name": "It is not one kind of infrastructure.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Keep what the task actually needs.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "Separate evidence from extrapolation.",
+          "start": 44,
+          "end": 66
+        },
+        {
+          "name": "Storing a copy does not guarantee recovery.",
+          "start": 66,
+          "end": 88
+        },
+        {
+          "name": "Sending software does not replace hardware.",
+          "start": 88,
+          "end": 110
+        },
+        {
+          "name": "The mission includes its end.",
+          "start": 110,
+          "end": 132
+        }
+      ],
+      "captions_path": "en/series/datacenters-espacio/03-que-es-datacenter-espacio-visual-text.vtt",
+      "captions_sha256": "eab8848e0e88ca6247d7cf46f8d3f11c3914e7fcce549307a6ef6d428425128b",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/datacenters-espacio/04-huella-real-datacenter.mp4",
+      "kind": "video",
+      "sha256": "754a842f8da6f00c0d45bd6ed624cf5ab6662f11efcbeade6fc0154ee212b69e",
+      "bytes": 4155591,
+      "duration": 136,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/datacenters-espacio/04-huella-real-datacenter/",
+      "watch": "videos/series/datacenters-espacio/04-huella-real-datacenter/",
+      "poster_path": "series/datacenters-espacio/04-huella-real-datacenter.jpg",
+      "poster_sha256": "165dc9b4d736d8c42b17413295fc6580a60a1b9d57d0f3ffede7fec740d9738a",
+      "chapters": [
+        {
+          "name": "La misma demanda. Dos cuencas distintas.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Retirar agua no es lo mismo que consumirla.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "La comparación exige el mismo denominador.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Más eficiencia no implica menos consumo total.",
+          "start": 68,
+          "end": 92
+        },
+        {
+          "name": "El hardware también tiene una cadena material.",
+          "start": 92,
+          "end": 114
+        },
+        {
+          "name": "Cambiar de lugar no borra la huella.",
+          "start": 114,
+          "end": 136
+        }
+      ],
+      "captions_path": "series/datacenters-espacio/04-huella-real-datacenter-visual-text.vtt",
+      "captions_sha256": "64065723720e296dc0cc319f81ce5d6a79ce440cd515f8265f490281e5ddd8cf",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/datacenters-espacio/04-huella-real-datacenter.mp4",
+      "kind": "video",
+      "sha256": "5f820d81acfa49b8842d54e19ffbf3204571985bbe7672b93a81732fea28322f",
+      "bytes": 4141267,
+      "duration": 136,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/datacenters-espacio/04-huella-real-datacenter/",
+      "watch": "en/videos/series/datacenters-espacio/04-huella-real-datacenter/",
+      "poster_path": "en/series/datacenters-espacio/04-huella-real-datacenter.jpg",
+      "poster_sha256": "1ad690f5d1a2aabee8cfdf354f21a952213131a682fd8e309f62dcb8e63456db",
+      "chapters": [
+        {
+          "name": "The same demand. Two different basins.",
+          "start": 0,
+          "end": 22
+        },
+        {
+          "name": "Water withdrawal is not water consumption.",
+          "start": 22,
+          "end": 44
+        },
+        {
+          "name": "A comparison needs the same denominator.",
+          "start": 44,
+          "end": 68
+        },
+        {
+          "name": "Higher efficiency need not mean lower total consumption.",
+          "start": 68,
+          "end": 92
+        },
+        {
+          "name": "Hardware also has a material supply chain.",
+          "start": 92,
+          "end": 114
+        },
+        {
+          "name": "Changing location does not erase the footprint.",
+          "start": 114,
+          "end": 136
+        }
+      ],
+      "captions_path": "en/series/datacenters-espacio/04-huella-real-datacenter-visual-text.vtt",
+      "captions_sha256": "e2be127bbc625342303cf861037eb1c1af0ddd1926205b1e9be39a22bf694961",
+      "captions_scope": "Timed visual text, silent video; no invented narration"
+    }
+  ]
+}

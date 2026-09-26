@@ -4,12 +4,15 @@ on:
   pull_request:
     paths:
       - 'locales/en/**'
+      - 'discovery/**'
       - 'mkdocs.en.yml'
       - 'hooks/video_sitemap_en.py'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
+      - 'scripts/prepare_modelos_r2_ci_media.sh'
       - 'scripts/audit_english_full_parity.py'
       - 'scripts/validate_english_series_mirror.mjs'
+      - 'scripts/validate_english_series_video_rollback.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'scripts/validate_english_energy_ch1.mjs'
       - 'scripts/validate_english_energy_ch2.mjs'
@@ -71,6 +74,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Prepare exact Modelos R2 media for discovery checks
+        run: bash scripts/prepare_modelos_r2_ci_media.sh
+
       - name: Prepare strict English locale
         run: python scripts/prepare_locale.py --locale en
 
@@ -102,8 +108,8 @@ jobs:
           cat /tmp/5sigmas-en-mirror.log
           exit 1
 
-      - name: Validate full English series mirror
-        run: node scripts/validate_english_series_mirror.mjs
+      - name: Validate English series mirror under series 07+ video rollback
+        run: node scripts/validate_english_series_video_rollback.mjs
 
       - name: Validate translated Test-Time Compute chapter
         env:

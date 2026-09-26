@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Visual text from the silent video. This is not a speech transcript.
+
+01-1
+00:00:00.700 --> 00:00:07.400
+An agent can say “done” without completing the task.
+
+01-2
+00:00:07.400 --> 00:00:14.100
+Inspect the actions it took and the resulting state as well.
+
+01-3
+00:00:14.100 --> 00:00:22.000
+Define that boundary before choosing a metric.
+
+02-1
+00:00:22.700 --> 00:00:29.400
+Give both models the same cases and the same protocol.
+
+02-2
+00:00:29.400 --> 00:00:36.100
+Hold context, tools and the scoring rubric constant.
+
+02-3
+00:00:36.100 --> 00:00:44.000
+The difference describes this test; it does not certify the whole product.
+
+03-1
+00:00:44.700 --> 00:00:51.400
+When the right policy never reaches the context, inspect retrieval.
+
+03-2
+00:00:51.400 --> 00:00:58.100
+Change only that component and rerun the same cases.
+
+03-3
+00:00:58.100 --> 00:01:06.000
+Then confirm the whole task improves, not just the ranking.
+
+04-1
+00:01:06.700 --> 00:01:13.400
+Workflow policy allows, blocks or redirects actions.
+
+04-2
+00:01:13.400 --> 00:01:20.100
+Authorization must be checked before a write is executed.
+
+04-3
+00:01:20.100 --> 00:01:28.000
+Test rejection and recovery branches too.
+
+05-1
+00:01:28.700 --> 00:01:35.400
+The workflow defines possible routes; a trajectory records one execution.
+
+05-2
+00:01:35.400 --> 00:01:42.100
+Follow arguments, responses, errors and state changes.
+
+05-3
+00:01:42.100 --> 00:01:50.000
+A correct final message does not erase a duplicated side effect.
+
+06-1
+00:01:50.700 --> 00:01:57.400
+A narrow boundary helps locate the failure.
+
+06-2
+00:01:57.400 --> 00:02:04.100
+A broader test checks the task, policies and real effects.
+
+06-3
+00:02:04.100 --> 00:02:12.000
+Preserve versions, cases and protocol to make comparisons reproducible.
+

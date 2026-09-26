@@ -1,0 +1,131 @@
+schema_version: 1
+revision: 80
+state: CHANGES_REQUIRED
+golden: NOT_CERTIFIED
+contract:
+  issue: 305
+  amendment_comment: 5655569434
+active:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+expected_video_curriculum:
+  policy: ALL_TARGET_ROUTES_NATIVE_PER_LOCALE_NO_OPT_OUT
+  target_routes: 42
+  required_locales: [es, en]
+  expected_locale_video_obligations: 84
+  declared_locale_pages: 24
+  undeclared_locale_pages: 60
+  declared_locale_h2_obligations: 174
+  pages_with_curated_key_moments: 0
+  absent_in_both_locales_counts_as_parity: false
+  fabricated_key_moments_or_timings: false
+  validator: scripts/audit_video_curriculum_expectation.py
+  canonical_scope: quality/series-requalification/scope.json
+  negative_and_positive_fixtures: PASS_38_TESTS
+
+source_coverage:
+  target_series: 7
+  pages_per_locale: 42
+  locale_pages: 84
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+
+rendered:
+  audited_locale_pages: 84
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+integration_action:
+  id: 35161200504
+  exact_head: 17894752ae63f3b0cbe65432e10fb5e8e03b3913
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  final_enforcement_reason:
+    - SOURCE_OUTCOME_FAILURE
+    - MEDIA_PROBE_OUTCOME_FAILURE
+    - RENDERED_OUTCOME_FAILURE
+  artifact_id: 10473324200
+  artifact_digest: sha256:3290eb5ad3073203b741fd901056555913fda9de558867232e559925d87b7800
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS
+  publication_contract: PASS
+  negative_regression_fixtures: PASS_38_TESTS
+  shared_security_plus_reference_contexts_expected: 64
+  shared_security_plus_reference_contexts_observed: 64
+  shared_security_plus_reference_classifier_mutations: 20
+  shared_security_plus_reference_failures: 0
+  focused_security_browser_contexts_expected: 16
+  focused_security_browser_contexts_observed: 16
+  focused_security_browser_failures: 0
+  contrast_and_text_visibility: PASS
+  real_mobile_touch: PASS
+  keyboard_and_focus: PASS
+  prompt_injection_visual_states: PASS
+  video_lifecycle_contexts_expected: 16
+  video_lifecycle_contexts_observed: 16
+  video_lifecycle_failures: 0
+  runtime_listener_lifetime_contexts_expected: 16
+  runtime_listener_lifetime_contexts_observed: 16
+  runtime_listener_lifetime_failures: 0
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: NO_PUBLISHED_SITE_BYTES_CHANGED
+
+media_security00_01:
+  state: FAIL_VOICE_MISSING
+  native_distinct_es_en_mp4_binaries: 4
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_chapters_or_curated_key_moments: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+gates:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+editorial:
+  published_site_bytes_changed_rev80: false
+  new_manual_pixel_review_rev80: false
+  new_manual_pedagogy_review_rev80: false
+  carry_forward_only_revision_scoped_security00_evidence: rev78
+  security01_inherits_security00_editorial_pass: false
+
+release:
+  production_pr_created: false
+  production_merge: false
+  deployed: false
+  force_push: false
+  datacenters_or_pre_datacenters_content_modified: false
+
+release_contract_281_310:
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate:
+    - KEEP_THE_24_DECLARED_LOCALE_PAGES_AND_174_NATIVE_H2_OBLIGATIONS_EXPLICIT_BUT_BLOCK_H2_TO_KEY_MOMENT_MAPPING_UNTIL_REAL_CURATED_KEY_MOMENTS_EXIST
+    - CONTINUE_FAIL_CLOSED_REPAIR_OF_THE_60_UNDECLARED_LOCALE_VIDEO_OBLIGATIONS_WITHOUT_ADVANCING_SECURITY00
+    - REUSE_ONLY_AUTHORIZED_EXISTING_ES_EN_NARRATION_IF_FOUND; NEVER_SYNTHESIZE_CLONE_OR_SUBSTITUTE_FRANCISCO_VOICE
+  article_golden_forbidden: true

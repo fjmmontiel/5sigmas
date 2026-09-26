@@ -135,103 +135,219 @@ series/modelos-razonadores/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: Reasoning Models
-  video_duration: PT45S
+  video_duration: PT1M15S
 
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg
   video_title: What It Means for an LLM to Reason
-  video_duration: PT58S
+  video_duration: PT1M22S
 
 series/modelos-razonadores/02-fallos.md:
   video: 02-fallos.mp4
   video_poster: 02-fallos.jpg
   video_title: How Reasoning Fails
-  video_duration: PT59S
+  video_duration: PT1M48S
 
 series/modelos-razonadores/03-test-time-compute.md:
   video: 03-test-time-compute.mp4
   video_poster: 03-test-time-compute.jpg
   video_title: Test-Time Compute
-  video_duration: PT1M0S
+  video_duration: PT2M9S
 
 series/modelos-razonadores/04-latencia-streaming.md:
   video: 04-latencia-streaming.mp4
   video_poster: 04-latencia-streaming.jpg
   video_title: Latency, Streaming and Product Design
-  video_duration: PT59S
+  video_duration: PT1M55S
 
 series/modelos-razonadores/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
   video_title: Reasoning Risks and Production Controls
-  video_duration: PT1M0S
+  video_duration: PT2M1S
 
 series/datacenters-espacio/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: Data Centers in Space
-  video_duration: PT53S
+  video_title: Data centers in space
+  video_summary: Include power, cooling, links, launch and end of life. One local advantage does not prove that the whole system is better.
+  video_duration: PT2M12S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Moving compute changes the constraints.
+    start: 0
+    end: 22
+  - name: Cold surroundings do not carry heat away.
+    start: 22
+    end: 44
+  - name: Solar energy depends on the orbit.
+    start: 44
+    end: 66
+  - name: Process before transmitting.
+    start: 66
+    end: 88
+  - name: A demonstration is not a service at scale.
+    start: 88
+    end: 110
+  - name: Compare the system. Not one advantage.
+    start: 110
+    end: 132
 
 series/datacenters-espacio/01-por-que-ahora.md:
   video: 01-por-que-ahora.mp4
   video_poster: 01-por-que-ahora.jpg
-  video_title: Why now
-  video_duration: PT53S
+  video_title: Why now?
+  video_summary: Change one assumption and calculate the budget again. Do not present the optimistic scenario as an achieved price.
+  video_duration: PT2M14S
+  video_captions: 01-por-que-ahora-visual-text.vtt
+  video_transcript: 01-por-que-ahora-transcript.html
+  video_chapters:
+  - name: More requests. The same infrastructure.
+    start: 0
+    end: 22
+  - name: Six conditions. All of them matter.
+    start: 22
+    end: 44
+  - name: A lower launch cost does not erase the rest.
+    start: 44
+    end: 68
+  - name: You also launch what supports the chip.
+    start: 68
+    end: 90
+  - name: Where the data originates matters.
+    start: 90
+    end: 112
+  - name: A projection is not an observed result.
+    start: 112
+    end: 134
 
 series/datacenters-espacio/02-energia-calor-conectividad.md:
   video: 02-energia-calor-conectividad.mp4
   video_poster: 02-energia-calor-conectividad.jpg
-  video_title: Energy, heat and connectivity
-  video_duration: PT53S
+  video_title: Power, heat and connectivity
+  video_summary: Error correction and redundancy help within their limits. An unrecoverable failure needs another plan; maintenance is not free.
+  video_duration: PT2M18S
+  video_captions: 02-energia-calor-conectividad-visual-text.vtt
+  video_transcript: 02-energia-calor-conectividad-transcript.html
+  video_chapters:
+  - name: Energy ends up in a thermal balance.
+    start: 0
+    end: 24
+  - name: More power requires more radiating area.
+    start: 24
+    end: 48
+  - name: Energy is the area under the power curve.
+    start: 48
+    end: 70
+  - name: A direct link exists only during contact.
+    start: 70
+    end: 92
+  - name: 'Rate times time: the link budget.'
+    start: 92
+    end: 116
+  - name: Detecting an error does not fix everything.
+    start: 116
+    end: 138
 
 series/datacenters-espacio/03-que-es-datacenter-espacio.md:
   video: 03-que-es-datacenter-espacio.mp4
   video_poster: 03-que-es-datacenter-espacio.jpg
-  video_title: What a data center in space actually is
-  video_duration: PT53S
+  video_title: What orbital computing means
+  video_summary: Include link coordination, failure handling and retirement at end of life. The proposal must explain who operates it, who is accountable and how it ends.
+  video_duration: PT2M12S
+  video_captions: 03-que-es-datacenter-espacio-visual-text.vtt
+  video_transcript: 03-que-es-datacenter-espacio-transcript.html
+  video_chapters:
+  - name: It is not one kind of infrastructure.
+    start: 0
+    end: 22
+  - name: Keep what the task actually needs.
+    start: 22
+    end: 44
+  - name: Separate evidence from extrapolation.
+    start: 44
+    end: 66
+  - name: Storing a copy does not guarantee recovery.
+    start: 66
+    end: 88
+  - name: Sending software does not replace hardware.
+    start: 88
+    end: 110
+  - name: The mission includes its end.
+    start: 110
+    end: 132
 
 series/datacenters-espacio/04-huella-real-datacenter.md:
   video: 04-huella-real-datacenter.mp4
   video_poster: 04-huella-real-datacenter.jpg
   video_title: The real footprint of a data center
-  video_duration: PT53S
+  video_summary: Reusing components can extend service without eliminating every impact. Compare alternatives for the same useful work over the complete lifecycle.
+  video_duration: PT2M16S
+  video_captions: 04-huella-real-datacenter-visual-text.vtt
+  video_transcript: 04-huella-real-datacenter-transcript.html
+  video_chapters:
+  - name: The same demand. Two different basins.
+    start: 0
+    end: 22
+  - name: Water withdrawal is not water consumption.
+    start: 22
+    end: 44
+  - name: A comparison needs the same denominator.
+    start: 44
+    end: 68
+  - name: Higher efficiency need not mean lower total consumption.
+    start: 68
+    end: 92
+  - name: Hardware also has a material supply chain.
+    start: 92
+    end: 114
+  - name: Changing location does not erase the footprint.
+    start: 114
+    end: 136
 
 series/seguridad-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: AI Security
-  video_duration: PT48S
+  video_summary: "How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action."
+  video_duration: PT1M30S
 
 series/seguridad-ia/01-prompt-injection.md:
   video: 01-prompt-injection.mp4
   video_poster: 01-prompt-injection.jpg
   video_title: Prompt Injection
-  video_duration: PT48S
+  video_summary: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
+  video_duration: PT1M30S
 
 series/seguridad-ia/02-jailbreaks.md:
   video: 02-jailbreaks.mp4
   video_poster: 02-jailbreaks.jpg
   video_title: Jailbreaks
-  video_duration: PT48S
+  video_summary: "How repeated and adaptive prompt attempts change the attack surface, and why authorization and attempt limits still matter after a refusal."
+  video_duration: PT1M30S
 
 series/seguridad-ia/03-envenenamiento.md:
   video: 03-envenenamiento.mp4
   video_poster: 03-envenenamiento.jpg
   video_title: Poisoning
-  video_duration: PT48S
+  video_summary: "How untrusted input can become persistent memory, re-enter a later decision, and survive naive deletion through derived state."
+  video_duration: PT1M30S
 
 series/seguridad-ia/04-red-teaming.md:
   video: 04-red-teaming.mp4
   video_poster: 04-red-teaming.jpg
   video_title: Red Teaming
-  video_duration: PT48S
+  video_summary: "How to test the full causal path from adversarial input to authorization, external effect, recovery, and a reproducible release regression."
+  video_duration: PT1M30S
 
 series/seguridad-ia/05-controles-produccion.md:
   video: 05-controles-produccion.mp4
   video_poster: 05-controles-produccion.jpg
   video_title: Production Controls
-  video_duration: PT48S
+  video_summary: "How least privilege, independent authorization, kill paths, observability, and evidence-bound release gates limit damage when the model fails."
+  video_duration: PT1M30S
 
 articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
   video: reactive-proactive-agent-header-demo.mp4
@@ -242,36 +358,750 @@ articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
 series/agentes-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI Agents
-  video_duration: PT32S
+  video_title: AI agents
+  video_summary: Conversation can continue while the tool is working. Only a verified result supports reporting that the task finished.
+  video_duration: PT2M12S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: An answer does not create an outcome.
+    start: 0
+    end: 22
+  - name: The result changes the next step.
+    start: 22
+    end: 44
+  - name: Autonomy within a defined scope.
+    start: 44
+    end: 66
+  - name: Evaluate the task, not just the text.
+    start: 66
+    end: 88
+  - name: Reading a document does not grant authority.
+    start: 88
+    end: 110
+  - name: Accepted does not mean completed.
+    start: 110
+    end: 132
 
 series/agentes-ia/01-que-es-un-agente.md:
   video: 01-que-es-un-agente.mp4
   video_poster: 01-que-es-un-agente.jpg
-  video_title: What an AI agent is—and is not
-  video_duration: PT32S
+  video_title: What an agent is
+  video_summary: The tool result identifies draft D4 and its state. Check that evidence and stop without taking extra actions.
+  video_duration: PT2M12S
+  video_captions: 01-que-es-un-agente-visual-text.vtt
+  video_transcript: 01-que-es-un-agente-transcript.html
+  video_chapters:
+  - name: A workflow can be enough.
+    start: 0
+    end: 22
+  - name: A proposal is not authorization.
+    start: 22
+    end: 44
+  - name: Choose actions from the observation.
+    start: 44
+    end: 66
+  - name: The model proposes. The runtime executes.
+    start: 66
+    end: 88
+  - name: Permissions name concrete operations.
+    start: 88
+    end: 110
+  - name: Define what proves the task is complete.
+    start: 110
+    end: 132
 
 series/agentes-ia/02-anatomia-de-un-agente.md:
   video: 02-anatomia-de-un-agente.mp4
   video_poster: 02-anatomia-de-un-agente.jpg
-  video_title: The anatomy of an agent
-  video_duration: PT32S
+  video_title: Tools, memory and state
+  video_summary: Keep its provenance and check evidence before using it. Memory needs rules for correction, expiration and deletion.
+  video_duration: PT2M14S
+  video_captions: 02-anatomia-de-un-agente-visual-text.vtt
+  video_transcript: 02-anatomia-de-un-agente-transcript.html
+  video_chapters:
+  - name: An ambiguous name is not a recipient.
+    start: 0
+    end: 22
+  - name: A partial result is not complete success.
+    start: 22
+    end: 44
+  - name: Context, memory and state are different.
+    start: 44
+    end: 68
+  - name: Reserve space before filling it.
+    start: 68
+    end: 90
+  - name: State governs the visible message.
+    start: 90
+    end: 112
+  - name: Memory needs provenance and freshness.
+    start: 112
+    end: 134
 
 series/agentes-ia/03-como-evaluar-un-agente.md:
   video: 03-como-evaluar-un-agente.mp4
   video_poster: 03-como-evaluar-un-agente.jpg
-  video_title: "Tutorial: how to evaluate an AI agent"
-  video_summary: "A practical tutorial for evaluating the agent's whole task: outcome, trajectory, permissions, cost, recovery, and abstention. A correct final answer is not enough."
-  video_duration: PT32S
+  video_title: How to evaluate an agent
+  video_summary: Separate task permissions from the verifier’s resources. Record out-of-scope attempts and inspect the trajectory.
+  video_duration: PT2M14S
+  video_captions: 03-como-evaluar-un-agente-visual-text.vtt
+  video_transcript: 03-como-evaluar-un-agente-transcript.html
+  video_chapters:
+  - name: The test starts with an initial state.
+    start: 0
+    end: 24
+  - name: The same result can require more steps.
+    start: 24
+    end: 46
+  - name: A policy violation invalidates success.
+    start: 46
+    end: 68
+  - name: The mean can hide the tail.
+    start: 68
+    end: 90
+  - name: Check the sum, not the wording.
+    start: 90
+    end: 112
+  - name: The agent must not rewrite its own test.
+    start: 112
+    end: 134
 
 series/agentes-ia/04-seguridad-agentes.md:
   video: 04-seguridad-agentes.mp4
   video_poster: 04-seguridad-agentes.jpg
-  video_title: Agent security
-  video_duration: PT32S
+  video_title: Security and authorization
+  video_summary: Tool restrictions must still constrain execution. Combine controls and auditing; this example does not guarantee immunity.
+  video_duration: PT2M12S
+  video_captions: 04-seguridad-agentes-visual-text.vtt
+  video_transcript: 04-seguridad-agentes-transcript.html
+  video_chapters:
+  - name: External data can carry instructions.
+    start: 0
+    end: 22
+  - name: Keep the boundary between data and rules.
+    start: 22
+    end: 44
+  - name: Limit both the action and the resource.
+    start: 44
+    end: 66
+  - name: Approve one action, not any continuation.
+    start: 66
+    end: 88
+  - name: Authorization can stop being valid.
+    start: 88
+    end: 110
+  - name: One defense is not enough.
+    start: 110
+    end: 132
 
 series/agentes-ia/05-de-la-demo-a-produccion.md:
   video: 05-de-la-demo-a-produccion.mp4
   video_poster: 05-de-la-demo-a-produccion.jpg
   video_title: From demo to production
-  video_duration: PT32S
+  video_summary: Reserve model decisions for the part that depends on the situation. Keep boundaries, verification and an operable fallback around that part.
+  video_duration: PT2M18S
+  video_captions: 05-de-la-demo-a-produccion-visual-text.vtt
+  video_transcript: 05-de-la-demo-a-produccion-transcript.html
+  video_chapters:
+  - name: The budget defines when to stop.
+    start: 0
+    end: 22
+  - name: Classify the failure before retrying.
+    start: 22
+    end: 46
+  - name: A retry must not duplicate the intent.
+    start: 46
+    end: 70
+  - name: Failure needs a state and an owner.
+    start: 70
+    end: 92
+  - name: A complete result. One completion message.
+    start: 92
+    end: 116
+  - name: Use an agent where the sequence needs one.
+    start: 116
+    end: 138
+
+series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md:
+  video: 01-arquitecturas-de-voz.mp4
+  video_poster: 01-arquitecturas-de-voz.jpg
+  video_title: Voice architectures
+  video_summary: Where text appears and why full-duplex is a separate axis.
+  video_duration: PT36S
+  video_chapters:
+  - name: Observable boundaries
+    start: 0
+    end: 12
+  - name: Modality
+    start: 12
+    end: 24
+  - name: Interaction
+    start: 24
+    end: 36
+
+series/agentes-voz-tiempo-real/02-turn-taking.md:
+  video: 02-turn-taking.mp4
+  video_poster: 02-turn-taking.jpg
+  video_title: Turn-taking and interruptions
+  video_summary: VAD detects activity; endpointing decides turns; barge-in does not roll back business state.
+  video_duration: PT36S
+  video_chapters:
+  - name: Signal vs decision
+    start: 0
+    end: 12
+  - name: Turn state
+    start: 12
+    end: 24
+  - name: Two cancellation domains
+    start: 24
+    end: 36
+
+series/agentes-voz-tiempo-real/03-presupuesto-latencia.md:
+  video: 03-presupuesto-latencia.mp4
+  video_poster: 03-presupuesto-latencia.jpg
+  video_title: Latency budget
+  video_summary: Measure the same-turn critical path and separate overlap from true blockers.
+  video_duration: PT36S
+  video_chapters:
+  - name: Critical path
+    start: 0
+    end: 12
+  - name: One clock
+    start: 12
+    end: 24
+  - name: Optimization
+    start: 24
+    end: 36
+
+series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md:
+  video: 04-tools-estado-acciones-asincronas.mp4
+  video_poster: 04-tools-estado-acciones-asincronas.jpg
+  video_title: Tools, state and asynchronous actions
+  video_summary: Conversation can move on before an action finishes; identity and state prevent stale results from being applied.
+  video_duration: PT36S
+  video_chapters:
+  - name: Different lifecycles
+    start: 0
+    end: 12
+  - name: Interruption
+    start: 12
+    end: 24
+  - name: Reconciliation
+    start: 24
+    end: 36
+
+series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md:
+  video: 05-webrtc-sip-telefonia-red.mp4
+  video_poster: 05-webrtc-sip-telefonia-red.jpg
+  video_title: WebRTC, SIP and network
+  video_summary: Transport determines where media, jitter, codecs and telephony boundaries live.
+  video_duration: PT36S
+  video_chapters:
+  - name: Topology
+    start: 0
+    end: 12
+  - name: Jitter
+    start: 12
+    end: 24
+  - name: Transcoding
+    start: 24
+    end: 36
+
+series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
+  video: 06-evaluacion-observabilidad-reliability.mp4
+  video_poster: 06-evaluacion-observabilidad-reliability.jpg
+  video_title: Evaluation, observability and reliability
+  video_summary: 'The useful unit is a traceable turn: correlated evidence, taxonomy, and a production→eval→repair loop.'
+  video_duration: PT36S
+  video_chapters:
+  - name: Turn trace
+    start: 0
+    end: 12
+  - name: Taxonomy
+    start: 12
+    end: 24
+  - name: Repair loop
+    start: 24
+    end: 36
+
+series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
+  video: 01-que-es-agent-harness.mp4
+  video_poster: 01-que-es-agent-harness.jpg
+  video_title: "What an agent harness adds to the model"
+  video_summary: "The harness turns model proposals into an operating trajectory with policy, tools, state, and real observations."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Proposal versus effect"
+      start: 0
+      end: 12
+    - name: "The feedback loop changes the next observation"
+      start: 12
+      end: 24
+    - name: "External control and stopping condition"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md:
+  video: 02-contexto-workspace-sandboxing-aislamiento.mp4
+  video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
+  video_title: "Workspace, worktrees, and sandboxing"
+  video_summary: "Isolation separates Git state, filesystem, processes, and resources; final integration revalidates the combined state."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One task, one observable state"
+      start: 0
+      end: 12
+    - name: "Isolate execution resources too"
+      start: 12
+      end: 24
+    - name: "Integrate against the current target"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md:
+  video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
+  video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
+  video_title: "Specs, plans, checkpoints, and stop conditions"
+  video_summary: "A contract fixes success; the plan can change with evidence; checkpoints and stop conditions make the trajectory recoverable."
+  video_duration: PT36S
+  video_chapters:
+    - name: "From request to observable contract"
+      start: 0
+      end: 12
+    - name: "Plan, evidence, checkpoint, and replan"
+      start: 12
+      end: 24
+    - name: "Done, recover, blocked, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md:
+  video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+  video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  video_title: "Tools, permissions, approvals, and trust boundaries"
+  video_summary: "Model intent creates effects only after independent validation, policy, approvals, sandbox, and external authority boundaries."
+  video_duration: PT36S
+  video_chapters:
+    - name: "A tool call is not authorization"
+      start: 0
+      end: 12
+    - name: "Untrusted input, bounded capability"
+      start: 12
+      end: 24
+    - name: "Project secrets without placing them in context"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md:
+  video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+  video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  video_title: "Tests, verifiers, and diff review"
+  video_summary: "Acceptance derives from combined, fresh evidence over the same candidate SHA; a change invalidates evidence that no longer applies."
+  video_duration: PT36S
+  video_chapters:
+    - name: "One green signal is not enough"
+      start: 0
+      end: 12
+    - name: "Freshness bound to the candidate SHA"
+      start: 12
+      end: 24
+    - name: "Verify, repair, accept, or escalate"
+      start: 24
+      end: 36
+
+series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md:
+  video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+  video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
+  video_title: "Long-running tasks, subagents, recovery, and observability"
+  video_summary: "Durable state, explicit ownership, and candidate-bound evidence allow restart, worker coordination, and integration over a moving target."
+  video_duration: PT36S
+  video_chapters:
+    - name: "Durable checkpoint and recovery"
+      start: 0
+      end: 12
+    - name: "Fan-out with ownership; fan-in with evidence"
+      start: 12
+      end: 24
+    - name: "Target moves: integrate and revalidate"
+      start: 24
+      end: 36
+
+series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
+  video: 01-context-engineering-vs-prompt-engineering.mp4
+  video_poster: 01-context-engineering-vs-prompt-engineering.jpg
+  video_title: "Context engineering versus prompt engineering"
+  video_summary: "Quality depends on which evidence, state, and tools enter each turn, not only on prompt wording."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Fixed prompt versus live context"
+    start: 0
+    end: 12
+  - name: "Per-turn selection and assembly"
+    start: 12
+    end: 24
+  - name: "Context changes after observation"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md:
+  video: 02-context-budgets-prioritisation-compaction-provenance.mp4
+  video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
+  video_title: "Budget, prioritization, compaction, and provenance"
+  video_summary: "A finite budget forces selection, compaction, or eviction while preserving provenance for what survives."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The window is a finite budget"
+    start: 0
+    end: 12
+  - name: "Compact without losing the source"
+    start: 12
+    end: 24
+  - name: "Priority changes with the task"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md:
+  video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+  video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+  video_title: "Memory architectures and persistent state"
+  video_summary: "Working memory, episodes, semantic knowledge, and persistent state have different write, retrieval, and expiry lifecycles."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Four memories, four lifecycles"
+    start: 0
+    end: 12
+  - name: "Writing requires a policy"
+    start: 12
+    end: 24
+  - name: "Retrieving does not mean trusting"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md:
+  video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+  video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+  video_title: "Retrieval, freshness, conflict, and grounding"
+  video_summary: "Retrieving candidates is not enough: relevance and freshness must be weighed, conflicts resolved, and traceable evidence assembled."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Relevance and freshness are different signals"
+    start: 0
+    end: 12
+  - name: "Resolve conflict before assembly"
+    start: 12
+    end: 24
+  - name: "Grounding keeps evidence and answer connected"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md:
+  video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+  video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+  video_title: "MCP: lifecycle, capabilities, and trust boundaries"
+  video_summary: "MCP separates host, clients, and servers; capability discovery does not remove authorization, validation, or trust boundaries."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Host, client, and server have different roles"
+    start: 0
+    end: 12
+  - name: "Discovering capabilities does not authorize them"
+    start: 12
+    end: 24
+  - name: "Remote data does not inherit authority"
+    start: 24
+    end: 36
+
+series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md:
+  video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+  video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+  video_title: "Skills, plugins, subagents, and context isolation"
+  video_summary: "Extensions and subagents scale only when each worker's context, authority, and evidence remain explicit and evaluable."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Extending does not mean sharing all context"
+    start: 0
+    end: 12
+  - name: "Fan-out with isolated contexts"
+    start: 12
+    end: 24
+  - name: "Fan-in only with evaluated evidence"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md:
+  video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+  video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
+  video_title: "Prefill, decode, and the latency budget"
+  video_summary: "Prefill processes context in parallel; decode generates tokens sequentially. TTFT, TPOT, and throughput measure different phases of the same service."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Prefill builds the state required for decoding"
+    start: 0
+    end: 12
+  - name: "Decode advances one token at a time"
+    start: 12
+    end: 24
+  - name: "TTFT, TPOT, and throughput form the budget"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md:
+  video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
+  video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
+  video_title: "KV cache, memory hierarchy, and continuous batching"
+  video_summary: "The KV cache trades memory for less repeated compute; paging and continuous batching coordinate capacity, admission, and reuse across active requests."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The KV cache consumes capacity per sequence"
+    start: 0
+    end: 12
+  - name: "Continuous batching rebuilds the batch each step"
+    start: 12
+    end: 24
+  - name: "Paging turns capacity into assignable pages"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md:
+  video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
+  video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
+  video_title: "Quantization, parallelism, and trade-offs"
+  video_summary: "Quantization reduces bytes per parameter; tensor and pipeline parallelism distribute compute and memory. Each choice moves memory, quality, communication, and latency."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Fewer bits reduce memory and bandwidth"
+    start: 0
+    end: 12
+  - name: "Parallelism distributes the model across devices"
+    start: 12
+    end: 24
+  - name: "Optimizing one metric moves others"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md:
+  video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
+  video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
+  video_title: "Speculative decoding and prefix caching"
+  video_summary: "Speculative decoding proposes several cheap tokens and the target model verifies them; prefix caching reuses prefill work when the prefix truly matches."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The draft proposes a block of tokens"
+    start: 0
+    end: 12
+  - name: "The verifier accepts a prefix and rejects the rest"
+    start: 12
+    end: 24
+  - name: "A prefix hit avoids repeated prefill"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md:
+  video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
+  video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
+  video_title: "Routing, fallback, caching, and workload-aware serving"
+  video_summary: "A router assigns each request by capacity, quality, cost, and latency; cache and fallback change the path without removing verification or policy bounds."
+  video_duration: PT36S
+  video_chapters:
+  - name: "Routing separates workloads before serving"
+    start: 0
+    end: 12
+  - name: "A cache hit avoids work when the key is valid"
+    start: 12
+    end: 24
+  - name: "Fallback recovers service under failure or saturation"
+    start: 24
+    end: 36
+
+series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md:
+  video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+  video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
+  video_title: "Benchmarking: cost, throughput, latency, and energy"
+  video_summary: "An inference benchmark is comparable only when workload, measurement boundary, and hardware are fixed, and latency distribution, useful throughput, cost, and energy are reported."
+  video_duration: PT36S
+  video_chapters:
+  - name: "The workload defines what is being measured"
+    start: 0
+    end: 12
+  - name: "A common boundary makes metrics comparable"
+    start: 12
+    end: 24
+  - name: "Acceptance requires SLO, cost, and constraints together"
+    start: 24
+    end: 36
+
+series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md:
+  video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
+  video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
+  video_title: What are we evaluating?
+  video_summary: A broader test checks the task, policies and real effects. Preserve
+    versions, cases and protocol to make comparisons reproducible.
+  video_duration: PT2M12S
+  video_captions: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
+  video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
+  video_chapters:
+  - name: The answer is not the outcome.
+    start: 0
+    end: 22
+  - name: Isolate the change. Evaluate the model.
+    start: 22
+    end: 44
+  - name: Missing evidence. Do not change everything.
+    start: 44
+    end: 66
+  - name: The workflow defines what can happen.
+    start: 66
+    end: 88
+  - name: The trajectory shows what happened.
+    start: 88
+    end: 110
+  - name: Diagnose narrowly. Confirm in the system.
+    start: 110
+    end: 132
+
+series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md:
+  video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
+  video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
+  video_title: Cases that test the system
+  video_summary: Changing a label or grader can change the score without improving
+    the model. Create a new version; do not silently rewrite the earlier result.
+  video_duration: PT2M14S
+  video_captions: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
+  video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
+  video_chapters:
+  - name: An eval is more than its questions.
+    start: 0
+    end: 22
+  - name: Seek coverage. Not just volume.
+    start: 22
+    end: 44
+  - name: Change one condition. The decision must change.
+    start: 44
+    end: 68
+  - name: Separate families. Not just rows.
+    start: 68
+    end: 90
+  - name: Development is not release measurement.
+    start: 90
+    end: 112
+  - name: The criterion changed. The evaluation changed.
+    start: 112
+    end: 134
+
+series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md:
+  video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
+  video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
+  video_title: How to evaluate the evaluator
+  video_summary: Freeze the judge version before testing it on a separate set. Accept,
+    restrict or reject its use according to risk and evidence.
+  video_duration: PT2M14S
+  video_captions: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
+  video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
+  video_chapters:
+  - name: Choose the verifier the task needs.
+    start: 0
+    end: 22
+  - name: A concrete rubric. The same evidence.
+    start: 22
+    end: 44
+  - name: Measure agreement. Do not call it truth.
+    start: 44
+    end: 68
+  - name: Reverse the order. Keep the content.
+    start: 68
+    end: 90
+  - name: A single judgment can be unstable.
+    start: 90
+    end: 112
+  - name: Calibrate on dev. Test separately.
+    start: 112
+    end: 134
+
+series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md:
+  video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
+  video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
+  video_title: The result and the path
+  video_summary: A hard violation blocks release even when other metrics improve.
+    Save the trajectory and the verdict reason so the result is reproducible.
+  video_duration: PT2M16S
+  video_captions: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
+  video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
+  video_chapters:
+  - name: Do not count calls. Follow the state.
+    start: 0
+    end: 22
+  - name: Success cannot cancel a permission violation.
+    start: 22
+    end: 44
+  - name: Timeout does not mean “nothing happened”.
+    start: 44
+    end: 68
+  - name: Reconcile first. Then decide.
+    start: 68
+    end: 92
+  - name: There can be several correct paths.
+    start: 92
+    end: 114
+  - name: The gate must explain why it stops.
+    start: 114
+    end: 136
+
+series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md:
+  video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
+  video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
+  video_title: Evidence before expanding
+  video_summary: A violation blocks; insufficient data keeps the rollout paused. Choose
+    stages for the change and its risk; not every release needs them all.
+  video_duration: PT2M14S
+  video_captions: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
+  video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
+  video_chapters:
+  - name: Three methods. Three different questions.
+    start: 0
+    end: 22
+  - name: Not serving the answer does not remove effects.
+    start: 22
+    end: 46
+  - name: Expose a little. Define when to stop.
+    start: 46
+    end: 68
+  - name: Randomize the unit that preserves context.
+    start: 68
+    end: 90
+  - name: Before the effect, validate measurement.
+    start: 90
+    end: 112
+  - name: Expansion requires sufficient evidence.
+    start: 112
+    end: 134
+
+series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md:
+  video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
+  video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+  video_title: From incident to repair
+  video_summary: After release, measure recurrence and exposure over the agreed observation
+    window. Close the loop with production evidence and an accountable owner.
+  video_duration: PT2M14S
+  video_captions: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
+  video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
+  video_chapters:
+  - name: An alert is not a diagnosis.
+    start: 0
+    end: 22
+  - name: The same answer. Two writes.
+    start: 22
+    end: 46
+  - name: One mechanism. Its neighboring cases too.
+    start: 46
+    end: 68
+  - name: Turn the incident into a reproducible test.
+    start: 68
+    end: 90
+  - name: Test the repair. Not just the symptom.
+    start: 90
+    end: 112
+  - name: Green tests are not production verification.
+    start: 112
+    end: 134
+

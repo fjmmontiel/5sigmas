@@ -21,7 +21,7 @@ In the earliest cases, a human trick was enough. A character, a story or a refor
 
 Generative models do not execute a security policy like a parser that always returns the same error. They generate tokens conditioned on context. Safety training changes the distribution of responses, but it does not add a formal barrier that makes every undesirable continuation impossible.
 
-That also explains why temperature zero does not solve the problem. If an adversarial input has already moved the model into an undesirable region of its distribution, deterministic decoding only makes the result more repeatable.
+Lowering temperature does not turn that policy into a formal boundary either. OWASP summarizes the Best-of-N evidence by noting that temperature reduction provides minimal protection even at temperature 0; it can change sampling variability, but it does not remove the adversarial surface ([OWASP Prompt Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)).
 
 {{ include_html("snippets/seguridad-ia/02-superficie-jailbreak.html") }}
 
@@ -31,7 +31,7 @@ To evaluate a system, we have to observe what happens when a persistent person c
 
 Work on universal and transferable attacks popularized an important idea. An adversarial suffix can be optimized to increase the probability that the model starts with an affirmative response and then transferred to other queries and models.
 
-The GCG method treats tokens as discrete variables and searches for substitutions that improve the objective. The attacker does not need to understand every detail of the model. They need an evaluation function, the ability to try variants and a path to observe the result ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
+GCG treats tokens as discrete variables, but its original optimization is white-box: it uses model gradients to prioritize token substitutions and then evaluates candidate replacements. The attacker does not need to hand-design every suffix, but they do need access to the model and its gradients during that optimization phase. Transfer of the resulting suffixes is what allows them to be tested against black-box models ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
 
 Transfer does not mean that there is one universal master key for every model. It means that a defense evaluated on a single formulation may be measuring an input surface that is too narrow. The attacker optimizes over a family of inputs, and the system should be evaluated across that same family.
 

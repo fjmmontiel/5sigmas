@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE Texto visual de un vídeo silencioso.
+
+1
+00:00:00.700 --> 00:00:07.400
+El entrenamiento y la inferencia requieren cómputo y capacidad física.
+
+2
+00:00:07.400 --> 00:00:14.100
+Si llegan trabajos más rápido de lo que se atienden, crece la cola.
+
+3
+00:00:14.100 --> 00:00:22.000
+Añadir chips no basta cuando el suministro eléctrico sigue limitado.
+
+4
+00:00:22.700 --> 00:00:29.400
+Red, agua, suelo, permisos, calor y latencia limitan proyectos de forma distinta.
+
+5
+00:00:29.400 --> 00:00:36.100
+Un edificio terminado no resuelve por sí mismo una conexión eléctrica pendiente.
+
+6
+00:00:36.100 --> 00:00:44.000
+Comprueba cada condición; no sumes recursos que tienen unidades diferentes.
+
+7
+00:00:44.700 --> 00:00:51.400
+El coste de lanzamiento depende de la masa y del precio por kilogramo.
+
+8
+00:00:51.400 --> 00:00:58.100
+Reduce ese precio en el ejemplo: sólo cambia una parte del presupuesto.
+
+9
+00:00:58.100 --> 00:01:08.000
+Paneles, radiadores, enlaces y operación siguen teniendo coste.
+
+10
+00:01:08.700 --> 00:01:15.400
+El procesador es sólo una parte de la masa que llega a órbita.
+
+11
+00:01:15.400 --> 00:01:22.100
+Añade generación, sistema térmico, estructura y comunicaciones.
+
+12
+00:01:22.100 --> 00:01:30.000
+Evalúa el kilogramo del sistema completo, no únicamente el del acelerador.
+
+13
+00:01:30.700 --> 00:01:37.400
+Si los datos nacen arriba, procesarlos allí puede reducir el downlink.
+
+14
+00:01:37.400 --> 00:01:44.100
+Si nacen en tierra, mover el trabajo añade una subida y una bajada.
+
+15
+00:01:44.100 --> 00:01:52.000
+Compara los dos recorridos para la misma necesidad del usuario.
+
+16
+00:01:52.700 --> 00:01:59.400
+Una previsión económica depende de supuestos sobre lanzamiento, masa y vida útil.
+
+17
+00:01:59.400 --> 00:02:06.100
+Cambia un supuesto y vuelve a calcular el presupuesto.
+
+18
+00:02:06.100 --> 00:02:14.000
+No presentes el escenario optimista como un precio ya conseguido.
+

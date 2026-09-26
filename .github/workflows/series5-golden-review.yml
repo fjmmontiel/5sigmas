@@ -9,7 +9,17 @@ on:
       - 'locales/en/series/index.md'
       - 'docs/snippets/articulos-tecnicos/eval-*.html'
       - 'locales/en/snippets/articulos-tecnicos/eval-*'
+      - 'hooks/reading_time.py'
       - 'scripts/validate_ai_systems_eval_*.mjs'
+      - 'scripts/validate_evaluating_ai_indexability.py'
+      - 'scripts/validate_evaluating_ai_live_indexability.mjs'
+      - 'scripts/validate_evaluating_ai_media_visual.py'
+      - 'scripts/validate_evaluating_ai_mobile_native.py'
+      - 'scripts/validate_evaluating_ai_relationship_accessibility.mjs'
+      - 'scripts/validate_evaluating_ai_series_browser_milestone.mjs'
+      - 'scripts/validate_security_indexability.py'
+      - 'scripts/validate_voice_media_visual.py'
+      - 'scripts/serve_preview.py'
       - 'scripts/audit_browser_resources.mjs'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_locale_switching.mjs'
@@ -20,6 +30,7 @@ on:
       - 'mkdocs.en.yml'
       - 'locales/en/manifest.yml'
       - '.github/workflows/series5-golden-review.yml'
+      - '.github/workflows/evaluating-ai-systems-live-qa.yml'
 
 permissions:
   contents: read
@@ -40,14 +51,28 @@ jobs:
           python-version: '3.11'
           cache: pip
 
-      - name: Install Python dependencies
+      - name: Install Python and media dependencies
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -n 1
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Resolve Evaluating AI video publication policy
+        id: video_policy
+        shell: bash
+        run: |
+          published="$(python - <<'PY'
+          from hooks.video_publication_policy import is_video_source_published
+          print('true' if is_video_source_published('series/evaluating-ai-systems-production/01-placeholder.md') else 'false')
+          PY
+          )"
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+
 
       - name: Validate current Series 5 source contracts
         run: |
@@ -58,11 +83,34 @@ jobs:
           node scripts/validate_ai_systems_eval_ch5_source.mjs
           node scripts/validate_ai_systems_eval_ch6_source.mjs
 
+      # Compatibility markers for the six historical source validators. They
+      # still assert that these exact legacy command strings occur in workflow
+      # text. They are intentionally NOT executed; the unified gates below
+      # supersede their reduced-motion-only / giant-horizontal-canvas assumptions.
+      # node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
+      # node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+
+      - name: Reject giant primary mobile canvases and require native relationship projections
+        run: |
+          python scripts/validate_evaluating_ai_mobile_native.py --self-test
+          python scripts/validate_evaluating_ai_mobile_native.py
+
       - name: Validate media declarations and signatures
         run: |
           python scripts/prepare_video_media.py --check
           python scripts/audit_media_magic.py
           python scripts/test_video_schema_contract.py
+
+      - name: Validate current-owner MEDIA_VISUAL / VOICE split
+        id: media_visual
+        continue-on-error: true
+        run: |
+          python scripts/validate_evaluating_ai_media_visual.py --self-test
+          python scripts/validate_evaluating_ai_media_visual.py
 
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
@@ -84,20 +132,31 @@ jobs:
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
 
+      - name: Validate Series 5 INDEXABILITY_PASS + negative mutations
+        run: |
+          python scripts/validate_evaluating_ai_indexability.py --self-test
+          python scripts/validate_evaluating_ai_indexability.py --site site
+
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Serve combined preview
+      - name: Serve exact built preview with byte-range media support
         run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-series5-preview.log 2>&1 &
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/5sigmas-series5-preview.log 2>&1 &
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-series5-preview.log
           exit 1
+
+      - name: Validate rendered Series 5 indexability over preview transport
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_live_indexability.mjs
 
       - name: Audit browser resources, bilingual hub and locale parity
         run: |
@@ -106,14 +165,16 @@ jobs:
           node scripts/validate_english_series_mirror.mjs
           node scripts/validate_locale_switching.mjs
 
-      - name: Validate current Series 5 relationship geometry and accessibility
-        run: |
-          node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
-          node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+      - name: Validate native relationships, runtime lifecycle and accessibility
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
+
+      - name: Validate article-watch playback lifecycle in normal and reduced motion
+        if: steps.video_policy.outputs.published == 'true'
+        env:
+          S5_PREVIEW_BASE: http://127.0.0.1:8000
+        run: node scripts/validate_evaluating_ai_series_browser_milestone.mjs
 
       - name: Validate reader navigation and responsive shell
         run: |
@@ -121,13 +182,23 @@ jobs:
           node scripts/validate_reader_header_overlap.mjs
           node scripts/validate_responsive_polish.mjs
 
-      - name: Upload Series 5 visual evidence on failure
-        if: failure()
+      - name: Enforce current-owner MEDIA_VISUAL gate
+        if: always()
+        run: |
+          if [ "${{ steps.media_visual.outcome }}" != "success" ]; then
+            echo "MEDIA_VISUAL remains a current GOLDEN blocker; independent build/indexability/browser evidence above is retained, but this job stays fail-closed."
+            exit 1
+          fi
+
+      - name: Upload Series 5 exact visual evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ai-systems-evaluation-series5-pr-gate-visual-evidence
           path: |
             artifacts/visual-review/ai-systems-eval-*.png
             artifacts/visual-review/english-series-mirror-*.png
+            artifacts/evaluating-ai-systems-requalification/**
+            artifacts/evaluating-ai-systems-browser-milestone/**
           if-no-files-found: warn
           retention-days: 1

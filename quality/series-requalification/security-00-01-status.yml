@@ -1,0 +1,299 @@
+schema_version: 54
+program: 5sigmas_GOLDEN_requalification
+owner_priority_date: 2026-09-13
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+updated_at_utc: 2026-09-17T14:03:44Z
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
+  state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+  article_golden: false
+  series_golden: false
+  next_article_blocked: 02-jailbreaks
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  public_series_discovered: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+  discovery_requires_presentation: false
+
+latest_verified_technical_diagnostic:
+  receipt: quality/series-requalification/security-00-01-revision94.yml
+  revision: 94
+  audited_head: 978e042b76cf82f9703ea81e9625b9000c64dc6f
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  action: 35225664150
+  action_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10499887253
+  artifact_size_bytes: 166922
+  artifact_retention_days: 1
+  artifact_digest: sha256:dc48fe02bb493b3f7dd00a0ce02d0a83b6c59220cc4ae926f828416947272102
+  negative_regression_fixtures: PASS
+  curriculum_video_mutation_fixtures: PASS
+  publication_discovery_tests: PASS
+  reviewed_source_guard: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  strict_es: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  strict_en: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  publication_discovery: PASS
+  publication_contract: PASS
+  native_media_probe_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  reviewed_media_metadata_and_claim_parity: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  complete_rendered_html_audit_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  shared_security_plus_reference_browser: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  focused_security_browser: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  contrast_and_text_visibility: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  lifecycle_keyboard_touch_normal_reduced: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  real_mobile_touch: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  prompt_visual_states_technical: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  keyboard_focus: PASS_REV94_HISTORICAL_AFTER_SITE_FACING_CHANGE
+  runtime_listener_lifetime: PASS_THROUGH_CONTEXT_TEARDOWN_REV94_HISTORICAL
+  global_336_browser_repeated: false
+  final_enforcement: FAIL_EXPECTED_REAL_DEBT
+
+latest_exact_head_capture:
+  capture_revision: 84
+  action: 35226187175
+  captured_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  action_conclusion: SUCCESS_TECHNICAL_CAPTURE_ONLY
+  artifact_id: 10499387634
+  artifact_size_bytes: 53854453
+  artifact_retention_days: 1
+  artifact_digest: sha256:a9adb27b1e71af7c40e2f1f748b291a95dda4440d57ea38a528d7d77be7efdd7
+  whole_article_and_per_asset_contexts: PASS_16_OF_16
+  semantic_trace_contexts: PASS_16_OF_16
+  prompt_visual_states_normal_reduced: PASS
+  video_lifecycle_poster_play_pause_seek_end_next: PASS_16_OF_16
+  security00_watch_summary_capture: PASS
+  technical_failures: 0
+  technical_capture_is_not_editorial_certification: true
+  stale_for_current_site_facing_bytes: true
+
+post_rev93_source_fix:
+  receipt: quality/series-requalification/security-00-influence-impact-boundary-fix.yml
+  finding: P2_SECURITY00_MODEL_INFLUENCE_VS_EXECUTION_IMPACT_CONFLATION
+  corrected_es: true
+  corrected_en: true
+  material_es_en_parity: true
+  primary_sources_revalidated: true
+  deterministic_guard: scripts/validate_security_source_claims.py
+  negative_mutations_added: true
+  guard_executed_on_rev94_site_bytes: true
+  guard_result: PASS_REV94_HISTORICAL
+  article_golden: false
+
+current_source_fix:
+  receipt: quality/series-requalification/security-00-prevention-impact-control-fix.yml
+  finding: P2_SECURITY00_PREVENTION_VS_IMPACT_CONTROL_CONFLATION
+  site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  deterministic_guard_commit: 820b977714f9c9691846e76624828038b4d75b3b
+  corrected_es: true
+  corrected_en: true
+  material_es_en_parity: true
+  primary_sources_revalidated: true
+  deterministic_negative_mutation_added: true
+  deterministic_positive_fixture_added: true
+  source_guard_exact_current_head: PENDING_NOT_EXECUTED
+  strict_es_exact_current_head: PENDING
+  strict_en_exact_current_head: PENDING
+  browser_exact_current_head: PENDING
+  pixel_review_exact_current_head: PENDING_STALE_AFTER_SITE_FACING_CHANGE
+  pedagogy_review_exact_current_head: PENDING_STALE_AFTER_SITE_FACING_CHANGE
+  article_golden: false
+
+curriculum_inventory:
+  canonical_workflow_gate: true
+  expected_locale_video_obligations: 84
+  audited_obligations: 84
+  missing_audited_pages: 0
+  page_states:
+    VIDEO_DECLARED_SOURCE_CONTRACT_INCOMPLETE: 24
+    VIDEO_REQUIRED_UNDECLARED: 60
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  h2_states:
+    BLOCKED_CURATED_KEY_MOMENTS_MISSING: 154
+    BLOCKED_VIDEO_UNDECLARED: 1044
+  fabricated_media_or_timings: false
+
+source_and_rendered_debt:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  raw_tex_last_full_catalogue_visible: 0
+
+last_full_browser_catalogue:
+  revision: 75
+  action: 35134585450
+  contexts_expected: 336
+  contexts_observed: 336
+  raw_tex_visible: 0
+  browser_context_timeout: 0
+  dom_subprobe_timeout: 0
+  browser_pass: false
+  reason: browser_visible_video_media_failures_remain
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+shared_gate_coverage:
+  video_accessibility_contract:
+    source: scripts/test_video_schema_contract.py
+    exact_locale_video_surfaces_on_repair_branch: 92
+    legacy_missing_captions_transcript_budget: 91
+    current_missing_captions_transcript_surfaces: 92
+    debt_budget_raised: false
+    canonical_requalification_diagnostic_executes_gate: true
+    final_enforcement_includes_gate_outcome: true
+    state: REAL_ACCESSIBILITY_DEBT_EXCEEDS_LEGACY_BUDGET
+  security_reviewed_source_parity:
+    canonical_entrypoint: scripts/validate_security_media_metadata_parity.py
+    delegated_claim_guard: scripts/validate_security_source_claims.py
+    canonical_requalification_diagnostic_executes_gate: true
+    final_enforcement_includes_gate_outcome: true
+    guards_conditional_indirect_injection_severity: true
+    guards_bounded_software_injection_claim: true
+    guards_security01_direct_indirect_impact_scope: true
+    guards_security00_model_influence_vs_execution_impact: true
+    guards_security00_prevention_vs_impact_control_split: true
+    latest_exact_head_execution: PENDING_AFTER_SITE_FACING_AND_GUARD_CHANGE
+
+current_global_gates:
+  SOURCE_PASS: false
+  BUILD_PASS: false
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+  note: current Security00 site-facing bytes and source guard changed after rev94; historical technical/editorial evidence is preserved but is not reused as exact-current-head certification
+
+editorial:
+  latest_site_facing_change_receipt: quality/series-requalification/security-00-prevention-impact-control-fix.yml
+  latest_site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  latest_manual_security00_capture_revision: 84
+  latest_manual_security00_capture_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  latest_manual_security00_review_scope: content_scoped_same_orchestrator
+  latest_manual_security00_review_independent: false
+  latest_manual_security00_review_current_for_site_bytes: false
+  security00_pixel_result: STALE_AFTER_SITE_FACING_SOURCE_CHANGE
+  security00_pedagogy_result: STALE_AFTER_SITE_FACING_SOURCE_CHANGE
+  security01_manual_pedagogy_pass_claimed: false
+  technical_gates_do_not_equal_editorial_pass: true
+  historical_inspected_locales:
+    - es
+    - en
+  historical_inspected_viewports:
+    - desktop_approx_1440
+    - mobile_390
+  historical_inspected_motion_modes:
+    - normal
+    - reduced
+  historical_inspected_lifecycle_states:
+    - poster
+    - play
+    - pause
+    - seek
+    - end_reset
+    - next
+  current_head_manual_pixel_inspection_completed: false
+  current_head_manual_pedagogy_inspection_completed: false
+  target_mechanism: untrusted_input_to_model_influence_to_authorization_boundary_to_action
+  bounded_path_outcome: BLOCKED
+  broad_permission_counterexample_outcome: EFFECT
+  new_source_boundary: distinguish_controls_that_reduce_model_influence_probability_from_controls_that_bound_reachable_consequences
+
+sources_and_locales:
+  revalidated_on: 2026-09-17
+  current_primary_sources:
+    - OWASP Injection Prevention Cheat Sheet
+    - MITRE CWE-74 Improper Neutralization of Special Elements in Output Used by a Downstream Component
+    - OWASP LLM Prompt Injection Prevention Cheat Sheet
+    - OWASP AI Agent Security Cheat Sheet
+    - OWASP RAG Security Cheat Sheet
+  security00_unconditional_indirect_injection_severity_ranking_removed: true
+  security00_conditioned_risk_claim_supported: true
+  security00_broad_software_attack_class_generalization_removed: true
+  security00_bounded_interpreter_injection_claim_supported: true
+  security00_privilege_separation_no_longer_presented_as_preventing_model_influence: true
+  security00_privilege_separation_presented_as_bounding_reachable_data_and_actions: true
+  security00_prevention_vs_impact_control_mechanisms_explicitly_separated: true
+  security00_es_en_material_claim_parity: true
+  security01_universal_indirect_over_direct_severity_ranking_removed: true
+
+release_and_concurrency:
+  main_last_checked: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  repair_branch: quality/post-datacenters-requalification
+  latest_site_facing_head: 5e13c6cd1c5201a45f4c1daa945b7dbf2b2882e9
+  latest_guard_head: 820b977714f9c9691846e76624828038b4d75b3b
+  branch_head_before_status_write: 0a191fd0011c60882620605b79d90ae6711930e5
+  branch_ahead_main_before_status_write: 458
+  branch_behind_main_last_checked: 0
+  merge_base_is_current_main: true
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  force_push: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  pr_310_state: MERGED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  main_es_blob_last_verified: 63591a3989937ea7c4dc84c39dd0666f52ad4efb
+  main_en_blob_last_verified: 3b6a0075c7e211caac3a46237d974797d26d8648
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  fresh_no_cache_live_verification_obtained_this_run: false
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  preserve_279: true
+  note: latest_issue_281_reconciliation_requires_fresh_uncached_live_es_en_verification_before_linkedin_lane_can_revalidate_again
+
+historical_receipts_preserved: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent:
+    - RUN_SOURCE_GUARD_SELF_TEST_AND_STRICT_ES_EN_ON_EXACT_CURRENT_HEAD_AT_NEXT_JUSTIFIED_MILESTONE
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REVIEW_FOR_NEXT_CONCRETE_DEFECT
+    - RECAPTURE_AND_MANUALLY_REVIEW_ES_EN_DESKTOP_MOBILE_NORMAL_REDUCED_AFTER_SITE_FACING_CLUSTER
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
+    - DO_NOT_FABRICATE_CHAPTER_TIMINGS_FROM_INSUFFICIENT_VIDEO_EVIDENCE
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

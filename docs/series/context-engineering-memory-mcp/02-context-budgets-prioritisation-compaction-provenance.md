@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - Arquitectura
   - LLMs
+video: 02-context-budgets-prioritisation-compaction-provenance.mp4
+video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
+video_title: "Presupuesto, prioridad, compactación y procedencia"
+video_summary: "Un presupuesto finito obliga a seleccionar, compactar o expulsar contexto conservando la procedencia de lo que sobrevive."
+video_duration: PT36S
+video_chapters:
+- name: "La ventana es un presupuesto finito"
+  start: 0
+  end: 12
+- name: "Compactar sin perder la fuente"
+  start: 12
+  end: 24
+- name: "Prioridad cambia con la tarea"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 2 — Context budgets, priorización, compaction y provenance

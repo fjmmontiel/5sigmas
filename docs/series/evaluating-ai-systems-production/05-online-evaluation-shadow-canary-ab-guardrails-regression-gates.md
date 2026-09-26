@@ -1,15 +1,45 @@
 ---
-title: "Evaluación online: shadow, canary, A/B, guardrails y regression gates"
-description: "Cómo evaluar cambios de sistemas de IA en producción sin confundir observación, exposición real y causalidad: shadow traffic, canaries, experimentos A/B, guardrails, rollback y gates de release."
+title: 'Evaluación online: shadow, canary, A/B, guardrails y regression gates'
+description: 'Cómo evaluar cambios de sistemas de IA en producción sin confundir observación,
+  exposición real y causalidad: shadow traffic, canaries, experimentos A/B, guardrails,
+  rollback y gates de release.'
 date: 2026-09-13
 date_modified: 2026-09-13
-keywords: "online evaluation, shadow traffic, canary, A/B testing, guardrails, regression gates, AI systems, progressive delivery"
+keywords: online evaluation, shadow traffic, canary, A/B testing, guardrails, regression
+  gates, AI systems, progressive delivery
 tags:
-  - IA
-  - Evaluación
-  - Producción
-  - Reliability
-  - Experimentos
+- IA
+- Evaluación
+- Producción
+- Reliability
+- Experimentos
+video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
+video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
+video_title: Evidencia antes de ampliar
+video_summary: 'Una violación bloquea; datos insuficientes mantienen la pausa. El
+  protocolo depende del cambio y su riesgo: no exige siempre todas las etapas.'
+video_duration: PT2M14S
+video_captions: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
+video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
+video_chapters:
+- name: Tres métodos. Tres preguntas distintas.
+  start: 0
+  end: 22
+- name: No servir la respuesta no elimina los efectos.
+  start: 22
+  end: 46
+- name: Expón poco. Define cuándo parar.
+  start: 46
+  end: 68
+- name: Randomiza la unidad que conserva el contexto.
+  start: 68
+  end: 90
+- name: Antes del efecto, valida la medición.
+  start: 90
+  end: 112
+- name: Ampliar requiere evidencia suficiente.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 5 — Evaluación online: shadow, canary, A/B, guardrails y regression gates

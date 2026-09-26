@@ -1,0 +1,13 @@
+{
+  "diagnostic_revision": 114,
+  "diagnostic_scope": "full",
+  "published_content_base": "e2f301e3fe346a4328cb773c46fa49ca34388a12",
+  "requested_head_parent": "da96634fa4814c1c63768b6ac9507d12eafa7a5a",
+  "reason": "Fresh zero-based seguridad-ia SERIES_GOLDEN verification after diagnosing the remaining run 35354853602 enforcement failure precisely. That run completed all source/build/rendered/INDEXABILITY/MEDIA_VISUAL/focused Security gates and all 336 global browser contexts, but the generic full-catalogue browser step returned failure because it treated Chromium net::ERR_ABORTED cancellations of the exact article MP4 during the audit's own verified pause/seek lifecycle as fatal REQUEST_FAILED events. The retained browser artifact proves 48/48 seguridad-ia contexts were present; their only generic-browser findings are those exact MP4 aborts, while the same contexts prove byte-range delivery, decoded duration/dimensions, playback start, seek and pause, and the dedicated Security browser/lifecycle/listener gates pass. A new fail-closed active-series browser reconciler accepts only that narrowly proven audit-owned media churn (exact route-local MP4, ERR_ABORTED, media request, allowed post-activation phase, successful range/metadata/play/seek/pause); wrong URL, lazy-traversal abort, ERR_FAILED, failed lifecycle, overflow/resource/runtime/timeout or any other finding remains blocking. The original 336-context browser-report.json and all future-series VIDEO_NOT_RENDERED/timeouts/request failures remain preserved as whole-program debt. No browser context, threshold, INDEXABILITY gate, visual-video obligation or listener lifetime check is removed; VOICE remains DEFERRED_OWNER_LOCAL under amendment 5716685049. This is one justified integration milestone; CI still does not substitute for prior real PIXEL/PEDAGOGY inspections on unchanged site-facing bytes.",
+  "contract_issue": 305,
+  "requalification_amendment_comment": 5655569434,
+  "owner_amendment_comment": 5716685049,
+  "owner_indexability_amendment_comment": 5727362172,
+  "owner_precedence_receipt_comment": 5719162654,
+  "causal_predecessor_run": 35354853602
+}

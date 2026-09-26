@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:07.400
+A retrieved invoice includes an instruction to change the recipient.
+
+2
+00:00:07.400 --> 00:00:14.100
+Reading it as data does not authorize that change.
+
+3
+00:00:14.100 --> 00:00:22.000
+In this example, a scope check blocks the proposed change.
+
+4
+00:00:22.700 --> 00:00:29.400
+Trusted rules and retrieved documents come from different sources.
+
+5
+00:00:29.400 --> 00:00:36.100
+Evidence can support an answer without becoming policy.
+
+6
+00:00:36.100 --> 00:00:44.000
+Represent data, instructions, actions and evidence separately.
+
+7
+00:00:44.700 --> 00:00:51.400
+The authorization permits reading orders for customer C7.
+
+8
+00:00:51.400 --> 00:00:58.100
+It does not permit changing C7’s account or reading C8’s data.
+
+9
+00:00:58.100 --> 00:01:06.000
+Least privilege limits what a mistaken decision can damage.
+
+10
+00:01:06.700 --> 00:01:13.400
+Confirmation shows the recipient and the draft to be sent.
+
+11
+00:01:13.400 --> 00:01:20.100
+If the recipient changes, the action no longer matches the approval.
+
+12
+00:01:20.100 --> 00:01:28.000
+Stop the send and request authorization for the new scope.
+
+13
+00:01:28.700 --> 00:01:35.400
+Permissions also have a time scope and can be revoked.
+
+14
+00:01:35.400 --> 00:01:42.100
+Check that they are still valid when the action is about to execute.
+
+15
+00:01:42.100 --> 00:01:50.000
+An earlier check does not grant indefinite authority.
+
+16
+00:01:50.700 --> 00:01:57.400
+The model can propose an improper action despite its instructions.
+
+17
+00:01:57.400 --> 00:02:04.100
+Tool restrictions must still constrain execution.
+
+18
+00:02:04.100 --> 00:02:12.000
+Combine controls and auditing; this example does not guarantee immunity.

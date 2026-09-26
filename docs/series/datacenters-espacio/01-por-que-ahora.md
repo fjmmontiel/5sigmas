@@ -7,8 +7,32 @@ tags:
   - IA
   - Infraestructura
   - Energía
-video: "01-por-que-ahora.mp4"
-video_duration: "PT1M0S"
+video: 01-por-que-ahora.mp4
+video_poster: 01-por-que-ahora.jpg
+video_title: Por qué ahora
+video_summary: Cambia un supuesto y vuelve a calcular el presupuesto. No presentes el escenario optimista como un precio ya conseguido.
+video_duration: PT2M14S
+video_captions: 01-por-que-ahora-visual-text.vtt
+video_transcript: 01-por-que-ahora-transcript.html
+video_chapters:
+- name: Más solicitudes. La misma infraestructura.
+  start: 0
+  end: 22
+- name: Seis condiciones. Todas importan.
+  start: 22
+  end: 44
+- name: Bajar el coste por kilo no elimina el resto.
+  start: 44
+  end: 68
+- name: También lanzas lo que sostiene al chip.
+  start: 68
+  end: 90
+- name: Importa dónde nace el dato.
+  start: 90
+  end: 112
+- name: Una proyección no es un resultado.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 1 — Por qué ahora

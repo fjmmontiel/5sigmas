@@ -10,6 +10,21 @@ tags:
   - Context engineering
   - Arquitectura
   - LLMs
+video: 01-context-engineering-vs-prompt-engineering.mp4
+video_poster: 01-context-engineering-vs-prompt-engineering.jpg
+video_title: "Context engineering frente a prompt engineering"
+video_summary: "La calidad depende de qué evidencia, estado y herramientas entran en cada turno, no sólo de cómo se redacta el prompt."
+video_duration: PT36S
+video_chapters:
+- name: "Prompt fijo frente a contexto vivo"
+  start: 0
+  end: 12
+- name: "Selección y ensamblado por turno"
+  start: 12
+  end: 24
+- name: "El contexto cambia después de observar"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 1 — Context engineering vs prompt engineering: qué entra al modelo, cuándo y por qué

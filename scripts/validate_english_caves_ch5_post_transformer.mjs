@@ -10,6 +10,38 @@ const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 
+const inspectVisualOverflow = async (visual) => visual.evaluate((root) => {
+  const rootRect = root.getBoundingClientRect();
+  const offenders = [...root.querySelectorAll('*')]
+    .map((node) => {
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        tag: node.tagName.toLowerCase(),
+        id: node.id || '',
+        className: typeof node.className === 'string' ? node.className.trim().replace(/\s+/g, '.') : '',
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        clientWidth: node.clientWidth,
+        scrollWidth: node.scrollWidth,
+        overflowX: style.overflowX,
+      };
+    })
+    .filter((item) =>
+      item.width > 0 &&
+      item.height > 0 &&
+      (
+        item.right > rootRect.right + 2 ||
+        item.left < rootRect.left - 2 ||
+        (item.scrollWidth > item.clientWidth + 2 && !['auto', 'scroll'].includes(item.overflowX))
+      )
+    )
+    .slice(0, 12);
+  return { clientWidth: root.clientWidth, scrollWidth: root.scrollWidth, offenders };
+});
+
 try {
   for (const viewport of [
     { name: 'desktop', width: 1440, height: 1000 },
@@ -63,10 +95,15 @@ try {
           failures.push(`${viewport.name}: post-Transformer panel ${key} did not activate`);
         }
       }
-    }
 
-    const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
-    if (scrollWidth > clientWidth + 2) failures.push(`${viewport.name}: horizontal overflow ${scrollWidth - clientWidth}px`);
+      // This validator owns this visual. Whole-page overflow is enforced separately by
+      // the full series/browser gates; zero-area hidden/SVG-definition descendants do
+      // not create visible overflow and are excluded without relaxing rendered bounds.
+      const overflow = await inspectVisualOverflow(visual);
+      if (overflow.scrollWidth > overflow.clientWidth + 2 || overflow.offenders.length) {
+        failures.push(`${viewport.name}: post-Transformer visual overflow; visual=${JSON.stringify(overflow)}`);
+      }
+    }
 
     if (viewport.name === 'desktop') {
       await page.screenshot({ path: path.join(outDir, 'english-history-05-canonical-post-transformer.png'), fullPage: true, animations: 'disabled' });
@@ -81,4 +118,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('English Chapter 5 post-Transformer visual QA passed: canonical structure, translations and interactions are preserved on desktop/mobile.');
+console.log('English Chapter 5 post-Transformer visual QA passed: canonical structure, translations, interactions and visual-local overflow are preserved on desktop/mobile.');

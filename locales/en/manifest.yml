@@ -171,6 +171,18 @@ required_snippets:
   - snippets/agentes-ia/03-evaluacion.html
   - snippets/agentes-ia/04-seguridad.html
 published_files:
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.mp4
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.jpg
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.mp4
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.jpg
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
   - assets/images/home/agents-system-boundary.svg
   - article_audio.yml
   - series/fundamentos-ia-iag/00_presentacion_serie.mp4
@@ -220,14 +232,24 @@ published_files:
   - series/from-cave-to-agi/05-mas-alla.jpg
   - series/datacenters-espacio/00_presentacion_serie.mp4
   - series/datacenters-espacio/00_presentacion_serie.jpg
+  - series/datacenters-espacio/00_presentacion_serie-transcript.html
+  - series/datacenters-espacio/00_presentacion_serie-visual-text.vtt
   - series/datacenters-espacio/01-por-que-ahora.mp4
   - series/datacenters-espacio/01-por-que-ahora.jpg
+  - series/datacenters-espacio/01-por-que-ahora-transcript.html
+  - series/datacenters-espacio/01-por-que-ahora-visual-text.vtt
   - series/datacenters-espacio/02-energia-calor-conectividad.mp4
   - series/datacenters-espacio/02-energia-calor-conectividad.jpg
+  - series/datacenters-espacio/02-energia-calor-conectividad-transcript.html
+  - series/datacenters-espacio/02-energia-calor-conectividad-visual-text.vtt
   - series/datacenters-espacio/03-que-es-datacenter-espacio.mp4
   - series/datacenters-espacio/03-que-es-datacenter-espacio.jpg
+  - series/datacenters-espacio/03-que-es-datacenter-espacio-transcript.html
+  - series/datacenters-espacio/03-que-es-datacenter-espacio-visual-text.vtt
   - series/datacenters-espacio/04-huella-real-datacenter.mp4
   - series/datacenters-espacio/04-huella-real-datacenter.jpg
+  - series/datacenters-espacio/04-huella-real-datacenter-transcript.html
+  - series/datacenters-espacio/04-huella-real-datacenter-visual-text.vtt
   - series/seguridad-ia/00_presentacion_serie.mp4
   - series/seguridad-ia/00_presentacion_serie.jpg
   - series/seguridad-ia/01-prompt-injection.mp4
@@ -246,24 +268,98 @@ published_files:
   - series/modelos-razonadores/01-que-es-razonar.jpg
   - series/modelos-razonadores/02-fallos.mp4
   - series/modelos-razonadores/02-fallos.jpg
+  - series/modelos-razonadores/03-test-time-compute.mp4
+  - series/modelos-razonadores/03-test-time-compute.jpg
   - series/modelos-razonadores/04-latencia-streaming.mp4
   - series/modelos-razonadores/04-latencia-streaming.jpg
   - series/modelos-razonadores/05-riesgos.mp4
   - series/modelos-razonadores/05-riesgos.jpg
   - series/agentes-ia/00_presentacion_serie.mp4
   - series/agentes-ia/00_presentacion_serie.jpg
+  - series/agentes-ia/00_presentacion_serie-transcript.html
+  - series/agentes-ia/00_presentacion_serie-visual-text.vtt
   - series/agentes-ia/01-que-es-un-agente.mp4
   - series/agentes-ia/01-que-es-un-agente.jpg
+  - series/agentes-ia/01-que-es-un-agente-transcript.html
+  - series/agentes-ia/01-que-es-un-agente-visual-text.vtt
   - series/agentes-ia/02-anatomia-de-un-agente.mp4
   - series/agentes-ia/02-anatomia-de-un-agente.jpg
+  - series/agentes-ia/02-anatomia-de-un-agente-transcript.html
+  - series/agentes-ia/02-anatomia-de-un-agente-visual-text.vtt
   - series/agentes-ia/03-como-evaluar-un-agente.mp4
   - series/agentes-ia/03-como-evaluar-un-agente.jpg
+  - series/agentes-ia/03-como-evaluar-un-agente-transcript.html
+  - series/agentes-ia/03-como-evaluar-un-agente-visual-text.vtt
   - series/agentes-ia/04-seguridad-agentes.mp4
   - series/agentes-ia/04-seguridad-agentes.jpg
+  - series/agentes-ia/04-seguridad-agentes-transcript.html
+  - series/agentes-ia/04-seguridad-agentes-visual-text.vtt
   - series/agentes-ia/05-de-la-demo-a-produccion.mp4
   - series/agentes-ia/05-de-la-demo-a-produccion.jpg
+  - series/agentes-ia/05-de-la-demo-a-produccion-transcript.html
+  - series/agentes-ia/05-de-la-demo-a-produccion-visual-text.vtt
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg
+  - series/agentes-voz-tiempo-real/02-turn-taking.mp4
+  - series/agentes-voz-tiempo-real/02-turn-taking.jpg
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.jpg
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.jpg
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.jpg
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.jpg
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.jpg
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.jpg
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
+  - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
+  - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete

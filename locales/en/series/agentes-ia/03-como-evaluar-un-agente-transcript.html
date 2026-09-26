@@ -1,0 +1,31 @@
+<p>Transcript of the visual text. This video has no narration.</p>
+<h3>00:00 — The test starts with an initial state.</h3>
+<p>The task asks for overdue invoices to be totalled and saved as a draft, not sent.</p>
+<p>In this example, 20 and 30 are overdue; the invoice for 10 is not.</p>
+<p>The expected result is 50, with a saved draft and no message sent.</p>
+<p><em>Illustrative example, not production measurements.</em></p>
+<h3>00:24 — The same result can require more steps.</h3>
+<p>Both runs produce the same correct draft.</p>
+<p>One uses three calls; the other repeats queries and consumes eight.</p>
+<p>Compare trajectories for the same task, not only their final text.</p>
+<p><em>Illustrative example, not production measurements.</em></p>
+<h3>00:46 — A policy violation invalidates success.</h3>
+<p>The total can be correct and the cost can remain within budget.</p>
+<p>But sending a forbidden draft violates the task contract.</p>
+<p>The evaluation must preserve that failure rather than average it into success.</p>
+<p><em>Illustrative example, not production measurements.</em></p>
+<h3>01:08 — The mean can hide the tail.</h3>
+<p>Eighteen tasks take one second; two others take nine.</p>
+<p>The mean is 1.8 seconds, but the 95th percentile is nine in this sample.</p>
+<p>Inspect slow cases and their tools, not only the average.</p>
+<p><em>Illustrative example, not production measurements.</em></p>
+<h3>01:30 — Check the sum, not the wording.</h3>
+<p>A clear response can still claim that 20 plus 30 equals 60.</p>
+<p>A deterministic verifier compares the number with the expected result: 50.</p>
+<p>Use the objective condition when one exists; writing style cannot replace it.</p>
+<p><em>Illustrative example, not production measurements.</em></p>
+<h3>01:52 — The agent must not rewrite its own test.</h3>
+<p>A test can appear to pass if the agent can change its expected result.</p>
+<p>Separate task permissions from the verifier’s resources.</p>
+<p>Record out-of-scope attempts and inspect the trajectory.</p>
+<p><em>Illustrative example, not production measurements.</em></p>

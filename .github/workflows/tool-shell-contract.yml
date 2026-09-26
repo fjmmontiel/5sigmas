@@ -1,0 +1,48 @@
+name: Tool SEO GEO shell contract
+
+on:
+  pull_request:
+    paths:
+      - 'docs/herramientas/**'
+      - 'locales/en/tools/**'
+      - 'docs/llms.txt'
+      - 'locales/en/llms.txt'
+      - 'tools/locale-en.yml'
+      - 'scripts/audit_tool_seo_geo_shell.py'
+      - 'scripts/tests/test_audit_tool_seo_geo_shell.py'
+      - '.github/workflows/tool-shell-contract.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: tool-seo-geo-shell-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tool-shell-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Test tool-shell auditor
+        run: python scripts/tests/test_audit_tool_seo_geo_shell.py
+
+      - name: Audit all published ES/EN tool shells
+        run: python scripts/audit_tool_seo_geo_shell.py --output seo-audit/tool-seo-geo-shell.json
+
+      - name: Upload failing machine-readable tool-shell inventory
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-seo-geo-shell
+          path: seo-audit/tool-seo-geo-shell.json
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true

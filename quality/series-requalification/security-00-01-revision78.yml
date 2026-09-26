@@ -1,0 +1,156 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+recorded_at: 2026-09-16
+
+scope:
+  series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+  article_golden: false
+  series_golden: false
+  next_article_blocked: 02-jailbreaks
+
+git_concurrency:
+  main_reconciled: 376af1b8002c3ebff33a4d637d88b38ec7533d9d
+  branch_reconciliation_merge: e04c850f0eb10c5e75910431b994ee93e300d3a5
+  reconciliation_method: TWO_PARENT_MERGE_NO_FORCE_PUSH
+  main_only_commits_before_reconcile: 24
+  overlapping_paths_with_requalification_changes: 0
+  concurrent_main_scope: bilingual_tool_SEO_GEO_shell_only
+  datacenters_or_pre_datacenters_content_modified: false
+  branch_behind_main_after_reconcile: 0
+
+rev78:
+  action: 35151129732
+  exact_head: 63b2741bf37dabe20edf97fdaf538e21e157317a
+  result: SUCCESS
+  strict_es: PASS
+  strict_en: PASS
+  shared_tooltip_negative_mutation: PASS
+  whole_article_and_per_asset_capture: PASS
+  semantic_trace_capture: PASS
+  prompt_injection_states: PASS
+  canonical_video_lifecycle_gate: PASS
+  canonical_video_lifecycle_contexts_expected: 16
+  canonical_video_lifecycle_contexts_observed: 16
+  canonical_video_lifecycle_failures: 0
+  canonical_video_lifecycle_runtime_fatal: 0
+  canonical_video_lifecycle_expected_media_cancellations: 8
+  lifecycle_state_capture: PASS
+  lifecycle_state_contexts_expected: 8
+  lifecycle_state_contexts_observed: 8
+  lifecycle_state_screenshots: 48
+  lifecycle_states_per_context:
+    - poster
+    - playing
+    - paused
+    - seeked
+    - ended_reset
+    - next_article
+  artifact_id: 10468524974
+  artifact_digest: sha256:f08b9958ebee4dfc4c7acb2bc5f50345b1e8b60669e1a0ab571f62dec052d5c0
+  artifact_retention_days: 1
+  site_facing_bytes_changed_by_rev78_capture: false
+
+manual_editorial_review:
+  reviewer_independence: SAME_ORCHESTRATOR_NOT_INDEPENDENT
+  lifecycle_pixel_contexts_manually_inspected: 8
+  lifecycle_state_images_manually_inspected: 48
+  locales:
+    - es
+    - en
+  desktop_1440: true
+  mobile_390: true
+  normal_motion: true
+  reduced_motion: true
+  result_content_scoped: PASS_CURRENT_HEAD_REV78_LIFECYCLE_SURFACE
+  new_visible_p0_p1_p2_found: 0
+  observations:
+    - Poster text and diagrams remain legible without clipping or overlap in ES and EN on desktop and mobile.
+    - Playing and paused states expose native browser controls without broken-resource surfaces or accidental markup.
+    - Seeked frames are coherent with the declared language-specific video and remain readable at mobile width.
+    - Ended state restores the poster cleanly and the next navigation lands on the localized Prompt Injection article.
+    - Normal and reduced motion preserve the same lifecycle semantics and resulting navigation.
+    - ES and EN retain distinct native video artwork/content; no ES media fallback is visible in EN.
+    - No giant horizontal canvas or global horizontal overflow is required for the reviewed mobile lifecycle surface.
+  limitations:
+    - This is a same-orchestrator review and is not represented as independent editorial review.
+    - The visual lifecycle capture intentionally mutes playback for deterministic browser capture and is not audio evidence.
+    - Missing authorized narration, captions, transcript and curated key moments remain hard failures.
+    - Security01 does not inherit this Security00 editorial result.
+  global_PIXEL_REVIEW: false
+  global_PEDAGOGY_REVIEW: false
+
+media:
+  state: FAIL_VOICE_MISSING
+  MEDIA_PASS: false
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_OR_CURATED_KEY_MOMENTS_MISSING: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+catalogue_authoritative_evidence:
+  full_run_revision: 75
+  action: 35134585450
+  target_series: 7
+  routes_per_locale: 42
+  locale_pages: 84
+  browser_contexts_expected: 336
+  browser_contexts_observed: 336
+  raw_tex_visible: 0
+  context_timeouts: 0
+  dom_subprobe_timeouts: 0
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  source_debt:
+    VIDEO_DECLARATION_MISSING: 60
+    VIDEO_CAPTIONS_MISSING: 24
+    VIDEO_TRANSCRIPT_MISSING: 24
+    VIDEO_CHAPTERS_MISSING: 24
+    VIDEO_SUMMARY_MISSING: 18
+    VIDEO_TITLE_MISSING: 9
+  browser_media_debt:
+    REQUEST_FAILED: 96
+    VIDEO_PLAYBACK_ERROR: 96
+    VIDEO_NOT_RENDERED: 240
+
+truth_and_locales:
+  primary_sources_rechecked_2026_09_16:
+    - OWASP LLM Prompt Injection Prevention Cheat Sheet
+    - OWASP AI Agent Security Cheat Sheet
+  material_security00_claim_change_required: false
+  security00_es_en_content_and_navigation_current_head: PASS_CONTENT_SCOPED
+
+release_contract_281_310:
+  issue_281_state: CHANGES_REQUIRED_BLOCKED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  main_es_blob: 63591a3989937ea7c4dc84c39dd0666f52ad4efb
+  main_en_blob: 3b6a0075c7e211caac3a46237d974797d26d8648
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  independent_work:
+    - CONTINUE_FAIL_CLOSED_EXPECTED_VIDEO_CURRICULUM_COVERAGE_REPAIR_FOR_THE_REMAINING_CATALOGUE_WITHOUT_ADVANCING_THE_ACTIVE_ARTICLE
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_INPUTS_ONLY_WHEN_NEW_EVIDENCE_OR_STORAGE_SURFACE_EXISTS; DO_NOT_SYNTHESIZE_OR_CLONE_VOICE
+  external_media_completion_required_for_security00:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

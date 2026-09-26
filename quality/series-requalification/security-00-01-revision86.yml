@@ -1,0 +1,166 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+release_contract_issue: fjmmontiel/5sigmas-tools-content#281
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+scope:
+  active_series: seguridad-ia
+  active_article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+  diagnostic_scope: focused_security_00_01
+
+revision86:
+  action: 35181006570
+  audited_head: 1ccc56e80a35f4607d8aae9200e5286b00b137b2
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10480457174
+  artifact_bytes: 167227
+  artifact_retention_days: 1
+  completed_at_utc: 2026-09-17T04:25:30Z
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
+
+canonical_gate_fix:
+  video_schema_contract_wired_into_diagnostic: true
+  script: scripts/test_video_schema_contract.py
+  final_enforcement_includes_video_schema_outcome: true
+  expected_video_locale_surfaces: 92
+  legacy_missing_captions_transcript_budget: 91
+  current_missing_captions_transcript_surfaces: 92
+  debt_budget_raised: false
+  video_schema_contract_outcome: FAIL
+  failure: "Captions/transcript debt increased: 92 surfaces exceed the legacy budget 91. New video surfaces must not silently expand accessibility debt."
+
+passed_technical_steps:
+  negative_regression_fixtures_38: PASS
+  curriculum_video_inventory_mutation_fixtures_7: PASS
+  publication_discovery_5: PASS
+  strict_es: PASS
+  publication_contract: PASS
+  strict_en: PASS
+  structured_metadata: PASS
+  article_watch_locale_contract: PASS
+  shared_security_plus_datacenters_pre_datacenters_browser: PASS
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  video_lifecycle_normal_reduced: PASS
+  real_mobile_touch: PASS
+  prompt_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_listener_lifetime: PASS
+
+catalogue:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  curriculum_video_obligations: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  curriculum_h2_obligations: 1198
+  declared_page_h2_obligations: 154
+  undeclared_page_h2_obligations: 1044
+  public_series_discovered: 13
+  presentation_first_series: 8
+  chapter_first_series: 5
+  public_chapters: 67
+  public_pages: 75
+
+source_rendered_debt:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+  RAW_TEX_RENDERED: 0
+
+security_media:
+  status: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+browser_regression:
+  shared_contexts_expected: 64
+  shared_contexts_observed: 64
+  classifier_mutations: 20
+  shared_failures: 0
+  listener_contexts_expected: 16
+  listener_contexts_observed: 16
+  listener_failures: 0
+  real_touch_round_trip: PASS
+  keyboard_focus: PASS
+  normal_and_reduced_motion: PASS
+
+technical_outcomes:
+  PUBLICATION_DISCOVERY_OUTCOME: success
+  SOURCE_OUTCOME: failure
+  VIDEO_CURRICULUM_INVENTORY_OUTCOME: failure
+  VIDEO_SCHEMA_CONTRACT_OUTCOME: failure
+  PUBLICATION_OUTCOME: success
+  MEDIA_PROBE_OUTCOME: failure
+  SECURITY_STRUCTURED_METADATA_OUTCOME: success
+  SECURITY_ARTICLE_WATCH_OUTCOME: success
+  RENDERED_OUTCOME: failure
+  SHARED_BROWSER_RESOURCES_OUTCOME: success
+  SECURITY_BROWSER_OUTCOME: success
+  SECURITY_CONTRAST_OUTCOME: success
+  SECURITY_VIDEO_LIFECYCLE_OUTCOME: success
+  SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME: success
+  SECURITY_PROMPT_STATES_OUTCOME: success
+  SECURITY_KEYBOARD_FOCUS_OUTCOME: success
+  SECURITY_LISTENER_LIFETIME_OUTCOME: success
+
+global_gates:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW: false
+  PEDAGOGY_REVIEW: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+editorial:
+  published_site_bytes_changed_in_revision86: false
+  new_manual_pixel_review: false
+  new_manual_pedagogy_review: false
+  preserved_security00_evidence: rev78_same_orchestrator_revision_scoped
+  security01_inherits_security00_review: false
+  technical_gates_do_not_equal_editorial_pass: true
+
+release_contract_281_310:
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent:
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_WITH_92_GT_91_AND_NO_THRESHOLD_WHITENING
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_REMEDIATION_INDEPENDENT_OF_MISSING_NARRATION
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

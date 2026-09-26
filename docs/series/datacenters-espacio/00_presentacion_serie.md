@@ -7,10 +7,34 @@ tags:
   - IA
   - Energía
   - Infraestructura
-video: "00_presentacion_serie.mp4"
-video_duration: "PT0M49S"
 hide:
   - toc
+video: 00_presentacion_serie.mp4
+video_poster: 00_presentacion_serie.jpg
+video_title: Datacenters en el espacio
+video_summary: Añade energía, refrigeración, enlaces, lanzamiento y fin de vida. Una ventaja local no demuestra que el conjunto sea mejor.
+video_duration: PT2M12S
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: Mover el cómputo cambia los límites.
+  start: 0
+  end: 22
+- name: El frío no se lleva el calor por sí solo.
+  start: 22
+  end: 44
+- name: La energía solar depende de la órbita.
+  start: 44
+  end: 66
+- name: Procesa antes de transmitir.
+  start: 66
+  end: 88
+- name: Una prueba no es un servicio a escala.
+  start: 88
+  end: 110
+- name: Compara el sistema. No una sola ventaja.
+  start: 110
+  end: 132
 ---
 # Datacenters en el espacio
 

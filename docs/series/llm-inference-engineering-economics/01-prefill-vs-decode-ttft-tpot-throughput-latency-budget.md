@@ -10,6 +10,21 @@ tags:
   - Inferencia
   - Serving
   - Rendimiento
+video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
+video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
+video_title: "Prefill, decode y presupuesto de latencia"
+video_summary: "Prefill procesa el contexto en paralelo; decode genera tokens secuencialmente. TTFT, TPOT y throughput miden fases distintas del mismo servicio."
+video_duration: PT36S
+video_chapters:
+- name: "Prefill construye el estado para decodificar"
+  start: 0
+  end: 12
+- name: "Decode avanza token a token"
+  start: 12
+  end: 24
+- name: "TTFT, TPOT y throughput forman el presupuesto"
+  start: 24
+  end: 36
 ---
 
 # Capítulo 1 — Prefill vs decode: TTFT, TPOT, throughput y presupuesto de latencia

@@ -16,6 +16,10 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from hooks.video_publication_policy import is_video_source_published
+
 DOCS = ROOT / "docs"
 SITE = ROOT / "site"
 MKDOCS = ROOT / "mkdocs.yml"
@@ -152,12 +156,66 @@ def require(condition: bool, message: str, failures: list[str]) -> None:
         failures.append(message)
 
 
+def validate_key_moment_schema(node: dict[str, Any], watch: str, label: str, failures: list[str]) -> None:
+    """Accept the two intentional key-moment contracts used by the renderer.
+
+    Uncurated videos expose an automatic SeekToAction. Videos with curated,
+    non-voice chapters expose explicit Clip nodes instead and deliberately omit
+    potentialAction so structured data does not advertise a second conflicting
+    key-moment mechanism. This mirrors hooks/video_sitemap.py and the regression
+    contract in test_video_schema_contract.py.
+    """
+    parts = node.get("hasPart")
+    if parts:
+        require(isinstance(parts, list) and len(parts) >= 1, f"{label}: VideoObject has invalid Clip collection", failures)
+        if not isinstance(parts, list):
+            return
+        previous_start = -1.0
+        for index, clip in enumerate(parts):
+            require(isinstance(clip, dict), f"{label}: Clip {index + 1} is not an object", failures)
+            if not isinstance(clip, dict):
+                continue
+            require(clip.get("@type") == "Clip", f"{label}: hasPart {index + 1} is not Clip", failures)
+            require(bool(clip.get("name")), f"{label}: Clip {index + 1} missing name", failures)
+            start = clip.get("startOffset")
+            end = clip.get("endOffset")
+            require(isinstance(start, (int, float)) and start >= 0, f"{label}: Clip {index + 1} invalid startOffset", failures)
+            require(isinstance(end, (int, float)) and isinstance(start, (int, float)) and end > start, f"{label}: Clip {index + 1} invalid endOffset", failures)
+            if isinstance(start, (int, float)):
+                require(start >= previous_start, f"{label}: Clip offsets are not monotonic", failures)
+                previous_start = float(start)
+                require(clip.get("url") == f"{watch}?t={int(start) if float(start).is_integer() else start}", f"{label}: Clip {index + 1} URL disagrees with startOffset", failures)
+        require("potentialAction" not in node, f"{label}: curated Clip key moments must not also expose SeekToAction", failures)
+        return
+
+    action = node.get("potentialAction")
+    require(bool(action), f"{label}: VideoObject missing key-moment contract", failures)
+    require(
+        isinstance(action, dict) and action.get("@type") == "SeekToAction",
+        f"{label}: VideoObject lacks SeekToAction or curated Clip key moments",
+        failures,
+    )
+    if isinstance(action, dict):
+        require(
+            action.get("target") == f"{watch}?t={{seek_to_second_number}}",
+            f"{label}: SeekToAction target is inconsistent with watch URL",
+            failures,
+        )
+        require(
+            action.get("startOffset-input") == "required name=seek_to_second_number",
+            f"{label}: SeekToAction startOffset-input is invalid",
+            failures,
+        )
+
+
 def main() -> int:
     failures: list[str] = []
     patterns = exclude_patterns()
     videos: list[tuple[Path, dict[str, Any]]] = []
 
     for md in sorted(DOCS.rglob("*.md")):
+        if not is_video_source_published(md.relative_to(DOCS).as_posix()):
+            continue
         if is_excluded(md, patterns):
             continue
         meta = read_frontmatter(md)
@@ -344,15 +402,9 @@ def main() -> int:
                 "uploadDate",
                 "duration",
                 "mainEntityOfPage",
-                "potentialAction",
             ):
                 require(bool(node.get(field)), f"{md}: VideoObject missing {field}", failures)
-            action = node.get("potentialAction")
-            require(
-                isinstance(action, dict) and action.get("@type") == "SeekToAction",
-                f"{md}: VideoObject lacks SeekToAction",
-                failures,
-            )
+            validate_key_moment_schema(node, target_watch_url, str(md), failures)
             content_url = str(node.get("contentUrl") or "")
             thumbnails = node.get("thumbnailUrl") or []
             thumbnail_url = thumbnails[0] if isinstance(thumbnails, list) and thumbnails else str(thumbnails)

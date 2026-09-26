@@ -2,7 +2,7 @@
 title: Poisoning — when a dangerous instruction stays in the system
 description: "What happens when a document or memory preserves a dangerous instruction and the system uses it again later."
 date: 2026-08-06
-date_modified: 2026-08-23
+date_modified: 2026-09-17
 keywords: RAG poisoning, agent memory, sleeper agents, memory poisoning, LLM backdoors, unlearning
 tags:
   - AI
@@ -41,7 +41,9 @@ The result should not be interpreted as a universal attack rate for any product.
 
 *From Untrusted Input to Trusted Memory* extends the problem by identifying four memory-write channels and nine structural vulnerabilities across model capabilities, system prompts and agent architecture. Its most useful design conclusion is that agents that write and retrieve memory more aggressively can also increase their attack surface ([Dash et al., 2026](https://arxiv.org/abs/2606.04329)).
 
-The latest evidence is *MemSecBench*, published as a preprint in July 2026. Its Write–Execute–Forget protocol follows the same malicious semantics from storage through consequence and then attempted repair. Across 24 configurations of agents, memories and models, the work reports malicious persistence in 84.2% of cases and end-to-end success of the Write–Execute chain in 50.3%. This is preliminary and harness-dependent evidence, but it sharpens the experimental question: not only whether the poison gets in, but whether it reaches an action and can be removed afterward ([Chen et al., 2026](https://arxiv.org/abs/2607.27080)).
+*MemSecBench*, published as a preprint in July 2026, proposes a Write–Execute–Forget protocol that follows the same malicious semantics from storage through consequence and then attempted repair. Across 24 configurations of agents, memories and models, the work reports malicious persistence in 84.2% of cases and end-to-end success of the Write–Execute chain in 50.3%. This is preliminary and harness-dependent evidence, but it sharpens the experimental question: not only whether the poison gets in, but whether it reaches an action and can be removed afterward ([Chen et al., 2026](https://arxiv.org/abs/2607.27080)).
+
+A later preprint, published in September 2026, evaluates a *Persistent Memory Poisoning Attack* (PMPA) on OpenClaw and Claude Code. In the evaluated setups it reports average `ISR/C-ASR` of 73.7%/55.5% on OpenClaw and 66.9%/81.7% on Claude Code. It also finds that a targeted prompt-level defense reduces malicious memory writes in many settings but offers limited protection once persistent memory has already been poisoned. These are results for those specific harnesses, not expected rates for arbitrary agents ([Huang et al., 2026](https://arxiv.org/abs/2609.13889)).
 
 OWASP already treats this risk explicitly in its 2026 Top 10 for agentic applications under **ASI06: Memory & Context Poisoning**: memory and context stop being mere product features and become assets that need provenance, isolation and write controls ([OWASP, 2026](https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/)).
 
@@ -114,6 +116,7 @@ Ultimately, poisoning is a state-management problem: **what the system stored, w
 - Pulipaka et al. (2026), [*Hidden in Memory: Sleeper Memory Poisoning in LLM Agents*](https://arxiv.org/abs/2605.15338).
 - Dash et al. (2026), [*From Untrusted Input to Trusted Memory: A Systematic Study of Memory Poisoning Attacks in LLM Agents*](https://arxiv.org/abs/2606.04329).
 - Chen et al. (2026), [*MemSecBench: Tracking Agent Memory Poisoning from Persistence to Consequence and Repair*](https://arxiv.org/abs/2607.27080) — preprint.
+- Huang et al. (2026), [*When Malicious Instructions Persist: Persistent Memory Poisoning Attack on Harness-Based Agents*](https://arxiv.org/abs/2609.13889) — preprint.
 - Hubinger et al. (2024), [*Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training*](https://arxiv.org/abs/2401.05566).
 - OWASP (2026), [*Memory Is a Feature. It Is Also an Attack Surface*](https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/).
 - OWASP, [*AI Agent Security Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).

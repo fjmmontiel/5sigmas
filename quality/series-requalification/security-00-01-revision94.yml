@@ -1,0 +1,193 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion_page: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+diagnostic_rev94:
+  action: 35225664150
+  audited_head: 978e042b76cf82f9703ea81e9625b9000c64dc6f
+  main_at_review: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10499887253
+  artifact_name: series-experience-diagnostic
+  artifact_size_bytes: 166922
+  artifact_digest: sha256:dc48fe02bb493b3f7dd00a0ce02d0a83b6c59220cc4ae926f828416947272102
+  artifact_retention_days: 1
+  negative_regression_fixtures: PASS
+  curriculum_video_mutation_fixtures: PASS
+  public_series_discovery_regression: PASS
+  reviewed_source_guard: PASS
+  curriculum_inventory_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  video_schema_accessibility_contract_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  strict_es: PASS
+  strict_en: PASS
+  publication_contract: PASS
+  native_media_probe_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  structured_metadata: PASS
+  article_watch_contract: PASS
+  reviewed_es_en_media_metadata_parity: PASS
+  rendered_html_audit_step: PASS_EXECUTED_FAIL_CLOSED_OUTCOME_RECORDED
+  shared_security_plus_datacenters_reference_browser: PASS
+  focused_security_browser: PASS
+  contrast_and_text_visibility: PASS
+  lifecycle_keyboard_touch_normal_reduced: PASS
+  real_mobile_touch: PASS
+  prompt_injection_visual_states_technical: PASS
+  keyboard_focus: PASS
+  runtime_resource_listeners: PASS_THROUGH_CONTEXT_TEARDOWN
+  global_336_browser_repeated: false
+  global_336_skip_reason: focused_exact_head_integration_no_need_to_repeat_full_catalogue
+  final_enforcement: FAIL_EXPECTED_REAL_DEBT
+
+rev94_exact_inventory:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  audited_video_obligations: 84
+  missing_audited_pages: 0
+  declared_but_incomplete_locale_pages: 24
+  required_but_undeclared_locale_pages: 60
+  curriculum_h2_obligations: 1198
+  blocked_curated_key_moments_missing: 154
+  blocked_video_undeclared: 1044
+  accessibility_surfaces_incomplete: 92
+  legacy_missing_captions_transcript_budget: 91
+  accessibility_budget_raised: false
+  raw_tex_last_full_catalogue_visible: 0
+
+capture_rev84:
+  action: 35226187175
+  captured_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  conclusion: SUCCESS_TECHNICAL_CAPTURE_ONLY
+  artifact_id: 10499387634
+  artifact_name: security-capture-direct-report
+  artifact_size_bytes: 53854453
+  artifact_digest: sha256:a9adb27b1e71af7c40e2f1f748b291a95dda4440d57ea38a528d7d77be7efdd7
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  whole_article_and_per_asset_contexts: PASS_16_OF_16
+  semantic_trace_contexts: PASS_16_OF_16
+  prompt_injection_state_gate_normal_reduced: PASS
+  poster_play_pause_seek_end_next: PASS_16_OF_16
+  security00_watch_summary_capture: PASS
+  failures: 0
+  workflow_does_not_certify_editorial_quality: true
+
+manual_editorial_review:
+  inspected_exact_capture_head: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  security00_only: true
+  security01_inherits: false
+  reviewer_independent: false
+  reviewer_scope: SAME_ORCHESTRATOR_CONTENT_SCOPED
+  locales:
+    - es
+    - en
+  desktop_approx_width: 1440
+  mobile_width: 390
+  motion_modes:
+    - normal
+    - reduced
+  inspected:
+    - whole_article_full_page
+    - watch_full_page
+    - causal_visual_initial_state
+    - bounded_authorization_final_state
+    - broad_permission_counterexample_final_state
+    - poster_play_pause_seek_end_next_all_locale_viewport_motion_contexts
+  pixel_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  pedagogy_result: PASS_CURRENT_HEAD_CONTENT_SCOPED_SAME_ORCHESTRATOR
+  observed_material_clipping_overlap_or_global_horizontal_overflow: false
+  observed_visible_raw_tex_html_or_macros: false
+  observed_broken_visual_assets: false
+  mobile_requires_giant_horizontal_canvas: false
+  reduced_motion_has_equivalent_teaching_state: true
+  mechanism_observed: untrusted_input_to_model_influence_to_authorization_boundary_to_action
+  bounded_path_outcome: BLOCKED
+  broad_permission_counterexample_outcome: EFFECT
+  note: technical_green_capture_was_not_treated_as_editorial_pass; these results come from manual inspection of retained pixels and remain same-orchestrator, non-independent evidence
+
+security_media:
+  state: FAIL_VOICE_MISSING
+  native_es_en_mp4_distinct: true
+  codec: H264_1920X1080_YUV420P
+  missing_audio_streams: 4
+  missing_captions: 4
+  missing_transcripts: 4
+  missing_curated_chapter_sets: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+source_and_rendered_debt:
+  VIDEO_DECLARATION_MISSING: 60
+  VIDEO_CAPTIONS_MISSING: 24
+  VIDEO_TRANSCRIPT_MISSING: 24
+  VIDEO_CHAPTERS_MISSING: 24
+  VIDEO_SECTION_MAP_MISSING: 24
+  VIDEO_SUMMARY_MISSING: 18
+  VIDEO_TITLE_MISSING: 9
+  VIDEO_NOT_RENDERED: 60
+
+current_gate_effect:
+  SOURCE_PASS: false
+  BUILD_PASS: true
+  RENDERED_PASS: false
+  BROWSER_PASS: false
+  MEDIA_PASS: false
+  PIXEL_REVIEW_GLOBAL: false
+  PEDAGOGY_REVIEW_GLOBAL: false
+  SECURITY00_PIXEL_REVIEW_CONTENT_SCOPED: true
+  SECURITY00_PEDAGOGY_REVIEW_CONTENT_SCOPED: true
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+  reason: active Security00 exact-head source/build/focused-browser and manual pixel/pedagogy evidence is current, but curriculum/media/accessibility/rendered debt remains fail-closed and no independent article-wide GOLDEN certification exists
+
+concurrency:
+  main_at_run: e2f301e3fe346a4328cb773c46fa49ca34388a12
+  branch_head_at_capture: 05f420fb936586f70cee5dfb57f6c58c8a8f6212
+  branch_ahead_main_at_capture: 450
+  branch_behind_main_at_capture: 0
+  merge_base_is_current_main: true
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr_created_by_requalification: false
+  production_merge: false
+  deployed: false
+  force_push: false
+
+release_contract_281_310:
+  state: CHANGES_REQUIRED_BLOCKED
+  pr_310_state: MERGED
+  pr_310_author_reviewed_head: a5efdfce72d11b2335452eaf45000f26ae524777
+  pr_310_merge_sha: 3ab69d10a4dff127364a010f8f08a06713600baf
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  fresh_no_cache_live_verification_obtained_this_run: false
+  linkedin_action_by_this_lane: false
+  queue_activation_publish: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  independent_work:
+    - CONTINUE_SECURITY00_SOURCE_PARITY_PEDAGOGY_AUDIT_FOR_NEXT_CONCRETE_DEFECT
+    - KEEP_VIDEO_SCHEMA_ACCESSIBILITY_FAILURE_VISIBLE_AT_92_GT_91_WITHOUT_THRESHOLD_WHITENING
+    - RETAIN_ALL_1198_LOCALE_NATIVE_H2_OBLIGATIONS_FAIL_CLOSED
+    - RECHECK_AUTHORIZED_EXISTING_NARRATION_ONLY_IF_NEW_VALID_INPUT_SURFACE_APPEARS
+    - DO_NOT_FABRICATE_CHAPTER_TIMINGS_FROM_INSUFFICIENT_VIDEO_EVIDENCE
+  external_media_completion_when_valid_inputs_exist:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPTS
+    - CURATED_CHAPTERS_AND_KEY_MOMENTS
+  do_not_advance_to: 02-jailbreaks
+  article_golden_forbidden: true

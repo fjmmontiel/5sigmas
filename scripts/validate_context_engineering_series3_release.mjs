@@ -25,6 +25,7 @@ const navEs = read('mkdocs.yml');
 const navEn = read('mkdocs.en.yml');
 const manifest = read('locales/en/manifest.yml');
 const prWorkflow = read('.github/workflows/pr-visual-review.yml');
+const goldenWorkflow = read('.github/workflows/pr-context-engineering-golden.yml');
 
 let previousEsNav = -1;
 let previousEnNav = -1;
@@ -53,8 +54,9 @@ for (let i = 0; i < chapters.length; i += 1) {
   assert(!forbidden.test(en), `placeholder marker in ${enPath}`);
   assert(es.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${esPath} does not include canonical visual ${visual}`);
   assert(en.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${enPath} does not include canonical visual ${visual}`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(es), `${esPath} unexpectedly references video media; inventory/review required`);
-  assert(!/(?:<video\b|\.mp4\b|youtube\.com|youtu\.be)/i.test(en), `${enPath} unexpectedly references video media; inventory/review required`);
+  // Do not forbid video here. Under #305 amendments 5716685049/5727362172,
+  // expected curriculum video is a blocking MEDIA_VISUAL obligation, while
+  // future owner-local narration remains explicitly deferred.
   assert((es.match(/^## /gm) || []).length >= 6, `${esPath} has suspiciously shallow pedagogical structure`);
   assert((en.match(/^## /gm) || []).length >= 6, `${enPath} has suspiciously shallow pedagogical structure`);
   assert((es.match(/\[\^[^\]]+\]/g) || []).length >= 4, `${esPath} has too few explicit source references for release review`);
@@ -85,6 +87,11 @@ for (let i = 0; i < chapters.length; i += 1) {
 }
 
 assert(chapters.length === 6, 'Series 3 chapter inventory must contain exactly six chapters');
+assert(goldenWorkflow.includes('validate_context_indexability.py --self-test'), 'Context INDEXABILITY negative fixture missing from GOLDEN workflow');
+assert(goldenWorkflow.includes('validate_context_indexability.py --site site'), 'Context rendered INDEXABILITY gate missing from GOLDEN workflow');
+assert(goldenWorkflow.includes('validate_context_media_visual.py --self-test'), 'Context MEDIA_VISUAL/VOICE split fixture missing from GOLDEN workflow');
+assert(goldenWorkflow.includes('validate_context_media_visual.py --output'), 'Context MEDIA_VISUAL gate missing from GOLDEN workflow');
+assert(goldenWorkflow.includes('locales/en/media.yml') || goldenWorkflow.includes("- 'locales/en/media.yml'"), 'English native media manifest missing from GOLDEN workflow paths');
 
 if (!process.exitCode) {
   fs.mkdirSync('artifacts/visual-review', { recursive: true });
@@ -92,5 +99,5 @@ if (!process.exitCode) {
     'artifacts/visual-review/context-engineering-series3-inventory.json',
     `${JSON.stringify({ generatedFrom: process.env.GITHUB_SHA || 'local', chapters: inventory }, null, 2)}\n`,
   );
-  console.log(`Series 3 deterministic release inventory PASS (${inventory.length} chapters, zero video dependencies).`);
+  console.log(`Series 3 deterministic release inventory PASS (${inventory.length} chapters; video obligations enforced by separate MEDIA_VISUAL gate).`);
 }

@@ -1,0 +1,52 @@
+schema_version: 2
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+reviewed_on: 2026-09-20
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+history:
+  initial_run: 35499330009
+  initial_head_sha: 81fcc2e37cff611a17017b53ac6ca1a38f63e685
+  initial_artifact_id: 10601915287
+  initial_result: P1_SHARED_12_OF_12_GIANT_CANVAS_ONLY
+current_exact_review:
+  run: 35510156711
+  head_sha: 9711ab0cf5c693824c9985f2f33cea2986dd1e97
+  conclusion: FAILURE_FAIL_CLOSED_AT_RELATIONSHIP_GEOMETRY
+  artifact_id: 10605125706
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  artifact_sha256: eac4c2dbe040301d493dbeb77decc8fef2a28b6d9d4d0c6bb97585b4dd85ae91
+  retention_days: 1
+inspection:
+  evidence_actually_present:
+    chapters: [1, 2, 3]
+    locales: [es, en]
+    modes: [normal, reduced]
+    viewports: [desktop, mobile]
+  chapters_not_captured_due_gate_abort: [4, 5, 6]
+  no_claim_for_uncaptured_pixels: true
+  finding:
+    severity: P1
+    code: INFERENCE_MOBILE_DIRECTED_GRAPH_LEGIBILITY_AND_EDGE_ROUTING
+    affected_route_locale_rows: 12
+    confirmed_directly_from_pixels: >-
+      Ch1 and Ch2 native mobile graphs remain cramped, with fragmented labels and edge labels close to
+      nodes. Ch3 is materially broken: labels split inside narrow boxes, nodes/edge labels collide and
+      the causal direction is hard to read. The same renderer is shared by all six chapters, so the
+      remediation applies across 12 route-locale rows, but Ch4-Ch6 are not claimed inspected because
+      this workflow aborted before producing them.
+    deterministic_ci: >-
+      The exact head passed inventory, sources, strict ES/EN builds, publication/search, INDEXABILITY
+      negative fixtures + rendered gate, MEDIA_VISUAL/VOICE split, native media and browser-resource/
+      locale parity before failing the relationship geometry/accessibility step.
+remediation:
+  status: FIX_V2_IMPLEMENTED_PENDING_EXACT_RENDER_REVIEW
+  site_head: 7978bfa1be5d5c42aacf54cc7e44575aa8e34006
+  file: docs/assets/javascripts/inference-mobile-native.js
+  mechanism: >-
+    Preserve directed node-edge topology while increasing vertical graph budgets, shortening only node
+    labels (not explanatory relation text), restoring normal word breaking, spacing rows/columns, and
+    trimming directed SVG edges to node boundaries so arrowheads remain visible rather than terminating
+    beneath target boxes. Typography is not reduced and the giant desktop canvas remains hidden on mobile.
+  certification: NOT_YET_PIXEL_OR_PEDAGOGY_PASS
+next_action: RENDER_FINAL_LEDGER_HEAD_AND_INSPECT_ALL_12_MOBILE_NATIVE_GRAPHS_BEFORE_CLEARING_P1

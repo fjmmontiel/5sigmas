@@ -1,0 +1,227 @@
+name: Coding Agents browser and visual GOLDEN milestone
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - quality/coding-agents-requalification
+    paths:
+      - '.github/workflows/coding-browser-visual-milestone.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coding-agents-browser-visual-milestone-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  browser-visual-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Pin validation to the exact triggering revision so later branch writes
+          # cannot silently change the bytes under a running GOLDEN milestone.
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Assert exact triggering revision is checked out
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          echo "PASS exact-head checkout: ${GITHUB_SHA}"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install build and media dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Assert exact ES and EN visual media are persisted before validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          stems=(
+            01-que-es-agent-harness
+            02-contexto-workspace-sandboxing-aislamiento
+            03-specs-planificacion-task-decomposition-checkpoints
+            04-tools-permisos-approvals-hooks-secretos-trust-boundaries
+            05-tests-verifiers-review-diffs-stop-conditions-evaluacion
+            06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad
+          )
+          for stem in "${stems[@]}"; do
+            for ext in mp4 jpg; do
+              es="docs/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              en="locales/en/series/coding-agents-agent-harnesses/${stem}.${ext}"
+              test -s "$es" && test -s "$en"
+              git ls-files --error-unmatch "$es" >/dev/null
+              git ls-files --error-unmatch "$en" >/dev/null
+            done
+          done
+          echo 'PASS: 24 persisted tracked media files (12 MP4 + 12 JPG), native ES/EN.'
+
+      - name: Validate exact bilingual source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+          node scripts/validate_coding_agent_harness_ch4_source.mjs
+          node scripts/validate_coding_agent_harness_ch5_source.mjs
+          node scripts/validate_coding_agent_harness_ch6_source.mjs
+
+      - name: Validate exact persisted MEDIA_VISUAL assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_coding_media_visual.py --self-test
+          python scripts/validate_coding_media_visual.py --output artifacts/coding-requalification/coding-media-visual.json
+
+      - name: Build exact Spanish preview strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --strict
+
+      - name: Validate publication and multilingual search contracts after render
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audit_publication_contract.py
+          python scripts/audit_multilingual_search_foundation.py
+
+      - name: Prepare, audit and build exact English preview strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Validate rendered INDEXABILITY plus negative mutations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_coding_indexability.py --self-test
+          python scripts/validate_coding_indexability.py --site site --output artifacts/coding-requalification/indexability/report.json
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated video URLs for preview QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          for root, replacements in [
+              (Path('site/videos'), [('https://5sigmas.com/', '/')]),
+              (Path('site/en/videos'), [('https://5sigmas.com/en/', '/en/'), ('https://5sigmas.com/', '/')]),
+          ]:
+              targets = [root / 'catalog.json', *root.rglob('*.html')]
+              for target in targets:
+                  if not target.is_file():
+                      continue
+                  text = target.read_text(encoding='utf-8')
+                  for source, dest in replacements:
+                      text = text.replace(source, dest)
+                  target.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Serve exact combined preview with byte-range support
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --port 8000 --directory site > /tmp/5sigmas-coding-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-coding-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-coding-preview.log
+          exit 1
+
+      - name: Regress browser resources with listeners active
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate Coding chapter interactions and accessibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch5_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
+          node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Validate all article/watch visual-media lifecycles and capture full-page evidence
+        env:
+          S5_CODING_BROWSER_CONCURRENCY: '2'
+        run: node scripts/validate_coding_series_browser_milestone.mjs
+
+      - name: Capture existing article visual evidence
+        run: node scripts/capture_coding_visual_evidence.mjs
+
+      - name: Capture video start, intermediate and final states
+        run: node scripts/capture_coding_video_states.mjs
+
+      - name: Inventory exact evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          roots = [Path('artifacts/coding-browser-milestone'), Path('artifacts/coding-visual-evidence'), Path('artifacts/coding-visual-review'), Path('artifacts/coding-requalification')]
+          files = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for p in sorted(root.rglob('*')):
+                  if p.is_file():
+                      data = p.read_bytes()
+                      files.append({'path': p.as_posix(), 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+          out = Path('artifacts/coding-browser-milestone/evidence-manifest.json')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps({'head': '${{ github.sha }}', 'files': files}, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'head': '${{ github.sha }}', 'files': len(files)}))
+          PY
+
+      - name: Upload short-lived exact Coding evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coding-agents-browser-visual-evidence
+          path: |
+            artifacts/coding-browser-milestone/**
+            artifacts/coding-visual-evidence/**
+            artifacts/coding-visual-review/**
+            artifacts/coding-requalification/**
+          if-no-files-found: warn
+          retention-days: 1

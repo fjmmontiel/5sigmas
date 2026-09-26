@@ -1,0 +1,105 @@
+schema_version: 1
+revision: 58
+recorded_at_utc: 2026-09-16T04:32:42Z
+state: REQUALIFICATION_QA
+series: seguridad-ia
+active_scope:
+  - 00_presentacion_serie
+  - 01-prompt-injection
+article_golden: false
+series_golden: false
+
+action:
+  run_id: 35054518006
+  job_id: 104661760793
+  head_sha: c27c499bd57f5f0ef91937122ebbb657605bd2e8
+  conclusion: failure
+  artifact:
+    id: 10429934581
+    files: 12
+    compressed_bytes: 127526
+    retention_days: 1
+
+focused_checks:
+  strict_es: PASS
+  strict_en: PASS
+  publication_discovery: PASS_5_OF_5_FIXTURES
+  publication_contract: PASS_13_PUBLIC_SERIES_67_CHAPTERS_75_PAGES
+  provenance_locale: PASS
+  article_watch_touch: PASS
+  security_browser: PASS
+  contrast_states: PASS_128_STATE_CONTEXT_RECORDS
+  text_visibility: PASS_8_CONTEXTS_X_4_STATES
+  video_lifecycle: PASS
+  touch_real_mobile: PASS_ES_EN_NORMAL_REDUCED
+  prompt_states: PASS_TECHNICAL_ONLY
+  keyboard_focus: PASS_REAL_TAB_VISIBLE_FOCUS_ENTER
+  listener_lifetime: PASS_16_OF_16_POST_CONTEXT_CLOSE
+  negative_mutation_fixtures: PASS_26_OF_26
+  global_browser_sweep: INTENTIONALLY_SKIPPED
+
+shared_browser_resources:
+  verdict: FAIL
+  contexts_expected: 64
+  contexts_observed: 64
+  elapsed_ms: 104699
+  concurrency: 4
+  failure_count: 128
+  failures_per_context: 2
+  signature:
+    - VIDEO_METADATA_UNHEALTHY_READY_STATE_0_NETWORK_STATE_NO_SOURCE
+    - FATAL_MEDIA_ABORT_WITHOUT_HEALTHY_MATCHING_VIDEO
+  preview_range_206: true
+  matrix: SECURITY_PLUS_DATACENTERS_PRE_DATACENTERS_DESKTOP_MOBILE_NORMAL_REDUCED
+  interpretation: >-
+    Bounded concurrency closed the revision-57 timeout and produced a complete verdict. The identical H.264 metadata failure pattern on
+    both Security and Datacenters/pre-Datacenters, while the dedicated lifecycle gate passes the same Security media using the system
+    Chrome channel and the preview server returns byte-range 206, strongly indicates a browser-runtime/codec mismatch in the shared gate
+    rather than 64 independent published-media regressions. This remains a diagnosis pending exact-QA of the repaired gate.
+
+diagnosis:
+  confidence: strong_pending_exact_qa
+  bundled_playwright_chromium_used_by_revision58: true
+  production_capable_chrome_used_by_passing_lifecycle_gate: true
+
+repair:
+  commit: 51dbb86a7ab238decdc8be7e49eb8d985fe6ef31
+  file: scripts/audit_browser_resources.mjs
+  state: IMPLEMENTED_PENDING_EXACT_QA
+  changes:
+    - PREFER_SYSTEM_CHROME_CHANNEL_FOR_H264_MEDIA_AUDIT
+    - FALL_BACK_TO_BUNDLED_PLAYWRIGHT_CHROMIUM_FAIL_CLOSED
+    - RECORD_REQUESTED_ACTUAL_BROWSER_CHANNEL_VERSION_AND_FALLBACK_REASON
+    - PRESERVE_FULL_64_CONTEXT_MATRIX
+    - PRESERVE_STRICT_METADATA_HEALTH_REQUIREMENT
+    - PRESERVE_STABLE_REQUEST_IDENTITY_AND_HTTP_200_206_CORRELATION
+    - PRESERVE_LISTENERS_THROUGH_CONTEXT_CLOSE
+    - PRESERVE_POST_TEARDOWN_VERDICT
+    - PRESERVE_11_SHARED_CLASSIFIER_MUTATIONS
+  report_schema_version: 4
+  site_facing_bytes_changed: false
+  thresholds_relaxed: false
+  coverage_reduced: false
+  local_syntax_check: NOT_EXECUTED_IN_THIS_RUNTIME
+  action_triggered_after_repair: false
+
+gates:
+  source_pass: false
+  rendered_pass: false
+  browser_pass: false
+  media_pass: false
+  pixel_review: REVISION43_SAME_AGENT_HISTORICAL_ONLY
+  pedagogy_review: REVISION43_SAME_AGENT_HISTORICAL_ONLY
+
+media:
+  state: VOICE_MISSING
+  blocker_count: 16
+  audio_stream_missing: 4
+  captions_missing: 4
+  transcripts_missing: 4
+  curated_key_moment_maps_missing: 4
+  generated_cloned_or_substituted_francisco_voice: false
+
+next_gap: >-
+  Run one exact QA of the repaired shared browser-resource gate over the same 64-context Security + Datacenters/pre-Datacenters matrix,
+  verify the recorded browser runtime and retain fail-closed behavior; only then evaluate BROWSER_PASS. Do not advance to 02-jailbreaks.

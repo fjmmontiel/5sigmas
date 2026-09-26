@@ -1,0 +1,42 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+status: CHANGES_REQUIRED_PENDING_EXACT_QA
+
+defect:
+  id: FULL_CATALOG_ERR_ABORTED_BLANKET_IGNORE
+  severity: P1_GATE
+  affected_gate: scripts/audit_series_experience_browser.mjs
+  finding: The complete catalogue browser sweep ignored every ERR_ABORTED request failure, so it could not prove that lazy media/interactions remained resource-clean.
+
+repair:
+  commit: 00a471eaeb2110795453854a77d25b92ea2391d1
+  policy: FAIL_CLOSED_FOR_ALL_PRE_TEARDOWN_REQUEST_FAILURES
+  only_expected_abort_without_additional_sequence_proof: CONTEXT_TEARDOWN_ERR_ABORTED
+  listener_lifetime:
+    - navigation
+    - lazy-load
+    - interaction-playback
+    - pixel-capture
+    - settle
+    - context-close
+  mutation_fixtures: 4
+  threshold_relaxed: false
+  pixel_or_pedagogy_auto_pass_added: false
+
+preceding_full_audit:
+  run_id: 35089095977
+  exact_head: e6f908ecf662b6dde03f305a5764c7f5dafc70bc
+  scope: 84 locale pages x desktop/mobile x normal/reduced
+  admissibility: TELEMETRY_ONLY_FOR_FULL_BROWSER_RESOURCE_ABORT_VERDICT
+  reason: Exact head predates this repair; its full-catalogue browser result cannot grant BROWSER_PASS even if green.
+
+exact_qa:
+  state: PENDING_AFTER_PRECEDING_MILESTONE_COMPLETES
+  required_scope: 84 locale pages x desktop/mobile x normal/reduced
+  BROWSER_PASS: false
+  ARTICLE_GOLDEN: false
+  SERIES_GOLDEN: false
+
+next_gap: Exact-QA this hardened auditor on the full catalogue, then reconcile fresh source/rendered/browser/media findings while remaining on seguridad-ia/00_presentacion_serie.

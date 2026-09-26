@@ -1,0 +1,88 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+requalification_amendment_comment: 5655569434
+status: CHANGES_REQUIRED_PUBLISHED_UNCERTIFIED
+series: seguridad-ia
+active_article: 00_presentacion_serie
+article_golden: false
+series_golden: false
+
+revision:
+  label: 69
+  exact_action_head: f168355d24301803759b1ee1b1b7e7979ccbe1fb
+  classifier_fix_commit: 4ea59f6e271107f9a74e4a5435347f80c38893f5
+  main_base: 7d9daf6e31361c91d00fb74c0e447ccf2743f580
+  action_run: 35100877425
+  action_job: 104809696634
+  scope: focused_security_00_01
+  full_336_context_sweep_executed: false
+
+shared_reference_regression_gate:
+  state: PASS_TECHNICAL_REV69
+  step_conclusion: SUCCESS
+  matrix: Security00_01_plus_Datacenters_and_pre_Datacenters_presentations
+  contexts_expected: 64
+  profiles_per_route: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  code_contract:
+    absent_request_event: FAIL_CLOSED
+    request_event_without_playwright_timing: NODE_EVENT_CLOCK_FALLBACK_ONLY
+    healthy_final_video_required: true
+    healthy_metadata_before_redundant_start_required: true
+    earlier_successful_different_request_required: true
+    same_url_required: true
+    response_statuses_allowed: [200, 206]
+  classifier_mutation_changes:
+    positive_request_event_clock_fallback: true
+    negative_no_usable_clock: true
+  thresholds_lowered: false
+  reference_content_modified: false
+
+full_catalogue_state_from_rev68:
+  BROWSER_PASS: false
+  contexts_observed: 336
+  REQUEST_FAILED: 96
+  VIDEO_PLAYBACK_ERROR: 96
+  VIDEO_NOT_RENDERED: 238
+  RAW_TEX_VISIBLE: 111
+  BROWSER_CONTEXT_TIMEOUT: 2
+  timeouts:
+    - /series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/ [mobile-reduced]
+    - /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/ [desktop-reduced]
+
+source_rendered_media_state:
+  BUILD_PASS: true
+  SOURCE_PASS: false
+  RENDERED_PASS: false
+  MEDIA_PASS: false
+  RAW_TEX_RENDERED_locale_pages: 28
+  VIDEO_DECLARATION_MISSING: 60
+  security_media_state: VOICE_MISSING
+
+editorial_state:
+  new_pixel_review_rev69: false
+  new_pedagogy_review_rev69: false
+  retained_security00_revision: 66
+  retained_PIXEL_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+  retained_PEDAGOGY_REVIEW: PASS_SAME_AGENT_REV66_ONLY
+  security01_inherits: false
+
+release_contract_281_310:
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action: false
+  preserve_279: true
+
+next_gap:
+  stay_on: seguridad-ia/00_presentacion_serie
+  immediate_independent:
+    - RECONCILE_AND_DIAGNOSE_THE_TWO_FULL_CATALOG_BROWSER_CONTEXT_TIMEOUTS_WITHOUT_RAISING_THRESHOLDS_BLINDLY
+    - REPAIR_RAW_TEX_RENDERING_ACROSS_ALL_14_AFFECTED_ARTICLE_ROUTES_WITH_REFERENCE_REGRESSION_PROOF
+    - CONTINUE_SOURCE_MEDIA_COVERAGE_REPAIR_INDEPENDENT_OF_MISSING_VOICE
+  external_media_blocker:
+    - AUTHORIZED_NATIVE_ES_EN_NARRATION
+    - CAPTIONS
+    - TRANSCRIPT
+    - CURATED_KEY_MOMENTS
+    - ARTICLE_WATCH_POSTER_PLAY_PAUSE_SEEK_END_NEXT
+  do_not_advance_to: 02-jailbreaks

@@ -32,12 +32,21 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  if (catalog.count < 40) throw new Error(`Unexpectedly small video catalog: ${catalog.count}.`);
+  const expectedCatalogCount = 52; // Previous46 plus six explicitly approved Agents A2 videos.
+  if (catalog.count !== expectedCatalogCount) {
+    throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
+  }
 
+  await root.locator('img').evaluateAll((nodes) => nodes.forEach((node) => {
+    const source = new URL(node.currentSrc || node.src);
+    node.removeAttribute('srcset');
+    node.src = new URL(source.pathname, location.origin).href;
+  }));
   const sources = await root.locator('img').evaluateAll((nodes) => nodes.map((node) => node.currentSrc || node.src));
   for (const src of sources) {
-    const response = await page.request.get(src);
-    if (!response.ok()) throw new Error(`Poster unavailable: ${response.status()} ${src}`);
+    const localSrc = new URL(new URL(src).pathname, baseUrl).href;
+    const response = await page.request.get(localSrc);
+    if (!response.ok()) throw new Error(`Poster unavailable in preview: ${response.status()} ${localSrc}`);
   }
   const firstPoster = root.locator('img:visible').first();
   await firstPoster.evaluate((node) => node.decode?.());

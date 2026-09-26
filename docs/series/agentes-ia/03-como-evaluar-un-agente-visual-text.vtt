@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:08.100
+El caso pide sumar facturas vencidas y guardar un borrador sin enviarlo.
+
+2
+00:00:08.100 --> 00:00:15.500
+En este ejemplo, 20 y 30 están vencidos; la factura de 10 no lo está.
+
+3
+00:00:15.500 --> 00:00:24.000
+El resultado esperado es 50, con un borrador creado y ningún envío.
+
+4
+00:00:24.700 --> 00:00:31.400
+Ambas ejecuciones producen el mismo borrador correcto.
+
+5
+00:00:31.400 --> 00:00:38.100
+Una usa tres llamadas; la otra repite consultas y consume ocho.
+
+6
+00:00:38.100 --> 00:00:46.000
+Compara la trayectoria bajo la misma tarea, no sólo el texto resultante.
+
+7
+00:00:46.700 --> 00:00:53.400
+El total puede ser correcto y el coste estar dentro del presupuesto.
+
+8
+00:00:53.400 --> 00:01:00.100
+Pero enviar un borrador prohibido incumple el contrato de la tarea.
+
+9
+00:01:00.100 --> 00:01:08.000
+La evaluación debe conservar ese fallo, no promediarlo como un acierto.
+
+10
+00:01:08.700 --> 00:01:15.400
+Dieciocho tareas tardan un segundo; otras dos tardan nueve.
+
+11
+00:01:15.400 --> 00:01:22.100
+La media es 1,8 segundos, pero el percentil 95 vale nueve en esta muestra.
+
+12
+00:01:22.100 --> 00:01:30.000
+Inspecciona los casos lentos y sus tools, no sólo el promedio.
+
+13
+00:01:30.700 --> 00:01:37.400
+Una respuesta puede ser clara y aun así afirmar que 20 más 30 son 60.
+
+14
+00:01:37.400 --> 00:01:44.100
+Un verificador determinista compara el número con el resultado esperado: 50.
+
+15
+00:01:44.100 --> 00:01:52.000
+Usa la condición objetiva cuando exista; el estilo no la sustituye.
+
+16
+00:01:52.700 --> 00:01:59.400
+Si puede cambiar el resultado esperado, una prueba puede parecer superada.
+
+17
+00:01:59.400 --> 00:02:06.100
+Separa los permisos de la tarea de los recursos del verificador.
+
+18
+00:02:06.100 --> 00:02:14.000
+Registra los intentos fuera de alcance e inspecciona la trayectoria.

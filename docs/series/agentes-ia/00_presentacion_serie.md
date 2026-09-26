@@ -8,10 +8,34 @@ tags:
   - Agentes
   - Tool Calling
   - Arquitectura
-video: "00_presentacion_serie.mp4"
-video_duration: "PT60S"
 hide:
   - toc
+video: 00_presentacion_serie.mp4
+video_poster: 00_presentacion_serie.jpg
+video_title: Agentes de IA
+video_summary: La conversación puede continuar mientras la herramienta trabaja. Sólo el resultado verificado permite comunicar que la tarea terminó.
+video_duration: PT2M12S
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: Una respuesta no crea un resultado.
+  start: 0
+  end: 22
+- name: El resultado cambia el siguiente paso.
+  start: 22
+  end: 44
+- name: Autonomía dentro de un alcance.
+  start: 44
+  end: 66
+- name: Evalúa la tarea, no sólo el texto.
+  start: 66
+  end: 88
+- name: Leer un documento no le da autoridad.
+  start: 88
+  end: 110
+- name: Aceptado no significa completado.
+  start: 110
+  end: 132
 ---
 
 # Agentes de IA

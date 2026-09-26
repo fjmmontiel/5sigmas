@@ -10,9 +10,15 @@ from functools import lru_cache
 from html import escape
 import os
 from pathlib import Path
+import sys
 import re
 
 import yaml
+
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -158,6 +164,8 @@ def _media_url(page, filename: str, config) -> str:
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
+    if not is_video_source_published(page.file.src_path):
+        return output
     meta = _video_meta(page, config)
     video_file = str(meta.get("video") or "").strip()
     if not video_file:

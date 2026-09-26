@@ -8,6 +8,13 @@ mirror layer.
 
 from pathlib import Path
 import shutil
+import sys
+import re
+
+HOOKS_DIR = Path(__file__).resolve().parent
+if str(HOOKS_DIR) not in sys.path:
+    sys.path.insert(0, str(HOOKS_DIR))
+from video_publication_policy import is_video_source_published
 
 
 _SKIP_DIRS = {"includes", "assets", "javascripts", "stylesheets", "snippets"}
@@ -21,6 +28,36 @@ def _html_target(source: Path, docs_dir: Path, site_dir: Path, use_directory_url
     if use_directory_urls:
         return site_dir / relative.parent / source.stem / "index.html"
     return site_dir / relative.parent / f"{source.stem}.html"
+
+
+def _strip_video_frontmatter(text: str) -> str:
+    """Remove video-only metadata from public Markdown mirrors of blocked series."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return text
+    try:
+        end = next(index for index in range(1, len(lines)) if lines[index].strip() == "---")
+    except StopIteration:
+        return text
+
+    kept: list[str] = []
+    skipping = False
+    for line in lines[1:end]:
+        match = re.match(r"^([A-Za-z0-9_-]+):(?:\s|$)", line)
+        if match:
+            key = match.group(1)
+            skipping = key == "video" or key.startswith("video_")
+            if skipping:
+                continue
+            kept.append(line)
+            continue
+        if skipping and (line.startswith((" ", "\t")) or not line.strip()):
+            continue
+        skipping = False
+        kept.append(line)
+
+    rendered = ["---", *kept, "---", *lines[end + 1 :]]
+    return "\n".join(rendered) + ("\n" if text.endswith("\n") else "")
 
 
 def on_post_build(config, **kwargs) -> None:
@@ -41,4 +78,11 @@ def on_post_build(config, **kwargs) -> None:
 
         markdown_target = Path(f"{html_target}.md")
         markdown_target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, markdown_target)
+        rel = source.relative_to(docs_dir).as_posix()
+        if is_video_source_published(rel):
+            shutil.copy2(source, markdown_target)
+        else:
+            markdown_target.write_text(
+                _strip_video_frontmatter(source.read_text(encoding="utf-8")),
+                encoding="utf-8",
+            )

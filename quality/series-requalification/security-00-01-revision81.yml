@@ -1,0 +1,97 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+contract_issue: 305
+amendment_comment: 5655569434
+state: REQUALIFICATION_QA_PUBLISHED_UNCERTIFIED
+article_golden: false
+series_golden: false
+
+active_scope:
+  series: seguridad-ia
+  article: 00_presentacion_serie
+  technical_companion: 01-prompt-injection
+  next_article_blocked: 02-jailbreaks
+
+revision81:
+  action: 35165542722
+  exact_head: 35d2404ac9d4bec88f983837d1633dcbb583f7d2
+  diagnostic_scope: focused_security_00_01
+  completed: true
+  conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+  artifact_id: 10475087573
+  artifact_digest: sha256:4b4a8fd97cd55fa5441f1e8a3cd72ad65d8aa97c5d6e692f8707fbdc8d620d89
+  artifact_retention_days: 1
+  strict_es: PASS
+  strict_en: PASS
+  negative_regression_fixtures: PASS
+  public_series_discovery_regression: PASS
+  current_publication_contract: PASS
+  security_structured_metadata: PASS
+  security_article_watch_locale_contract: PASS
+  shared_security_plus_datacenters_pre_datacenters_browser_resources: PASS
+  focused_security_browser_interaction_layout_playback: PASS
+  contrast_and_text_visibility: PASS
+  canonical_video_lifecycle: PASS
+  real_touch_article_watch_round_trip: PASS
+  prompt_injection_visual_states: PASS
+  real_keyboard_and_visible_focus: PASS
+  runtime_resource_listeners_through_teardown: PASS
+  full_catalogue_browser_repeated: false
+  full_catalogue_browser_skip_reason: published_site_bytes_unchanged
+  final_enforcement: FAIL_CLOSED
+  final_enforcement_reason: required source/rendered/media contracts remain incomplete; technical green subchecks are not GOLDEN
+
+catalogue_evidence:
+  target_series: 7
+  target_routes_per_locale: 42
+  target_locale_pages: 84
+  declared_video_locale_pages: 24
+  undeclared_video_locale_pages: 60
+  declared_page_native_h2_obligations: 154
+  declared_page_curated_video_chapters_present: 0
+  declared_page_valid_video_section_maps_present: 0
+  undeclared_distribution_locale_pages:
+    agentes-voz-tiempo-real: 12
+    coding-agents-agent-harnesses: 12
+    context-engineering-memory-mcp: 12
+    llm-inference-engineering-economics: 12
+    evaluating-ai-systems-production: 12
+
+media_blocker:
+  state: VOICE_MISSING
+  security_native_mp4_count: 4
+  video_audio_stream_missing: 4
+  video_captions_missing: 4
+  video_transcript_missing: 4
+  curated_video_chapters_or_key_moments_missing: 4
+  generated_cloned_or_substituted_francisco_voice: false
+  es_media_used_as_en_fallback: false
+  fabricated_transcript_or_timings: false
+
+editorial:
+  new_pixel_review_this_revision: false
+  new_pedagogy_review_this_revision: false
+  reason: no published content or media pixels changed; prior same-orchestrator Security00 rev78 evidence remains revision-scoped only
+  global_pixel_review: false
+  global_pedagogy_review: false
+
+release:
+  main: 27ee187e47c3caaaf0e3c157431046d0083e4fd2
+  main_reconciled_into_repair_branch_by_merge: 336e286b4aab9ce34456ed55b3c2dfee84b03f40
+  force_push: false
+  draft_34: OPEN_DRAFT_DO_NOT_MERGE_BLINDLY
+  production_pr: false
+  production_merge: false
+  deployed: false
+
+release_contract_281_310:
+  material_change_to_310: false
+  seventy_two_hour_clock_restarted: false
+  linkedin_action_by_this_lane: false
+  preserve_279: true
+
+next_gap:
+  - keep Security00 active and Security02 blocked
+  - make every expected native-video requirement independently addressable by route and locale; aggregate 84 alone must not hide a missing locale or route
+  - preserve the 60 undeclared locale-video failures and the 154 declared-page H2 obligations without fabricating mappings or timings
+  - re-run the focused integration gate only after the expectation ledger hardening is persisted

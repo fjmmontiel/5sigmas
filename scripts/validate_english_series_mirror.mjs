@@ -2,6 +2,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
@@ -48,6 +49,12 @@ const evaluatingAiSystems = {
   title: 'Evaluating AI Systems in Production',
   chapterTitle: 'Chapter 1 — What to evaluate: model, component, system, workflow, and trajectory',
 };
+
+const isVideoPublished = (slug) => execFileSync(
+  'python3',
+  ['-c', `from hooks.video_publication_policy import is_video_source_published; print(is_video_source_published("series/${slug}/00_presentacion_serie.md"))`],
+  { encoding: 'utf8' },
+).trim() === 'True';
 
 const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
@@ -109,7 +116,10 @@ for (const [slug, expectedTitle] of presentations) {
   const nativeMedia = nativePresentationMedia.get(slug);
   const videos = page.locator('video[data-s5-inline-video-player]');
   const videoCount = await videos.count();
-  if (nativeMedia) {
+  const videoPublished = isVideoPublished(slug);
+  if (!videoPublished) {
+    if (videoCount !== 0) failures.push(`${route}: publication policy blocks video but page exposes ${videoCount} video(s)`);
+  } else if (nativeMedia) {
     if (videoCount !== 1) {
       failures.push(`${route}: expected one declared native-English presentation video, found ${videoCount}`);
     } else {
@@ -156,7 +166,7 @@ for (const expected of ['Ground', 'Orbit', 'Grid: 4–10 years', 'Launch mass an
 
 await page.goto(`${base}/en/series/seguridad-ia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
 const securityBody = await page.locator('body').innerText();
-for (const expected of ['Play attack', 'Hostile content', 'Crosses authorization', 'The risk is not a response. It is a path.']) {
+for (const expected of ['Trace path', 'Hostile content', 'Authorization boundary', 'Injection changes a proposal; architecture decides whether it becomes an effect']) {
   if (!securityBody.includes(expected)) failures.push(`security series: missing localized series-map text ${JSON.stringify(expected)}`);
 }
 
@@ -190,4 +200,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: thirteen canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, LLM Inference Engineering & Economics, and Evaluating AI Systems in Production; localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: thirteen canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, LLM Inference Engineering & Economics, and Evaluating AI Systems in Production; localized embedded visuals, native-English presentation media only when declared and publication-policy enabled, desktop/mobile overflow clean.');

@@ -1,0 +1,81 @@
+schema_version: 1
+program: 5sigmas_GOLDEN_requalification
+series: llm-inference-engineering-economics
+review_date: 2026-09-21
+review_kind: EXACT_CURRENT_HEAD_PIXEL_PEDAGOGY_REVIEW
+owner_amendment_comment: 5716685049
+owner_indexability_amendment_comment: 5727362172
+evidence:
+  head: 39c9c718ece4d3ff2906171e9b8a21256b1c1db5
+  series4_run: 35538317845
+  series4_job: 106151279864
+  broad_visual_run: 35538317890
+  artifact: 10614520052
+  artifact_name: inference-engineering-series4-pr-gate-visual-evidence
+  artifact_sha256: 09efbd574f116b542e775c76eb3c814dcd4a564158a899daeac471dc27e3d447
+  artifact_size_bytes: 163666815
+  artifact_expires_at: 2026-09-21T21:36:23Z
+automated_current_head:
+  result: SUCCESS
+  source: PASS_12_OF_12
+  build: PASS_12_OF_12
+  browser_resources_parity: PASS_12_OF_12
+  media_visual_static: PASS_12_OF_12
+  media_visual_playback_lifecycle: PASS_12_OF_12
+  indexability_negative_mutations: PASS
+  indexability_rendered: PASS_12_OF_12
+  relationship_geometry_accessibility: PASS_12_OF_12_NORMAL_REDUCED
+  mobile_text_fit_negative_mutation: PASS_12_OF_12
+  reader_navigation_responsive_shell: PASS
+manual_review:
+  inspected:
+    mobile_native_graphs: 12_OF_12_ES_EN_NORMAL_AND_REDUCED
+    desktop_visual_contact_sheets: ES_EN_NORMAL_AND_REDUCED
+    video_key_frames: 12_OF_12_ES_EN_START_MIDDLE_FINAL
+  desktop_result: NO_CORRESPONDING_RELATIONSHIP_DISCONNECT_OBSERVED_IN_REVIEWED_CONTACT_SHEETS
+  video_result: NATIVE_CHAPTER_SPECIFIC_NON_PLACEHOLDER_VISUALS_COHERENT_AT_START_MIDDLE_FINAL
+  mobile_result: P1_SHARED_EDGE_VISIBILITY_AND_CAUSAL_CONTINUITY
+  observations:
+    - Ch1 text-fit defect is closed on exact evidence; Concurrencia/Concurrency fit in normal and reduced motion.
+    - Across the mobile maps, multiple adjacent-node relations render as isolated arrowheads or extremely short edge stubs rather than visually continuous directed connections.
+    - Ch2 lower admission flow, Ch3 parallelism lane, Ch4 speculative branch, Ch5 fallback/telemetry loop, and Ch6 accounting/load-sweep lane show the clearest causal disconnections in exact screenshots.
+    - The defect is locale-independent because the SVG path geometry is shared across ES/EN; exact ES/EN normal/reduced screenshots exhibit the same renderer behavior.
+root_cause:
+  file: docs/assets/javascripts/inference-mobile-native.js
+  finding: HARDCODED_BOUNDARY_EXTENTS_OVERCLIP_SHORT_EDGES
+  details:
+    - boundaryPoint hard-codes normalized half-extents 16.2 x 6.4 for every node.
+    - Many same-row node centers are only 33 normalized units apart; subtracting 16.2 from both endpoints leaves about 0.6 normalized units of visible line before the arrow marker.
+    - Actual CSS node widths vary between 30%, 32%, and 35%, so one fixed boundary extent cannot preserve both border attachment and meaningful visible edge length.
+  gate_gap:
+    file: scripts/inference_relationship_accessibility_common.mjs
+    finding: EDGE_EXISTENCE_AND_MARKER_ONLY_DO_NOT_ASSERT_VISIBLE_CAUSAL_SEGMENT
+    details:
+      - The current mobile relationship gate verifies edge count and marker-end presence, but not rendered edge length/visibility.
+      - Therefore the current automated relationship gate can be green while the pixel/pedagogy contract is red.
+defect:
+  severity: P1
+  code: INFERENCE_MOBILE_EDGE_VISIBILITY_HARDCODED_BOUNDARY_OVERCLIP
+  scope: ALL_6_CHAPTERS_ES_EN_MOBILE_NORMAL_REDUCED
+  p0: 0
+  p1_rows: 12
+  p2: 0
+  status: OPEN_ACTIONABLE
+remediation_contract:
+  - Replace hard-coded clipping with node-aware source/target boundary geometry so arrows terminate at actual target borders and retain a meaningful visible segment.
+  - Add a deterministic rendered-edge visibility assertion or equivalent negative mutation; edge count plus marker-end is insufficient.
+  - Preserve topology, branching, feedback loops, 12px minimum text, normal/reduced behavior, and no horizontal giant canvas/cards fallback.
+  - Rerender all 12 route-locale mobile graphs and manually review exact pixels before clearing P1.
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  generated_voice: false
+  generated_captions_transcript_narration_timings: false
+  historical_accessibility_debt: "92 > 91 retained; budget remains 91; future voice/accessibility lane only"
+release:
+  pr: 342
+  state: OPEN_DRAFT
+  merge_allowed: false
+  deploy_allowed: false
+  series_golden_allowed: false
+  reason: MANUAL_PIXEL_PEDAGOGY_P1_OPEN_AND_BRANCH_DIVERGED_FROM_CURRENT_MAIN

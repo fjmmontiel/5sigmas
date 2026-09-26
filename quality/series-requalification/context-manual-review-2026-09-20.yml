@@ -1,0 +1,46 @@
+schema: 1
+reviewed_on: 2026-09-20
+series: context-engineering-memory-mcp
+site_facing_revision: 86a8f65f35ae8d4ae6d325bf577d35b02618dd19
+automated_head: f8e47ac14b65667f242359eacb0cac24c4b28cf0
+artifact:
+  run: 35490132841
+  id: 10597609868
+  name: context-engineering-browser-visual-evidence
+  sha256: 61d2267399298294a16fa096f80e1ef467e44a0eed612baa0b91ddcdb0842964
+  retention_days: 1
+inspection:
+  route_locale_rows: 12
+  full_page_contexts_captured: 48
+  article_contexts: 48
+  watch_contexts: 48
+  modes: [desktop-normal, desktop-reduced, mobile-normal, mobile-reduced]
+  video_states: [start, intermediate, final]
+  deterministic_frames_per_native_mp4: 6
+  article_visuals_reviewed_es_en: true
+  mobile_native_controls_safe_area_reviewed: true
+  pixel_result: PASS_12_OF_12
+  pedagogy_result: PASS_12_OF_12
+  known_p0: 0
+  known_p1: 0
+  known_p2: 0
+technical_support:
+  context_golden_pr_gate_run: 35491320469
+  result: SUCCESS
+  series5_review_run: 35491320491
+  series5_result: SUCCESS
+  broad_pr_visual_run: 35491320474
+  broad_result: CANCELLED_AFTER_ALL_CONTEXT_STEPS_PASSED_AT_UNRELATED_LLM_INFERENCE_STEP_69
+  indexability: PASS_12_OF_12
+  media_visual: PASS_12_OF_12
+  article_watch_lifecycle: PASS_12_OF_12
+voice:
+  VOICE_ENHANCEMENT: DEFERRED_OWNER_LOCAL
+  blocking: false
+  voice_generated: false
+  captions_transcript_narration_timings_generated: false
+release:
+  ARTICLE_GOLDEN: 6/6
+  SERIES_GOLDEN: false
+  production_verified: false
+  remaining: COMPLETE_CURRENT_HEAD_BROAD_VISUAL_THEN_READY_PR_MERGE_DEPLOY_LIVE_VERIFY

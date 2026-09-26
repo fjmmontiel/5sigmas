@@ -1,15 +1,45 @@
 ---
-title: "Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación"
-description: "Cómo convertir señales reales de producción en casos reproducibles, evals versionados, reparaciones verificables y regresiones sin confundir telemetría con veredicto ni sobreajustar cada incidente."
+title: Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación
+description: Cómo convertir señales reales de producción en casos reproducibles, evals
+  versionados, reparaciones verificables y regresiones sin confundir telemetría con
+  veredicto ni sobreajustar cada incidente.
 date: 2026-09-13
 date_modified: 2026-09-13
-keywords: "AI observability, failure taxonomy, production monitoring, evals, regression testing, incident response, traces, feedback loop"
+keywords: AI observability, failure taxonomy, production monitoring, evals, regression
+  testing, incident response, traces, feedback loop
 tags:
-  - IA
-  - Evaluación
-  - Observabilidad
-  - Producción
-  - Reliability
+- IA
+- Evaluación
+- Observabilidad
+- Producción
+- Reliability
+video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
+video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
+video_title: Del incidente a la reparación
+video_summary: Después de la release, mide recurrencia y exposición durante la ventana
+  acordada. Cierra el ciclo con evidencia de producción y una persona responsable.
+video_duration: PT2M14S
+video_captions: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
+video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
+video_chapters:
+- name: Una alerta no es un diagnóstico.
+  start: 0
+  end: 22
+- name: La misma respuesta. Dos writes.
+  start: 22
+  end: 46
+- name: Un mecanismo. También sus vecinos.
+  start: 46
+  end: 68
+- name: Convierte el incidente en una prueba reproducible.
+  start: 68
+  end: 90
+- name: Prueba la reparación. No sólo el síntoma.
+  start: 90
+  end: 112
+- name: Tests verdes no son verificación en producción.
+  start: 112
+  end: 134
 ---
 
 # Capítulo 6 — Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación

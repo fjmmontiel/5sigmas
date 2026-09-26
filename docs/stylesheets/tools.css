@@ -269,9 +269,10 @@
   border-top: 1px solid var(--s5-line-strong);
 }
 .s5-model-chart {
+  --s5-model-chart-height: 560px;
   display: grid;
   grid-template-columns: 2rem minmax(0, 1fr);
-  grid-template-rows: minmax(290px, 34vw) auto;
+  grid-template-rows: var(--s5-model-chart-height) auto;
   gap: .6rem .7rem;
   min-width: 0;
 }
@@ -286,7 +287,7 @@
 }
 .s5-model-chart__plot {
   position: relative;
-  min-height: 290px;
+  min-height: var(--s5-model-chart-height);
   border-left: 1px solid var(--s5-line-strong);
   border-bottom: 1px solid var(--s5-line-strong);
 }
@@ -419,8 +420,8 @@
   .s5-tool-page .s5-page-intro h1 { font-size: clamp(2.45rem, 14vw, 4rem); }
   .s5-model-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .s5-model-counts p { grid-column: 1 / -1; justify-self: start; text-align: left; }
-  .s5-model-chart { grid-template-columns: 1.5rem minmax(0, 1fr); grid-template-rows: 250px auto; }
-  .s5-model-chart__plot { min-height: 250px; }
+  .s5-model-chart { --s5-model-chart-height: 640px; grid-template-columns: 1.5rem minmax(0, 1fr); grid-template-rows: var(--s5-model-chart-height) auto; }
+  .s5-model-chart__plot { min-height: var(--s5-model-chart-height); }
   .s5-model-point { max-width: 5.2rem; overflow: hidden; text-overflow: ellipsis; }
   .s5-model-focus__facts { grid-template-columns: 1fr 1fr; }
 }

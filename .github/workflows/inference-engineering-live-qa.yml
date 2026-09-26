@@ -16,37 +16,40 @@ jobs:
   live-inference-series:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Wait for LLM Inference Engineering deployment
+      - name: Wait for exact LLM Inference deployment revision
         shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           set -euo pipefail
-          url='https://5sigmas.com/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/'
-          for attempt in {1..18}; do
-            body="$(curl --fail --silent --show-error --location "$url" || true)"
-            if grep -q 'Capítulo 1' <<< "$body" && grep -q 'Prefill' <<< "$body"; then
-              echo 'LLM Inference Engineering production route is serving the deployed series.'
+          for attempt in {1..30}; do
+            revision="$(curl --fail --silent --show-error --location -H 'Cache-Control: no-cache' https://5sigmas.com/build.json | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{try{console.log(JSON.parse(s).revision||'')}catch{console.log('')}})" || true)"
+            if [[ "$revision" == "$EXPECTED_SHA" ]]; then
+              echo "Exact production revision is live: $revision"
               exit 0
             fi
+            echo "Waiting for production revision $EXPECTED_SHA; observed ${revision:-none}"
             sleep 5
           done
-          echo 'LLM Inference Engineering production route did not become ready within the validation window.'
+          echo "Exact deployed revision did not become live within the validation window."
           exit 1
-
+      - name: Validate exact live LLM Inference indexability
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+          S5_EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: node scripts/validate_inference_live_indexability.mjs
       - name: Install Playwright
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-
       - name: Audit live resources across all ES/EN inference routes
         env:
           S5_PREVIEW_URL: https://5sigmas.com
@@ -66,52 +69,53 @@ jobs:
             /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/,
             /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/
         run: node scripts/audit_browser_resources.mjs
-
       - name: Validate live bilingual series hub and mirror
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_series_mirror.mjs
-
       - name: Validate live ES/EN route switching and reader progression
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_locale_switching.mjs
-
+      - name: Validate live inference article/watch visual media lifecycle
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/validate_inference_series_browser_milestone.mjs
       - name: Validate live chapter 4.1 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch1_accessibility.mjs
-
       - name: Validate live chapter 4.2 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch2_accessibility.mjs
-
       - name: Validate live chapter 4.3 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch3_accessibility.mjs
-
       - name: Validate live chapter 4.4 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch4_accessibility.mjs
-
       - name: Validate live chapter 4.5 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch5_accessibility.mjs
-
       - name: Validate live chapter 4.6 visual states and accessibility
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_inference_engineering_ch6_accessibility.mjs
-
+      - name: Validate live inference mobile text fit and overlap regression
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_mobile_text_fit.mjs
       - name: Upload live Series 4 failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: inference-engineering-live-qa-failure
-          path: artifacts/visual-review/inference-engineering-*.png
+          path: |
+            artifacts/visual-review/inference-engineering-*.png
+            artifacts/inference-browser-milestone/**
           if-no-files-found: warn
           retention-days: 1

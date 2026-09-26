@@ -1,0 +1,75 @@
+WEBVTT
+
+NOTE Visual text from a silent video.
+
+1
+00:00:00.700 --> 00:00:08.100
+The task asks for overdue invoices to be totalled and saved as a draft, not sent.
+
+2
+00:00:08.100 --> 00:00:15.500
+In this example, 20 and 30 are overdue; the invoice for 10 is not.
+
+3
+00:00:15.500 --> 00:00:24.000
+The expected result is 50, with a saved draft and no message sent.
+
+4
+00:00:24.700 --> 00:00:31.400
+Both runs produce the same correct draft.
+
+5
+00:00:31.400 --> 00:00:38.100
+One uses three calls; the other repeats queries and consumes eight.
+
+6
+00:00:38.100 --> 00:00:46.000
+Compare trajectories for the same task, not only their final text.
+
+7
+00:00:46.700 --> 00:00:53.400
+The total can be correct and the cost can remain within budget.
+
+8
+00:00:53.400 --> 00:01:00.100
+But sending a forbidden draft violates the task contract.
+
+9
+00:01:00.100 --> 00:01:08.000
+The evaluation must preserve that failure rather than average it into success.
+
+10
+00:01:08.700 --> 00:01:15.400
+Eighteen tasks take one second; two others take nine.
+
+11
+00:01:15.400 --> 00:01:22.100
+The mean is 1.8 seconds, but the 95th percentile is nine in this sample.
+
+12
+00:01:22.100 --> 00:01:30.000
+Inspect slow cases and their tools, not only the average.
+
+13
+00:01:30.700 --> 00:01:37.400
+A clear response can still claim that 20 plus 30 equals 60.
+
+14
+00:01:37.400 --> 00:01:44.100
+A deterministic verifier compares the number with the expected result: 50.
+
+15
+00:01:44.100 --> 00:01:52.000
+Use the objective condition when one exists; writing style cannot replace it.
+
+16
+00:01:52.700 --> 00:01:59.400
+A test can appear to pass if the agent can change its expected result.
+
+17
+00:01:59.400 --> 00:02:06.100
+Separate task permissions from the verifier’s resources.
+
+18
+00:02:06.100 --> 00:02:14.000
+Record out-of-scope attempts and inspect the trajectory.

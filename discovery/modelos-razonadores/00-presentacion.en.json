@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "modelos-razonadores-intro-en",
+  "locale": "en",
+  "title": "Reasoning Models",
+  "description": "Five chapters on how LLMs reason: test-time compute, failure modes, latency, cost and risks when models use tools.",
+  "watch_url": "https://5sigmas.com/en/videos/series/modelos-razonadores/00_presentacion_serie/",
+  "article_url": "https://5sigmas.com/en/series/modelos-razonadores/00_presentacion_serie/",
+  "video_url": "https://5sigmas.com/en/series/modelos-razonadores/00_presentacion_serie.mp4",
+  "poster_url": "https://5sigmas.com/en/series/modelos-razonadores/00_presentacion_serie.jpg",
+  "vtt_url": "https://5sigmas.com/en/series/modelos-razonadores/00_presentacion_serie.visual-text.vtt",
+  "video_sha256": "f26ac17cb5b4fa077b5175b00256ac6eaffb414e85fa0b51a4e878efc6d9a730",
+  "video_bytes": 3946808,
+  "width": 1920,
+  "height": 1080,
+  "duration_ms": 75000,
+  "upload_date": "2026-09-20T14:00:37Z",
+  "caption_contract": "silent-visual-text-v1",
+  "provenance": {
+    "source_provenance": "UNRECOVERED_LEGACY",
+    "text_timing_candidate_commit": "e7155f70920ef2669853b800c887dd53c1c8d1ee",
+    "text_timing_candidate_path": "motion/content/modelos-razonadores/00-presentacion.en.json",
+    "text_timing_candidate_git_blob": "417b74cbd9cd457d2877d38ebbd853391ef450d9",
+    "timing_basis": "Candidate scene/cue boundaries compared with decoded approved media; this is not identification of the renderer source.",
+    "upload_date_basis": "Observed completion of production deploy-pages step in workflow 35514981780; first-publication time of these exact bytes may be earlier."
+  },
+  "chapters": [
+    {
+      "id": "process",
+      "name": "Reasoning is a process.",
+      "start_ms": 0,
+      "end_ms": 15000,
+      "cues": [
+        {"id": "process-01", "start_ms": 700, "end_ms": 3372, "text": "A complex problem can be broken into steps."},
+        {"id": "process-02", "start_ms": 3372, "end_ms": 5727, "text": "Those steps consume time and compute."},
+        {"id": "process-03", "start_ms": 5727, "end_ms": 15000, "text": "And they can fail."}
+      ],
+      "visual_description": ["The illustrative multiplication 17 × 6 is split into 10 × 6 and 7 × 6: 60 + 42 = 102. An answer of 104 is marked incorrect. The grid represents the calculation being broken down, not a benchmark result."]
+    },
+    {
+      "id": "budget",
+      "name": "The budget is also a choice.",
+      "start_ms": 15000,
+      "end_ms": 35000,
+      "cues": [
+        {"id": "budget-01", "start_ms": 15700, "end_ms": 20277, "text": "At inference time, you can spend more steps, samples, verification or tool interactions."},
+        {"id": "budget-02", "start_ms": 20277, "end_ms": 35000, "text": "On some tasks that can improve the answer, but it also increases cost and latency."}
+      ],
+      "visual_description": ["Twelve units of compute are allocated to steps, samples and verification. This is an illustrative allocation: it shows that a budget can be distributed in different ways, not that one allocation is universally optimal."]
+    },
+    {
+      "id": "roadmap",
+      "name": "One series, five questions.",
+      "start_ms": 35000,
+      "end_ms": 58000,
+      "cues": [
+        {"id": "roadmap-01", "start_ms": 35700, "end_ms": 38372, "text": "First: what reasoning means for an LLM."},
+        {"id": "roadmap-02", "start_ms": 38372, "end_ms": 40410, "text": "Second: how these systems fail."},
+        {"id": "roadmap-03", "start_ms": 40410, "end_ms": 43082, "text": "Third: how to use more inference-time compute."},
+        {"id": "roadmap-04", "start_ms": 43082, "end_ms": 46389, "text": "Fourth: what happens to latency and streaming."},
+        {"id": "roadmap-05", "start_ms": 46389, "end_ms": 58000, "text": "Fifth: when more reasoning introduces new risks."}
+      ],
+      "visual_description": ["The map connects reasoning to five questions: what it means, how it fails, how to use test-time compute, what happens to latency, and what risks it introduces. Quality, cost and time are shown as related decisions."]
+    },
+    {
+      "id": "tradeoff",
+      "name": "Thinking longer is not free.",
+      "start_ms": 58000,
+      "end_ms": 75000,
+      "cues": [
+        {"id": "tradeoff-01", "start_ms": 58700, "end_ms": 61690, "text": "More reasoning can improve quality on suitable tasks."},
+        {"id": "tradeoff-02", "start_ms": 61690, "end_ms": 64044, "text": "It also consumes time, compute and money."},
+        {"id": "tradeoff-03", "start_ms": 64044, "end_ms": 75000, "text": "And it can introduce overthinking, errors or new attack surfaces."}
+      ],
+      "visual_description": ["A triangle connects quality, cost and latency, and risk around the task. This is a qualitative comparison: position does not represent a score or a performance measurement."]
+    }
+  ]
+}

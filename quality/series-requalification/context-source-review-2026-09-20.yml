@@ -1,0 +1,101 @@
+schema: 1
+reviewed_on: 2026-09-20
+series: context-engineering-memory-mcp
+review_kind: FRESH_PRIMARY_SOURCE_REQUALIFICATION
+contract:
+  owner_amendment_voice: 5716685049
+  owner_amendment_indexability: 5727362172
+  source_gate_is_independent_of_media_voice_and_google_selection: true
+article_source_revision:
+  01-context-engineering-vs-prompt-engineering:
+    es_blob: 1c06d3d06838c9379a6c98ca92ef9ac398dbf075
+    deterministic_es_en_contract: PASS
+  02-context-budgets-prioritisation-compaction-provenance:
+    es_blob: 6c52447305b1acefdb714e2fb066a853a233e6ac
+    deterministic_es_en_contract: PASS
+  03-memory-architectures-working-episodic-semantic-persistent-state:
+    es_blob: 380bee6bdf420851f4e47b85db3e82ae7d5983f3
+    deterministic_es_en_contract: PASS
+  04-retrieval-context-assembly-freshness-relevance-conflict-grounding:
+    es_blob: a21bd5efabb879bc98a49864c61ebfc3427bc0c8
+    deterministic_es_en_contract: PASS
+  05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries:
+    es_blob: df9cdd9e9a0086e3aea013a95f93d2dc01ed7133
+    deterministic_es_en_contract: PASS
+  06-skills-plugins-subagents-hooks-context-isolation-evaluation:
+    es_blob: 6e3fb3d05388c7b515d9f9a7826777b799918882
+    deterministic_es_en_contract: PASS
+fresh_primary_checks:
+  context_engineering:
+    status: PASS
+    sources:
+      - https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+      - https://openai.com/index/introducing-the-agents-api/
+      - https://openai.com/index/unrolling-the-codex-agent-loop/
+    verified_claims:
+      - context_is_finite_and_curated_per_turn
+      - compaction_and_tool_search_are_harness_context_management_mechanisms
+      - subagents_keep_separate_contexts_under_orchestration
+  budgets_compaction_provenance:
+    status: PASS
+    sources:
+      - https://openai.com/index/unrolling-the-codex-agent-loop/
+      - https://openai.com/index/introducing-the-agents-api/
+      - https://www.w3.org/TR/prov-o/
+    verified_claims:
+      - responses_compaction_replaces_prior_input_with_compacted_items
+      - finite_context_requires_selection_or_compaction
+      - provenance_is_a_separate_lineage_contract
+  memory_architectures:
+    status: PASS
+    sources:
+      - https://openai.github.io/openai-agents-python/sessions/
+      - https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool
+      - https://arxiv.org/abs/2309.02427
+    verified_claims:
+      - session_memory_persists_and_retrieves_history_across_runs
+      - persistent_memory_is_distinct_from_effective_model_context
+      - memory_requires_write_retrieval_and_freshness_policy
+  retrieval_grounding:
+    status: PASS
+    sources:
+      - https://developers.openai.com/api/reference/python/resources/vector_stores/methods/search
+      - https://www.anthropic.com/engineering/contextual-retrieval
+      - https://aclanthology.org/2025.findings-naacl.55/
+    verified_claims:
+      - retrieval_scores_and_ranking_do_not_establish_business_authority
+      - contextual_retrieval_combines_candidate_generation_and_reranking
+      - grounding_support_must_be_evaluated_separately_from_retrieval
+  mcp:
+    status: PASS
+    sources:
+      - https://modelcontextprotocol.io/specification/2026-07-28/architecture
+      - https://modelcontextprotocol.io/specification/2026-07-28/server/tools
+    verified_claims:
+      - host_client_server_roles_and_security_boundaries
+      - capabilities_are_declared_per_protocol_contract
+      - tool_discovery_does_not_equal_authorization
+      - tool_annotations_are_untrusted_unless_from_trusted_servers
+  extensions_subagents_hooks:
+    status: PASS
+    sources:
+      - https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+      - https://code.claude.com/docs/en/subagents
+      - https://code.claude.com/docs/en/hooks
+      - https://openai.github.io/openai-agents-python/context/
+      - https://openai.github.io/openai-agents-python/guardrails/
+    verified_claims:
+      - skills_are_reusable_progressively_loaded_procedure_context
+      - subagents_are_separate_contexts_not_automatic_security_sandboxes
+      - hooks_are_deterministic_lifecycle_extension_points_not_blanket_authority
+      - local_context_and_model_context_are_distinct
+es_natural_technical_language: PASS
+en_native_claim_parity: PASS
+formula_unit_code_claim_parity: PASS
+material_claim_freshness: PASS
+source_pass_route_locale_rows: 12
+source_pass: true
+notes:
+  - No source edits were required by this fresh review.
+  - MEDIA_VISUAL, INDEXABILITY, PIXEL and PEDAGOGY remain independent gates.
+  - Google indexing state was not used as evidence for SOURCE_PASS.

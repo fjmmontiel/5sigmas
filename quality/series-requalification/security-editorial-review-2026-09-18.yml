@@ -1,0 +1,92 @@
+schema_version: 1
+receipt: security_editorial_review_2026_09_18
+owner_amendment_comment: 5716685049
+owner_precedence_restatement_comment: 5719162654
+voice_enhancement: DEFERRED_OWNER_LOCAL
+voice_is_blocker: false
+
+security02_05_editorial_evidence:
+  exact_head: 78dbfee5481ca80d3826fd727f463a2a0b3bfe46
+  action_run: 35304844058
+  workflow: Security02-05 fast bounded browser review
+  result: PASS
+  artifact:
+    id: 10531488470
+    size_bytes: 126391411
+    digest_sha256: 57e97f15428d57c5320340d4d72fc1cbfdd4b75a369738f413b1c58ca716293f
+    expires_at_utc: 2026-09-19T04:02:00Z
+  automated_evidence:
+    strict_es: PASS
+    strict_en: PASS
+    browser_matrix_contexts: 32
+    browser_matrix_failures: 0
+    whole_article_contexts: 32
+    teaching_visual_state_images: 536
+    rendered_style_diagnostics: PASS
+    keyboard_touch_focus_runtime_resources: PASS
+  manual_review:
+    reviewer_scope: SAME_ORCHESTRATOR_NO_INDEPENDENCE_CLAIM
+    reviewed_all_retained_teaching_state_images: true
+    reviewed_whole_article_contact_sheets: true
+    matrix: ES_EN_x_1440_390_x_normal_reduced
+    visual_roots:
+      - jbsearch
+      - jbbudget
+      - jbladder
+      - memlife
+      - memgov
+      - memlayers
+      - memprop
+      - threatbuild
+      - uplift3
+      - causalrt
+      - regloop
+      - proddef
+      - mcpbound
+      - killpath
+      - releasegate
+    pixel_review: PASS
+    pedagogy_review: PASS
+    known_p0_p1_p2_remaining: []
+    notes:
+      - Adaptive-search and budget visuals change path geometry/state rather than only colour.
+      - Memory visuals expose persistence, derivation, revocation and lineage reachability.
+      - Red-team visuals expose causal stages, intervention points and release-state consequences.
+      - Production controls expose privilege boundaries, independent kill counterfactuals and DEPLOY/HOLD topology.
+      - Full-page ES/EN desktop/mobile captures show no material clipping, overflow, locale leakage or unreadable hierarchy.
+
+security00_01_nonvoice_media_evidence:
+  exact_capture_head: 36459e402559614f098f08c21ebea998c10005ae
+  action_run: 35304662242
+  result: PASS_EVIDENCE_CAPTURE
+  artifact:
+    id: 10531049095
+    size_bytes: 58121605
+    digest_sha256: 3b5e98cdb01eefff45e733a0f6b8d20efb582830bd855a701cfc23630147fbab
+    expires_at_utc: 2026-09-19T04:00:56Z
+  manual_video_frame_review:
+    sample_fractions: [0.02, 0.20, 0.40, 0.60, 0.80, 0.98]
+    locales: [es, en]
+    routes: [security00, security01]
+    narration_or_transcript_inference: false
+    result: CURATED_KEY_MOMENTS_READY_TO_PERSIST
+  curated_key_moments:
+    security00:
+      es:
+        - {name: "Control y datos comparten el canal", start: 0, end: 24}
+        - {name: "Jailbreaks y persistencia amplían el riesgo", start: 24, end: 48}
+        - {name: "Autorización y permisos limitan el impacto", start: 48, end: 60}
+      en:
+        - {name: "Control and data share one channel", start: 0, end: 19}
+        - {name: "Search and persistence expand the attack surface", start: 19, end: 38}
+        - {name: "Production controls limit effects", start: 38, end: 48}
+    security01:
+      es:
+        - {name: "Del documento al contexto", start: 0, end: 24}
+        - {name: "Datos e instrucciones compiten por el control", start: 24, end: 48}
+        - {name: "Separar lectura de acción y registrar permisos", start: 48, end: 60}
+      en:
+        - {name: "Control and data share one channel", start: 0, end: 19}
+        - {name: "Retrieval and filters remain part of the security boundary", start: 19, end: 38}
+        - {name: "Separate reading from action", start: 38, end: 48}
+  persistence_state: CURATED_NOT_YET_WRITTEN_TO_CANONICAL_FRONTMATTER_OR_EN_MEDIA_INDEX

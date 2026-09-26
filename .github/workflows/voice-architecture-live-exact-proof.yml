@@ -1,0 +1,238 @@
+name: Voice architecture exact live proof
+
+on:
+  workflow_run:
+    workflows: ["Deploy MkDocs to GitHub Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voice-architecture-live-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: true
+
+jobs:
+  exact-live-proof:
+    # Do not couple this focused RELEASE CONTRACT proof to unrelated downstream
+    # live-QA checks in the parent workflow. The proof remains fail-closed: it
+    # requires /build.json to expose this exact head SHA before any ES/EN PASS.
+    if: >-
+      ${{ github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Pin the reviewed bilingual article bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object docs/articulos-tecnicos/voice-agent-architectures.md)" = "63591a3989937ea7c4dc84c39dd0666f52ad4efb"
+          test "$(git hash-object locales/en/articulos-tecnicos/voice-agent-architectures.md)" = "3b6a0075c7e211caac3a46237d974797d26d8648"
+
+      - name: Verify exact deployed revision and fresh uncached ES/EN HTML + sitemaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import crypto from 'node:crypto';
+
+          const expected = process.env.EXPECTED_SHA;
+          const origin = 'https://5sigmas.com';
+          const headers = {
+            'cache-control': 'no-cache, no-store, max-age=0',
+            pragma: 'no-cache',
+            'user-agent': '5sigmas-release-contract-281/1.0',
+          };
+          const attr = (tag, name) => {
+            const match = tag.match(new RegExp(`${name}\\s*=\\s*["']([^"']+)["']`, 'i'));
+            return match?.[1] || '';
+          };
+          const links = (html) => [...html.matchAll(/<link\b[^>]*>/gi)].map((m) => m[0]);
+          const anchors = (html) => [...html.matchAll(/<a\b[^>]*>/gi)].map((m) => m[0]);
+          const findLink = (html, predicate) => links(html).find((tag) => predicate({
+            rel: attr(tag, 'rel'),
+            href: attr(tag, 'href'),
+            hreflang: attr(tag, 'hreflang'),
+          }));
+          const findAnchor = (html, predicate) => anchors(html).find((tag) => predicate({
+            href: attr(tag, 'href'),
+            hreflang: attr(tag, 'hreflang'),
+          }));
+          const sitemapBlocks = (xml) => [...xml.matchAll(/<url\b[^>]*>[\s\S]*?<\/url>/gi)].map((m) => m[0]);
+          const sitemapBlockFor = (xml, absoluteUrl) => sitemapBlocks(xml).find((block) => {
+            const match = block.match(/<loc\b[^>]*>([\s\S]*?)<\/loc>/i);
+            return match?.[1]?.trim() === absoluteUrl;
+          });
+          const sitemapAlternate = (block, locale, href) => [...block.matchAll(/<xhtml:link\b[^>]*\/?\s*>/gi)]
+            .map((m) => m[0])
+            .some((tag) =>
+              attr(tag, 'rel').toLowerCase() === 'alternate'
+              && attr(tag, 'hreflang').toLowerCase() === locale
+              && attr(tag, 'href') === href
+            );
+          const sha256 = (text) => crypto.createHash('sha256').update(text).digest('hex');
+          const h1Text = (html) => {
+            const match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
+            const inner = match?.[1] || '';
+            const withoutPermalink = inner.replace(
+              /<a\b[^>]*\bclass=["'][^"']*\bheaderlink\b[^"']*["'][^>]*>[\s\S]*?<\/a>/gi,
+              '',
+            );
+            return withoutPermalink.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+          };
+          const h1Fixture = '<h1>Reviewed title<a class="headerlink" href="#reviewed-title" title="Permanent link">¶</a></h1>';
+          if (h1Text(h1Fixture) !== 'Reviewed title') {
+            throw new Error('H1 parser failed to ignore the Material permalink');
+          }
+          const sitemapFixture = `<?xml version="1.0"?><urlset xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>${origin}/fixture/</loc><xhtml:link rel="alternate" hreflang="es" href="${origin}/fixture/" /><xhtml:link rel="alternate" hreflang="en" href="${origin}/en/fixture/" /></url></urlset>`;
+          const fixtureBlock = sitemapBlockFor(sitemapFixture, `${origin}/fixture/`);
+          if (!fixtureBlock
+              || !sitemapAlternate(fixtureBlock, 'es', `${origin}/fixture/`)
+              || !sitemapAlternate(fixtureBlock, 'en', `${origin}/en/fixture/`)) {
+            throw new Error('Sitemap hreflang parser regression');
+          }
+
+          async function fresh(path, label) {
+            const url = new URL(path, origin);
+            url.searchParams.set('__s5_release_verify', `${expected}-${label}-${Date.now()}`);
+            const response = await fetch(url, {
+              cache: 'no-store',
+              headers,
+              redirect: 'error',
+            });
+            if (!response.ok) throw new Error(`${label}: HTTP ${response.status}`);
+            return { response, text: await response.text(), url: url.toString() };
+          }
+
+          const build = await fresh('/build.json', 'build');
+          const buildData = JSON.parse(build.text);
+          if (buildData.revision !== expected) {
+            throw new Error(`build.json revision ${buildData.revision || '<missing>'} != ${expected}`);
+          }
+
+          const sitemapEs = await fresh('/sitemap.xml', 'sitemap-es');
+          const sitemapEn = await fresh('/en/sitemap.xml', 'sitemap-en');
+          const routes = [
+            {
+              locale: 'es',
+              path: '/articulos-tecnicos/voice-agent-architectures/',
+              title: 'Arquitecturas de agentes de voz: cascade, speech-to-speech y full-duplex',
+              anchors: [
+                'GPT-Live-1',
+                'Cuatro decisiones que no deben mezclarse',
+                '30 puntos porcentuales',
+                'audio-in / text-out',
+              ],
+            },
+            {
+              locale: 'en',
+              path: '/en/articulos-tecnicos/voice-agent-architectures/',
+              title: 'Voice-agent architectures: cascades, speech-to-speech and full-duplex',
+              anchors: [
+                'GPT-Live-1',
+                'Four decisions that should not be mixed',
+                '30-percentage-point',
+                'audio-in / text-out',
+              ],
+            },
+          ];
+          const localeTargets = {
+            es: '/articulos-tecnicos/voice-agent-architectures/',
+            en: '/en/articulos-tecnicos/voice-agent-architectures/',
+          };
+          const absoluteTargets = {
+            es: `${origin}${localeTargets.es}`,
+            en: `${origin}${localeTargets.en}`,
+          };
+
+          for (const route of routes) {
+            const { text: html, url } = await fresh(route.path, route.locale);
+            if (!new RegExp(`<html[^>]+lang=["']${route.locale}["']`, 'i').test(html)) {
+              throw new Error(`${route.locale}: incorrect or missing html lang`);
+            }
+            const actualH1 = h1Text(html);
+            if (actualH1 !== route.title) {
+              throw new Error(`${route.locale}: live H1 mismatch; expected ${JSON.stringify(route.title)}, got ${JSON.stringify(actualH1)}`);
+            }
+            if (!html.includes(route.title)) throw new Error(`${route.locale}: current reviewed title missing`);
+            for (const anchor of route.anchors) {
+              if (!html.includes(anchor)) throw new Error(`${route.locale}: current reviewed anchor missing: ${anchor}`);
+            }
+            const canonical = findLink(html, ({ rel }) => rel.toLowerCase().split(/\s+/).includes('canonical'));
+            const expectedCanonical = `${origin}${route.path}`;
+            if (!canonical || attr(canonical, 'href') !== expectedCanonical) {
+              throw new Error(`${route.locale}: canonical mismatch; expected ${expectedCanonical}`);
+            }
+            for (const locale of ['es', 'en']) {
+              const selector = findAnchor(html, ({ hreflang }) => hreflang.toLowerCase() === locale);
+              if (!selector || attr(selector, 'href') !== localeTargets[locale]) {
+                throw new Error(`${route.locale}: language selector ${locale} mismatch; expected ${localeTargets[locale]}`);
+              }
+            }
+            const nativeMath = (html.match(/<math\b/gi) || []).length;
+            if (nativeMath < 18) throw new Error(`${route.locale}: expected native MathML, found ${nativeMath} math nodes`);
+            console.log(JSON.stringify({
+              locale: route.locale,
+              url,
+              exact_deploy_revision: expected,
+              html_sha256: sha256(html),
+              bytes: Buffer.byteLength(html),
+              native_math_nodes: nativeMath,
+              canonical: expectedCanonical,
+              language_selector: localeTargets,
+              cache_request: 'no-store + no-cache/no-store/max-age=0 + unique query',
+            }));
+          }
+
+          for (const [sitemapLocale, sitemap] of [['es', sitemapEs], ['en', sitemapEn]]) {
+            const currentUrl = absoluteTargets[sitemapLocale];
+            const block = sitemapBlockFor(sitemap.text, currentUrl);
+            if (!block) throw new Error(`${sitemapLocale} sitemap: missing route ${currentUrl}`);
+            for (const locale of ['es', 'en']) {
+              if (!sitemapAlternate(block, locale, absoluteTargets[locale])) {
+                throw new Error(`${sitemapLocale} sitemap: missing reciprocal hreflang ${locale} -> ${absoluteTargets[locale]}`);
+              }
+            }
+            console.log(JSON.stringify({
+              sitemap_locale: sitemapLocale,
+              sitemap_url: sitemap.url,
+              route: currentUrl,
+              reciprocal_hreflang: absoluteTargets,
+              sitemap_sha256: sha256(sitemap.text),
+            }));
+          }
+
+          console.log(`Fresh uncached exact-revision ES+EN HTTP+sitemap proof PASS for ${expected}`);
+          NODE
+
+      - name: Install browser QA runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Verify live ES/EN math, visuals, interactions and desktop/mobile output
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+          S5_REVIEW_HEAD: ${{ github.event.workflow_run.head_sha }}
+        run: node scripts/validate_voice_architecture_article.mjs
+
+      - name: Persist focused failure evidence only
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-architecture-exact-live-proof
+          path: artifacts/voice-article-review/
+          if-no-files-found: warn
+          retention-days: 1
+          overwrite: true
