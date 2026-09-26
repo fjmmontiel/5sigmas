@@ -1,0 +1,44 @@
+name: Prepare bounded Golden live QA timeout repair
+on:
+  push:
+    branches: [ops/golden-live-qa-budget-20260926]
+    paths: [.github/workflows/golden-live-qa-budget-repair.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 52a96b50136a725ae94ede3bf15463b2736b293c
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /.github/workflows/deploy-pages.yml
+      - name: Change only the insufficient job time budget
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('.github/workflows/deploy-pages.yml');raw=p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()=='02283011ecb293e3994ec1ac0992d8fc3cf1cd74'
+          old=b'  live-qa:\n    needs: deploy\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n'
+          new=old.replace(b'15\n',b'25\n')
+          assert raw.count(old)==1
+          updated=raw.replace(old,new);assert updated.replace(new,old)==raw
+          p.write_bytes(updated)
+          PY
+          git diff --check
+          git diff -- .github/workflows/deploy-pages.yml
+      - name: Persist clean single-line repair for direct review
+        run: |
+          set -euo pipefail
+          target='fix/golden-live-qa-budget-20260926'
+          test -z "$(git ls-remote origin "refs/heads/$target")"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/deploy-pages.yml
+          git commit -m 'Allow expanded Golden live QA to complete within a bounded 25 minutes'
+          git push origin "HEAD:refs/heads/$target"
+          printf 'REPAIR_HEAD=%s\n' "$(git rev-parse HEAD)"
