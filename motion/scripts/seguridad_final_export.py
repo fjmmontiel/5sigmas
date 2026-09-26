@@ -1,0 +1,284 @@
+#!/usr/bin/env python3
+"""Render one complete Seguridad IA localized H/V chapter from the deterministic browser timeline."""
+from __future__ import annotations
+
+import argparse
+import base64
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+from seguridad_render_check import bundled_page
+
+ROOT = Path(__file__).resolve().parents[1]
+SPEC_PATH = ROOT / "migration/seguridad-ia-content-v1.json"
+REGISTER_PATH = ROOT / "migration/seguridad-ia-series-register.json"
+FPS = 60
+
+def load_authored_chapter(chapter: int) -> dict | None:
+    path = ROOT / "src" / "seguridad" / f"chapter{chapter:02d}-data.mjs"
+    if not path.is_file():
+        return None
+    text = path.read_text(encoding="utf-8")
+    match = re.search(r"export const CHAPTER\d+ = (\{.*\});\s*$", text, re.S)
+    if not match:
+        raise SystemExit(f"cannot parse authored chapter data: {path}")
+    data = json.loads(match.group(1))
+    if data.get("chapter") != f"{chapter:02d}":
+        raise SystemExit(f"chapter data mismatch: {path}")
+    return data
+
+def cue_rows(scene: dict, semantic_timeline: dict) -> list[dict]:
+    if isinstance(semantic_timeline.get("events"), list):
+        rows = []
+        for event in semantic_timeline["events"]:
+            rows.append({
+                "id": event["id"],
+                "sentence_id": event["sentence_id"],
+                "concept_id": event["concept_id"],
+                "visual_target_id": event["visual_target_id"],
+                "action": event["action"],
+                "timeline_version": semantic_timeline["version"],
+                "text_at": float(event["text_at"]),
+                "text_reveal_end_at": float(event["visual_at"]),
+                "reading_hold_end_at": float(event["visual_at"]),
+                "visual_at": float(event["visual_at"]),
+                "visual_end_at": float(event["settled_at"]),
+                "scene_end_at": float(event["scene_end_at"]),
+                "expected": event.get("expected"),
+            })
+        return rows
+    return [cue_from_scene(scene, semantic_timeline)]
+
+
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def ffmpeg_encoder(path: Path, width: int, height: int) -> list[str]:
+    return [
+        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        "-f", "image2pipe", "-vcodec", "mjpeg", "-framerate", str(FPS), "-i", "-",
+        "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+        "-pix_fmt", "yuv420p", "-r", str(FPS), "-movflags", "+faststart",
+        "-vf", f"scale={width}:{height}:flags=lanczos", str(path),
+    ]
+
+
+def cue_from_scene(scene: dict, semantic_timeline: dict) -> dict:
+    """Bind the encoded asset to the authored semantic timeline in global MP4 time.
+
+    The renderer itself is not treated as an evaluator. These values are expected
+    events used later by the independent encoded-media critic; observations must
+    still come from the decoded MP4 and match within one encoded frame.
+    """
+    start = float(scene["start"])
+    sentence_id = semantic_timeline["sentence_id"]
+    return {
+        "id": sentence_id,
+        "sentence_id": sentence_id,
+        "concept_id": semantic_timeline["concept_id"],
+        "visual_target_id": semantic_timeline["visual_target_id"],
+        "action": semantic_timeline["action"],
+        "timeline_version": semantic_timeline["version"],
+        "text_at": start + float(semantic_timeline["text_start_seconds"]),
+        "text_reveal_end_at": start + float(semantic_timeline["text_reveal_end_seconds"]),
+        "reading_hold_end_at": start + float(semantic_timeline["reading_hold_end_seconds"]),
+        "visual_at": start + float(semantic_timeline["visual_start_seconds"]),
+        "visual_end_at": start + float(semantic_timeline["visual_end_seconds"]),
+        "scene_end_at": float(scene["end"]),
+    }
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--chapter", type=int, required=True, choices=range(6))
+    ap.add_argument("--locale", required=True, choices=("es", "en"))
+    ap.add_argument("--orientation", required=True, choices=("horizontal", "vertical"))
+    ap.add_argument("--source-head", default=os.getenv("GITHUB_SHA", "LOCAL"))
+    ap.add_argument("--out", type=Path, required=True)
+    args = ap.parse_args()
+
+    if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+        raise SystemExit("ffmpeg and ffprobe are required")
+    chrome = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser")
+    if not chrome:
+        raise SystemExit("system Chromium/Chrome is required")
+
+    spec = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
+    register = json.loads(REGISTER_PATH.read_text(encoding="utf-8"))
+    chapter = spec["chapters"][args.chapter]
+    authored = load_authored_chapter(args.chapter)
+    duration = float(authored["duration"]) if authored else float(spec["render_contract"]["duration_seconds_per_chapter"])
+    source_scenes = authored["scenes"] if authored else chapter["scenes"]
+    width, height = ((1920, 1080) if args.orientation == "horizontal" else (1080, 1920))
+    slug = chapter["slug"]
+    stem = f"{args.chapter:02d}-{slug}-{args.locale}-{args.orientation}"
+    args.out.mkdir(parents=True, exist_ok=True)
+    mp4 = args.out / f"{stem}.mp4"
+    poster = args.out / f"{stem}.poster.jpg"
+    transcript = args.out / f"{stem}.visual-transcript.json"
+    metadata = args.out / f"{stem}.metadata.json"
+    job = f"seguridad-ia-{args.chapter:02d}-{args.locale}-{args.orientation}"
+
+    browser_errors: list[str] = []
+    proc = subprocess.Popen(ffmpeg_encoder(mp4, width, height), stdin=subprocess.PIPE)
+    frame_budget = int(round(FPS * duration))
+    frame_count = 0
+    observed_families: set[str] = set()
+    observed_topologies: set[str] = set()
+    scene_mechanisms: dict[str, dict[str, object]] = {}
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(executable_path=chrome, headless=True, args=["--no-sandbox", "--disable-dev-shm-usage"])
+            page = browser.new_page(viewport={"width": 1920, "height": 1920}, device_scale_factor=1)
+            page.on("pageerror", lambda e: browser_errors.append(str(e)))
+            page.set_content(bundled_page())
+            page.wait_for_function("window.ready===true", timeout=15000)
+            page.evaluate("(a)=>window.setup(a.spec,a.register)", {"spec": spec, "register": register})
+            for i in range(frame_budget):
+                t = i / FPS
+                item = page.evaluate("(a)=>window.frame(a.job,a.t)", {"job": job, "t": t})
+                result = item["result"]
+                if result["issues"]:
+                    raise RuntimeError(f"render issues {job} t={t}: {result['issues']}")
+                family = result["family"]
+                topology = result.get("topology", family)
+                observed_families.add(family)
+                observed_topologies.add(topology)
+                scene_mechanisms[result["scene"]] = {
+                    "concept_id": result["scene"],
+                    "declared_family": family,
+                    "topology": topology,
+                    "semantic_timeline": result["semanticTimeline"],
+                }
+                jpeg = base64.b64decode(item["jpeg"])
+                assert proc.stdin is not None
+                proc.stdin.write(jpeg)
+                frame_count += 1
+            browser.close()
+    finally:
+        if proc.stdin:
+            proc.stdin.close()
+        rc = proc.wait()
+    if rc != 0:
+        raise SystemExit(f"ffmpeg encode failed: {rc}")
+    if browser_errors:
+        raise SystemExit(f"browser errors: {browser_errors}")
+    if frame_count != frame_budget:
+        raise SystemExit(f"frame count mismatch: {frame_count} expected={frame_budget}")
+    if len(scene_mechanisms) != len(source_scenes):
+        raise SystemExit(f"scene mechanism mismatch: got={len(scene_mechanisms)} expected={len(source_scenes)}")
+
+    probe = json.loads(subprocess.check_output([
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "stream=codec_name,width,height,pix_fmt,r_frame_rate,avg_frame_rate,duration,nb_frames",
+        "-of", "json", str(mp4)
+    ], text=True))["streams"][0]
+    subprocess.run(["ffmpeg", "-v", "error", "-i", str(mp4), "-f", "null", "-"], check=True)
+    subprocess.run([
+        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-ss", "6", "-i", str(mp4),
+        "-frames:v", "1", "-q:v", "2", str(poster)
+    ], check=True)
+
+    transcript_data = {
+        "schema_version": 1,
+        "unit": "seguridad-ia",
+        "chapter": chapter["chapter"],
+        "locale": args.locale,
+        "orientation": args.orientation,
+        "audio": "silent",
+        "title": (authored["title"][args.locale] if authored else chapter["title"][args.locale]),
+        "summary": chapter["summary"][args.locale],
+        "article_chapters": (
+            [{"start": s["start"], "end": s["end"], "name": s["title"][args.locale]} for s in source_scenes]
+            if authored else
+            [{"start": x["start"], "end": x["end"], "name": x["name"][args.locale]} for x in chapter["article_chapters"]]
+        ),
+        "scenes": [
+            {
+                "concept_id": s.get("id", s.get("concept_id")),
+                "start": s["start"],
+                "end": s["end"],
+                "text": s["text"][args.locale],
+            }
+            for s in source_scenes
+        ],
+    }
+    transcript.write_text(json.dumps(transcript_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    source_binding = spec["source_bindings"][args.chapter][args.locale]
+    scene_ids = [s.get("id", s.get("concept_id")) for s in source_scenes]
+    ordered_scene_mechanisms = [scene_mechanisms[scene_id] for scene_id in scene_ids]
+    text_visual_cues = []
+    for scene, scene_id in zip(source_scenes, scene_ids):
+        text_visual_cues.extend(cue_rows(scene, scene_mechanisms[scene_id]["semantic_timeline"]))
+    if not text_visual_cues or len({cue["id"] for cue in text_visual_cues}) != len(text_visual_cues):
+        raise SystemExit(f"invalid authored semantic cues: {text_visual_cues}")
+
+    meta = {
+        "schema_version": 1,
+        "unit": "seguridad-ia",
+        "spec_id": spec["spec_id"],
+        "source_head": args.source_head,
+        "chapter": chapter["chapter"],
+        "slug": slug,
+        "locale": args.locale,
+        "orientation": args.orientation,
+        "job_id": job,
+        "source_binding": source_binding,
+        "render_contract": {**spec["render_contract"], "duration_seconds_per_chapter": duration, "frame_count": frame_budget},
+        "theme": spec["theme"],
+        "mp4": {
+            "file": mp4.name,
+            "sha256": sha256(mp4),
+            "size_bytes": mp4.stat().st_size,
+            "ffprobe": probe,
+            "full_decode": "PASS",
+            "frame_count_written": frame_count,
+        },
+        "poster": {
+            "file": poster.name,
+            "sha256": sha256(poster),
+            "size_bytes": poster.stat().st_size,
+        },
+        "visual_transcript": {
+            "file": transcript.name,
+            "sha256": sha256(transcript),
+            "size_bytes": transcript.stat().st_size,
+        },
+        "browser_errors": browser_errors,
+        "scene_mechanisms": [
+            {k: v for k, v in row.items() if k != "semantic_timeline"}
+            for row in ordered_scene_mechanisms
+        ],
+        "text_visual_cues": text_visual_cues,
+        "observed_families": sorted(observed_families),
+        "observed_topologies": sorted(observed_topologies),
+        "technical_golden": False,
+        "owner_visual_approval": "NOT_REQUESTED",
+    }
+    metadata.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "state": "FINAL_OUTPUT_ENCODED_NOT_GOLDEN",
+        "job": job,
+        "sha256": meta["mp4"]["sha256"],
+        "size_bytes": meta["mp4"]["size_bytes"],
+        "frames": frame_count,
+        "full_decode": "PASS",
+        "semantic_cues": len(text_visual_cues),
+        "scene_mechanisms": meta["scene_mechanisms"],
+    }))
+
+
+if __name__ == "__main__":
+    main()

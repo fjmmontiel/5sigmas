@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T22:15:00Z",
+  "unit": "seguridad-ia",
+  "branch": "migration/video-golden-seguridad-ia",
+  "stage": "BROWSER_HV_PREFLIGHT_PASS_NOT_ENCODED",
+  "head_under_test": "dc91fa0c5a53655d31261edbff390442b8c8785e",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "semantic_engine": {
+    "state": "PASS",
+    "workflow_run": 35472720052,
+    "job": 105976522331,
+    "tests": {"total": 14, "passed": 14, "failed": 0},
+    "render_jobs": 24,
+    "canonical_concepts": 30,
+    "perceptual_families": 27,
+    "max_family_use": 2,
+    "supported_topologies": 26
+  },
+  "browser_render_preflight": {
+    "state": "PASS",
+    "workflow_run": 35472719982,
+    "job": 105976522267,
+    "browser": "Chrome 152.0.7977.82",
+    "jobs": 24,
+    "frames_sampled": 360,
+    "layout_issues": 0,
+    "browser_errors": 0,
+    "minimum_body_px": 56,
+    "minimum_mechanism_scale": 0.925,
+    "native_horizontal": "1920x1080@60",
+    "native_vertical": "1080x1920@60",
+    "duration_seconds_per_job": 60,
+    "reduced_motion_sample": "PASS_NO_ISSUES",
+    "contact_sheets_generated": 2,
+    "contact_sheets_opened_and_inspected_by_worker": true,
+    "artifact": {
+      "id": 10593835848,
+      "name": "seguridad-ia-browser-preflight-dc91fa0c5a53655d31261edbff390442b8c8785e",
+      "size_bytes": 778546,
+      "sha256": "52ae0513e65eca11bb0dab4e9631b9d208d56dca62b3e360331e46dae53341f3",
+      "retention_days": 1
+    }
+  },
+  "defect_repair": {
+    "initial_failed_workflow_run": 35472656371,
+    "initial_failed_job": 105976341599,
+    "defects": [
+      "semantic diagram labels overflowed narrow graph-cut zones",
+      "Boundary Candidate node label exceeded its allocated label width",
+      "Revocation zone label exceeded its narrow zone width",
+      "Authorization Result node label exceeded its allocated width"
+    ],
+    "repair_commit": "dc91fa0c5a53655d31261edbff390442b8c8785e",
+    "repair_scope": "semantic-label placement/width only; authored claims, scene timing, family registry and source bindings unchanged",
+    "post_repair_browser_result": "360/360 sampled frames with 0 layout issues and 0 browser errors"
+  },
+  "visual_inspection": {
+    "layout_readability": "PASS_PREFLIGHT",
+    "native_hv_recomposition": "PASS_PREFLIGHT",
+    "semantic_topology_variety": "STRUCTURALLY_AND_VISUALLY_OBSERVED_IN_CONTACT_SHEETS",
+    "encoded_motion_review": "NOT_VERIFIED",
+    "whole_series_aesthetic_acceptance": "NOT_CERTIFIED",
+    "note": "Contact sheets show the actual browser renderer and confirm readable editorial text plus distinct semantic topology. They do not substitute for encoded-motion inspection; low-level circles/lines/boxes are shared primitives and the encoded temporal choreography must still be reviewed before a review package is produced."
+  },
+  "not_claimed": [
+    "No final Seguridad MP4 has been encoded by this checkpoint.",
+    "No encoded whole-series motion/contact reel has been inspected.",
+    "No Seguridad Drive review package has been created.",
+    "No owner approval has been requested or inferred.",
+    "No Technical GOLDEN, final PR, merge, deployment or publication is claimed."
+  ],
+  "next_action": "Encode bounded representative MP4s from the exact validated renderer for temporal-motion inspection, verify H/V motion and series diversity on encoded media, repair only demonstrated defects, then encode the complete 24-output ES/EN H/V unit and create the single review package under the stable Drive root. Modelos remains independently owner-approved and technical-release-pending; do not contaminate its frozen PR with Seguridad work."
+}

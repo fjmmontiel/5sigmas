@@ -1,0 +1,162 @@
+name: Seguridad IA semantic register gate
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - 'motion/migration/seguridad-ia-series-register.json'
+      - '.github/workflows/seguridad-video-register-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seguridad-ia-semantic-register
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate source binding, diversity and accessibility contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import collections
+          import json
+          import math
+          import subprocess
+          from pathlib import Path
+
+          path = Path('motion/migration/seguridad-ia-series-register.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+
+          errors = []
+          if data.get('unit') != 'seguridad-ia':
+              errors.append('unit must be seguridad-ia')
+          if data.get('owner_visual_approval') != 'NOT_REQUESTED':
+              errors.append('owner_visual_approval must remain NOT_REQUESTED before complete review delivery')
+          if data.get('technical_golden') is not False:
+              errors.append('technical_golden must remain false at semantic-register stage')
+
+          required_source = {'chapter','path','blob_sha','title'}
+          sources = data.get('source_articles', [])
+          if len(sources) != 6:
+              errors.append(f'expected 6 source articles, got {len(sources)}')
+          for src in sources:
+              missing = required_source - set(src)
+              if missing:
+                  errors.append(f'source {src.get("chapter")}: missing {sorted(missing)}')
+                  continue
+              p = Path(src['path'])
+              if not p.is_file():
+                  errors.append(f'missing source path: {p}')
+                  continue
+              observed = subprocess.check_output(['git','hash-object',str(p)], text=True).strip()
+              if observed != src['blob_sha']:
+                  errors.append(f'stale source binding {p}: expected {src["blob_sha"]}, observed {observed}')
+
+          required_concept = {
+              'id','evidence','visual_mechanism','semantic_rationale','perceptual_family',
+              'topology','choreography','composition','cues','reuse_key'
+          }
+          concepts=[]
+          chapters=data.get('chapters',[])
+          if [c.get('chapter') for c in chapters] != ['00','01','02','03','04','05']:
+              errors.append('chapters must be exactly 00..05 in order')
+          for chapter in chapters:
+              current=chapter.get('concepts',[])
+              if len(current) != 5:
+                  errors.append(f'chapter {chapter.get("chapter")}: expected 5 concepts, got {len(current)}')
+              for concept in current:
+                  missing=required_concept-set(concept)
+                  if missing:
+                      errors.append(f'{concept.get("id","unknown")}: missing {sorted(missing)}')
+                  if not isinstance(concept.get('cues'),list) or len(concept.get('cues',[])) < 3:
+                      errors.append(f'{concept.get("id","unknown")}: requires at least 3 semantic cues')
+              concepts.extend(current)
+
+          ids=[c.get('id') for c in concepts]
+          if len(concepts) != 30:
+              errors.append(f'expected 30 canonical concepts, got {len(concepts)}')
+          if len(ids) != len(set(ids)):
+              errors.append('concept ids must be unique')
+
+          families=collections.Counter(c.get('perceptual_family') for c in concepts)
+          max_use=max(families.values(), default=0)
+          declared=data.get('series_diversity',{})
+          if declared.get('canonical_concept_count') != len(concepts):
+              errors.append('canonical_concept_count does not match actual concepts')
+          if declared.get('expected_max_family_use') != max_use:
+              errors.append(f'expected_max_family_use says {declared.get("expected_max_family_use")}, observed {max_use}')
+          if max_use > 2:
+              errors.append(f'perceptual family reuse exceeds hard pre-render target: {families}')
+          reused=sorted(k for k,v in families.items() if v == 2)
+          if reused != sorted(declared.get('families_reused_twice',[])):
+              errors.append(f'reused-family declaration mismatch: declared={declared.get("families_reused_twice",[])}, observed={reused}')
+
+          contract=data.get('design_contract',{})
+          if contract.get('base') != 'neutral_flat_editorial':
+              errors.append('neutral_flat_editorial base is required')
+          if contract.get('motion') != 'purposeful_semantic_only':
+              errors.append('motion must remain purposeful_semantic_only')
+          if contract.get('mobile') != 'native_vertical_recomposition_not_shrunk_horizontal':
+              errors.append('mobile must require native vertical recomposition')
+          prohibited=set(contract.get('prohibited',[]))
+          required_prohibited={'gradients','glow','textures','decorative_multicolor','pseudo_technical_graphics','typing_gimmicks'}
+          if not required_prohibited.issubset(prohibited):
+              errors.append('prohibited visual-gimmick contract incomplete')
+
+          def srgb_luminance(hex_color):
+              rgb=[int(hex_color[i:i+2],16)/255 for i in (1,3,5)]
+              linear=[v/12.92 if v <= 0.04045 else ((v+0.055)/1.055)**2.4 for v in rgb]
+              return .2126*linear[0]+.7152*linear[1]+.0722*linear[2]
+          def contrast(a,b):
+              hi,lo=sorted([srgb_luminance(a),srgb_luminance(b)], reverse=True)
+              return (hi+.05)/(lo+.05)
+
+          accent_dark=contract.get('accent_dark')
+          surface=contract.get('accent_surface')
+          if not accent_dark or contrast(accent_dark,'#FFFFFF') < 4.5:
+              errors.append('accent_dark must support >=4.5:1 white body text contrast')
+          if not surface or contrast(surface,'#1A1A1A') < 4.5:
+              errors.append('accent_surface must support >=4.5:1 dark body text contrast')
+
+          timeline=data.get('timeline_contract',{})
+          for key in ('single_deterministic_timeline','whole_sentence_or_chunk_reveal','unseen_chunks_prelaid_out','semantic_action_bound_to_current_explanation','seek_pause_replay_export_share_timeline'):
+              if timeline.get(key) is not True:
+                  errors.append(f'timeline contract must require {key}=true')
+          if timeline.get('typing_effects') is not False:
+              errors.append('typing_effects must be false')
+
+          outputs=data.get('required_outputs',{})
+          if outputs.get('locales') != ['es','en']:
+              errors.append('required locales must be ES/EN')
+          if outputs.get('orientations') != ['horizontal','vertical']:
+              errors.append('required orientations must be H/V')
+          if outputs.get('chapters') != ['00','01','02','03','04','05']:
+              errors.append('required chapters must be 00..05')
+          for key in ('mp4','poster','chapters_metadata','visual_transcript','reduced_motion'):
+              if outputs.get(key) is not True:
+                  errors.append(f'required output contract must include {key}')
+
+          if errors:
+              print('Seguridad IA semantic register FAIL:')
+              for error in errors:
+                  print(f' - {error}')
+              raise SystemExit(1)
+
+          print('Seguridad IA semantic register PASS')
+          print(f'canonical concepts: {len(concepts)}')
+          print(f'perceptual families: {len(families)}')
+          print(f'max family reuse: {max_use}')
+          print('reused twice:', ', '.join(reused))
+          print(f'accent dark/white contrast: {contrast(accent_dark,"#FFFFFF"):.2f}:1')
+          print(f'accent surface/dark contrast: {contrast(surface,"#1A1A1A"):.2f}:1')
+          PY

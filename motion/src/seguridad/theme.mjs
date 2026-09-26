@@ -1,0 +1,1 @@
+export const SEGURIDAD_THEME=Object.freeze({background:'#FCFBF7',ink:'#181B1D',muted:'#6D716F',rule:'#DADDD8',bodyFont:'Inter',headlineFont:'GFS Didot',accent:'#A34B35',accentText:'#873B2B',accentSurface:'#F3E7E2',guideSurface:'#D9A99A',guideText:'#4A1A12'});

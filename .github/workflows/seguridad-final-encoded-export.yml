@@ -1,0 +1,163 @@
+name: Seguridad IA exact encoded validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/seguridad-final-encode-request.txt
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seguridad-ia-exact-encoded-validation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  encode-chapter:
+    name: validate encoded chapter ${{ matrix.chapter }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        chapter: [0, 1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate exact source before expensive encode
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/seguridad_render_check.py motion/scripts/seguridad_final_export.py
+          node --check motion/src/seguridad/render.mjs
+          node --check motion/src/seguridad/engine.mjs
+          node --check motion/src/seguridad/mechanisms.mjs
+          node --check motion/src/seguridad/timeline.mjs
+          node --check motion/src/seguridad/chapter01.mjs
+          node --check motion/src/seguridad/chapter02.mjs
+          node --check motion/src/seguridad/chapter03.mjs
+          node --check motion/src/seguridad/chapter01-data.mjs
+          node --check motion/src/seguridad/chapter02-data.mjs
+          node --check motion/src/seguridad/chapter03-data.mjs
+
+      - name: Install browser encoder dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+
+      - name: Encode ES/EN horizontal and vertical from one timeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+          for locale in es en; do
+            for orientation in horizontal vertical; do
+              python motion/scripts/seguridad_final_export.py \
+                --chapter "${{ matrix.chapter }}" \
+                --locale "$locale" \
+                --orientation "$orientation" \
+                --source-head "$GITHUB_SHA" \
+                --out "$OUT"
+            done
+          done
+
+      - name: Independently validate the four ephemeral chapter encodes
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+          python - "$OUT" "$GITHUB_SHA" "${{ matrix.chapter }}" <<'PY'
+          import hashlib
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          expected_head = sys.argv[2]
+          expected_chapter = int(sys.argv[3])
+
+          def sha256(path: Path) -> str:
+              h = hashlib.sha256()
+              with path.open("rb") as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          metas = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(root.glob("*.metadata.json"))]
+          assert len(metas) == 4, len(metas)
+          assert {(m["locale"], m["orientation"]) for m in metas} == {
+              ("es", "horizontal"), ("es", "vertical"),
+              ("en", "horizontal"), ("en", "vertical"),
+          }
+          for meta in metas:
+              assert int(meta["chapter"]) == expected_chapter
+              assert meta["source_head"] == expected_head
+              cues = meta.get("text_visual_cues", [])
+              assert len(cues) >= 5
+              assert len({c["id"] for c in cues}) == len(cues)
+              assert all(c.get("sentence_id") and c.get("concept_id") and c.get("visual_target_id") for c in cues)
+              assert all(c["text_at"] < c["visual_at"] <= c["visual_end_at"] < c["scene_end_at"] for c in cues)
+
+              mp4 = root / meta["mp4"]["file"]
+              assert mp4.is_file()
+              assert sha256(mp4) == meta["mp4"]["sha256"]
+              expected_wh = (1920, 1080) if meta["orientation"] == "horizontal" else (1080, 1920)
+              probe = json.loads(subprocess.check_output([
+                  "ffprobe", "-v", "error", "-select_streams", "v:0",
+                  "-show_entries", "stream=codec_name,width,height,pix_fmt,r_frame_rate,nb_frames,duration",
+                  "-of", "json", str(mp4),
+              ], text=True))["streams"][0]
+              assert probe["codec_name"] == "h264"
+              assert (int(probe["width"]), int(probe["height"])) == expected_wh
+              assert probe["r_frame_rate"] == "60/1"
+              expected_frames = int(meta["render_contract"]["frame_count"])
+              expected_duration = float(meta["render_contract"]["duration_seconds_per_chapter"])
+              assert int(probe["nb_frames"]) == expected_frames
+              assert abs(float(probe["duration"]) - expected_duration) < 0.05
+              subprocess.run(
+                  ["ffmpeg", "-v", "error", "-i", str(mp4), "-f", "null", "-"],
+                  check=True,
+              )
+
+          assert len(list(root.glob("*.mp4"))) == 4
+          assert len(list(root.glob("*.poster.jpg"))) == 4
+          assert len(list(root.glob("*.visual-transcript.json"))) == 4
+          print(json.dumps({
+              "state": "CHAPTER_EXACT_ENCODE_VALIDATED_EPHEMERAL_NOT_DELIVERY",
+              "chapter": expected_chapter,
+              "outputs": len(metas),
+              "semantic_review": "NOT_CLAIMED_BY_THIS_TECHNICAL_ENCODE_CHECK",
+              "delivery": "NOT_PERFORMED",
+          }))
+          PY
+
+      - name: Delete ephemeral encoded media before runner teardown
+        if: always()
+        shell: bash
+        run: |
+          rm -rf "motion/dist/seguridad-ia-final/ch${{ matrix.chapter }}"
+
+  validation-complete:
+    name: all six chapter encode validations completed
+    needs: encode-chapter
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Record bounded milestone result
+        shell: bash
+        run: |
+          printf '%s\n' \
+            'ENCODED_VALIDATION_COMPLETE_24_OUTPUTS_EPHEMERAL_NOT_DELIVERY' \
+            'No MP4 is retained or transported by GitHub Actions.' \
+            'Independent encoded visual review, Drive delivery and discovery staging remain separate fail-closed gates.'

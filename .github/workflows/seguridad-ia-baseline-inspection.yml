@@ -1,0 +1,138 @@
+name: Seguridad IA baseline media inspection
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - .github/workflows/seguridad-ia-baseline-inspection.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install and verify media tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffprobe -version | head -n 1
+          ffmpeg -version | head -n 1
+
+      - name: Probe and fully decode all Seguridad IA baseline MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob, hashlib, json, os, subprocess
+          from datetime import datetime, timezone
+
+          paths = sorted(
+              glob.glob('docs/series/seguridad-ia/*.mp4') +
+              glob.glob('locales/en/series/seguridad-ia/*.mp4')
+          )
+          if len(paths) != 12:
+              raise SystemExit(f'Expected 12 baseline MP4s, found {len(paths)}: {paths}')
+
+          assets = []
+          failures = []
+          for path in paths:
+              h = hashlib.sha256()
+              with open(path, 'rb') as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(chunk)
+
+              probe = subprocess.run([
+                  'ffprobe', '-v', 'error',
+                  '-select_streams', 'v:0',
+                  '-show_entries',
+                  'stream=codec_name,width,height,r_frame_rate,pix_fmt,color_range,color_space:format=duration,size',
+                  '-of', 'json', path
+              ], check=True, capture_output=True, text=True)
+              data = json.loads(probe.stdout)
+              stream = (data.get('streams') or [{}])[0]
+              fmt = data.get('format') or {}
+
+              decode = subprocess.run([
+                  'ffmpeg', '-nostdin', '-v', 'error', '-xerror',
+                  '-i', path, '-map', '0:v:0', '-f', 'null', '-'
+              ], capture_output=True, text=True)
+              decode_ok = decode.returncode == 0
+              if not decode_ok:
+                  failures.append({'path': path, 'stderr_tail': decode.stderr[-2000:]})
+
+              locale = 'en' if path.startswith('locales/en/') else 'es'
+              base = os.path.basename(path)
+              chapter = base[:2]
+              assets.append({
+                  'locale': locale,
+                  'chapter': chapter,
+                  'path': path,
+                  'sha256': h.hexdigest(),
+                  'bytes': os.path.getsize(path),
+                  'duration_seconds': round(float(fmt.get('duration', 0.0)), 3),
+                  'codec': stream.get('codec_name'),
+                  'width': stream.get('width'),
+                  'height': stream.get('height'),
+                  'fps': stream.get('r_frame_rate'),
+                  'pixel_format': stream.get('pix_fmt'),
+                  'color_range': stream.get('color_range'),
+                  'color_space': stream.get('color_space'),
+                  'full_decode': 'PASS' if decode_ok else 'FAIL',
+              })
+
+          es = [a for a in assets if a['locale'] == 'es']
+          en = [a for a in assets if a['locale'] == 'en']
+          report = {
+              'schema_version': 1,
+              'unit': 'seguridad-ia',
+              'recorded_at_utc': datetime.now(timezone.utc).isoformat(),
+              'source_head': subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
+              'stage': 'BASELINE_MEDIA_PROFILE_INSPECTED',
+              'owner_visual_approval': 'NOT_REQUESTED',
+              'technical_golden': False,
+              'baseline_inventory': {
+                  'total_mp4': len(assets),
+                  'es_mp4': len(es),
+                  'en_mp4': len(en),
+                  'full_decode_pass': sum(a['full_decode'] == 'PASS' for a in assets),
+                  'full_decode_fail': sum(a['full_decode'] != 'PASS' for a in assets),
+              },
+              'assets': assets,
+              'decode_failures': failures,
+              'next_action': 'Author and render the complete versioned six-chapter ES/EN semantic timeline from the already validated series register; baseline binaries are inputs only, not migrated Golden outputs.'
+          }
+          os.makedirs('motion/migration/checkpoints', exist_ok=True)
+          out = 'motion/migration/checkpoints/seguridad-ia-baseline-media-profile.json'
+          with open(out, 'w', encoding='utf-8') as f:
+              json.dump(report, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          print(json.dumps(report['baseline_inventory'], indent=2))
+          if failures:
+              raise SystemExit(f'{len(failures)} baseline media decode failures')
+          PY
+
+      - name: Commit deterministic baseline evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add motion/migration/checkpoints/seguridad-ia-baseline-media-profile.json
+          if git diff --cached --quiet; then
+            echo "Baseline profile already current."
+            exit 0
+          fi
+          git commit -m "migration: inspect Seguridad IA baseline media [skip ci]"
+          git push origin HEAD:migration/video-golden-seguridad-ia

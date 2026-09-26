@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T23:02:28Z",
+  "unit": "seguridad-ia",
+  "branch": "migration/video-golden-seguridad-ia",
+  "validated_head": "28f9a968db7c5234614a94cc26b7bbabaa82e9dc",
+  "state": "ENCODED_HV_MOTION_PROBE_PASS_NOT_FINAL_OUTPUTS",
+  "technical_golden": false,
+  "owner_visual_approval": "NOT_REQUESTED",
+  "scope": "Bounded encoded H/V diagnostic motion probe across all 30 canonical Spanish concepts. This evidence validates encoded motion presence, codec integrity and native H/V delivery from the actual deterministic browser renderer; it is not the final 24-output series and is not Technical GOLDEN.",
+  "workflow_evidence": {
+    "run_id": 35474840709,
+    "job_id": 105982204542,
+    "conclusion": "success",
+    "artifact_id": 10593153296,
+    "artifact_name": "seguridad-ia-encoded-motion-28f9a968db7c5234614a94cc26b7bbabaa82e9dc",
+    "artifact_zip_sha256": "4b9128da4c44d81a210c5467740d4013d637d5bac200aecdd5964cdd3b2157cf",
+    "artifact_size_bytes": 3374696
+  },
+  "coverage": {
+    "canonical_concepts": 30,
+    "orientations": ["horizontal", "vertical"],
+    "cue_windows_per_concept": "first and last semantic cue",
+    "window_seconds": 0.6,
+    "fps": 60,
+    "frames_encoded_total": 4320,
+    "static_concepts_horizontal": 0,
+    "static_concepts_vertical": 0,
+    "moving_windows_horizontal": 53,
+    "moving_windows_vertical": 51
+  },
+  "outputs": [
+    {
+      "orientation": "horizontal",
+      "sha256": "3d7df2ca7dee01bc5ce17eb40621cb390b3aa12e552bbfb932f151fcb73cf733",
+      "size_bytes": 1832802,
+      "codec": "h264",
+      "resolution": "1920x1080",
+      "pixel_format": "yuv420p",
+      "fps": "60/1",
+      "duration_seconds": 36.0,
+      "frames": 2160,
+      "full_decode": "PASS"
+    },
+    {
+      "orientation": "vertical",
+      "sha256": "3df2c1babb92e09d9f6ebbbd433d193e8ff7e952e8b719c67288a9350ca79b7c",
+      "size_bytes": 1809954,
+      "codec": "h264",
+      "resolution": "1080x1920",
+      "pixel_format": "yuv420p",
+      "fps": "60/1",
+      "duration_seconds": 36.0,
+      "frames": 2160,
+      "full_decode": "PASS"
+    }
+  ],
+  "gates": {
+    "python_compile": "PASS",
+    "node_syntax": "PASS",
+    "browser_renderer": "PASS",
+    "encoded_motion_presence_all_concepts_hv": "PASS",
+    "h264_60fps_native_hv": "PASS",
+    "full_decode_hv": "PASS",
+    "final_24_outputs": "NOT_VERIFIED",
+    "whole_series_final_encoded_visual_review": "NOT_VERIFIED",
+    "delivery_integration": "NOT_VERIFIED"
+  },
+  "next_action": "Encode the complete 24 ES/EN H/V chapter outputs from the same versioned spec/theme/timeline, bind exact hashes and metadata, inspect whole-series encoded motion/diversity and accessibility/player delivery, then create the single complete Seguridad IA review package under the existing Drive root and request one owner review."
+}

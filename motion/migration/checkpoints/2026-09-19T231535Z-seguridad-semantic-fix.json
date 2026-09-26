@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-19T23:15:35Z",
+  "unit": "seguridad-ia",
+  "branch": "migration/video-golden-seguridad-ia",
+  "validated_head": "aecca1f8615413dfee4b31d8f3a5c55a6d3c1295",
+  "state": "POST_FIX_BROWSER_PREFLIGHT_PASS_FINAL_ENCODE_PENDING",
+  "technical_golden": false,
+  "owner_visual_approval": "NOT_REQUESTED",
+  "defects_repaired": [
+    {
+      "concept": "S00-C5",
+      "topology": "graph_cut",
+      "defect": "Tall cut-set labels overlaid causal path/nodes in horizontal composition.",
+      "repair": "Place tall narrow cut-set labels above the barrier, preserving geometry, content, palette and timing."
+    },
+    {
+      "concept": "S03-C2",
+      "topology": "two_dimensional_space",
+      "defect": "Semantic axes existed in geometry but labels were not rendered.",
+      "repair": "Render declared x/y semantic axis labels."
+    },
+    {
+      "concept": "S01-C2",
+      "topology": "ranked_candidates_to_top_k",
+      "defect": "Declared selected candidate indices were not visually distinguished.",
+      "repair": "Render selected candidates with the existing accent semantics and center marker."
+    }
+  ],
+  "post_fix_evidence": {
+    "browser_preflight": {
+      "run_id": 35475585063,
+      "job_id": 105984166548,
+      "conclusion": "success",
+      "artifact_id": 10593158890,
+      "artifact_digest": "sha256:ab421f6053e85076a60367611c7ceec667254ef0bbc059693a828caed999e013",
+      "jobs": 24,
+      "frames_sampled": 360,
+      "layout_issues": 0,
+      "browser_errors": 0,
+      "minimum_body_px": 56,
+      "minimum_mechanism_scale": 0.925,
+      "horizontal_contact_sheet_concepts": 30,
+      "vertical_contact_sheet_concepts": 30,
+      "inspection": "Contact sheets read back and visually inspected after the repair; repaired graph-cut label placement and declared axes/selection semantics are visibly present."
+    },
+    "semantic_engine": {
+      "run_id": 35475585054,
+      "job_id": 105984166460,
+      "conclusion": "success"
+    },
+    "encoded_motion": {
+      "run_id": 35475585045,
+      "state_at_checkpoint": "IN_PROGRESS",
+      "conclusion": "NOT_YET_OBSERVED"
+    },
+    "complete_24_output_export": {
+      "run_id": 35475585037,
+      "state_at_checkpoint": "PENDING",
+      "conclusion": "NOT_YET_OBSERVED"
+    }
+  },
+  "next_action": "Observe the post-fix encoded-motion result and complete 24-output encoded export. Only after the exact final package passes full decode, ES/EN parity, encoded motion and whole-series visual inspection should it be uploaded beneath the single existing Drive review root and one owner review be requested."
+}

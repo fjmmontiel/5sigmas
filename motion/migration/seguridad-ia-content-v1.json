@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "spec_id": "seguridad-ia-v1",
+  "unit": "seguridad-ia",
+  "status": "AUTHORED_NOT_RENDERED",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "series_register": "motion/migration/seguridad-ia-series-register.json",
+  "theme": {
+    "base": "neutral_flat_editorial",
+    "accent": "#B44B31",
+    "accent_dark": "#7F3525",
+    "accent_surface": "#F7ECE8"
+  },
+  "render_contract": {
+    "width_horizontal": 1920,
+    "height_horizontal": 1080,
+    "width_vertical": 1080,
+    "height_vertical": 1920,
+    "fps": 60,
+    "duration_seconds_per_chapter": 60,
+    "scene_duration_seconds": 12,
+    "audio": "silent",
+    "deterministic_seek": true,
+    "native_vertical_recomposition": true,
+    "reduced_motion_variant": true,
+    "text_reveal": "whole_chunk",
+    "unseen_text_prelaid_out": true
+  },
+  "source_bindings": [
+    {"chapter":"00","es":{"path":"docs/series/seguridad-ia/00_presentacion_serie.md","blob_sha":"8a37661f67541b3cffe90a6d90f7b482a735fba3"},"en":{"path":"locales/en/series/seguridad-ia/00_presentacion_serie.md","blob_sha":"a90c6ca3db356c8c5fd337480abaf564e95b255a"}},
+    {"chapter":"01","es":{"path":"docs/series/seguridad-ia/01-prompt-injection.md","blob_sha":"4b1937a64293faed650cdcd19abf5e29fe69098f"},"en":{"path":"locales/en/series/seguridad-ia/01-prompt-injection.md","blob_sha":"9f670970963d5469b7b04b2db653b310f749b5ca"}},
+    {"chapter":"02","es":{"path":"docs/series/seguridad-ia/02-jailbreaks.md","blob_sha":"de2c9666dc1b82d6d88a396c98ce9eac93b6e387"},"en":{"path":"locales/en/series/seguridad-ia/02-jailbreaks.md","blob_sha":"e2a159b6c23d64c480064fe38765a03b4a668579"}},
+    {"chapter":"03","es":{"path":"docs/series/seguridad-ia/03-envenenamiento.md","blob_sha":"7110f402bc7d4a09fb6f2dff2f2d6ca6818ac501"},"en":{"path":"locales/en/series/seguridad-ia/03-envenenamiento.md","blob_sha":"b64a2da0193c3762e4dccabe7fd01097853e3780"}},
+    {"chapter":"04","es":{"path":"docs/series/seguridad-ia/04-red-teaming.md","blob_sha":"7cd9cd72f344d98fa642ab59285a6c8917ee1186"},"en":{"path":"locales/en/series/seguridad-ia/04-red-teaming.md","blob_sha":"0cfbb0401ba45391e997d3d0474ef0f599ca2b04"}},
+    {"chapter":"05","es":{"path":"docs/series/seguridad-ia/05-controles-produccion.md","blob_sha":"d938e592ea94cf0b940b7e17434ceb75db4999f3"},"en":{"path":"locales/en/series/seguridad-ia/05-controles-produccion.md","blob_sha":"a266554db41a50320191a3387112bd08317ffda3"}}
+  ],
+  "chapters": [
+    {
+      "chapter":"00",
+      "slug":"presentacion",
+      "title":{"es":"Seguridad en IA","en":"AI Security"},
+      "summary":{"es":"Cómo una entrada no confiable puede influir en un sistema y qué fronteras limitan que esa influencia se convierta en una acción.","en":"How untrusted input can influence a system and which boundaries limit that influence before it becomes an action."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"Control y datos comparten el canal","en":"Control and data share a channel"}},
+        {"start":24,"end":48,"name":{"es":"Jailbreaks y persistencia amplían el riesgo","en":"Jailbreaks and persistence expand risk"}},
+        {"start":48,"end":60,"name":{"es":"Autorización y permisos limitan el impacto","en":"Authorization and permissions limit impact"}}
+      ],
+      "scenes":[
+        {"concept_id":"S00-C1","start":0,"end":12,"text":{"es":"Instrucciones privilegiadas y datos externos llegan al modelo por el mismo medio: lenguaje natural.","en":"Privileged instructions and external data reach the model through the same medium: natural language."}},
+        {"concept_id":"S00-C2","start":12,"end":24,"text":{"es":"Una señal no confiable puede viajar por retrieval, memoria o tools antes de afectar una decisión.","en":"An untrusted signal can travel through retrieval, memory or tools before it changes a decision."}},
+        {"concept_id":"S00-C3","start":24,"end":36,"text":{"es":"La influencia no determina por sí sola el daño: los permisos deciden qué datos y acciones quedan al alcance.","en":"Influence alone does not determine harm: permissions decide which data and actions remain reachable."}},
+        {"concept_id":"S00-C4","start":36,"end":48,"text":{"es":"Prompt injection, jailbreaks y persistencia son mecanismos distintos que pueden encadenarse.","en":"Prompt injection, jailbreaks and persistence are different mechanisms that can be chained."}},
+        {"concept_id":"S00-C5","start":48,"end":60,"text":{"es":"Una defensa robusta combina controles de influencia con fronteras independientes de autorización.","en":"A robust defense combines influence controls with independent authorization boundaries."}}
+      ]
+    },
+    {
+      "chapter":"01",
+      "slug":"prompt-injection",
+      "title":{"es":"Prompt injection","en":"Prompt injection"},
+      "summary":{"es":"Cómo una orden escondida en contenido externo puede competir por el control y qué arquitectura separa lectura de acción.","en":"How an instruction hidden in external content can compete for control and which architecture separates reading from action."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"Del documento al contexto","en":"From document to context"}},
+        {"start":24,"end":48,"name":{"es":"Datos e instrucciones compiten por el control","en":"Data and instructions compete for control"}},
+        {"start":48,"end":60,"name":{"es":"Separar lectura de acción y registrar permisos","en":"Separate reading from action and record permissions"}}
+      ],
+      "scenes":[
+        {"concept_id":"S01-C1","start":0,"end":12,"text":{"es":"System prompt, usuario, documentos recuperados y outputs de tools comparten el contexto del modelo.","en":"System prompts, user text, retrieved documents and tool outputs share the model context."}},
+        {"concept_id":"S01-C2","start":12,"end":24,"text":{"es":"La inyección indirecta solo puede influir si el contenido hostil consigue entrar entre los documentos recuperados.","en":"Indirect injection can only influence the model if hostile content reaches the retrieved set."}},
+        {"concept_id":"S01-C3","start":24,"end":36,"text":{"es":"Cambiar palabras o filtrar firmas no crea una frontera formal cuando la intención semántica sigue intacta.","en":"Rewriting words or filtering signatures does not create a formal boundary when semantic intent remains intact."}},
+        {"concept_id":"S01-C4","start":36,"end":48,"text":{"es":"El riesgo crece cuando una decisión contaminada puede proponer una tool call con efectos externos.","en":"Risk grows when a contaminated decision can propose a tool call with external effects."}},
+        {"concept_id":"S01-C5","start":48,"end":60,"text":{"es":"Separar el lector no confiable del ejecutor privilegiado rompe la ruta directa entre documento y acción.","en":"Separating the untrusted reader from the privileged executor breaks the direct path from document to action."}}
+      ]
+    },
+    {
+      "chapter":"02",
+      "slug":"jailbreaks",
+      "title":{"es":"Jailbreaks","en":"Jailbreaks"},
+      "summary":{"es":"Cómo los intentos adaptativos convierten una negativa aislada en un problema de búsqueda y presupuesto.","en":"How adaptive attempts turn a single refusal into a search-and-budget problem."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"De una negativa a una búsqueda","en":"From one refusal to a search"}},
+        {"start":24,"end":48,"name":{"es":"Optimización, transferencia y presupuesto","en":"Optimization, transfer and budget"}},
+        {"start":48,"end":60,"name":{"es":"Aleatoriedad y autorización como fronteras distintas","en":"Randomness and authorization are different boundaries"}}
+      ],
+      "scenes":[
+        {"concept_id":"S02-C1","start":0,"end":12,"text":{"es":"Una negativa en N=1 no demuestra que todas las reformulaciones posibles queden bloqueadas.","en":"A refusal at N=1 does not show that every possible reformulation is blocked."}},
+        {"concept_id":"S02-C2","start":12,"end":24,"text":{"es":"La optimización automatiza la búsqueda; la transferencia prueba si los patrones encontrados sobreviven fuera del target original.","en":"Optimization automates search; transfer tests whether discovered patterns survive beyond the original target."}},
+        {"concept_id":"S02-C3","start":24,"end":36,"text":{"es":"El número de intentos, la adaptatividad y la información observable forman parte del threat model.","en":"Attempt count, adaptivity and observable information are part of the threat model."}},
+        {"concept_id":"S02-C4","start":36,"end":48,"text":{"es":"Bypass, capability, alcance de tools y ejecución requieren evidencias diferentes.","en":"Bypass, capability, tool reachability and execution require different evidence."}},
+        {"concept_id":"S02-C5","start":48,"end":60,"text":{"es":"Rate limiting reduce búsqueda; autorización decide si una acción está permitida. No son el mismo control.","en":"Rate limiting reduces search; authorization decides whether an action is allowed. They are not the same control."}}
+      ]
+    },
+    {
+      "chapter":"03",
+      "slug":"envenenamiento",
+      "title":{"es":"Envenenamiento","en":"Poisoning"},
+      "summary":{"es":"Cómo una entrada no confiable puede persistir, reaparecer y sobrevivir a una revocación incompleta.","en":"How untrusted input can persist, reappear and survive incomplete revocation."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"Persistencia y reentrada de memoria","en":"Persistence and memory re-entry"}},
+        {"start":24,"end":48,"name":{"es":"Estado contaminado y comportamiento latente","en":"Contaminated state and latent behavior"}},
+        {"start":48,"end":60,"name":{"es":"Procedencia y revocación verificable","en":"Provenance and verifiable revocation"}}
+      ],
+      "scenes":[
+        {"concept_id":"S03-C1","start":0,"end":12,"text":{"es":"La cadena útil de evaluación es Write → Retrieve → Influence/Execute → Forget.","en":"The useful evaluation chain is Write → Retrieve → Influence/Execute → Forget."}},
+        {"concept_id":"S03-C2","start":12,"end":24,"text":{"es":"Que una memoria sea relevante no demuestra que sea verdadera, actual ni autorizada para gobernar una acción.","en":"A relevant memory is not necessarily true, current or authorized to govern an action."}},
+        {"concept_id":"S03-C3","start":24,"end":36,"text":{"es":"Una señal persistente puede propagarse a índices, caches, resúmenes y otros agentes.","en":"A persistent signal can propagate into indexes, caches, summaries and other agents."}},
+        {"concept_id":"S03-C4","start":36,"end":48,"text":{"es":"Un backdoor en pesos y un memory poisoning de runtime viven en superficies distintas y requieren controles distintos.","en":"A weight-level backdoor and runtime memory poisoning live on different surfaces and need different controls."}},
+        {"concept_id":"S03-C5","start":48,"end":60,"text":{"es":"Procedencia, scope, caducidad y revocación hacen que el estado persistente pueda gobernarse y auditarse.","en":"Provenance, scope, expiration and revocation make persistent state governable and auditable."}}
+      ]
+    },
+    {
+      "chapter":"04",
+      "slug":"red-teaming",
+      "title":{"es":"Red-teaming","en":"Red teaming"},
+      "summary":{"es":"Cómo probar una trayectoria completa y convertir cada hallazgo en evidencia reproducible de release.","en":"How to test a complete trajectory and turn each finding into reproducible release evidence."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"Del test a la cadena de ataque","en":"From a test to an attack chain"}},
+        {"start":24,"end":48,"name":{"es":"Cobertura adaptativa y validez del evaluador","en":"Adaptive coverage and evaluator validity"}},
+        {"start":48,"end":60,"name":{"es":"Evidencia y gate de release","en":"Evidence and the release gate"}}
+      ],
+      "scenes":[
+        {"concept_id":"S04-C1","start":0,"end":12,"text":{"es":"Antes del benchmark hay que fijar activo, actor, entrada, presupuesto, permisos, éxito y recuperación.","en":"Before the benchmark, define the asset, actor, input, budget, permissions, success and recovery."}},
+        {"concept_id":"S04-C2","start":12,"end":24,"text":{"es":"Capacidad del modelo, uplift humano y ejecución del producto son experimentos distintos.","en":"Model capability, human uplift and product execution are different experiments."}},
+        {"concept_id":"S04-C3","start":24,"end":36,"text":{"es":"Un atacante automatizado puede optimizar contra la rúbrica; el grader también necesita validación.","en":"An automated attacker can optimize against the rubric; the grader also needs validation."}},
+        {"concept_id":"S04-C4","start":36,"end":48,"text":{"es":"La traza debe ligar input, contexto, decisión, tool proposal, policy, efecto y estado final.","en":"The trace must bind input, context, decision, tool proposal, policy, effect and final state."}},
+        {"concept_id":"S04-C5","start":48,"end":60,"text":{"es":"El hallazgo útil termina como fixture reproducible con scopes, budget, evidencia y estado esperado.","en":"A useful finding ends as a reproducible fixture with scopes, budget, evidence and expected state."}}
+      ]
+    },
+    {
+      "chapter":"05",
+      "slug":"controles-produccion",
+      "title":{"es":"Controles de producción","en":"Production controls"},
+      "summary":{"es":"Cómo mínimo privilegio, autorización, kill paths y evidencia limitan el daño cuando una defensa falla.","en":"How least privilege, authorization, kill paths and evidence limit harm when one defense fails."},
+      "article_chapters":[
+        {"start":0,"end":24,"name":{"es":"Separar lectura y acción privilegiada","en":"Separate reading from privileged action"}},
+        {"start":24,"end":48,"name":{"es":"Mínimo privilegio y fronteras MCP","en":"Least privilege and MCP boundaries"}},
+        {"start":48,"end":60,"name":{"es":"Observabilidad, kill path y confirmación","en":"Observability, kill path and confirmation"}}
+      ],
+      "scenes":[
+        {"concept_id":"S05-C1","start":0,"end":12,"text":{"es":"El componente que lee contenido no confiable no debe heredar automáticamente acciones irreversibles.","en":"A component that reads untrusted content should not automatically inherit irreversible actions."}},
+        {"concept_id":"S05-C2","start":12,"end":24,"text":{"es":"Los scopes mínimos reducen el blast radius antes de que el modelo proponga nada.","en":"Minimum scopes reduce blast radius before the model proposes anything."}},
+        {"concept_id":"S05-C3","start":24,"end":36,"text":{"es":"MCP estandariza integración, no autorización: identidad, schemas, scopes y outputs siguen siendo fronteras de confianza.","en":"MCP standardizes integration, not authorization: identity, schemas, scopes and outputs remain trust boundaries."}},
+        {"concept_id":"S05-C4","start":36,"end":48,"text":{"es":"El kill path debe poder revocar credenciales, cancelar ejecución o degradar a read-only fuera del canal del modelo.","en":"The kill path must revoke credentials, cancel execution or degrade to read-only outside the model channel."}},
+        {"concept_id":"S05-C5","start":48,"end":60,"text":{"es":"Una release queda en HOLD si falta evidencia versionada para un control obligatorio.","en":"A release remains on HOLD when versioned evidence is missing for a mandatory control."}}
+      ]
+    }
+  ],
+  "derivation": {
+    "mp4": "from_this_spec_and_versioned_renderer",
+    "posters": "from_deterministic_keyframes",
+    "chapters": "from_article_chapters",
+    "duration": "from_render_contract",
+    "visual_transcript": "from_scene_text_and_concept_register",
+    "captions": "only_if_declared_by_consumer_contract"
+  },
+  "next_action": "Validate this exact bilingual spec against source blobs and semantic register, then implement reusable scene primitives and H/V layout checks before full encode."
+}

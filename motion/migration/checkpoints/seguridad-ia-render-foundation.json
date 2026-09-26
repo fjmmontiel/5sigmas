@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "unit": "seguridad-ia",
+  "stage": "REUSABLE_RENDER_FOUNDATION_PREFLIGHT_PASS",
+  "source_engine_branch": "migration/video-golden-modelos-razonadores",
+  "source_engine_head_observed": "4b7a194d734452637d1175ab16fb8a797c8d0b41",
+  "target_head_before": "e2e097f5b75413092bcab85cc77cfcd3472d18d4",
+  "foundation_commit": "9a0135a8dd6cb899b9c910b71d036bc4cf27e96a",
+  "gate_commit": "4e0cee933209f42ce6ad4c8bfe38495208f5fba3",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "ported_modules": [
+    {"path":"motion/src/cues.mjs","blob_sha":"409e55bfbecf06769a1428526d4b41b885b62222","role":"deterministic cue timeline and reveal state"},
+    {"path":"motion/src/labels.mjs","blob_sha":"ea06cfc0aa9dfab01d472d1e5b843808a2d677ad","role":"localized renderer labels"},
+    {"path":"motion/src/theme.mjs","blob_sha":"44fdb1c6c428dbe49ba40da75035b17cecdc2a16","role":"series visual identity and contrast validation"},
+    {"path":"motion/src/render/paint.mjs","blob_sha":"b667ef779f1e73a55cf2bd7f103b0043654593b0","role":"deterministic canvas primitives"},
+    {"path":"motion/src/render/layout.mjs","blob_sha":"cf0b1c7fa3c327892c4148623cc56a5c3f322d37","role":"content-aware horizontal/portrait editorial layout"}
+  ],
+  "intentionally_not_ported": [
+    "motion/src/engine.mjs: imports reasoning/editorial domain renderers from Modelos",
+    "motion/src/player.mjs: imports the Modelos-coupled engine",
+    "motion/src/schema.mjs: mechanism enum is still Modelos-oriented",
+    "motion/src/review-policy.mjs: imports Modelos editorial registry and returns unit modelos-razonadores"
+  ],
+  "security_profile": {
+    "accent":"#B44B31",
+    "accent_text":"#7F3525",
+    "accent_surface":"#F7ECE8",
+    "content_spec":"motion/migration/seguridad-ia-content-v1.json",
+    "series_register":"motion/migration/seguridad-ia-series-register.json"
+  },
+  "preflight": {
+    "workflow_run": 35466459676,
+    "job": 105959575103,
+    "status": "PASS",
+    "utf8_control_byte_integrity": "5/5 PASS",
+    "node_syntax_import": "5/5 PASS",
+    "accent_text_contrast_on_background": 8.322568356519009,
+    "accent_contrast_on_background": 5.084235297901862,
+    "horizontal_body_min_px": 46,
+    "portrait_body_min_px": 46,
+    "animation_family_repeat_cap": 2
+  },
+  "next_action": "Implement Seguridad-specific schema/mechanism registry and engine on top of these shared deterministic primitives, validate the authored 30-concept ES/EN content against the full series register, then render H/V and inspect encoded motion before any review package."
+}

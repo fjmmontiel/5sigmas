@@ -1,0 +1,132 @@
+name: Seguridad IA migration baseline profile
+
+on:
+  push:
+    branches:
+      - migration/video-golden-seguridad-ia
+    paths:
+      - '.github/workflows/seguridad-video-migration-profile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seguridad-ia-migration-profile
+  cancel-in-progress: false
+
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/video-golden-seguridad-ia
+          fetch-depth: 0
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Inspect all public ES/EN baseline MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          pairs = []
+          for locale, root in (
+              ('es', Path('docs/series/seguridad-ia')),
+              ('en', Path('locales/en/series/seguridad-ia')),
+          ):
+              for path in sorted(root.glob('*.mp4')):
+                  pairs.append((locale, path))
+
+          if len(pairs) != 12:
+              raise SystemExit(f'Expected 12 public Seguridad IA MP4s, found {len(pairs)}')
+
+          rows = []
+          for locale, path in pairs:
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              probe = json.loads(subprocess.check_output([
+                  'ffprobe', '-v', 'error', '-show_streams', '-show_format',
+                  '-of', 'json', str(path)
+              ], text=True))
+              video = next((s for s in probe.get('streams', []) if s.get('codec_type') == 'video'), None)
+              if video is None:
+                  raise SystemExit(f'No video stream in {path}')
+              duration = float(probe.get('format', {}).get('duration') or video.get('duration') or 0)
+              if duration <= 0:
+                  raise SystemExit(f'Invalid duration for {path}: {duration}')
+              # Full decode to /dev/null: integrity must be observed, not inferred from metadata.
+              subprocess.run([
+                  'ffmpeg', '-v', 'error', '-i', str(path), '-map', '0:v:0',
+                  '-f', 'null', '-'
+              ], check=True)
+              rows.append({
+                  'locale': locale,
+                  'chapter': path.stem.split('-', 1)[0].split('_', 1)[0],
+                  'path': path.as_posix(),
+                  'bytes': path.stat().st_size,
+                  'sha256': digest,
+                  'duration_seconds': round(duration, 3),
+                  'codec': video.get('codec_name'),
+                  'width': video.get('width'),
+                  'height': video.get('height'),
+                  'pixel_format': video.get('pix_fmt'),
+                  'fps': video.get('avg_frame_rate'),
+                  'color_range': video.get('color_range'),
+                  'color_space': video.get('color_space'),
+                  'full_decode': 'PASS',
+              })
+
+          es = [r for r in rows if r['locale'] == 'es']
+          en = [r for r in rows if r['locale'] == 'en']
+          result = {
+              'schema_version': 1,
+              'unit': 'seguridad-ia',
+              'recorded_at_utc': datetime.now(timezone.utc).isoformat(),
+              'source_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'stage': 'BASELINE_MEDIA_PROFILED',
+              'owner_visual_approval': 'NOT_REQUESTED',
+              'technical_golden': False,
+              'inventory': {
+                  'mp4_count': len(rows),
+                  'es_count': len(es),
+                  'en_count': len(en),
+                  'full_decode_pass': sum(r['full_decode'] == 'PASS' for r in rows),
+              },
+              'media': rows,
+              'observations': [
+                  'This is an engineering baseline inspection of existing public binaries, not owner approval.',
+                  'All integrity claims are bound to the exact SHA-256 recorded for each inspected MP4.',
+                  'No media bytes were modified by this profiling job.',
+              ],
+              'next_action': 'Author the complete six-chapter ES/EN versioned semantic spec and series-diversity register, then render a new review unit without contaminating Modelos R2.',
+          }
+          out = Path('motion/migration/seguridad-ia-profile.json')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(result['inventory'], indent=2))
+          PY
+
+      - name: Persist inspected baseline profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add motion/migration/seguridad-ia-profile.json
+          if git diff --cached --quiet; then
+            echo 'Profile already current.'
+            exit 0
+          fi
+          git commit -m 'migration: persist Seguridad IA baseline media profile [skip ci]'
+          git push origin HEAD:migration/video-golden-seguridad-ia
