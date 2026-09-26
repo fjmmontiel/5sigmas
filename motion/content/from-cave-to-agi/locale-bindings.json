@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "unit": "from-cave-to-agi",
+  "locales": ["es", "en"],
+  "chapters": [
+    {"chapter":"00","es":"docs/series/from-cave-to-agi/00_presentacion_serie.md","en":"locales/en/series/from-cave-to-agi/00_presentacion_serie.md","output_es":"docs/series/from-cave-to-agi/00_presentacion_serie.mp4","output_en":"locales/en/series/from-cave-to-agi/00_presentacion_serie.mp4"},
+    {"chapter":"01","es":"docs/series/from-cave-to-agi/01-representar.md","en":"locales/en/series/from-cave-to-agi/01-representar.md","output_es":"docs/series/from-cave-to-agi/01-representar.mp4","output_en":"locales/en/series/from-cave-to-agi/01-representar.mp4"},
+    {"chapter":"02","es":"docs/series/from-cave-to-agi/02-mecanizar.md","en":"locales/en/series/from-cave-to-agi/02-mecanizar.md","output_es":"docs/series/from-cave-to-agi/02-mecanizar.mp4","output_en":"locales/en/series/from-cave-to-agi/02-mecanizar.mp4"},
+    {"chapter":"03","es":"docs/series/from-cave-to-agi/03-aprender.md","en":"locales/en/series/from-cave-to-agi/03-aprender.md","output_es":"docs/series/from-cave-to-agi/03-aprender.mp4","output_en":"locales/en/series/from-cave-to-agi/03-aprender.mp4"},
+    {"chapter":"04","es":"docs/series/from-cave-to-agi/04-escalar.md","en":"locales/en/series/from-cave-to-agi/04-escalar.md","output_es":"docs/series/from-cave-to-agi/04-escalar.mp4","output_en":"locales/en/series/from-cave-to-agi/04-escalar.mp4"},
+    {"chapter":"05","es":"docs/series/from-cave-to-agi/05-mas-alla.md","en":"locales/en/series/from-cave-to-agi/05-mas-alla.md","output_es":"docs/series/from-cave-to-agi/05-mas-alla.mp4","output_en":"locales/en/series/from-cave-to-agi/05-mas-alla.mp4"}
+  ]
+}

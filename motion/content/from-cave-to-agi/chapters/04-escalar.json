@@ -1,0 +1,63 @@
+{
+  "chapter": "04",
+  "slug": "escalar",
+  "source_es": "docs/series/from-cave-to-agi/04-escalar.md",
+  "question": "¿Qué cambió cuando datos, cómputo y arquitecturas escalables empezaron a reforzarse mutuamente?",
+  "concepts": [
+    {
+      "concept_id": "scale.alexnet-regime-shift",
+      "evidence": "AlexNet logró 15,3% de error top-5 en ILSVRC 2012 frente al 26,2% del segundo clasificado, combinando profundidad, datos, regularización y GPU.",
+      "mechanism": "Una comparación de benchmark mantiene fija la tarea y muestra la caída abrupta del error mientras aparecen los recursos que hicieron entrenable la arquitectura.",
+      "semantic_rationale": "La evidencia debe mostrar un cambio de régimen medido sin atribuirlo a una única innovación.",
+      "perceptual_family": "benchmark-gap-reveal",
+      "topology": "fixed benchmark with measured gap",
+      "choreography": "lock benchmark axis, reveal runner-up and AlexNet error bars, then annotate data/compute/regularization contributions",
+      "composition": "benchmark bars with resource callouts",
+      "cues": ["26.2", "15.3", "imagenet", "gpu"]
+    },
+    {
+      "concept_id": "scale.transformer-parallelism",
+      "evidence": "El Transformer elimina la recurrencia del núcleo y reorganiza el cálculo alrededor de atención, haciendo el entrenamiento mucho más paralelizable.",
+      "mechanism": "Dos ejecuciones de la misma secuencia compiten: una dependencia recurrente avanza token a token y una matriz de atención procesa relaciones en paralelo.",
+      "semantic_rationale": "La ventaja visual debe ser topológica y temporal, no una etiqueta que diga 'más rápido'.",
+      "perceptual_family": "parallel-attention-race",
+      "topology": "serial dependency chain versus parallel interaction matrix",
+      "choreography": "advance recurrent lane sequentially while attention lane opens token interactions concurrently",
+      "composition": "paired serial/matrix race",
+      "cues": ["recurrence", "attention", "parallelism", "throughput"]
+    },
+    {
+      "concept_id": "scale.pretraining-reuse",
+      "evidence": "BERT y la familia GPT consolidan la idea de entrenar una base amplia y después adaptarla o condicionarla para múltiples tareas.",
+      "mechanism": "Un único modelo preentrenado alimenta ramas de fine-tuning, zero-shot, few-shot e in-context use sin reconstruir el núcleo desde cero.",
+      "semantic_rationale": "La reutilización del conocimiento previo es el concepto central.",
+      "perceptual_family": "pretraining-adaptation-hub",
+      "topology": "shared pretrained hub with adaptation branches",
+      "choreography": "accumulate broad pretraining into one hub, then fan out to task-specific adaptation modes",
+      "composition": "central foundation hub with typed branches",
+      "cues": ["pretrain", "finetune", "few-shot", "reuse"]
+    },
+    {
+      "concept_id": "scale.scaling-laws",
+      "evidence": "En muchos regímenes, el error cae de forma relativamente predecible con parámetros, datos y cómputo; Chinchilla enfatiza que importa también cómo se reparte el presupuesto.",
+      "mechanism": "Una superficie de presupuesto mueve recursos entre parámetros y tokens y muestra regiones subóptimas frente a una trayectoria compute-optimal.",
+      "semantic_rationale": "Debe verse que escalar es una decisión de asignación medible, no simplemente hacer todo más grande.",
+      "perceptual_family": "compute-budget-allocation",
+      "topology": "constrained resource surface",
+      "choreography": "hold total compute budget, slide allocation between parameters and tokens, trace lower-loss region",
+      "composition": "budget simplex / performance contour",
+      "cues": ["parameters", "tokens", "compute", "optimum"]
+    },
+    {
+      "concept_id": "scale.foundation-model-reuse",
+      "evidence": "Los modelos fundacionales se preentrenan sobre datos amplios y luego sirven como infraestructura reutilizable para muchas tareas y, cada vez más, modalidades.",
+      "mechanism": "Una base compartida recibe distintas modalidades y entrega adaptaciones de tarea manteniendo un núcleo común.",
+      "semantic_rationale": "La escena debe distinguir reutilización generalista de una colección de modelos independientes.",
+      "perceptual_family": "foundation-reuse-lattice",
+      "topology": "shared base across tasks and modalities",
+      "choreography": "merge broad modalities into a common base, then activate multiple downstream task adapters",
+      "composition": "input modality lattice to shared base to task outputs",
+      "cues": ["text", "vision", "multimodal", "downstream"]
+    }
+  ]
+}

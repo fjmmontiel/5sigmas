@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-20T02:12:10Z",
+  "unit": "from-cave-to-agi",
+  "branch": "migration/video-golden-from-cave-to-agi",
+  "head_before_checkpoint": "e4c966b0c5a3f419bc3edb3f26e763c5da49292c",
+  "stage": "COMPLETE_SOURCE_BOUND_REGISTER_AND_HV_FOUNDATION",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "published": false,
+  "semantic_register": {
+    "chapters": 6,
+    "concepts": 30,
+    "perceptual_families": 30,
+    "max_family_uses": 1,
+    "source_bound": true,
+    "result": "PASS_STRUCTURAL_SOURCE_BOUND_REGISTER"
+  },
+  "render_foundation": {
+    "syntax_check": "PASS",
+    "foundation_contract": "PASS",
+    "accent": "#26A69A",
+    "accent_text": "#00776F",
+    "accent_surface": "#E7F4F0",
+    "contrast_body": 15.89,
+    "contrast_muted": 6.35,
+    "contrast_accent_text": 5.23,
+    "horizontal_body_floor_px": 46,
+    "portrait_body_floor_px": 46,
+    "family_repeat_cap": 2,
+    "encoded_motion": "NOT_RENDERED",
+    "browser_hv_layout": "NOT_RUN"
+  },
+  "evidence": {
+    "workflow_run": 35483354231,
+    "job": 106005042793,
+    "head": "e4c966b0c5a3f419bc3edb3f26e763c5da49292c"
+  },
+  "next_action": "Implement deterministic per-chapter ES/EN render specs and semantic mechanism compiler on this validated foundation, then run native H/V browser layout and encoded-motion review before creating any Drive review package or PR."
+}

@@ -1,0 +1,61 @@
+name: From Cave to AGI browser render preflight
+
+on:
+  push:
+    branches:
+      - migration/video-golden-from-cave-to-agi
+    paths:
+      - 'motion/migration/from-cave-to-agi-content-v1.json'
+      - 'motion/content/from-cave-to-agi/**'
+      - 'motion/src/from-cave/**'
+      - 'motion/src/render/**'
+      - 'motion/web/from-cave-render.html'
+      - 'motion/scripts/from_cave_render_check.py'
+      - '.github/workflows/from-cave-browser-render-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: from-cave-to-agi-browser-render-preflight
+  cancel-in-progress: false
+
+jobs:
+  browser-render-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Python and ESM syntax before browser work
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile motion/scripts/from_cave_render_check.py
+          node --check motion/src/from-cave/render.mjs
+          node --check motion/src/from-cave/engine.mjs
+          node --check motion/src/from-cave/mechanisms.mjs
+          node --check motion/src/from-cave/schema.mjs
+
+      - name: Install browser-check Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright pillow
+          command -v google-chrome || command -v chromium || command -v chromium-browser
+
+      - name: Render and inspect actual ES/EN H/V browser frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          python motion/scripts/from_cave_render_check.py
+          cat motion/dist/from-cave-to-agi-check/from-cave-browser-preflight.json
+
+      - name: Preserve bounded review-support evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: from-cave-to-agi-browser-preflight-${{ github.sha }}
+          path: motion/dist/from-cave-to-agi-check/
+          if-no-files-found: error
+          retention-days: 1

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "unit": "from-cave-to-agi",
+  "checkpoint_at": "2026-09-20T04:58:00Z",
+  "state": "COMPLETE_ENCODED_PACKAGE_PASS_DRIVE_BINARY_DELIVERY_BLOCKED",
+  "frozen_snapshot": {
+    "output_relevant_source_head": "91940c4a53ad455b920b999dd2b5c27d24ea4843",
+    "workflow_run": 35489348099,
+    "complete_artifact_name": "from-cave-to-agi-complete-review-91940c4a53ad455b920b999dd2b5c27d24ea4843",
+    "artifact_sha256": "0de601f6e4c588dec4aa8109081863e6ea892f4e5b0954d6c1989fc325dcc97e",
+    "inner_review_package_sha256": "f364bc97c0f62dd2b47c14ba937e62bb30a675370e5cc931d3511d257010814a",
+    "inner_review_package_bytes": 43092818,
+    "outputs": 24,
+    "chapters": 6,
+    "languages": ["es", "en"],
+    "orientations": ["horizontal", "vertical"],
+    "duration_seconds_per_output": 75,
+    "fps": 60,
+    "frames_per_output": 4500
+  },
+  "technical_evidence": {
+    "full_decode_pass": "24/24",
+    "es_en_semantic_parity_pass": "12/12",
+    "native_hv_semantic_parity_pass": "12/12",
+    "package_validator_job": 106022959845,
+    "technical_golden": false,
+    "published": false
+  },
+  "review": {
+    "owner_visual_approval": "NOT_REQUESTED",
+    "final_pr": 338,
+    "pr_state": "OPEN_DRAFT_UNMERGED",
+    "single_drive_root_policy_preserved": true,
+    "drive_block_folder_created": true,
+    "drive_review_index_created_and_read_back": true,
+    "drive_binary_package_delivered": false,
+    "drive_binary_delivery_blocker": "BLOCKED_FILE_REFERENCE connector egress; no sharing expansion performed",
+    "review_email_sent": false,
+    "review_email_reason": "Do not request owner approval until the immutable binary package is genuinely accessible beneath the existing single Drive root."
+  },
+  "next_action": "Resolve exact binary delivery into the existing Drive block without creating another review root; verify uploaded bytes by read-back/hash, then send one deduplicated owner-review email for this immutable snapshot. Keep PR #338 draft and technical_golden=false until explicit owner approval plus remaining release/integration gates."
+}

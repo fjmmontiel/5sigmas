@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-20",
+  "unit": "from-cave-to-agi",
+  "state": "CHANGES_REQUIRED",
+  "review_ready": false,
+  "owner_visual_approval": "CHANGES_REQUIRED",
+  "technical_golden": false,
+  "published": false,
+  "supersedes": "PENDING_OWNER_REVIEW for snapshot 91940c4a53ad455b920b999dd2b5c27d24ea4843; historical decode/hash results retained as diagnostics only",
+  "findings": ["Owner reports synchronization/style/repetition defects in new batches", "ZIP-only delivery is not individually playable MP4 delivery", "Prior packager checked structural IDs, frames and hashes, not independent visual quality"],
+  "implemented": ["Shared fail-closed review_admission.py wired inside main(), covering direct Python and workflow calls", "Exact asset/evidence binding, all required QA criteria, authored text/visual cues, independent review receipts, complete MP4 delivery required", "Missing, unknown, stale and failed evidence blocks review; internal diagnostic mode never promotes", "Manifest and embedded ZIP state corrected together"],
+  "verification": {"local_contract_regression_tests_passed": 26, "synthetic_positive_fixture_is_not_real_video_certification": true, "real_cave_package_outputs_checked": 24, "packager_exit_code": 1, "expected_result": "REVIEW BLOCKED", "new_review_ready_outputs": 0},
+  "next_action": "Repair authored timeline and actual visual mechanisms/style using approved Golden quality baseline, then render and inspect exact encoded outputs independently. Stage every MP4 individually only after content-ready; announce review only after delivery-ready. Do not start another flawed series. Preserve Modelos R2 approval and bytes. Reuse this PR.",
+  "public_state_excludes_private_delivery_receipts": true
+}

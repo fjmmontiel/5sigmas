@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>5sigmas From Cave deterministic renderer</title>
+<style>html,body{margin:0;background:#fff}canvas{display:block;width:100%;height:auto}</style>
+<canvas id="stage" width="1920" height="1080"></canvas>
+<script type="module">
+import {renderFromCaveFrame,validateFromCaveLayouts,validateFromCaveBrowserInputs} from '../src/from-cave/render.mjs';
+import {fromCaveRenderMatrix} from '../src/from-cave/engine.mjs';
+const canvas=document.querySelector('#stage');
+window.setup=(spec,bindings,chapters)=>{window.S=spec;window.B=bindings;window.C=chapters;const jobs=fromCaveRenderMatrix(bindings,chapters);const coverage=validateFromCaveBrowserInputs(spec,bindings,chapters);return {jobs,coverage};};
+window.draw=(jobId,time,reduced=false)=>renderFromCaveFrame(canvas,window.S,window.B,window.C,jobId,time,{reducedMotion:reduced});
+window.frame=(jobId,time,reduced=false)=>{const result=window.draw(jobId,time,reduced);return {result,jpeg:canvas.toDataURL('image/jpeg',.95).split(',')[1]};};
+window.layoutCheck=()=>validateFromCaveLayouts(canvas,window.S,window.B,window.C);
+window.ready=true;
+</script></html>

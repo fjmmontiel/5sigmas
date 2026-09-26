@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "unit": "from-cave-to-agi",
+  "state": "PARTIAL_SOURCE_BOUND_SEMANTIC_AUTHORING",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "palette": {
+    "accent": "#26A69A",
+    "ink": "#1F857C",
+    "source": "existing-series-identity"
+  },
+  "authoring_policy": {
+    "one_deterministic_timeline": true,
+    "native_horizontal_and_vertical": true,
+    "no_typing_gimmicks": true,
+    "no_generic_list_fallback": true,
+    "max_perceptual_family_uses_target": 2,
+    "source_bound_claims_required": true
+  },
+  "chapters": [
+    {
+      "chapter": "01",
+      "slug": "representar",
+      "source_es": "docs/series/from-cave-to-agi/01-representar.md",
+      "question": "¿Cómo pasamos de contar objetos a razonar sobre representaciones manipulables del mundo?",
+      "concepts": [
+        {
+          "concept_id": "represent.symbol-substitution",
+          "evidence": "Las marcas físicas permiten registrar cantidades ausentes y convierten objetos concretos en símbolos operables.",
+          "mechanism": "Una colección concreta se desacopla progresivamente de su representación: objeto -> muesca -> numeral -> variable.",
+          "semantic_rationale": "La animación debe mostrar que la ganancia no es decorativa: el símbolo conserva referencia mientras reduce la dependencia del objeto físico.",
+          "perceptual_family": "symbol-substitution",
+          "topology": "many-to-one abstraction",
+          "choreography": "replace physical tokens with stable symbolic tokens while preserving cardinality",
+          "composition": "paired concrete/symbolic fields",
+          "cues": ["concrete", "mark", "number", "variable"]
+        },
+        {
+          "concept_id": "represent.place-value-zero",
+          "evidence": "La notación posicional y el cero separan el valor del símbolo de su forma aislada y permiten expresar cantidades generales con un vocabulario pequeño.",
+          "mechanism": "Una rejilla de posiciones desplaza un mismo dígito entre órdenes de magnitud y después introduce el cero como placeholder y como número.",
+          "semantic_rationale": "El visual debe hacer visible que la posición cambia el valor y que cero cumple funciones históricamente distintas.",
+          "perceptual_family": "place-value-grid",
+          "topology": "ordered positional lattice",
+          "choreography": "move a digit across columns, then lock an empty place with zero",
+          "composition": "horizontal place-value table / vertical stacked columns",
+          "cues": ["additive", "positional", "placeholder", "number-zero"]
+        },
+        {
+          "concept_id": "represent.algebra-unknown",
+          "evidence": "El álgebra convierte cantidades desconocidas en objetos que pueden transformarse con reglas generales; la notación posterior comprime esas operaciones.",
+          "mechanism": "Una ecuación retórica se compacta en notación simbólica y se transforma paso a paso conservando equivalencia hasta aislar la incógnita.",
+          "semantic_rationale": "La transformación debe preservar ambos lados y mostrar por qué una incógnita puede manipularse sin conocer todavía su valor.",
+          "perceptual_family": "algebra-transform",
+          "topology": "equivalence-preserving transformation",
+          "choreography": "compress prose to symbols, apply mirrored operations, isolate x",
+          "composition": "balanced equation field",
+          "cues": ["rhetorical", "symbolic", "transform", "solve"]
+        },
+        {
+          "concept_id": "represent.deductive-proof",
+          "evidence": "El ideal deductivo griego organiza conclusiones como cadenas revisables desde definiciones y postulados.",
+          "mechanism": "Un grafo de dependencias activa postulados y lemas sólo cuando sus precondiciones están presentes hasta alcanzar una conclusión.",
+          "semantic_rationale": "La coreografía debe comunicar verificabilidad causal, no una simple lista de pasos.",
+          "perceptual_family": "deduction-dependency",
+          "topology": "directed acyclic proof graph",
+          "choreography": "activate premises, propagate validity, unlock conclusion",
+          "composition": "proof dependency graph",
+          "cues": ["definitions", "postulates", "lemma", "conclusion"]
+        },
+        {
+          "concept_id": "represent.calculus-change",
+          "evidence": "El cálculo formaliza tasa de cambio y acumulación, haciendo calculables fenómenos continuos y predictivos.",
+          "mechanism": "La misma trayectoria se observa como pendiente local y como área acumulada, vinculando cambio instantáneo y acumulación.",
+          "semantic_rationale": "La escena debe mostrar la relación entre dos operaciones sobre un proceso continuo, no sólo dibujar una curva.",
+          "perceptual_family": "rate-accumulation-dual",
+          "topology": "continuous curve with coupled local/global measures",
+          "choreography": "sweep tangent and accumulation window over one shared trajectory",
+          "composition": "coupled curve and measure panels",
+          "cues": ["motion", "rate", "accumulation", "prediction"]
+        }
+      ]
+    },
+    {
+      "chapter": "02",
+      "slug": "mecanizar",
+      "source_es": "docs/series/from-cave-to-agi/02-mecanizar.md",
+      "question": "¿Qué tuvo que cambiar para que un procedimiento simbólico pudiera convertirse en una computación general ejecutable?",
+      "concepts": [
+        {
+          "concept_id": "mechanize.fixed-operation-limit",
+          "evidence": "Pascalina y Step Reckoner automatizan familias concretas de operaciones, pero no separan mecanismo e instrucciones generales.",
+          "mechanism": "Una máquina de operaciones fijas recibe tareas crecientemente distintas hasta que su envolvente de capacidad deja tareas fuera.",
+          "semantic_rationale": "El límite de una calculadora debe verse como falta de programabilidad, no como falta de velocidad.",
+          "perceptual_family": "capability-envelope",
+          "topology": "bounded operation set",
+          "choreography": "route tasks through fixed operators and visibly reject unsupported procedure",
+          "composition": "machine core with capability boundary",
+          "cues": ["add", "multiply", "new-procedure", "limit"]
+        },
+        {
+          "concept_id": "mechanize.instructions-separate",
+          "evidence": "Jacquard separa instrucciones del mecanismo; Babbage y Lovelace extienden esa idea hacia una máquina general y procedimientos reutilizables.",
+          "mechanism": "El mismo mecanismo recibe tarjetas/instrucciones diferentes y produce comportamientos diferentes sin cambiar su estructura física.",
+          "semantic_rationale": "La invariancia del mecanismo frente al cambio de programa es el concepto central.",
+          "perceptual_family": "instruction-stream",
+          "topology": "fixed executor with interchangeable program stream",
+          "choreography": "swap instruction sequence while executor remains fixed",
+          "composition": "program rail feeding stable machine",
+          "cues": ["jacquard", "babbage", "lovelace", "general-procedure"]
+        },
+        {
+          "concept_id": "mechanize.logic-to-circuit",
+          "evidence": "Boole formaliza operaciones lógicas y Shannon muestra cómo implementarlas con circuitos de conmutación.",
+          "mechanism": "Una expresión booleana se transforma en una red física de puertas que reproduce la misma tabla de verdad.",
+          "semantic_rationale": "La escena debe probar equivalencia entre regla simbólica y estructura física.",
+          "perceptual_family": "logic-circuit-translation",
+          "topology": "expression-to-gate-network mapping",
+          "choreography": "bind symbolic operators to gates, then race all input combinations through both representations",
+          "composition": "symbolic expression beside gate network",
+          "cues": ["boolean", "mapping", "circuit", "equivalence"]
+        },
+        {
+          "concept_id": "mechanize.turing-boundary",
+          "evidence": "La máquina de Turing abstrae la computación general y el problema de parada demuestra que existen límites formales no reducibles a más hardware.",
+          "mechanism": "Una cinta/estado ejecuta reglas finitas y después un contraprograma invierte la predicción de un supuesto verificador universal de parada.",
+          "semantic_rationale": "La contradicción por autorreferencia debe ser observable como causalidad, no contarse como una paradoja decorativa.",
+          "perceptual_family": "state-tape-counterexample",
+          "topology": "state machine plus self-reference loop",
+          "choreography": "execute finite transition trace, then close the self-reference loop and flip the predicted outcome",
+          "composition": "tape/state trace transitioning to counterexample loop",
+          "cues": ["compute", "universal-model", "predict-halt", "contradiction"]
+        },
+        {
+          "concept_id": "mechanize.stored-program",
+          "evidence": "El programa almacenado coloca datos e instrucciones bajo una codificación común; Manchester Baby y EDSAC convierten el principio en ejecución real y Dartmouth desplaza la pregunta hacia inteligencia.",
+          "mechanism": "Datos e instrucciones entran en una memoria común y un ciclo fetch-decode-execute los trata como estados reprogramables sin recableado.",
+          "semantic_rationale": "La diferencia visible debe ser cambiar memoria para cambiar comportamiento manteniendo intacto el hardware.",
+          "perceptual_family": "stored-program-cycle",
+          "topology": "shared memory cyclic dataflow",
+          "choreography": "load program/data, cycle fetch-decode-execute, replace memory contents, reuse hardware",
+          "composition": "shared memory with cyclic processor flow",
+          "cues": ["stored-program", "baby", "edsac", "dartmouth"]
+        }
+      ]
+    }
+  ],
+  "series_register": {
+    "authored_concepts": 10,
+    "authored_chapters": 2,
+    "target_chapters": 6,
+    "family_counts": {
+      "symbol-substitution": 1,
+      "place-value-grid": 1,
+      "algebra-transform": 1,
+      "deduction-dependency": 1,
+      "rate-accumulation-dual": 1,
+      "capability-envelope": 1,
+      "instruction-stream": 1,
+      "logic-circuit-translation": 1,
+      "state-tape-counterexample": 1,
+      "stored-program-cycle": 1
+    },
+    "max_family_uses": 1,
+    "diversity_gate": "PARTIAL_NOT_CERTIFIED"
+  },
+  "next_action": "Author source-bound concepts for chapters 00 and 03-05, then validate the complete-series family register before implementing/rendering the H/V engine."
+}

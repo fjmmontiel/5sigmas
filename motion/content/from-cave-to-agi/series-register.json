@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "unit": "from-cave-to-agi",
+  "state": "COMPLETE_SOURCE_BOUND_SEMANTIC_REGISTER",
+  "owner_visual_approval": "NOT_REQUESTED",
+  "technical_golden": false,
+  "palette": {
+    "accent": "#26A69A",
+    "accent_ink": "#1F857C",
+    "high_contrast_accent_text": "#00776F",
+    "accent_surface": "#E7F4F0",
+    "body_ink": "#17211F",
+    "source": "existing-series-identity-with-accessible-render-variants"
+  },
+  "authoring_policy": {
+    "one_deterministic_timeline": true,
+    "native_horizontal_and_vertical": true,
+    "no_typing_gimmicks": true,
+    "no_generic_list_fallback": true,
+    "max_perceptual_family_uses_target": 2,
+    "source_bound_claims_required": true
+  },
+  "chapter_sources": [
+    {"chapter":"00","path":"motion/content/from-cave-to-agi/chapters/00-presentacion.json"},
+    {"chapter":"01","path":"motion/content/from-cave-to-agi/series-register.partial.json","selector":"01"},
+    {"chapter":"02","path":"motion/content/from-cave-to-agi/series-register.partial.json","selector":"02"},
+    {"chapter":"03","path":"motion/content/from-cave-to-agi/chapters/03-aprender.json"},
+    {"chapter":"04","path":"motion/content/from-cave-to-agi/chapters/04-escalar.json"},
+    {"chapter":"05","path":"motion/content/from-cave-to-agi/chapters/05-mas-alla.json"}
+  ],
+  "series_register": {
+    "authored_concepts": 30,
+    "authored_chapters": 6,
+    "target_chapters": 6,
+    "distinct_perceptual_families": 30,
+    "max_family_uses": 1,
+    "diversity_gate": "PASS_STRUCTURAL_SOURCE_BOUND_REGISTER",
+    "encoded_motion_visual_acceptance": "PENDING"
+  },
+  "next_action": "Run the deterministic register/foundation validators, then implement the H/V render spec and engine from this complete source-bound register before any review package is requested."
+}

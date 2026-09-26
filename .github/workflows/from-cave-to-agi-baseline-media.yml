@@ -1,0 +1,60 @@
+name: From Cave to AGI baseline media integrity
+
+on:
+  push:
+    branches:
+      - migration/video-golden-from-cave-to-agi
+    paths:
+      - 'docs/series/from-cave-to-agi/**'
+      - 'locales/en/series/from-cave-to-agi/**'
+      - '.github/workflows/from-cave-to-agi-baseline-media.yml'
+      - 'motion/migration/checkpoints/*from-cave-to-agi*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline-media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ffmpeg tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
+          ffprobe -version | head -1
+      - name: Full-decode and profile all 12 baseline MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            docs/series/from-cave-to-agi/00_presentacion_serie.mp4
+            docs/series/from-cave-to-agi/01-representar.mp4
+            docs/series/from-cave-to-agi/02-mecanizar.mp4
+            docs/series/from-cave-to-agi/03-aprender.mp4
+            docs/series/from-cave-to-agi/04-escalar.mp4
+            docs/series/from-cave-to-agi/05-mas-alla.mp4
+            locales/en/series/from-cave-to-agi/00_presentacion_serie.mp4
+            locales/en/series/from-cave-to-agi/01-representar.mp4
+            locales/en/series/from-cave-to-agi/02-mecanizar.mp4
+            locales/en/series/from-cave-to-agi/03-aprender.mp4
+            locales/en/series/from-cave-to-agi/04-escalar.mp4
+            locales/en/series/from-cave-to-agi/05-mas-alla.mp4
+          )
+          pass=0
+          for f in "${files[@]}"; do
+            test -s "$f"
+            sha=$(sha256sum "$f" | awk '{print $1}')
+            profile=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -of csv=p=0 "$f")
+            duration=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$f")
+            ffmpeg -v error -i "$f" -map 0:v:0 -f null -
+            printf 'MEDIA_OK path=%s sha256=%s duration=%s profile=%s\n' "$f" "$sha" "$duration" "$profile"
+            pass=$((pass+1))
+          done
+          test "$pass" -eq 12
+          echo "BASELINE_FULL_DECODE_PASS count=$pass"
