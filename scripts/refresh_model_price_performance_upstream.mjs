@@ -65,6 +65,7 @@ if (releaseSlugs[0] !== expectedLatestRelease) {
 }
 
 const updates = [];
+const sameDayPerformanceDrift = [];
 for (const model of data.models || []) {
   const url = model.sources?.benchmark?.url;
   assert.match(url || '', /^https:\/\/artificialanalysis\.ai\/models\//, `${model.id}: benchmark must use an Artificial Analysis model page`);
@@ -90,17 +91,28 @@ for (const model of data.models || []) {
     throw new Error(`${model.id}: PRICE_DRIFT requires primary-source review (stored ${model.input_usd_per_million}/${model.output_usd_per_million}, AA ${observedInput}/${observedOutput})`);
   }
 
-  const changed = intelligence !== Number(model.intelligence_index)
-    || speed !== Number(model.output_tokens_per_second)
+  const intelligenceChanged = intelligence !== Number(model.intelligence_index);
+  const performanceChanged = speed !== Number(model.output_tokens_per_second)
     || ttft !== Number(model.ttft_seconds);
-  if (changed) updates.push({ id: model.id, intelligence, speed, ttft });
+  const performanceSnapshotIsToday = model.sources?.benchmark?.performance_snapshot_on === today;
+
+  if (performanceChanged && performanceSnapshotIsToday) {
+    sameDayPerformanceDrift.push({ id: model.id, speed, ttft });
+  }
+
+  if (intelligenceChanged || (performanceChanged && !performanceSnapshotIsToday)) {
+    updates.push({ id: model.id, intelligence, speed, ttft });
+  }
 }
 
 const ageDays = Math.floor((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${data.updated_at}T00:00:00Z`)) / 86_400_000);
 const checkpointDue = ageDays >= Number(data.freshness_policy?.review_interval_days || 7);
 
 if (!updates.length && !checkpointDue) {
-  console.log(`Model upstream check passed: ${data.models.length} model pages match the ${data.updated_at} snapshot; latest release remains ${expectedLatestRelease}.`);
+  const suffix = sameDayPerformanceDrift.length
+    ? `; ${sameDayPerformanceDrift.length} same-day speed/TTFT movements ignored after today's pinned snapshot`
+    : '';
+  console.log(`Model upstream check passed: ${data.models.length} model pages match the ${data.updated_at} daily snapshot; latest release remains ${expectedLatestRelease}${suffix}.`);
   process.exit(0);
 }
 
