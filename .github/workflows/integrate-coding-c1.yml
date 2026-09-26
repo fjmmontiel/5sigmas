@@ -24,7 +24,7 @@ jobs:
         run: |
           python -m pip install -q -r requirements.txt
           sudo apt-get update -qq
-          sudo apt-get install -qq -y ffmpeg
+          sudo apt-get install -qq -y --no-install-recommends ffmpeg >/tmp/coding-poster-dependencies.log 2>&1 || { tail -50 /tmp/coding-poster-dependencies.log; exit 1; }
       - name: Run hash-bound integration, never encode a replacement MP4
         shell: python
         run: |
@@ -34,7 +34,14 @@ jobs:
           assert hashlib.sha256(bundle).hexdigest()=='8fea6df2d71ea159aa4efaed8f0f42d60823ab9eeb2f20a4a24d6d602e4c3925'
           payload=json.loads(lzma.decompress(bundle))
           assert set(payload)=={'integrate.py','test_video_fractional_timing.py'}
-          Path('/tmp/coding-c1-integrate.py').write_text(payload['integrate.py'],encoding='utf-8')
+          lines=payload['integrate.py'].splitlines(True)
+          matches=[i for i,line in enumerate(lines) if "patch('.github/workflows/unpublish-series-07-video-media.yml'" in line]
+          assert len(matches)==1
+          i=matches[0];assert lines[i].endswith("'',1)\n")
+          lines[i]=lines[i].replace("'',1)","'',2)")
+          code=''.join(lines)
+          assert hashlib.sha256(code.encode()).hexdigest()=='e3bbb155e7b06dd20bcc0997eb2a0bc8998035a33c6fa9678ac34254b2a4971e'
+          Path('/tmp/coding-c1-integrate.py').write_text(code,encoding='utf-8')
           Path('scripts/test_video_fractional_timing.py').write_text(payload['test_video_fractional_timing.py'],encoding='utf-8')
           subprocess.run([sys.executable,'/tmp/coding-c1-integrate.py'],check=True)
       - name: Check original identity, precise timing and publication contracts
