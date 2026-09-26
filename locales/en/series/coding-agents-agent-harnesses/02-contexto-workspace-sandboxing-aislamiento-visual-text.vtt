@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+A branch points to commits. A workspace holds working files.
+
+2
+00:00:07.500 --> 00:00:14.500
+A sandbox restricts effects on files, processes or the network.
+
+3
+00:00:14.500 --> 00:00:21.500
+A separate copy does not prove confinement. Both boundaries need checking.
+
+4
+00:00:22.000 --> 00:00:29.000
+The Git reference points to commit A.
+
+5
+00:00:29.000 --> 00:00:36.000
+An uncommitted edit changes the file but leaves that reference in place.
+
+6
+00:00:36.000 --> 00:00:43.550
+Processes and ignored files sit outside this history. A commit does not describe the whole environment.
+
+7
+00:00:44.050 --> 00:00:51.050
+Two agents write to separate copies of the same repository.
+
+8
+00:00:51.050 --> 00:00:58.600
+Each worktree has its own HEAD and index: one edit does not overwrite the other file.
+
+9
+00:00:58.600 --> 00:01:05.600
+That prevents local file interference. It does not isolate networks or services.
+
+10
+00:01:06.100 --> 00:01:13.267
+Worktrees A and B have separate files but share one test database.
+
+11
+00:01:13.267 --> 00:01:20.267
+A deletes a fixture. B finds zero rows and its test fails.
+
+12
+00:01:20.267 --> 00:01:27.267
+In a new run, separate service namespaces prevent this specific interference, not every conflict.
+
+13
+00:01:27.767 --> 00:01:34.767
+One task changes an amount from cents to euros. Another adds a consumer.
+
+14
+00:01:34.767 --> 00:01:41.767
+They touch different lines, so Git can combine them without a textual conflict.
+
+15
+00:01:41.767 --> 00:01:48.767
+The consumer expects cents but receives euros. The combined contract still needs a test.
+
+16
+00:01:49.267 --> 00:01:56.267
+The workspace already contained a human edit before the task began.
+
+17
+00:01:56.267 --> 00:02:03.267
+The agent and another process then add their own changes.
+
+18
+00:02:03.267 --> 00:02:10.433
+Cleanup must distinguish their owners. Reverting everything would destroy work the agent did not own.
+

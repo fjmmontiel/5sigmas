@@ -32,7 +32,7 @@ DOCS = ROOT / "docs"
 EN_LOCALE = ROOT / "locales" / "en"
 MKDOCS = ROOT / "mkdocs.yml"
 REMOTE_URL = re.compile(r"^https?://", re.IGNORECASE)
-DURATION = re.compile(r"^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$")
+DURATION = re.compile(r"^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?$")
 
 
 def read_frontmatter(path: Path) -> dict[str, Any]:

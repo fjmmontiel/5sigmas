@@ -66,6 +66,12 @@ jobs:
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
+      - name: Verify exact owner-approved Coding C1 MP4 bytes
+        run: sha256sum -c .github/receipts/coding-c1.sha256
+
+      - name: Test fractional video timing parity
+        run: python3 scripts/test_video_fractional_timing.py
+
       - name: Validate media binary signatures
         run: python scripts/audit_media_magic.py
 
@@ -119,7 +125,6 @@ jobs:
           protected="$(
             git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
               docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
-              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
               docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
               docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
               docs/series/modelos-razonadores locales/en/series/modelos-razonadores
@@ -191,6 +196,12 @@ jobs:
 
       - name: Verify A2 native desktop and mobile video consumers
         run: node scripts/verify_agents_a2_browser.mjs
+
+      - name: Verify exact approved Coding C1 media and discovery
+        run: python3 scripts/verify_coding_c1_release.py --site-dir site
+
+      - name: Verify native Coding C1 desktop and mobile playback
+        run: node scripts/verify_coding_c1_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs

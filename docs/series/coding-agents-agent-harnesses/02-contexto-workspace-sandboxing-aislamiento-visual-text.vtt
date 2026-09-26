@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+La branch señala commits. El workspace contiene los archivos de trabajo.
+
+2
+00:00:07.500 --> 00:00:14.500
+El sandbox limita efectos sobre archivos, procesos o red.
+
+3
+00:00:14.500 --> 00:00:21.500
+Separar una copia no demuestra que esté confinada. Hay que comprobar ambas fronteras.
+
+4
+00:00:22.000 --> 00:00:29.000
+La referencia de Git apunta al commit A.
+
+5
+00:00:29.000 --> 00:00:36.000
+Una edición sin commit cambia el archivo, pero no mueve esa referencia.
+
+6
+00:00:36.000 --> 00:00:43.550
+Procesos y archivos ignorados quedan fuera de ese historial. Un commit no describe todo el entorno.
+
+7
+00:00:44.050 --> 00:00:51.050
+Dos agentes escriben sobre copias distintas del mismo repositorio.
+
+8
+00:00:51.050 --> 00:00:58.600
+Cada worktree mantiene su propio HEAD e índice: una edición no pisa el archivo del otro.
+
+9
+00:00:58.600 --> 00:01:05.600
+Eso evita interferencia local de archivos. No concede aislamiento de red ni de servicios.
+
+10
+00:01:06.100 --> 00:01:13.267
+Los worktrees A y B tienen archivos separados, pero usan la misma base de pruebas.
+
+11
+00:01:13.267 --> 00:01:20.267
+A borra una fixture. El test de B encuentra cero filas y falla.
+
+12
+00:01:20.267 --> 00:01:27.267
+En otra ejecución, separar los namespaces evita esta interferencia concreta, no todos los conflictos.
+
+13
+00:01:27.767 --> 00:01:34.767
+Una tarea cambia el importe de céntimos a euros. Otra añade un consumidor.
+
+14
+00:01:34.767 --> 00:01:41.767
+Los cambios tocan líneas distintas: Git puede combinarlos sin conflicto textual.
+
+15
+00:01:41.767 --> 00:01:48.767
+El consumidor espera céntimos y recibe euros. El contrato combinado todavía necesita una prueba.
+
+16
+00:01:49.267 --> 00:01:56.267
+El workspace ya tenía una edición humana antes de empezar.
+
+17
+00:01:56.267 --> 00:02:03.267
+Después aparecen cambios del agente y de otro proceso.
+
+18
+00:02:03.267 --> 00:02:10.433
+Un cleanup debe distinguir sus propietarios. Revertir todo destruiría trabajo que no era suyo.
+

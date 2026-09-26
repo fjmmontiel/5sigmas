@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+“Añade JSON” deja sin definir el formato y el comportamiento anterior.
+
+2
+00:00:07.500 --> 00:00:14.667
+El contrato concreta: --json produce un objeto válido; sin la opción se conserva el texto.
+
+3
+00:00:14.667 --> 00:00:21.667
+Estas condiciones permiten rechazar una implementación que sólo cumple la mitad.
+
+4
+00:00:22.167 --> 00:00:29.167
+La instrucción del repo dice cómo trabajar: no modificar la API pública sin permiso.
+
+5
+00:00:29.167 --> 00:00:36.333
+La spec define qué debe hacer esta tarea: añadir --json sin romper la salida existente.
+
+6
+00:00:36.333 --> 00:00:43.333
+Marcar una casilla del plan no cambia ninguna de esas obligaciones.
+
+7
+00:00:43.833 --> 00:00:50.833
+Primero se acuerda el schema. Después pueden avanzar parser y serializador.
+
+8
+00:00:50.833 --> 00:00:58.000
+El parser ya está; falta el serializador. La prueba de extremo a extremo sigue bloqueada.
+
+9
+00:00:58.000 --> 00:01:05.917
+Sólo al reunir las dos piezas se habilita la prueba completa. Cerrar un subpaso no basta.
+
+10
+00:01:06.417 --> 00:01:13.417
+El plan supone que basta con cambiar el serializador.
+
+11
+00:01:13.417 --> 00:01:20.417
+La prueba revela que el parser rechaza --json antes de llegar a él.
+
+12
+00:01:20.417 --> 00:01:28.333
+Se revisa el plan para corregir la causa. Una hipótesis de trabajo no es evidencia de éxito.
+
+13
+00:01:28.833 --> 00:01:35.833
+El checkpoint conserva revisión A, tests ejecutados y decisiones pendientes.
+
+14
+00:01:35.833 --> 00:01:42.833
+Después cambia el parser y aparece B. Los tests dependientes quedan por repetir.
+
+15
+00:01:42.833 --> 00:01:50.750
+Al reanudar, se reconcilia el estado real con el checkpoint; no se hereda un PASS por proximidad.
+
+16
+00:01:51.250 --> 00:01:58.250
+JSON válido es una condición, no la tarea completa.
+
+17
+00:01:58.250 --> 00:02:05.250
+También deben conservarse la salida anterior y el alcance permitido.
+
+18
+00:02:05.250 --> 00:02:12.250
+Sólo la conjunción de las condiciones requeridas permite entregar; un subpaso verde no basta.
+

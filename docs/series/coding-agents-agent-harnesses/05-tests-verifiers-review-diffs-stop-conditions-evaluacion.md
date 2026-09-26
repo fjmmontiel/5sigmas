@@ -12,19 +12,31 @@ tags:
   - Evaluación
 video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
 video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
-video_title: "Tests, verifiers y revisión de diffs"
-video_summary: "La aceptación deriva de evidencia conjunta y fresca sobre el mismo candidate SHA; un cambio invalida la evidencia que ya no corresponde."
-video_duration: PT36S
+video_title: Tests, verificadores y condiciones de parada
+video_summary: 'La revisión del diff añade otra pregunta: qué cambió realmente y si estaba permitido.'
+video_date: '2026-09-26'
+video_duration: PT133.8S
+video_captions: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion-visual-text.vtt
+video_transcript: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion-transcript.html
 video_chapters:
-- name: "Una señal verde no basta"
-  start: 0
-  end: 12
-- name: "Freshness ligada al candidate SHA"
-  start: 12
-  end: 24
-- name: "Verificar, reparar, aceptar o escalar"
-  start: 24
-  end: 36
+- name: Cada prueba cubre una pregunta
+  start: 0.0
+  end: 22.05
+- name: Este verde pertenece a A
+  start: 22.05
+  end: 44.1
+- name: También se revisa el test
+  start: 44.1
+  end: 66.9
+- name: Dos modos, dos contratos
+  start: 66.9
+  end: 89.7
+- name: Agotar tiempo no da un PASS
+  start: 89.7
+  end: 111.75
+- name: Una ejecución no mide fiabilidad
+  start: 111.75
+  end: 133.8
 ---
 
 # Capítulo 5 — Tests, verifiers, review de diffs, stop conditions y evaluación de tareas

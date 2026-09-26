@@ -12,19 +12,31 @@ tags:
   - Observabilidad
 video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
 video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
-video_title: "Tareas largas, subagentes, recuperación y observabilidad"
-video_summary: "Estado durable, ownership explícito y evidencia por candidate permiten reiniciar, coordinar workers e integrar sobre un target que avanza."
-video_duration: PT36S
+video_title: Tareas largas, recuperación e integración
+video_summary: La confirmación remota vincula T7 con R42 y se registra aparte. Un intento no sustituye a un resultado.
+video_date: '2026-09-26'
+video_duration: PT135.25S
+video_captions: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-visual-text.vtt
+video_transcript: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-transcript.html
 video_chapters:
-- name: "Checkpoint durable y recuperación"
-  start: 0
-  end: 12
-- name: "Fan-out con ownership; fan-in con evidencia"
-  start: 12
-  end: 24
-- name: "Target avanza: integrar y revalidar"
-  start: 24
-  end: 36
+- name: Guardar lo que ocurrió
+  start: 0.0
+  end: 23.35
+- name: Resumir no restaura el entorno
+  start: 23.35
+  end: 46.533333
+- name: Una respuesta perdida no autoriza repetir
+  start: 46.533333
+  end: 68.033333
+- name: Paralelizar no elimina la integración
+  start: 68.033333
+  end: 89.866667
+- name: El destino también se mueve
+  start: 89.866667
+  end: 111.916667
+- name: Entregar con evidencia
+  start: 111.916667
+  end: 135.25
 ---
 
 # Capítulo 6 — Tareas largas, memoria, subagentes, recuperación, merge y observabilidad

@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.667
+El primer registro expresa una intención. Todavía no prueba que se haya enviado nada.
+
+2
+00:00:07.667 --> 00:00:14.667
+El journal añade el intento real con una identidad estable: operación T7.
+
+3
+00:00:14.667 --> 00:00:23.350
+La confirmación remota vincula T7 con R42 y se registra aparte. Un intento no sustituye a un resultado.
+
+4
+00:00:23.850 --> 00:00:30.850
+La compactación reduce el historial visible al modelo.
+
+5
+00:00:30.850 --> 00:00:37.850
+El workspace, la revisión y los procesos pueden haber cambiado fuera de ese resumen.
+
+6
+00:00:37.850 --> 00:00:46.533
+Antes de continuar se relee el estado operativo. Memoria de la tarea y realidad no son el mismo objeto.
+
+7
+00:00:47.033 --> 00:00:54.033
+La publicación sale, pero la respuesta se pierde. El resultado queda desconocido.
+
+8
+00:00:54.033 --> 00:01:01.033
+Antes de reintentar, se consulta la operación por su identidad estable.
+
+9
+00:01:01.033 --> 00:01:08.033
+Si ya existe, se reconcilia su recibo. Repetir a ciegas podría crear un duplicado.
+
+10
+00:01:08.533 --> 00:01:15.533
+Dos piezas independientes pueden construirse al mismo tiempo.
+
+11
+00:01:15.533 --> 00:01:22.700
+En este ejemplo, tardan cuatro y seis minutos; después quedan dos minutos de integración.
+
+12
+00:01:22.700 --> 00:01:29.867
+El recorrido dura ocho, no seis. La ganancia depende de dependencias, coordinación y pruebas finales.
+
+13
+00:01:30.367 --> 00:01:37.367
+El candidato se verificó contra la base A.
+
+14
+00:01:37.367 --> 00:01:44.367
+La rama de destino avanza a B mientras el agente trabaja.
+
+15
+00:01:44.367 --> 00:01:51.917
+Integrar cambia el estado combinado. Hay que revisar el diff efectivo y repetir los controles afectados.
+
+16
+00:01:52.417 --> 00:01:59.417
+La entrega identifica la tarea, la revisión final y el diff del estado combinado.
+
+17
+00:01:59.417 --> 00:02:07.333
+Las pruebas indican su alcance y qué revisión validaron. No se heredan de una base antigua.
+
+18
+00:02:07.333 --> 00:02:15.250
+La entrega incluye límites y decisiones pendientes. El revisor sabe qué está comprobado y qué falta.
+

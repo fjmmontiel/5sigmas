@@ -10,7 +10,6 @@ from pathlib import Path
 UNPUBLISHED_VIDEO_SERIES = frozenset(
     {
         "agentes-voz-tiempo-real",
-        "coding-agents-agent-harnesses",
         "context-engineering-memory-mcp",
         "llm-inference-engineering-economics",
     }

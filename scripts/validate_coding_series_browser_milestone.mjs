@@ -9,6 +9,8 @@ const modeConcurrency = Number.isFinite(requestedConcurrency)
   ? Math.max(1, Math.min(4, requestedConcurrency))
   : 4;
 const mediaEventTimeoutMs = 10000;
+const approvedRelease = JSON.parse(await fs.readFile('docs/coding-c1-release.json', 'utf8'));
+const approvedDuration = (locale, stem) => { const row = approvedRelease.objects.find(r => r.locale === locale && r.article.endsWith('/'+stem+'/')); if (!row) throw new Error('missing approved Coding identity'); return row.duration; };
 
 const chapters = [
   '01-que-es-agent-harness',
@@ -167,7 +169,7 @@ async function validateArticle(page, locale, stem, mode, evidence) {
     const final = await seekTo(Math.max(0, duration - 0.35));
     return { duration, startedAt, middle, final, paused: node.paused, readyState: node.readyState };
   }, mediaEventTimeoutMs);
-  if (!(playback.duration >= 35 && playback.duration <= 37)
+  if (!(Math.abs(playback.duration - approvedDuration(locale, stem)) < .025)
       || playback.startedAt < 0
       || playback.middle < playback.duration * 0.45
       || playback.final < playback.duration - 1
@@ -236,7 +238,7 @@ async function validateWatch(page, locale, stem, mode, evidence) {
     return { started, duration, startedAt, middle, final, paused: node.paused, readyState: node.readyState };
   }, mediaEventTimeoutMs);
   if (!playback.started
-      || !(playback.duration >= 35 && playback.duration <= 37)
+      || !(Math.abs(playback.duration - approvedDuration(locale, stem)) < .025)
       || playback.middle < playback.duration * 0.45
       || playback.final < playback.duration - 1
       || playback.final <= playback.middle

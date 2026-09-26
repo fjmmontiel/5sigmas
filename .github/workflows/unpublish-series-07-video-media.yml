@@ -127,7 +127,6 @@ jobs:
           endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           for series in \
             agentes-voz-tiempo-real \
-            coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
             llm-inference-engineering-economics
           do
@@ -157,7 +156,6 @@ jobs:
           failures=0
           for series in \
             agentes-voz-tiempo-real \
-            coding-agents-agent-harnesses \
             context-engineering-memory-mcp \
             llm-inference-engineering-economics
           do

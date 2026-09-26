@@ -173,16 +173,28 @@ required_snippets:
 published_files:
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness-transcript.html
+  - series/coding-agents-agent-harnesses/01-que-es-agent-harness-visual-text.vtt
   - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.mp4
   - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.jpg
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento-transcript.html
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento-visual-text.vtt
   - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.mp4
   - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.jpg
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints-transcript.html
+  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints-visual-text.vtt
   - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
   - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries-transcript.html
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries-visual-text.vtt
   - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
   - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion-transcript.html
+  - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion-visual-text.vtt
   - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
   - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-transcript.html
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-visual-text.vtt
   - assets/images/home/agents-system-boundary.svg
   - article_audio.yml
   - series/fundamentos-ia-iag/00_presentacion_serie.mp4

@@ -57,7 +57,6 @@ const nativePresentationMedia = new Map([
 // A2 and C3 have explicit owner release approval; the remaining four do not.
 const intentionallyUnpublishedVideoSeries = new Set([
   'agentes-voz-tiempo-real',
-  'coding-agents-agent-harnesses',
   'context-engineering-memory-mcp',
   'llm-inference-engineering-economics',
 ]);
@@ -126,7 +125,7 @@ for (const series of [realtimeVoice, codingAgents, contextEngineering, inference
     if (body.includes(marker)) failures.push(`${series.route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
   }
   const videoCount = await page.locator('video[data-s5-inline-video-player]').count();
-  const expectedCount = series === evaluatingAiSystems ? 1 : 0;
+  const expectedCount = (series === evaluatingAiSystems || series === codingAgents) ? 1 : 0;
   if (videoCount !== expectedCount) failures.push(`${series.route}: approved C3/remaining-unapproved publication mismatch, expected ${expectedCount}, got ${videoCount}`);
 }
 await page.goto(`${base}/en/series/ia-pib-bienestar-energia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
