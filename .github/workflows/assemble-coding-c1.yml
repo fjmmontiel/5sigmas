@@ -21,7 +21,7 @@ jobs:
       - name: Install the reference distribution packages
         run: |
           apt-get update -qq
-          apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo ffmpeg fonts-cabin fonts-noto-core fonts-noto-extra
+          apt-get install -qq -y --no-install-recommends git ca-certificates python3 python3-cairo ffmpeg fonts-cabin fonts-noto-core fonts-noto-extra
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -31,7 +31,7 @@ jobs:
             docs/series/coding-agents-agent-harnesses
             locales/en/series/coding-agents-agent-harnesses
       - name: Verify and recover only byte-identical approved media
-        shell: python
+        shell: python3 {0}
         run: |
           import concurrent.futures, hashlib, json, lzma, os, pathlib, subprocess, sys
           root=pathlib.Path.cwd(); state=root/'.release-coding-c1'
@@ -65,7 +65,6 @@ jobs:
               assert int(v['nb_frames'])==round(render.chapter_duration(chapter)*60)
               subprocess.run(['ffmpeg','-v','error','-xerror','-threads','1','-i',str(target),'-f','null','-'],check=True)
               return str(target.relative_to(root))
-          # The full first file must match before spending work on the other eleven.
           paths=[recover(approved['files'][0])]
           with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
               paths+=list(pool.map(recover,approved['files'][1:]))
