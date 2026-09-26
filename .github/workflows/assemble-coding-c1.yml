@@ -1,0 +1,90 @@
+name: Assemble exact owner-approved Coding C1 originals
+on:
+  push:
+    branches: [release/coding-c1-approved-20260926]
+    paths: [.github/workflows/assemble-coding-c1.yml]
+permissions:
+  contents: write
+concurrency:
+  group: coding-c1-exact-assembly
+  cancel-in-progress: false
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    container: debian:trixie
+    timeout-minutes: 80
+    env:
+      ENCODE_THREADS: '1'
+      ENCODE_PRESET: veryfast
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Install the reference distribution packages
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git ca-certificates python3 python3-cairo ffmpeg fonts-cabin fonts-noto-core fonts-noto-extra
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          filter: blob:none
+          sparse-checkout: |
+            .release-coding-c1
+            docs/series/coding-agents-agent-harnesses
+            locales/en/series/coding-agents-agent-harnesses
+      - name: Verify and recover only byte-identical approved media
+        shell: python
+        run: |
+          import concurrent.futures, hashlib, json, lzma, os, pathlib, subprocess, sys
+          root=pathlib.Path.cwd(); state=root/'.release-coding-c1'
+          approved=json.loads((state/'approved.json').read_text())
+          blob=b''.join((state/f'source.{i}').read_bytes() for i in range(1,5))
+          assert hashlib.sha256(blob).hexdigest()==approved['source_bundle_sha256']
+          src=pathlib.Path('/tmp/coding-c1-source');src.mkdir()
+          files=json.loads(lzma.decompress(blob))
+          assert set(files)==set(approved['source'])
+          for name,text in files.items():
+              data=text.encode('utf-8');assert hashlib.sha256(data).hexdigest()==approved['source'][name]
+              (src/name).write_bytes(data)
+          sys.path.insert(0,str(src));import render
+          assert render.STORY['series']=='coding-agents-agent-harnesses'
+          assert render.STORY['source_commit']=='52a96b50136a725ae94ede3bf15463b2736b293c'
+          print(subprocess.check_output(['ffmpeg','-version']).decode().splitlines()[0],flush=True)
+          subprocess.run(['fc-match','Cabin'],check=True);subprocess.run(['fc-match','Noto Serif Display'],check=True)
+          def recover(row):
+              chapter=render.STORY['chapters'][row['chapter']-1]
+              folder=root/('docs' if row['language']=='es' else 'locales/en')/'series/coding-agents-agent-harnesses'
+              target=folder/(chapter['slug']+'.mp4');folder.mkdir(parents=True,exist_ok=True)
+              if not target.exists() or render.sha256(target)!=row['sha256']:
+                  render.render_video(chapter,row['language'],'h',target,60)
+              observed=render.sha256(target)
+              print('EXACT_CHECK',str(target.relative_to(root)),observed,row['sha256'],target.stat().st_size,row['size'],flush=True)
+              assert observed==row['sha256'] and target.stat().st_size==row['size'], 'BYTE_IDENTITY_MISMATCH: preserve approved originals; do not publish reconstructed substitutes'
+              p=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-of','json',str(target)]))
+              assert len(p['streams'])==1
+              v=p['streams'][0]
+              assert (v['codec_name'],v['pix_fmt'],v['width'],v['height'],v['avg_frame_rate'])==('h264','yuv420p',1920,1080,'60/1')
+              assert int(v['nb_frames'])==round(render.chapter_duration(chapter)*60)
+              subprocess.run(['ffmpeg','-v','error','-xerror','-threads','1','-i',str(target),'-f','null','-'],check=True)
+              return str(target.relative_to(root))
+          # The full first file must match before spending work on the other eleven.
+          paths=[recover(approved['files'][0])]
+          with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+              paths+=list(pool.map(recover,approved['files'][1:]))
+          assert len(paths)==12
+          (state/'verified-paths.json').write_text(json.dumps(paths))
+          print('APPROVED_C1_EXACT_BYTES_RECOVERED_12_OF_12',flush=True)
+      - name: Commit only the twelve approved exact originals
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          actual=$(git ls-remote origin refs/heads/release/coding-c1-approved-20260926 | cut -f1)
+          test "$actual" = "$GITHUB_SHA"
+          python3 - <<'PY'
+          import json,subprocess
+          for path in json.load(open('.release-coding-c1/verified-paths.json')):
+              subprocess.run(['git','add','--',path],check=True)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'media: recover twelve exact owner-approved Coding C1 originals'
+          git push origin HEAD:refs/heads/release/coding-c1-approved-20260926
