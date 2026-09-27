@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "run": "36349458184",
+  "branch": "release/owner-approved-video-batch-20260927",
+  "public_key": "9mRV5ZsjBJOvCyn/SchP5z7xfLDf/au5xWa06CS78Xo=",
+  "pins": {
+    "context": "c4f92393ed686698831a903a32f50cab4d9e0dc144948dbb54ac7b74a0443241",
+    "inference": "72b3bd014bf14b92c2bb2e4d4f109b918f7d9a00f6d63ef6f136c67c1f089cd0",
+    "cave": "41d658c648d43fb7ebe1ed044900214d7af7388c384eaa7d248bf3c908f8d348",
+    "voice": "cbb744c984be3cff69e15709ff0ec0d2555cd1a204566722a996ab907260d9c8"
+  },
+  "expires_epoch": 1790545550,
+  "scope": "Exact approved horizontal media only; no private source, tokens, regenerated originals, merge or production publication."
+}
