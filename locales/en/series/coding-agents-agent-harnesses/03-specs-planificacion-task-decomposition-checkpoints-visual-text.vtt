@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+“Add JSON” leaves the format and the previous behaviour undefined.
+
+2
+00:00:07.500 --> 00:00:14.667
+The contract specifies a valid object with --json and unchanged text without it.
+
+3
+00:00:14.667 --> 00:00:21.667
+Those conditions let us reject an implementation that satisfies only half the request.
+
+4
+00:00:22.167 --> 00:00:29.167
+Repository instructions say how to work: do not change the public API without permission.
+
+5
+00:00:29.167 --> 00:00:36.333
+The spec defines this task: add --json without breaking the existing output.
+
+6
+00:00:36.333 --> 00:00:43.333
+Checking off a plan item changes neither obligation.
+
+7
+00:00:43.833 --> 00:00:50.833
+Agree on the schema first. The parser and serializer can then proceed.
+
+8
+00:00:50.833 --> 00:00:58.000
+The parser is ready, but the serializer is missing. The end-to-end test remains blocked.
+
+9
+00:00:58.000 --> 00:01:05.917
+Only when both pieces are ready can the complete test run. Finishing one substep is not enough.
+
+10
+00:01:06.417 --> 00:01:13.417
+The plan assumes changing the serializer is enough.
+
+11
+00:01:13.417 --> 00:01:20.417
+The test shows that the parser rejects --json before it reaches the serializer.
+
+12
+00:01:20.417 --> 00:01:28.333
+Revise the plan to address the cause. A working hypothesis is not evidence of success.
+
+13
+00:01:28.833 --> 00:01:35.833
+The checkpoint stores revision A, completed tests and pending decisions.
+
+14
+00:01:35.833 --> 00:01:42.833
+A parser edit creates B. Dependent tests now need to run again.
+
+15
+00:01:42.833 --> 00:01:50.750
+On resume, reconcile reality with the checkpoint. A nearby PASS does not carry over automatically.
+
+16
+00:01:51.250 --> 00:01:58.250
+Valid JSON is one condition, not the whole task.
+
+17
+00:01:58.250 --> 00:02:05.250
+The previous output and the permitted scope must also be preserved.
+
+18
+00:02:05.250 --> 00:02:12.250
+Delivery requires all mandatory conditions together. One green substep is not enough.
+

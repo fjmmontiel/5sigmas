@@ -12,19 +12,31 @@ tags:
   - Seguridad
 video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
 video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
-video_title: "Tools, permisos, approvals y trust boundaries"
-video_summary: "La intención del modelo sólo produce efectos tras cruzar validación, policy, approvals, sandbox y autoridad externa independientes."
-video_duration: PT36S
+video_title: Tools, permisos y límites de confianza
+video_summary: La lista de tools describe capacidad. La frontera efectiva decide qué efectos pueden ocurrir.
+video_date: '2026-09-26'
+video_duration: PT132.816667S
+video_captions: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries-visual-text.vtt
+video_transcript: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries-transcript.html
 video_chapters:
-- name: "Una tool call no es autorización"
-  start: 0
-  end: 12
-- name: "Input no confiable, capacidad limitada"
-  start: 12
-  end: 24
-- name: "Proyectar secretos sin ponerlos en contexto"
-  start: 24
-  end: 36
+- name: Disponible no significa permitido
+  start: 0.0
+  end: 21.5
+- name: Permitir, preguntar o denegar
+  start: 21.5
+  end: 43.166667
+- name: Aprobar esta acción exacta
+  start: 43.166667
+  end: 65.766667
+- name: Comprobar y usar no son lo mismo
+  start: 65.766667
+  end: 87.433333
+- name: El secreto no es parte del prompt
+  start: 87.433333
+  end: 110.233333
+- name: El contenido no cambia la política
+  start: 110.233333
+  end: 132.816667
 ---
 
 # Capítulo 4 — Tools, permisos, approvals, hooks, secretos y trust boundaries

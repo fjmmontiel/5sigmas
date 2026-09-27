@@ -628,104 +628,176 @@ series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
 series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
   video: 01-que-es-agent-harness.mp4
   video_poster: 01-que-es-agent-harness.jpg
-  video_title: "What an agent harness adds to the model"
-  video_summary: "The harness turns model proposals into an operating trajectory with policy, tools, state, and real observations."
-  video_duration: PT36S
+  video_title: The model and the harness
+  video_summary: 'Only then is there a real result: output, errors and an exit code.'
+  video_date: '2026-09-26'
+  video_duration: PT130.8S
+  video_captions: 01-que-es-agent-harness-visual-text.vtt
+  video_transcript: 01-que-es-agent-harness-transcript.html
   video_chapters:
-    - name: "Proposal versus effect"
-      start: 0
-      end: 12
-    - name: "The feedback loop changes the next observation"
-      start: 12
-      end: 24
-    - name: "External control and stopping condition"
-      start: 24
-      end: 36
+  - name: A request is not an action
+    start: 0.0
+    end: 21.5
+  - name: An error changes the next turn
+    start: 21.5
+    end: 43.166667
+  - name: One file is not the system
+    start: 43.166667
+    end: 65.583333
+  - name: Same model, different checks
+    start: 65.583333
+    end: 87.083333
+  - name: A PASS needs an identity
+    start: 87.083333
+    end: 108.75
+  - name: Stopping does not mean success
+    start: 108.75
+    end: 130.8
 
 series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md:
   video: 02-contexto-workspace-sandboxing-aislamiento.mp4
   video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
-  video_title: "Workspace, worktrees, and sandboxing"
-  video_summary: "Isolation separates Git state, filesystem, processes, and resources; final integration revalidates the combined state."
-  video_duration: PT36S
+  video_title: Context, workspace and isolation
+  video_summary: A separate copy does not prove confinement. Both boundaries need checking.
+  video_date: '2026-09-26'
+  video_duration: PT130.433333S
+  video_captions: 02-contexto-workspace-sandboxing-aislamiento-visual-text.vtt
+  video_transcript: 02-contexto-workspace-sandboxing-aislamiento-transcript.html
   video_chapters:
-    - name: "One task, one observable state"
-      start: 0
-      end: 12
-    - name: "Isolate execution resources too"
-      start: 12
-      end: 24
-    - name: "Integrate against the current target"
-      start: 24
-      end: 36
+  - name: Separate three boundaries
+    start: 0.0
+    end: 21.5
+  - name: A branch does not hold everything
+    start: 21.5
+    end: 43.55
+  - name: Two indexes, two copies
+    start: 43.55
+    end: 65.6
+  - name: The database is still shared
+    start: 65.6
+    end: 87.266667
+  - name: A clean merge can still be wrong
+    start: 87.266667
+    end: 108.766667
+  - name: Preserve changes owned by others
+    start: 108.766667
+    end: 130.433333
 
 series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md:
   video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
   video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
-  video_title: "Specs, plans, checkpoints, and stop conditions"
-  video_summary: "A contract fixes success; the plan can change with evidence; checkpoints and stop conditions make the trajectory recoverable."
-  video_duration: PT36S
+  video_title: Specs, plans and checkpoints
+  video_summary: Those conditions let us reject an implementation that satisfies only half the request.
+  video_date: '2026-09-26'
+  video_duration: PT132.25S
+  video_captions: 03-specs-planificacion-task-decomposition-checkpoints-visual-text.vtt
+  video_transcript: 03-specs-planificacion-task-decomposition-checkpoints-transcript.html
   video_chapters:
-    - name: "From request to observable contract"
-      start: 0
-      end: 12
-    - name: "Plan, evidence, checkpoint, and replan"
-      start: 12
-      end: 24
-    - name: "Done, recover, blocked, or escalate"
-      start: 24
-      end: 36
+  - name: From a request to a test
+    start: 0.0
+    end: 21.666667
+  - name: A stable rule, a specific goal
+    start: 21.666667
+    end: 43.333333
+  - name: Dependencies determine the order
+    start: 43.333333
+    end: 65.916667
+  - name: The plan can be wrong
+    start: 65.916667
+    end: 88.333333
+  - name: Save evidence, not just notes
+    start: 88.333333
+    end: 110.75
+  - name: The task requires the whole contract
+    start: 110.75
+    end: 132.25
 
 series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md:
   video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
   video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
-  video_title: "Tools, permissions, approvals, and trust boundaries"
-  video_summary: "Model intent creates effects only after independent validation, policy, approvals, sandbox, and external authority boundaries."
-  video_duration: PT36S
+  video_title: Tools, permissions and trust boundaries
+  video_summary: The tool list describes capability. The effective boundary determines which effects can occur.
+  video_date: '2026-09-26'
+  video_duration: PT132.816667S
+  video_captions: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries-visual-text.vtt
+  video_transcript: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries-transcript.html
   video_chapters:
-    - name: "A tool call is not authorization"
-      start: 0
-      end: 12
-    - name: "Untrusted input, bounded capability"
-      start: 12
-      end: 24
-    - name: "Project secrets without placing them in context"
-      start: 24
-      end: 36
+  - name: Available does not mean allowed
+    start: 0.0
+    end: 21.5
+  - name: Allow, ask or deny
+    start: 21.5
+    end: 43.166667
+  - name: Approve this exact action
+    start: 43.166667
+    end: 65.766667
+  - name: Checking and using are different moments
+    start: 65.766667
+    end: 87.433333
+  - name: A secret is not prompt content
+    start: 87.433333
+    end: 110.233333
+  - name: Content does not rewrite policy
+    start: 110.233333
+    end: 132.816667
 
 series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md:
   video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
   video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
-  video_title: "Tests, verifiers, and diff review"
-  video_summary: "Acceptance derives from combined, fresh evidence over the same candidate SHA; a change invalidates evidence that no longer applies."
-  video_duration: PT36S
+  video_title: Tests, verifiers and stop conditions
+  video_summary: 'Diff review asks another question: what actually changed, and was it permitted?'
+  video_date: '2026-09-26'
+  video_duration: PT133.8S
+  video_captions: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion-visual-text.vtt
+  video_transcript: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion-transcript.html
   video_chapters:
-    - name: "One green signal is not enough"
-      start: 0
-      end: 12
-    - name: "Freshness bound to the candidate SHA"
-      start: 12
-      end: 24
-    - name: "Verify, repair, accept, or escalate"
-      start: 24
-      end: 36
+  - name: Each check answers one question
+    start: 0.0
+    end: 22.05
+  - name: This green result belongs to A
+    start: 22.05
+    end: 44.1
+  - name: Review the test change too
+    start: 44.1
+    end: 66.9
+  - name: Two modes, two contracts
+    start: 66.9
+    end: 89.7
+  - name: A time limit is not a PASS
+    start: 89.7
+    end: 111.75
+  - name: One run does not measure reliability
+    start: 111.75
+    end: 133.8
 
 series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md:
   video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
   video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
-  video_title: "Long-running tasks, subagents, recovery, and observability"
-  video_summary: "Durable state, explicit ownership, and candidate-bound evidence allow restart, worker coordination, and integration over a moving target."
-  video_duration: PT36S
+  video_title: Long tasks, recovery and integration
+  video_summary: Remote confirmation links T7 to R42 and is recorded separately. An attempt is not a substitute for an outcome.
+  video_date: '2026-09-26'
+  video_duration: PT135.25S
+  video_captions: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-visual-text.vtt
+  video_transcript: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-transcript.html
   video_chapters:
-    - name: "Durable checkpoint and recovery"
-      start: 0
-      end: 12
-    - name: "Fan-out with ownership; fan-in with evidence"
-      start: 12
-      end: 24
-    - name: "Target moves: integrate and revalidate"
-      start: 24
-      end: 36
+  - name: Record what actually happened
+    start: 0.0
+    end: 23.35
+  - name: A summary does not restore the environment
+    start: 23.35
+    end: 46.533333
+  - name: A lost response does not authorize a retry
+    start: 46.533333
+    end: 68.033333
+  - name: Parallel work still needs integration
+    start: 68.033333
+    end: 89.866667
+  - name: The target can move too
+    start: 89.866667
+    end: 111.916667
+  - name: Deliver with evidence
+    start: 111.916667
+    end: 135.25
 
 series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
   video: 01-context-engineering-vs-prompt-engineering.mp4

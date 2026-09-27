@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+The linter checks style, not whether the output is valid JSON.
+
+2
+00:00:07.500 --> 00:00:15.050
+A contract test checks the format. A regression test checks that the old mode still works.
+
+3
+00:00:15.050 --> 00:00:22.050
+Diff review asks another question: what actually changed, and was it permitted?
+
+4
+00:00:22.550 --> 00:00:29.550
+Tests pass on revision A and produce a receipt.
+
+5
+00:00:29.550 --> 00:00:37.100
+A later edit creates B. The receipt remains valid history, but it does not prove B.
+
+6
+00:00:37.100 --> 00:00:44.100
+Delivery needs evidence bound to the current candidate and its environment.
+
+7
+00:00:44.600 --> 00:00:51.600
+The test fails because it detects that the previous output disappeared.
+
+8
+00:00:51.600 --> 00:00:58.600
+Deleting that assertion produces green without fixing the behaviour.
+
+9
+00:00:58.600 --> 00:01:06.900
+Changes to the verifier also need review. Passing a weakened test does not satisfy the contract.
+
+10
+00:01:07.400 --> 00:01:14.400
+With no option, report keeps its text output.
+
+11
+00:01:14.400 --> 00:01:21.400
+With --json, it returns an object that can be parsed and validated.
+
+12
+00:01:21.400 --> 00:01:29.700
+Test both paths and invalid input. Checking only the new mode leaves a regression invisible.
+
+13
+00:01:30.200 --> 00:01:37.200
+The run has a budget to prevent unbounded work.
+
+14
+00:01:37.200 --> 00:01:44.200
+The counter reaches zero while a mandatory check is still pending.
+
+15
+00:01:44.200 --> 00:01:51.750
+The correct status is incomplete, with the available evidence. A timeout does not become acceptance.
+
+16
+00:01:52.250 --> 00:01:59.250
+In this illustrative example, 16 of 20 runs satisfy the contract.
+
+17
+00:01:59.250 --> 00:02:06.250
+The other four fail for different reasons that must remain in the record.
+
+18
+00:02:06.250 --> 00:02:13.800
+That 80% describes this sample and environment. It is not a universal model guarantee.
+

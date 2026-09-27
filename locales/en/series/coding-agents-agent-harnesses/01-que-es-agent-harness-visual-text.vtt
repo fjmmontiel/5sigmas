@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.500
+The model proposes running a test. No effect has occurred yet.
+
+2
+00:00:07.500 --> 00:00:14.500
+The harness applies policy and starts the process in a specific workspace.
+
+3
+00:00:14.500 --> 00:00:21.500
+Only then is there a real result: output, errors and an exit code.
+
+4
+00:00:22.000 --> 00:00:29.000
+The test rejects the --json option we just added.
+
+5
+00:00:29.000 --> 00:00:36.000
+That error returns to the model as an observation of the current code.
+
+6
+00:00:36.000 --> 00:00:43.167
+The agent fixes the parser and reruns the test. Intention cannot replace this check.
+
+7
+00:00:43.667 --> 00:00:50.667
+Changing report() also affects the code that consumes its result.
+
+8
+00:00:50.667 --> 00:00:57.667
+Reading only the function misses the exporter that expects text.
+
+9
+00:00:57.667 --> 00:01:05.583
+Search expands the context before editing. A different model does not supply an unseen fact.
+
+10
+00:01:06.083 --> 00:01:13.083
+Two runs use the same model and propose the same change.
+
+11
+00:01:13.083 --> 00:01:20.083
+One checks style. The other also tests the previous behaviour.
+
+12
+00:01:20.083 --> 00:01:27.083
+The second check catches a regression. The outcome belongs to the whole system.
+
+13
+00:01:27.583 --> 00:01:34.583
+Task T7 ran its test in workspace W2 on revision A.
+
+14
+00:01:34.583 --> 00:01:41.583
+An edit creates revision B. The earlier receipt still describes A.
+
+15
+00:01:41.583 --> 00:01:48.750
+Keeping task, environment and revision identities prevents a PASS being assigned to the wrong code.
+
+16
+00:01:49.250 --> 00:01:56.250
+Once the contract is verified, the harness can deliver the result.
+
+17
+00:01:56.250 --> 00:02:03.250
+When a decision is missing, it returns control to the user.
+
+18
+00:02:03.250 --> 00:02:10.800
+When the budget runs out, it stops incomplete. These are different outcomes, not stages of success.
+

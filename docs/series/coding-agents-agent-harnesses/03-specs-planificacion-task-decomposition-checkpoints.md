@@ -13,19 +13,31 @@ tags:
   - Evaluación
 video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
 video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
-video_title: "Specs, planes, checkpoints y stop conditions"
-video_summary: "Un contrato fija el éxito; el plan puede cambiar con evidencia; los checkpoints y stop conditions hacen la trayectoria recuperable."
-video_duration: PT36S
+video_title: Specs, planes y checkpoints
+video_summary: Estas condiciones permiten rechazar una implementación que sólo cumple la mitad.
+video_date: '2026-09-26'
+video_duration: PT132.25S
+video_captions: 03-specs-planificacion-task-decomposition-checkpoints-visual-text.vtt
+video_transcript: 03-specs-planificacion-task-decomposition-checkpoints-transcript.html
 video_chapters:
-- name: "De petición a contrato observable"
-  start: 0
-  end: 12
-- name: "Plan, evidencia, checkpoint y replan"
-  start: 12
-  end: 24
-- name: "Done, recover, blocked o escalate"
-  start: 24
-  end: 36
+- name: De una petición a una prueba
+  start: 0.0
+  end: 21.666667
+- name: Regla estable, objetivo concreto
+  start: 21.666667
+  end: 43.333333
+- name: La dependencia marca el orden
+  start: 43.333333
+  end: 65.916667
+- name: El plan puede estar equivocado
+  start: 65.916667
+  end: 88.333333
+- name: Guardar evidencia, no sólo texto
+  start: 88.333333
+  end: 110.75
+- name: La tarea exige el conjunto
+  start: 110.75
+  end: 132.25
 ---
 
 # Capítulo 3 — Specs, planificación, task decomposition, checkpoints y contratos de tarea

@@ -1,0 +1,634 @@
+{
+  "schema": 1,
+  "series": "coding-agents-agent-harnesses",
+  "round": "C1",
+  "owner_approval": "APPROVED_2026-09-26",
+  "public_scope": "12 exact owner-approved horizontal originals;12 approved vertical originals preserved separately",
+  "duration_contract": "Exact fractional seconds in ISO8601, catalogue and Clip; display clocks and integer sitemap durations use whole-second projections. VTT timing rounds to the nearest millisecond.",
+  "objects": [
+    {
+      "path": "series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4",
+      "kind": "video",
+      "sha256": "41f3ac4f94094477b233ba9dd7750246b7c5357125de0738f12920b25134f978",
+      "bytes": 3499995,
+      "duration": 130.8,
+      "duration_iso": "PT130.8S",
+      "frames": 7848,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/01-que-es-agent-harness/",
+      "watch": "videos/series/coding-agents-agent-harnesses/01-que-es-agent-harness/",
+      "poster_path": "series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg",
+      "poster_sha256": "a0e8eba68e5d5b9fb794d74a60e87aab38f0acc63ecb11672fc28823e66d3ee8",
+      "chapters": [
+        {
+          "name": "Pedir no es ejecutar",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "El error cambia el turno",
+          "start": 21.5,
+          "end": 43.166667
+        },
+        {
+          "name": "Un archivo no es el sistema",
+          "start": 43.166667,
+          "end": 65.583333
+        },
+        {
+          "name": "Mismo modelo, otro control",
+          "start": 65.583333,
+          "end": 87.083333
+        },
+        {
+          "name": "Un PASS necesita identidad",
+          "start": 87.083333,
+          "end": 108.75
+        },
+        {
+          "name": "Parar no significa terminar",
+          "start": 108.75,
+          "end": 130.8
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/01-que-es-agent-harness-visual-text.vtt",
+      "captions_sha256": "41f52c05f108a9b6e38b645be9b8b4c09e751e0f890822e9e6d693e01608b502",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4",
+      "kind": "video",
+      "sha256": "796cafe74e02dcc53651fca81682f554c120e67d9d2b483319a8deeb3b64fefc",
+      "bytes": 3444805,
+      "duration": 130.8,
+      "duration_iso": "PT130.8S",
+      "frames": 7848,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/01-que-es-agent-harness/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg",
+      "poster_sha256": "6b720449b938c5b6ff81bb939cc2c79b481110223fd613bde5b736f6711a5c7b",
+      "chapters": [
+        {
+          "name": "A request is not an action",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "An error changes the next turn",
+          "start": 21.5,
+          "end": 43.166667
+        },
+        {
+          "name": "One file is not the system",
+          "start": 43.166667,
+          "end": 65.583333
+        },
+        {
+          "name": "Same model, different checks",
+          "start": 65.583333,
+          "end": 87.083333
+        },
+        {
+          "name": "A PASS needs an identity",
+          "start": 87.083333,
+          "end": 108.75
+        },
+        {
+          "name": "Stopping does not mean success",
+          "start": 108.75,
+          "end": 130.8
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/01-que-es-agent-harness-visual-text.vtt",
+      "captions_sha256": "e5356d209d7b932fe7d15cf7b3ec6d8317e2ccc9d292606fe91d0fe63ec16d3c",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.mp4",
+      "kind": "video",
+      "sha256": "2df2bb96589086b273be5f92ca0e01d5baa91e4c2b7cf9c0eda3d14b7467b577",
+      "bytes": 3717244,
+      "duration": 130.433333,
+      "duration_iso": "PT130.433333S",
+      "frames": 7826,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/",
+      "watch": "videos/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/",
+      "poster_path": "series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.jpg",
+      "poster_sha256": "b5e8df5f3bc8b872d6e2aaa8b25ef668291acbe307e27e7e11fec4b1c76231ff",
+      "chapters": [
+        {
+          "name": "Separar tres fronteras",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "La branch no guarda todo",
+          "start": 21.5,
+          "end": 43.55
+        },
+        {
+          "name": "Dos índices, dos copias",
+          "start": 43.55,
+          "end": 65.6
+        },
+        {
+          "name": "La base de datos sigue compartida",
+          "start": 65.6,
+          "end": 87.266667
+        },
+        {
+          "name": "Sin conflicto, con un error",
+          "start": 87.266667,
+          "end": 108.766667
+        },
+        {
+          "name": "El cambio ajeno se conserva",
+          "start": 108.766667,
+          "end": 130.433333
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento-visual-text.vtt",
+      "captions_sha256": "3d1e8e793d90e8c38006bfb70b42783bd05983ea6769670aab436e7d5fc33bec",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.mp4",
+      "kind": "video",
+      "sha256": "78951f4237a081e01e85ccad5ad3ea9d61101f4f0a9223e5ef618a5089822cd5",
+      "bytes": 3665146,
+      "duration": 130.433333,
+      "duration_iso": "PT130.433333S",
+      "frames": 7826,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.jpg",
+      "poster_sha256": "504cede4bee8ca32127150bdc96ab9196ec1969801a03650d02b3c4eb56fa821",
+      "chapters": [
+        {
+          "name": "Separate three boundaries",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "A branch does not hold everything",
+          "start": 21.5,
+          "end": 43.55
+        },
+        {
+          "name": "Two indexes, two copies",
+          "start": 43.55,
+          "end": 65.6
+        },
+        {
+          "name": "The database is still shared",
+          "start": 65.6,
+          "end": 87.266667
+        },
+        {
+          "name": "A clean merge can still be wrong",
+          "start": 87.266667,
+          "end": 108.766667
+        },
+        {
+          "name": "Preserve changes owned by others",
+          "start": 108.766667,
+          "end": 130.433333
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento-visual-text.vtt",
+      "captions_sha256": "4cb139b7df3eb1978b9277868d427f6f136a03c578becb03de21d040b881796f",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.mp4",
+      "kind": "video",
+      "sha256": "3e5ff9500f5ba6f59e584dc360d13356555b595973a6d8955c1f771b37f3e6cc",
+      "bytes": 3721961,
+      "duration": 132.25,
+      "duration_iso": "PT132.25S",
+      "frames": 7935,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/",
+      "watch": "videos/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/",
+      "poster_path": "series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.jpg",
+      "poster_sha256": "b64fc686033261955787e0430a2cf8ea07ea2600aaf616013f62146bc3740fb1",
+      "chapters": [
+        {
+          "name": "De una petición a una prueba",
+          "start": 0.0,
+          "end": 21.666667
+        },
+        {
+          "name": "Regla estable, objetivo concreto",
+          "start": 21.666667,
+          "end": 43.333333
+        },
+        {
+          "name": "La dependencia marca el orden",
+          "start": 43.333333,
+          "end": 65.916667
+        },
+        {
+          "name": "El plan puede estar equivocado",
+          "start": 65.916667,
+          "end": 88.333333
+        },
+        {
+          "name": "Guardar evidencia, no sólo texto",
+          "start": 88.333333,
+          "end": 110.75
+        },
+        {
+          "name": "La tarea exige el conjunto",
+          "start": 110.75,
+          "end": 132.25
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints-visual-text.vtt",
+      "captions_sha256": "0a39a3430428fa0bf0af3d61783784197c4f97ded9ceb6062ddea7e95ee89401",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.mp4",
+      "kind": "video",
+      "sha256": "555eab1cd31cebc380c3fdbcf8b3b5b7133903badf040f81d72fbbb0f25bac4f",
+      "bytes": 3577667,
+      "duration": 132.25,
+      "duration_iso": "PT132.25S",
+      "frames": 7935,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.jpg",
+      "poster_sha256": "23726811e9a9cf085d256cf0bc729a961b82a69a45d2ea64045eef5d76e30446",
+      "chapters": [
+        {
+          "name": "From a request to a test",
+          "start": 0.0,
+          "end": 21.666667
+        },
+        {
+          "name": "A stable rule, a specific goal",
+          "start": 21.666667,
+          "end": 43.333333
+        },
+        {
+          "name": "Dependencies determine the order",
+          "start": 43.333333,
+          "end": 65.916667
+        },
+        {
+          "name": "The plan can be wrong",
+          "start": 65.916667,
+          "end": 88.333333
+        },
+        {
+          "name": "Save evidence, not just notes",
+          "start": 88.333333,
+          "end": 110.75
+        },
+        {
+          "name": "The task requires the whole contract",
+          "start": 110.75,
+          "end": 132.25
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints-visual-text.vtt",
+      "captions_sha256": "258454752a93263ac46f06c513625ab71c0c65873963c8236fb81012edc1fdab",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4",
+      "kind": "video",
+      "sha256": "128c7b26eea6882a286b44fe007c39e4b0c0f5f4748a71a85a0acdd6e834ca38",
+      "bytes": 3799103,
+      "duration": 132.816667,
+      "duration_iso": "PT132.816667S",
+      "frames": 7969,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/",
+      "watch": "videos/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/",
+      "poster_path": "series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg",
+      "poster_sha256": "38bc5f5e4eca032c5efddedb7f9202cb7b93a7e4020bcfe8d789ab60c89cb49d",
+      "chapters": [
+        {
+          "name": "Disponible no significa permitido",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "Permitir, preguntar o denegar",
+          "start": 21.5,
+          "end": 43.166667
+        },
+        {
+          "name": "Aprobar esta acción exacta",
+          "start": 43.166667,
+          "end": 65.766667
+        },
+        {
+          "name": "Comprobar y usar no son lo mismo",
+          "start": 65.766667,
+          "end": 87.433333
+        },
+        {
+          "name": "El secreto no es parte del prompt",
+          "start": 87.433333,
+          "end": 110.233333
+        },
+        {
+          "name": "El contenido no cambia la política",
+          "start": 110.233333,
+          "end": 132.816667
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries-visual-text.vtt",
+      "captions_sha256": "5a0e90e96b7caa2d9ec49be53d2776bcd64a686eb979046bca38561ed10a32b9",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4",
+      "kind": "video",
+      "sha256": "dc44909193021922c6c554f10f48e7d9549345ac68f658df39dd99c90f3869b3",
+      "bytes": 3661161,
+      "duration": 132.816667,
+      "duration_iso": "PT132.816667S",
+      "frames": 7969,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg",
+      "poster_sha256": "868d5c5d84e09bc68d3b88089664b62e34a5875805d96d21b5df5894237e6221",
+      "chapters": [
+        {
+          "name": "Available does not mean allowed",
+          "start": 0.0,
+          "end": 21.5
+        },
+        {
+          "name": "Allow, ask or deny",
+          "start": 21.5,
+          "end": 43.166667
+        },
+        {
+          "name": "Approve this exact action",
+          "start": 43.166667,
+          "end": 65.766667
+        },
+        {
+          "name": "Checking and using are different moments",
+          "start": 65.766667,
+          "end": 87.433333
+        },
+        {
+          "name": "A secret is not prompt content",
+          "start": 87.433333,
+          "end": 110.233333
+        },
+        {
+          "name": "Content does not rewrite policy",
+          "start": 110.233333,
+          "end": 132.816667
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries-visual-text.vtt",
+      "captions_sha256": "5f412d18f8f2bd4ad2c16c9520da8025928cd95ca1937902e958483787543a8b",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4",
+      "kind": "video",
+      "sha256": "9ac4097e821d2abf4b5cccb5ebe442cabc830e1465494e6e0b76d98304709cd4",
+      "bytes": 3690916,
+      "duration": 133.8,
+      "duration_iso": "PT133.8S",
+      "frames": 8028,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/",
+      "watch": "videos/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/",
+      "poster_path": "series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg",
+      "poster_sha256": "260d44114105209d3e75265176c49ba54795b0a8e6b180d572ffb8d634bb58f7",
+      "chapters": [
+        {
+          "name": "Cada prueba cubre una pregunta",
+          "start": 0.0,
+          "end": 22.05
+        },
+        {
+          "name": "Este verde pertenece a A",
+          "start": 22.05,
+          "end": 44.1
+        },
+        {
+          "name": "También se revisa el test",
+          "start": 44.1,
+          "end": 66.9
+        },
+        {
+          "name": "Dos modos, dos contratos",
+          "start": 66.9,
+          "end": 89.7
+        },
+        {
+          "name": "Agotar tiempo no da un PASS",
+          "start": 89.7,
+          "end": 111.75
+        },
+        {
+          "name": "Una ejecución no mide fiabilidad",
+          "start": 111.75,
+          "end": 133.8
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion-visual-text.vtt",
+      "captions_sha256": "2eb83b7d6ee70f8d72a395aee1c1ed396c39165d04b319ca698359526bd26bfc",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4",
+      "kind": "video",
+      "sha256": "beb90500fa2617daa124f95bbecad33e687f62055aa2a273c628b1a23b7522b9",
+      "bytes": 3540177,
+      "duration": 133.8,
+      "duration_iso": "PT133.8S",
+      "frames": 8028,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg",
+      "poster_sha256": "d4100b80b4dffbbf9ba0eeeb9df8aa0e3610647467c6ce8c11315c9d2cd2bd60",
+      "chapters": [
+        {
+          "name": "Each check answers one question",
+          "start": 0.0,
+          "end": 22.05
+        },
+        {
+          "name": "This green result belongs to A",
+          "start": 22.05,
+          "end": 44.1
+        },
+        {
+          "name": "Review the test change too",
+          "start": 44.1,
+          "end": 66.9
+        },
+        {
+          "name": "Two modes, two contracts",
+          "start": 66.9,
+          "end": 89.7
+        },
+        {
+          "name": "A time limit is not a PASS",
+          "start": 89.7,
+          "end": 111.75
+        },
+        {
+          "name": "One run does not measure reliability",
+          "start": 111.75,
+          "end": 133.8
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion-visual-text.vtt",
+      "captions_sha256": "8f3c922e23a4de90f2a07babcba1c4c909d2bbec18024503513601e82fca70dd",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4",
+      "kind": "video",
+      "sha256": "57102b84c184a531abff0bc51f95c3144d4775d4efd7711d8ebe2591503ead88",
+      "bytes": 3783086,
+      "duration": 135.25,
+      "duration_iso": "PT135.25S",
+      "frames": 8115,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/",
+      "watch": "videos/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/",
+      "poster_path": "series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg",
+      "poster_sha256": "1eb022e4acf4fa6010df24066a13e67f718826e81c7a6ba4f4c07685117c8dfb",
+      "chapters": [
+        {
+          "name": "Guardar lo que ocurrió",
+          "start": 0.0,
+          "end": 23.35
+        },
+        {
+          "name": "Resumir no restaura el entorno",
+          "start": 23.35,
+          "end": 46.533333
+        },
+        {
+          "name": "Una respuesta perdida no autoriza repetir",
+          "start": 46.533333,
+          "end": 68.033333
+        },
+        {
+          "name": "Paralelizar no elimina la integración",
+          "start": 68.033333,
+          "end": 89.866667
+        },
+        {
+          "name": "El destino también se mueve",
+          "start": 89.866667,
+          "end": 111.916667
+        },
+        {
+          "name": "Entregar con evidencia",
+          "start": 111.916667,
+          "end": 135.25
+        }
+      ],
+      "captions_path": "series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-visual-text.vtt",
+      "captions_sha256": "7661909f9296029f65c19176cbd9a0dac5ff78e7475e13cad7efd9e8d951d2ae",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    },
+    {
+      "path": "en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4",
+      "kind": "video",
+      "sha256": "51ad94953937e5ee9bd85c7b1185dd958771d84a1d4110e9c2ed0f4b29116f1c",
+      "bytes": 3703841,
+      "duration": 135.25,
+      "duration_iso": "PT135.25S",
+      "frames": 8115,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/",
+      "watch": "en/videos/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/",
+      "poster_path": "en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg",
+      "poster_sha256": "37da740c86ed12a8ceae06df9c893a4d69c4ef2e9d9f93008cada3bff91cfbb2",
+      "chapters": [
+        {
+          "name": "Record what actually happened",
+          "start": 0.0,
+          "end": 23.35
+        },
+        {
+          "name": "A summary does not restore the environment",
+          "start": 23.35,
+          "end": 46.533333
+        },
+        {
+          "name": "A lost response does not authorize a retry",
+          "start": 46.533333,
+          "end": 68.033333
+        },
+        {
+          "name": "Parallel work still needs integration",
+          "start": 68.033333,
+          "end": 89.866667
+        },
+        {
+          "name": "The target can move too",
+          "start": 89.866667,
+          "end": 111.916667
+        },
+        {
+          "name": "Deliver with evidence",
+          "start": 111.916667,
+          "end": 135.25
+        }
+      ],
+      "captions_path": "en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad-visual-text.vtt",
+      "captions_sha256": "af841af5d90b98ac0de8fd6ae416dbde49740d79cff1e16bc7f833e618bf13ed",
+      "captions_scope": "Visual text, silent video; no invented narration"
+    }
+  ]
+}

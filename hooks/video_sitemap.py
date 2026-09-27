@@ -34,6 +34,7 @@ from collections import Counter
 from datetime import date, datetime
 from html import escape as html_escape
 import json
+import math
 import logging
 import os
 from pathlib import Path
@@ -232,7 +233,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
             f'<meta property="og:video" content="{html_escape(entry["video_url"], quote=True)}">',
             f'<meta property="og:video:secure_url" content="{html_escape(entry["video_url"], quote=True)}">',
             '<meta property="og:video:type" content="video/mp4">',
-            f'<meta property="og:video:duration" content="{entry["duration_seconds"]}">'
+            f'<meta property="og:video:duration" content="{int(entry["duration_seconds"])}">'
             if entry["duration_seconds"]
             else "",
         ]
@@ -299,7 +300,7 @@ def _build_entry(
         or meta.get("description")
         or f"Explicación en vídeo de {title}."
     )
-    publication_date = _normalize_date(meta.get("date"))
+    publication_date = _normalize_date(meta.get("video_date") or meta.get("date"))
     duration_iso = str(meta.get("video_duration") or "").strip()
     duration_seconds = _duration_to_seconds(duration_iso)
     snippets = _extract_snippets(body, meta)
@@ -498,19 +499,18 @@ def _normalize_date(value: Any) -> str:
     return text
 
 
-def _duration_to_seconds(value: str) -> int:
-    match = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", value or "")
+def _duration_to_seconds(value: str) -> int | float:
+    match = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?", value or "")
     if not match:
         return 0
-    return (
-        int(match.group(1) or 0) * 3600
-        + int(match.group(2) or 0) * 60
-        + int(match.group(3) or 0)
-    )
+    seconds = int(match.group(1) or 0) * 3600 + int(match.group(2) or 0) * 60 + float(match.group(3) or 0)
+    if not math.isfinite(seconds):
+        return 0
+    return int(seconds) if seconds.is_integer() else seconds
 
 
 def _clock_label(seconds: int) -> str:
-    minutes, remaining = divmod(max(0, seconds), 60)
+    minutes, remaining = divmod(max(0, int(seconds)), 60)
     if minutes >= 60:
         hours, minutes = divmod(minutes, 60)
         return f"{hours}:{minutes:02d}:{remaining:02d}"
@@ -521,9 +521,9 @@ def _duration_label(seconds: int) -> str:
     return _clock_label(seconds) if seconds else "Vídeo breve"
 
 
-def _timestamp_to_seconds(value: Any) -> int | None:
-    if isinstance(value, (int, float)) and value >= 0:
-        return int(value)
+def _timestamp_to_seconds(value: Any) -> int | float | None:
+    if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value >= 0:
+        return int(value) if float(value).is_integer() else float(value)
     text = str(value or "").strip()
     if text.isdigit():
         return int(text)
@@ -922,7 +922,7 @@ def _write_video_sitemap(site_dir: Path, entries: list[dict[str, Any]]) -> None:
         optional = []
         if entry["duration_seconds"]:
             optional.append(
-                f"      <video:duration>{entry['duration_seconds']}</video:duration>"
+                f"      <video:duration>{int(entry['duration_seconds'])}</video:duration>"
             )
         if entry["publication_date"]:
             optional.append(

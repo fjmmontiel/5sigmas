@@ -1,0 +1,74 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:07.667
+The first record expresses an intention. It does not yet prove that anything was sent.
+
+2
+00:00:07.667 --> 00:00:14.667
+The journal adds the actual attempt with a stable identity: operation T7.
+
+3
+00:00:14.667 --> 00:00:23.350
+Remote confirmation links T7 to R42 and is recorded separately. An attempt is not a substitute for an outcome.
+
+4
+00:00:23.850 --> 00:00:30.850
+Compaction reduces the history visible to the model.
+
+5
+00:00:30.850 --> 00:00:37.850
+The workspace, revision and processes may have changed outside that summary.
+
+6
+00:00:37.850 --> 00:00:46.533
+Read the operational state again before continuing. Task memory and reality are different objects.
+
+7
+00:00:47.033 --> 00:00:54.033
+Publication is sent, but its response is lost. The outcome is unknown.
+
+8
+00:00:54.033 --> 00:01:01.033
+Before retrying, look up the operation using its stable identity.
+
+9
+00:01:01.033 --> 00:01:08.033
+If it exists, reconcile the receipt. A blind retry could create a duplicate.
+
+10
+00:01:08.533 --> 00:01:15.533
+Two independent pieces can be built at the same time.
+
+11
+00:01:15.533 --> 00:01:22.700
+In this example they take four and six minutes, followed by two minutes of integration.
+
+12
+00:01:22.700 --> 00:01:29.867
+The path takes eight minutes, not six. Gains depend on dependencies, coordination and final tests.
+
+13
+00:01:30.367 --> 00:01:37.367
+The candidate was verified against base A.
+
+14
+00:01:37.367 --> 00:01:44.367
+The target branch advances to B while the agent works.
+
+15
+00:01:44.367 --> 00:01:51.917
+Integration changes the combined state. Review the effective diff and rerun the affected checks.
+
+16
+00:01:52.417 --> 00:01:59.417
+Delivery identifies the task, final revision and diff of the combined state.
+
+17
+00:01:59.417 --> 00:02:07.333
+Checks identify their scope and the revision they verified. They are not inherited from an old base.
+
+18
+00:02:07.333 --> 00:02:15.250
+Delivery includes limits and pending decisions. The reviewer knows what is verified and what is still missing.
+

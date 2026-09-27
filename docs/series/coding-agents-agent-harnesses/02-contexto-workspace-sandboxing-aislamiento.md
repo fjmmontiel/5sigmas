@@ -13,19 +13,31 @@ tags:
   - Seguridad
 video: 02-contexto-workspace-sandboxing-aislamiento.mp4
 video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
-video_title: "Workspace, worktrees y sandboxing"
-video_summary: "El aislamiento separa estado Git, filesystem, procesos y recursos; la integración final vuelve a validar el estado combinado."
-video_duration: PT36S
+video_title: Contexto, workspace y aislamiento
+video_summary: Separar una copia no demuestra que esté confinada. Hay que comprobar ambas fronteras.
+video_date: '2026-09-26'
+video_duration: PT130.433333S
+video_captions: 02-contexto-workspace-sandboxing-aislamiento-visual-text.vtt
+video_transcript: 02-contexto-workspace-sandboxing-aislamiento-transcript.html
 video_chapters:
-- name: "Una tarea, un estado observable"
-  start: 0
-  end: 12
-- name: "Aislar también recursos de ejecución"
-  start: 12
-  end: 24
-- name: "Integrar contra el target actual"
-  start: 24
-  end: 36
+- name: Separar tres fronteras
+  start: 0.0
+  end: 21.5
+- name: La branch no guarda todo
+  start: 21.5
+  end: 43.55
+- name: Dos índices, dos copias
+  start: 43.55
+  end: 65.6
+- name: La base de datos sigue compartida
+  start: 65.6
+  end: 87.266667
+- name: Sin conflicto, con un error
+  start: 87.266667
+  end: 108.766667
+- name: El cambio ajeno se conserva
+  start: 108.766667
+  end: 130.433333
 ---
 
 # Capítulo 2 — Contexto de repositorio, workspace, sandboxing, worktrees/branches y aislamiento
