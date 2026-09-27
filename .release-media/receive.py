@@ -1,6 +1,6 @@
-"""Receive hash-pinned owner-approved originals; never render, publish or merge.
-Private transfer URLs are AES-GCM sealed to a one-run X25519 receiver key.
-Only the public key and ciphertext enter Git; the private key stays in memory.
+"""Receive only hash-pinned owner-approved originals. Never render, publish or merge.
+Private transfer URLs remain AES-GCM sealed to a one-run X25519 receiver key.
+Only the public key and ciphertext enter Git; private keys exist only in memory.
 """
 from pathlib import Path,PurePosixPath
 import base64,hashlib,json,os,subprocess,tempfile,time,zipfile
@@ -33,18 +33,30 @@ def receive(slot,private,ready,envelope):
   aad=(BRANCH+'|'+slot+'|'+ready['run']+'|'+PINS[slot]).encode()
   key=HKDF(algorithm=hashes.SHA256(),length=32,salt=bytes.fromhex(PINS[slot]),info=aad).derive(shared)
   data=json.loads(AESGCM(key).decrypt(base64.b64decode(envelope['nonce'],validate=True),base64.b64decode(envelope['ciphertext'],validate=True),aad))
-  assert set(data)=={'url','sha256','size','slot','run'} and data['slot']==slot and data['run']==ready['run']
-  u=urlsplit(data['url']);assert u.scheme=='https' and u.hostname.endswith('.oaiusercontent.com') and not u.username and not u.password and not u.fragment
+  assert set(data)=={'parts','sha256','size','slot','run'} and data['slot']==slot and data['run']==ready['run']
+  assert isinstance(data['parts'],list) and 1<=len(data['parts'])<=8
+  for part in data['parts']:
+   assert set(part)=={'url','size','sha256'}
+   u=urlsplit(part['url']);assert u.scheme=='https' and u.hostname.endswith('.oaiusercontent.com') and not u.username and not u.password and not u.fragment
+   assert isinstance(part['size'],int) and 0<part['size']<=90_000_000
+   assert len(part['sha256'])==64 and all(c in '0123456789abcdef' for c in part['sha256'])
+  assert sum(x['size'] for x in data['parts'])==data['size']
   assert isinstance(data['size'],int) and 0<data['size']<500_000_000
   assert len(data['sha256'])==64 and all(c in '0123456789abcdef' for c in data['sha256'])
  except Exception:raise RuntimeError('SEALED_INPUT_INVALID') from None
  with tempfile.TemporaryDirectory(prefix='approved-media-') as td:
   archive=Path(td)/'originals.zip';observed=0;digest=hashlib.sha256()
   try:
-   with build_opener(NoRedirect()).open(Request(data['url'],headers={'User-Agent':'5sigmas-approved-original-transfer/1'}),timeout=90) as response,archive.open('wb') as out:
-    assert response.status==200
-    while chunk:=response.read(1024*1024):
-     observed+=len(chunk);assert observed<=data['size'];digest.update(chunk);out.write(chunk)
+   with archive.open('wb') as out:
+    for part in data['parts']:
+     part_size=0;part_digest=hashlib.sha256()
+     with build_opener(NoRedirect()).open(Request(part['url'],headers={'User-Agent':'5sigmas-approved-original-transfer/2'}),timeout=90) as response:
+      assert response.status==200
+      while chunk:=response.read(1024*1024):
+       observed+=len(chunk);part_size+=len(chunk)
+       assert observed<=data['size'] and part_size<=part['size']
+       digest.update(chunk);part_digest.update(chunk);out.write(chunk)
+     assert part_size==part['size'] and part_digest.hexdigest()==part['sha256']
    assert observed==data['size'] and digest.hexdigest()==data['sha256']
   except Exception:raise RuntimeError('EXACT_PUBLIC_PAYLOAD_DOWNLOAD_FAILED_NO_URL_LOGGED') from None
   with zipfile.ZipFile(archive) as z:
@@ -78,9 +90,19 @@ def main():
  git('config','user.name','github-actions[bot]');git('config','user.email','41898282+github-actions[bot]@users.noreply.github.com')
  assert git('ls-remote','origin','refs/heads/'+BRANCH).split()[0]==os.environ['GITHUB_SHA']
  private=X25519PrivateKey.generate()
- ready={'schema':1,'run':os.environ['GITHUB_RUN_ID'],'branch':BRANCH,'public_key':base64.b64encode(private.public_key().public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw)).decode(),'pins':PINS,'expires_epoch':int(time.time()+3300),'scope':'Exact approved horizontal media only; no private source, tokens, regenerated originals, merge or production publication.'}
+ ready={'schema':2,'run':os.environ['GITHUB_RUN_ID'],'branch':BRANCH,'public_key':base64.b64encode(private.public_key().public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw)).decode(),'pins':PINS,'expires_epoch':int(time.time()+3300),'scope':'Exact approved horizontal media only; no private source, tokens, regenerated originals, merge or production publication.'}
  (STATE/'receiver.json').write_text(json.dumps(ready,indent=2)+'\n');publish([str(STATE/'receiver.json')],'release: announce one-run public media receiver key')
  done=set()
+ for slot in PINS:
+  receipt=STATE/(slot+'-receipt.json')
+  if not receipt.exists():continue
+  r=json.loads(receipt.read_text());rows=r['objects']
+  assert r['status']=='EXACT_APPROVED_ORIGINALS_STAGED_NOT_PUBLISHED' and len(rows)==12
+  assert hashlib.sha256(canonical(rows)).hexdigest()==PINS[slot]
+  for row in rows:
+   p=Path(row['path']);assert p.stat().st_size==row['size'] and hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256']
+  done.add(slot)
+ print('REUSED_EXACT_VALIDATED_SLOTS',','.join(sorted(done)),flush=True)
  while time.time()<ready['expires_epoch'] and done!=set(PINS):
   git('fetch','--quiet','origin',BRANCH)
   for slot in PINS:
