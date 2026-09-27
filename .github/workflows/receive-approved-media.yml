@@ -7,7 +7,7 @@ permissions:
   contents: write
 concurrency:
   group: receive-owner-approved-video-batch-20260927
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   receive:
     if: github.actor == 'fjmmontiel'
@@ -26,5 +26,5 @@ jobs:
           python -m pip install cryptography
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-      - name: Receive hash-pinned original files without rendering or publishing
+      - name: Receive bounded sealed parts and reuse hash-verified completed slots
         run: python -u .release-media/receive.py
