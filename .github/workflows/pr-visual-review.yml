@@ -143,8 +143,11 @@ jobs:
       - name: Verify exact approved D2 bytes and unchanged article bodies
         run: python scripts/verify_datacenters_d2_release.py
 
-      - name: Verify exact approved A2 bytes and unchanged article bodies
-        run: python scripts/verify_agents_a2_release.py --base-ref "${{ github.event.pull_request.base.sha }}"
+      - name: Verify exact approved A2 bytes and discovery
+        run: python scripts/verify_agents_a2_release.py
+
+      - name: Verify exact approved Coding C1 media, discovery and release scope
+        run: python3 scripts/verify_coding_c1_release.py --site-dir site --base-ref "${{ github.event.pull_request.base.sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -187,7 +190,6 @@ jobs:
           done
           cat /tmp/5sigmas-preview.log
           exit 1
-
       - name: Verify C3 native desktop and mobile video consumers
         run: node scripts/verify_evaluation_c3_browser.mjs
 
@@ -196,9 +198,6 @@ jobs:
 
       - name: Verify A2 native desktop and mobile video consumers
         run: node scripts/verify_agents_a2_browser.mjs
-
-      - name: Verify exact approved Coding C1 media and discovery
-        run: python3 scripts/verify_coding_c1_release.py --site-dir site
 
       - name: Verify native Coding C1 desktop and mobile playback
         run: node scripts/verify_coding_c1_browser.mjs
