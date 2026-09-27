@@ -1,0 +1,92 @@
+{
+  "status": "EXACT_APPROVED_ORIGINALS_STAGED_NOT_PUBLISHED",
+  "slot": "context",
+  "objects": [
+    {
+      "duration": 131.7,
+      "frames": 7902,
+      "path": "docs/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4",
+      "sha256": "b4f1e9b43a1c6c01a771cdbb7fdb8aef555acd17538b48a5b5883dde49d09e74",
+      "size": 3808118
+    },
+    {
+      "duration": 131.7,
+      "frames": 7902,
+      "path": "locales/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4",
+      "sha256": "54f53a9ef5c49668802790f5d364e67db0e3355b018a86728d1c5c9e056accdd",
+      "size": 3704627
+    },
+    {
+      "duration": 135.25,
+      "frames": 8115,
+      "path": "docs/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4",
+      "sha256": "9c8056764ffc993b98dcae83b45ff053b8431578fc4556132fd3edc07cf0dc25",
+      "size": 4224428
+    },
+    {
+      "duration": 135.25,
+      "frames": 8115,
+      "path": "locales/en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4",
+      "sha256": "b1fc7589c1c75a31c897a92746e6f7df1948f30b726d1bc8dc6f6a4920b81a80",
+      "size": 4029591
+    },
+    {
+      "duration": 129.933333,
+      "frames": 7796,
+      "path": "docs/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4",
+      "sha256": "511b1a18049e2b0e73f94fb66f8754ea18a9fff899db767a9a714de720276e2e",
+      "size": 3915291
+    },
+    {
+      "duration": 129.933333,
+      "frames": 7796,
+      "path": "locales/en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4",
+      "sha256": "4752a7d1a5b4b27360b7028bfeb98e215a2dfd2fc4c7d9a0d603d2314ce58323",
+      "size": 3716989
+    },
+    {
+      "duration": 134.283333,
+      "frames": 8057,
+      "path": "docs/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4",
+      "sha256": "059dcdb16a27154c7ecaab64ae2f3cd5e1ce96b8e52fae4dbbc062c29525340c",
+      "size": 4037646
+    },
+    {
+      "duration": 134.283333,
+      "frames": 8057,
+      "path": "locales/en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4",
+      "sha256": "82c58de7f0778468fa5bfbe871319ecb30520eeeeb1fe8dc2c7f612ad861e5d4",
+      "size": 3754271
+    },
+    {
+      "duration": 134.916667,
+      "frames": 8095,
+      "path": "docs/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4",
+      "sha256": "a7e334549a35577bbb61f93617632e1b845975cd4b796c7f4ee0b8a9ffb72e09",
+      "size": 5802672
+    },
+    {
+      "duration": 134.916667,
+      "frames": 8095,
+      "path": "locales/en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4",
+      "sha256": "75a6e05ccd730aa954ba1f03b961bd01e508b9841743215f3156f2fc5c862699",
+      "size": 5506018
+    },
+    {
+      "duration": 133.783333,
+      "frames": 8027,
+      "path": "docs/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4",
+      "sha256": "1a1fda9f935d86fd116c075722981b42321493d19b5ccba5f410348689c9fd36",
+      "size": 5961383
+    },
+    {
+      "duration": 133.783333,
+      "frames": 8027,
+      "path": "locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4",
+      "sha256": "8549565f9ecf8626f6f99a89ecbbaaf9dc6a1d511d76420a63fcb9abaf4b0a7e",
+      "size": 5599131
+    }
+  ],
+  "run": "36349458184",
+  "count": 12
+}
