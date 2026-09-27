@@ -1,0 +1,32 @@
+name: Approved video source preflight
+on:
+  push:
+    branches: [release/approved-video-backlog-20260927]
+    paths: [.github/workflows/approved-video-source-preflight.yml]
+permissions:
+  contents: read
+concurrency:
+  group: approved-video-source-preflight
+  cancel-in-progress: false
+jobs:
+  source-availability:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check existing credential configuration without exposing credentials
+        env:
+          SOURCE_CREDENTIAL: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+        shell: python
+        run: |
+          import json, os
+          value = os.environ.get('SOURCE_CREDENTIAL', '')
+          if not value.strip():
+              raise SystemExit('ASSET_SOURCE_NOT_CONFIGURED: the existing documented Google credential is not available in this repository. No download, credential export, permission change, render or publication was attempted.')
+          try:
+              credential = json.loads(value)
+          except (ValueError, TypeError):
+              raise SystemExit('ASSET_SOURCE_INVALID_CONFIGURATION: no credential contents are logged.')
+          if credential.get('type') != 'service_account' or not credential.get('client_email') or not credential.get('private_key'):
+              raise SystemExit('ASSET_SOURCE_UNSUPPORTED_CONFIGURATION: no credential contents are logged.')
+          print('EXISTING_GOOGLE_CREDENTIAL_CONFIGURED. This is configuration availability only, NOT Drive access or publication proof. Approved asset access still requires an explicit file-level read grant and a verified exact-hash manifest. No Google API was called.')
