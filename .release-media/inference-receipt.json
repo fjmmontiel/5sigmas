@@ -1,0 +1,92 @@
+{
+  "status": "EXACT_APPROVED_ORIGINALS_STAGED_NOT_PUBLISHED",
+  "slot": "inference",
+  "objects": [
+    {
+      "duration": 133.05,
+      "frames": 7983,
+      "path": "docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4",
+      "sha256": "b5ed464edc06af5088689bd9cb2d07919f00722caf85dc10c6b01d99a12761f5",
+      "size": 13237157
+    },
+    {
+      "duration": 133.05,
+      "frames": 7983,
+      "path": "locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4",
+      "sha256": "f377739334044a25501a798f7b69afada1e4a0268eda17d38ef96bd3729a8d56",
+      "size": 12839504
+    },
+    {
+      "duration": 133.433333,
+      "frames": 8006,
+      "path": "docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4",
+      "sha256": "9a22cf35fc937fbd57ad9586df8138ccdf0a1edb495a3395e475408dcef49992",
+      "size": 12388363
+    },
+    {
+      "duration": 133.433333,
+      "frames": 8006,
+      "path": "locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4",
+      "sha256": "8c19772423b4da469f31ef0acd77a009804e5d7fa21974dea24030020540b834",
+      "size": 11970405
+    },
+    {
+      "duration": 135.35,
+      "frames": 8121,
+      "path": "docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4",
+      "sha256": "95ca73d8e12a33c1212dbb298bd4631b25ebf993b9b8e0fdf7338084f97b1dac",
+      "size": 12668244
+    },
+    {
+      "duration": 135.35,
+      "frames": 8121,
+      "path": "locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4",
+      "sha256": "2dad72e318d58c4525c661a6f03eb55efe178dc764fdd2f42a4a354027682c54",
+      "size": 12262000
+    },
+    {
+      "duration": 135.55,
+      "frames": 8133,
+      "path": "docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4",
+      "sha256": "b8eb6675538d66ab596036d120546fbee9352da805794687d9193489df1a390d",
+      "size": 13039812
+    },
+    {
+      "duration": 135.55,
+      "frames": 8133,
+      "path": "locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4",
+      "sha256": "b051afb88eaf0dc4fcfc2f159cc672c0ea899be1d3860fbfbb187e77bf8f0d8e",
+      "size": 12355424
+    },
+    {
+      "duration": 134.95,
+      "frames": 8097,
+      "path": "docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4",
+      "sha256": "9de4903860392aa7110c179e0cb348dfa1747061942abf55b3491883c88df987",
+      "size": 12495213
+    },
+    {
+      "duration": 134.95,
+      "frames": 8097,
+      "path": "locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4",
+      "sha256": "04139ffce6f89650294ea767a76449ae5fb1efa7a104b06a7b7afba2a342cf53",
+      "size": 11980630
+    },
+    {
+      "duration": 135.283333,
+      "frames": 8117,
+      "path": "docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4",
+      "sha256": "b96afa3325839af49b80de807a21401a8ed93ecbf5a3de2b8b02317f47567eab",
+      "size": 12603282
+    },
+    {
+      "duration": 135.283333,
+      "frames": 8117,
+      "path": "locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4",
+      "sha256": "899fa0e538ce9b303f8e744e46370f44c851177d51b3ed16c192c73e8a49a988",
+      "size": 12139762
+    }
+  ],
+  "run": "36351350125",
+  "count": 12
+}
