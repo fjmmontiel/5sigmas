@@ -25,11 +25,12 @@ jobs:
           python-version: '3.12'
       - name: Install media verification dependencies
         run: |
-          python -m pip install cryptography
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-      - name: Receive pinned originals with redacted diagnostics and stage without merge
-        run: python -u .release-media/archive_retry.py
+          python -m pip install -q cryptography
+          sudo apt-get update -qq >/tmp/media-dependencies.log 2>&1
+          sudo apt-get install -y -qq ffmpeg >>/tmp/media-dependencies.log 2>&1
+          ffmpeg -version | head -n 1
+      - name: Receive hash-pinned originals using identified release client and stage without merge
+        run: python -u .release-media/archive_identified.py
       - uses: actions/upload-artifact@v4
         with:
           name: final-exact-media-evidence
