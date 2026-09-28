@@ -1,17 +1,43 @@
 ---
 title: De las cavernas a la AGI
-description: "Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto."
+description: 'Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales.
+  Matemáticas, filosofía y computación en contexto.'
 keywords: historia inteligencia artificial, IA historia, Transformer, modelos fundacionales, AGI, deep learning
 date: 2026-03-26
 tags:
-  - IA
-  - AGI
-  - LLMs
-  - Historia
+- IA
+- AGI
+- LLMs
+- Historia
 hide:
-  - toc
-video: "00_presentacion_serie.mp4"
-video_duration: "PT1M15S"
+- toc
+video: 00_presentacion_serie.mp4
+video_poster: 00_presentacion_serie.jpg
+video_title: Cinco cambios en cómo tratamos información
+video_summary: El registro conserva la cantidad aunque los objetos ya no estén a la vista.
+video_date: '2026-09-28'
+video_duration: PT130.316667S
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: Una marca conserva una cantidad
+  start: 0
+  end: 21.55
+- name: Cambiar notación cambia el trabajo
+  start: 21.55
+  end: 43.1
+- name: La instrucción puede cambiar sin cambiar la máquina
+  start: 43.1
+  end: 64.966667
+- name: Los ejemplos cambian la transformación
+  start: 64.966667
+  end: 87.216667
+- name: Más trabajo simultáneo exige una estructura adecuada
+  start: 87.216667
+  end: 108.766667
+- name: Los mecanismos se acumulan, no se sustituyen todos
+  start: 108.766667
+  end: 130.316667
 ---
 # De las cavernas a la AGI
 

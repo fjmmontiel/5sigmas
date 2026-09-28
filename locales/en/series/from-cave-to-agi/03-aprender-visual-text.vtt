@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+An initial rule handles a bounded set of cases.
+
+2
+00:00:07.350 --> 00:00:14.200
+A new case requires an exception and may conflict with another rule.
+
+3
+00:00:14.200 --> 00:00:21.867
+Maintenance grows as conditions change; automating a rule does not solve all its exceptions.
+
+4
+00:00:22.367 --> 00:00:29.217
+A flexible curve can pass through all training points.
+
+5
+00:00:29.217 --> 00:00:36.383
+Held-out points test whether the fit preserves the pattern beyond the sample.
+
+6
+00:00:36.383 --> 00:00:43.733
+Low training error does not guarantee low error on new data.
+
+7
+00:00:44.233 --> 00:00:52.150
+Use loss L equals w minus three squared, starting at w equals zero.
+
+8
+00:00:52.150 --> 00:01:00.450
+The gradient is minus six. A step size of zero point two moves w to one point two.
+
+9
+00:01:00.450 --> 00:01:08.867
+Loss falls from 9 to 3.24; the next step recomputes the gradient.
+
+10
+00:01:09.367 --> 00:01:16.217
+In XOR, the two opposite corners with one active input have label one.
+
+11
+00:01:16.217 --> 00:01:23.067
+No straight line separates those corners from the other two in the original plane.
+
+12
+00:01:23.067 --> 00:01:30.417
+A nonlinear transformation can distinguish the case with exactly one active input.
+
+13
+00:01:30.917 --> 00:01:37.767
+A network composes operations: x passes through two weights before producing an output.
+
+14
+00:01:37.767 --> 00:01:44.617
+The chain rule connects loss changes to each intermediate operation.
+
+15
+00:01:44.617 --> 00:01:51.967
+Backpropagation reuses those derivatives to update weights across layers.
+
+16
+00:01:52.467 --> 00:01:59.317
+A trigram model conditions the next token on the previous two.
+
+17
+00:01:59.317 --> 00:02:07.233
+Two sentences with the same ending receive the same short context despite different earlier topics.
+
+18
+00:02:07.233 --> 00:02:14.900
+Limited memory simplifies the model and removes dependencies outside the window.
+

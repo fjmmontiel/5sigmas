@@ -1,30 +1,45 @@
 ---
-title: "Arquitecturas de voz: dónde colocas la frontera de texto"
-description: "Full cascade, audio-native con TTS externo, speech-to-speech y full-duplex no son cuatro etiquetas equivalentes. Este capítulo separa modalidad, interacción y orquestación para elegir arquitectura con criterios observables."
+title: 'Arquitecturas de voz: dónde colocas la frontera de texto'
+description: Full cascade, audio-native con TTS externo, speech-to-speech y full-duplex no son cuatro etiquetas
+  equivalentes. Este capítulo separa modalidad, interacción y orquestación para elegir arquitectura con criterios
+  observables.
 date: 2026-09-07
 date_modified: 2026-09-08
-keywords: "arquitecturas agentes de voz, full cascade, half cascade, speech to speech, full duplex, STT LLM TTS, realtime voice"
+keywords: arquitecturas agentes de voz, full cascade, half cascade, speech to speech, full duplex, STT LLM TTS,
+  realtime voice
 tags:
-  - IA
-  - Voz
-  - Arquitectura
-  - Realtime
-  - Agentes
+- IA
+- Voz
+- Arquitectura
+- Realtime
+- Agentes
 video: 01-arquitecturas-de-voz.mp4
 video_poster: 01-arquitecturas-de-voz.jpg
 video_title: Arquitecturas de voz
-video_summary: Dónde aparece el texto y por qué full-duplex es un eje distinto.
-video_duration: PT36S
+video_summary: El mismo turno atraviesa todas las etapas. El runtime debe coordinar sus resultados.
+video_date: '2026-09-28'
+video_duration: PT138S
+video_captions: 01-arquitecturas-de-voz-visual-text.vtt
+video_transcript: 01-arquitecturas-de-voz-transcript.html
 video_chapters:
-- name: Fronteras observables
+- name: Dónde aparece el texto
   start: 0
-  end: 12
-- name: Modalidad
-  start: 12
-  end: 24
-- name: Interacción
-  start: 24
-  end: 36
+  end: 23
+- name: Escuchar audio. Responder texto.
+  start: 23
+  end: 46
+- name: Menos fronteras. El mismo control.
+  start: 46
+  end: 69
+- name: Dos direcciones. Otro eje.
+  start: 69
+  end: 92
+- name: Quién posee cada frontera
+  start: 92
+  end: 115
+- name: El requisito antes del ranking
+  start: 115
+  end: 138
 ---
 
 # Capítulo 1 — Arquitecturas de voz: dónde colocas la frontera de texto

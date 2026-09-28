@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+SIP establece la sesión. Un 200 OK confirma señalización, no voz en ambas direcciones.
+
+2
+00:00:07.700 --> 00:00:14.700
+En este caso llegan paquetes de entrada, pero el camino de salida está bloqueado.
+
+3
+00:00:14.700 --> 00:00:23.000
+Comprueba cada ruta de media y su codec. No diagnostiques sólo con «conectado».
+
+4
+00:00:23.700 --> 00:00:30.700
+ICE prueba conectividad entre candidatos. Una ruta directa puede no atravesar la red.
+
+5
+00:00:30.700 --> 00:00:37.700
+TURN permite usar un relay cuando hace falta. Eso no equivale a una llamada fallida.
+
+6
+00:00:37.700 --> 00:00:46.000
+Registra la ruta seleccionada y sus cambios: el salto adicional pertenece al diagnóstico.
+
+7
+00:00:46.700 --> 00:00:53.700
+TCP entrega en orden. Si falta el segmento 2, los posteriores pueden quedar esperando.
+
+8
+00:00:53.700 --> 00:01:00.700
+Cuando llega la retransmisión, libera la secuencia. El audio ha acumulado espera.
+
+9
+00:01:00.700 --> 00:01:09.000
+En UDP no existe esa entrega ordenada de TCP; el receptor aún debe gestionar pérdidas.
+
+10
+00:01:09.700 --> 00:01:16.700
+Cuatro paquetes llegan a los 0, 20, 70 y 75 milisegundos: los intervalos son irregulares.
+
+11
+00:01:16.700 --> 00:01:23.700
+Con 60 milisegundos de margen, este ejemplo los reproduce a los 60, 80, 100 y 120.
+
+12
+00:01:23.700 --> 00:01:33.000
+El buffer evita estos huecos a cambio de retraso. No elimina toda variación de red.
+
+13
+00:01:33.700 --> 00:01:40.700
+Un tramo telefónico puede eliminar frecuencias antes de llegar al modelo.
+
+14
+00:01:40.700 --> 00:01:47.700
+Elevar luego la frecuencia de muestreo añade muestras de la señal ya limitada.
+
+15
+00:01:47.700 --> 00:01:56.000
+La información eliminada no vuelve. Codec, ancho de banda y muestreo son fronteras distintas.
+
+16
+00:01:56.700 --> 00:02:03.700
+La redundancia de un paquete posterior puede ayudar a reconstruir audio anterior perdido.
+
+17
+00:02:03.700 --> 00:02:10.700
+Sólo sirve para ese playout si la reparación llega antes de su deadline.
+
+18
+00:02:10.700 --> 00:02:19.000
+Activar FEC no garantiza continuidad. Pérdida de red y degradación audible se miden por separado.
+

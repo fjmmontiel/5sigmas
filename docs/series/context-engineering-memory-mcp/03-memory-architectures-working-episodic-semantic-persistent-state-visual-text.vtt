@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Un episodio registra lo ocurrido; una memoria semántica consolida una preferencia.
+
+2
+00:00:07.350 --> 00:00:14.200
+Cualquiera puede persistir. El almacenamiento no determina qué significa el registro.
+
+3
+00:00:14.200 --> 00:00:21.867
+Un checkpoint también persiste, pero su contrato es reanudar la ejecución, no aprender una preferencia.
+
+4
+00:00:22.367 --> 00:00:29.217
+En el episodio e17, el usuario pide seguimiento por email.
+
+5
+00:00:29.217 --> 00:00:36.067
+e24 y e31 añaden nuevas observaciones. Cada evento conserva fecha, sujeto y procedencia.
+
+6
+00:00:36.067 --> 00:00:43.417
+La secuencia describe experiencias concretas; todavía no es una regla universal.
+
+7
+00:00:43.917 --> 00:00:50.767
+Tres episodios respaldan una preferencia por email.
+
+8
+00:00:50.767 --> 00:00:57.617
+La consolidación crea un registro reutilizable, enlazado a esos tres episodios.
+
+9
+00:00:57.617 --> 00:01:04.967
+Una corrección posterior puede sustituirlo. No basta conservar la conclusión y olvidar su origen.
+
+10
+00:01:05.467 --> 00:01:12.317
+La memoria dice que ayer la cuenta tenía plan Pro.
+
+11
+00:01:12.317 --> 00:01:19.167
+La fuente de facturación indica que hoy el acceso de pago está revocado.
+
+12
+00:01:19.167 --> 00:01:26.833
+La autorización actual gobierna la operación. Una memoria relevante no sustituye al sistema de registro.
+
+13
+00:01:27.333 --> 00:01:34.183
+El modelo propone guardar una observación. La propuesta todavía no es memoria durable.
+
+14
+00:01:34.183 --> 00:01:41.033
+La aplicación comprueba sujeto, sensibilidad, duplicados y evidencia antes de escribir.
+
+15
+00:01:41.033 --> 00:01:48.383
+Una propuesta de otro tenant se rechaza; la observación válida conserva su procedencia.
+
+16
+00:01:48.883 --> 00:01:55.733
+La preferencia de email alimenta una memoria y un resumen del usuario.
+
+17
+00:01:55.733 --> 00:02:02.583
+El usuario la cambia por llamadas. El evento invalida las representaciones dependientes.
+
+18
+00:02:02.583 --> 00:02:09.933
+Actualizar sólo el registro original deja copias obsoletas. La trazabilidad permite encontrarlas.
+

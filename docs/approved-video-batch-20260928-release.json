@@ -1,0 +1,2772 @@
+{
+  "schema": 1,
+  "release": "owner-approved-video-batch-20260928",
+  "owner_approval": "EXPLICIT_APPROVALS_2026-09-26_AND_2026-09-27",
+  "collections": [
+    {
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "approved_on": "2026-09-27",
+      "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    },
+    {
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "approved_on": "2026-09-27",
+      "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    },
+    {
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "approved_on": "2026-09-27",
+      "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    },
+    {
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "approved_on": "2026-09-26",
+      "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    }
+  ],
+  "public_scope": "48 exact approved horizontal MP4s in four series, ES/EN; 48 approved verticals remain in their owner collections",
+  "provenance_note": "Voice V3 collection includes chapter03 V2-labelled originals. Exact V3 renderer is not recovered. Encoded text directly checked and cue timings sampled for captions; no renderer equivalence claimed.",
+  "duration_contract": "Exact 60fps frame counts; ISO/catalog/Clip seconds round to six decimals, VTT to milliseconds; integer sitemap and clock displays are projections.",
+  "objects": [
+    {
+      "path": "series/from-cave-to-agi/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "f31549f1069d284fa98730926b148521f8c6f902c33db237b9986bd5e5e10e24",
+      "bytes": 6019010,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/00_presentacion_serie/",
+      "watch": "videos/series/from-cave-to-agi/00_presentacion_serie/",
+      "poster_path": "series/from-cave-to-agi/00_presentacion_serie.jpg",
+      "poster_sha256": "bab3b499fe706d0e0a197783228686c20d5c1d34600a3d12d0c53bb9697bf9dd",
+      "chapters": [
+        {
+          "name": "Una marca conserva una cantidad",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Cambiar notación cambia el trabajo",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "La instrucción puede cambiar sin cambiar la máquina",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "Los ejemplos cambian la transformación",
+          "start": 64.966667,
+          "end": 87.216667
+        },
+        {
+          "name": "Más trabajo simultáneo exige una estructura adecuada",
+          "start": 87.216667,
+          "end": 108.766667
+        },
+        {
+          "name": "Los mecanismos se acumulan, no se sustituyen todos",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "bbf2866a627fd524b19ed5e40286e96474210678c359a64a60c43dd0fe9a0f14",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "ccbe37d51c87a470528b3f80b56575b0464e86e0fd1f92519e3c863ebd74e362"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "c26259802b79241463daa71d66c4c53ce169e9a197ac7f3edbde6e4953ed9b4e",
+      "bytes": 5687298,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/00_presentacion_serie/",
+      "watch": "en/videos/series/from-cave-to-agi/00_presentacion_serie/",
+      "poster_path": "en/series/from-cave-to-agi/00_presentacion_serie.jpg",
+      "poster_sha256": "5ac50cbb057074bdea5f9cdcfccbd62e7c0a3b255444cbb3c66bcbe774f1b1b8",
+      "chapters": [
+        {
+          "name": "A mark preserves a quantity",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Changing notation changes the work",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "The instruction can change without changing the machine",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "Examples change the mapping",
+          "start": 64.966667,
+          "end": 87.216667
+        },
+        {
+          "name": "Parallel work needs suitable structure",
+          "start": 87.216667,
+          "end": 108.766667
+        },
+        {
+          "name": "Mechanisms accumulate; they do not replace everything",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "8eb004ed9cdcaa8d4a5bad1af79db1f57407c4b1e1a5083b4de980b98b85b8c0",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "570fd4a31ce5b8fcf467f6d445312c302ea690b55ee20e2457071711f29eadd7"
+    },
+    {
+      "path": "series/from-cave-to-agi/01-representar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "6d090fc1d18257016a8fda865ea1a4b51dc59f94a460d746699ebb765fd8224f",
+      "bytes": 5230796,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/01-representar/",
+      "watch": "videos/series/from-cave-to-agi/01-representar/",
+      "poster_path": "series/from-cave-to-agi/01-representar.jpg",
+      "poster_sha256": "d1c34277b80071d6d3b1e0f3768e87ba5b76bca905b33fb417a4152a2e8a5091",
+      "chapters": [
+        {
+          "name": "Agrupar no cambia cuántos objetos hay",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "El cero conserva una posición",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "La misma operación conserva la igualdad",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "Una regla compacta describe muchos términos",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "La conclusión depende de las premisas",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Medir cambio en intervalos cada vez menores",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/01-representar-visual-text.vtt",
+      "captions_sha256": "531e36f13beff08a32ad35d5f281fe8d90ba2b9140730651d91e6502df0a43c8",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/01-representar-transcript.html",
+      "transcript_sha256": "1bf810487ad75a585be4370fa3b7e66b72feb920382a88fc302df74424980350"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/01-representar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "f137dc4bae46d0368ee943a131402870afb30b9c97d4cec68f8cc0b34b5c9616",
+      "bytes": 4995402,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/01-representar/",
+      "watch": "en/videos/series/from-cave-to-agi/01-representar/",
+      "poster_path": "en/series/from-cave-to-agi/01-representar.jpg",
+      "poster_sha256": "112b5b6149c6f67a9201c7e15298bd4ea1548c61f1307ac55db1d55b2143b7ed",
+      "chapters": [
+        {
+          "name": "Grouping does not change the object count",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Zero preserves a position",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "The same operation preserves equality",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "A compact rule describes many terms",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "A conclusion depends on its premises",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Measuring change over smaller intervals",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/01-representar-visual-text.vtt",
+      "captions_sha256": "4c9356c93236306401d2a4b6473b787b4aaa2ef135d653c8f0535de797219d07",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/01-representar-transcript.html",
+      "transcript_sha256": "441da04f3369e1fb1e710cacb28aad7b6f42242a1d00ec3ace8fa634e3faf2aa"
+    },
+    {
+      "path": "series/from-cave-to-agi/02-mecanizar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "049fd01964655a55de3d7238c8127d9ed10fc8ad76000883f683d85b58ad035b",
+      "bytes": 5337616,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/02-mecanizar/",
+      "watch": "videos/series/from-cave-to-agi/02-mecanizar/",
+      "poster_path": "series/from-cave-to-agi/02-mecanizar.jpg",
+      "poster_sha256": "edebbb028ba84352e360db43a2d60d0cb35957a5cb310c00e7a6bd76d42bacd6",
+      "chapters": [
+        {
+          "name": "Un acarreo conecta dos posiciones",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Cambiar el patrón, conservar el mecanismo",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Una operación lógica puede gobernar un circuito",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Una regla local puede recorrer una cinta",
+          "start": 64.966667,
+          "end": 87.216667
+        },
+        {
+          "name": "Instrucciones y datos pueden residir en memoria",
+          "start": 87.216667,
+          "end": 108.766667
+        },
+        {
+          "name": "Cuatro alternativas equiprobables requieren dos bits",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/02-mecanizar-visual-text.vtt",
+      "captions_sha256": "4377bbef97ec552f904afccf6266c37b7aa96193dce53bbcf1c5a9ca4b2b52c7",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/02-mecanizar-transcript.html",
+      "transcript_sha256": "a18691487afeae339e83aa80661e543bcc7e973aec0d83f7333ac9aef0f38ca9"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/02-mecanizar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "a899bb76395b644e577f3e9f94c31c2983d1a5be51b50753890ecf8b7647a9b2",
+      "bytes": 4977721,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/02-mecanizar/",
+      "watch": "en/videos/series/from-cave-to-agi/02-mecanizar/",
+      "poster_path": "en/series/from-cave-to-agi/02-mecanizar.jpg",
+      "poster_sha256": "4cc7057a5f82aa22338fa204aec92c10cb01a46ecedaa2e641a68589d7140fc6",
+      "chapters": [
+        {
+          "name": "A carry connects two positions",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Change the pattern, keep the mechanism",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "A logical operation can control a circuit",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "A local rule can traverse a tape",
+          "start": 64.966667,
+          "end": 87.216667
+        },
+        {
+          "name": "Instructions and data can reside in memory",
+          "start": 87.216667,
+          "end": 108.766667
+        },
+        {
+          "name": "Four equally likely alternatives require two bits",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/02-mecanizar-visual-text.vtt",
+      "captions_sha256": "08bc78390302ef328161c7ed874a5f10332d0a3b21a1d2a3b789737161bc7fea",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/02-mecanizar-transcript.html",
+      "transcript_sha256": "7c5369777e5707cde496eea9e97b3815bc205ca0df15d27d3d9cabb50a0d48d4"
+    },
+    {
+      "path": "series/from-cave-to-agi/03-aprender.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "086ea3ac9fae42357c52c199d2b6be04bbeeaac3dcef697b9291d24b1b99f233",
+      "bytes": 5645677,
+      "duration": 134.9,
+      "duration_iso": "PT134.9S",
+      "frames": 8094,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/03-aprender/",
+      "watch": "videos/series/from-cave-to-agi/03-aprender/",
+      "poster_path": "series/from-cave-to-agi/03-aprender.jpg",
+      "poster_sha256": "26f6ed6c78cc7e0201663b0c335d8215bde9df1991b0445e16528ae39481132d",
+      "chapters": [
+        {
+          "name": "Las excepciones amplían la base de reglas",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Ajustar los ejemplos no basta para generalizar",
+          "start": 21.866667,
+          "end": 43.733333
+        },
+        {
+          "name": "El gradiente indica una dirección local",
+          "start": 43.733333,
+          "end": 68.866667
+        },
+        {
+          "name": "Una representación cambia la separación posible",
+          "start": 68.866667,
+          "end": 90.416667
+        },
+        {
+          "name": "El error se propaga mediante derivadas",
+          "start": 90.416667,
+          "end": 111.966667
+        },
+        {
+          "name": "Una ventana corta descarta contexto lejano",
+          "start": 111.966667,
+          "end": 134.9
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/03-aprender-visual-text.vtt",
+      "captions_sha256": "11d0181932bd6032e1715eb19bbaf711bdfe2a269205175365dae2b3a624813e",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/03-aprender-transcript.html",
+      "transcript_sha256": "b40a0a99ef0448aafc4dab47374d3ebebc7d3bb6048434c181bdde3f1f8e6c8d"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/03-aprender.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "f04dba1c5a81a29798f1e835780546e1a91ea1499dd06673273433a8a6963c67",
+      "bytes": 5133439,
+      "duration": 134.9,
+      "duration_iso": "PT134.9S",
+      "frames": 8094,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/03-aprender/",
+      "watch": "en/videos/series/from-cave-to-agi/03-aprender/",
+      "poster_path": "en/series/from-cave-to-agi/03-aprender.jpg",
+      "poster_sha256": "2fe8eb1123ac78a5dd2334b4f925d709a542e321a4e9e021d636e10e33b2d804",
+      "chapters": [
+        {
+          "name": "Exceptions expand the rule base",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Fitting examples is not enough to generalize",
+          "start": 21.866667,
+          "end": 43.733333
+        },
+        {
+          "name": "The gradient gives a local direction",
+          "start": 43.733333,
+          "end": 68.866667
+        },
+        {
+          "name": "A representation changes what can be separated",
+          "start": 68.866667,
+          "end": 90.416667
+        },
+        {
+          "name": "Error propagates through derivatives",
+          "start": 90.416667,
+          "end": 111.966667
+        },
+        {
+          "name": "A short window discards distant context",
+          "start": 111.966667,
+          "end": 134.9
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/03-aprender-visual-text.vtt",
+      "captions_sha256": "b5a0f9f4380e6ce1dc02a9667096b3dac4db3d259a9ae1479e4f3484d84207fc",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/03-aprender-transcript.html",
+      "transcript_sha256": "7734d9f559e21e156dd600c438c7253b901f0c2047ac7bd77cc2433c1fa333cd"
+    },
+    {
+      "path": "series/from-cave-to-agi/04-escalar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "5483d8f21d5c188f8d64f7557c48b4998a55c16a21e871304ba1d4b196d3c25a",
+      "bytes": 5994503,
+      "duration": 131.066667,
+      "duration_iso": "PT131.066667S",
+      "frames": 7864,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/04-escalar/",
+      "watch": "videos/series/from-cave-to-agi/04-escalar/",
+      "poster_path": "series/from-cave-to-agi/04-escalar.jpg",
+      "poster_sha256": "111f3b7b5fa37ced3d43b52d65bb71726094e0423609d5e7089b8b422ecd8d39",
+      "chapters": [
+        {
+          "name": "Un filtro comparte parámetros entre posiciones",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Particionar no elimina la comunicación",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Duplicar posiciones cuadruplica pares",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "Un presupuesto fijo impone un reparto",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "Una base puede adaptarse a tareas diferentes",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "Seguir instrucciones requiere un ajuste distinto",
+          "start": 109.516667,
+          "end": 131.066667
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/04-escalar-visual-text.vtt",
+      "captions_sha256": "d944e8a4ee4eb0300a152911f899e0946afca2c514205829840cb2ecd5b91af6",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/04-escalar-transcript.html",
+      "transcript_sha256": "5289cedaaffd6b506e1fb31b0697e812bd18e07adf5dca4662b14dc5b211f6e4"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/04-escalar.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "e26164f42797a0c80d7f04f92c3cd750d873a3ccc8cd78a1da780011d80b653c",
+      "bytes": 5659845,
+      "duration": 131.066667,
+      "duration_iso": "PT131.066667S",
+      "frames": 7864,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/04-escalar/",
+      "watch": "en/videos/series/from-cave-to-agi/04-escalar/",
+      "poster_path": "en/series/from-cave-to-agi/04-escalar.jpg",
+      "poster_sha256": "b5be2dcc0d8982744efb7761a45ad937e6d57ac55c81790220d1e181e4b0a9d6",
+      "chapters": [
+        {
+          "name": "A filter shares parameters across positions",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Partitioning does not eliminate communication",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Doubling positions quadruples pairs",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "A fixed budget imposes a trade-off",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "One base can adapt to different tasks",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "Instruction following adds a training objective",
+          "start": 109.516667,
+          "end": 131.066667
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/04-escalar-visual-text.vtt",
+      "captions_sha256": "06b01b27973537fbc61026e31fa6ba4c759adecac728825c71129ac2e04000e5",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/04-escalar-transcript.html",
+      "transcript_sha256": "c26193ab912acd0f67e6a2181f78880e9d0350b673245115e2110f1686e0c02b"
+    },
+    {
+      "path": "series/from-cave-to-agi/05-mas-alla.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "82d76b8cbeae2a441c7af0c405aa77bf31237d821a644e4e0a195defda1995b4",
+      "bytes": 5578728,
+      "duration": 132.516667,
+      "duration_iso": "PT132.516667S",
+      "frames": 7951,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/from-cave-to-agi/05-mas-alla/",
+      "watch": "videos/series/from-cave-to-agi/05-mas-alla/",
+      "poster_path": "series/from-cave-to-agi/05-mas-alla.jpg",
+      "poster_sha256": "b4346176d180013ed55eead502bf0f76ea1566293969994d3780b5e835f1383a",
+      "chapters": [
+        {
+          "name": "Proponer y verificar son operaciones distintas",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Guardar no obliga a releerlo todo",
+          "start": 21.55,
+          "end": 43.416667
+        },
+        {
+          "name": "Un estado compacto no conserva cada dato intacto",
+          "start": 43.416667,
+          "end": 66.033333
+        },
+        {
+          "name": "La predicción del mundo debe compararse con observaciones",
+          "start": 66.033333,
+          "end": 89.416667
+        },
+        {
+          "name": "Actuar exige cerrar el bucle con mediciones",
+          "start": 89.416667,
+          "end": 110.966667
+        },
+        {
+          "name": "Una mejora local no demuestra capacidad universal",
+          "start": 110.966667,
+          "end": 132.516667
+        }
+      ],
+      "captions_path": "series/from-cave-to-agi/05-mas-alla-visual-text.vtt",
+      "captions_sha256": "5d2e82c9a5e2987f633273fff7d745defcc8cec7de158955dd9c2e9b59b002e3",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/from-cave-to-agi/05-mas-alla-transcript.html",
+      "transcript_sha256": "85d55beb7451ac34c04cf3327039acb0131dbb706746d1d9962df6b12fdae3d1"
+    },
+    {
+      "path": "en/series/from-cave-to-agi/05-mas-alla.mp4",
+      "kind": "video",
+      "series": "from-cave-to-agi",
+      "round": "H1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "d7135661adcfe86f0f519d42e821a0fb4f9b160228edcbab9fc9981a9ab9e305",
+      "bytes": 5371870,
+      "duration": 132.516667,
+      "duration_iso": "PT132.516667S",
+      "frames": 7951,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/from-cave-to-agi/05-mas-alla/",
+      "watch": "en/videos/series/from-cave-to-agi/05-mas-alla/",
+      "poster_path": "en/series/from-cave-to-agi/05-mas-alla.jpg",
+      "poster_sha256": "067156d13c1597426b64f63f6617c91e203de7c02ffe4167e562a32318d705ea",
+      "chapters": [
+        {
+          "name": "Proposing and verifying are different operations",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Storing information does not require rereading everything",
+          "start": 21.55,
+          "end": 43.416667
+        },
+        {
+          "name": "A compact state does not preserve every input intact",
+          "start": 43.416667,
+          "end": 66.033333
+        },
+        {
+          "name": "A world prediction must be checked against observations",
+          "start": 66.033333,
+          "end": 89.416667
+        },
+        {
+          "name": "Acting requires closing the loop with measurements",
+          "start": 89.416667,
+          "end": 110.966667
+        },
+        {
+          "name": "A local improvement does not prove universal capability",
+          "start": 110.966667,
+          "end": 132.516667
+        }
+      ],
+      "captions_path": "en/series/from-cave-to-agi/05-mas-alla-visual-text.vtt",
+      "captions_sha256": "d165e17a67f98d4686dcb2f78da35e03040ea721fad72bed53e16510647f7246",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/from-cave-to-agi/05-mas-alla-transcript.html",
+      "transcript_sha256": "4d428df28fafb37a1d5cd6bed4934bd227d4bc87cae7d00f34cdcc92f2b6f390"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b4f1e9b43a1c6c01a771cdbb7fdb8aef555acd17538b48a5b5883dde49d09e74",
+      "bytes": 3808118,
+      "duration": 131.7,
+      "duration_iso": "PT131.7S",
+      "frames": 7902,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/",
+      "watch": "videos/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/",
+      "poster_path": "series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.jpg",
+      "poster_sha256": "fdc06d945ba60205b6f037d39db43ae67d729f5c2449279d3a8f630d4b1577cc",
+      "chapters": [
+        {
+          "name": "Disponible no es visible",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "Una política fuera de fecha",
+          "start": 22.25,
+          "end": 44.866667
+        },
+        {
+          "name": "Filtrar antes de ordenar",
+          "start": 44.866667,
+          "end": 66.733333
+        },
+        {
+          "name": "El siguiente turno cambia",
+          "start": 66.733333,
+          "end": 88.6
+        },
+        {
+          "name": "Cargar cuando hace falta",
+          "start": 88.6,
+          "end": 110.15
+        },
+        {
+          "name": "Poder reconstruir el turno",
+          "start": 110.15,
+          "end": 131.7
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-visual-text.vtt",
+      "captions_sha256": "04205e9b5aa18d4de72a200ecdfb16fecabee24dc59a518023c86dcb579b18ab",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-transcript.html",
+      "transcript_sha256": "a798c103be9f9585db0b64aca30c40d81be04f347731fc3c62395852bd1af0dc"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "54f53a9ef5c49668802790f5d364e67db0e3355b018a86728d1c5c9e056accdd",
+      "bytes": 3704627,
+      "duration": 131.7,
+      "duration_iso": "PT131.7S",
+      "frames": 7902,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/",
+      "poster_path": "en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.jpg",
+      "poster_sha256": "b4e8ed3aa5c6c2349a603d1676ec62c9d968f3399908d3802ebbaf8cd40b969e",
+      "chapters": [
+        {
+          "name": "Available is not visible",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "An outdated policy",
+          "start": 22.25,
+          "end": 44.866667
+        },
+        {
+          "name": "Filter before ranking",
+          "start": 44.866667,
+          "end": 66.733333
+        },
+        {
+          "name": "The next turn changes",
+          "start": 66.733333,
+          "end": 88.6
+        },
+        {
+          "name": "Load when needed",
+          "start": 88.6,
+          "end": 110.15
+        },
+        {
+          "name": "Reconstruct the turn",
+          "start": 110.15,
+          "end": 131.7
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-visual-text.vtt",
+      "captions_sha256": "2aec680bbaa9e77cc6fd0a78f261081e487e77e04ee535222cf632bd9b980aa3",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-transcript.html",
+      "transcript_sha256": "31273c2bb71e63b7fe29f6d24e52659a4a91b2f74cbae3350db6ac261cd1941c"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "9c8056764ffc993b98dcae83b45ff053b8431578fc4556132fd3edc07cf0dc25",
+      "bytes": 4224428,
+      "duration": 135.25,
+      "duration_iso": "PT135.25S",
+      "frames": 8115,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance/",
+      "watch": "videos/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance/",
+      "poster_path": "series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.jpg",
+      "poster_sha256": "9d53b9aa1f94058e391b394a2116dcb1668dffbba8606cdef7ebe2cc9bfa082b",
+      "chapters": [
+        {
+          "name": "La ventana no es el budget",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "La spec no debe desaparecer",
+          "start": 22.25,
+          "end": 45.95
+        },
+        {
+          "name": "Un resumen puede perder la regla",
+          "start": 45.95,
+          "end": 68.2
+        },
+        {
+          "name": "El derivado necesita origen",
+          "start": 68.2,
+          "end": 89.75
+        },
+        {
+          "name": "Cache y resumen no hacen lo mismo",
+          "start": 89.75,
+          "end": 111.933333
+        },
+        {
+          "name": "Un enlace debe recuperar la versión",
+          "start": 111.933333,
+          "end": 135.25
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-visual-text.vtt",
+      "captions_sha256": "c19489b2b38a52af37dceabfab7165e5a33e21baee88bb3fbc90264927e77344",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-transcript.html",
+      "transcript_sha256": "0533a8378f7994115262d11c6f0ad6b96e75f99623236452086df6b587194f7d"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b1fc7589c1c75a31c897a92746e6f7df1948f30b726d1bc8dc6f6a4920b81a80",
+      "bytes": 4029591,
+      "duration": 135.25,
+      "duration_iso": "PT135.25S",
+      "frames": 8115,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance/",
+      "poster_path": "en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.jpg",
+      "poster_sha256": "dc501542eeb1b1ea8478b6ac6877c75550a51c187ca866606514d0a073f28a19",
+      "chapters": [
+        {
+          "name": "The window is not the budget",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "Do not evict the specification",
+          "start": 22.25,
+          "end": 45.95
+        },
+        {
+          "name": "A summary can lose the rule",
+          "start": 45.95,
+          "end": 68.2
+        },
+        {
+          "name": "A derivative needs its source",
+          "start": 68.2,
+          "end": 89.75
+        },
+        {
+          "name": "Caching is not summarising",
+          "start": 89.75,
+          "end": 111.933333
+        },
+        {
+          "name": "A pointer must recover the version",
+          "start": 111.933333,
+          "end": 135.25
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-visual-text.vtt",
+      "captions_sha256": "d738d857ad68d733d24e51cffd93071d8aac72b1c23b99884c6ad902542b9dfb",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-transcript.html",
+      "transcript_sha256": "dbfe22e6ffc56715dfa184dea2815ae3c2d85ae3ca36f472a8ace9fe0a84c753"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "511b1a18049e2b0e73f94fb66f8754ea18a9fff899db767a9a714de720276e2e",
+      "bytes": 3915291,
+      "duration": 129.933333,
+      "duration_iso": "PT129.933333S",
+      "frames": 7796,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state/",
+      "watch": "videos/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state/",
+      "poster_path": "series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.jpg",
+      "poster_sha256": "b1519f2a44e9cdffd1fdd5285a231654cab54bce4ce71bfe222656f474fa4fd1",
+      "chapters": [
+        {
+          "name": "Duración no es significado",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Recordar qué ocurrió y cuándo",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Una preferencia es un derivado",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Recordar no concede acceso",
+          "start": 64.966667,
+          "end": 86.833333
+        },
+        {
+          "name": "Persistir exige una política",
+          "start": 86.833333,
+          "end": 108.383333
+        },
+        {
+          "name": "Corregir también los derivados",
+          "start": 108.383333,
+          "end": 129.933333
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-visual-text.vtt",
+      "captions_sha256": "d4bb4092e1693a44e44f89cc3c48eb33595d9c458b2f351853df50b4f08d8cb8",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-transcript.html",
+      "transcript_sha256": "78ad341c4fa15b5909b1fb5a72291791dec7bcd143a80bb448e4ff94a933d5f7"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "4752a7d1a5b4b27360b7028bfeb98e215a2dfd2fc4c7d9a0d603d2314ce58323",
+      "bytes": 3716989,
+      "duration": 129.933333,
+      "duration_iso": "PT129.933333S",
+      "frames": 7796,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state/",
+      "poster_path": "en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.jpg",
+      "poster_sha256": "d8824c051c6b22cb8c8edf01702c4b10f899ecd9f81ab85031602a089e8bf8e5",
+      "chapters": [
+        {
+          "name": "Lifetime is not meaning",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Remember what happened and when",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "A preference is derived",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Memory does not grant access",
+          "start": 64.966667,
+          "end": 86.833333
+        },
+        {
+          "name": "Persistence needs a policy",
+          "start": 86.833333,
+          "end": 108.383333
+        },
+        {
+          "name": "Correct the derivatives too",
+          "start": 108.383333,
+          "end": 129.933333
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-visual-text.vtt",
+      "captions_sha256": "823c13a9e865d84e366588e129eee4b220b84f1ee9e32d2f19550c5cb4ae70a1",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-transcript.html",
+      "transcript_sha256": "5ad34f360f905c481cbe7cb5bc2d1172bf7faf85b16a0477ab1951a393d9ecd4"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "059dcdb16a27154c7ecaab64ae2f3cd5e1ce96b8e52fae4dbbc062c29525340c",
+      "bytes": 4037646,
+      "duration": 134.283333,
+      "duration_iso": "PT134.283333S",
+      "frames": 8057,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/",
+      "watch": "videos/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/",
+      "poster_path": "series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg",
+      "poster_sha256": "fd487944c18d51f686d16ce5953d21c9d68bbfe91300eaeac411ed3cf0321ab7",
+      "chapters": [
+        {
+          "name": "Tres maneras de encontrar evidencia",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Los scores no comparten escala",
+          "start": 21.55,
+          "end": 44.55
+        },
+        {
+          "name": "Índice reciente, copia antigua",
+          "start": 44.55,
+          "end": 66.416667
+        },
+        {
+          "name": "No promediar contradicciones",
+          "start": 66.416667,
+          "end": 89.733333
+        },
+        {
+          "name": "Una cita debe sostener la frase",
+          "start": 89.733333,
+          "end": 111.283333
+        },
+        {
+          "name": "Identificar qué capa falló",
+          "start": 111.283333,
+          "end": 134.283333
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-visual-text.vtt",
+      "captions_sha256": "e5334b97a763eac88f68600ad8314dbddaeaaa1421248e7a847ea1d5bfa551be",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-transcript.html",
+      "transcript_sha256": "7225620c3f47c90658d1b30a143df09b0fb1a4d91dc8c4543d8b8bb25a4ba1d7"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "82c58de7f0778468fa5bfbe871319ecb30520eeeeb1fe8dc2c7f612ad861e5d4",
+      "bytes": 3754271,
+      "duration": 134.283333,
+      "duration_iso": "PT134.283333S",
+      "frames": 8057,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/",
+      "poster_path": "en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg",
+      "poster_sha256": "3114412867eee19a401bd70267fb41bc7e242d3aa1ca85a6e3f4624023fd45ce",
+      "chapters": [
+        {
+          "name": "Three ways to find evidence",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Scores do not share a scale",
+          "start": 21.55,
+          "end": 44.55
+        },
+        {
+          "name": "Fresh index, old copy",
+          "start": 44.55,
+          "end": 66.416667
+        },
+        {
+          "name": "Do not average contradictions",
+          "start": 66.416667,
+          "end": 89.733333
+        },
+        {
+          "name": "A citation must support the claim",
+          "start": 89.733333,
+          "end": 111.283333
+        },
+        {
+          "name": "Identify the failing layer",
+          "start": 111.283333,
+          "end": 134.283333
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-visual-text.vtt",
+      "captions_sha256": "6593156b00e4e4730a677c2c844e5a08e300775c5c77ac337cb63a53e4178350",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-transcript.html",
+      "transcript_sha256": "273b0e6a3cc2b2bcacd5145db0c89b40e45718a8be80e445bfdeaa47667d7862"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "a7e334549a35577bbb61f93617632e1b845975cd4b796c7f4ee0b8a9ffb72e09",
+      "bytes": 5802672,
+      "duration": 134.916667,
+      "duration_iso": "PT134.916667S",
+      "frames": 8095,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/",
+      "watch": "videos/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/",
+      "poster_path": "series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg",
+      "poster_sha256": "f9ee1932558dc8a281abf74ccb53ef4b6520d64ae0115d5c2a9c00c8c7e9e367",
+      "chapters": [
+        {
+          "name": "El host conserva la política",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Datos, plantillas y acciones",
+          "start": 21.55,
+          "end": 43.416667
+        },
+        {
+          "name": "La versión cambia el contrato",
+          "start": 43.416667,
+          "end": 65.283333
+        },
+        {
+          "name": "Una etiqueta no impone un límite",
+          "start": 65.283333,
+          "end": 88.6
+        },
+        {
+          "name": "Un timeout no prueba el resultado",
+          "start": 88.6,
+          "end": 111.533333
+        },
+        {
+          "name": "Transportar no convierte en autoridad",
+          "start": 111.533333,
+          "end": 134.916667
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-visual-text.vtt",
+      "captions_sha256": "5f0961cda657333df1110954f875e79e75fdfacd691fceb192bd352b3be91e1d",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-transcript.html",
+      "transcript_sha256": "8228b9557303b0d3aa05fd0927e9ac4bbce8e88c1db6ed85b85891ca7c1826dd"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "75a6e05ccd730aa954ba1f03b961bd01e508b9841743215f3156f2fc5c862699",
+      "bytes": 5506018,
+      "duration": 134.916667,
+      "duration_iso": "PT134.916667S",
+      "frames": 8095,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/",
+      "poster_path": "en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg",
+      "poster_sha256": "ac93c967439435ad9404f2d3d47e925daa78bd07aca883a99f26a38168137476",
+      "chapters": [
+        {
+          "name": "The host keeps the policy",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Data, templates and actions",
+          "start": 21.55,
+          "end": 43.416667
+        },
+        {
+          "name": "The version changes the contract",
+          "start": 43.416667,
+          "end": 65.283333
+        },
+        {
+          "name": "A label does not enforce a limit",
+          "start": 65.283333,
+          "end": 88.6
+        },
+        {
+          "name": "A timeout does not prove the outcome",
+          "start": 88.6,
+          "end": 111.533333
+        },
+        {
+          "name": "Transport does not confer authority",
+          "start": 111.533333,
+          "end": 134.916667
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-visual-text.vtt",
+      "captions_sha256": "dd6247bc3063f0bbffaa0487cccdc422018d513d22f1e3937c0c891e76828d87",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-transcript.html",
+      "transcript_sha256": "246f51694d7cacfab490b1ab0524f3c511d910d21573c5640552a6cdf6119de2"
+    },
+    {
+      "path": "series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "1a1fda9f935d86fd116c075722981b42321493d19b5ccba5f410348689c9fd36",
+      "bytes": 5961383,
+      "duration": 133.783333,
+      "duration_iso": "PT133.783333S",
+      "frames": 8027,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/",
+      "watch": "videos/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/",
+      "poster_path": "series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg",
+      "poster_sha256": "493aed9677959c91fbb6622527032bfff15c57c97101d2ccf3b6b10f76c1cc3d",
+      "chapters": [
+        {
+          "name": "Cargar una skill por etapas",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Un paquete no es un sandbox",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Delegar un contrato preciso",
+          "start": 43.1,
+          "end": 65.666667
+        },
+        {
+          "name": "Otra ventana no es otro entorno",
+          "start": 65.666667,
+          "end": 87.533333
+        },
+        {
+          "name": "Bloquear antes del efecto",
+          "start": 87.533333,
+          "end": 110.783333
+        },
+        {
+          "name": "Éxito y aislamiento se miden aparte",
+          "start": 110.783333,
+          "end": 133.783333
+        }
+      ],
+      "captions_path": "series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-visual-text.vtt",
+      "captions_sha256": "1dc7fa5bc845519a8c8d0379a0e27f870981aa03f40b7526388862e2a1a872b9",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-transcript.html",
+      "transcript_sha256": "322c041dd61ae106357a6bbb4991fdcf277c9692f2d372c092d91e9c91e17fb1"
+    },
+    {
+      "path": "en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4",
+      "kind": "video",
+      "series": "context-engineering-memory-mcp",
+      "round": "E1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "8549565f9ecf8626f6f99a89ecbbaaf9dc6a1d511d76420a63fcb9abaf4b0a7e",
+      "bytes": 5599131,
+      "duration": 133.783333,
+      "duration_iso": "PT133.783333S",
+      "frames": 8027,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/",
+      "watch": "en/videos/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/",
+      "poster_path": "en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg",
+      "poster_sha256": "c938e2a088d8cc8bb83843439de940792b045b64379efb7b591aff6ae90c5d4b",
+      "chapters": [
+        {
+          "name": "Load a skill in stages",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "A package is not a sandbox",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Delegate a precise contract",
+          "start": 43.1,
+          "end": 65.666667
+        },
+        {
+          "name": "Another window is not another environment",
+          "start": 65.666667,
+          "end": 87.533333
+        },
+        {
+          "name": "Block before the effect",
+          "start": 87.533333,
+          "end": 110.783333
+        },
+        {
+          "name": "Measure success and isolation separately",
+          "start": 110.783333,
+          "end": 133.783333
+        }
+      ],
+      "captions_path": "en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-visual-text.vtt",
+      "captions_sha256": "f893e2470174f8da00d514d290f7928bf685bcccf0c028eff84f6275590db8e9",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-transcript.html",
+      "transcript_sha256": "07febd81a03898613820e708e7e9bcd2dccb89f6ff2ae0cf2c3d9e1315c43e2b"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b5ed464edc06af5088689bd9cb2d07919f00722caf85dc10c6b01d99a12761f5",
+      "bytes": 13237157,
+      "duration": 133.05,
+      "duration_iso": "PT133.05S",
+      "frames": 7983,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/",
+      "watch": "videos/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/",
+      "poster_path": "series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg",
+      "poster_sha256": "1f6649568ade3489bc72fb0a6e54dddaee38adec3d619e32e89feaf336c83a0b",
+      "chapters": [
+        {
+          "name": "Leer y después generar",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "El cliente también espera",
+          "start": 22.566667,
+          "end": 44.816667
+        },
+        {
+          "name": "Cada token añade tiempo",
+          "start": 44.816667,
+          "end": 66.366667
+        },
+        {
+          "name": "Un evento no es un token",
+          "start": 66.366667,
+          "end": 88.933333
+        },
+        {
+          "name": "Terminar no basta",
+          "start": 88.933333,
+          "end": 110.483333
+        },
+        {
+          "name": "La forma de la tarea importa",
+          "start": 110.483333,
+          "end": 133.05
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-visual-text.vtt",
+      "captions_sha256": "636e4940e9654312f53b8058fca204dd0f1f1cf058287dbbbb6a71c5a7a83015",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-transcript.html",
+      "transcript_sha256": "d768cde040bad62b1e2716304122d66a4a081f91b141a184375633bb371b071c"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "f377739334044a25501a798f7b69afada1e4a0268eda17d38ef96bd3729a8d56",
+      "bytes": 12839504,
+      "duration": 133.05,
+      "duration_iso": "PT133.05S",
+      "frames": 7983,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/",
+      "poster_path": "en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg",
+      "poster_sha256": "08f857c38efb35336ac65872e5cb03e06411549efaf113b2f0bc53286f6db096",
+      "chapters": [
+        {
+          "name": "Read, then generate",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "The client also waits",
+          "start": 22.566667,
+          "end": 44.816667
+        },
+        {
+          "name": "Each token adds time",
+          "start": 44.816667,
+          "end": 66.366667
+        },
+        {
+          "name": "An event is not a token",
+          "start": 66.366667,
+          "end": 88.933333
+        },
+        {
+          "name": "Completion is not enough",
+          "start": 88.933333,
+          "end": 110.483333
+        },
+        {
+          "name": "Workload shape matters",
+          "start": 110.483333,
+          "end": 133.05
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-visual-text.vtt",
+      "captions_sha256": "6076728b4ea01ded95ddfcbd9681a192852c8a85aef04a80faeba8fb73ca35aa",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-transcript.html",
+      "transcript_sha256": "fc4ad9ef415d25df8fb3881242000e175d3c286a9a8702ae148490b2d9fa8cd6"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "9a22cf35fc937fbd57ad9586df8138ccdf0a1edb495a3395e475408dcef49992",
+      "bytes": 12388363,
+      "duration": 133.433333,
+      "duration_iso": "PT133.433333S",
+      "frames": 8006,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/",
+      "watch": "videos/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/",
+      "poster_path": "series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg",
+      "poster_sha256": "ddefcba639d321654e094cb63c1365d174d62980a53e2f9f68febfa2bc96d2ff",
+      "chapters": [
+        {
+          "name": "El contexto ocupa memoria",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "La GPU no es toda KV",
+          "start": 22.566667,
+          "end": 44.816667
+        },
+        {
+          "name": "Separar lógico y físico",
+          "start": 44.816667,
+          "end": 67.066667
+        },
+        {
+          "name": "Terminar libera una plaza",
+          "start": 67.066667,
+          "end": 88.933333
+        },
+        {
+          "name": "Mover estado también cuesta",
+          "start": 88.933333,
+          "end": 111.183333
+        },
+        {
+          "name": "Cancelar libera estado",
+          "start": 111.183333,
+          "end": 133.433333
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-visual-text.vtt",
+      "captions_sha256": "36b40aa5450b8192d419a3591e84eb4d28a90b8ad0c6b66212ee678ac7b7bc59",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-transcript.html",
+      "transcript_sha256": "b3c3eafbbe5789189250dd8769606e59686ccf66de1cb4502e7cfcbdca49d887"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "8c19772423b4da469f31ef0acd77a009804e5d7fa21974dea24030020540b834",
+      "bytes": 11970405,
+      "duration": 133.433333,
+      "duration_iso": "PT133.433333S",
+      "frames": 8006,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/",
+      "poster_path": "en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg",
+      "poster_sha256": "6e7c64767d4298a742c960885eeacbaf267654d5caf1e69bc800b6320c5447fe",
+      "chapters": [
+        {
+          "name": "Context occupies memory",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "Not all GPU memory is KV",
+          "start": 22.566667,
+          "end": 44.816667
+        },
+        {
+          "name": "Separate logical and physical",
+          "start": 44.816667,
+          "end": 67.066667
+        },
+        {
+          "name": "Completion frees a slot",
+          "start": 67.066667,
+          "end": 88.933333
+        },
+        {
+          "name": "Moving state also costs",
+          "start": 88.933333,
+          "end": 111.183333
+        },
+        {
+          "name": "Cancellation releases state",
+          "start": 111.183333,
+          "end": 133.433333
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-visual-text.vtt",
+      "captions_sha256": "feac25ad70af0f371a40da39ac72da9b6981d554026347b1f88471753fb8f9d8",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-transcript.html",
+      "transcript_sha256": "e89c45e5ec1451b88887422e59b325370246b3cf3f4bda6e8bb52f98237e79d8"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "95ca73d8e12a33c1212dbb298bd4631b25ebf993b9b8e0fdf7338084f97b1dac",
+      "bytes": 12668244,
+      "duration": 135.35,
+      "duration_iso": "PT135.35S",
+      "frames": 8121,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/",
+      "watch": "videos/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/",
+      "poster_path": "series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.jpg",
+      "poster_sha256": "e25046eafc1cc93d5e4e52f725294cbc95cd912c8d4085008cbbfa3c67b94433",
+      "chapters": [
+        {
+          "name": "Menos niveles de precisión",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Payload no es huella total",
+          "start": 21.55,
+          "end": 44.866667
+        },
+        {
+          "name": "Tres precisiones distintas",
+          "start": 44.866667,
+          "end": 67.483333
+        },
+        {
+          "name": "Dividir una capa comunica",
+          "start": 67.483333,
+          "end": 91.233333
+        },
+        {
+          "name": "Las etapas también esperan",
+          "start": 91.233333,
+          "end": 113.483333
+        },
+        {
+          "name": "Réplicas no son expertos",
+          "start": 113.483333,
+          "end": 135.35
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-visual-text.vtt",
+      "captions_sha256": "cb9f9f0f20030d325502b0fc195a46fcdf1575816f190ad06ef308be20dd4c76",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-transcript.html",
+      "transcript_sha256": "3cd979e074435328ea68367dc928ae82dbeff0628e74eb12ba8b867a3491a4be"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "2dad72e318d58c4525c661a6f03eb55efe178dc764fdd2f42a4a354027682c54",
+      "bytes": 12262000,
+      "duration": 135.35,
+      "duration_iso": "PT135.35S",
+      "frames": 8121,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/",
+      "poster_path": "en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.jpg",
+      "poster_sha256": "63caaab6558823e0c6de11d9c0c229a476600a8434e71508564325db525a1473",
+      "chapters": [
+        {
+          "name": "Fewer precision levels",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Payload is not total footprint",
+          "start": 21.55,
+          "end": 44.866667
+        },
+        {
+          "name": "Three distinct precisions",
+          "start": 44.866667,
+          "end": 67.483333
+        },
+        {
+          "name": "Splitting a layer communicates",
+          "start": 67.483333,
+          "end": 91.233333
+        },
+        {
+          "name": "Pipeline stages also wait",
+          "start": 91.233333,
+          "end": 113.483333
+        },
+        {
+          "name": "Replicas are not experts",
+          "start": 113.483333,
+          "end": 135.35
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-visual-text.vtt",
+      "captions_sha256": "38490b1cea42a2fdaa6c8461366c99a591635985c73809dafa9edc4f4b6e7ccf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-transcript.html",
+      "transcript_sha256": "99b8d38ef5ba6596ad8168241d40a6f614258fe614976205af352b6c1558275a"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b8eb6675538d66ab596036d120546fbee9352da805794687d9193489df1a390d",
+      "bytes": 13039812,
+      "duration": 135.55,
+      "duration_iso": "PT135.55S",
+      "frames": 8133,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/",
+      "watch": "videos/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/",
+      "poster_path": "series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.jpg",
+      "poster_sha256": "cfcbe375f813c490ccb21b24409599d05bc1adadf8ef69a8ed81918b436b699a",
+      "chapters": [
+        {
+          "name": "Reutilizar sólo el prefijo",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "La identidad decide el hit",
+          "start": 22.566667,
+          "end": 44.433333
+        },
+        {
+          "name": "Proponer no es confirmar",
+          "start": 44.433333,
+          "end": 67.366667
+        },
+        {
+          "name": "Aceptar mucho no basta",
+          "start": 67.366667,
+          "end": 90.3
+        },
+        {
+          "name": "La rama rechazada se retira",
+          "start": 90.3,
+          "end": 113.3
+        },
+        {
+          "name": "Intercalar trabajo",
+          "start": 113.3,
+          "end": 135.55
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-visual-text.vtt",
+      "captions_sha256": "41f08b31ddbeff60f51980c89d70f65abcc70843727b46beb24781b5b1b0c6a9",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-transcript.html",
+      "transcript_sha256": "e9c73f29e14a1c3d915015f05d15f884ee12ffce30a49f5a0cfe0c6d1c37de1a"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b051afb88eaf0dc4fcfc2f159cc672c0ea899be1d3860fbfbb187e77bf8f0d8e",
+      "bytes": 12355424,
+      "duration": 135.55,
+      "duration_iso": "PT135.55S",
+      "frames": 8133,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/",
+      "poster_path": "en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.jpg",
+      "poster_sha256": "d3118d66c10cb9a021768b1d2395931d156da0b8196cc71d2419c16fd4149e7d",
+      "chapters": [
+        {
+          "name": "Reuse only the prefix",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "Identity determines the hit",
+          "start": 22.566667,
+          "end": 44.433333
+        },
+        {
+          "name": "A proposal is not a commit",
+          "start": 44.433333,
+          "end": 67.366667
+        },
+        {
+          "name": "High acceptance is not enough",
+          "start": 67.366667,
+          "end": 90.3
+        },
+        {
+          "name": "Retire the rejected branch",
+          "start": 90.3,
+          "end": 113.3
+        },
+        {
+          "name": "Interleave the work",
+          "start": 113.3,
+          "end": 135.55
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-visual-text.vtt",
+      "captions_sha256": "54fdbbd489f73de37edf514d29c325f4881d51142c0f75dba98874d8f15a9c2c",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-transcript.html",
+      "transcript_sha256": "21b4980db9c934cbbe08671250a202289ddcef542875857c98c253f3c0a0868c"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "9de4903860392aa7110c179e0cb348dfa1747061942abf55b3491883c88df987",
+      "bytes": 12495213,
+      "duration": 134.95,
+      "duration_iso": "PT134.95S",
+      "frames": 8097,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/",
+      "watch": "videos/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/",
+      "poster_path": "series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.jpg",
+      "poster_sha256": "4c56a77f629987984bf3b7185d308388f702333a6a2881e833037d34caf24474",
+      "chapters": [
+        {
+          "name": "Primero lo permitido",
+          "start": 0,
+          "end": 22.616667
+        },
+        {
+          "name": "Elegir no es recuperarse",
+          "start": 22.616667,
+          "end": 45.233333
+        },
+        {
+          "name": "El deadline no se reinicia",
+          "start": 45.233333,
+          "end": 68.916667
+        },
+        {
+          "name": "Lo visible ya cuenta",
+          "start": 68.916667,
+          "end": 90.783333
+        },
+        {
+          "name": "Dos ahorros diferentes",
+          "start": 90.783333,
+          "end": 112.333333
+        },
+        {
+          "name": "Parecido no es equivalente",
+          "start": 112.333333,
+          "end": 134.95
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt",
+      "captions_sha256": "3e3fbd1093ae57c38f80651aaf194d979f9c48afdac036cbe537513fe406d453",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-transcript.html",
+      "transcript_sha256": "ffba7e737473ae89d46458cfd66e0d27e5269049b4e60e87e995129dcfccad43"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "04139ffce6f89650294ea767a76449ae5fb1efa7a104b06a7b7afba2a342cf53",
+      "bytes": 11980630,
+      "duration": 134.95,
+      "duration_iso": "PT134.95S",
+      "frames": 8097,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/",
+      "poster_path": "en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.jpg",
+      "poster_sha256": "528e3125950366bd01c2e1a7bcb6053b0b8c233f827b48f885b2fdca3fd2edab",
+      "chapters": [
+        {
+          "name": "Eligibility comes first",
+          "start": 0,
+          "end": 22.616667
+        },
+        {
+          "name": "Routing is not recovery",
+          "start": 22.616667,
+          "end": 45.233333
+        },
+        {
+          "name": "The deadline does not reset",
+          "start": 45.233333,
+          "end": 68.916667
+        },
+        {
+          "name": "Visible output is committed",
+          "start": 68.916667,
+          "end": 90.783333
+        },
+        {
+          "name": "Two different forms of reuse",
+          "start": 90.783333,
+          "end": 112.333333
+        },
+        {
+          "name": "Similarity is not equivalence",
+          "start": 112.333333,
+          "end": 134.95
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt",
+      "captions_sha256": "7ed22bb3963b8ae602cf4d8f06c9a73e494818e5597e7124b262ce021ded7ed5",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-transcript.html",
+      "transcript_sha256": "a3aadd3aba1a0b1a6ea258e46aa0450b5129bae48f09bb935824240782699738"
+    },
+    {
+      "path": "series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "b96afa3325839af49b80de807a21401a8ed93ecbf5a3de2b8b02317f47567eab",
+      "bytes": 12603282,
+      "duration": 135.283333,
+      "duration_iso": "PT135.283333S",
+      "frames": 8117,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/",
+      "watch": "videos/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/",
+      "poster_path": "series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg",
+      "poster_sha256": "f28f6b5357bac630a83ddbe816f782815871e56afde6ffe53d5839b03b3592c4",
+      "chapters": [
+        {
+          "name": "Llegadas o concurrencia",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Dividir por tareas resueltas",
+          "start": 21.866667,
+          "end": 44.483333
+        },
+        {
+          "name": "La energía acumula potencia",
+          "start": 44.483333,
+          "end": 67.1
+        },
+        {
+          "name": "Dibuja lo que mides",
+          "start": 67.1,
+          "end": 89.35
+        },
+        {
+          "name": "La cola cambia el régimen",
+          "start": 89.35,
+          "end": 113.033333
+        },
+        {
+          "name": "Conservar la variación",
+          "start": 113.033333,
+          "end": 135.283333
+        }
+      ],
+      "captions_path": "series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-visual-text.vtt",
+      "captions_sha256": "01f6418f9c1f42861a3fd0040c34a801669b8751a844f3c2ce32434359660282",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-transcript.html",
+      "transcript_sha256": "34f891ee735e5b326358a4398bb62d911905cb4c86c03b68cb328cd20dc7fa8d"
+    },
+    {
+      "path": "en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4",
+      "kind": "video",
+      "series": "llm-inference-engineering-economics",
+      "round": "I1",
+      "owner_approved_on": "2026-09-27",
+      "sha256": "899fa0e538ce9b303f8e744e46370f44c851177d51b3ed16c192c73e8a49a988",
+      "bytes": 12139762,
+      "duration": 135.283333,
+      "duration_iso": "PT135.283333S",
+      "frames": 8117,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/",
+      "watch": "en/videos/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/",
+      "poster_path": "en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg",
+      "poster_sha256": "8164b0f671d186ed7886c8ca66f4cd5406d4f99fcf94d6c34073d45b9fc935cd",
+      "chapters": [
+        {
+          "name": "Arrivals or concurrency",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Divide by successful tasks",
+          "start": 21.866667,
+          "end": 44.483333
+        },
+        {
+          "name": "Energy accumulates power",
+          "start": 44.483333,
+          "end": 67.1
+        },
+        {
+          "name": "Draw what you measure",
+          "start": 67.1,
+          "end": 89.35
+        },
+        {
+          "name": "Queuing changes the regime",
+          "start": 89.35,
+          "end": 113.033333
+        },
+        {
+          "name": "Preserve the variation",
+          "start": 113.033333,
+          "end": 135.283333
+        }
+      ],
+      "captions_path": "en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-visual-text.vtt",
+      "captions_sha256": "2532f1e835372bcc406f2d8bceeef83dc0c630db677513ba2f277905521303c4",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-transcript.html",
+      "transcript_sha256": "17670ce1e9193532cb411a98003de06b807d0e8f654432be6d17a0d3a324f5f6"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "659c5a6dfe43ed97887f5dde7f1205bb1fe78abadb2a2c80528299c822b0baa5",
+      "bytes": 4562741,
+      "duration": 138.0,
+      "duration_iso": "PT138S",
+      "frames": 8280,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/",
+      "watch": "videos/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/",
+      "poster_path": "series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg",
+      "poster_sha256": "3add9c582b5d47aec4a4ededc99d17ec177e18636ab758d8b1765ffd945c30e9",
+      "chapters": [
+        {
+          "name": "Dónde aparece el texto",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Escuchar audio. Responder texto.",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Menos fronteras. El mismo control.",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Dos direcciones. Otro eje.",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Quién posee cada frontera",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "El requisito antes del ranking",
+          "start": 115,
+          "end": 138
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-visual-text.vtt",
+      "captions_sha256": "5368405ec524916a98134eb8658b4ecd1b42915d1a70836fa046b394b6fc94d0",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-transcript.html",
+      "transcript_sha256": "ff1b3c6e0519726c03b95081daec6572714c75fdd6e4bcaba3bca4e3bf011f1b"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "da837e7c5323c373358d4076a8266e231c21cc689a8bb7cad644b4a29f20b842",
+      "bytes": 4409907,
+      "duration": 138.0,
+      "duration_iso": "PT138S",
+      "frames": 8280,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.jpg",
+      "poster_sha256": "27b22b08f6c427002b0de297f77de9d58b4c460e74cccb238ef4a59d784efd36",
+      "chapters": [
+        {
+          "name": "Where text enters the path",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Hear audio. Return text.",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Fewer boundaries. The same controls.",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Two directions. A separate axis.",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Who owns each boundary",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "The requirement before the ranking",
+          "start": 115,
+          "end": 138
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-visual-text.vtt",
+      "captions_sha256": "24233d9b412cbceb8cb1634d9466ce645cc20d823f5cab48b6a81cb84aedf118",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-transcript.html",
+      "transcript_sha256": "297b7b9ae63c2626ff669d06d8c408017adc381ae5e05b77d0a975c1f4d50785"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/02-turn-taking.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "3818aacf8c3f8974a56ccf7837cc2f48de5e8830be376f17b00147a874689116",
+      "bytes": 4389734,
+      "duration": 138.0,
+      "duration_iso": "PT138S",
+      "frames": 8280,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/02-turn-taking/",
+      "watch": "videos/series/agentes-voz-tiempo-real/02-turn-taking/",
+      "poster_path": "series/agentes-voz-tiempo-real/02-turn-taking.jpg",
+      "poster_sha256": "05b51be050ed9f9cd9900079c7e46a5a99d0b77857187651566f52ddc27c416d",
+      "chapters": [
+        {
+          "name": "Una pausa no termina la idea",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Esperar también tiene un coste",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Inicio rápido. Final con evidencia.",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "¿Quiere tomar el turno?",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "No basta con parar la generación",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "Un turno. Una decisión.",
+          "start": 115,
+          "end": 138
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/02-turn-taking-visual-text.vtt",
+      "captions_sha256": "342c5edf927cbea7906b47338d617abb97e15839af0522037689d22508bed1ae",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/02-turn-taking-transcript.html",
+      "transcript_sha256": "b37a5ac2122bf6006ce70931071979acfbf8a484175da55bd86b7cfbcc7bf40c"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/02-turn-taking.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "7e85696c3eee1fcfa99d362d1ff6cb2adff9758758316fe64320614eeb02a8d5",
+      "bytes": 4335984,
+      "duration": 138.0,
+      "duration_iso": "PT138S",
+      "frames": 8280,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/02-turn-taking/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/02-turn-taking/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/02-turn-taking.jpg",
+      "poster_sha256": "8d6484747943b625e44e22eae2c247ce689a3f47fa7ebaec0db2cfe593d3dbe4",
+      "chapters": [
+        {
+          "name": "A pause does not finish the thought",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Waiting has a cost too",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Fast start. Evidence for the end.",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Do they want the turn?",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Stopping generation is not enough",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "One turn. One decision.",
+          "start": 115,
+          "end": 138
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/02-turn-taking-visual-text.vtt",
+      "captions_sha256": "83dcdaf7041596b147ce253d281b54c8523f60047d78ef72b0db5ec93ef8de70",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/02-turn-taking-transcript.html",
+      "transcript_sha256": "4a862a31e111f63ccc60c32709b0bb816942b41e35dc030b810e946abfc740f4"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "026272e7d9b58acb245c305e974fc8cc97481d5889d39edf055c50096ee06b6a",
+      "bytes": 4446778,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/03-presupuesto-latencia/",
+      "watch": "videos/series/agentes-voz-tiempo-real/03-presupuesto-latencia/",
+      "poster_path": "series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg",
+      "poster_sha256": "46581aafba67d5cfe5d2a43de87100a659efd80ee7343b5bf90cb356ba440e94",
+      "chapters": [
+        {
+          "name": "Dos eventos definen la latencia",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Sigue el camino crítico",
+          "start": 23,
+          "end": 47
+        },
+        {
+          "name": "Relojes distintos. Restas engañosas.",
+          "start": 47,
+          "end": 70
+        },
+        {
+          "name": "Generado no significa reproducido",
+          "start": 70,
+          "end": 93
+        },
+        {
+          "name": "La media oculta la cola",
+          "start": 93,
+          "end": 116
+        },
+        {
+          "name": "Cambia una capa. Mide el efecto.",
+          "start": 116,
+          "end": 139
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/03-presupuesto-latencia-visual-text.vtt",
+      "captions_sha256": "404e8e3ea9ab6d5ffb1045d9f5f0db1f4124ac2772b9299b71ce95d15a69ab54",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/03-presupuesto-latencia-transcript.html",
+      "transcript_sha256": "3ce2e544e9772b6e8474cf3add424338b4fd2e3b9b6c8192550cf3b9734316a9"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "0cfc2fd1b81a5ec442697ee7af7cd5e9b183b4892722c6e2b7a62a62cd9d357d",
+      "bytes": 4264615,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/03-presupuesto-latencia/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.jpg",
+      "poster_sha256": "438585ab72a6caaa5eb02507a7782f870379e915c82ff4eeecce0786e8ae95cf",
+      "chapters": [
+        {
+          "name": "Two events define latency",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Follow the critical path",
+          "start": 23,
+          "end": 47
+        },
+        {
+          "name": "Different clocks. Misleading differences.",
+          "start": 47,
+          "end": 70
+        },
+        {
+          "name": "Generated does not mean played",
+          "start": 70,
+          "end": 93
+        },
+        {
+          "name": "The average hides the tail",
+          "start": 93,
+          "end": 116
+        },
+        {
+          "name": "Change one layer. Measure the effect.",
+          "start": 116,
+          "end": 139
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/03-presupuesto-latencia-visual-text.vtt",
+      "captions_sha256": "eff8964c7848d38cbfcc2767f0bfa4291e6ccce05205f863f83ce2fe1a3d004d",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/03-presupuesto-latencia-transcript.html",
+      "transcript_sha256": "5168f308a4eb15e970a8e30f110309e49f8a43d3f70b2c96bbf2770f30921eff"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "add7617231da05c698ca292e4033afffbcf8252d903c5e877651c945276f208b",
+      "bytes": 4625486,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/",
+      "watch": "videos/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/",
+      "poster_path": "series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg",
+      "poster_sha256": "350b665cfd6072dee3243b32c8072d9bc5301a9d789639ed593dc2a7030c8a75",
+      "chapters": [
+        {
+          "name": "Solicitar no es ejecutar",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Cuatro estados. Cuatro autoridades.",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Callarse no deshace una reserva",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "El resultado llega a otro turno",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Timeout no significa fracaso",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "Async necesita un responsable",
+          "start": 115,
+          "end": 139
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-visual-text.vtt",
+      "captions_sha256": "d446e5291e2b64b71494affbd93019ac754daf0505dcb09a0a7b9efb809e6a27",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-transcript.html",
+      "transcript_sha256": "a783b0cf47b7e36b2ac5bb52fcce6362a4383289e4473732c32bea67e5fddd40"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "10ca78bbca6af98a19e7ecaf5c1154babb44740ba5ebb520aeb95d6df66fe858",
+      "bytes": 4519292,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.jpg",
+      "poster_sha256": "953dd47a779b11ddb5ce361c9178c53749780d63f9806f0cb1168521e7fd918a",
+      "chapters": [
+        {
+          "name": "Requesting is not executing",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Four states. Four authorities.",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "Silence does not undo a booking",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "The result arrives in another turn",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Timeout does not mean failure",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "Async needs an owner",
+          "start": 115,
+          "end": 139
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-visual-text.vtt",
+      "captions_sha256": "cff26db1f929700a25e178f2873a5f89cbae7df3f67e9fd315ee88c11f5e713a",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-transcript.html",
+      "transcript_sha256": "22cfbf58c036eaf07f3c156616d18f59fcf485fdc3891ee48b293614b5c3258f"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "27148977bd1ea2f1c5dca8334854ad524d0178077a43d90cab03766a692e7d9c",
+      "bytes": 4526195,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/",
+      "watch": "videos/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/",
+      "poster_path": "series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg",
+      "poster_sha256": "062d99924af29a9d1425593140a1231ea980f9fe71131c039d75f334fe9a8b1c",
+      "chapters": [
+        {
+          "name": "Conectar no garantiza audio",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "La ruta real puede cambiar",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "El paquete perdido retiene a los demás",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Suavizar llegadas añade espera",
+          "start": 69,
+          "end": 93
+        },
+        {
+          "name": "Más muestras no recuperan detalle",
+          "start": 93,
+          "end": 116
+        },
+        {
+          "name": "Reparar requiere llegar a tiempo",
+          "start": 116,
+          "end": 139
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-visual-text.vtt",
+      "captions_sha256": "2d6d683d8bbf9b4fc7e30e472edcf4ef6056534855722f33cf23e13e17683df3",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-transcript.html",
+      "transcript_sha256": "3a00974e509d0e50f7722677cb086237ca53ef6e4e9af3bafc798448ddd4bd07"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "0bc50b8ea6a2ae334606cbdb18452d88be85e19589ca629933e2ea5222011bfd",
+      "bytes": 4393109,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.jpg",
+      "poster_sha256": "1fe6359bb2230ad83cb9532f5d8e9e37b40a9ccac7bcc5a9d857229afeb32d28",
+      "chapters": [
+        {
+          "name": "Connected does not guarantee audio",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "The actual path can change",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "A missing packet holds back the rest",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Smoothing arrivals adds waiting",
+          "start": 69,
+          "end": 93
+        },
+        {
+          "name": "More samples do not restore detail",
+          "start": 93,
+          "end": 116
+        },
+        {
+          "name": "Repair must arrive in time",
+          "start": 116,
+          "end": 139
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-visual-text.vtt",
+      "captions_sha256": "66485b5292874493b653c1eb980b1e6098fa0625271b646dc09e96cd9d0e6ae3",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-transcript.html",
+      "transcript_sha256": "48f55dcb7f2e3aff6fed05e07c8e89799c9c569c01d392ce2514c53757b18d28"
+    },
+    {
+      "path": "series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "e8cf50e0e17b640cef0ec1d7c7bc9cc7f70f9fcf494884d61c02705e11fd111b",
+      "bytes": 4431048,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/",
+      "watch": "videos/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/",
+      "poster_path": "series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg",
+      "poster_sha256": "fbf05d4bd77410cf23b6589621b6d10399a301e842653db3067399fa2cf04a17",
+      "chapters": [
+        {
+          "name": "La frase no es toda la evidencia",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "Un turno puede tener varios intentos",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "El denominador cambia la lectura",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Lo determinista no necesita un judge",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Reproduce la frontera que falló",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "Del incidente a una regresión útil",
+          "start": 115,
+          "end": 139
+        }
+      ],
+      "captions_path": "series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-visual-text.vtt",
+      "captions_sha256": "26c8fe5e12fcfb2866399001076b7a6300fe8e9ea14d06ba0ba87af5c06b4504",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-transcript.html",
+      "transcript_sha256": "c9d1902917402d86993bc0fe720f4c24e3b14ec7a332e66da7509a70136f4dee"
+    },
+    {
+      "path": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.mp4",
+      "kind": "video",
+      "series": "agentes-voz-tiempo-real",
+      "round": "V3",
+      "owner_approved_on": "2026-09-26",
+      "sha256": "6918500cb2456a87dde77c16e4003648923bf214a6ccec3b3d814268fbc4e555",
+      "bytes": 4403589,
+      "duration": 139.0,
+      "duration_iso": "PT139S",
+      "frames": 8340,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/",
+      "watch": "en/videos/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/",
+      "poster_path": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.jpg",
+      "poster_sha256": "e66dea6c70c5bcd05592fa6362b5b7a06041fd0e564b5a4ff8ac6332afa0c77d",
+      "chapters": [
+        {
+          "name": "The sentence is not all the evidence",
+          "start": 0,
+          "end": 23
+        },
+        {
+          "name": "One turn can have several attempts",
+          "start": 23,
+          "end": 46
+        },
+        {
+          "name": "The denominator changes the meaning",
+          "start": 46,
+          "end": 69
+        },
+        {
+          "name": "Deterministic checks do not need a judge",
+          "start": 69,
+          "end": 92
+        },
+        {
+          "name": "Replay the boundary that failed",
+          "start": 92,
+          "end": 115
+        },
+        {
+          "name": "From incident to a useful regression",
+          "start": 115,
+          "end": 139
+        }
+      ],
+      "captions_path": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-visual-text.vtt",
+      "captions_sha256": "291eed75e1b58ae6b020b67f64bf94f39d83155ddcdd98f4dca55f66a9928e3f",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-transcript.html",
+      "transcript_sha256": "d5937ae0b064f04b393845617649d13457da6a3fe6f5750e00ba3d550db539d5"
+    }
+  ]
+}

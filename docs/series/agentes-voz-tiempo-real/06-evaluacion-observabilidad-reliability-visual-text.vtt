@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+El agente dice «reservado». Un judge de texto puede aprobar la respuesta.
+
+2
+00:00:07.700 --> 00:00:14.700
+Pero op_42 sigue UNKNOWN y el audio puede estar en una cola cancelada.
+
+3
+00:00:14.700 --> 00:00:23.000
+Une negocio, turno, media y runtime. La transcripción no demuestra el resultado completo.
+
+4
+00:00:23.700 --> 00:00:30.700
+T12 mantiene su identidad aunque una petición falle y el fallback use otra.
+
+5
+00:00:30.700 --> 00:00:37.700
+Los intentos, la operación y el audio se correlacionan sin convertirse en turnos nuevos.
+
+6
+00:00:37.700 --> 00:00:46.000
+Distingue observación, inferencia y juicio. Un diagnóstico probable no es un hecho registrado.
+
+7
+00:00:46.700 --> 00:00:53.700
+De diez turnos sintéticos, tres tienen un fallo interno. Dos se recuperan sin daño visible.
+
+8
+00:00:53.700 --> 00:01:00.700
+La tasa interna es 3 de 10; la de fallo visible es 1 de 10.
+
+9
+00:01:00.700 --> 00:01:09.000
+La recuperación es 2 de 3 fallos internos. No mezcles requests con turnos.
+
+10
+00:01:09.700 --> 00:01:16.700
+Exige un efecto por operación, cero audio obsoleto y evidencia antes de declarar SUCCESS.
+
+11
+00:01:16.700 --> 00:01:23.700
+Si falla una invariante, una valoración semántica alta no debe compensarla.
+
+12
+00:01:23.700 --> 00:01:32.000
+Reserva el judge para lo semántico o perceptivo y conserva sus criterios y versión.
+
+13
+00:01:32.700 --> 00:01:39.700
+Un replay de texto conserva las palabras, pero pierde el momento exacto de la interrupción.
+
+14
+00:01:39.700 --> 00:01:46.700
+Este fallo requiere audio o eventos temporizados y el estado de la cola.
+
+15
+00:01:46.700 --> 00:01:55.000
+Un test local de audio tampoco certifica la red real. Declara qué capas quedan fuera.
+
+16
+00:01:55.700 --> 00:02:02.700
+Aísla la mínima secuencia que reproduce el audio obsoleto; no copies toda la conversación.
+
+17
+00:02:02.700 --> 00:02:09.700
+Redacta datos sensibles y fija input, versión y resultado esperado.
+
+18
+00:02:09.700 --> 00:02:19.000
+El test debe fallar antes de corregir el mecanismo y pasar después, en la capa adecuada.
+

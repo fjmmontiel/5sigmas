@@ -1,30 +1,44 @@
 ---
-title: "Arquitecturas de memoria para agentes: working, episodic, semantic y estado persistente"
-description: "Cómo separar contexto activo, memoria episódica, conocimiento semántico y estado autoritativo persistente sin confundir persistencia, retrieval o checkpoints con tipos de memoria."
+title: 'Arquitecturas de memoria para agentes: working, episodic, semantic y estado persistente'
+description: Cómo separar contexto activo, memoria episódica, conocimiento semántico y estado autoritativo persistente
+  sin confundir persistencia, retrieval o checkpoints con tipos de memoria.
 date: 2026-09-11
 date_modified: 2026-09-11
-keywords: "agent memory, working memory, episodic memory, semantic memory, persistent state, context engineering, agents"
+keywords: agent memory, working memory, episodic memory, semantic memory, persistent state, context engineering,
+  agents
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - Memoria
-  - Arquitectura
+- IA
+- Agentes
+- Context engineering
+- Memoria
+- Arquitectura
 video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
 video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
-video_title: "Arquitecturas de memoria y estado persistente"
-video_summary: "Memoria de trabajo, episodios, conocimiento semántico y estado persistente tienen ciclos de escritura, recuperación y caducidad distintos."
-video_duration: PT36S
+video_title: Memoria y estado autoritativo
+video_summary: Un checkpoint también persiste, pero su contrato es reanudar la ejecución, no aprender una preferencia.
+video_date: '2026-09-28'
+video_duration: PT129.933333S
+video_captions: 03-memory-architectures-working-episodic-semantic-persistent-state-visual-text.vtt
+video_transcript: 03-memory-architectures-working-episodic-semantic-persistent-state-transcript.html
 video_chapters:
-- name: "Cuatro memorias, cuatro ciclos"
+- name: Duración no es significado
   start: 0
-  end: 12
-- name: "Escribir requiere una política"
-  start: 12
-  end: 24
-- name: "Recuperar no significa confiar"
-  start: 24
-  end: 36
+  end: 21.866667
+- name: Recordar qué ocurrió y cuándo
+  start: 21.866667
+  end: 43.416667
+- name: Una preferencia es un derivado
+  start: 43.416667
+  end: 64.966667
+- name: Recordar no concede acceso
+  start: 64.966667
+  end: 86.833333
+- name: Persistir exige una política
+  start: 86.833333
+  end: 108.383333
+- name: Corregir también los derivados
+  start: 108.383333
+  end: 129.933333
 ---
 
 # Capítulo 3 — Arquitecturas de memoria: working, episodic, semantic y estado persistente

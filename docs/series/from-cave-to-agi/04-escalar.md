@@ -1,15 +1,42 @@
 ---
 title: Escalar - de AlexNet a los modelos fundacionales
-description: Cómo datos, cómputo y arquitecturas escalables cambiaron la IA desde 2012. AlexNet, Transformer, preentrenamiento, leyes de escala y el nacimiento de los modelos fundacionales.
+description: Cómo datos, cómputo y arquitecturas escalables cambiaron la IA desde 2012. AlexNet, Transformer, preentrenamiento,
+  leyes de escala y el nacimiento de los modelos fundacionales.
 date: 2026-03-30
 date_modified: 2026-08-23
-keywords: "escalar IA, AlexNet, Transformer, leyes de escala, modelos fundacionales, preentrenamiento, GPT historia, historia deep learning, ImageNet, BERT"
+keywords: escalar IA, AlexNet, Transformer, leyes de escala, modelos fundacionales, preentrenamiento, GPT historia,
+  historia deep learning, ImageNet, BERT
 tags:
-  - IA
-  - LLMs
-  - Historia
-video: "04-escalar.mp4"
-video_duration: "PT1M9S"
+- IA
+- LLMs
+- Historia
+video: 04-escalar.mp4
+video_poster: 04-escalar.jpg
+video_title: Escalar datos, cálculo y reutilización
+video_summary: Aprender esos filtros permite construir representaciones a partir de píxeles.
+video_date: '2026-09-28'
+video_duration: PT131.066667S
+video_captions: 04-escalar-visual-text.vtt
+video_transcript: 04-escalar-transcript.html
+video_chapters:
+- name: Un filtro comparte parámetros entre posiciones
+  start: 0
+  end: 21.55
+- name: Particionar no elimina la comunicación
+  start: 21.55
+  end: 43.1
+- name: Duplicar posiciones cuadruplica pares
+  start: 43.1
+  end: 64.966667
+- name: Un presupuesto fijo impone un reparto
+  start: 64.966667
+  end: 87.966667
+- name: Una base puede adaptarse a tareas diferentes
+  start: 87.966667
+  end: 109.516667
+- name: Seguir instrucciones requiere un ajuste distinto
+  start: 109.516667
+  end: 131.066667
 ---
 
 # Capítulo 4: Escalar (≈ 2012 - 2024)

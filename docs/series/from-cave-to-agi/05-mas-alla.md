@@ -1,16 +1,43 @@
 ---
 title: Más allá del Transformer — memoria y modelos del mundo
-description: Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda, memoria en inferencia, modelos del mundo y robótica.
+description: Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda,
+  memoria en inferencia, modelos del mundo y robótica.
 date: 2026-03-31
 date_modified: 2026-08-23
-keywords: "más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes IA, búsqueda IA, futuro IA"
+keywords: más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes
+  IA, búsqueda IA, futuro IA
 tags:
-  - IA
-  - LLMs
-  - Razonamiento
-  - Inferencia
-video: "05-mas-alla.mp4"
-video_duration: "PT1M25S"
+- IA
+- LLMs
+- Razonamiento
+- Inferencia
+video: 05-mas-alla.mp4
+video_poster: 05-mas-alla.jpg
+video_title: Búsqueda, memoria y acción con límites
+video_summary: La búsqueda aporta alternativas; el verificador aporta evidencia para este criterio concreto.
+video_date: '2026-09-28'
+video_duration: PT132.516667S
+video_captions: 05-mas-alla-visual-text.vtt
+video_transcript: 05-mas-alla-transcript.html
+video_chapters:
+- name: Proponer y verificar son operaciones distintas
+  start: 0
+  end: 21.55
+- name: Guardar no obliga a releerlo todo
+  start: 21.55
+  end: 43.416667
+- name: Un estado compacto no conserva cada dato intacto
+  start: 43.416667
+  end: 66.033333
+- name: La predicción del mundo debe compararse con observaciones
+  start: 66.033333
+  end: 89.416667
+- name: Actuar exige cerrar el bucle con mediciones
+  start: 89.416667
+  end: 110.966667
+- name: Una mejora local no demuestra capacidad universal
+  start: 110.966667
+  end: 132.516667
 ---
 
 # Capítulo 5: Más allá del Transformer (≈ 2022 - Q1 2026)

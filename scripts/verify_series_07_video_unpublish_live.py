@@ -15,14 +15,8 @@ import yaml
 
 ORIGIN = "https://5sigmas.com"
 REVISION = os.environ.get("GITHUB_SHA", "").strip()
-BLOCKED = (
-    "agentes-ia",
-    "agentes-voz-tiempo-real",
-    "coding-agents-agent-harnesses",
-    "context-engineering-memory-mcp",
-    "llm-inference-engineering-economics",
-)
-KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6, "evaluating-ai-systems-production": 6}
+BLOCKED = ()
+KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6, "evaluating-ai-systems-production": 6, "agentes-ia": 6, "coding-agents-agent-harnesses": 6, "agentes-voz-tiempo-real": 6, "context-engineering-memory-mcp": 6, "llm-inference-engineering-economics": 6, "from-cave-to-agi": 6}
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 
@@ -163,7 +157,7 @@ def main() -> int:
     es_catalog = catalogue(f"{ORIGIN}/videos/catalog.json")
     en_catalog = catalogue(f"{ORIGIN}/en/videos/catalog.json")
 
-    if es_catalog.get("count") != 40 or en_catalog.get("count") != 40:
+    if es_catalog.get("count") != 76 or en_catalog.get("count") != 76:
         raise AssertionError(
             f"catalogue count mismatch: ES={es_catalog.get('count')} EN={en_catalog.get('count')}"
         )
@@ -197,15 +191,15 @@ def main() -> int:
                     status, _ = fetch(asset_url)
                     if status != 404:
                         raise AssertionError(f"{asset_url}: blocked video asset still public (HTTP {status})")
-    if blocked_count != 36:
-        raise AssertionError(f"blocked inventory drift: expected 36, got {blocked_count}")
+    if blocked_count != 0:
+        raise AssertionError(f"blocked inventory drift: expected 0, got {blocked_count}")
 
     for series, expected in KEEP.items():
         assert_keep_live(series, expected, "", es_normal, es_video, es_catalog)
         assert_keep_live(series, expected, "/en", en_normal, en_video, en_catalog)
 
     print(
-        "LIVE PASS: 36 unapproved series 07+ video entries removed from embeds/watch pages/catalogues/"
+        "LIVE PASS: 0 remaining unapproved series 07+ video entries; approved originals restored from embeds/watch pages/catalogues/"
         "video sitemaps/public video assets while all ES/EN articles remain live; Datacenters and "
         "Modelos R2 and AI Security R5 video surfaces remain live."
     )

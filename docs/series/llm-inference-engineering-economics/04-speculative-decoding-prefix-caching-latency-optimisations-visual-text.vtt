@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Dos peticiones comparten cuatro tokens iniciales y tienen sufijos distintos.
+
+2
+00:00:07.350 --> 00:00:14.900
+El segundo prefill puede reutilizar el estado de esos cuatro tokens, si el cache es compatible.
+
+3
+00:00:14.900 --> 00:00:22.567
+La continuación todavía debe generarse. Un hit de prefijo no recupera una respuesta completa.
+
+4
+00:00:23.067 --> 00:00:30.233
+El texto parece igual, pero los tokens o la revisión del modelo pueden haber cambiado.
+
+5
+00:00:30.233 --> 00:00:37.083
+La clave debe reflejar las dependencias reales y el aislamiento de acceso exigido.
+
+6
+00:00:37.083 --> 00:00:44.433
+Una coincidencia incompleta no autoriza reutilizar KV. La corrección precede al porcentaje de hits.
+
+7
+00:00:44.933 --> 00:00:51.783
+El proposer adelanta tres tokens candidatos: A, B y C.
+
+8
+00:00:51.783 --> 00:00:58.950
+El target acepta A y B, rechaza C y produce D con el procedimiento correcto.
+
+9
+00:00:58.950 --> 00:01:07.367
+La secuencia confirmada es A, B, D. Los candidatos no verificados no deben llegar como salida definitiva.
+
+10
+00:01:07.867 --> 00:01:14.717
+Tres tokens normales cuestan doce unidades de tiempo en este ejemplo.
+
+11
+00:01:14.717 --> 00:01:22.633
+Proponer y verificar cuesta nueve en un caso, pero dieciocho en otro con igual salida confirmada.
+
+12
+00:01:22.633 --> 00:01:30.300
+Sólo el primero ahorra tiempo. Acceptance rate sin coste de propuesta y verificación es incompleta.
+
+13
+00:01:30.800 --> 00:01:37.650
+Los candidatos especulativos también pueden reservar estado KV provisional.
+
+14
+00:01:37.650 --> 00:01:44.500
+Al rechazar C, su estado no puede tratarse como parte del prefijo confirmado.
+
+15
+00:01:44.500 --> 00:01:53.300
+El rollback conserva A y B y descarta la rama inválida. Mide también el coste del estado temporal.
+
+16
+00:01:53.800 --> 00:02:00.650
+Un prefill grande puede ocupar un intervalo durante el que otras peticiones esperan decode.
+
+17
+00:02:00.650 --> 00:02:07.500
+Dividirlo en chunks permite al scheduler intercalar pasos de generación.
+
+18
+00:02:07.500 --> 00:02:15.550
+La política cambia interferencia y eficiencia. Hay que medir ambas; fragmentar no acelera necesariamente cualquier carga.
+

@@ -1,0 +1,515 @@
+[
+  {
+    "path": "docs/series/from-cave-to-agi/00_presentacion_serie.md",
+    "body_sha256": "793b8978f89fb2626f7ae51845468127fa0ad58e72fdfa83fc10d2c852e2bfd8",
+    "nonvideo_metadata": {
+      "title": "De las cavernas a la AGI",
+      "description": "Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto.",
+      "keywords": "historia inteligencia artificial, IA historia, Transformer, modelos fundacionales, AGI, deep learning",
+      "date": "2026-03-26",
+      "tags": [
+        "IA",
+        "AGI",
+        "LLMs",
+        "Historia"
+      ],
+      "hide": [
+        "toc"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/00_presentacion_serie.md",
+    "unchanged_sha256": "974f104e4c198bf5c87f0836c0f0c70dc09ba2dcb587e60d9e27f910d3ec0cd9"
+  },
+  {
+    "path": "docs/series/from-cave-to-agi/01-representar.md",
+    "body_sha256": "ecdeab096969ffda61670e59fa2949990e1df3d34fecbfae3636e55353f412af",
+    "nonvideo_metadata": {
+      "title": "Representar — del conteo al cálculo",
+      "description": "Cómo símbolos, números, álgebra y cálculo hicieron posible representar y manipular el mundo hasta construir la base matemática de la IA moderna.",
+      "date": "2026-03-26",
+      "keywords": "historia de las matemáticas, representación simbólica, álgebra, cálculo diferencial, historia computación, Leibniz Newton, notación matemática, origen inteligencia artificial",
+      "tags": [
+        "IA",
+        "Historia"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/01-representar.md",
+    "unchanged_sha256": "edae517f2ee86c42f6ae32563bdebd6e77bb0b4b002804ba6dd8b375ad0b5454"
+  },
+  {
+    "path": "docs/series/from-cave-to-agi/02-mecanizar.md",
+    "body_sha256": "a53ad4f7c872a3307882d6e0188cb4d06399a7f67cf4f260bc6319d56b2a1ed6",
+    "nonvideo_metadata": {
+      "title": "Mecanizar — de Babbage a Turing",
+      "description": "Cómo la humanidad automatizó el cálculo: de los primeros mecanismos físicos a la separación de programa y hardware, y los fundamentos teóricos de la computación moderna.",
+      "date": "2026-03-26",
+      "keywords": "historia computación, Alan Turing, Charles Babbage, máquina de Turing, ENIAC, Von Neumann, historia ordenadores, automatización cálculo, computación teórica",
+      "tags": [
+        "IA",
+        "Historia"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/02-mecanizar.md",
+    "unchanged_sha256": "1247d8a0e247c7b76272111223e1154b4fee70f56ea3155f40652527c9e67dff"
+  },
+  {
+    "path": "docs/series/from-cave-to-agi/03-aprender.md",
+    "body_sha256": "09da927da6eecb161f6beaefd92db653211b2d0271922363d1b2b621815fb2b5",
+    "nonvideo_metadata": {
+      "title": "Aprender — de las reglas a los datos",
+      "description": "Cómo la IA pasó de reglas escritas a mano al aprendizaje con datos: sistemas expertos, estadística, redes neuronales y el salto de AlexNet.",
+      "date": "2026-03-27",
+      "keywords": "historia machine learning, sistemas expertos, MYCIN, aprendizaje automático historia, backpropagation, AlexNet, inviernos ia, ia simbólica, perceptrón, deep learning historia",
+      "tags": [
+        "IA",
+        "Historia",
+        "LLMs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/03-aprender.md",
+    "unchanged_sha256": "db773994c1505349db3ac93c56d580ce044903d95345888839f0c7b8545fb268"
+  },
+  {
+    "path": "docs/series/from-cave-to-agi/04-escalar.md",
+    "body_sha256": "9735c4537f40ba2e7c15b4f3d8f27a37dcf2830b275d8cca47f726c48b85871a",
+    "nonvideo_metadata": {
+      "title": "Escalar - de AlexNet a los modelos fundacionales",
+      "description": "Cómo datos, cómputo y arquitecturas escalables cambiaron la IA desde 2012. AlexNet, Transformer, preentrenamiento, leyes de escala y el nacimiento de los modelos fundacionales.",
+      "date": "2026-03-30",
+      "date_modified": "2026-08-23",
+      "keywords": "escalar IA, AlexNet, Transformer, leyes de escala, modelos fundacionales, preentrenamiento, GPT historia, historia deep learning, ImageNet, BERT",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Historia"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/04-escalar.md",
+    "unchanged_sha256": "49c9e51a83ef971295b45294fe35299641fd7c8a6088bd654b8119fb4451a4c8"
+  },
+  {
+    "path": "docs/series/from-cave-to-agi/05-mas-alla.md",
+    "body_sha256": "e001717ae001ce555ee395832a7f05b807fe88c5ae132ca4a1b502034d1e797f",
+    "nonvideo_metadata": {
+      "title": "Más allá del Transformer — memoria y modelos del mundo",
+      "description": "Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda, memoria en inferencia, modelos del mundo y robótica.",
+      "date": "2026-03-31",
+      "date_modified": "2026-08-23",
+      "keywords": "más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes IA, búsqueda IA, futuro IA",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Razonamiento",
+        "Inferencia"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/from-cave-to-agi/05-mas-alla.md",
+    "unchanged_sha256": "43030222ab878a0edd8ee72dcbfa1b47bceb20210f64206bc19c097e8248902e"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md",
+    "body_sha256": "3e523a11844b658316cae9b8d2b65cc3f8b63e6de97bb8910cd6dcd73f533ad4",
+    "nonvideo_metadata": {
+      "title": "Context engineering vs prompt engineering: qué entra al modelo, cuándo y por qué",
+      "description": "Prompt engineering optimiza instrucciones. Context engineering decide qué información, tools, historial, retrieval, observaciones y memoria llegan realmente al modelo en cada inferencia, con qué prioridad y bajo qué límites.",
+      "date": "2026-09-11",
+      "date_modified": "2026-09-11",
+      "keywords": "context engineering, prompt engineering, context window, agents, retrieval, memory, tool context",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "Arquitectura",
+        "LLMs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md",
+    "unchanged_sha256": "9f949eb6f3f0ffc73c4ae8dd844f0676429e3d7a63ee201273f985c058ebe05a"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md",
+    "body_sha256": "069f6af3f6d22438b385883690051e7e21acc832186c6f1e23eb310557cb2253",
+    "nonvideo_metadata": {
+      "title": "Context budgets, priorización, compaction y provenance: qué conservar cuando no cabe todo",
+      "description": "Cómo separar el límite físico de contexto del presupuesto operativo, priorizar evidencia, compactar sin confundir resumen con verdad y conservar provenance para rehidratar o invalidar información.",
+      "date": "2026-09-11",
+      "date_modified": "2026-09-11",
+      "keywords": "context budget, context window, compaction, provenance, context engineering, agentes, LLM",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "Arquitectura",
+        "LLMs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md",
+    "unchanged_sha256": "a69048bce73b64a675c5fea9c7c85f1581b52a6433f14f521571b50189b9c181"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md",
+    "body_sha256": "8dcfa66d49e55e132583df5033dddb9cfd1a0d85b02938ca9645d26e76ae73f4",
+    "nonvideo_metadata": {
+      "title": "Arquitecturas de memoria para agentes: working, episodic, semantic y estado persistente",
+      "description": "Cómo separar contexto activo, memoria episódica, conocimiento semántico y estado autoritativo persistente sin confundir persistencia, retrieval o checkpoints con tipos de memoria.",
+      "date": "2026-09-11",
+      "date_modified": "2026-09-11",
+      "keywords": "agent memory, working memory, episodic memory, semantic memory, persistent state, context engineering, agents",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "Memoria",
+        "Arquitectura"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md",
+    "unchanged_sha256": "e7e7e7991fbff5415977f0bfe6c2c93701473935c75333ecf3828a65b9582bc3"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md",
+    "body_sha256": "61bc31acb5a0cff1b1ed4e285cd61dda57724e363cffadd33fa6502bca3b02d1",
+    "nonvideo_metadata": {
+      "title": "Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding",
+      "description": "Cómo separar la recuperación de candidatos de la política que decide qué evidencia entra en contexto, resolver frescura y conflictos y mantener un grounding verificable por afirmación.",
+      "date": "2026-09-11",
+      "date_modified": "2026-09-11",
+      "keywords": "retrieval, RAG, context assembly, freshness, relevance, grounding, conflict resolution, hybrid search, context engineering",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "Retrieval",
+        "RAG"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md",
+    "unchanged_sha256": "3ed3d2277341eab3be8600341a1f0ab0e959715fa630356b1773641e0f8554cd"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md",
+    "body_sha256": "6e0c28b508a3910afbba4d52012fa6e4171675099f99f291f458e69469571ac8",
+    "nonvideo_metadata": {
+      "title": "MCP: hosts, clients y servers; tools, resources, prompts, ciclo de vida y fronteras de confianza",
+      "description": "Cómo razonar sobre MCP como protocolo: qué posee el host, qué expone cada servidor, cómo cambió el ciclo de vida en 2026-07-28 y dónde deben imponerse autorización, consentimiento y aislamiento.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "MCP, Model Context Protocol, host, client, server, tools, resources, prompts, trust boundaries, authorization, lifecycle",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "MCP",
+        "Seguridad"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md",
+    "unchanged_sha256": "062a85f3b9e0b348099ba73e8f26a54e732671e2d57e227b0d0f435ff7027ed6"
+  },
+  {
+    "path": "docs/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md",
+    "body_sha256": "99264f63d70f5f36369494346c2439599c0a89eb9756eae4fc514763d88d4cce",
+    "nonvideo_metadata": {
+      "title": "Skills, plugins, subagentes y hooks: aislamiento de contexto, autoridad y evaluación",
+      "description": "Cómo distinguir empaquetado, carga de contexto, delegación, hooks y aislamiento en sistemas de agentes; qué autoridad hereda cada primitive y cómo evaluarla sin confundir extensión con seguridad.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "agent skills, plugins, subagents, hooks, context isolation, delegation, permissions, evaluation, agent harness",
+      "tags": [
+        "IA",
+        "Agentes",
+        "Context engineering",
+        "Seguridad",
+        "Evaluación"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md",
+    "unchanged_sha256": "30c25034a7940cd6c06fdb9b7198f4082971739eb8bc6fa06b13586f730a30a1"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md",
+    "body_sha256": "9d1277b61e999e624d0968fda2000542720041800eb788b135b89c0696cc9d65",
+    "nonvideo_metadata": {
+      "title": "Prefill vs decode: TTFT, TPOT, throughput y presupuesto de latencia",
+      "description": "Cómo separar prefill y decode en inferencia de LLMs, medir TTFT y TPOT sin mezclar fronteras, entender el trade-off con throughput y construir un presupuesto de latencia útil para producción.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "LLM inference, prefill, decode, TTFT, TPOT, ITL, throughput, latency, KV cache, serving",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Serving",
+        "Rendimiento"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md",
+    "unchanged_sha256": "768ec02a291836f48497fb63190915825ee31ccc67ff1168370e939731c0e093"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md",
+    "body_sha256": "86f92b09bf9256c557ed48d63f08586c5660cddf5b64387cfd89b39631b29d8b",
+    "nonvideo_metadata": {
+      "title": "KV cache, jerarquía de memoria, continuous batching y PagedAttention",
+      "description": "Cómo el KV cache convierte la memoria en un límite de capacidad, cómo PagedAttention separa bloques lógicos y físicos, y cómo continuous batching usa esa capacidad petición a petición.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "KV cache, PagedAttention, continuous batching, LLM serving, GPU memory, memory hierarchy, inference",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Serving",
+        "Memoria"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md",
+    "unchanged_sha256": "3f0a8524d276d57c6f3118d6e8daf782a9e3e86c1e885fcaee784569e5f63328"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md",
+    "body_sha256": "8a41054b30149302b7c49c4d100ef3a37d38ada1946582806a9ce35d0a516a1f",
+    "nonvideo_metadata": {
+      "title": "Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad",
+      "description": "Qué cambia realmente al cuantizar pesos, activaciones o KV cache, y cómo TP, PP, DP, EP y CP cambian la distribución, la comunicación, la memoria por rank y los dominios de fallo.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "LLM quantization, tensor parallelism, pipeline parallelism, expert parallelism, context parallelism, FP8, INT4, AWQ, GPTQ",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Serving",
+        "GPUs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md",
+    "unchanged_sha256": "ef77ef73f8b5f2aae9faca9038caa792ad3931a6fce4a9afba36392aca9e67fa"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md",
+    "body_sha256": "6e3d777eda8afe209f9886ff6e90c7b289aefcb22785ea7eea83e9c203a275a9",
+    "nonvideo_metadata": {
+      "title": "Speculative decoding, prefix caching y otras optimizaciones de latencia",
+      "description": "Cómo distinguir trabajo reutilizado de trabajo especulado, qué cambia realmente en TTFT y decode, y cuándo prefix caching o speculative decoding ayudan o empeoran un serving real.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "speculative decoding, prefix caching, KV cache reuse, TTFT, TPOT, acceptance rate, draft model, inference latency",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Serving",
+        "Latencia"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md",
+    "unchanged_sha256": "413db9f9e90a6c7e99e8f4fdc24046e5e2b5e182581ffaa3b58adda554226162"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md",
+    "body_sha256": "041b39d4cacb31c18bea3a92b5de3b4f1ef542b0c87d4585fc9a3ab2e5d66926",
+    "nonvideo_metadata": {
+      "title": "Model routing, fallback, caching y serving adaptado al workload",
+      "description": "Cómo separar selección de modelo, fallback, cache de respuestas y placement de workers para optimizar calidad, latencia, capacidad y coste sin romper corrección.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "model routing, LLM routing, fallback, response cache, semantic cache, workload-aware serving, inference gateway, KV-aware routing",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Serving",
+        "Routing"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md",
+    "unchanged_sha256": "5b6c4e5f301a51e795f2109f985129adbee3b923b6dc1b6f52ae9ece63ddf18d"
+  },
+  {
+    "path": "docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md",
+    "body_sha256": "223e5b9957e740c25f73d681bf35c3a9e856283206bc88d590d46e7026dec191",
+    "nonvideo_metadata": {
+      "title": "Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware",
+      "description": "Cómo diseñar benchmarks de inferencia reproducibles: workload, TTFT/TPOT/ITL, throughput/goodput, coste por tarea correcta, energía y restricciones reales de hardware.",
+      "date": "2026-09-12",
+      "date_modified": "2026-09-12",
+      "keywords": "LLM inference benchmark, TTFT, TPOT, ITL, throughput, goodput, cost per task, energy per inference, MLPerf, AIPerf, vLLM",
+      "tags": [
+        "IA",
+        "LLMs",
+        "Inferencia",
+        "Benchmarking",
+        "Serving"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md",
+    "unchanged_sha256": "d22175e8e31990b12a1cdfe1334a86c6041e0e1a80cc29c68cd652983ff9320f"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md",
+    "body_sha256": "d6f02750cba198933600afd03fed6a6e0ed96dea164c652d83d375b0eb5f7264",
+    "nonvideo_metadata": {
+      "title": "Arquitecturas de voz: dónde colocas la frontera de texto",
+      "description": "Full cascade, audio-native con TTS externo, speech-to-speech y full-duplex no son cuatro etiquetas equivalentes. Este capítulo separa modalidad, interacción y orquestación para elegir arquitectura con criterios observables.",
+      "date": "2026-09-07",
+      "date_modified": "2026-09-08",
+      "keywords": "arquitecturas agentes de voz, full cascade, half cascade, speech to speech, full duplex, STT LLM TTS, realtime voice",
+      "tags": [
+        "IA",
+        "Voz",
+        "Arquitectura",
+        "Realtime",
+        "Agentes"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md",
+    "unchanged_sha256": "84e2aef8ea409be5c7a53c1712ee28ca406fbb0d6a2bea21bd10290e5f235e9a"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/02-turn-taking.md",
+    "body_sha256": "016d61f795f185189e79cbfa9acffdfe688ed98cc6ec4a1898dd47b9fec8a15d",
+    "nonvideo_metadata": {
+      "title": "Turn-taking: detectar voz no es decidir el turno",
+      "description": "VAD, endpointing, interrupciones y barge-in son decisiones distintas. Este capítulo separa las señales, estados y políticas que hacen que un agente de voz sepa cuándo escuchar, cuándo responder y cuándo callarse.",
+      "date": "2026-09-09",
+      "date_modified": "2026-09-09",
+      "tags": [
+        "IA",
+        "Voz",
+        "Realtime",
+        "Agentes",
+        "Producción"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/02-turn-taking.md",
+    "unchanged_sha256": "fd9b212b005997f47878f466a2c39dc18f6cae0951e92673199c758dddfd8842"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md",
+    "body_sha256": "21239d34448f0f3ae859a95cf18c0fc3dbb44a6aebeef83749c1ac67438fb748",
+    "nonvideo_metadata": {
+      "title": "Presupuesto de latencia: medir el camino crítico, no sumar dashboards",
+      "description": "Cómo descomponer la latencia de un agente de voz desde el fin del habla hasta el playback, separar captura, red, turn-taking, inferencia y audio, y optimizar sin comparar métricas incompatibles.",
+      "date": "2026-09-10",
+      "date_modified": "2026-09-10",
+      "tags": [
+        "IA",
+        "Voz",
+        "Realtime",
+        "Latencia",
+        "Producción"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia.md",
+    "unchanged_sha256": "e5ac56e08e81402f84f8dcd4e954ca4bb3a689f48d63d56de84a147e4c1586fd"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md",
+    "body_sha256": "b6ee960e0153c429f443236b25e460db2cad8bf7c51394be130300abd18eed16",
+    "nonvideo_metadata": {
+      "title": "Tools y estado: ejecutar acciones sin romper la conversación",
+      "description": "Cómo diseñar tool calls, estado conversacional, acciones asíncronas, cancelación, idempotencia y recuperación en agentes de voz en tiempo real.",
+      "date": "2026-09-10",
+      "date_modified": "2026-09-10",
+      "tags": [
+        "IA",
+        "Voz",
+        "Realtime",
+        "Agentes",
+        "Producción"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md",
+    "unchanged_sha256": "2e30c509122d6c8def310e29abdc287f2c913cdbecbedba68ecb5d0776de2643"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md",
+    "body_sha256": "a947987ff6c6aeb88eb5ba107b81d92e8d7cf3f779ff3bc2452747034b07951b",
+    "nonvideo_metadata": {
+      "title": "WebRTC, SIP y telefonía: seguir el camino real del audio",
+      "description": "Cómo razonar sobre WebRTC, SIP, RTP, codecs, jitter, pérdida de paquetes, NAT, TURN y telefonía sin confundir señalización, media y runtime del agente.",
+      "date": "2026-09-10",
+      "date_modified": "2026-09-10",
+      "tags": [
+        "IA",
+        "Voz",
+        "Realtime",
+        "WebRTC",
+        "Telefonía",
+        "Producción"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md",
+    "unchanged_sha256": "01752905d93ffabab9db6d3c5bbd0b99a0dceb7d10091efd9fbea286abc9662d"
+  },
+  {
+    "path": "docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md",
+    "body_sha256": "15c5c8142c41d01fd0124422c6885c0f4604b980c8de71774db772205ccb2d67",
+    "nonvideo_metadata": {
+      "title": "Evaluar un agente de voz: evidencia por turno, observabilidad y reliability",
+      "description": "Cómo saber si un agente de voz funciona de verdad: outcome, turn-taking, media, tools y runtime unidos en una taxonomía de fallos y un loop producción→eval→regresión.",
+      "date": "2026-09-10",
+      "date_modified": "2026-09-11",
+      "tags": [
+        "IA",
+        "Voz",
+        "Realtime",
+        "Evaluación",
+        "Observabilidad",
+        "Reliability",
+        "Producción"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md",
+    "unchanged_sha256": "c64f0f8d9d69fbeaf66f5de45e7bb86634e65dc28a972e435a5d0047aded622e"
+  }
+]

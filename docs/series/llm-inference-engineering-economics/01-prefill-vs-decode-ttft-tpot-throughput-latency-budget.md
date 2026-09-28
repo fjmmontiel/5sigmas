@@ -1,30 +1,43 @@
 ---
-title: "Prefill vs decode: TTFT, TPOT, throughput y presupuesto de latencia"
-description: "Cómo separar prefill y decode en inferencia de LLMs, medir TTFT y TPOT sin mezclar fronteras, entender el trade-off con throughput y construir un presupuesto de latencia útil para producción."
+title: 'Prefill vs decode: TTFT, TPOT, throughput y presupuesto de latencia'
+description: Cómo separar prefill y decode en inferencia de LLMs, medir TTFT y TPOT sin mezclar fronteras, entender
+  el trade-off con throughput y construir un presupuesto de latencia útil para producción.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "LLM inference, prefill, decode, TTFT, TPOT, ITL, throughput, latency, KV cache, serving"
+keywords: LLM inference, prefill, decode, TTFT, TPOT, ITL, throughput, latency, KV cache, serving
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Serving
-  - Rendimiento
+- IA
+- LLMs
+- Inferencia
+- Serving
+- Rendimiento
 video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
 video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
-video_title: "Prefill, decode y presupuesto de latencia"
-video_summary: "Prefill procesa el contexto en paralelo; decode genera tokens secuencialmente. TTFT, TPOT y throughput miden fases distintas del mismo servicio."
-video_duration: PT36S
+video_title: El reloj de una petición
+video_summary: Entrada larga y salida larga añaden trabajo en fases diferentes. Un único reloj no distingue ambas.
+video_date: '2026-09-28'
+video_duration: PT133.05S
+video_captions: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-visual-text.vtt
+video_transcript: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-transcript.html
 video_chapters:
-- name: "Prefill construye el estado para decodificar"
+- name: Leer y después generar
   start: 0
-  end: 12
-- name: "Decode avanza token a token"
-  start: 12
-  end: 24
-- name: "TTFT, TPOT y throughput forman el presupuesto"
-  start: 24
-  end: 36
+  end: 22.566667
+- name: El cliente también espera
+  start: 22.566667
+  end: 44.816667
+- name: Cada token añade tiempo
+  start: 44.816667
+  end: 66.366667
+- name: Un evento no es un token
+  start: 66.366667
+  end: 88.933333
+- name: Terminar no basta
+  start: 88.933333
+  end: 110.483333
+- name: La forma de la tarea importa
+  start: 110.483333
+  end: 133.05
 ---
 
 # Capítulo 1 — Prefill vs decode: TTFT, TPOT, throughput y presupuesto de latencia

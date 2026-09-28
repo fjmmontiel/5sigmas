@@ -1,30 +1,42 @@
 ---
-title: "Presupuesto de latencia: medir el camino crítico, no sumar dashboards"
-description: "Cómo descomponer la latencia de un agente de voz desde el fin del habla hasta el playback, separar captura, red, turn-taking, inferencia y audio, y optimizar sin comparar métricas incompatibles."
+title: 'Presupuesto de latencia: medir el camino crítico, no sumar dashboards'
+description: Cómo descomponer la latencia de un agente de voz desde el fin del habla hasta el playback, separar
+  captura, red, turn-taking, inferencia y audio, y optimizar sin comparar métricas incompatibles.
 date: 2026-09-10
 date_modified: 2026-09-10
 tags:
-  - IA
-  - Voz
-  - Realtime
-  - Latencia
-  - Producción
+- IA
+- Voz
+- Realtime
+- Latencia
+- Producción
 video: 03-presupuesto-latencia.mp4
 video_poster: 03-presupuesto-latencia.jpg
 video_title: Presupuesto de latencia
-video_summary: Mide el camino crítico del mismo turno y separa trabajo solapado de
-  bloqueos.
-video_duration: PT36S
+video_summary: Con el mismo reloj, la espera total es 300 más 480. No es el TTFT del modelo.
+video_date: '2026-09-28'
+video_duration: PT139S
+video_captions: 03-presupuesto-latencia-visual-text.vtt
+video_transcript: 03-presupuesto-latencia-transcript.html
 video_chapters:
-- name: Camino crítico
+- name: Dos eventos definen la latencia
   start: 0
-  end: 12
-- name: Un reloj
-  start: 12
-  end: 24
-- name: Optimización
-  start: 24
-  end: 36
+  end: 23
+- name: Sigue el camino crítico
+  start: 23
+  end: 47
+- name: Relojes distintos. Restas engañosas.
+  start: 47
+  end: 70
+- name: Generado no significa reproducido
+  start: 70
+  end: 93
+- name: La media oculta la cola
+  start: 93
+  end: 116
+- name: Cambia una capa. Mide el efecto.
+  start: 116
+  end: 139
 ---
 
 # Capítulo 3 — Presupuesto de latencia: medir el camino crítico, no sumar dashboards

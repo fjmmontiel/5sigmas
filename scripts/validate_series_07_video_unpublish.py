@@ -20,14 +20,10 @@ DOCS = ROOT / "docs"
 SITE = ROOT / "site"
 EN_MEDIA = ROOT / "locales" / "en" / "media.yml"
 
-BLOCKED = (
-    "agentes-voz-tiempo-real",
-    "context-engineering-memory-mcp",
-    "llm-inference-engineering-economics",
-)
-KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia", "evaluating-ai-systems-production", "agentes-ia", "coding-agents-agent-harnesses")
-EXPECTED_BLOCKED_ENTRIES = 18
-EXPECTED_PUBLIC_CATALOGUE = 58
+BLOCKED = ()
+KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia", "evaluating-ai-systems-production", "agentes-ia", "coding-agents-agent-harnesses", "agentes-voz-tiempo-real", "context-engineering-memory-mcp", "llm-inference-engineering-economics", "from-cave-to-agi")
+EXPECTED_BLOCKED_ENTRIES = 0
+EXPECTED_PUBLIC_CATALOGUE = 76
 
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 

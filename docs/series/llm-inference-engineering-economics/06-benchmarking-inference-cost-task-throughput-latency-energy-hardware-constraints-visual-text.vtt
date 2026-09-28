@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+En carga abierta, las peticiones llegan a un ritmo fijado aunque el servidor se ralentice.
+
+2
+00:00:07.667 --> 00:00:14.517
+En carga cerrada, cada cliente espera su respuesta antes de enviar la siguiente.
+
+3
+00:00:14.517 --> 00:00:21.867
+Son experimentos diferentes: el segundo puede reducir las llegadas justo cuando aumenta la latencia.
+
+4
+00:00:22.367 --> 00:00:29.217
+Una corrida cuesta veinticuatro euros y ejecuta mil intentos.
+
+5
+00:00:29.217 --> 00:00:36.067
+Novecientos veinte superan el criterio de éxito fijado previamente.
+
+6
+00:00:36.067 --> 00:00:44.483
+El coste por intento es 0,024 euros; por tarea correcta, aproximadamente 0,0261. Los fallos también se pagan.
+
+7
+00:00:44.983 --> 00:00:51.833
+Una potencia constante ilustrativa de seiscientos vatios durante tres horas consume 1,8 kWh.
+
+8
+00:00:51.833 --> 00:00:58.683
+Dividir esa energía entre 920 tareas correctas da aproximadamente 1,96 Wh por tarea.
+
+9
+00:00:58.683 --> 00:01:07.100
+No sustituye una medición: potencia y resultados deben corresponder a la misma ventana y al mismo sistema.
+
+10
+00:01:07.600 --> 00:01:14.450
+La telemetría de GPU no incluye necesariamente CPU, RAM, red y pérdidas del sistema.
+
+11
+00:01:14.450 --> 00:01:21.300
+Un medidor a pared observa otra frontera que el sensor del acelerador.
+
+12
+00:01:21.300 --> 00:01:29.350
+Comparar ambos sin declarar la frontera mezcla magnitudes. La potencia nominal tampoco sustituye el consumo medido.
+
+13
+00:01:29.850 --> 00:01:36.700
+En este modelo M/M/1 ilustrativo, el servidor procesa cinco peticiones por segundo en promedio.
+
+14
+00:01:36.700 --> 00:01:44.617
+Al acercarse las llegadas a esa capacidad, el tiempo medio crece como uno entre cinco menos lambda.
+
+15
+00:01:44.617 --> 00:01:53.033
+Con cuatro llegadas por segundo, resulta un segundo. Una prueba de baja carga no describe la saturación.
+
+16
+00:01:53.533 --> 00:02:00.383
+Tres repeticiones equivalentes duran 1,0, 1,2 y 1,1 segundos en este ejemplo.
+
+17
+00:02:00.383 --> 00:02:07.233
+Publicar sólo la más rápida elimina información sobre la variación entre corridas.
+
+18
+00:02:07.233 --> 00:02:15.283
+Fija warmup, caché y protocolo. Compara distribuciones y conserva errores, no sólo el mejor escalar.
+

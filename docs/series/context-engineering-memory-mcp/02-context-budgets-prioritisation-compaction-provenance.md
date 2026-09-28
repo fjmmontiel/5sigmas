@@ -1,30 +1,43 @@
 ---
-title: "Context budgets, priorización, compaction y provenance: qué conservar cuando no cabe todo"
-description: "Cómo separar el límite físico de contexto del presupuesto operativo, priorizar evidencia, compactar sin confundir resumen con verdad y conservar provenance para rehidratar o invalidar información."
+title: 'Context budgets, priorización, compaction y provenance: qué conservar cuando no cabe todo'
+description: Cómo separar el límite físico de contexto del presupuesto operativo, priorizar evidencia, compactar
+  sin confundir resumen con verdad y conservar provenance para rehidratar o invalidar información.
 date: 2026-09-11
 date_modified: 2026-09-11
-keywords: "context budget, context window, compaction, provenance, context engineering, agentes, LLM"
+keywords: context budget, context window, compaction, provenance, context engineering, agentes, LLM
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - Arquitectura
-  - LLMs
+- IA
+- Agentes
+- Context engineering
+- Arquitectura
+- LLMs
 video: 02-context-budgets-prioritisation-compaction-provenance.mp4
 video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
-video_title: "Presupuesto, prioridad, compactación y procedencia"
-video_summary: "Un presupuesto finito obliga a seleccionar, compactar o expulsar contexto conservando la procedencia de lo que sobrevive."
-video_duration: PT36S
+video_title: Presupuesto y procedencia
+video_summary: Quedan 48 mil para información dinámica. No es una propiedad universal del modelo.
+video_date: '2026-09-28'
+video_duration: PT135.25S
+video_captions: 02-context-budgets-prioritisation-compaction-provenance-visual-text.vtt
+video_transcript: 02-context-budgets-prioritisation-compaction-provenance-transcript.html
 video_chapters:
-- name: "La ventana es un presupuesto finito"
+- name: La ventana no es el budget
   start: 0
-  end: 12
-- name: "Compactar sin perder la fuente"
-  start: 12
-  end: 24
-- name: "Prioridad cambia con la tarea"
-  start: 24
-  end: 36
+  end: 22.25
+- name: La spec no debe desaparecer
+  start: 22.25
+  end: 45.95
+- name: Un resumen puede perder la regla
+  start: 45.95
+  end: 68.2
+- name: El derivado necesita origen
+  start: 68.2
+  end: 89.75
+- name: Cache y resumen no hacen lo mismo
+  start: 89.75
+  end: 111.933333
+- name: Un enlace debe recuperar la versión
+  start: 111.933333
+  end: 135.25
 ---
 
 # Capítulo 2 — Context budgets, priorización, compaction y provenance

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The same local filter visits different image regions.
+
+2
+00:00:07.350 --> 00:00:14.200
+Its response changes with each region’s content while the weights remain shared.
+
+3
+00:00:14.200 --> 00:00:21.550
+Learning those filters builds representations from pixels.
+
+4
+00:00:22.050 --> 00:00:28.900
+Split a matrix product into four output blocks.
+
+5
+00:00:28.900 --> 00:00:35.750
+Each compute unit calculates a block using the operands it needs.
+
+6
+00:00:35.750 --> 00:00:43.100
+The output assembles those blocks; moving operands and results also consumes resources.
+
+7
+00:00:43.600 --> 00:00:50.450
+Unmasked dense attention considers sixteen pairs for four positions.
+
+8
+00:00:50.450 --> 00:00:57.300
+At eight positions, the grid contains sixty-four pairs.
+
+9
+00:00:57.300 --> 00:01:04.967
+This quadratic relation counts interactions; it does not itself predict kernel runtime.
+
+10
+00:01:05.467 --> 00:01:12.317
+In this normalized example, cost is proportional to parameters times data.
+
+11
+00:01:12.317 --> 00:01:19.167
+Doubling parameters requires fewer data at the same fixed budget.
+
+12
+00:01:19.167 --> 00:01:27.967
+The best allocation needs a validated loss law, not an assumption that more parameters always wins.
+
+13
+00:01:28.467 --> 00:01:35.317
+Pretraining builds shared parameters from broad data.
+
+14
+00:01:35.317 --> 00:01:42.167
+The same base can receive instructions or adaptations for different tasks.
+
+15
+00:01:42.167 --> 00:01:49.517
+Reusing the base does not imply equal quality across all tasks.
+
+16
+00:01:50.017 --> 00:01:56.867
+Predicting continuations and responding appropriately to instructions are not identical objectives.
+
+17
+00:01:56.867 --> 00:02:03.717
+Response examples and preference signals can guide later training.
+
+18
+00:02:03.717 --> 00:02:11.067
+That training changes behavior; it does not guarantee every response is true or safe.
+

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+SIP establishes the session. A 200 OK confirms signalling, not two-way audio.
+
+2
+00:00:07.700 --> 00:00:14.700
+Here incoming packets arrive, but the outgoing media path is blocked.
+
+3
+00:00:14.700 --> 00:00:23.000
+Check each media direction and its codec. Do not diagnose from “connected” alone.
+
+4
+00:00:23.700 --> 00:00:30.700
+ICE tests connectivity between candidates. A direct path may not cross the network.
+
+5
+00:00:30.700 --> 00:00:37.700
+TURN provides a relay when needed. That does not mean the call failed.
+
+6
+00:00:37.700 --> 00:00:46.000
+Record the selected path and its changes: the additional hop belongs in the diagnosis.
+
+7
+00:00:46.700 --> 00:00:53.700
+TCP delivers in order. When segment 2 is missing, later data can be held back.
+
+8
+00:00:53.700 --> 00:01:00.700
+Once retransmission arrives, the sequence is released. Audio has accumulated waiting.
+
+9
+00:01:00.700 --> 00:01:09.000
+UDP has no TCP-style ordered delivery; the receiver still needs a loss policy.
+
+10
+00:01:09.700 --> 00:01:16.700
+Four packets arrive at 0, 20, 70 and 75 milliseconds: the intervals are irregular.
+
+11
+00:01:16.700 --> 00:01:23.700
+With 60 milliseconds of margin, this example plays them at 60, 80, 100 and 120.
+
+12
+00:01:23.700 --> 00:01:33.000
+The buffer avoids these gaps by adding delay. It does not remove all network variation.
+
+13
+00:01:33.700 --> 00:01:40.700
+A telephone leg can remove part of the spectrum before audio reaches the model.
+
+14
+00:01:40.700 --> 00:01:47.700
+Increasing the sample rate later adds samples of the already limited signal.
+
+15
+00:01:47.700 --> 00:01:56.000
+The lost information does not return. Codec, bandwidth and sampling are different boundaries.
+
+16
+00:01:56.700 --> 00:02:03.700
+Redundancy in a later packet can help reconstruct earlier missing audio.
+
+17
+00:02:03.700 --> 00:02:10.700
+It helps that playout only when repair arrives before its deadline.
+
+18
+00:02:10.700 --> 00:02:19.000
+Enabling FEC does not guarantee continuity. Network loss and audible damage are measured separately.
+

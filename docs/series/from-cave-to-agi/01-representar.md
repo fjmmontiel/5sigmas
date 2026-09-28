@@ -1,13 +1,40 @@
 ---
 title: Representar — del conteo al cálculo
-description: "Cómo símbolos, números, álgebra y cálculo hicieron posible representar y manipular el mundo hasta construir la base matemática de la IA moderna."
+description: Cómo símbolos, números, álgebra y cálculo hicieron posible representar y manipular el mundo hasta construir
+  la base matemática de la IA moderna.
 date: 2026-03-26
-keywords: "historia de las matemáticas, representación simbólica, álgebra, cálculo diferencial, historia computación, Leibniz Newton, notación matemática, origen inteligencia artificial"
+keywords: historia de las matemáticas, representación simbólica, álgebra, cálculo diferencial, historia computación,
+  Leibniz Newton, notación matemática, origen inteligencia artificial
 tags:
-  - IA
-  - Historia
-video: "01-representar.mp4"
-video_duration: "PT1M22S"
+- IA
+- Historia
+video: 01-representar.mp4
+video_poster: 01-representar.jpg
+video_title: Representar cantidades, relaciones y cambio
+video_summary: 'Diez marcas siguen representando diez unidades: cambia la organización, no la cantidad.'
+video_date: '2026-09-28'
+video_duration: PT131.766667S
+video_captions: 01-representar-visual-text.vtt
+video_transcript: 01-representar-transcript.html
+video_chapters:
+- name: Agrupar no cambia cuántos objetos hay
+  start: 0
+  end: 21.55
+- name: El cero conserva una posición
+  start: 21.55
+  end: 43.8
+- name: La misma operación conserva la igualdad
+  start: 43.8
+  end: 65.35
+- name: Una regla compacta describe muchos términos
+  start: 65.35
+  end: 86.9
+- name: La conclusión depende de las premisas
+  start: 86.9
+  end: 109.516667
+- name: Medir cambio en intervalos cada vez menores
+  start: 109.516667
+  end: 131.766667
 ---
 
 # Capítulo 1: Representar (≈ 43 000 a. C. hasta 1700)

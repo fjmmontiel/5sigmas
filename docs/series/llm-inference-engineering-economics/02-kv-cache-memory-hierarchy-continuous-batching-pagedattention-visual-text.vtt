@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+Cada token guarda claves y valores por capa y cabeza KV. También importa la precisión.
+
+2
+00:00:07.667 --> 00:00:15.217
+Con 32 capas, 8 cabezas, dimensión 128 y dos bytes, resultan 128 KiB por token.
+
+3
+00:00:15.217 --> 00:00:22.567
+Para 4096 tokens son 512 MiB de carga KV. No incluye pesos ni buffers.
+
+4
+00:00:23.067 --> 00:00:29.917
+Partimos de dieciséis GiB en un ejemplo simplificado.
+
+5
+00:00:29.917 --> 00:00:36.767
+Diez GiB alojan pesos y dos alojan buffers y otras reservas.
+
+6
+00:00:36.767 --> 00:00:44.817
+Quedan cuatro para KV. La capacidad por peticiones depende del estado vivo, no sólo de FLOPs.
+
+7
+00:00:45.317 --> 00:00:52.167
+La secuencia necesita seis posiciones. Una reserva máxima de dieciséis deja diez sin utilizar.
+
+8
+00:00:52.167 --> 00:00:59.017
+Con bloques de cuatro, dos bloques físicos alojan esas seis posiciones mediante una tabla.
+
+9
+00:00:59.017 --> 00:01:07.067
+Quedan dos posiciones vacías en el último bloque. Paging reduce desperdicio; no lo elimina todo.
+
+10
+00:01:07.567 --> 00:01:14.417
+A y B comparten una iteración de decode. A termina antes que B.
+
+11
+00:01:14.417 --> 00:01:21.267
+El scheduler libera el KV de A y admite C mientras B sigue generando.
+
+12
+00:01:21.267 --> 00:01:28.933
+Continuous batching cambia quién participa en cada paso. No es lo mismo que paginar memoria.
+
+13
+00:01:29.433 --> 00:01:36.283
+Un bloque expulsado de la GPU permanece en memoria de CPU.
+
+14
+00:01:36.283 --> 00:01:43.133
+Para reutilizarlo, debe cruzar la interconexión y volver a estar residente.
+
+15
+00:01:43.133 --> 00:01:51.183
+Más capacidad total puede añadir movimiento al camino crítico. Mide transferencias y espera, no sólo ocupación.
+
+16
+00:01:51.683 --> 00:01:58.533
+Una petición reserva tres bloques y continúa creciendo.
+
+17
+00:01:58.533 --> 00:02:05.383
+La cancelación detiene el trabajo y devuelve sus bloques al conjunto libre.
+
+18
+00:02:05.383 --> 00:02:13.433
+La contabilidad debe cerrar también con errores. Un bloque huérfano reduce capacidad para las peticiones siguientes.
+

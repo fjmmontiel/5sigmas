@@ -1,32 +1,44 @@
 ---
-title: "Evaluar un agente de voz: evidencia por turno, observabilidad y reliability"
-description: "Cómo saber si un agente de voz funciona de verdad: outcome, turn-taking, media, tools y runtime unidos en una taxonomía de fallos y un loop producción→eval→regresión."
+title: 'Evaluar un agente de voz: evidencia por turno, observabilidad y reliability'
+description: 'Cómo saber si un agente de voz funciona de verdad: outcome, turn-taking, media, tools y runtime unidos
+  en una taxonomía de fallos y un loop producción→eval→regresión.'
 date: 2026-09-10
 date_modified: 2026-09-11
 tags:
-  - IA
-  - Voz
-  - Realtime
-  - Evaluación
-  - Observabilidad
-  - Reliability
-  - Producción
+- IA
+- Voz
+- Realtime
+- Evaluación
+- Observabilidad
+- Reliability
+- Producción
 video: 06-evaluacion-observabilidad-reliability.mp4
 video_poster: 06-evaluacion-observabilidad-reliability.jpg
-video_title: Evaluación, observabilidad y reliability
-video_summary: 'La unidad útil es el turno trazable: evidencia correlacionada, taxonomía
-  y bucle producción→eval→reparación.'
-video_duration: PT36S
+video_title: Evaluación y observabilidad
+video_summary: Une negocio, turno, media y runtime. La transcripción no demuestra el resultado completo.
+video_date: '2026-09-28'
+video_duration: PT139S
+video_captions: 06-evaluacion-observabilidad-reliability-visual-text.vtt
+video_transcript: 06-evaluacion-observabilidad-reliability-transcript.html
 video_chapters:
-- name: Traza por turno
+- name: La frase no es toda la evidencia
   start: 0
-  end: 12
-- name: Taxonomía
-  start: 12
-  end: 24
-- name: Bucle de reparación
-  start: 24
-  end: 36
+  end: 23
+- name: Un turno puede tener varios intentos
+  start: 23
+  end: 46
+- name: El denominador cambia la lectura
+  start: 46
+  end: 69
+- name: Lo determinista no necesita un judge
+  start: 69
+  end: 92
+- name: Reproduce la frontera que falló
+  start: 92
+  end: 115
+- name: Del incidente a una regresión útil
+  start: 115
+  end: 139
 ---
 
 # Capítulo 6 — Evaluar un agente de voz: evidencia por turno, observabilidad y reliability

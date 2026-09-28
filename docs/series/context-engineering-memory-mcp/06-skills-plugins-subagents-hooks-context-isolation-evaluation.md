@@ -1,30 +1,44 @@
 ---
-title: "Skills, plugins, subagentes y hooks: aislamiento de contexto, autoridad y evaluación"
-description: "Cómo distinguir empaquetado, carga de contexto, delegación, hooks y aislamiento en sistemas de agentes; qué autoridad hereda cada primitive y cómo evaluarla sin confundir extensión con seguridad."
+title: 'Skills, plugins, subagentes y hooks: aislamiento de contexto, autoridad y evaluación'
+description: Cómo distinguir empaquetado, carga de contexto, delegación, hooks y aislamiento en sistemas de agentes;
+  qué autoridad hereda cada primitive y cómo evaluarla sin confundir extensión con seguridad.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "agent skills, plugins, subagents, hooks, context isolation, delegation, permissions, evaluation, agent harness"
+keywords: agent skills, plugins, subagents, hooks, context isolation, delegation, permissions, evaluation, agent
+  harness
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - Seguridad
-  - Evaluación
+- IA
+- Agentes
+- Context engineering
+- Seguridad
+- Evaluación
 video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
 video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
-video_title: "Skills, plugins, subagentes y aislamiento de contexto"
-video_summary: "Extensiones y subagentes sólo escalan bien cuando el contexto, la autoridad y la evidencia de cada worker permanecen explícitos y evaluables."
-video_duration: PT36S
+video_title: Extensiones, delegación y controles
+video_summary: La carga progresiva limita contexto. No aísla el proceso ni concede nuevas autorizaciones.
+video_date: '2026-09-28'
+video_duration: PT133.783333S
+video_captions: 06-skills-plugins-subagents-hooks-context-isolation-evaluation-visual-text.vtt
+video_transcript: 06-skills-plugins-subagents-hooks-context-isolation-evaluation-transcript.html
 video_chapters:
-- name: "Extender no significa compartir todo el contexto"
+- name: Cargar una skill por etapas
   start: 0
-  end: 12
-- name: "Fan-out con contextos aislados"
-  start: 12
-  end: 24
-- name: "Fan-in sólo con evidencia evaluada"
-  start: 24
-  end: 36
+  end: 21.55
+- name: Un paquete no es un sandbox
+  start: 21.55
+  end: 43.1
+- name: Delegar un contrato preciso
+  start: 43.1
+  end: 65.666667
+- name: Otra ventana no es otro entorno
+  start: 65.666667
+  end: 87.533333
+- name: Bloquear antes del efecto
+  start: 87.533333
+  end: 110.783333
+- name: Éxito y aislamiento se miden aparte
+  start: 110.783333
+  end: 133.783333
 ---
 
 # Capítulo 6 — Skills, plugins, subagentes y hooks: aislamiento de contexto, autoridad y evaluación

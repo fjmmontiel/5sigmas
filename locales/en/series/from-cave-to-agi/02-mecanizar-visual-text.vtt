@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+A units wheel represents nine and a tens wheel represents zero.
+
+2
+00:00:07.350 --> 00:00:14.517
+Adding one unit returns the first wheel to zero and advances the second to one.
+
+3
+00:00:14.517 --> 00:00:21.867
+The mechanism represents ten without requiring a person to remember the carry.
+
+4
+00:00:22.367 --> 00:00:29.217
+A pattern of holes encodes instructions for selecting positions.
+
+5
+00:00:29.217 --> 00:00:36.067
+A second card activates another sequence without rebuilding the mechanism.
+
+6
+00:00:36.067 --> 00:00:43.417
+Separating instructions from execution lets different procedures be repeated.
+
+7
+00:00:43.917 --> 00:00:50.767
+Two switches in series must both close to complete the path.
+
+8
+00:00:50.767 --> 00:00:57.617
+If A or B remains open, the output is zero.
+
+9
+00:00:57.617 --> 00:01:04.967
+When both close, the output is one: the circuit implements A AND B.
+
+10
+00:01:05.467 --> 00:01:12.317
+The tape contains three ones followed by an empty cell.
+
+11
+00:01:12.317 --> 00:01:19.167
+The rule moves right while it reads a one.
+
+12
+00:01:19.167 --> 00:01:27.217
+At the empty cell it writes another one and stops, incrementing a unary count.
+
+13
+00:01:27.717 --> 00:01:34.567
+Memory contains load, add and store instructions alongside two data values.
+
+14
+00:01:34.567 --> 00:01:41.417
+The execution unit reads one instruction at a time and updates its register.
+
+15
+00:01:41.417 --> 00:01:48.767
+In this example it loads three, adds four and stores seven.
+
+16
+00:01:49.267 --> 00:01:56.117
+A message can be A, B, C or D, each equally likely.
+
+17
+00:01:56.117 --> 00:02:02.967
+Two binary decisions distinguish the four possibilities.
+
+18
+00:02:02.967 --> 00:02:10.317
+Bits quantify uncertainty in this choice, not the message’s meaning.
+

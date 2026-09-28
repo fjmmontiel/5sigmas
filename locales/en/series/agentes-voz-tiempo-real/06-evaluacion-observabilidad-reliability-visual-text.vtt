@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+The agent says “booked”. A text judge may consider that response correct.
+
+2
+00:00:07.700 --> 00:00:14.700
+But op_42 is still UNKNOWN, and the audio may remain in a cancelled queue.
+
+3
+00:00:14.700 --> 00:00:23.000
+Join business, turn, media and runtime evidence. A transcript does not prove the complete outcome.
+
+4
+00:00:23.700 --> 00:00:30.700
+T12 keeps its identity when one request fails and fallback uses another.
+
+5
+00:00:30.700 --> 00:00:37.700
+Attempts, operation and audio stay correlated without becoming new turns.
+
+6
+00:00:37.700 --> 00:00:46.000
+Separate observation, inference and judgement. A probable diagnosis is not a recorded fact.
+
+7
+00:00:46.700 --> 00:00:53.700
+Of ten synthetic turns, three have an internal failure. Two recover without visible harm.
+
+8
+00:00:53.700 --> 00:01:00.700
+The internal rate is 3 out of 10; the visible-failure rate is 1 out of 10.
+
+9
+00:01:00.700 --> 00:01:09.000
+Recovery is 2 out of 3 internal failures. Do not mix requests with turns.
+
+10
+00:01:09.700 --> 00:01:16.700
+Require one effect per operation, no stale audio and evidence before declaring SUCCESS.
+
+11
+00:01:16.700 --> 00:01:23.700
+When an invariant fails, a high semantic score must not compensate for it.
+
+12
+00:01:23.700 --> 00:01:32.000
+Reserve judges for semantic or perceptual questions, keeping their criteria and version.
+
+13
+00:01:32.700 --> 00:01:39.700
+Text replay keeps the words, but loses the exact timing of the interruption.
+
+14
+00:01:39.700 --> 00:01:46.700
+This failure needs audio or timed events and the playback queue’s state.
+
+15
+00:01:46.700 --> 00:01:55.000
+A local audio test does not certify the real network either. State which layers are excluded.
+
+16
+00:01:55.700 --> 00:02:02.700
+Isolate the smallest sequence that reproduces stale audio; do not copy the entire conversation.
+
+17
+00:02:02.700 --> 00:02:09.700
+Redact sensitive data and pin the input, version and expected outcome.
+
+18
+00:02:09.700 --> 00:02:19.000
+The test should fail before the mechanism is fixed and pass afterwards, at the right layer.
+

@@ -1,30 +1,43 @@
 ---
-title: "KV cache, jerarquía de memoria, continuous batching y PagedAttention"
-description: "Cómo el KV cache convierte la memoria en un límite de capacidad, cómo PagedAttention separa bloques lógicos y físicos, y cómo continuous batching usa esa capacidad petición a petición."
+title: KV cache, jerarquía de memoria, continuous batching y PagedAttention
+description: Cómo el KV cache convierte la memoria en un límite de capacidad, cómo PagedAttention separa bloques
+  lógicos y físicos, y cómo continuous batching usa esa capacidad petición a petición.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "KV cache, PagedAttention, continuous batching, LLM serving, GPU memory, memory hierarchy, inference"
+keywords: KV cache, PagedAttention, continuous batching, LLM serving, GPU memory, memory hierarchy, inference
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Serving
-  - Memoria
+- IA
+- LLMs
+- Inferencia
+- Serving
+- Memoria
 video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
 video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
-video_title: "KV cache, jerarquía de memoria y continuous batching"
-video_summary: "El KV cache intercambia memoria por menos cómputo repetido; paging y continuous batching coordinan capacidad, admisión y reutilización entre requests activos."
-video_duration: PT36S
+video_title: Estado y capacidad
+video_summary: Para 4096 tokens son 512 MiB de carga KV. No incluye pesos ni buffers.
+video_date: '2026-09-28'
+video_duration: PT133.433333S
+video_captions: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-visual-text.vtt
+video_transcript: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-transcript.html
 video_chapters:
-- name: "El KV cache ocupa capacidad por secuencia"
+- name: El contexto ocupa memoria
   start: 0
-  end: 12
-- name: "Continuous batching recompone el batch en cada paso"
-  start: 12
-  end: 24
-- name: "Paging convierte capacidad en páginas asignables"
-  start: 24
-  end: 36
+  end: 22.566667
+- name: La GPU no es toda KV
+  start: 22.566667
+  end: 44.816667
+- name: Separar lógico y físico
+  start: 44.816667
+  end: 67.066667
+- name: Terminar libera una plaza
+  start: 67.066667
+  end: 88.933333
+- name: Mover estado también cuesta
+  start: 88.933333
+  end: 111.183333
+- name: Cancelar libera estado
+  start: 111.183333
+  end: 133.433333
 ---
 
 # Capítulo 2 — KV cache, jerarquía de memoria, continuous batching y PagedAttention

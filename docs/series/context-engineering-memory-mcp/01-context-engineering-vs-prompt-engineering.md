@@ -1,30 +1,44 @@
 ---
-title: "Context engineering vs prompt engineering: qué entra al modelo, cuándo y por qué"
-description: "Prompt engineering optimiza instrucciones. Context engineering decide qué información, tools, historial, retrieval, observaciones y memoria llegan realmente al modelo en cada inferencia, con qué prioridad y bajo qué límites."
+title: 'Context engineering vs prompt engineering: qué entra al modelo, cuándo y por qué'
+description: Prompt engineering optimiza instrucciones. Context engineering decide qué información, tools, historial,
+  retrieval, observaciones y memoria llegan realmente al modelo en cada inferencia, con qué prioridad y bajo qué
+  límites.
 date: 2026-09-11
 date_modified: 2026-09-11
-keywords: "context engineering, prompt engineering, context window, agents, retrieval, memory, tool context"
+keywords: context engineering, prompt engineering, context window, agents, retrieval, memory, tool context
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - Arquitectura
-  - LLMs
+- IA
+- Agentes
+- Context engineering
+- Arquitectura
+- LLMs
 video: 01-context-engineering-vs-prompt-engineering.mp4
 video_poster: 01-context-engineering-vs-prompt-engineering.jpg
-video_title: "Context engineering frente a prompt engineering"
-video_summary: "La calidad depende de qué evidencia, estado y herramientas entran en cada turno, no sólo de cómo se redacta el prompt."
-video_duration: PT36S
+video_title: Qué entra al modelo
+video_summary: La decisión depende de esa entrada concreta, no de todo lo que existe en la aplicación.
+video_date: '2026-09-28'
+video_duration: PT131.7S
+video_captions: 01-context-engineering-vs-prompt-engineering-visual-text.vtt
+video_transcript: 01-context-engineering-vs-prompt-engineering-transcript.html
 video_chapters:
-- name: "Prompt fijo frente a contexto vivo"
+- name: Disponible no es visible
   start: 0
-  end: 12
-- name: "Selección y ensamblado por turno"
-  start: 12
-  end: 24
-- name: "El contexto cambia después de observar"
-  start: 24
-  end: 36
+  end: 22.25
+- name: Una política fuera de fecha
+  start: 22.25
+  end: 44.866667
+- name: Filtrar antes de ordenar
+  start: 44.866667
+  end: 66.733333
+- name: El siguiente turno cambia
+  start: 66.733333
+  end: 88.6
+- name: Cargar cuando hace falta
+  start: 88.6
+  end: 110.15
+- name: Poder reconstruir el turno
+  start: 110.15
+  end: 131.7
 ---
 
 # Capítulo 1 — Context engineering vs prompt engineering: qué entra al modelo, cuándo y por qué

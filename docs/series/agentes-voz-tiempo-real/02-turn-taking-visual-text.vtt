@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+«Cambia la dirección… del pedido 4182». La pausa intermedia dura 350 milisegundos en este ejemplo.
+
+2
+00:00:07.700 --> 00:00:14.700
+Un cierre a los 250 milisegundos corta la petición antes de identificar el pedido.
+
+3
+00:00:14.700 --> 00:00:23.000
+VAD detecta actividad. El fin de turno necesita evidencia sobre la intención completa.
+
+4
+00:00:23.700 --> 00:00:30.700
+Una ventana corta puede confundir una pausa con el final. Una larga puede crear silencio.
+
+5
+00:00:30.700 --> 00:00:37.700
+Aumentar el timeout protege esta frase incompleta, pero retrasa un «sí» ya completo.
+
+6
+00:00:37.700 --> 00:00:46.000
+Ajusta cortes prematuros y espera juntos. Un número de latencia menor no basta.
+
+7
+00:00:46.700 --> 00:00:53.700
+Detectar pronto que el usuario empieza permite considerar cederle el canal.
+
+8
+00:00:53.700 --> 00:01:00.700
+Cerrar su turno demasiado pronto puede cambiar el significado de la petición.
+
+9
+00:01:00.700 --> 00:01:09.000
+Usa decisiones de inicio y fin separadas, con una autoridad clara para cada una.
+
+10
+00:01:09.700 --> 00:01:16.700
+Un «ajá» puede mostrar atención sin pedir que el agente deje de hablar.
+
+11
+00:01:16.700 --> 00:01:23.700
+«Espera, cambia la hora» sí puede requerir detener la respuesta y escuchar.
+
+12
+00:01:23.700 --> 00:01:32.000
+El contexto decide: detectar voz es evidencia, no una orden universal de cancelación.
+
+13
+00:01:32.700 --> 00:01:39.700
+R7 ya tiene un fragmento reproducido, otros en cola y más audio por generar.
+
+14
+00:01:39.700 --> 00:01:46.700
+La interrupción detiene nuevo output y retira el audio pendiente de la cola.
+
+15
+00:01:46.700 --> 00:01:55.000
+Conserva el prefijo confirmado. No confundas lo generado con lo realmente reproducido.
+
+16
+00:01:55.700 --> 00:02:02.700
+Dos detectores pueden proponer cerrar T12. No deben iniciar dos respuestas independientes.
+
+17
+00:02:02.700 --> 00:02:09.700
+Una autoridad admite el cierre una sola vez y asigna la respuesta R7.
+
+18
+00:02:09.700 --> 00:02:18.000
+Cuando T13 reemplaza al turno, el audio tardío de R7 no recupera el canal.
+

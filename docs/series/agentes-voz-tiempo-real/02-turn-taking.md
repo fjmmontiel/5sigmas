@@ -1,30 +1,42 @@
 ---
-title: "Turn-taking: detectar voz no es decidir el turno"
-description: "VAD, endpointing, interrupciones y barge-in son decisiones distintas. Este capítulo separa las señales, estados y políticas que hacen que un agente de voz sepa cuándo escuchar, cuándo responder y cuándo callarse."
+title: 'Turn-taking: detectar voz no es decidir el turno'
+description: VAD, endpointing, interrupciones y barge-in son decisiones distintas. Este capítulo separa las señales,
+  estados y políticas que hacen que un agente de voz sepa cuándo escuchar, cuándo responder y cuándo callarse.
 date: 2026-09-09
 date_modified: 2026-09-09
 tags:
-  - IA
-  - Voz
-  - Realtime
-  - Agentes
-  - Producción
+- IA
+- Voz
+- Realtime
+- Agentes
+- Producción
 video: 02-turn-taking.mp4
 video_poster: 02-turn-taking.jpg
-video_title: Turn-taking e interrupciones
-video_summary: VAD detecta actividad; endpointing decide turnos; barge-in no revierte
-  negocio.
-video_duration: PT36S
+video_title: Turnos e interrupciones
+video_summary: VAD detecta actividad. El fin de turno necesita evidencia sobre la intención completa.
+video_date: '2026-09-28'
+video_duration: PT138S
+video_captions: 02-turn-taking-visual-text.vtt
+video_transcript: 02-turn-taking-transcript.html
 video_chapters:
-- name: Señal vs decisión
+- name: Una pausa no termina la idea
   start: 0
-  end: 12
-- name: Estado del turno
-  start: 12
-  end: 24
-- name: Dos cancelaciones
-  start: 24
-  end: 36
+  end: 23
+- name: Esperar también tiene un coste
+  start: 23
+  end: 46
+- name: Inicio rápido. Final con evidencia.
+  start: 46
+  end: 69
+- name: ¿Quiere tomar el turno?
+  start: 69
+  end: 92
+- name: No basta con parar la generación
+  start: 92
+  end: 115
+- name: Un turno. Una decisión.
+  start: 115
+  end: 138
 ---
 
 # Capítulo 2 — Turn-taking: detectar voz no es decidir el turno
