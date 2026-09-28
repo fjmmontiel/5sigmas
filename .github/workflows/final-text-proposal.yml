@@ -1,0 +1,36 @@
+name: Reproduce exact final approved release text
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/final-text-proposal.yml]
+permissions:
+  contents: write
+concurrency:
+  group: final-approved-text-proposal
+  cancel-in-progress: false
+jobs:
+  propose:
+    if: github.actor == 'fjmmontiel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .release-media
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -q cryptography
+      - name: Verify exact proposal and create unreferenced commit only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -u .release-media/propose_final_text.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-text-proposal-evidence
+          path: /tmp/final-text-evidence/*
+          if-no-files-found: error
+          retention-days: 1
