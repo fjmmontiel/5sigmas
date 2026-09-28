@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+Un documento visual contiene una frase que intenta ordenar una acción ajena a la tarea.
+
+2
+00:00:07.667 --> 00:00:14.517
+El sistema registra su origen como contenido recibido, no como política de la aplicación.
+
+3
+00:00:14.517 --> 00:00:21.867
+Leer correctamente una instrucción no le concede autoridad para cambiar los permisos.
+
+4
+00:00:22.367 --> 00:00:29.217
+El modelo propone enviar un registro a un destino externo.
+
+5
+00:00:29.217 --> 00:00:36.067
+El controlador comprueba el permiso y deniega esa salida antes de ejecutarla.
+
+6
+00:00:36.067 --> 00:00:43.417
+Registrar el intento después del envío no habría evitado la divulgación.
+
+7
+00:00:43.917 --> 00:00:50.767
+Una imagen contiene un nombre visible y metadatos de localización separados.
+
+8
+00:00:50.767 --> 00:00:57.617
+Ocultar los píxeles del nombre no modifica automáticamente esos metadatos.
+
+9
+00:00:57.617 --> 00:01:04.967
+El tratamiento debe revisar cada canal; el ejemplo no contiene ningún dato personal real.
+
+10
+00:01:05.467 --> 00:01:12.317
+Una copia alterada de un documento afirma una cantidad distinta del original.
+
+11
+00:01:12.317 --> 00:01:19.167
+Si entra en el índice, consultas futuras pueden recuperar esa misma copia.
+
+12
+00:01:19.167 --> 00:01:27.583
+Versionar, validar y retirar la copia afecta a recuperación; no equivale a reentrenar los pesos del modelo.
+
+13
+00:01:28.083 --> 00:01:34.933
+La percepción produce una propuesta de modificar el registro A.
+
+14
+00:01:34.933 --> 00:01:42.100
+Antes de confirmar, mostramos el objeto, el cambio y el alcance a quien debe autorizar.
+
+15
+00:01:42.100 --> 00:01:50.517
+Sin autorización no se aplica el cambio; una confirmación válida tampoco garantiza que la percepción fuera correcta.
+
+16
+00:01:51.017 --> 00:01:57.867
+En el ejemplo, diecinueve de veinte imágenes claras se resuelven bien.
+
+17
+00:01:57.867 --> 00:02:05.033
+Con poca luz, sólo doce de veinte aciertan, aunque el promedio conjunto parezca mejor.
+
+18
+00:02:05.033 --> 00:02:12.700
+Conserva condiciones y tamaños de muestra; no atribuyas este resultado inventado a un modelo real.
+

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Un encoder transforma la imagen y otro transforma la consulta textual.
+
+2
+00:00:07.350 --> 00:00:14.200
+Sus representaciones comparables permiten ordenar candidatos por similitud.
+
+3
+00:00:14.200 --> 00:00:21.867
+Ese sistema devuelve un registro; para redactar una respuesta hace falta una etapa generativa aparte.
+
+4
+00:00:22.367 --> 00:00:29.217
+El encoder visual emite un vector con tres componentes en este ejemplo.
+
+5
+00:00:29.217 --> 00:00:36.067
+Una matriz aprendida lo proyecta a cuatro componentes que consume el modelo receptor.
+
+6
+00:00:36.067 --> 00:00:43.417
+Cambiar dimensiones conecta interfaces, pero no garantiza que toda evidencia visual sobreviva.
+
+7
+00:00:43.917 --> 00:00:50.767
+La consulta textual pregunta por el objeto situado a la derecha.
+
+8
+00:00:50.767 --> 00:00:57.617
+La atención asigna pesos a regiones visuales y combina sus representaciones.
+
+9
+00:00:57.617 --> 00:01:06.417
+Esa selección depende de la consulta; un mapa de atención por sí solo no demuestra una explicación causal.
+
+10
+00:01:06.917 --> 00:01:13.767
+La entrada intercala una primera imagen con su descripción y después una segunda imagen.
+
+11
+00:01:13.767 --> 00:01:20.933
+La pregunta se refiere a la segunda, no a una mezcla sin orden de ambas.
+
+12
+00:01:20.933 --> 00:01:28.283
+Conservar límites de modalidad y posición evita perder qué evidencia acompaña a cada fragmento.
+
+13
+00:01:28.783 --> 00:01:35.633
+Cuatro regiones visuales contienen información, incluida una etiqueta pequeña en la cuarta.
+
+14
+00:01:35.633 --> 00:01:42.483
+Un resumen de dos representaciones combina o descarta parte del detalle.
+
+15
+00:01:42.483 --> 00:01:50.150
+Menos tokens puede reducir trabajo, pero hay que comprobar si esa etiqueta sigue siendo recuperable.
+
+16
+00:01:50.650 --> 00:01:57.500
+Un sistema puede producir texto y audio en fragmentos con ritmos distintos.
+
+17
+00:01:57.500 --> 00:02:04.350
+Los identificadores y límites permiten asociar cada fragmento con el contenido correcto.
+
+18
+00:02:04.350 --> 00:02:12.767
+La coordinación pertenece al sistema: aceptar varias modalidades no prueba que toda la ruta sea full duplex.
+

@@ -1,17 +1,42 @@
 ---
 title: Multimodalidad en IA generativa
-description: "Qué significa construir sistemas capaces de percibir, alinear, razonar, generar y actuar entre texto, imagen, audio, vídeo, documentos y otras señales del mundo."
+description: Qué significa construir sistemas capaces de percibir, alinear, razonar, generar y actuar entre texto, imagen, audio, vídeo, documentos y otras señales del mundo.
 keywords: multimodalidad IA, modelos multimodales, CLIP, Flamingo, Gemini, visión lenguaje, audio texto
 date: 2026-04-01
 tags:
-  - IA
-  - GenAI
-  - LLMs
-  - Multimodalidad
+- IA
+- GenAI
+- LLMs
+- Multimodalidad
 hide:
-  - toc
-video: "00_presentacion_serie.mp4"
-video_duration: "PT1M7S"
+- toc
+video: 00_presentacion_serie.mp4
+video_poster: 00_presentacion_serie.jpg
+video_title: Conservar evidencia entre modalidades
+video_summary: Esa descripción perdió una relación espacial necesaria para responder dónde está cada objeto.
+video_date: '2026-09-28'
+video_duration: PT130.316667S
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: Nombrar objetos no conserva su relación
+  start: 0.0
+  end: 21.55
+- name: Los mismos estados pueden contar otra secuencia
+  start: 21.55
+  end: 43.1
+- name: Buscar entre modalidades
+  start: 43.1
+  end: 64.966667
+- name: Un embedding no es una imagen generada
+  start: 64.966667
+  end: 86.516667
+- name: La respuesta debe conservar su evidencia
+  start: 86.516667
+  end: 108.766667
+- name: Ver una instrucción no autoriza una acción
+  start: 108.766667
+  end: 130.316667
 ---
 # Multimodalidad en IA generativa
 

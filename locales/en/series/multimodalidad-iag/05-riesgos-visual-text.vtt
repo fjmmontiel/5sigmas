@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+A visual document contains a sentence attempting to order an unrelated action.
+
+2
+00:00:07.667 --> 00:00:14.517
+The system records its origin as received content, not application policy.
+
+3
+00:00:14.517 --> 00:00:21.867
+Correctly reading an instruction does not give it authority to change permissions.
+
+4
+00:00:22.367 --> 00:00:29.217
+The model proposes sending a record to an external destination.
+
+5
+00:00:29.217 --> 00:00:36.067
+The controller checks permission and denies egress before execution.
+
+6
+00:00:36.067 --> 00:00:43.417
+Logging the attempt after sending would not have prevented disclosure.
+
+7
+00:00:43.917 --> 00:00:50.767
+An image contains a visible name and separate location metadata.
+
+8
+00:00:50.767 --> 00:00:57.617
+Covering the name pixels does not automatically alter the metadata.
+
+9
+00:00:57.617 --> 00:01:04.967
+Each channel needs review; this example contains no real personal data.
+
+10
+00:01:05.467 --> 00:01:12.317
+An altered document copy states an amount different from the original.
+
+11
+00:01:12.317 --> 00:01:19.167
+Once indexed, future queries can repeatedly retrieve that copy.
+
+12
+00:01:19.167 --> 00:01:27.583
+Versioning, validation and removal affect retrieval; they are not equivalent to retraining model weights.
+
+13
+00:01:28.083 --> 00:01:34.933
+Perception produces a proposal to modify record A.
+
+14
+00:01:34.933 --> 00:01:42.100
+Before committing, the object, change and scope are shown to the authorized reviewer.
+
+15
+00:01:42.100 --> 00:01:50.517
+Without authorization the change is not applied; valid approval still does not guarantee perception was correct.
+
+16
+00:01:51.017 --> 00:01:57.867
+In this example, nineteen of twenty bright images are answered correctly.
+
+17
+00:01:57.867 --> 00:02:05.033
+Under low light, only twelve of twenty succeed, even if the combined average looks better.
+
+18
+00:02:05.033 --> 00:02:12.700
+Keep conditions and sample sizes; do not attribute these invented results to a real model.
+

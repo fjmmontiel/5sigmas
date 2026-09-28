@@ -1,15 +1,40 @@
 ---
 title: Evaluación de sistemas multimodales
-description: "Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas."
+description: 'Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas.'
 date: 2026-04-03
 date_modified: 2026-08-23
-keywords: "evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa"
+keywords: evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa
 tags:
-  - IA
-  - Evaluación
-  - Multimodalidad
-video: "04-evaluacion.mp4"
-video_duration: "PT1M14S"
+- IA
+- Evaluación
+- Multimodalidad
+video: 04-evaluacion.mp4
+video_poster: 04-evaluacion.jpg
+video_title: Medir capacidades distintas
+video_summary: 'IoU vale cero coma seis: reconocer la clase no habría medido este error de localización.'
+video_date: '2026-09-28'
+video_duration: PT134.8S
+video_captions: 04-evaluacion-visual-text.vtt
+video_transcript: 04-evaluacion-transcript.html
+video_chapters:
+- name: Nombrar y localizar no son el mismo acierto
+  start: 0.0
+  end: 22.183333
+- name: Las mismas palabras pueden cambiar quién está dónde
+  start: 22.183333
+  end: 43.733333
+- name: Comprobar el valor exige comprobar la celda
+  start: 43.733333
+  end: 66.3
+- name: El orden puede ser toda la pregunta
+  start: 66.3
+  end: 88.166667
+- name: Una prueba debe exigir la evidencia visual
+  start: 88.166667
+  end: 111.1
+- name: Responder más casos también puede admitir más errores
+  start: 111.1
+  end: 134.8
 ---
 
 # Capítulo 4 — Evaluación: medir sin autoengañarse

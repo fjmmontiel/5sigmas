@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "release": "owner-approved-video-batch-20260928",
-  "owner_approval": "EXPLICIT_APPROVALS_2026-09-26_AND_2026-09-27",
+  "owner_approval": "EXPLICIT_APPROVALS_2026-09-26_2026-09-27_AND_2026-09-28",
   "collections": [
     {
       "series": "from-cave-to-agi",
@@ -26,9 +26,15 @@
       "round": "V3",
       "approved_on": "2026-09-26",
       "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    },
+    {
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "approved_on": "2026-09-28",
+      "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
     }
   ],
-  "public_scope": "48 exact approved horizontal MP4s in four series, ES/EN; 48 approved verticals remain in their owner collections",
+  "public_scope": "60 exact approved horizontal MP4s in five series, ES/EN; 60 approved verticals remain in their owner collections",
   "provenance_note": "Voice V3 collection includes chapter03 V2-labelled originals. Exact V3 renderer is not recovered. Encoded text directly checked and cue timings sampled for captions; no renderer equivalence claimed.",
   "duration_contract": "Exact 60fps frame counts; ISO/catalog/Clip seconds round to six decimals, VTT to milliseconds; integer sitemap and clock displays are projections.",
   "objects": [
@@ -2767,6 +2773,690 @@
       "captions_scope": "Visual text, silent video; no invented narration",
       "transcript_path": "en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-transcript.html",
       "transcript_sha256": "d5937ae0b064f04b393845617649d13457da6a3fe6f5750e00ba3d550db539d5"
+    },
+    {
+      "path": "series/multimodalidad-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "85589ee0b77bdeeddfc0a201ceeb78f9c4f32f37a1f25a6daef32830a3ae65e4",
+      "bytes": 5348388,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/00_presentacion_serie/",
+      "watch": "videos/series/multimodalidad-iag/00_presentacion_serie/",
+      "poster_path": "series/multimodalidad-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "f95f89aa513b122f39f3e987a467b3a7188771bdb20e3e0bd9b4e7e967fdb656",
+      "chapters": [
+        {
+          "name": "Nombrar objetos no conserva su relación",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Los mismos estados pueden contar otra secuencia",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Buscar entre modalidades",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "Un embedding no es una imagen generada",
+          "start": 64.966667,
+          "end": 86.516667
+        },
+        {
+          "name": "La respuesta debe conservar su evidencia",
+          "start": 86.516667,
+          "end": 108.766667
+        },
+        {
+          "name": "Ver una instrucción no autoriza una acción",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "fddb6c4b32e2e282c9078584dddec7c8238473cb39e667d1f008a0c633204b6b",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "651616e40fcaf71a18a3713f2981b72b0eb3c81e0f5ed3bf448e42b876c391d4"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "5e07e9c56f2be685ab8009b5d4d2e5c03b40080e21f1835b4ca61fb50aa3d9c0",
+      "bytes": 5081795,
+      "duration": 130.316667,
+      "duration_iso": "PT130.316667S",
+      "frames": 7819,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/00_presentacion_serie/",
+      "watch": "en/videos/series/multimodalidad-iag/00_presentacion_serie/",
+      "poster_path": "en/series/multimodalidad-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "bf5085737e20e2d704e4f4bceadfd0c5c972af2e09f8228cb332fec715e22c5a",
+      "chapters": [
+        {
+          "name": "Naming objects does not preserve their relation",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "The same states can form a different sequence",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Cross-modal search requires correspondences",
+          "start": 43.1,
+          "end": 64.966667
+        },
+        {
+          "name": "An embedding is not a generated image",
+          "start": 64.966667,
+          "end": 86.516667
+        },
+        {
+          "name": "The answer must retain its evidence",
+          "start": 86.516667,
+          "end": 108.766667
+        },
+        {
+          "name": "Seeing an instruction does not authorize an action",
+          "start": 108.766667,
+          "end": 130.316667
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "890ae9ad33ef9ad7022329aecce471bdd59b6074036fbf9f2710fcd36e93b38e",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "905875587d9a915c995cfc550ac5a49818359c5fe73b89a0bf35c284a87e4d60"
+    },
+    {
+      "path": "series/multimodalidad-iag/01-el-problema.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "28d2afaff9b206f53a31952225a6d7530cc5d85d00f9762b539017116f38ba73",
+      "bytes": 5304942,
+      "duration": 133.033333,
+      "duration_iso": "PT133.033333S",
+      "frames": 7982,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/01-el-problema/",
+      "watch": "videos/series/multimodalidad-iag/01-el-problema/",
+      "poster_path": "series/multimodalidad-iag/01-el-problema.jpg",
+      "poster_sha256": "f9c4efea915c269e5def810eb93f12aec1a332d741435a2a31f7518f5d9c798e",
+      "chapters": [
+        {
+          "name": "Reducir resolución puede borrar una diferencia",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Leer números no basta para leer una tabla",
+          "start": 21.55,
+          "end": 43.733333
+        },
+        {
+          "name": "La transcripción puede omitir cómo se dijo",
+          "start": 43.733333,
+          "end": 65.983333
+        },
+        {
+          "name": "Un evento puede quedar entre dos muestras",
+          "start": 65.983333,
+          "end": 88.6
+        },
+        {
+          "name": "Sincronizar requiere conocer el desfase",
+          "start": 88.6,
+          "end": 110.466667
+        },
+        {
+          "name": "Un número necesita unidad y referencia",
+          "start": 110.466667,
+          "end": 133.033333
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/01-el-problema-visual-text.vtt",
+      "captions_sha256": "a96b5ac1dff07e07474cd12b0a0980a23b93c9f507e3e57df06db64c6b913ee7",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/01-el-problema-transcript.html",
+      "transcript_sha256": "130773e2db02c589654f18d62977b880465dd49f1ab33916147b4ed108a7367a"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/01-el-problema.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a4466ff5d6d6fcd15d4fe297944711a6405b2c644e77c1ba6c38d5d03732d1a6",
+      "bytes": 5068714,
+      "duration": 133.033333,
+      "duration_iso": "PT133.033333S",
+      "frames": 7982,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/01-el-problema/",
+      "watch": "en/videos/series/multimodalidad-iag/01-el-problema/",
+      "poster_path": "en/series/multimodalidad-iag/01-el-problema.jpg",
+      "poster_sha256": "37e009f1b218a6729ce1a8142bd170096a8132875d01e2c5409109780dae642e",
+      "chapters": [
+        {
+          "name": "Lower resolution can erase a difference",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Reading numbers is not enough to read a table",
+          "start": 21.55,
+          "end": 43.733333
+        },
+        {
+          "name": "A transcript can omit how words were spoken",
+          "start": 43.733333,
+          "end": 65.983333
+        },
+        {
+          "name": "An event can fall between two samples",
+          "start": 65.983333,
+          "end": 88.6
+        },
+        {
+          "name": "Synchronization requires knowing the offset",
+          "start": 88.6,
+          "end": 110.466667
+        },
+        {
+          "name": "A number needs units and a reference frame",
+          "start": 110.466667,
+          "end": 133.033333
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/01-el-problema-visual-text.vtt",
+      "captions_sha256": "edba3b6002faf5b9c9d7be5dbd6dfd9b63c4f8eb276450b50cdcaa9b89bf361c",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/01-el-problema-transcript.html",
+      "transcript_sha256": "f09bb6e89ff2e9a9047c1ba1ac31fa0c0531755e535e2e49a0806d750ee5e93f"
+    },
+    {
+      "path": "series/multimodalidad-iag/02-alineamiento.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "543df182d8df3ed9f7afa4f12010532a4515c9f12ad128a8637baee1aa4e3b6f",
+      "bytes": 5532237,
+      "duration": 131.75,
+      "duration_iso": "PT131.75S",
+      "frames": 7905,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/02-alineamiento/",
+      "watch": "videos/series/multimodalidad-iag/02-alineamiento/",
+      "poster_path": "series/multimodalidad-iag/02-alineamiento.jpg",
+      "poster_sha256": "21231af41cc849ba2dd669e3ea75f69d6447930eb0fd01d95edfdb3c5bc0ab9e",
+      "chapters": [
+        {
+          "name": "El par correcto es una señal de entrenamiento",
+          "start": 0.0,
+          "end": 22.616667
+        },
+        {
+          "name": "La similitud puede depender de la dirección",
+          "start": 22.616667,
+          "end": 44.166667
+        },
+        {
+          "name": "Cambiar una relación crea un negativo difícil",
+          "start": 44.166667,
+          "end": 65.716667
+        },
+        {
+          "name": "Un emparejamiento puede enseñar una asociación falsa",
+          "start": 65.716667,
+          "end": 88.333333
+        },
+        {
+          "name": "Alinear un clip no localiza cada evento",
+          "start": 88.333333,
+          "end": 110.2
+        },
+        {
+          "name": "Un ancla compartida no sustituye la evaluación",
+          "start": 110.2,
+          "end": 131.75
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/02-alineamiento-visual-text.vtt",
+      "captions_sha256": "634cfdf90a9e9506cafcf2f9366e0fa199d3b3f52c6b8be39a4b99d433b5d4f9",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/02-alineamiento-transcript.html",
+      "transcript_sha256": "fd0ea93c6a94ef63f69fa7044587204ff9bbe448e260a4613f99fdc08d9f67a4"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/02-alineamiento.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a74ff5068d7e4bb72e63b5b16a1fe66cd8d5a6b8aaad98b7e682484bf72c74db",
+      "bytes": 5249733,
+      "duration": 131.75,
+      "duration_iso": "PT131.75S",
+      "frames": 7905,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/02-alineamiento/",
+      "watch": "en/videos/series/multimodalidad-iag/02-alineamiento/",
+      "poster_path": "en/series/multimodalidad-iag/02-alineamiento.jpg",
+      "poster_sha256": "49bcb3cce34620bb4ed3ab2b9b30422fcd27e24e7dfe9c4c95ca88f89b38b14c",
+      "chapters": [
+        {
+          "name": "The matching pair is a training signal",
+          "start": 0.0,
+          "end": 22.616667
+        },
+        {
+          "name": "Similarity can depend on direction",
+          "start": 22.616667,
+          "end": 44.166667
+        },
+        {
+          "name": "Changing a relation creates a hard negative",
+          "start": 44.166667,
+          "end": 65.716667
+        },
+        {
+          "name": "A pairing can teach a false association",
+          "start": 65.716667,
+          "end": 88.333333
+        },
+        {
+          "name": "Aligning a clip does not locate every event",
+          "start": 88.333333,
+          "end": 110.2
+        },
+        {
+          "name": "A shared anchor does not replace evaluation",
+          "start": 110.2,
+          "end": 131.75
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/02-alineamiento-visual-text.vtt",
+      "captions_sha256": "4f256d5d3a9c5c17c111f3391eced100f2133ff165d7e7117d99f4aa06f2e24c",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/02-alineamiento-transcript.html",
+      "transcript_sha256": "c285cc3867148712b76372e11cc33911b472f7fe56852dbf59996694e77113c5"
+    },
+    {
+      "path": "series/multimodalidad-iag/03-arquitecturas.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "cb8dd556f4138d8f6d22c579c6a1cac9d175a8daaf608fef4b457ddb7298c6a8",
+      "bytes": 6296334,
+      "duration": 132.766667,
+      "duration_iso": "PT132.766667S",
+      "frames": 7966,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/03-arquitecturas/",
+      "watch": "videos/series/multimodalidad-iag/03-arquitecturas/",
+      "poster_path": "series/multimodalidad-iag/03-arquitecturas.jpg",
+      "poster_sha256": "8a87804faeb5acf378b451585e3cc8fa03c647f88752f89da0cbabd9c886030d",
+      "chapters": [
+        {
+          "name": "Dos encoders pueden recuperar sin generar",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "El conector aprende a cambiar la representación",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Una consulta puede seleccionar información visual",
+          "start": 43.416667,
+          "end": 66.416667
+        },
+        {
+          "name": "La posición conecta imágenes y preguntas",
+          "start": 66.416667,
+          "end": 88.283333
+        },
+        {
+          "name": "Comprimir regiones puede ocultar un detalle",
+          "start": 88.283333,
+          "end": 110.15
+        },
+        {
+          "name": "Texto y audio necesitan coordinar sus salidas",
+          "start": 110.15,
+          "end": 132.766667
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/03-arquitecturas-visual-text.vtt",
+      "captions_sha256": "e4a3981b6123bcb239109e0e642c240659b9c9676847f778aa64bfe2b9df4762",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/03-arquitecturas-transcript.html",
+      "transcript_sha256": "f0dc233d751b5260b6afdf053c78ff9770b652e613c5bbe8381a12bd763b78a6"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/03-arquitecturas.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "181a6c474003722e525cc673e4d030fd2f1f1a1c7cf9a02a47cda1d7daafa36c",
+      "bytes": 5786881,
+      "duration": 132.766667,
+      "duration_iso": "PT132.766667S",
+      "frames": 7966,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/03-arquitecturas/",
+      "watch": "en/videos/series/multimodalidad-iag/03-arquitecturas/",
+      "poster_path": "en/series/multimodalidad-iag/03-arquitecturas.jpg",
+      "poster_sha256": "7b3df812e95da8c0863a7adcfc433f968cf7b097285bdf38ec2a50e9a665bfed",
+      "chapters": [
+        {
+          "name": "Two encoders can retrieve without generating",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "A connector learns to change representations",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "A query can select visual information",
+          "start": 43.416667,
+          "end": 66.416667
+        },
+        {
+          "name": "Sequence position links images and questions",
+          "start": 66.416667,
+          "end": 88.283333
+        },
+        {
+          "name": "Compressing regions can hide a detail",
+          "start": 88.283333,
+          "end": 110.15
+        },
+        {
+          "name": "Text and audio outputs need coordination",
+          "start": 110.15,
+          "end": 132.766667
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/03-arquitecturas-visual-text.vtt",
+      "captions_sha256": "c0d8e5394e27263fdc8210a9c863ebca5ee17fb25dc623cb312b165363dc55e9",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/03-arquitecturas-transcript.html",
+      "transcript_sha256": "d8673c9ce856fc553180333be9a13dac53761ea9f21c11e0ff1c9bd167821807"
+    },
+    {
+      "path": "series/multimodalidad-iag/04-evaluacion.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "7e7c85f5d41e198ce07e4a9789ec5a308089888a92efffa979cb4ffaded22e37",
+      "bytes": 5755203,
+      "duration": 134.8,
+      "duration_iso": "PT134.8S",
+      "frames": 8088,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/04-evaluacion/",
+      "watch": "videos/series/multimodalidad-iag/04-evaluacion/",
+      "poster_path": "series/multimodalidad-iag/04-evaluacion.jpg",
+      "poster_sha256": "82a051781d8cc079eacd0897bb87491a70807e8f9b7d1edd9559fe5edf1d5bbe",
+      "chapters": [
+        {
+          "name": "Nombrar y localizar no son el mismo acierto",
+          "start": 0.0,
+          "end": 22.183333
+        },
+        {
+          "name": "Las mismas palabras pueden cambiar quién está dónde",
+          "start": 22.183333,
+          "end": 43.733333
+        },
+        {
+          "name": "Comprobar el valor exige comprobar la celda",
+          "start": 43.733333,
+          "end": 66.3
+        },
+        {
+          "name": "El orden puede ser toda la pregunta",
+          "start": 66.3,
+          "end": 88.166667
+        },
+        {
+          "name": "Una prueba debe exigir la evidencia visual",
+          "start": 88.166667,
+          "end": 111.1
+        },
+        {
+          "name": "Responder más casos también puede admitir más errores",
+          "start": 111.1,
+          "end": 134.8
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/04-evaluacion-visual-text.vtt",
+      "captions_sha256": "04ece41b2170217ba920b3a68b577e3fa56dee2f4b339d324620bca1d50a6bb5",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/04-evaluacion-transcript.html",
+      "transcript_sha256": "84396acce715366d2a23e5e7b89e9555435607bef8b1366b815cb79cbe93e28b"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/04-evaluacion.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "84f616d338cfd87e1f10286056cdc9a54a176f5929eea40f73de6017f922f05e",
+      "bytes": 5260510,
+      "duration": 134.8,
+      "duration_iso": "PT134.8S",
+      "frames": 8088,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/04-evaluacion/",
+      "watch": "en/videos/series/multimodalidad-iag/04-evaluacion/",
+      "poster_path": "en/series/multimodalidad-iag/04-evaluacion.jpg",
+      "poster_sha256": "ebdc0af997a9d5e385f5adadf2ffa539b4ce625a4254f9bd4289603557dcf252",
+      "chapters": [
+        {
+          "name": "Naming and locating are different successes",
+          "start": 0.0,
+          "end": 22.183333
+        },
+        {
+          "name": "The same words can change who is where",
+          "start": 22.183333,
+          "end": 43.733333
+        },
+        {
+          "name": "Checking a value requires checking the cell",
+          "start": 43.733333,
+          "end": 66.3
+        },
+        {
+          "name": "Order can be the whole question",
+          "start": 66.3,
+          "end": 88.166667
+        },
+        {
+          "name": "A test should require visual evidence",
+          "start": 88.166667,
+          "end": 111.1
+        },
+        {
+          "name": "Answering more cases can admit more errors",
+          "start": 111.1,
+          "end": 134.8
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/04-evaluacion-visual-text.vtt",
+      "captions_sha256": "eecb6a90ab6e75ffc1aeffa6216670fc2c3714f44d139d08d36d41cfc3cf0b07",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/04-evaluacion-transcript.html",
+      "transcript_sha256": "a95b92f24944f7afc19931a65c5a42629931149ef6216d4f1c208d7d884d88de"
+    },
+    {
+      "path": "series/multimodalidad-iag/05-riesgos.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "255ab32cdf3966c1d95c28bd12c6b4d05a1e36f09e4524012df3b9dce32ff3b4",
+      "bytes": 6030998,
+      "duration": 132.7,
+      "duration_iso": "PT132.7S",
+      "frames": 7962,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/multimodalidad-iag/05-riesgos/",
+      "watch": "videos/series/multimodalidad-iag/05-riesgos/",
+      "poster_path": "series/multimodalidad-iag/05-riesgos.jpg",
+      "poster_sha256": "1421ca2fc7c721007923a48d1c7c73c71c49b84573b6fe762eec5bda2390e7b0",
+      "chapters": [
+        {
+          "name": "El texto de una imagen sigue siendo dato externo",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Validar el permiso debe preceder al efecto",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Tapar una región no elimina todos los datos",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Guardar evidencia falsa puede repetir el error",
+          "start": 64.966667,
+          "end": 87.583333
+        },
+        {
+          "name": "Una propuesta aún puede detenerse",
+          "start": 87.583333,
+          "end": 110.516667
+        },
+        {
+          "name": "Un promedio puede ocultar un grupo de fallos",
+          "start": 110.516667,
+          "end": 132.7
+        }
+      ],
+      "captions_path": "series/multimodalidad-iag/05-riesgos-visual-text.vtt",
+      "captions_sha256": "c6b2512040a2e7eed382a9a671da62c5816e5fbedb70e24a7b5fbba9f4dfc285",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/multimodalidad-iag/05-riesgos-transcript.html",
+      "transcript_sha256": "6511652b69b00ce750c395bbecf58d2442ba1183c777c7a1e8156372daa67f7d"
+    },
+    {
+      "path": "en/series/multimodalidad-iag/05-riesgos.mp4",
+      "kind": "video",
+      "series": "multimodalidad-iag",
+      "round": "M1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "74bf5105aa8283588b49c5d893e9124a751cc9aff3342e5480317695d83e8a64",
+      "bytes": 5759880,
+      "duration": 132.7,
+      "duration_iso": "PT132.7S",
+      "frames": 7962,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/multimodalidad-iag/05-riesgos/",
+      "watch": "en/videos/series/multimodalidad-iag/05-riesgos/",
+      "poster_path": "en/series/multimodalidad-iag/05-riesgos.jpg",
+      "poster_sha256": "a434ad19386d61ac91a6742bd8d0057e8ab6640b63db33fb261cd507d0ae00f2",
+      "chapters": [
+        {
+          "name": "Text in an image remains external data",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Permission checking must precede the effect",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Covering a region does not remove every data channel",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Stored false evidence can repeat an error",
+          "start": 64.966667,
+          "end": 87.583333
+        },
+        {
+          "name": "A proposal can still be stopped",
+          "start": 87.583333,
+          "end": 110.516667
+        },
+        {
+          "name": "An average can hide a failure group",
+          "start": 110.516667,
+          "end": 132.7
+        }
+      ],
+      "captions_path": "en/series/multimodalidad-iag/05-riesgos-visual-text.vtt",
+      "captions_sha256": "7b0faf42f78facb0d64b1e96cd5d6ade3c91d7eb99c3cd7cbb4bedb33fc74a4b",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/multimodalidad-iag/05-riesgos-transcript.html",
+      "transcript_sha256": "3ecda26bf69954a6013c8fd44e245ece1dd14efe530434aa6afe6dec54214ef8"
     }
   ]
 }

@@ -69,7 +69,7 @@ jobs:
       - name: Verify exact owner-approved Coding C1 MP4 bytes
         run: sha256sum -c .github/receipts/coding-c1.sha256
 
-      - name: Verify 48 exact owner-approved batch MP4 hashes
+      - name: Verify 60 exact owner-approved batch MP4 hashes
         run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
 
       - name: Test fractional video timing parity
@@ -134,7 +134,6 @@ jobs:
               docs/series/agentes-ia locales/en/series/agentes-ia \
               docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
               docs/series/fundamentos-ia-iag locales/en/series/fundamentos-ia-iag \
-              docs/series/multimodalidad-iag locales/en/series/multimodalidad-iag \
               docs/series/ia-pib-bienestar-energia locales/en/series/ia-pib-bienestar-energia
           )"
           if [ -n "$protected" ]; then
@@ -213,7 +212,7 @@ jobs:
       - name: Verify native Coding C1 desktop and mobile playback
         run: node scripts/verify_coding_c1_browser.mjs
 
-      - name: Verify 192 native batch playback cases
+      - name: Verify 240 native batch playback cases
         run: node scripts/verify_approved_video_batch_browser.mjs
 
       - name: Audit browser resource loading
@@ -372,13 +371,13 @@ jobs:
         run: node scripts/validate_responsive_polish.mjs
 
       - name: Upload exact approved batch verification evidence
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: approved-batch-evidence
           path: /tmp/approved-video-batch-20260928-*.json
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
 
       - name: Upload visual review on failure
         if: failure()

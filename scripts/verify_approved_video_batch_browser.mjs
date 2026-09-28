@@ -10,7 +10,7 @@ const preview=['127.0.0.1','localhost'].includes(new URL(requestedOrigin).hostna
 const previewServer=preview?await startVideoPreview('site'):null;
 const origin=previewServer?.origin||requestedOrigin;
 const browser=await chromium.launch({channel:'chrome',headless:true});const rows=[];
-const report={status:'IN_PROGRESS',scope:'192 native route/viewport interaction probes, not full-duration viewings',requestedOrigin,origin,preview,browser:browser.version(),channel:'chrome',rows};
+const report={status:'IN_PROGRESS',scope:'240 native route/viewport interaction probes, not full-duration viewings',requestedOrigin,origin,preview,browser:browser.version(),channel:'chrome',rows};
 const save=()=>fs.writeFileSync('/tmp/approved-video-batch-20260928-browser.json',JSON.stringify(report,null,2));
 try {
   const diagnostic=await browser.newPage();
@@ -78,5 +78,5 @@ try {
     }
     await context.close();
   }
-  assert.equal(rows.length,192);report.status='PASS';save();console.log('APPROVED_BATCH_NATIVE_BROWSER_PASS 192/192 desktop/mobile article/watch cases');
+  assert.equal(rows.length,240);report.status='PASS';save();console.log('APPROVED_BATCH_NATIVE_BROWSER_PASS 240/240 desktop/mobile article/watch cases');
 }finally{await browser.close();if(previewServer)await previewServer.close();}

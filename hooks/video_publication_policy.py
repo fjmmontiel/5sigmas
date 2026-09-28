@@ -1,7 +1,7 @@
 """Owner-directed publication gate for site videos.
 
-The final three withheld series have exact owner-approved replacements in the
-2026-09-28 release manifest. Future unapproved replacements must not enter main.
+The 2026-09-28 release manifest includes five exact owner-approved collections,
+including Multimodalidad M1 approved on 2026-09-28. Future unapproved replacements must not enter main.
 Approved R2/R5/C3/D2/A2/C1 assets are not altered by this release.
 """
 from pathlib import Path

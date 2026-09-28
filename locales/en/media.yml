@@ -1,38 +1,176 @@
 series/multimodalidad-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: Multimodality in Generative AI
-  video_duration: PT1M2S
+  video_title: Preserving evidence across modalities
+  video_summary: That caption lost a spatial relation needed to answer where each object is.
+  video_date: '2026-09-28'
+  video_duration: PT130.316667S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Naming objects does not preserve their relation
+    start: 0.0
+    end: 21.55
+  - name: The same states can form a different sequence
+    start: 21.55
+    end: 43.1
+  - name: Cross-modal search requires correspondences
+    start: 43.1
+    end: 64.966667
+  - name: An embedding is not a generated image
+    start: 64.966667
+    end: 86.516667
+  - name: The answer must retain its evidence
+    start: 86.516667
+    end: 108.766667
+  - name: Seeing an instruction does not authorize an action
+    start: 108.766667
+    end: 130.316667
 
 series/multimodalidad-iag/01-el-problema.md:
   video: 01-el-problema.mp4
   video_poster: 01-el-problema.jpg
-  video_title: The Real Problem of Multimodality
-  video_duration: PT1M2S
+  video_title: Structure, resolution and time
+  video_summary: If that position answered the question, the reduction already removed the needed evidence.
+  video_date: '2026-09-28'
+  video_duration: PT133.033333S
+  video_captions: 01-el-problema-visual-text.vtt
+  video_transcript: 01-el-problema-transcript.html
+  video_chapters:
+  - name: Lower resolution can erase a difference
+    start: 0.0
+    end: 21.55
+  - name: Reading numbers is not enough to read a table
+    start: 21.55
+    end: 43.733333
+  - name: A transcript can omit how words were spoken
+    start: 43.733333
+    end: 65.983333
+  - name: An event can fall between two samples
+    start: 65.983333
+    end: 88.6
+  - name: Synchronization requires knowing the offset
+    start: 88.6
+    end: 110.466667
+  - name: A number needs units and a reference frame
+    start: 110.466667
+    end: 133.033333
 
 series/multimodalidad-iag/02-alineamiento.md:
   video: 02-alineamiento.mp4
   video_poster: 02-alineamiento.jpg
-  video_title: "Alignment: From Pairs to Interactions"
-  video_duration: PT1M2S
+  video_title: Learning alignment
+  video_summary: The contrastive objective distinguishes those batch correspondences without guaranteeing every pair is correctly labelled.
+  video_date: '2026-09-28'
+  video_duration: PT131.75S
+  video_captions: 02-alineamiento-visual-text.vtt
+  video_transcript: 02-alineamiento-transcript.html
+  video_chapters:
+  - name: The matching pair is a training signal
+    start: 0.0
+    end: 22.616667
+  - name: Similarity can depend on direction
+    start: 22.616667
+    end: 44.166667
+  - name: Changing a relation creates a hard negative
+    start: 44.166667
+    end: 65.716667
+  - name: A pairing can teach a false association
+    start: 65.716667
+    end: 88.333333
+  - name: Aligning a clip does not locate every event
+    start: 88.333333
+    end: 110.2
+  - name: A shared anchor does not replace evaluation
+    start: 110.2
+    end: 131.75
 
 series/multimodalidad-iag/03-arquitecturas.md:
   video: 03-arquitecturas.mp4
   video_poster: 03-arquitecturas.jpg
-  video_title: Multimodal System Architectures
-  video_duration: PT1M2S
+  video_title: Connecting representations and models
+  video_summary: The system returns a record; writing an answer requires a separate generative stage.
+  video_date: '2026-09-28'
+  video_duration: PT132.766667S
+  video_captions: 03-arquitecturas-visual-text.vtt
+  video_transcript: 03-arquitecturas-transcript.html
+  video_chapters:
+  - name: Two encoders can retrieve without generating
+    start: 0.0
+    end: 21.866667
+  - name: A connector learns to change representations
+    start: 21.866667
+    end: 43.416667
+  - name: A query can select visual information
+    start: 43.416667
+    end: 66.416667
+  - name: Sequence position links images and questions
+    start: 66.416667
+    end: 88.283333
+  - name: Compressing regions can hide a detail
+    start: 88.283333
+    end: 110.15
+  - name: Text and audio outputs need coordination
+    start: 110.15
+    end: 132.766667
 
 series/multimodalidad-iag/04-evaluacion.md:
   video: 04-evaluacion.mp4
   video_poster: 04-evaluacion.jpg
-  video_title: Evaluating Multimodal Systems
-  video_duration: PT1M2S
+  video_title: Measuring distinct capabilities
+  video_summary: 'IoU is 0.6: recognizing the class alone would not measure this localization error.'
+  video_date: '2026-09-28'
+  video_duration: PT134.8S
+  video_captions: 04-evaluacion-visual-text.vtt
+  video_transcript: 04-evaluacion-transcript.html
+  video_chapters:
+  - name: Naming and locating are different successes
+    start: 0.0
+    end: 22.183333
+  - name: The same words can change who is where
+    start: 22.183333
+    end: 43.733333
+  - name: Checking a value requires checking the cell
+    start: 43.733333
+    end: 66.3
+  - name: Order can be the whole question
+    start: 66.3
+    end: 88.166667
+  - name: A test should require visual evidence
+    start: 88.166667
+    end: 111.1
+  - name: Answering more cases can admit more errors
+    start: 111.1
+    end: 134.8
 
 series/multimodalidad-iag/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
-  video_title: Risks of Multimodal AI Systems
-  video_duration: PT1M2S
+  video_title: Data, permissions and consequences
+  video_summary: Correctly reading an instruction does not give it authority to change permissions.
+  video_date: '2026-09-28'
+  video_duration: PT132.7S
+  video_captions: 05-riesgos-visual-text.vtt
+  video_transcript: 05-riesgos-transcript.html
+  video_chapters:
+  - name: Text in an image remains external data
+    start: 0.0
+    end: 21.866667
+  - name: Permission checking must precede the effect
+    start: 21.866667
+    end: 43.416667
+  - name: Covering a region does not remove every data channel
+    start: 43.416667
+    end: 64.966667
+  - name: Stored false evidence can repeat an error
+    start: 64.966667
+    end: 87.583333
+  - name: A proposal can still be stopped
+    start: 87.583333
+    end: 110.516667
+  - name: An average can hide a failure group
+    start: 110.516667
+    end: 132.7
 
 series/fundamentos-ia-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4

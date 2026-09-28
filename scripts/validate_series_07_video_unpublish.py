@@ -21,7 +21,7 @@ SITE = ROOT / "site"
 EN_MEDIA = ROOT / "locales" / "en" / "media.yml"
 
 BLOCKED = ()
-KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia", "evaluating-ai-systems-production", "agentes-ia", "coding-agents-agent-harnesses", "agentes-voz-tiempo-real", "context-engineering-memory-mcp", "llm-inference-engineering-economics", "from-cave-to-agi")
+KEEP_LIVE = ("datacenters-espacio", "modelos-razonadores", "seguridad-ia", "evaluating-ai-systems-production", "agentes-ia", "coding-agents-agent-harnesses", "agentes-voz-tiempo-real", "context-engineering-memory-mcp", "llm-inference-engineering-economics", "from-cave-to-agi", "multimodalidad-iag")
 EXPECTED_BLOCKED_ENTRIES = 0
 EXPECTED_PUBLIC_CATALOGUE = 76
 

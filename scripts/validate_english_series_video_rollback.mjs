@@ -3,6 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import { execFileSync } from 'node:child_process';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/visual-review');
@@ -54,12 +55,10 @@ const nativePresentationMedia = new Map([
   ['seguridad-ia', '00_presentacion_serie'],
   ['agentes-ia', '00_presentacion_serie'],
 ]);
-// A2 and C3 have explicit owner release approval; the remaining four do not.
-const intentionallyUnpublishedVideoSeries = new Set([
-  'agentes-voz-tiempo-real',
-  'context-engineering-memory-mcp',
-  'llm-inference-engineering-economics',
-]);
+// The production policy remains authoritative when an approved replacement restores a series.
+const intentionallyUnpublishedVideoSeries = new Set(JSON.parse(execFileSync('python', [
+  '-c', 'import json; from hooks.video_publication_policy import UNPUBLISHED_VIDEO_SERIES; print(json.dumps(sorted(UNPUBLISHED_VIDEO_SERIES)))',
+], { encoding: 'utf8' })));
 const forbidden = [
   'Prerrequisitos', 'Terminada', 'Técnico', 'Capítulos', 'Ver todas las series',
   'Reproducir ataque', 'Reiniciar', 'Idea clave', 'Cargar gráfico externo', 'Abrir OWID',
@@ -125,8 +124,9 @@ for (const series of [realtimeVoice, codingAgents, contextEngineering, inference
     if (body.includes(marker)) failures.push(`${series.route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
   }
   const videoCount = await page.locator('video[data-s5-inline-video-player]').count();
-  const expectedCount = (series === evaluatingAiSystems || series === codingAgents) ? 1 : 0;
-  if (videoCount !== expectedCount) failures.push(`${series.route}: approved C3/remaining-unapproved publication mismatch, expected ${expectedCount}, got ${videoCount}`);
+  const slug = series.route.split('/')[3];
+  const expectedCount = intentionallyUnpublishedVideoSeries.has(slug) ? 0 : 1;
+  if (videoCount !== expectedCount) failures.push(`${series.route}: production publication policy mismatch, expected ${expectedCount}, got ${videoCount}`);
 }
 await page.goto(`${base}/en/series/ia-pib-bienestar-energia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
 for (const expected of ['Electricity → well-being', 'AI as an electrical technology', 'GDP vs well-being', 'AI and GDP today']) {

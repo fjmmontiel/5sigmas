@@ -511,5 +511,127 @@
   {
     "path": "locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md",
     "unchanged_sha256": "c64f0f8d9d69fbeaf66f5de45e7bb86634e65dc28a972e435a5d0047aded622e"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/00_presentacion_serie.md",
+    "body_sha256": "0e5246c718ceb7889c77a669c1e0ca3942c9a90dbfb7d91cf0c506edac5279d1",
+    "nonvideo_metadata": {
+      "title": "Multimodalidad en IA generativa",
+      "description": "Qué significa construir sistemas capaces de percibir, alinear, razonar, generar y actuar entre texto, imagen, audio, vídeo, documentos y otras señales del mundo.",
+      "keywords": "multimodalidad IA, modelos multimodales, CLIP, Flamingo, Gemini, visión lenguaje, audio texto",
+      "date": "2026-04-01",
+      "tags": [
+        "IA",
+        "GenAI",
+        "LLMs",
+        "Multimodalidad"
+      ],
+      "hide": [
+        "toc"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/00_presentacion_serie.md",
+    "unchanged_sha256": "cd0c8493d59cf3e26acbe67bfbc5a06e9a391f11fcbfe301f0eca779d1282f0c"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/01-el-problema.md",
+    "body_sha256": "faf1c8a3cdcda193ef1883626f3fee95f687fd3867afa5b3256bf246c5e2621c",
+    "nonvideo_metadata": {
+      "title": "El problema real de la multimodalidad",
+      "description": "Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción.",
+      "date": "2026-04-01",
+      "keywords": "multimodalidad IA, sistemas multimodales, LLM multimodal, IA texto imagen audio, percepción multimodal, IA generativa multimodal, GPT-4V, Gemini multimodal",
+      "tags": [
+        "IA",
+        "GenAI",
+        "Multimodalidad"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/01-el-problema.md",
+    "unchanged_sha256": "b0ab2c60a8c22c2ecd2dd605357285ddfbdd2c0cbf0938af316d849979f87a19"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/02-alineamiento.md",
+    "body_sha256": "ea87c9b7bc11ff54d4c224655c00984c8f09d5f65607789e94cd0dc1f0a0ca5d",
+    "nonvideo_metadata": {
+      "title": "Alineamiento de pares a interacciones multimodales",
+      "description": "Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal.",
+      "date": "2026-04-02",
+      "keywords": "alineamiento multimodal, CLIP, contrastive learning, ImageBind, embedding multimodal, representaciones imagen texto, entrenamiento multimodal, aprendizaje contrastivo",
+      "tags": [
+        "IA",
+        "GenAI",
+        "Multimodalidad",
+        "Alineamiento"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/02-alineamiento.md",
+    "unchanged_sha256": "dba9864697a6227da90212d8894d70c78aaead432265175c4ec6148214ad498a"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/03-arquitecturas.md",
+    "body_sha256": "c16c679ac400b826239095b48a7e14313ce43e0319face9425976a4af8909970",
+    "nonvideo_metadata": {
+      "title": "Arquitecturas de sistemas multimodales",
+      "description": "Cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y cuándo conviene cada forma de combinar modalidades.",
+      "date": "2026-04-02",
+      "keywords": "arquitecturas multimodales, fusión temprana tardía, ViT, encoder multimodal, decoder multimodal, LLaVA, GPT-4V, arquitectura IA generativa, visión transformer",
+      "tags": [
+        "IA",
+        "GenAI",
+        "Multimodalidad"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/03-arquitecturas.md",
+    "unchanged_sha256": "47f7243958697b4a43a7a6891f0f5879561018b9862a20276140610f642eacd5"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/04-evaluacion.md",
+    "body_sha256": "98cbcd963ca55eb02a41a0268c75f3c8376b43962361c777e30b29c4b549fac7",
+    "nonvideo_metadata": {
+      "title": "Evaluación de sistemas multimodales",
+      "description": "Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas.",
+      "date": "2026-04-03",
+      "date_modified": "2026-08-23",
+      "keywords": "evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa",
+      "tags": [
+        "IA",
+        "Evaluación",
+        "Multimodalidad"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/04-evaluacion.md",
+    "unchanged_sha256": "a8decf1fd18d2760febacbccb0a04c1e7d8e6015ce5f7b0e91624a61672485b1"
+  },
+  {
+    "path": "docs/series/multimodalidad-iag/05-riesgos.md",
+    "body_sha256": "8c71fa4b7daf8d6a6224147f6543900b7abecf01fb9b3fbdc9dc810646aa2df3",
+    "nonvideo_metadata": {
+      "title": "Riesgos de seguridad en sistemas multimodales",
+      "description": "Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar.",
+      "date": "2026-04-03",
+      "date_modified": "2026-08-23",
+      "keywords": "riesgos IA multimodal, prompt injection visual, seguridad sistemas IA, privacidad imágenes IA, ataques LLM multimodal, alineamiento seguridad, IA responsable multimodal",
+      "tags": [
+        "IA",
+        "GenAI",
+        "Multimodalidad",
+        "Alineamiento"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/multimodalidad-iag/05-riesgos.md",
+    "unchanged_sha256": "310ec611227d9f01d15d466e2fdc9050c3316aeb4009b2e9a36c860a694734fc"
   }
 ]

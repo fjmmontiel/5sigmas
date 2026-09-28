@@ -16,7 +16,7 @@ import yaml
 ORIGIN = "https://5sigmas.com"
 REVISION = os.environ.get("GITHUB_SHA", "").strip()
 BLOCKED = ()
-KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6, "evaluating-ai-systems-production": 6, "agentes-ia": 6, "coding-agents-agent-harnesses": 6, "agentes-voz-tiempo-real": 6, "context-engineering-memory-mcp": 6, "llm-inference-engineering-economics": 6, "from-cave-to-agi": 6}
+KEEP = {"datacenters-espacio": 5, "modelos-razonadores": 6, "seguridad-ia": 6, "evaluating-ai-systems-production": 6, "agentes-ia": 6, "coding-agents-agent-harnesses": 6, "agentes-voz-tiempo-real": 6, "context-engineering-memory-mcp": 6, "llm-inference-engineering-economics": 6, "from-cave-to-agi": 6, "multimodalidad-iag": 6}
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 

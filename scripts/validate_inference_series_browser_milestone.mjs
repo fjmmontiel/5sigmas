@@ -6,6 +6,11 @@ const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/inference-browser-milestone');
 const timeoutMs = 10000;
 const series = 'llm-inference-engineering-economics';
+const approvedManifest = JSON.parse(await fs.readFile('docs/approved-video-batch-20260928-release.json', 'utf8'));
+const approvedI1 = approvedManifest.objects.filter((row) => row.series === series && row.round === 'I1' && row.owner_approved_on === '2026-09-27');
+if (approvedI1.length !== 12) throw new Error('Expected exactly twelve approved I1 media records');
+const approvedDurations = new Map(approvedI1.map((row) => ['/' + row.path, row.duration]));
+
 const chapters = [
   '01-prefill-vs-decode-ttft-tpot-throughput-latency-budget',
   '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention',
@@ -67,7 +72,9 @@ async function exercise(video, label, { start = true } = {}) {
     const final = await seek(Math.max(0, duration - 0.35));
     return { duration, middle, final, paused: node.paused, readyState: node.readyState };
   }, { timeoutMs, start });
-  if (!(result.duration >= 35 && result.duration <= 37) || result.middle < result.duration * 0.45 || result.final < result.duration - 1 || result.final <= result.middle || !result.paused || result.readyState < 2) throw new Error(`${label}: invalid lifecycle ${JSON.stringify(result)}`);
+  const currentSource = await video.evaluate((node) => node.currentSrc);
+  const expectedDuration = approvedDurations.get(new URL(currentSource).pathname);
+  if (!(Number.isFinite(expectedDuration) && Math.abs(result.duration - expectedDuration) <= 0.025) || result.middle < result.duration * 0.45 || result.final < result.duration - 1 || result.final <= result.middle || !result.paused || result.readyState < 2) throw new Error(`${label}: invalid lifecycle ${JSON.stringify(result)}`);
   return result;
 }
 
