@@ -10,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Inspect public endpoint responses only
+      - name: Inspect normal identified release-client responses without private paths
         run: |
           python - <<'PY'
           import urllib.request, urllib.error, hashlib, re, json
           for url in ['https://5sigmas.com/build.json','https://sdmntprdenmarkeast.oaiusercontent.com/','https://sdmntprnortheu.oaiusercontent.com/']:
+              request=urllib.request.Request(url,headers={'User-Agent':'5sigmas-approved-release/1'})
               try:
-                  with urllib.request.urlopen(url,timeout=30) as r: status=r.status; raw=r.read(4096)
+                  with urllib.request.urlopen(request,timeout=30) as r: status=r.status; raw=r.read(4096)
               except urllib.error.HTTPError as e: status=e.code; raw=e.read(4096)
               except Exception as e: print(url,type(e).__name__); continue
               text=raw.decode('utf8',errors='replace')
               text=re.sub(r'https?://[^\s<>"\']+','[URL]',text)
-              print(json.dumps({'public_endpoint':url,'status':status,'sha256':hashlib.sha256(raw).hexdigest(),'text':text[:700]}))
+              print(json.dumps({'public_endpoint':url,'client':'5sigmas-approved-release/1','status':status,'sha256':hashlib.sha256(raw).hexdigest(),'text':text[:700]}))
           PY
