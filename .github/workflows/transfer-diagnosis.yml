@@ -1,0 +1,25 @@
+name: Diagnose approved media transfer host
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/transfer-diagnosis.yml]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect public endpoint responses only
+        run: |
+          python - <<'PY'
+          import urllib.request, urllib.error, hashlib, re, json
+          for url in ['https://5sigmas.com/build.json','https://sdmntprdenmarkeast.oaiusercontent.com/','https://sdmntprnortheu.oaiusercontent.com/']:
+              try:
+                  with urllib.request.urlopen(url,timeout=30) as r: status=r.status; raw=r.read(4096)
+              except urllib.error.HTTPError as e: status=e.code; raw=e.read(4096)
+              except Exception as e: print(url,type(e).__name__); continue
+              text=raw.decode('utf8',errors='replace')
+              text=re.sub(r'https?://[^\s<>"\']+','[URL]',text)
+              print(json.dumps({'public_endpoint':url,'status':status,'sha256':hashlib.sha256(raw).hexdigest(),'text':text[:700]}))
+          PY
