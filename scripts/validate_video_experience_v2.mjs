@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
+import { cataloguePublicationErrors } from './video_catalogue_contract.mjs';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outputDir = 'artifacts/visual-review';
@@ -32,10 +33,8 @@ async function validateHub(page, mobile) {
   if (await cards.count() !== catalog.count) {
     throw new Error(`Hub cards=${await cards.count()} catalog=${catalog.count}.`);
   }
-  const expectedCatalogCount = 58; // Previous52 plus six explicitly approved Coding C1 videos.
-  if (catalog.count !== expectedCatalogCount) {
-    throw new Error(`Video catalog count mismatch: expected ${expectedCatalogCount}, got ${catalog.count}.`);
-  }
+  const publicationErrors = cataloguePublicationErrors(catalog);
+  if (publicationErrors.length) throw new Error(publicationErrors.join('; '));
 
   await root.locator('img').evaluateAll((nodes) => nodes.forEach((node) => {
     const source = new URL(node.currentSrc || node.src);
