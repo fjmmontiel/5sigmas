@@ -1,0 +1,144 @@
+{
+  "schema": 1,
+  "status": "EXACT_M1_MEDIA_STAGED_NOT_MERGED_NOT_DEPLOYED",
+  "source_head": "b6e9fd93af72f5a9d1bf4e0b729107bf6ed137a7",
+  "run": "36388709075",
+  "approval": "EXPLICIT_OWNER_APPROVAL_2026-09-28",
+  "spec_sha256": "71f065a50724fe9c1a23c7b8586ffc7dad55912af4931f79366a574a3bfe9712",
+  "media_count": 12,
+  "objects": [
+    {
+      "path": "docs/series/multimodalidad-iag/00_presentacion_serie.mp4",
+      "sha256": "85589ee0b77bdeeddfc0a201ceeb78f9c4f32f37a1f25a6daef32830a3ae65e4",
+      "size": 5348388,
+      "frames": 7819,
+      "duration": 130.31666666666666,
+      "locale": "es",
+      "slug": "00_presentacion_serie",
+      "poster_sha256": "f95f89aa513b122f39f3e987a467b3a7188771bdb20e3e0bd9b4e7e967fdb656",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/00_presentacion_serie.mp4",
+      "sha256": "5e07e9c56f2be685ab8009b5d4d2e5c03b40080e21f1835b4ca61fb50aa3d9c0",
+      "size": 5081795,
+      "frames": 7819,
+      "duration": 130.31666666666666,
+      "locale": "en",
+      "slug": "00_presentacion_serie",
+      "poster_sha256": "bf5085737e20e2d704e4f4bceadfd0c5c972af2e09f8228cb332fec715e22c5a",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "docs/series/multimodalidad-iag/01-el-problema.mp4",
+      "sha256": "28d2afaff9b206f53a31952225a6d7530cc5d85d00f9762b539017116f38ba73",
+      "size": 5304942,
+      "frames": 7982,
+      "duration": 133.03333333333333,
+      "locale": "es",
+      "slug": "01-el-problema",
+      "poster_sha256": "f9c4efea915c269e5def810eb93f12aec1a332d741435a2a31f7518f5d9c798e",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/01-el-problema.mp4",
+      "sha256": "a4466ff5d6d6fcd15d4fe297944711a6405b2c644e77c1ba6c38d5d03732d1a6",
+      "size": 5068714,
+      "frames": 7982,
+      "duration": 133.03333333333333,
+      "locale": "en",
+      "slug": "01-el-problema",
+      "poster_sha256": "37e009f1b218a6729ce1a8142bd170096a8132875d01e2c5409109780dae642e",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "docs/series/multimodalidad-iag/02-alineamiento.mp4",
+      "sha256": "543df182d8df3ed9f7afa4f12010532a4515c9f12ad128a8637baee1aa4e3b6f",
+      "size": 5532237,
+      "frames": 7905,
+      "duration": 131.75,
+      "locale": "es",
+      "slug": "02-alineamiento",
+      "poster_sha256": "21231af41cc849ba2dd669e3ea75f69d6447930eb0fd01d95edfdb3c5bc0ab9e",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/02-alineamiento.mp4",
+      "sha256": "a74ff5068d7e4bb72e63b5b16a1fe66cd8d5a6b8aaad98b7e682484bf72c74db",
+      "size": 5249733,
+      "frames": 7905,
+      "duration": 131.75,
+      "locale": "en",
+      "slug": "02-alineamiento",
+      "poster_sha256": "49bcb3cce34620bb4ed3ab2b9b30422fcd27e24e7dfe9c4c95ca88f89b38b14c",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "docs/series/multimodalidad-iag/03-arquitecturas.mp4",
+      "sha256": "cb8dd556f4138d8f6d22c579c6a1cac9d175a8daaf608fef4b457ddb7298c6a8",
+      "size": 6296334,
+      "frames": 7966,
+      "duration": 132.76666666666668,
+      "locale": "es",
+      "slug": "03-arquitecturas",
+      "poster_sha256": "8a87804faeb5acf378b451585e3cc8fa03c647f88752f89da0cbabd9c886030d",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/03-arquitecturas.mp4",
+      "sha256": "181a6c474003722e525cc673e4d030fd2f1f1a1c7cf9a02a47cda1d7daafa36c",
+      "size": 5786881,
+      "frames": 7966,
+      "duration": 132.76666666666668,
+      "locale": "en",
+      "slug": "03-arquitecturas",
+      "poster_sha256": "7b3df812e95da8c0863a7adcfc433f968cf7b097285bdf38ec2a50e9a665bfed",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "docs/series/multimodalidad-iag/04-evaluacion.mp4",
+      "sha256": "7e7c85f5d41e198ce07e4a9789ec5a308089888a92efffa979cb4ffaded22e37",
+      "size": 5755203,
+      "frames": 8088,
+      "duration": 134.8,
+      "locale": "es",
+      "slug": "04-evaluacion",
+      "poster_sha256": "82a051781d8cc079eacd0897bb87491a70807e8f9b7d1edd9559fe5edf1d5bbe",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/04-evaluacion.mp4",
+      "sha256": "84f616d338cfd87e1f10286056cdc9a54a176f5929eea40f73de6017f922f05e",
+      "size": 5260510,
+      "frames": 8088,
+      "duration": 134.8,
+      "locale": "en",
+      "slug": "04-evaluacion",
+      "poster_sha256": "ebdc0af997a9d5e385f5adadf2ffa539b4ce625a4254f9bd4289603557dcf252",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "docs/series/multimodalidad-iag/05-riesgos.mp4",
+      "sha256": "255ab32cdf3966c1d95c28bd12c6b4d05a1e36f09e4524012df3b9dce32ff3b4",
+      "size": 6030998,
+      "frames": 7962,
+      "duration": 132.7,
+      "locale": "es",
+      "slug": "05-riesgos",
+      "poster_sha256": "1421ca2fc7c721007923a48d1c7c73c71c49b84573b6fe762eec5bda2390e7b0",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    },
+    {
+      "path": "locales/en/series/multimodalidad-iag/05-riesgos.mp4",
+      "sha256": "74bf5105aa8283588b49c5d893e9124a751cc9aff3342e5480317695d83e8a64",
+      "size": 5759880,
+      "frames": 7962,
+      "duration": 132.7,
+      "locale": "en",
+      "slug": "05-riesgos",
+      "poster_sha256": "a434ad19386d61ac91a6742bd8d0057e8ab6640b63db33fb261cd507d0ae00f2",
+      "technical": "SHA256_SIZE_SILENT_H264_1080P60_FASTSTART_FULL_DECODE_PASS"
+    }
+  ],
+  "scope": "Only exact approved M1 horizontal media and derived posters. Existing four approved batch collections and article sources untouched. Web metadata and technical gate reconciliation required before merge."
+}
