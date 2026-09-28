@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+A batch contains three images and their three associated captions.
+
+2
+00:00:07.350 --> 00:00:14.200
+Each image is compared with every text: matched pairs lie on the diagonal.
+
+3
+00:00:14.200 --> 00:00:22.617
+The contrastive objective distinguishes those batch correspondences without guaranteeing every pair is correctly labelled.
+
+4
+00:00:23.117 --> 00:00:29.967
+We normalize two vectors and compare their angle using cosine similarity.
+
+5
+00:00:29.967 --> 00:00:36.817
+Bringing their directions closer increases positive-pair similarity.
+
+6
+00:00:36.817 --> 00:00:44.167
+Training also contrasts other candidates; high cosine similarity is not a probability of truth.
+
+7
+00:00:44.667 --> 00:00:51.517
+Both captions name a circle and a square.
+
+8
+00:00:51.517 --> 00:00:58.367
+One places the circle on the left; the other places it on the right.
+
+9
+00:00:58.367 --> 00:01:05.717
+Distinguishing them requires the relation, not just recognition of the object list.
+
+10
+00:01:06.217 --> 00:01:13.067
+An image of three dots arrives paired with the caption “two dots”.
+
+11
+00:01:13.067 --> 00:01:19.917
+Treating that pair as positive favors a wrong correspondence.
+
+12
+00:01:19.917 --> 00:01:28.333
+Review corrects or excludes the item; a larger batch alone does not eliminate this noise.
+
+13
+00:01:28.833 --> 00:01:35.683
+A recording contains silence, a knock and another pause.
+
+14
+00:01:35.683 --> 00:01:42.850
+A clip label says a knock is present but not when it starts or ends.
+
+15
+00:01:42.850 --> 00:01:50.200
+A temporal annotation binds the event to the relevant interval with explicit boundaries.
+
+16
+00:01:50.700 --> 00:01:57.550
+Image–text and image–audio pairs are trained around a shared concept.
+
+17
+00:01:57.550 --> 00:02:04.400
+The image can connect representations that were not directly paired.
+
+18
+00:02:04.400 --> 00:02:11.750
+Test text–audio retrieval: a shared anchor does not guarantee equal quality for every relation.
+

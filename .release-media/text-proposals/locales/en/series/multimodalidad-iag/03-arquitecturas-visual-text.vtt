@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+One encoder transforms the image and another transforms the text query.
+
+2
+00:00:07.350 --> 00:00:14.200
+Their comparable representations allow candidates to be ordered by similarity.
+
+3
+00:00:14.200 --> 00:00:21.867
+The system returns a record; writing an answer requires a separate generative stage.
+
+4
+00:00:22.367 --> 00:00:29.217
+The visual encoder emits a three-component vector in this example.
+
+5
+00:00:29.217 --> 00:00:36.067
+A learned matrix projects it into four components accepted by the receiving model.
+
+6
+00:00:36.067 --> 00:00:43.417
+Changing dimensions connects interfaces but does not guarantee that all visual evidence survives.
+
+7
+00:00:43.917 --> 00:00:50.767
+The text query asks about the object on the right.
+
+8
+00:00:50.767 --> 00:00:57.617
+Attention weights visual regions and combines their representations.
+
+9
+00:00:57.617 --> 00:01:06.417
+Selection depends on the query; an attention map alone does not establish a causal explanation.
+
+10
+00:01:06.917 --> 00:01:13.767
+The input interleaves a first image with its caption and then a second image.
+
+11
+00:01:13.767 --> 00:01:20.933
+The question refers to the second image, not an unordered mixture of both.
+
+12
+00:01:20.933 --> 00:01:28.283
+Keeping modality boundaries and positions preserves which evidence accompanies each fragment.
+
+13
+00:01:28.783 --> 00:01:35.633
+Four visual regions contain information, including a small label in the fourth.
+
+14
+00:01:35.633 --> 00:01:42.483
+A two-representation summary merges or discards some detail.
+
+15
+00:01:42.483 --> 00:01:50.150
+Fewer tokens can reduce work, but the small label must still be tested for recoverability.
+
+16
+00:01:50.650 --> 00:01:57.500
+A system can produce text and audio chunks at different rates.
+
+17
+00:01:57.500 --> 00:02:04.350
+Identifiers and boundaries associate each chunk with the correct content.
+
+18
+00:02:04.350 --> 00:02:12.767
+Coordination belongs to the system: multiple modalities do not prove the entire path is full duplex.
+

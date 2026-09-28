@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+La caja objetivo mide cuatro por dos unidades. La predicción se desplaza una unidad.
+
+2
+00:00:07.667 --> 00:00:14.517
+La intersección tiene área seis y la unión área diez.
+
+3
+00:00:14.517 --> 00:00:22.183
+IoU vale cero coma seis: reconocer la clase no habría medido este error de localización.
+
+4
+00:00:22.683 --> 00:00:29.533
+Emparejamos dos imágenes con dos frases que usan los mismos nombres.
+
+5
+00:00:29.533 --> 00:00:36.383
+Al invertir arriba y abajo, cambia la correspondencia correcta.
+
+6
+00:00:36.383 --> 00:00:43.733
+Una evaluación composicional exige acertar las relaciones cruzadas, no sólo reconocer los objetos.
+
+7
+00:00:44.233 --> 00:00:51.083
+La respuesta afirma que el total del pedido B es veinte.
+
+8
+00:00:51.083 --> 00:00:58.250
+El número veinte existe en la tabla, pero pertenece al pedido A; B tiene treinta.
+
+9
+00:00:58.250 --> 00:01:06.300
+El test debe validar fila, columna y valor para detectar una respuesta visualmente plausible pero falsa.
+
+10
+00:01:06.800 --> 00:01:13.650
+La secuencia A enciende una luz y después abre una puerta.
+
+11
+00:01:13.650 --> 00:01:20.500
+La secuencia B contiene los mismos eventos, pero en el orden inverso.
+
+12
+00:01:20.500 --> 00:01:28.167
+Un test temporal debe distinguir ambos casos aunque su inventario de objetos y acciones coincida.
+
+13
+00:01:28.667 --> 00:01:35.517
+La pregunta pide cuántos puntos contiene la imagen; el texto permanece idéntico.
+
+14
+00:01:35.517 --> 00:01:42.683
+Cambiamos sólo la imagen de dos a tres puntos y conservamos las demás condiciones.
+
+15
+00:01:42.683 --> 00:01:51.100
+La respuesta debe cambiar; responder siempre dos puede revelar una dependencia del texto, no de la imagen.
+
+16
+00:01:51.600 --> 00:01:58.450
+Cinco casos tienen scores de confianza, pero algunos resultados son incorrectos.
+
+17
+00:01:58.450 --> 00:02:07.133
+Con umbral alto aceptamos dos y no fallamos en este conjunto; al bajarlo aceptamos cuatro y fallamos en uno.
+
+18
+00:02:07.133 --> 00:02:14.800
+Cobertura y error se reportan juntos: dos aciertos no prueban fiabilidad fuera de esta muestra.
+

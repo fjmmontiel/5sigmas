@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Un lote contiene tres imágenes y sus tres descripciones asociadas.
+
+2
+00:00:07.350 --> 00:00:14.200
+Comparamos cada imagen con todos los textos: los pares emparejados ocupan la diagonal.
+
+3
+00:00:14.200 --> 00:00:22.617
+El objetivo distingue los pares del lote; no garantiza que todas las etiquetas sean correctas.
+
+4
+00:00:23.117 --> 00:00:29.967
+Normalizamos dos vectores para comparar su ángulo mediante el coseno.
+
+5
+00:00:29.967 --> 00:00:36.817
+Acercar sus direcciones eleva la similitud del par positivo.
+
+6
+00:00:36.817 --> 00:00:44.167
+El entrenamiento también contrasta otros candidatos; coseno alto no es una probabilidad de verdad.
+
+7
+00:00:44.667 --> 00:00:51.517
+Ambas frases nombran un círculo y un cuadrado.
+
+8
+00:00:51.517 --> 00:00:58.367
+Una sitúa el círculo a la izquierda; la otra lo sitúa a la derecha.
+
+9
+00:00:58.367 --> 00:01:05.717
+Distinguirlas requiere la relación, no basta con reconocer la lista de objetos.
+
+10
+00:01:06.217 --> 00:01:13.067
+Una foto de tres puntos llega acompañada por el texto «dos puntos».
+
+11
+00:01:13.067 --> 00:01:19.917
+Tratar ese par como positivo favorece una correspondencia errónea.
+
+12
+00:01:19.917 --> 00:01:28.333
+La revisión corrige o excluye el dato; escalar el lote no elimina por sí solo ese ruido.
+
+13
+00:01:28.833 --> 00:01:35.683
+Una grabación contiene silencio, un golpe y otra pausa.
+
+14
+00:01:35.683 --> 00:01:42.850
+La etiqueta del clip indica que hay un golpe, pero no cuándo empieza o termina.
+
+15
+00:01:42.850 --> 00:01:50.200
+Una anotación temporal vincula el evento al intervalo pertinente, con límites explícitos.
+
+16
+00:01:50.700 --> 00:01:57.550
+Entrenamos pares imagen–texto e imagen–audio alrededor de un mismo concepto.
+
+17
+00:01:57.550 --> 00:02:04.400
+La imagen puede conectar representaciones que no se emparejaron directamente.
+
+18
+00:02:04.400 --> 00:02:11.750
+Comprueba la recuperación texto–audio: compartir ancla no garantiza igual calidad en todas las relaciones.
+
