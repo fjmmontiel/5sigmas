@@ -1,0 +1,60 @@
+name: Stage exact owner-approved Multimodalidad M1
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/m1-exact-staging.yml]
+permissions:
+  contents: write
+concurrency:
+  group: exact-m1-staging-20260928
+  cancel-in-progress: false
+jobs:
+  stage:
+    if: github.actor == 'fjmmontiel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .release-media
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Capture pinned public text sources for release integration review
+        run: |
+          git fetch --quiet --depth=1 origin release/approved-golden-batch-20260928
+          test "$(git rev-parse FETCH_HEAD)" = b6e9fd93af72f5a9d1bf4e0b729107bf6ed137a7
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          ref='b6e9fd93af72f5a9d1bf4e0b729107bf6ed137a7'
+          files=subprocess.check_output(['git','ls-tree','-r','--name-only',ref],text=True).splitlines()
+          prefixes=('.github/','scripts/','hooks/','locales/','docs/series/','docs/approved-')
+          allowed={'.py','.mjs','.json','.yml','.yaml','.md','.html','.vtt','.sha256','.txt','.sh','.js','.css'}
+          paths=[p for p in files if p.startswith(prefixes) and Path(p).suffix in allowed]
+          subprocess.run(['git','archive','--format=zip','--output=/tmp/m1-pinned-sources.zip',ref,'--',*paths],check=True)
+          print('Public pinned text snapshot files:',len(paths))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m1-pinned-public-sources
+          path: /tmp/m1-pinned-sources.zip
+          retention-days: 1
+      - name: Install exact media validation dependencies
+        run: |
+          python -m pip install cryptography
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Receive hash-pinned approved M1 originals and stage without merge
+        run: python -u .release-media/m1_receive.py
+      - name: Retain actual technical staging receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m1-exact-staging-evidence
+          path: /tmp/m1-evidence/*
+          if-no-files-found: warn
+          retention-days: 1
