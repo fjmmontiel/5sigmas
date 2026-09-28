@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "run": "36384845705",
+  "branch": "release/owner-approved-video-batch-20260927",
+  "target": "release/approved-golden-batch-20260928",
+  "public_key": "3oPENHfiespCsqgk0C7RFU60+QvLCLIAdoKxZAbJKks=",
+  "sha256": "7b89c3504188565d3135b41017358825262b01207f52a815dcba4c518a6824a2",
+  "size": 46712458,
+  "expires_epoch": 1790578372,
+  "scope": "Only hash-pinned approved public files; clean branch from pinned main; no merge, no deployment, no raw transfer URL in git."
+}
