@@ -1,0 +1,42 @@
+name: Series 07-13 in-article visual deep audit
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/article-animation-deep-audit.yml]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .release-media
+      - uses: actions/checkout@v4
+        with:
+          ref: 6209a852b804338e31b95f06bdf604baeb04cf40
+          path: audit-source
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /docs/series/**/*.md
+            /docs/snippets/**/*.html
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Observe current public article visuals without changing source or production
+        run: node .release-media/audit_article_visuals.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: series-07-13-article-visual-evidence
+          path: /tmp/article-animation-audit/
+          retention-days: 1
+          if-no-files-found: error
