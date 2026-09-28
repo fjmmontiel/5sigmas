@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "run": "36388709075",
+  "branch": "release/owner-approved-video-batch-20260927",
+  "target": "release/approved-golden-batch-20260928",
+  "expected_head": "b6e9fd93af72f5a9d1bf4e0b729107bf6ed137a7",
+  "spec_sha256": "71f065a50724fe9c1a23c7b8586ffc7dad55912af4931f79366a574a3bfe9712",
+  "public_key": "QDQ1WTHvVuP+XyE/pGFhKT3FSJsrI9QN4Du198lzEww=",
+  "expires_epoch": 1790581192,
+  "scope": "Twelve hash-pinned owner-approved M1 horizontal originals and derived posters only. No merge, deploy, private source publication or permanent credentials."
+}
