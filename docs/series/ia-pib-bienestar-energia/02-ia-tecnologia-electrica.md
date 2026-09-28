@@ -3,13 +3,38 @@ title: IA como tecnología eléctrica
 description: Qué implica la IA en términos de cómputo y energía, por qué la demanda puede crecer aunque mejore el hardware, y cuáles son los cuellos de botella reales.
 date: 2026-04-08
 date_modified: 2026-08-23
-keywords: "IA tecnología eléctrica, consumo energético inteligencia artificial, datacenters IA energía, efecto rebote IA, cómputo GPU TPU, inferencia LLM energía, PUE datacenter, cuellos botella energía IA"
+keywords: IA tecnología eléctrica, consumo energético inteligencia artificial, datacenters IA energía, efecto rebote IA, cómputo GPU TPU, inferencia LLM energía, PUE datacenter, cuellos botella energía IA
 tags:
-  - Economía
-  - Energía
-  - IA
-video: "02-ia-tecnologia-electrica.mp4"
-video_duration: "PT52S"
+- Economía
+- Energía
+- IA
+video: 02-ia-tecnologia-electrica.mp4
+video_duration: PT134.816667S
+video_poster: 02-ia-tecnologia-electrica.jpg
+video_title: La IA dentro de un sistema eléctrico
+video_summary: 'Con veinte mil consultas, la inferencia suma doscientos y el total trescientos: depende del volumen.'
+video_date: '2026-09-28'
+video_captions: 02-ia-tecnologia-electrica-visual-text.vtt
+video_transcript: 02-ia-tecnologia-electrica-transcript.html
+video_chapters:
+- name: Entrenar e inferir acumulan energía de forma distinta
+  start: 0.0
+  end: 22.25
+- name: Mejorar por tarea no fija el consumo total
+  start: 22.25
+  end: 44.433333
+- name: El servidor no es todo el edificio
+  start: 44.433333
+  end: 67.816667
+- name: La capacidad la limita la restricción más estricta
+  start: 67.816667
+  end: 89.683333
+- name: La fabricación exige declarar cómo se reparte
+  start: 89.683333
+  end: 112.25
+- name: Los kilovatios-hora no son kilogramos de emisiones
+  start: 112.25
+  end: 134.816667
 ---
 
 # Capítulo 2 — IA como tecnología eléctrica

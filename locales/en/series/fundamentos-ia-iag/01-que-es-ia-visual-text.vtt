@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+AI is the broad set; it includes rule-based systems and systems that learn.
+
+2
+00:00:07.350 --> 00:00:14.200
+Machine learning learns from data. Deep learning uses neural networks with multiple layers.
+
+3
+00:00:14.200 --> 00:00:21.550
+Generating content describes a purpose: deep networks can also classify, not only generate.
+
+4
+00:00:22.050 --> 00:00:28.900
+We test whether the sensor reading exceeds four units.
+
+5
+00:00:28.900 --> 00:00:35.750
+Training compares that split with another at six units.
+
+6
+00:00:35.750 --> 00:00:43.800
+This example selects six because it separates these labels, not because six is a physical law.
+
+7
+00:00:44.300 --> 00:00:51.150
+The word urgent appears in eight of ten spam messages in this example.
+
+8
+00:00:51.150 --> 00:00:58.000
+It also appears in one of ten legitimate messages.
+
+9
+00:00:58.000 --> 00:01:05.350
+These are class-conditional frequencies; a posterior also needs priors and other evidence.
+
+10
+00:01:05.850 --> 00:01:12.700
+A group contains three points at horizontal coordinates one, three and five.
+
+11
+00:01:12.700 --> 00:01:19.550
+Its current center is at two; recomputing the mean moves it to three.
+
+12
+00:01:19.550 --> 00:01:26.900
+The new center depends on cluster assignments, not on an external label.
+
+13
+00:01:27.400 --> 00:01:35.317
+Two inputs, two weights: two times zero point four minus zero point two gives zero point six.
+
+14
+00:01:35.317 --> 00:01:42.167
+ReLU keeps this positive value. Against target one, squared error is zero point sixteen.
+
+15
+00:01:42.167 --> 00:01:49.517
+Training uses that error to adjust weights; inference uses the weights already fixed.
+
+16
+00:01:50.017 --> 00:01:56.867
+Initial evaluation uses readings similar to the training data.
+
+17
+00:01:56.867 --> 00:02:03.717
+Later the input distribution changes while the model remains identical.
+
+18
+00:02:03.717 --> 00:02:11.767
+Detected drift calls for checking performance; drift alone does not prove every prediction is wrong.
+

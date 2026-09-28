@@ -1,15 +1,40 @@
 ---
-title: "Qué es AGI: inteligencia artificial general"
-description: "AGI significa inteligencia artificial general. Este capítulo explica sus definiciones, los niveles de DeepMind y OpenAI, y qué faltaría para alcanzarla."
+title: 'Qué es AGI: inteligencia artificial general'
+description: AGI significa inteligencia artificial general. Este capítulo explica sus definiciones, los niveles de DeepMind y OpenAI, y qué faltaría para alcanzarla.
 date: 2026-03-20
 date_modified: 2026-08-24
-keywords: "agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos"
+keywords: agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos
 tags:
-  - IA
-  - AGI
-  - Alineamiento
-video: "04-agi.mp4"
-video_duration: "PT1M10S"
+- IA
+- AGI
+- Alineamiento
+video: 04-agi.mp4
+video_duration: PT132.083333S
+video_poster: 04-agi.jpg
+video_title: Qué significa evaluar generalidad
+video_summary: Describe profundidad y amplitud por separado; un pico de rendimiento no cubre todo el mapa.
+video_date: '2026-09-28'
+video_captions: 04-agi-visual-text.vtt
+video_transcript: 04-agi-transcript.html
+video_chapters:
+- name: Destacar en una tarea no mide toda la generalidad
+  start: 0.0
+  end: 21.866667
+- name: Generalizar exige una separación real
+  start: 21.866667
+  end: 43.416667
+- name: Un permiso no demuestra inteligencia
+  start: 43.416667
+  end: 64.966667
+- name: Los fallos se acumulan en una cadena
+  start: 64.966667
+  end: 87.966667
+- name: La métrica puede separarse del objetivo
+  start: 87.966667
+  end: 109.516667
+- name: Una definición útil declara cómo comprobarla
+  start: 109.516667
+  end: 132.083333
 ---
 
 # Capítulo 4 — AGI: Inteligencia Artificial General

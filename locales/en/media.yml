@@ -26,7 +26,6 @@ series/multimodalidad-iag/00_presentacion_serie.md:
   - name: Seeing an instruction does not authorize an action
     start: 108.766667
     end: 130.316667
-
 series/multimodalidad-iag/01-el-problema.md:
   video: 01-el-problema.mp4
   video_poster: 01-el-problema.jpg
@@ -55,7 +54,6 @@ series/multimodalidad-iag/01-el-problema.md:
   - name: A number needs units and a reference frame
     start: 110.466667
     end: 133.033333
-
 series/multimodalidad-iag/02-alineamiento.md:
   video: 02-alineamiento.mp4
   video_poster: 02-alineamiento.jpg
@@ -84,7 +82,6 @@ series/multimodalidad-iag/02-alineamiento.md:
   - name: A shared anchor does not replace evaluation
     start: 110.2
     end: 131.75
-
 series/multimodalidad-iag/03-arquitecturas.md:
   video: 03-arquitecturas.mp4
   video_poster: 03-arquitecturas.jpg
@@ -113,7 +110,6 @@ series/multimodalidad-iag/03-arquitecturas.md:
   - name: Text and audio outputs need coordination
     start: 110.15
     end: 132.766667
-
 series/multimodalidad-iag/04-evaluacion.md:
   video: 04-evaluacion.mp4
   video_poster: 04-evaluacion.jpg
@@ -142,7 +138,6 @@ series/multimodalidad-iag/04-evaluacion.md:
   - name: Answering more cases can admit more errors
     start: 111.1
     end: 134.8
-
 series/multimodalidad-iag/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
@@ -171,67 +166,286 @@ series/multimodalidad-iag/05-riesgos.md:
   - name: An average can hide a failure group
     start: 110.516667
     end: 132.7
-
 series/fundamentos-ia-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI and Generative AI Foundations
-  video_duration: PT53S
-
+  video_title: A map of tasks and systems
+  video_summary: The output format determines which errors we need to measure.
+  video_date: '2026-09-28'
+  video_duration: PT129.616667S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: What must the system produce?
+    start: 0.0
+    end: 21.55
+  - name: A model is not the entire product
+    start: 21.55
+    end: 43.1
+  - name: Three questions, not three synonyms
+    start: 43.1
+    end: 64.65
+  - name: One request can use several components
+    start: 64.65
+    end: 86.516667
+  - name: Training is one step, not completion
+    start: 86.516667
+    end: 108.066667
+  - name: Capability and autonomy are different
+    start: 108.066667
+    end: 129.616667
 series/fundamentos-ia-iag/01-que-es-ia.md:
   video: 01-que-es-ia.mp4
   video_poster: 01-que-es-ia.jpg
-  video_title: What is AI?
-  video_duration: PT1M3S
-
+  video_title: What an AI system learns
+  video_summary: 'Generating content describes a purpose: deep networks can also classify, not only generate.'
+  video_date: '2026-09-28'
+  video_duration: PT131.766667S
+  video_captions: 01-que-es-ia-visual-text.vtt
+  video_transcript: 01-que-es-ia-transcript.html
+  video_chapters:
+  - name: Technical family and purpose are different
+    start: 0.0
+    end: 21.55
+  - name: A tree learns a concrete question
+    start: 21.55
+    end: 43.8
+  - name: Counting frequencies does not prove causation
+    start: 43.8
+    end: 65.35
+  - name: The center moves toward its examples
+    start: 65.35
+    end: 86.9
+  - name: A neuron computes, compares and updates
+    start: 86.9
+    end: 109.516667
+  - name: Tomorrow’s data can change
+    start: 109.516667
+    end: 131.766667
 series/fundamentos-ia-iag/02-que-es-ia-generativa.md:
   video: 02-que-es-ia-generativa.mp4
   video_poster: 02-que-es-ia-generativa.jpg
-  video_title: What is Generative AI?
-  video_duration: PT1M3S
-
+  video_title: How a generative response is built
+  video_summary: Closeness depends on the model and task; it does not guarantee two statements are equivalent.
+  video_date: '2026-09-28'
+  video_duration: PT130.95S
+  video_captions: 02-que-es-ia-generativa-visual-text.vtt
+  video_transcript: 02-que-es-ia-generativa-transcript.html
+  video_chapters:
+  - name: Representation enables comparison
+    start: 0.0
+    end: 21.866667
+  - name: The same word receives different context
+    start: 21.866667
+    end: 44.116667
+  - name: A distribution before the next token
+    start: 44.116667
+    end: 65.983333
+  - name: Providing examples does not update weights
+    start: 65.983333
+    end: 87.533333
+  - name: Retrieval adds evidence, not certainty
+    start: 87.533333
+    end: 109.4
+  - name: Proposing an action is not executing it
+    start: 109.4
+    end: 130.95
 series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md:
   video: 03-ia-vs-ia-generativa.mp4
   video_poster: 03-ia-vs-ia-generativa.jpg
-  video_title: Classical AI vs Generative AI
-  video_duration: PT1M3S
-
+  video_title: Choosing and evaluating a configuration
+  video_summary: Fluent text replaces neither risk validation nor fact-checking its claims.
+  video_date: '2026-09-28'
+  video_duration: PT130.95S
+  video_captions: 03-ia-vs-ia-generativa-visual-text.vtt
+  video_transcript: 03-ia-vs-ia-generativa-transcript.html
+  video_chapters:
+  - name: A score and a text need different evaluation
+    start: 0.0
+    end: 21.866667
+  - name: Temperature changes the probability allocation
+    start: 21.866667
+    end: 44.05
+  - name: An explanation must be testable
+    start: 44.05
+    end: 65.6
+  - name: A metric depends on which error it counts
+    start: 65.6
+    end: 87.85
+  - name: Who chooses the next step?
+    start: 87.85
+    end: 109.4
+  - name: First define testable requirements
+    start: 109.4
+    end: 130.95
 series/fundamentos-ia-iag/04-agi.md:
   video: 04-agi.mp4
   video_poster: 04-agi.jpg
-  video_title: "AGI: Artificial General Intelligence"
-  video_duration: PT1M3S
-
+  video_title: What evaluating generality means
+  video_summary: Describe depth and breadth separately; a performance peak does not cover the whole map.
+  video_date: '2026-09-28'
+  video_duration: PT132.083333S
+  video_captions: 04-agi-visual-text.vtt
+  video_transcript: 04-agi-transcript.html
+  video_chapters:
+  - name: Excelling at one task does not measure all generality
+    start: 0.0
+    end: 21.866667
+  - name: Generalization requires real separation
+    start: 21.866667
+    end: 43.416667
+  - name: A permission does not demonstrate intelligence
+    start: 43.416667
+    end: 64.966667
+  - name: Failures accumulate along a chain
+    start: 64.966667
+    end: 87.966667
+  - name: The metric can diverge from the goal
+    start: 87.966667
+    end: 109.516667
+  - name: A useful definition says how to test it
+    start: 109.516667
+    end: 132.083333
 series/ia-pib-bienestar-energia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI, GDP, Well-being and Energy
-  video_duration: PT1M2S
-
+  video_title: Separating energy, production and wellbeing
+  video_summary: Daily energy is equal, but the ability to deliver that scheduled service differs.
+  video_date: '2026-09-28'
+  video_duration: PT134.6S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Energy must arrive when it is needed
+    start: 0.0
+    end: 22.566667
+  - name: Power and energy answer different questions
+    start: 22.566667
+    end: 44.116667
+  - name: Counting attempts does not measure useful service
+    start: 44.116667
+    end: 66.366667
+  - name: Adding sales can count the same value twice
+    start: 66.366667
+    end: 90.116667
+  - name: A mean does not describe every person
+    start: 90.116667
+    end: 112.733333
+  - name: An association does not identify its cause
+    start: 112.733333
+    end: 134.6
 series/ia-pib-bienestar-energia/01-electricidad-bienestar.md:
   video: 01-electricidad-bienestar.mp4
   video_poster: 01-electricidad-bienestar.jpg
-  video_title: Electricity and Well-being
-  video_duration: PT1M2S
-
+  video_title: Electricity and effective service
+  video_summary: 'Capacity and duration are separate conditions: a nominal connection does not prove effective access.'
+  video_date: '2026-09-28'
+  video_duration: PT131.383333S
+  video_captions: 01-electricidad-bienestar-visual-text.vtt
+  video_transcript: 01-electricidad-bienestar-transcript.html
+  video_chapters:
+  - name: A connection does not guarantee service
+    start: 0.0
+    end: 21.55
+  - name: An outage can cost more than its duration
+    start: 21.55
+    end: 43.1
+  - name: Continuity can be a process requirement
+    start: 43.1
+    end: 64.65
+  - name: More energy does not always add another task
+    start: 64.65
+    end: 86.516667
+  - name: Scheduling changes peak power
+    start: 86.516667
+    end: 109.516667
+  - name: A battery has two different limits
+    start: 109.516667
+    end: 131.383333
 series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md:
   video: 02-ia-tecnologia-electrica.mp4
   video_poster: 02-ia-tecnologia-electrica.jpg
-  video_title: AI as an Electrical Technology
-  video_duration: PT1M2S
-
+  video_title: AI within an electricity system
+  video_summary: 'At twenty thousand queries, inference uses two hundred and the total reaches three hundred: volume matters.'
+  video_date: '2026-09-28'
+  video_duration: PT134.816667S
+  video_captions: 02-ia-tecnologia-electrica-visual-text.vtt
+  video_transcript: 02-ia-tecnologia-electrica-transcript.html
+  video_chapters:
+  - name: Training and inference accumulate energy differently
+    start: 0.0
+    end: 22.25
+  - name: Efficiency per task does not fix total consumption
+    start: 22.25
+    end: 44.433333
+  - name: The server is not the whole facility
+    start: 44.433333
+    end: 67.816667
+  - name: Capacity is limited by the tightest constraint
+    start: 67.816667
+    end: 89.683333
+  - name: Manufacturing impact needs an allocation rule
+    start: 89.683333
+    end: 112.25
+  - name: Kilowatt-hours are not kilograms of emissions
+    start: 112.25
+    end: 134.816667
 series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md:
   video: 03-pib-vs-bienestar.mp4
   video_poster: 03-pib-vs-bienestar.jpg
-  video_title: "Measurement: GDP vs Well-being"
-  video_duration: PT1M2S
-
+  video_title: What GDP measures and what it leaves out
+  video_summary: 'At first-period prices, volume rises from one hundred to two hundred: distinguish nominal and real GDP.'
+  video_date: '2026-09-28'
+  video_duration: PT134.65S
+  video_captions: 03-pib-vs-bienestar-visual-text.vtt
+  video_transcript: 03-pib-vs-bienestar-transcript.html
+  video_chapters:
+  - name: Price can hide a quantity change
+    start: 0.0
+    end: 22.616667
+  - name: A service and its measurement are not identical
+    start: 22.616667
+    end: 44.866667
+  - name: The total can rise while the per-person figure falls
+    start: 44.866667
+    end: 66.416667
+  - name: Gross and net domestic product differ
+    start: 66.416667
+    end: 89.033333
+  - name: Time can change without more output
+    start: 89.033333
+    end: 110.583333
+  - name: Spending is not all the value received
+    start: 110.583333
+    end: 134.65
 series/ia-pib-bienestar-energia/04-ia-pib-hoy.md:
   video: 04-ia-pib-hoy.mp4
   video_poster: 04-ia-pib-hoy.jpg
-  video_title: AI and GDP Today
-  video_duration: PT1M2S
-
+  video_title: From task improvement to aggregate effects
+  video_summary: 'Total time becomes eighty-five minutes: improvement depends on the fraction actually affected.'
+  video_date: '2026-09-28'
+  video_duration: PT136.366667S
+  video_captions: 04-ia-pib-hoy-visual-text.vtt
+  video_transcript: 04-ia-pib-hoy-transcript.html
+  video_chapters:
+  - name: Speeding up one part does not double the process
+    start: 0.0
+    end: 22.25
+  - name: A local improvement must be weighted by coverage
+    start: 22.25
+    end: 46.316667
+  - name: Costs and benefits can arrive at different times
+    start: 46.316667
+    end: 70.383333
+  - name: Doubling deliveries does not double valid results
+    start: 70.383333
+    end: 92.25
+  - name: Saving time does not decide how it is used
+    start: 92.25
+    end: 114.816667
+  - name: Before-and-after comparison does not isolate an effect
+    start: 114.816667
+    end: 136.366667
 series/from-cave-to-agi/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
@@ -260,7 +474,6 @@ series/from-cave-to-agi/00_presentacion_serie.md:
   - name: Mechanisms accumulate; they do not replace everything
     start: 108.766667
     end: 130.316667
-
 series/from-cave-to-agi/01-representar.md:
   video: 01-representar.mp4
   video_poster: 01-representar.jpg
@@ -289,7 +502,6 @@ series/from-cave-to-agi/01-representar.md:
   - name: Measuring change over smaller intervals
     start: 109.516667
     end: 131.766667
-
 series/from-cave-to-agi/02-mecanizar.md:
   video: 02-mecanizar.mp4
   video_poster: 02-mecanizar.jpg
@@ -318,7 +530,6 @@ series/from-cave-to-agi/02-mecanizar.md:
   - name: Four equally likely alternatives require two bits
     start: 108.766667
     end: 130.316667
-
 series/from-cave-to-agi/03-aprender.md:
   video: 03-aprender.mp4
   video_poster: 03-aprender.jpg
@@ -347,7 +558,6 @@ series/from-cave-to-agi/03-aprender.md:
   - name: A short window discards distant context
     start: 111.966667
     end: 134.9
-
 series/from-cave-to-agi/04-escalar.md:
   date: 2026-03-30
   video: 04-escalar.mp4
@@ -377,7 +587,6 @@ series/from-cave-to-agi/04-escalar.md:
   - name: Instruction following adds a training objective
     start: 109.516667
     end: 131.066667
-
 series/from-cave-to-agi/05-mas-alla.md:
   video: 05-mas-alla.mp4
   video_poster: 05-mas-alla.jpg
@@ -406,43 +615,36 @@ series/from-cave-to-agi/05-mas-alla.md:
   - name: A local improvement does not prove universal capability
     start: 110.966667
     end: 132.516667
-
 series/modelos-razonadores/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: Reasoning Models
   video_duration: PT1M15S
-
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg
   video_title: What It Means for an LLM to Reason
   video_duration: PT1M22S
-
 series/modelos-razonadores/02-fallos.md:
   video: 02-fallos.mp4
   video_poster: 02-fallos.jpg
   video_title: How Reasoning Fails
   video_duration: PT1M48S
-
 series/modelos-razonadores/03-test-time-compute.md:
   video: 03-test-time-compute.mp4
   video_poster: 03-test-time-compute.jpg
   video_title: Test-Time Compute
   video_duration: PT2M9S
-
 series/modelos-razonadores/04-latencia-streaming.md:
   video: 04-latencia-streaming.mp4
   video_poster: 04-latencia-streaming.jpg
   video_title: Latency, Streaming and Product Design
   video_duration: PT1M55S
-
 series/modelos-razonadores/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
   video_title: Reasoning Risks and Production Controls
   video_duration: PT2M1S
-
 series/datacenters-espacio/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
@@ -470,7 +672,6 @@ series/datacenters-espacio/00_presentacion_serie.md:
   - name: Compare the system. Not one advantage.
     start: 110
     end: 132
-
 series/datacenters-espacio/01-por-que-ahora.md:
   video: 01-por-que-ahora.mp4
   video_poster: 01-por-que-ahora.jpg
@@ -498,7 +699,6 @@ series/datacenters-espacio/01-por-que-ahora.md:
   - name: A projection is not an observed result.
     start: 112
     end: 134
-
 series/datacenters-espacio/02-energia-calor-conectividad.md:
   video: 02-energia-calor-conectividad.mp4
   video_poster: 02-energia-calor-conectividad.jpg
@@ -526,7 +726,6 @@ series/datacenters-espacio/02-energia-calor-conectividad.md:
   - name: Detecting an error does not fix everything.
     start: 116
     end: 138
-
 series/datacenters-espacio/03-que-es-datacenter-espacio.md:
   video: 03-que-es-datacenter-espacio.mp4
   video_poster: 03-que-es-datacenter-espacio.jpg
@@ -554,7 +753,6 @@ series/datacenters-espacio/03-que-es-datacenter-espacio.md:
   - name: The mission includes its end.
     start: 110
     end: 132
-
 series/datacenters-espacio/04-huella-real-datacenter.md:
   video: 04-huella-real-datacenter.mp4
   video_poster: 04-huella-real-datacenter.jpg
@@ -582,55 +780,47 @@ series/datacenters-espacio/04-huella-real-datacenter.md:
   - name: Changing location does not erase the footprint.
     start: 114
     end: 136
-
 series/seguridad-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: AI Security
-  video_summary: "How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action."
+  video_summary: How untrusted input can influence an AI system and which authorization boundaries limit whether that influence becomes an action.
   video_duration: PT1M30S
-
 series/seguridad-ia/01-prompt-injection.md:
   video: 01-prompt-injection.mp4
   video_poster: 01-prompt-injection.jpg
   video_title: Prompt Injection
-  video_summary: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
+  video_summary: How an instruction hidden in a document can enter an AI system and which controls separate reading from action.
   video_duration: PT1M30S
-
 series/seguridad-ia/02-jailbreaks.md:
   video: 02-jailbreaks.mp4
   video_poster: 02-jailbreaks.jpg
   video_title: Jailbreaks
-  video_summary: "How repeated and adaptive prompt attempts change the attack surface, and why authorization and attempt limits still matter after a refusal."
+  video_summary: How repeated and adaptive prompt attempts change the attack surface, and why authorization and attempt limits still matter after a refusal.
   video_duration: PT1M30S
-
 series/seguridad-ia/03-envenenamiento.md:
   video: 03-envenenamiento.mp4
   video_poster: 03-envenenamiento.jpg
   video_title: Poisoning
-  video_summary: "How untrusted input can become persistent memory, re-enter a later decision, and survive naive deletion through derived state."
+  video_summary: How untrusted input can become persistent memory, re-enter a later decision, and survive naive deletion through derived state.
   video_duration: PT1M30S
-
 series/seguridad-ia/04-red-teaming.md:
   video: 04-red-teaming.mp4
   video_poster: 04-red-teaming.jpg
   video_title: Red Teaming
-  video_summary: "How to test the full causal path from adversarial input to authorization, external effect, recovery, and a reproducible release regression."
+  video_summary: How to test the full causal path from adversarial input to authorization, external effect, recovery, and a reproducible release regression.
   video_duration: PT1M30S
-
 series/seguridad-ia/05-controles-produccion.md:
   video: 05-controles-produccion.mp4
   video_poster: 05-controles-produccion.jpg
   video_title: Production Controls
-  video_summary: "How least privilege, independent authorization, kill paths, observability, and evidence-bound release gates limit damage when the model fails."
+  video_summary: How least privilege, independent authorization, kill paths, observability, and evidence-bound release gates limit damage when the model fails.
   video_duration: PT1M30S
-
 articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
   video: reactive-proactive-agent-header-demo.mp4
   video_poster: reactive-proactive-agent-header-demo.jpg
   video_title: Proactive and reactive agents and tool calls
   video_duration: PT20S
-
 series/agentes-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
@@ -658,7 +848,6 @@ series/agentes-ia/00_presentacion_serie.md:
   - name: Accepted does not mean completed.
     start: 110
     end: 132
-
 series/agentes-ia/01-que-es-un-agente.md:
   video: 01-que-es-un-agente.mp4
   video_poster: 01-que-es-un-agente.jpg
@@ -686,7 +875,6 @@ series/agentes-ia/01-que-es-un-agente.md:
   - name: Define what proves the task is complete.
     start: 110
     end: 132
-
 series/agentes-ia/02-anatomia-de-un-agente.md:
   video: 02-anatomia-de-un-agente.mp4
   video_poster: 02-anatomia-de-un-agente.jpg
@@ -714,7 +902,6 @@ series/agentes-ia/02-anatomia-de-un-agente.md:
   - name: Memory needs provenance and freshness.
     start: 112
     end: 134
-
 series/agentes-ia/03-como-evaluar-un-agente.md:
   video: 03-como-evaluar-un-agente.mp4
   video_poster: 03-como-evaluar-un-agente.jpg
@@ -742,7 +929,6 @@ series/agentes-ia/03-como-evaluar-un-agente.md:
   - name: The agent must not rewrite its own test.
     start: 112
     end: 134
-
 series/agentes-ia/04-seguridad-agentes.md:
   video: 04-seguridad-agentes.mp4
   video_poster: 04-seguridad-agentes.jpg
@@ -770,7 +956,6 @@ series/agentes-ia/04-seguridad-agentes.md:
   - name: One defense is not enough.
     start: 110
     end: 132
-
 series/agentes-ia/05-de-la-demo-a-produccion.md:
   video: 05-de-la-demo-a-produccion.mp4
   video_poster: 05-de-la-demo-a-produccion.jpg
@@ -798,7 +983,6 @@ series/agentes-ia/05-de-la-demo-a-produccion.md:
   - name: Use an agent where the sequence needs one.
     start: 116
     end: 138
-
 series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md:
   video: 01-arquitecturas-de-voz.mp4
   video_poster: 01-arquitecturas-de-voz.jpg
@@ -827,7 +1011,6 @@ series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md:
   - name: The requirement before the ranking
     start: 115
     end: 138
-
 series/agentes-voz-tiempo-real/02-turn-taking.md:
   video: 02-turn-taking.mp4
   video_poster: 02-turn-taking.jpg
@@ -856,7 +1039,6 @@ series/agentes-voz-tiempo-real/02-turn-taking.md:
   - name: One turn. One decision.
     start: 115
     end: 138
-
 series/agentes-voz-tiempo-real/03-presupuesto-latencia.md:
   video: 03-presupuesto-latencia.mp4
   video_poster: 03-presupuesto-latencia.jpg
@@ -885,7 +1067,6 @@ series/agentes-voz-tiempo-real/03-presupuesto-latencia.md:
   - name: Change one layer. Measure the effect.
     start: 116
     end: 139
-
 series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md:
   video: 04-tools-estado-acciones-asincronas.mp4
   video_poster: 04-tools-estado-acciones-asincronas.jpg
@@ -914,7 +1095,6 @@ series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md:
   - name: Async needs an owner
     start: 115
     end: 139
-
 series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md:
   video: 05-webrtc-sip-telefonia-red.mp4
   video_poster: 05-webrtc-sip-telefonia-red.jpg
@@ -943,7 +1123,6 @@ series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md:
   - name: Repair must arrive in time
     start: 116
     end: 139
-
 series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
   video: 06-evaluacion-observabilidad-reliability.mp4
   video_poster: 06-evaluacion-observabilidad-reliability.jpg
@@ -972,7 +1151,6 @@ series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
   - name: From incident to a useful regression
     start: 115
     end: 139
-
 series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
   video: 01-que-es-agent-harness.mp4
   video_poster: 01-que-es-agent-harness.jpg
@@ -1001,7 +1179,6 @@ series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
   - name: Stopping does not mean success
     start: 108.75
     end: 130.8
-
 series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md:
   video: 02-contexto-workspace-sandboxing-aislamiento.mp4
   video_poster: 02-contexto-workspace-sandboxing-aislamiento.jpg
@@ -1030,7 +1207,6 @@ series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamient
   - name: Preserve changes owned by others
     start: 108.766667
     end: 130.433333
-
 series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md:
   video: 03-specs-planificacion-task-decomposition-checkpoints.mp4
   video_poster: 03-specs-planificacion-task-decomposition-checkpoints.jpg
@@ -1059,7 +1235,6 @@ series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-c
   - name: The task requires the whole contract
     start: 110.75
     end: 132.25
-
 series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md:
   video: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.mp4
   video_poster: 04-tools-permisos-approvals-hooks-secretos-trust-boundaries.jpg
@@ -1088,7 +1263,6 @@ series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-
   - name: Content does not rewrite policy
     start: 110.233333
     end: 132.816667
-
 series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md:
   video: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.mp4
   video_poster: 05-tests-verifiers-review-diffs-stop-conditions-evaluacion.jpg
@@ -1117,7 +1291,6 @@ series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-condit
   - name: One run does not measure reliability
     start: 111.75
     end: 133.8
-
 series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md:
   video: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.mp4
   video_poster: 06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.jpg
@@ -1146,7 +1319,6 @@ series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuper
   - name: Deliver with evidence
     start: 111.916667
     end: 135.25
-
 series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
   video: 01-context-engineering-vs-prompt-engineering.mp4
   video_poster: 01-context-engineering-vs-prompt-engineering.jpg
@@ -1175,7 +1347,6 @@ series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineeri
   - name: Reconstruct the turn
     start: 110.15
     end: 131.7
-
 series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md:
   video: 02-context-budgets-prioritisation-compaction-provenance.mp4
   video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
@@ -1204,7 +1375,6 @@ series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compacti
   - name: A pointer must recover the version
     start: 111.933333
     end: 135.25
-
 series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md:
   video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
   video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
@@ -1233,7 +1403,6 @@ series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-s
   - name: Correct the derivatives too
     start: 108.383333
     end: 129.933333
-
 series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md:
   video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
   video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
@@ -1262,7 +1431,6 @@ series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-re
   - name: Identify the failing layer
     start: 111.283333
     end: 134.283333
-
 series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md:
   video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
   video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
@@ -1291,7 +1459,6 @@ series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resourc
   - name: Transport does not confer authority
     start: 111.533333
     end: 134.916667
-
 series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md:
   video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
   video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
@@ -1320,7 +1487,6 @@ series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-
   - name: Measure success and isolation separately
     start: 110.783333
     end: 133.783333
-
 series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md:
   video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
   video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
@@ -1349,7 +1515,6 @@ series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throug
   - name: Workload shape matters
     start: 110.483333
     end: 133.05
-
 series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md:
   video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
   video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
@@ -1378,7 +1543,6 @@ series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuo
   - name: Cancellation releases state
     start: 111.183333
     end: 133.433333
-
 series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md:
   video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
   video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
@@ -1407,7 +1571,6 @@ series/llm-inference-engineering-economics/03-quantization-parallelism-memory-qu
   - name: Replicas are not experts
     start: 113.483333
     end: 135.35
-
 series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md:
   video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
   video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
@@ -1436,13 +1599,11 @@ series/llm-inference-engineering-economics/04-speculative-decoding-prefix-cachin
   - name: Interleave the work
     start: 113.3
     end: 135.55
-
 series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md:
   video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
   video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
   video_title: Decide under constraints
-  video_summary: Selection optimises within the eligible set. A cheap but incompatible alternative is not a valid
-    option.
+  video_summary: Selection optimises within the eligible set. A cheap but incompatible alternative is not a valid option.
   video_date: '2026-09-28'
   video_duration: PT134.95S
   video_captions: 05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt
@@ -1466,7 +1627,6 @@ series/llm-inference-engineering-economics/05-model-routing-fallback-caching-wor
   - name: Similarity is not equivalence
     start: 112.333333
     end: 134.95
-
 ? series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
 : video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
   video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
@@ -1495,13 +1655,11 @@ series/llm-inference-engineering-economics/05-model-routing-fallback-caching-wor
   - name: Preserve the variation
     start: 113.033333
     end: 135.283333
-
 series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md:
   video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4
   video_poster: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.jpg
   video_title: What are we evaluating?
-  video_summary: A broader test checks the task, policies and real effects. Preserve
-    versions, cases and protocol to make comparisons reproducible.
+  video_summary: A broader test checks the task, policies and real effects. Preserve versions, cases and protocol to make comparisons reproducible.
   video_duration: PT2M12S
   video_captions: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-visual-text.vtt
   video_transcript: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria-transcript.html
@@ -1524,13 +1682,11 @@ series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema
   - name: Diagnose narrowly. Confirm in the system.
     start: 110
     end: 132
-
 series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md:
   video: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.mp4
   video_poster: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning.jpg
   video_title: Cases that test the system
-  video_summary: Changing a label or grader can change the score without improving
-    the model. Create a new version; do not silently rewrite the earlier result.
+  video_summary: Changing a label or grader can change the score without improving the model. Create a new version; do not silently rewrite the earlier result.
   video_duration: PT2M14S
   video_captions: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-visual-text.vtt
   video_transcript: 02-offline-eval-sets-curation-hard-negatives-contamination-versioning-transcript.html
@@ -1553,13 +1709,11 @@ series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negat
   - name: The criterion changed. The evaluation changed.
     start: 112
     end: 134
-
 series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md:
   video: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.mp4
   video_poster: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.jpg
   video_title: How to evaluate the evaluator
-  video_summary: Freeze the judge version before testing it on a separate set. Accept,
-    restrict or reject its use according to risk and evidence.
+  video_summary: Freeze the judge version before testing it on a separate set. Accept, restrict or reject its use according to risk and evidence.
   video_duration: PT2M14S
   video_captions: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-visual-text.vtt
   video_transcript: 03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo-transcript.html
@@ -1582,13 +1736,11 @@ series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibr
   - name: Calibrate on dev. Test separately.
     start: 112
     end: 134
-
 series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md:
   video: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.mp4
   video_poster: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.jpg
   video_title: The result and the path
-  video_summary: A hard violation blocks release even when other metrics improve.
-    Save the trajectory and the verdict reason so the result is reproducible.
+  video_summary: A hard violation blocks release even when other metrics improve. Save the trajectory and the verdict reason so the result is reproducible.
   video_duration: PT2M16S
   video_captions: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-visual-text.vtt
   video_transcript: 04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy-transcript.html
@@ -1611,13 +1763,11 @@ series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools
   - name: The gate must explain why it stops.
     start: 114
     end: 136
-
 series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md:
   video: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.mp4
   video_poster: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.jpg
   video_title: Evidence before expanding
-  video_summary: A violation blocks; insufficient data keeps the rollout paused. Choose
-    stages for the change and its risk; not every release needs them all.
+  video_summary: A violation blocks; insufficient data keeps the rollout paused. Choose stages for the change and its risk; not every release needs them all.
   video_duration: PT2M14S
   video_captions: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
   video_transcript: 05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-transcript.html
@@ -1640,13 +1790,11 @@ series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-gu
   - name: Expansion requires sufficient evidence.
     start: 112
     end: 134
-
 series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md:
   video: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.mp4
   video_poster: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops.jpg
   video_title: From incident to repair
-  video_summary: After release, measure recurrence and exposure over the agreed observation
-    window. Close the loop with production evidence and an accountable owner.
+  video_summary: After release, measure recurrence and exposure over the agreed observation window. Close the loop with production evidence and an accountable owner.
   video_duration: PT2M14S
   video_captions: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
   video_transcript: 06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
@@ -1669,4 +1817,3 @@ series/evaluating-ai-systems-production/06-observability-failure-taxonomies-prod
   - name: Green tests are not production verification.
     start: 112
     end: 134
-

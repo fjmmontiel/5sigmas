@@ -1,17 +1,42 @@
 ---
 title: Fundamentos de IA e IA generativa
-description: "Serie introductoria sobre IA e IA generativa: qué son, cómo funcionan, en qué se diferencian y qué es la AGI. Para profesionales técnicos y decisores."
+description: 'Serie introductoria sobre IA e IA generativa: qué son, cómo funcionan, en qué se diferencian y qué es la AGI. Para profesionales técnicos y decisores.'
 keywords: inteligencia artificial, IA generativa, LLMs, AGI, machine learning, fundamentos IA
 date: 2026-03-15
 tags:
-  - IA
-  - GenAI
-  - LLMs
-  - AGI
+- IA
+- GenAI
+- LLMs
+- AGI
 hide:
-  - toc
-video: "00_presentacion_serie.mp4"
-video_duration: "PT0M59S"
+- toc
+video: 00_presentacion_serie.mp4
+video_duration: PT129.616667S
+video_poster: 00_presentacion_serie.jpg
+video_title: Un mapa que separa tareas y sistemas
+video_summary: La forma de la salida determina qué errores debemos medir.
+video_date: '2026-09-28'
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: ¿Qué debe salir del sistema?
+  start: 0.0
+  end: 21.55
+- name: Un modelo no es todo el producto
+  start: 21.55
+  end: 43.1
+- name: Tres preguntas que no son sinónimos
+  start: 43.1
+  end: 64.65
+- name: Una consulta puede usar varias piezas
+  start: 64.65
+  end: 86.516667
+- name: Entrenar es un paso, no el cierre
+  start: 86.516667
+  end: 108.066667
+- name: Capacidad y autonomía son distintas
+  start: 108.066667
+  end: 129.616667
 ---
 # Fundamentos de IA e IA generativa
 

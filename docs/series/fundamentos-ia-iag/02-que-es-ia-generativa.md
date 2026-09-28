@@ -1,15 +1,40 @@
 ---
 title: Qué es IA Generativa
-description: "Cómo funciona la IA generativa: del embedding y el Transformer a los modelos fundacionales. Leyes de escala, LLMOps y diferencias entre LLM, RAG y agentes."
+description: 'Cómo funciona la IA generativa: del embedding y el Transformer a los modelos fundacionales. Leyes de escala, LLMOps y diferencias entre LLM, RAG y agentes.'
 date: 2026-03-17
 date_modified: 2026-08-23
-keywords: "ia generativa, qué es ia generativa, transformer, modelos de lenguaje, LLM, embedding, leyes de escala, GPT, modelos fundacionales, RLHF, fine-tuning"
+keywords: ia generativa, qué es ia generativa, transformer, modelos de lenguaje, LLM, embedding, leyes de escala, GPT, modelos fundacionales, RLHF, fine-tuning
 tags:
-  - IA
-  - GenAI
-  - LLMs
-video: "02-que-es-ia-generativa.mp4"
-video_duration: "PT1M14S"
+- IA
+- GenAI
+- LLMs
+video: 02-que-es-ia-generativa.mp4
+video_duration: PT130.95S
+video_poster: 02-que-es-ia-generativa.jpg
+video_title: Cómo se construye una respuesta generativa
+video_summary: La cercanía depende del modelo y la tarea; no garantiza que dos afirmaciones sean equivalentes.
+video_date: '2026-09-28'
+video_captions: 02-que-es-ia-generativa-visual-text.vtt
+video_transcript: 02-que-es-ia-generativa-transcript.html
+video_chapters:
+- name: La representación permite comparar
+  start: 0.0
+  end: 21.866667
+- name: La misma palabra recibe otro contexto
+  start: 21.866667
+  end: 44.116667
+- name: Una distribución antes del siguiente token
+  start: 44.116667
+  end: 65.983333
+- name: Dar ejemplos no actualiza los pesos
+  start: 65.983333
+  end: 87.533333
+- name: Recuperar añade evidencia, no certeza
+  start: 87.533333
+  end: 109.4
+- name: Proponer una acción no es ejecutarla
+  start: 109.4
+  end: 130.95
 ---
 
 # Capítulo 2 — Qué es IA Generativa

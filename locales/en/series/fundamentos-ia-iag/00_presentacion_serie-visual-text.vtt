@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+A transaction may need a label; a question may need a written explanation.
+
+2
+00:00:07.350 --> 00:00:14.200
+Classification selects defined categories. Generation constructs a sequence of content.
+
+3
+00:00:14.200 --> 00:00:21.550
+The output format determines which errors we need to measure.
+
+4
+00:00:22.050 --> 00:00:28.900
+The model transforms an input into a prediction or continuation.
+
+5
+00:00:28.900 --> 00:00:35.750
+The product adds context, permissions, tools and quality controls.
+
+6
+00:00:35.750 --> 00:00:43.100
+Changing those components can change the result without retraining the model.
+
+7
+00:00:43.600 --> 00:00:50.450
+The family describes the technique: for example, a neural network.
+
+8
+00:00:50.450 --> 00:00:57.300
+The signal describes how it learns: labels, data structure or reward.
+
+9
+00:00:57.300 --> 00:01:04.650
+The update describes what changes: here, the weights of that same network.
+
+10
+00:01:05.150 --> 00:01:12.000
+A shop receives a message about returning an order.
+
+11
+00:01:12.000 --> 00:01:18.850
+A rule checks the deadline; a classifier identifies the message intent.
+
+12
+00:01:18.850 --> 00:01:26.517
+A generative model writes the reply using the policy and the rule result.
+
+13
+00:01:27.017 --> 00:01:33.867
+Separate training data from cases reserved for evaluation.
+
+14
+00:01:33.867 --> 00:01:40.717
+Deploy only the version that meets the criteria defined for the task.
+
+15
+00:01:40.717 --> 00:01:48.067
+Observe real errors and drift: a new version must pass evaluation again.
+
+16
+00:01:48.567 --> 00:01:55.417
+A system may solve a difficult task while only making recommendations.
+
+17
+00:01:55.417 --> 00:02:02.267
+Another may perform simple actions with broad permissions.
+
+18
+00:02:02.267 --> 00:02:09.617
+Describe separately what it can do and what it is authorized to execute.
+

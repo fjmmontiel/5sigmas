@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Fix an illustrative training run at one hundred kilowatt-hours.
+
+2
+00:00:07.350 --> 00:00:14.200
+Each later query uses 0.01 kilowatt-hours; ten thousand queries match training energy.
+
+3
+00:00:14.200 --> 00:00:22.250
+At twenty thousand queries, inference uses two hundred and the total reaches three hundred: volume matters.
+
+4
+00:00:22.750 --> 00:00:29.600
+One hundred tasks at ten watt-hours each use one thousand in total.
+
+5
+00:00:29.600 --> 00:00:36.767
+Energy per task falls to five, while scenario demand rises to three hundred.
+
+6
+00:00:36.767 --> 00:00:44.433
+The total becomes fifteen hundred: this is not inevitable; it depends on demand.
+
+7
+00:00:44.933 --> 00:00:51.783
+IT equipment draws eight kilowatts while the whole facility draws ten.
+
+8
+00:00:51.783 --> 00:00:58.633
+The remaining two power supporting infrastructure within this boundary.
+
+9
+00:00:58.633 --> 00:01:07.817
+Power usage effectiveness is ten divided by eight: 1.25. It alone measures neither model quality nor useful work.
+
+10
+00:01:08.317 --> 00:01:15.167
+Each unit needs two kilowatts; twelve available allow at most six.
+
+11
+00:01:15.167 --> 00:01:22.017
+Eight slots exist, but cooling supports only ten kilowatts: five units.
+
+12
+00:01:22.017 --> 00:01:29.683
+Combined capacity is the minimum of six, eight and five: five under these assumptions.
+
+13
+00:01:30.183 --> 00:01:37.033
+Assign six hundred kilograms of embodied emissions to a fictional device.
+
+14
+00:01:37.033 --> 00:01:44.200
+Across one million useful tasks that is 0.6 grams each; across half a million, 1.2.
+
+15
+00:01:44.200 --> 00:01:52.250
+Allocation changes with service life and volume: it is not a direct measurement of each query.
+
+16
+00:01:52.750 --> 00:01:59.600
+Keep consumption fixed at twenty kilowatt-hours.
+
+17
+00:01:59.600 --> 00:02:06.767
+Illustrative factors of 0.1 and 0.5 kilograms per kilowatt-hour give two and ten kilograms.
+
+18
+00:02:06.767 --> 00:02:14.817
+Boundary and factor matter: this calculation covers neither marginal emissions nor all manufacturing.
+

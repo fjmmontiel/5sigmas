@@ -32,6 +32,20 @@
       "round": "M1",
       "approved_on": "2026-09-28",
       "scope": "Exact final delivered ES/EN H/V files; horizontal variants published, vertical variants retained in owner collection"
+    },
+    {
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "approved_on": "2026-09-28",
+      "scope": "Exact owner-approved delivered ES/EN H/V files; publish horizontal originals only",
+      "source_story_sha256": "a4020406f1e416133505da173d86807ea67f12c790eb10b4330235f9d12e1354"
+    },
+    {
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "approved_on": "2026-09-28",
+      "scope": "Exact owner-approved delivered ES/EN H/V files; publish horizontal originals only",
+      "source_story_sha256": "9edaa50b8a6d51fbe9909a19b47daccf0d37cfaa9276ce490f23a4c4454d63fa"
     }
   ],
   "public_scope": "60 exact approved horizontal MP4s in five series, ES/EN; 60 approved verticals remain in their owner collections",
@@ -3457,6 +3471,1146 @@
       "captions_scope": "Visual text, silent video; no invented narration",
       "transcript_path": "en/series/multimodalidad-iag/05-riesgos-transcript.html",
       "transcript_sha256": "3ecda26bf69954a6013c8fd44e245ece1dd14efe530434aa6afe6dec54214ef8"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "62fc35e360620546f1b9adc753b1e22dbc75d267d68bcb36639add3d58e03b65",
+      "bytes": 12413230,
+      "duration": 129.616667,
+      "duration_iso": "PT129.616667S",
+      "frames": 7777,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/00_presentacion_serie/",
+      "watch": "videos/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "poster_path": "series/fundamentos-ia-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "5f820e884a6147da0046b0d9c39f1ba83ad918497653644b5a4698bd4661a396",
+      "chapters": [
+        {
+          "name": "¿Qué debe salir del sistema?",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Un modelo no es todo el producto",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Tres preguntas que no son sinónimos",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "Una consulta puede usar varias piezas",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Entrenar es un paso, no el cierre",
+          "start": 86.516667,
+          "end": 108.066667
+        },
+        {
+          "name": "Capacidad y autonomía son distintas",
+          "start": 108.066667,
+          "end": 129.616667
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "1f46b722d02914251d1353f47b4c158cdf3a532fff55fd7e45e6bf1a65b5c3e7",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "c5d4db05c7797fd12f11868896ad1b3d1e84677a9f8e25066330c1787c04799f"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "3163ccc2fc943016d1c160fc44d30e297f139c37431ade225215e6808368d386",
+      "bytes": 11781209,
+      "duration": 129.616667,
+      "duration_iso": "PT129.616667S",
+      "frames": 7777,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "watch": "en/videos/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "poster_path": "en/series/fundamentos-ia-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "74948a4f28a59863ee770f75db4e7e0e20443134442dc4c4a8eb9bfdae437404",
+      "chapters": [
+        {
+          "name": "What must the system produce?",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "A model is not the entire product",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Three questions, not three synonyms",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "One request can use several components",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Training is one step, not completion",
+          "start": 86.516667,
+          "end": 108.066667
+        },
+        {
+          "name": "Capability and autonomy are different",
+          "start": 108.066667,
+          "end": 129.616667
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "86c6bc6df198a4a1f480de56c8889697572113a1010a6a7ada9741adde82d74c",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "11cb5279cb2092124f81bb9991c4532c86c068915ee4b5cded6a289b16fecad9"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "3a15988693d6f800630c35f0fc36d8bad6a116e4349b8982a3766f1ae8157c40",
+      "bytes": 12581918,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/01-que-es-ia/",
+      "watch": "videos/series/fundamentos-ia-iag/01-que-es-ia/",
+      "poster_path": "series/fundamentos-ia-iag/01-que-es-ia.jpg",
+      "poster_sha256": "1f3e7179ab26f7c8969c56a5f830aa1b3dd188878eac38af773c444b15c4dda6",
+      "chapters": [
+        {
+          "name": "Familia técnica y finalidad no son lo mismo",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Un árbol aprende una pregunta concreta",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "Contar frecuencias no es demostrar una causa",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "El centro se mueve hacia sus ejemplos",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "Una neurona calcula, compara y se ajusta",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Los datos de mañana pueden cambiar",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/01-que-es-ia-visual-text.vtt",
+      "captions_sha256": "02cbc68119094d2099a203a1bfc86a259200091d01052f7e20a7f6e193013f15",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/01-que-es-ia-transcript.html",
+      "transcript_sha256": "11dc3fae6e18bd52f4b661c0e8d83a29e6e00938e2f70e1f7ecdf188dbc60aab"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a4ac9e7b21824f4e9d8dcbac9075d95b9ca277df09be5ce8352ad0b5ace4782b",
+      "bytes": 12223646,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/01-que-es-ia/",
+      "watch": "en/videos/series/fundamentos-ia-iag/01-que-es-ia/",
+      "poster_path": "en/series/fundamentos-ia-iag/01-que-es-ia.jpg",
+      "poster_sha256": "4f36359f500df7206a974a37beaff1fda6d07d5825235ed3cbb4cc77bb4b203a",
+      "chapters": [
+        {
+          "name": "Technical family and purpose are different",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "A tree learns a concrete question",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "Counting frequencies does not prove causation",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "The center moves toward its examples",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "A neuron computes, compares and updates",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Tomorrow’s data can change",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/01-que-es-ia-visual-text.vtt",
+      "captions_sha256": "b4d82656d2a3c0bdc1e2fff0e1b573d5ff4dfb9db37869f50830c19734c5e53a",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/01-que-es-ia-transcript.html",
+      "transcript_sha256": "12e486b59744152a6caa22d92e6321f2aa949c3d143ae39af246a1bc00eda626"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "6283bab0f7871d3915e21989aa7eae7b396a49835f4b7eb39b4a9fb5458cbe94",
+      "bytes": 12852779,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "watch": "videos/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "poster_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa.jpg",
+      "poster_sha256": "0a853d3b532b8ef49744218a4ab38f36cccdfd6368ef0b02310ae2fbdeb566ef",
+      "chapters": [
+        {
+          "name": "La representación permite comparar",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "La misma palabra recibe otro contexto",
+          "start": 21.866667,
+          "end": 44.116667
+        },
+        {
+          "name": "Una distribución antes del siguiente token",
+          "start": 44.116667,
+          "end": 65.983333
+        },
+        {
+          "name": "Dar ejemplos no actualiza los pesos",
+          "start": 65.983333,
+          "end": 87.533333
+        },
+        {
+          "name": "Recuperar añade evidencia, no certeza",
+          "start": 87.533333,
+          "end": 109.4
+        },
+        {
+          "name": "Proponer una acción no es ejecutarla",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa-visual-text.vtt",
+      "captions_sha256": "2a5e7d82633ffad40121ce0e2d493bc3d75bf9e5564ec7286f71040b556e0f77",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa-transcript.html",
+      "transcript_sha256": "ffa82418833888d9b2cc5d4ead9dc5ba8940635be6ecef7d8119a0859e9751fd"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "9b5c386ecf98f24f1ed505fb61d2b1efa918a669ac1016c70c42c62c99d2e2f4",
+      "bytes": 12191615,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "watch": "en/videos/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "poster_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa.jpg",
+      "poster_sha256": "6550b360639bbc1460b896de9a18ad71ffa3d21455361c7e1286c27baf88be3f",
+      "chapters": [
+        {
+          "name": "Representation enables comparison",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "The same word receives different context",
+          "start": 21.866667,
+          "end": 44.116667
+        },
+        {
+          "name": "A distribution before the next token",
+          "start": 44.116667,
+          "end": 65.983333
+        },
+        {
+          "name": "Providing examples does not update weights",
+          "start": 65.983333,
+          "end": 87.533333
+        },
+        {
+          "name": "Retrieval adds evidence, not certainty",
+          "start": 87.533333,
+          "end": 109.4
+        },
+        {
+          "name": "Proposing an action is not executing it",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa-visual-text.vtt",
+      "captions_sha256": "33d2cedfd6d1f433cf1f80076e91e7644a91b41c6d7c33682199b0f601524703",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa-transcript.html",
+      "transcript_sha256": "8e3c13bb9a9f26f007f3319c964240bc8c44f9909d68891a027c20257e765c4e"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "77df3f67740fbfb93a76caf95fa3a6cd9eeaebbc0a9efb78b8cefb3f583c9c6e",
+      "bytes": 12781600,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "watch": "videos/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "poster_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg",
+      "poster_sha256": "c30efa7ebebd868c123e52d77b89913627105cf113ffb0b078da5d7b8b3ec522",
+      "chapters": [
+        {
+          "name": "Una puntuación y un texto se evalúan distinto",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Temperatura cambia el reparto de probabilidad",
+          "start": 21.866667,
+          "end": 44.05
+        },
+        {
+          "name": "Una explicación debe poder contrastarse",
+          "start": 44.05,
+          "end": 65.6
+        },
+        {
+          "name": "Una cifra depende de qué error cuenta",
+          "start": 65.6,
+          "end": 87.85
+        },
+        {
+          "name": "¿Quién elige el siguiente paso?",
+          "start": 87.85,
+          "end": 109.4
+        },
+        {
+          "name": "Primero fija requisitos verificables",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa-visual-text.vtt",
+      "captions_sha256": "22a8ca4a313bdd37c07afad7c91fdfca9d45fbfe9e61ddf35d187a648c674f96",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa-transcript.html",
+      "transcript_sha256": "89c8cdb3df342e9126865f9eaa7c9e82845ef881520f64dd501d1466206e046d"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "666419db979be49ad12b4c84cf1898979dd461c091af363d8ec53cb26f194fd5",
+      "bytes": 12331377,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "watch": "en/videos/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "poster_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg",
+      "poster_sha256": "20a8faff0f41e2d2d49a21cc39c35dc8968cc19b9822dbda78247f17323bc830",
+      "chapters": [
+        {
+          "name": "A score and a text need different evaluation",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Temperature changes the probability allocation",
+          "start": 21.866667,
+          "end": 44.05
+        },
+        {
+          "name": "An explanation must be testable",
+          "start": 44.05,
+          "end": 65.6
+        },
+        {
+          "name": "A metric depends on which error it counts",
+          "start": 65.6,
+          "end": 87.85
+        },
+        {
+          "name": "Who chooses the next step?",
+          "start": 87.85,
+          "end": 109.4
+        },
+        {
+          "name": "First define testable requirements",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa-visual-text.vtt",
+      "captions_sha256": "0b404394133857c782b5c3054e089d487a36a71feb384672a31375e0ab347f18",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa-transcript.html",
+      "transcript_sha256": "d0d34fd7526eee011504fe20e2a3f8e5da8daba3477058997de95842674d5f8a"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/04-agi.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "751f422b58f37932f4484c9dbf6600804a71f0f2a785313587a14383fa6e84e6",
+      "bytes": 14059813,
+      "duration": 132.083333,
+      "duration_iso": "PT132.083333S",
+      "frames": 7925,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/04-agi/",
+      "watch": "videos/series/fundamentos-ia-iag/04-agi/",
+      "poster_path": "series/fundamentos-ia-iag/04-agi.jpg",
+      "poster_sha256": "a3589063d73826b38ff71f7c7d2517dc82e1b03e8b939311945c378a4298b69e",
+      "chapters": [
+        {
+          "name": "Destacar en una tarea no mide toda la generalidad",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Generalizar exige una separación real",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Un permiso no demuestra inteligencia",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Los fallos se acumulan en una cadena",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "La métrica puede separarse del objetivo",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "Una definición útil declara cómo comprobarla",
+          "start": 109.516667,
+          "end": 132.083333
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/04-agi-visual-text.vtt",
+      "captions_sha256": "a44c2fd5324ccb572f40f654243267db63139e7e96a507afb78e1678ee11e2bf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/04-agi-transcript.html",
+      "transcript_sha256": "916ecf8e4340696b612526d266b3d168ab28001eb57317378013f9d4a0e6de72"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/04-agi.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "925280a3fa22996ea629f0c5fd7eb1d2d0baaff2289cf542b6331333f47479ae",
+      "bytes": 13220365,
+      "duration": 132.083333,
+      "duration_iso": "PT132.083333S",
+      "frames": 7925,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/04-agi/",
+      "watch": "en/videos/series/fundamentos-ia-iag/04-agi/",
+      "poster_path": "en/series/fundamentos-ia-iag/04-agi.jpg",
+      "poster_sha256": "3196d70b43ac08ad10877730cef4d37617b99663648061cffd86437be9775071",
+      "chapters": [
+        {
+          "name": "Excelling at one task does not measure all generality",
+          "start": 0.0,
+          "end": 21.866667
+        },
+        {
+          "name": "Generalization requires real separation",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "A permission does not demonstrate intelligence",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Failures accumulate along a chain",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "The metric can diverge from the goal",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "A useful definition says how to test it",
+          "start": 109.516667,
+          "end": 132.083333
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/04-agi-visual-text.vtt",
+      "captions_sha256": "57837eafd7c65c5ec51934cf76042b56c369e9e45ff2e8b715291a38b428188b",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/04-agi-transcript.html",
+      "transcript_sha256": "303e62f1b7a37433b431bf2e89b539d56787c7b66eb41bcc3c52a50f70a5f88b"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "f6679c3ee5b981d88e8b2a7ce1b13481f982a5b68a6e4eefa822b479254343a7",
+      "bytes": 5640541,
+      "duration": 134.6,
+      "duration_iso": "PT134.6S",
+      "frames": 8076,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "watch": "videos/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "poster_path": "series/ia-pib-bienestar-energia/00_presentacion_serie.jpg",
+      "poster_sha256": "25d38dce4c961019fd732f76d6b2a8b2e37ac950205e06cf489177e096ae4f1a",
+      "chapters": [
+        {
+          "name": "La energía debe llegar cuando hace falta",
+          "start": 0.0,
+          "end": 22.566667
+        },
+        {
+          "name": "Potencia y energía responden preguntas distintas",
+          "start": 22.566667,
+          "end": 44.116667
+        },
+        {
+          "name": "Contar intentos no mide servicio útil",
+          "start": 44.116667,
+          "end": 66.366667
+        },
+        {
+          "name": "Sumar ventas puede contar dos veces",
+          "start": 66.366667,
+          "end": 90.116667
+        },
+        {
+          "name": "Una media no describe a cada persona",
+          "start": 90.116667,
+          "end": 112.733333
+        },
+        {
+          "name": "Una asociación no identifica su causa",
+          "start": 112.733333,
+          "end": 134.6
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "91a08aa4deaa6698f7b1afab540e435d2003e396af04f0d246e2e2478907e643",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "fb382774d1cf0c516df4dffbdb99bc101916eb13e90237bb78bd50f8f80c7696"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "cd344d7bb49fb4465179c498bcb909388f46fcf4bc6078cbaf6f9850a7b9623c",
+      "bytes": 5491649,
+      "duration": 134.6,
+      "duration_iso": "PT134.6S",
+      "frames": 8076,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie.jpg",
+      "poster_sha256": "97b391a662875af45ad4e5fa0b2f16f0f6d74a83a4bdaa58d660ea293b07a8e3",
+      "chapters": [
+        {
+          "name": "Energy must arrive when it is needed",
+          "start": 0.0,
+          "end": 22.566667
+        },
+        {
+          "name": "Power and energy answer different questions",
+          "start": 22.566667,
+          "end": 44.116667
+        },
+        {
+          "name": "Counting attempts does not measure useful service",
+          "start": 44.116667,
+          "end": 66.366667
+        },
+        {
+          "name": "Adding sales can count the same value twice",
+          "start": 66.366667,
+          "end": 90.116667
+        },
+        {
+          "name": "A mean does not describe every person",
+          "start": 90.116667,
+          "end": 112.733333
+        },
+        {
+          "name": "An association does not identify its cause",
+          "start": 112.733333,
+          "end": 134.6
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "0d00d9049a5521461e194755b4822c9d024ebd3b0afbf4f8121d91eb258b8ea4",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "92643a18534c4bd54d571c7d000cbc7bc192143cb448dc27dcf7580c38a06c45"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "257a53e4bf582c15db54be818e50d2e425463a31208c81c4221e9df120acfc45",
+      "bytes": 5681124,
+      "duration": 131.383333,
+      "duration_iso": "PT131.383333S",
+      "frames": 7883,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "watch": "videos/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "poster_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar.jpg",
+      "poster_sha256": "82ea05271e95421ede6cf4655b8060843a25f1b661699b17d2fcc2139aae8fe5",
+      "chapters": [
+        {
+          "name": "Estar conectado no garantiza el servicio",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "Un corte puede costar más que su duración",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "La continuidad puede ser una condición del proceso",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "Más energía no siempre añade otra tarea",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "El horario cambia el pico de potencia",
+          "start": 86.516667,
+          "end": 109.516667
+        },
+        {
+          "name": "Una batería tiene dos límites diferentes",
+          "start": 109.516667,
+          "end": 131.383333
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar-visual-text.vtt",
+      "captions_sha256": "83e01d345fc003035aef8d8a00e0b7e37a5328ec879b32e0ff1ad45235467252",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar-transcript.html",
+      "transcript_sha256": "1a519b9ccfba0783afa990e3ec6600d7da7ddccdd256013f994690ac2d662beb"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "8c63614474a09f138e37bc82b382d17deaea8f214c8f436d87444bf1a190abea",
+      "bytes": 5365903,
+      "duration": 131.383333,
+      "duration_iso": "PT131.383333S",
+      "frames": 7883,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.jpg",
+      "poster_sha256": "2d8b6a8aa2e257cde77bb60f0405736c02a5188d77593c58926e8ff9e92bcbc4",
+      "chapters": [
+        {
+          "name": "A connection does not guarantee service",
+          "start": 0.0,
+          "end": 21.55
+        },
+        {
+          "name": "An outage can cost more than its duration",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Continuity can be a process requirement",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "More energy does not always add another task",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Scheduling changes peak power",
+          "start": 86.516667,
+          "end": 109.516667
+        },
+        {
+          "name": "A battery has two different limits",
+          "start": 109.516667,
+          "end": 131.383333
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar-visual-text.vtt",
+      "captions_sha256": "11e265db5298eb5fdac12ee9b8345f2f5b3aaa847df3b7d0a178c5ce07fc1643",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar-transcript.html",
+      "transcript_sha256": "082681999d322949b9395dd27bb4422b8a68af80a785e9fa09facdac96a0b0d4"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "5871cc0a7133ba51df1474022c5337017c0dc61a4171d2373cbfa98d42723608",
+      "bytes": 5863664,
+      "duration": 134.816667,
+      "duration_iso": "PT134.816667S",
+      "frames": 8089,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "watch": "videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "poster_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg",
+      "poster_sha256": "1d27c5c9e11db1f1d7c3ff8ba8d1f6aa2cd64703eee941761b606bce50e697d8",
+      "chapters": [
+        {
+          "name": "Entrenar e inferir acumulan energía de forma distinta",
+          "start": 0.0,
+          "end": 22.25
+        },
+        {
+          "name": "Mejorar por tarea no fija el consumo total",
+          "start": 22.25,
+          "end": 44.433333
+        },
+        {
+          "name": "El servidor no es todo el edificio",
+          "start": 44.433333,
+          "end": 67.816667
+        },
+        {
+          "name": "La capacidad la limita la restricción más estricta",
+          "start": 67.816667,
+          "end": 89.683333
+        },
+        {
+          "name": "La fabricación exige declarar cómo se reparte",
+          "start": 89.683333,
+          "end": 112.25
+        },
+        {
+          "name": "Los kilovatios-hora no son kilogramos de emisiones",
+          "start": 112.25,
+          "end": 134.816667
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-visual-text.vtt",
+      "captions_sha256": "8b7266f95550383ce445db03253c5ec2059fb67c7454932d0b0bc9d589cb7e4d",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-transcript.html",
+      "transcript_sha256": "d3e6aa709c9855d9da2a2dfdd67cad1af0d770a648da4dd56a9d0e9127467590"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "fa6ed6d30afdb13c853751a5b46fac9520f7a582c117c1ffb09505fe7f9dac86",
+      "bytes": 5655289,
+      "duration": 134.816667,
+      "duration_iso": "PT134.816667S",
+      "frames": 8089,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg",
+      "poster_sha256": "a5e1b99171f0beb330964f7d35fad97976547f2df4ef77a5936f7393a5c95039",
+      "chapters": [
+        {
+          "name": "Training and inference accumulate energy differently",
+          "start": 0.0,
+          "end": 22.25
+        },
+        {
+          "name": "Efficiency per task does not fix total consumption",
+          "start": 22.25,
+          "end": 44.433333
+        },
+        {
+          "name": "The server is not the whole facility",
+          "start": 44.433333,
+          "end": 67.816667
+        },
+        {
+          "name": "Capacity is limited by the tightest constraint",
+          "start": 67.816667,
+          "end": 89.683333
+        },
+        {
+          "name": "Manufacturing impact needs an allocation rule",
+          "start": 89.683333,
+          "end": 112.25
+        },
+        {
+          "name": "Kilowatt-hours are not kilograms of emissions",
+          "start": 112.25,
+          "end": 134.816667
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-visual-text.vtt",
+      "captions_sha256": "58ad35033c83e075f530fedcfcfd3d6ccfb16921607cb334b4f9a2020d30e624",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-transcript.html",
+      "transcript_sha256": "932f1c9489e998fceb3af00df8e2add63e82a3c9214583609af30982bbb5d0c2"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "83fbea277199aaed221e1624f99c1903b34404f29e39d0543abbcc0eb0ff3ab4",
+      "bytes": 5698379,
+      "duration": 134.65,
+      "duration_iso": "PT134.65S",
+      "frames": 8079,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "watch": "videos/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "poster_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg",
+      "poster_sha256": "6e75460cced7043bfc267b50d8de728b2555ae96d9cde5f68fb14e35b02e8ade",
+      "chapters": [
+        {
+          "name": "El precio puede ocultar un cambio de cantidad",
+          "start": 0.0,
+          "end": 22.616667
+        },
+        {
+          "name": "El servicio y su medición no son idénticos",
+          "start": 22.616667,
+          "end": 44.866667
+        },
+        {
+          "name": "El total puede subir y la cifra por persona bajar",
+          "start": 44.866667,
+          "end": 66.416667
+        },
+        {
+          "name": "Producto bruto y neto son distintos",
+          "start": 66.416667,
+          "end": 89.033333
+        },
+        {
+          "name": "El tiempo también puede cambiar sin más producción",
+          "start": 89.033333,
+          "end": 110.583333
+        },
+        {
+          "name": "El gasto no equivale a todo el valor recibido",
+          "start": 110.583333,
+          "end": 134.65
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar-visual-text.vtt",
+      "captions_sha256": "a77ecf3c9e9682e8e194cf9085b4ed6755d209bc68cf3977b3c9d666e125babf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar-transcript.html",
+      "transcript_sha256": "816e2dfae6bbe101e524e195d6a21c5a8df36ec304fe45fbe73f0b83a593ad3b"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "aeb2e163c7dfe6eba6d6b3e36cd51f971a02c51b704effac1bc3384f38309c92",
+      "bytes": 5843590,
+      "duration": 134.65,
+      "duration_iso": "PT134.65S",
+      "frames": 8079,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg",
+      "poster_sha256": "8b5c2f88ffb90467e7a33101b9fbafd5b9dfadf0fa94dc0e76f5ee845ad06014",
+      "chapters": [
+        {
+          "name": "Price can hide a quantity change",
+          "start": 0.0,
+          "end": 22.616667
+        },
+        {
+          "name": "A service and its measurement are not identical",
+          "start": 22.616667,
+          "end": 44.866667
+        },
+        {
+          "name": "The total can rise while the per-person figure falls",
+          "start": 44.866667,
+          "end": 66.416667
+        },
+        {
+          "name": "Gross and net domestic product differ",
+          "start": 66.416667,
+          "end": 89.033333
+        },
+        {
+          "name": "Time can change without more output",
+          "start": 89.033333,
+          "end": 110.583333
+        },
+        {
+          "name": "Spending is not all the value received",
+          "start": 110.583333,
+          "end": 134.65
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar-visual-text.vtt",
+      "captions_sha256": "a9962c9adc03aba922a12a44c1e2ff9f699b38134d26d80c66eec4af415db086",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar-transcript.html",
+      "transcript_sha256": "5feb4df94bc15d35111522381f7ccd3862424d02ce111f31b088099f2cb91c12"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a306b35b49a56b3cbb19a0203697d2040506d9776cd09a88db47f17e141d01ca",
+      "bytes": 5774965,
+      "duration": 136.366667,
+      "duration_iso": "PT136.366667S",
+      "frames": 8182,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "watch": "videos/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "poster_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg",
+      "poster_sha256": "feb17410cea042be8a132b99652cd2749c3132826c5a57ad6dd69e1ec08a214d",
+      "chapters": [
+        {
+          "name": "Acelerar una parte no duplica el proceso",
+          "start": 0.0,
+          "end": 22.25
+        },
+        {
+          "name": "Una mejora local debe ponderarse por su cobertura",
+          "start": 22.25,
+          "end": 46.316667
+        },
+        {
+          "name": "El coste y el beneficio pueden llegar en momentos distintos",
+          "start": 46.316667,
+          "end": 70.383333
+        },
+        {
+          "name": "Duplicar entregas no duplica resultados válidos",
+          "start": 70.383333,
+          "end": 92.25
+        },
+        {
+          "name": "Ahorrar tiempo no decide qué se hace con él",
+          "start": 92.25,
+          "end": 114.816667
+        },
+        {
+          "name": "Comparar antes y después no aísla el efecto",
+          "start": 114.816667,
+          "end": 136.366667
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy-visual-text.vtt",
+      "captions_sha256": "8ddcdd0a745d0496f568f4484d49e88445118f94f53003807c390972ac704dbf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy-transcript.html",
+      "transcript_sha256": "ae263e54884450fb9d109af6d6f43d8f9039783557a2f251fbc6c31e23d434f6"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "02aad92eb66392d4ed9eea8101af81831618b6232ce575d8e7e652828b3d7e20",
+      "bytes": 5459322,
+      "duration": 136.366667,
+      "duration_iso": "PT136.366667S",
+      "frames": 8182,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg",
+      "poster_sha256": "598070f51097a2407fe416d71d003590d4a61dfd4272fcd8d353fc48114bdf10",
+      "chapters": [
+        {
+          "name": "Speeding up one part does not double the process",
+          "start": 0.0,
+          "end": 22.25
+        },
+        {
+          "name": "A local improvement must be weighted by coverage",
+          "start": 22.25,
+          "end": 46.316667
+        },
+        {
+          "name": "Costs and benefits can arrive at different times",
+          "start": 46.316667,
+          "end": 70.383333
+        },
+        {
+          "name": "Doubling deliveries does not double valid results",
+          "start": 70.383333,
+          "end": 92.25
+        },
+        {
+          "name": "Saving time does not decide how it is used",
+          "start": 92.25,
+          "end": 114.816667
+        },
+        {
+          "name": "Before-and-after comparison does not isolate an effect",
+          "start": 114.816667,
+          "end": 136.366667
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy-visual-text.vtt",
+      "captions_sha256": "7491effbb9618f29ad25ff1bfacbbace9d2370846aa6a0b199557ab1da745b1f",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy-transcript.html",
+      "transcript_sha256": "a187c965b4a57e45e193f0fcd530dfc6c1a654b9a7520559787ff14c4debe5ec"
     }
   ]
 }

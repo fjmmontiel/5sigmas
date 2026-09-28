@@ -633,5 +633,207 @@
   {
     "path": "locales/en/series/multimodalidad-iag/05-riesgos.md",
     "unchanged_sha256": "310ec611227d9f01d15d466e2fdc9050c3316aeb4009b2e9a36c860a694734fc"
+  },
+  {
+    "path": "docs/series/fundamentos-ia-iag/00_presentacion_serie.md",
+    "body_sha256": "93812c90a236c8ed9d7354d87654572ee9f10f3b794222942581d4f055645a82",
+    "nonvideo_metadata": {
+      "title": "Fundamentos de IA e IA generativa",
+      "description": "Serie introductoria sobre IA e IA generativa: qué son, cómo funcionan, en qué se diferencian y qué es la AGI. Para profesionales técnicos y decisores.",
+      "keywords": "inteligencia artificial, IA generativa, LLMs, AGI, machine learning, fundamentos IA",
+      "date": "2026-03-15",
+      "tags": [
+        "IA",
+        "GenAI",
+        "LLMs",
+        "AGI"
+      ],
+      "hide": [
+        "toc"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/fundamentos-ia-iag/00_presentacion_serie.md",
+    "unchanged_sha256": "721a31b8d100186c1778a92d809e3eaf43c85e1a223edb192a162db017845dc6"
+  },
+  {
+    "path": "docs/series/fundamentos-ia-iag/01-que-es-ia.md",
+    "body_sha256": "8af210a0760e40581cdb48070ba68eb39c45582b2ee302dd3049c178f092adf8",
+    "nonvideo_metadata": {
+      "title": "Qué es la Inteligencia Artificial",
+      "description": "Qué es la Inteligencia Artificial, cómo funciona y cómo ha evolucionado: desde heurísticas y Machine Learning hasta redes neuronales y modelos fundacionales.",
+      "date": "2026-03-15",
+      "keywords": "inteligencia artificial, qué es la inteligencia artificial, machine learning, deep learning, ia generativa, aprendizaje automático, redes neuronales, modelos fundacionales",
+      "tags": [
+        "IA",
+        "LLMs",
+        "GenAI"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/fundamentos-ia-iag/01-que-es-ia.md",
+    "unchanged_sha256": "b8739d9f30c86a102dbf6c2b936c09dff6ade9c6c69e37badf97657d068a362b"
+  },
+  {
+    "path": "docs/series/fundamentos-ia-iag/02-que-es-ia-generativa.md",
+    "body_sha256": "d63682207e1c57065d1e0e49bdb24b30a4175fba4f6f3a7a54f037d460aa390d",
+    "nonvideo_metadata": {
+      "title": "Qué es IA Generativa",
+      "description": "Cómo funciona la IA generativa: del embedding y el Transformer a los modelos fundacionales. Leyes de escala, LLMOps y diferencias entre LLM, RAG y agentes.",
+      "date": "2026-03-17",
+      "date_modified": "2026-08-23",
+      "keywords": "ia generativa, qué es ia generativa, transformer, modelos de lenguaje, LLM, embedding, leyes de escala, GPT, modelos fundacionales, RLHF, fine-tuning",
+      "tags": [
+        "IA",
+        "GenAI",
+        "LLMs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.md",
+    "unchanged_sha256": "50547ab55618b39cffab1b4244a3d376ec1dfda675339e1bcc0e5f5aa210a351"
+  },
+  {
+    "path": "docs/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md",
+    "body_sha256": "d2d3a1633fc83c966ddef2087762d5b9f2147212617698507a1c6480c0c8d387",
+    "nonvideo_metadata": {
+      "title": "IA clásica vs IA Generativa",
+      "description": "Comparativa técnica entre IA clásica e IA generativa: entradas, salidas, determinismo, explicabilidad y cuándo usar reglas, ML, LLM, RAG o agentes.",
+      "date": "2026-03-20",
+      "date_modified": "2026-08-23",
+      "keywords": "ia clásica vs ia generativa, diferencias ia, cuándo usar llm, RAG, agentes ia, determinismo ia, explicabilidad ia, ia vs llm, matriz operacional ia",
+      "tags": [
+        "IA",
+        "GenAI",
+        "LLMs"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md",
+    "unchanged_sha256": "3b888a6148688ff0bb6d88b87379b712a811fcc04d7cba379d63bffc2b9e1269"
+  },
+  {
+    "path": "docs/series/fundamentos-ia-iag/04-agi.md",
+    "body_sha256": "2fd3ee0cac76638487f5d231e857996384a352bc32a1ac6d20ef46cafbe4a63b",
+    "nonvideo_metadata": {
+      "title": "Qué es AGI: inteligencia artificial general",
+      "description": "AGI significa inteligencia artificial general. Este capítulo explica sus definiciones, los niveles de DeepMind y OpenAI, y qué faltaría para alcanzarla.",
+      "date": "2026-03-20",
+      "date_modified": "2026-08-24",
+      "keywords": "agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos",
+      "tags": [
+        "IA",
+        "AGI",
+        "Alineamiento"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/fundamentos-ia-iag/04-agi.md",
+    "unchanged_sha256": "2dd54cd0d07b43609764a717972ffc1a936b5fd1b47fe49c76b9a9687cca49cd"
+  },
+  {
+    "path": "docs/series/ia-pib-bienestar-energia/00_presentacion_serie.md",
+    "body_sha256": "a58c01b2c06a1cfe40a733794a77c0fe12a863d3841239e9872e94b8e2a8899c",
+    "nonvideo_metadata": {
+      "title": "IA, PIB, bienestar y energía",
+      "description": "Impacto cuantitativo de la IA en energía, productividad y bienestar. Análisis con datos reales del Banco Mundial, IEA y Penn World Table, sin proyecciones especulativas.",
+      "keywords": "IA energía, PIB inteligencia artificial, productividad IA, bienestar tecnología, electricidad IA",
+      "date": "2026-04-07",
+      "date_modified": "2026-08-23",
+      "tags": [
+        "IA",
+        "Energía",
+        "Productividad"
+      ],
+      "hide": [
+        "toc"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/ia-pib-bienestar-energia/00_presentacion_serie.md",
+    "unchanged_sha256": "0770409c3748757308682637bfe516dc5226f827d72fa1eee5e20d699c820142"
+  },
+  {
+    "path": "docs/series/ia-pib-bienestar-energia/01-electricidad-bienestar.md",
+    "body_sha256": "d2c9f5e65af136eab3a5002caec2732148b06a845131b8a5056b4dfa4f040333",
+    "nonvideo_metadata": {
+      "title": "Electricidad y bienestar",
+      "description": "Por qué el acceso a electricidad fiable y barata habilita saltos reales en salud, logística e industria, y qué diferencia hay entre tener kilovatios y tener calidad de suministro.",
+      "date": "2026-04-07",
+      "keywords": "electricidad y bienestar, acceso energía desarrollo, electrificación rural, MTF energía, consumo electricidad per cápita, IDH y energía, calidad suministro eléctrico, nexo energía desarrollo humano",
+      "tags": [
+        "Economía",
+        "Energía",
+        "IA"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.md",
+    "unchanged_sha256": "66d0950390fa4ff115d45aa6cc3b73cbec9b1d17b39933970a1677d526e74250"
+  },
+  {
+    "path": "docs/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md",
+    "body_sha256": "6fca4482b419038ad69af96e5814a53ff92cec8c56e58524bdfd547857ad6ce2",
+    "nonvideo_metadata": {
+      "title": "IA como tecnología eléctrica",
+      "description": "Qué implica la IA en términos de cómputo y energía, por qué la demanda puede crecer aunque mejore el hardware, y cuáles son los cuellos de botella reales.",
+      "date": "2026-04-08",
+      "date_modified": "2026-08-23",
+      "keywords": "IA tecnología eléctrica, consumo energético inteligencia artificial, datacenters IA energía, efecto rebote IA, cómputo GPU TPU, inferencia LLM energía, PUE datacenter, cuellos botella energía IA",
+      "tags": [
+        "Economía",
+        "Energía",
+        "IA"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md",
+    "unchanged_sha256": "91217548998f1a98ffe97882d63a404fb4c8f3f6654d741e4cc250fbc0cd2c72"
+  },
+  {
+    "path": "docs/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md",
+    "body_sha256": "129faec8eea4be294d2156991132d4c3b24ecadbbae6836def5f672866909e23",
+    "nonvideo_metadata": {
+      "title": "Medición — PIB vs bienestar",
+      "description": "Por qué el PIB no captura el bienestar real, qué dimensiones importan más, y cuándo el bienestar subjetivo diverge del material.",
+      "date": "2026-04-09",
+      "keywords": "PIB bienestar, más allá del PIB, índice desarrollo humano IDH, paradoja Easterlin, GPI indicador progreso genuino, bienestar subjetivo medición, Stiglitz Sen Fitoussi, trabajo no remunerado economía",
+      "tags": [
+        "Economía",
+        "Bienestar",
+        "IA"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md",
+    "unchanged_sha256": "f8ec44d1cfd310670954036cb72a3212240e4b891830b7313a94433c50b05fcb"
+  },
+  {
+    "path": "docs/series/ia-pib-bienestar-energia/04-ia-pib-hoy.md",
+    "body_sha256": "073b31abfb8b18d1e3cc52ae359f1390b9980c6ce34fe4d5de791ac6e23b9de5",
+    "nonvideo_metadata": {
+      "title": "IA y PIB hoy — impacto real y señales tempranas",
+      "description": "Por qué el impacto macroeconómico de la IA tarda en aparecer en el PIB, dónde sí aparece antes, y qué señales son más indicativas de lo que está pasando.",
+      "date": "2026-04-10",
+      "keywords": "impacto IA PIB, J-Curve productividad IA, productividad inteligencia artificial, crecimiento económico IA, señales tempranas adopción IA, Brynjolfsson productividad, Goldman Sachs IA, Acemoglu IA macroeconomía",
+      "tags": [
+        "Economía",
+        "IA",
+        "Productividad"
+      ]
+    }
+  },
+  {
+    "path": "locales/en/series/ia-pib-bienestar-energia/04-ia-pib-hoy.md",
+    "unchanged_sha256": "7caf5c29de0b5e0bb777b16c732421fd9087692fe3a6925c2493c350d07d4810"
   }
 ]

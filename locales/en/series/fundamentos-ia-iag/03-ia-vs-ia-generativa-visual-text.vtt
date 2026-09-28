@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+A classifier returns a risk score for a transaction.
+
+2
+00:00:07.350 --> 00:00:14.200
+A generator writes an explanation containing several checkable claims.
+
+3
+00:00:14.200 --> 00:00:21.867
+Fluent text replaces neither risk validation nor fact-checking its claims.
+
+4
+00:00:22.367 --> 00:00:29.533
+With logits two, one and zero, temperature one concentrates more mass on the first token.
+
+5
+00:00:29.533 --> 00:00:36.383
+Temperature two flattens the distribution before sampling.
+
+6
+00:00:36.383 --> 00:00:44.050
+Greedy selects a maximum without sampling; it does not make the whole system always reproducible.
+
+7
+00:00:44.550 --> 00:00:51.400
+The model attributes an outcome to variable A.
+
+8
+00:00:51.400 --> 00:00:58.250
+A controlled intervention changes A while holding other factors constant.
+
+9
+00:00:58.250 --> 00:01:05.600
+Comparing both outcomes provides evidence; explanatory text alone does not prove causation.
+
+10
+00:01:06.100 --> 00:01:12.950
+The example has six true positives, two false positives and three false negatives.
+
+11
+00:01:12.950 --> 00:01:20.500
+Precision counts six correct alerts out of eight; recall counts six detected cases out of nine.
+
+12
+00:01:20.500 --> 00:01:27.850
+For text, add faithfulness and usefulness criteria: these fractions alone cannot evaluate it.
+
+13
+00:01:28.350 --> 00:01:35.200
+A workflow executes steps and conditions defined by its designer.
+
+14
+00:01:35.200 --> 00:01:42.050
+An agent can select tools or steps according to the observed state.
+
+15
+00:01:42.050 --> 00:01:49.400
+Both need validation; more freedom adds decisions that must be checked.
+
+16
+00:01:49.900 --> 00:01:56.750
+We require structured output, bounded latency and access to private documents.
+
+17
+00:01:56.750 --> 00:02:03.600
+Reject configurations that violate requirements before comparing results.
+
+18
+00:02:03.600 --> 00:02:10.950
+The solution may combine rules, models and retrieval.
+

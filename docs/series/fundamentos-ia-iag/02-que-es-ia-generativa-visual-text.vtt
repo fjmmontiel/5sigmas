@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Un embedding representa una entrada mediante números aprendidos.
+
+2
+00:00:07.350 --> 00:00:14.200
+En este plano ilustrativo, dos vectores con direcciones próximas tienen alta similitud coseno.
+
+3
+00:00:14.200 --> 00:00:21.867
+La cercanía depende del modelo y la tarea; no garantiza que dos afirmaciones sean equivalentes.
+
+4
+00:00:22.367 --> 00:00:29.917
+Banco aparece junto a sentarse en una frase y junto a préstamo en otra.
+
+5
+00:00:29.917 --> 00:00:36.767
+La atención combina información de otras posiciones mediante pesos dependientes del contexto.
+
+6
+00:00:36.767 --> 00:00:44.117
+Los pesos mostrados son ilustrativos: no constituyen una explicación completa del razonamiento.
+
+7
+00:00:44.617 --> 00:00:51.783
+Para una continuación inventada, tres tokens tienen probabilidades de sesenta, treinta y diez por ciento.
+
+8
+00:00:51.783 --> 00:00:58.633
+Muestrear puede elegir tokens distintos aun partiendo de esa misma distribución.
+
+9
+00:00:58.633 --> 00:01:05.983
+El token elegido se incorpora al contexto y cambia el siguiente paso.
+
+10
+00:01:06.483 --> 00:01:13.333
+El prompt muestra dos ejemplos de cómo convertir un nombre a una etiqueta.
+
+11
+00:01:13.333 --> 00:01:20.183
+El modelo aplica el patrón a un tercer nombre durante esta llamada.
+
+12
+00:01:20.183 --> 00:01:27.533
+Aquí cambió el contexto, no los pesos: no es una sesión de fine-tuning.
+
+13
+00:01:28.033 --> 00:01:34.883
+La pregunta selecciona un fragmento relevante del documento de devoluciones.
+
+14
+00:01:34.883 --> 00:01:41.733
+Ese fragmento entra en el contexto junto a la pregunta.
+
+15
+00:01:41.733 --> 00:01:49.400
+La respuesta debe respaldar su afirmación con ese fragmento; recuperar no impide todos los errores.
+
+16
+00:01:49.900 --> 00:01:56.750
+El modelo propone consultar el estado del pedido.
+
+17
+00:01:56.750 --> 00:02:03.600
+El sistema valida el permiso antes de ejecutar la herramienta.
+
+18
+00:02:03.600 --> 00:02:10.950
+La observación regresa al modelo, pero cada nuevo paso conserva límites y controles.
+

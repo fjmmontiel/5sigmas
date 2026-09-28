@@ -14,7 +14,7 @@ def objects(v):
   for x in v:yield from objects(x)
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--site-dir',default='site');ap.add_argument('--origin');ap.add_argument('--revision',default=os.environ.get('GITHUB_SHA',''));ap.add_argument('--base-ref');ap.add_argument('--output',default='/tmp/approved-video-batch-20260928-integration.json');a=ap.parse_args()
- m=json.loads((ROOT/'docs/approved-video-batch-20260928-release.json').read_text());assert len(m['objects'])==60 and len(m['collections'])==5;assert m['owner_approval']=='EXPLICIT_APPROVALS_2026-09-26_2026-09-27_AND_2026-09-28'
+ m=json.loads((ROOT/'docs/approved-video-batch-20260928-release.json').read_text());assert len(m['objects'])==80 and len(m['collections'])==7;assert m['owner_approval']=='EXPLICIT_APPROVALS_2026-09-26_2026-09-27_AND_2026-09-28'
  cache={}
  def get(path):
   path=path.lstrip('/')
@@ -78,6 +78,6 @@ def main():
   rel='locales/en/media.yml';old=yaml.safe_load(subprocess.check_output(['git','show',a.base_ref+':'+rel],cwd=ROOT));new=yaml.safe_load((ROOT/rel).read_text())
   allowed=tuple('series/'+c['series']+'/' for c in m['collections'])
   assert old.keys()==new.keys();assert all(old[k]==new[k] for k in old if not k.startswith(allowed))
- report=dict(scope='Exact approved APPROVED_BATCH integration, not a new visual approval',revision=a.revision,origin=a.origin,media_count=60,surface_count=120,clips=360,status='PASS',results=results)
- Path(a.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print('APPROVED_BATCH_INTEGRATION_PASS 60 media,120 article/watch surfaces,360 clips')
+ report=dict(scope='Exact approved APPROVED_BATCH integration, not a new visual approval',revision=a.revision,origin=a.origin,media_count=80,surface_count=160,clips=480,status='PASS',results=results)
+ Path(a.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print('APPROVED_BATCH_INTEGRATION_PASS 80 media,160 article/watch surfaces,480 clips')
 if __name__=='__main__':main()

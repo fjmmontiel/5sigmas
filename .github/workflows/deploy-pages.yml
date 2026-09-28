@@ -82,7 +82,7 @@ jobs:
       - name: Verify exact owner-approved Coding C1 MP4 bytes
         run: sha256sum -c .github/receipts/coding-c1.sha256
 
-      - name: Verify 60 exact owner-approved batch MP4 hashes
+      - name: Verify 80 exact owner-approved batch MP4 hashes
         run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
 
       - name: Test fractional video timing parity
@@ -216,7 +216,7 @@ jobs:
   live-qa:
     needs: deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -331,7 +331,7 @@ jobs:
       - name: Verify live approved batch exact bytes and discovery
         run: python3 scripts/verify_approved_video_batch_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
 
-      - name: Verify 240 live batch native desktop and mobile cases
+      - name: Verify 320 live batch native desktop and mobile cases
         env:
           S5_APPROVED_BATCH_ORIGIN: https://5sigmas.com
         run: node scripts/verify_approved_video_batch_browser.mjs

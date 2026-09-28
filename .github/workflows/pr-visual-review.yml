@@ -69,7 +69,7 @@ jobs:
       - name: Verify exact owner-approved Coding C1 MP4 bytes
         run: sha256sum -c .github/receipts/coding-c1.sha256
 
-      - name: Verify 60 exact owner-approved batch MP4 hashes
+      - name: Verify 80 exact owner-approved batch MP4 hashes
         run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
 
       - name: Test fractional video timing parity
@@ -212,7 +212,7 @@ jobs:
       - name: Verify native Coding C1 desktop and mobile playback
         run: node scripts/verify_coding_c1_browser.mjs
 
-      - name: Verify 240 native batch playback cases
+      - name: Verify 320 native batch playback cases
         run: node scripts/verify_approved_video_batch_browser.mjs
 
       - name: Audit browser resource loading
