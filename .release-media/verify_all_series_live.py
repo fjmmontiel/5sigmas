@@ -1,8 +1,8 @@
 """Read-only exact-byte publication inventory for all thirteen approved series."""
 from __future__ import annotations
-import collections, concurrent.futures, hashlib, json, os, re, time
+import collections, concurrent.futures, hashlib, html, json, os, re, time
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urljoin
 from urllib.request import Request, urlopen
 ROOT = Path(os.environ.get('SOURCE_ROOT', 'audit-source'))
 REVISION = os.environ['EXPECTED_REVISION']
@@ -92,7 +92,15 @@ def main():
             assert not re.search(r'<meta[^>]+name=[\"\']robots[\"\'][^>]+noindex',watch,re.I)
             with request(row['thumb_url']) as r:
                 assert r.status==200 and r.headers.get_content_type().startswith('image/') and r.read(16)
-            result.update(status='PASS',bytes=count,sha256=h.hexdigest(),range='206_EXACT_FIRST_1024_BYTES',media_type=content_type,article_watch_schema='PASS',poster='PUBLIC_IMAGE_PRESENT')
+            tracks=[]
+            for tag in re.findall(r'<track\b[^>]*>',watch,re.I):
+                attrs={k.lower():html.unescape(v) for k,_,v in re.findall(r'([\w-]+)\s*=\s*([\"\'])(.*?)\2',tag)}
+                if attrs.get('kind') not in ['captions','subtitles']: continue
+                url=urljoin(row['watch_url'],attrs['src'])
+                assert get(url).lstrip().startswith(b'WEBVTT'),'Declared captions not retrievable VTT'
+                tracks.append(url)
+            transcript_present='s5-video-watch__transcript' in watch or bool(re.search(r'id=[\"\']video-transcript[\"\']',watch))
+            result.update(status='PASS',bytes=count,sha256=h.hexdigest(),range='206_EXACT_FIRST_1024_BYTES',media_type=content_type,article_watch_schema='PASS',poster='PUBLIC_IMAGE_PRESENT',rendered_caption_tracks_verified=tracks,rendered_transcript_block_present=transcript_present,rendered_clip_count=len(found[0].get('hasPart',[])))
         except Exception as exc:
             result.update(status='FAIL',error=type(exc).__name__+': '+str(exc)[:350])
         print(result['status'],route,flush=True)
@@ -102,7 +110,8 @@ def main():
     final_revision=json.loads(get('/build.json')).get('revision')
     passed=sum(x['status']=='PASS' for x in results)
     aggregate={s:{'expected':n,'passed':sum(x['status']=='PASS' and x['series']==s for x in results)} for s,n in COUNTS.items()}
-    report={'schema':1,'status':'PASS' if passed==150 and final_revision==REVISION else 'FAIL', 'revision_before':seen,'revision_after':final_revision,'expected_revision':REVISION, 'observed_at_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()), 'scope':'All thirteen series: 150 exact approved horizontal ES/EN MP4s, HTTP Range, article/watch consumers, locale/schema/catalogue consistency and public poster availability. Not a new visual approval, accessibility certification, full browser playback audit or search engine indexing claim.', 'series_count':13,'conceptual_pieces':75,'media_expected':150,'media_pass':passed,'catalogues':catalogues, 'total_bytes':sum(x.get('bytes',0) for x in results),'approval_source_sha256':sources,'by_series':aggregate,'results':results}
+    accessibility={'scope':'Observed generated watch markup and retrieval of declared caption tracks, not WCAG conformance or qualitative transcript assessment','with_caption_tracks':sum(bool(x.get('rendered_caption_tracks_verified')) for x in results),'with_transcript_block':sum(x.get('rendered_transcript_block_present',False) for x in results),'missing_either':[x['path'] for x in results if x['status']=='PASS' and not (x['rendered_caption_tracks_verified'] and x['rendered_transcript_block_present'])]}
+    report={'schema':1,'status':'PASS' if passed==150 and final_revision==REVISION else 'FAIL', 'revision_before':seen,'revision_after':final_revision,'expected_revision':REVISION, 'observed_at_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()), 'scope':'All thirteen series: 150 exact approved horizontal ES/EN MP4s, HTTP Range, article/watch consumers, locale/schema/catalogue consistency and public poster availability. Not a new visual approval, accessibility certification, full browser playback audit or search engine indexing claim.', 'series_count':13,'conceptual_pieces':75,'media_expected':150,'media_pass':passed,'catalogues':catalogues, 'total_bytes':sum(x.get('bytes',0) for x in results),'approval_source_sha256':sources,'by_series':aggregate,'rendered_accessibility':accessibility,'results':results}
     (OUT/'ALL_SERIES_LIVE.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in report.items() if k not in ['results','approval_source_sha256']},ensure_ascii=False))
     assert report['status']=='PASS','ALL_SERIES_PUBLICATION_INCOMPLETE'
