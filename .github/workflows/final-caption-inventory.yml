@@ -1,0 +1,43 @@
+name: Final approved caption inventory reconciliation
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/final-caption-inventory.yml]
+permissions:
+  contents: write
+jobs:
+  reconcile:
+    if: github.actor == 'fjmmontiel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f05f7ab934aeba9353d65e9dce131cedb8141417
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Reconcile only the exact new caption coverage and run all schema regressions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess
+          p=Path('scripts/test_video_schema_contract.py');b=p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='e31227a43aa4afb2dc845da79f5825019ef8cdc6'
+          s=b.decode()
+          for before,after in [('summary["captions_transcript_complete"] == 106','summary["captions_transcript_complete"] == 126'),('summary["captions_transcript_review"] == 46','summary["captions_transcript_review"] == 26')]:
+              assert s.count(before)==1;s=s.replace(before,after)
+          p.write_text(s)
+          PY
+          python scripts/test_video_schema_contract.py
+      - name: Persist only the tested two-assertion update without force
+        run: |
+          test "$(git ls-remote origin refs/heads/release/final-approved-f1-w1-20260928 | cut -f1)" = f05f7ab934aeba9353d65e9dce131cedb8141417
+          test "$(git diff --name-only)" = scripts/test_video_schema_contract.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/test_video_schema_contract.py
+          git commit -m 'test(video): account for twenty exact new F1 W1 caption transcript pairs'
+          git push origin HEAD:refs/heads/release/final-approved-f1-w1-20260928
