@@ -1,7 +1,7 @@
-"""Bounded exact metadata integration for approved F1/W1. No rendering, merge or deploy."""
+"""Apply reviewed F1/W1 metadata only. No rendering, merge or deployment."""
 from pathlib import Path
 import base64,hashlib,io,json,os,subprocess,tempfile,time,zipfile
-from urllib.request import build_opener,HTTPRedirectHandler
+from urllib.request import build_opener,HTTPRedirectHandler,Request
 from urllib.parse import urlsplit
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey,X25519PublicKey
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -28,7 +28,7 @@ def main():
     url=None
     while time.time()<ready['expires_epoch']:
         git('fetch','--quiet','--depth=1','origin',BRANCH)
-        try:raw=git('show','FETCH_HEAD:.release-media/final-overlay-input.json')
+        try:raw=git('show','FETCH_HEAD:.release-media/final-overlay-input-'+run+'.json')
         except subprocess.CalledProcessError:time.sleep(6);continue
         try:
             assert len(raw)<10000;e=json.loads(raw);assert set(e)=={'sender','nonce','ciphertext'}
@@ -41,9 +41,17 @@ def main():
         except Exception:raise RuntimeError('INVALID_OVERLAY_INPUT_PRIVATE_URL_NOT_LOGGED') from None
         break
     assert url is not None,'NO_INPUT_RECEIVED'
-    try:
-        with build_opener(NoRedirect()).open(url,timeout=60) as r:assert r.status==200;data=r.read(ZIP_BYTES+1)
-    except Exception:raise RuntimeError('OVERLAY_DOWNLOAD_FAILED_PRIVATE_URL_NOT_LOGGED') from None
+    data=None
+    for attempt in range(3):
+        try:
+            request=Request(url,headers={'User-Agent':'5sigmas-approved-release/1'})
+            with build_opener(NoRedirect()).open(request,timeout=60) as r:
+                assert r.status==200;data=r.read(ZIP_BYTES+1)
+            break
+        except Exception as exc:
+            print('TRANSPORT_ERROR',type(exc).__name__,getattr(exc,'code',None),flush=True)
+            if attempt<2:time.sleep(2)
+    assert data is not None,'OVERLAY_DOWNLOAD_FAILED_PRIVATE_URL_NOT_LOGGED'
     assert len(data)==ZIP_BYTES and sha(data)==ZIP_SHA
     url=None
     shared={'.github/receipts/approved-video-batch-20260928-content.json','.github/receipts/approved-video-batch-20260928.sha256','.github/workflows/deploy-pages.yml','.github/workflows/pr-visual-review.yml','docs/approved-video-batch-20260928-release.json','locales/en/manifest.yml','locales/en/media.yml','scripts/verify_approved_video_batch_release.py','scripts/verify_approved_video_batch_browser.mjs'}
