@@ -1,0 +1,37 @@
+name: Final approved video release source review
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/final-release-source-review.yml]
+permissions:
+  contents: read
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 9e1080a36a5d88f9ecbe0537088a0126ad30a3ab
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .github/receipts
+      - name: Retain only pinned public text sources for release integration and requested animation audit
+        run: |
+          python3 - <<'PY'
+          import pathlib,subprocess,zipfile,hashlib,json
+          ref='9e1080a36a5d88f9ecbe0537088a0126ad30a3ab'
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==ref
+          paths=subprocess.check_output(['git','ls-tree','-r','--name-only',ref],text=True).splitlines()
+          exts={'.py','.mjs','.cjs','.js','.ts','.json','.yml','.yaml','.md','.html','.css','.svg','.vtt','.sha256','.txt','.sh','.toml'}
+          allowed=[p for p in paths if pathlib.Path(p).suffix in exts and not p.startswith(('.release-media/','node_modules/','site/'))]
+          subprocess.run(['git','archive','--format=zip','--output=/tmp/final-public-text.zip',ref,'--',*allowed],check=True)
+          p=pathlib.Path('/tmp/final-public-text.zip')
+          print(json.dumps({'ref':ref,'files':len(allowed),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-pinned-public-text
+          path: /tmp/final-public-text.zip
+          retention-days: 1
+          if-no-files-found: error
