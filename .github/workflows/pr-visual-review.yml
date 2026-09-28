@@ -69,6 +69,9 @@ jobs:
       - name: Verify exact owner-approved Coding C1 MP4 bytes
         run: sha256sum -c .github/receipts/coding-c1.sha256
 
+      - name: Verify 48 exact owner-approved batch MP4 hashes
+        run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
@@ -124,10 +127,15 @@ jobs:
           set -euo pipefail
           protected="$(
             git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
-              docs/series/agentes-voz-tiempo-real locales/en/series/agentes-voz-tiempo-real \
-              docs/series/context-engineering-memory-mcp locales/en/series/context-engineering-memory-mcp \
-              docs/series/llm-inference-engineering-economics locales/en/series/llm-inference-engineering-economics \
-              docs/series/modelos-razonadores locales/en/series/modelos-razonadores
+              docs/series/modelos-razonadores locales/en/series/modelos-razonadores \
+              docs/series/seguridad-ia locales/en/series/seguridad-ia \
+              docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production \
+              docs/series/datacenters-espacio locales/en/series/datacenters-espacio \
+              docs/series/agentes-ia locales/en/series/agentes-ia \
+              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
+              docs/series/fundamentos-ia-iag locales/en/series/fundamentos-ia-iag \
+              docs/series/multimodalidad-iag locales/en/series/multimodalidad-iag \
+              docs/series/ia-pib-bienestar-energia locales/en/series/ia-pib-bienestar-energia
           )"
           if [ -n "$protected" ]; then
             echo "This release must not modify later-unapproved series or Modelos assets:" >&2
@@ -147,7 +155,10 @@ jobs:
         run: python scripts/verify_agents_a2_release.py
 
       - name: Verify exact approved Coding C1 media, discovery and release scope
-        run: python3 scripts/verify_coding_c1_release.py --site-dir site --base-ref "${{ github.event.pull_request.base.sha }}"
+        run: python3 scripts/verify_coding_c1_release.py --site-dir site
+
+      - name: Verify approved batch exact media, text preservation and discovery
+        run: python3 scripts/verify_approved_video_batch_release.py --site-dir site --base-ref "${{ github.event.pull_request.base.sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -201,6 +212,9 @@ jobs:
 
       - name: Verify native Coding C1 desktop and mobile playback
         run: node scripts/verify_coding_c1_browser.mjs
+
+      - name: Verify 192 native batch playback cases
+        run: node scripts/verify_approved_video_batch_browser.mjs
 
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs
@@ -356,6 +370,15 @@ jobs:
 
       - name: Validate responsive interaction polish
         run: node scripts/validate_responsive_polish.mjs
+
+      - name: Upload exact approved batch verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-batch-evidence
+          path: /tmp/approved-video-batch-20260928-*.json
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload visual review on failure
         if: failure()
