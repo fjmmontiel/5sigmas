@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+La aplicación host gestiona clientes que hablan con servidores MCP.
+
+2
+00:00:07.350 --> 00:00:14.200
+Cada servidor expone capacidades; el host decide cuáles incorpora al contexto del modelo.
+
+3
+00:00:14.200 --> 00:00:21.550
+Conectar dos servidores no autoriza que uno reciba los datos del otro.
+
+4
+00:00:22.050 --> 00:00:28.900
+Un resource proporciona datos identificados por URI; un prompt proporciona una plantilla.
+
+5
+00:00:28.900 --> 00:00:35.750
+Una tool describe una operación invocable y los argumentos que admite.
+
+6
+00:00:35.750 --> 00:00:43.417
+Cumplir el schema no concede permiso para ejecutar. La política aplica a la operación concreta.
+
+7
+00:00:43.917 --> 00:00:50.767
+En MCP 2026-07-28, cada solicitud transporta sus metadatos de protocolo; ya no usa initialize.
+
+8
+00:00:50.767 --> 00:00:57.933
+Dos solicitudes pueden llegar a instancias distintas. El estado de negocio debe seguir siendo explícito.
+
+9
+00:00:57.933 --> 00:01:05.283
+server/discover permite consultar capacidades. El cliente no siempre necesita llamarlo primero.
+
+10
+00:01:05.783 --> 00:01:14.083
+El servidor declara que una tool es de sólo lectura. Esa annotation es una señal, no una garantía.
+
+11
+00:01:14.083 --> 00:01:20.933
+La aplicación limita capacidades y el servicio protegido comprueba permisos reales.
+
+12
+00:01:20.933 --> 00:01:28.600
+Una llamada de escritura no autorizada debe fallar aunque la descripción del tool parezca segura.
+
+13
+00:01:29.100 --> 00:01:35.950
+La operación de reembolso sale hacia el servicio, pero la respuesta se pierde.
+
+14
+00:01:35.950 --> 00:01:43.867
+El timeout no permite concluir ni que falló ni que se ejecutó. Repetir puede duplicar el efecto.
+
+15
+00:01:43.867 --> 00:01:51.533
+Un ID de operación y una lectura posterior permiten reconciliar el estado antes de reintentar.
+
+16
+00:01:52.033 --> 00:01:58.883
+Un resource incluye texto que pide enviar un secreto a un destino externo.
+
+17
+00:01:58.883 --> 00:02:05.733
+Ese texto conserva su origen no confiable; no asciende a política del host.
+
+18
+00:02:05.733 --> 00:02:14.917
+La frontera de salida y los permisos impiden el efecto. MCP conecta sistemas, no decide qué datos son confiables.
+

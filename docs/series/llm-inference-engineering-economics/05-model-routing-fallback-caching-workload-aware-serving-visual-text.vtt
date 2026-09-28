@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+El router tiene tres modelos candidatos. Uno no cumple el contrato de herramientas requerido.
+
+2
+00:00:07.350 --> 00:00:14.200
+Ese modelo queda fuera antes de comparar precio o latencia.
+
+3
+00:00:14.200 --> 00:00:22.617
+La selección optimiza dentro del conjunto permitido. Una alternativa barata pero incompatible no es una opción válida.
+
+4
+00:00:23.117 --> 00:00:29.967
+Routing elige el primer modelo antes de ejecutar la petición.
+
+5
+00:00:29.967 --> 00:00:36.817
+Fallback empieza después de un fallo o una condición de degradación definida.
+
+6
+00:00:36.817 --> 00:00:45.233
+La traza debe distinguir decisión, intento y recuperación. No atribuyas todos los resultados al primer modelo.
+
+7
+00:00:45.733 --> 00:00:53.650
+El usuario dispone de mil milisegundos. El primer intento gasta cuatrocientos y el backoff otros cien.
+
+8
+00:00:53.650 --> 00:01:00.500
+Quedan quinientos para recuperar, incluidos red, procesamiento y entrega.
+
+9
+00:01:00.500 --> 00:01:08.917
+Un segundo intento previsto de seiscientos no cabe. Cambiar de modelo no crea un nuevo presupuesto.
+
+10
+00:01:09.417 --> 00:01:16.267
+El usuario ya ha recibido parte de una respuesta cuando falla el stream.
+
+11
+00:01:16.267 --> 00:01:23.117
+Concatenar otra respuesta desde cero puede duplicar o contradecir lo que vio.
+
+12
+00:01:23.117 --> 00:01:30.783
+El producto necesita una política explícita de interrupción o reemplazo. No es un retry transparente.
+
+13
+00:01:31.283 --> 00:01:38.133
+Response caching devuelve una respuesta validada sin realizar una nueva inferencia completa.
+
+14
+00:01:38.133 --> 00:01:44.983
+Prefix caching reutiliza parte del estado de entrada, pero todavía necesita generar la salida.
+
+15
+00:01:44.983 --> 00:01:52.333
+Comparar sus hits como si fueran el mismo ahorro mezcla fronteras de trabajo distintas.
+
+16
+00:01:52.833 --> 00:01:59.683
+Dos preguntas casi idénticas consultan revisiones distintas de una política.
+
+17
+00:01:59.683 --> 00:02:06.533
+La cercanía semántica puede recuperar la respuesta antigua aunque el plazo vigente haya cambiado.
+
+18
+00:02:06.533 --> 00:02:14.950
+La caché debe respetar versión, permisos y condiciones de verdad. Un vecino cercano también puede estar equivocado.
+

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Quantisation approximates values with a scale and a limited set of levels.
+
+2
+00:00:07.350 --> 00:00:14.200
+At scale 0.25, the value 0.62 is represented as 2 and reconstructed as 0.50.
+
+3
+00:00:14.200 --> 00:00:21.550
+The error is 0.12. Lower precision requires task evaluation, not just memory accounting.
+
+4
+00:00:22.050 --> 00:00:28.900
+Eight billion parameters at sixteen bits require sixteen GB of ideal payload.
+
+5
+00:00:28.900 --> 00:00:36.067
+At four bits, that payload falls to four GB before scales and other costs.
+
+6
+00:00:36.067 --> 00:00:44.867
+Actual memory includes metadata, buffers and KV. This does not automatically require a GPU one quarter the size.
+
+7
+00:00:45.367 --> 00:00:52.217
+Weights, activations and the KV cache are different objects.
+
+8
+00:00:52.217 --> 00:00:59.067
+A weight-only scheme changes weights; it does not automatically convert the other two.
+
+9
+00:00:59.067 --> 00:01:07.483
+Record every dtype and compatible kernel. A quantisation label does not describe the entire execution.
+
+10
+00:01:07.983 --> 00:01:14.833
+Tensor parallelism distributes parts of a layer operation across devices.
+
+11
+00:01:14.833 --> 00:01:21.683
+Partial results must communicate and combine according to the chosen partition.
+
+12
+00:01:21.683 --> 00:01:31.233
+Memory per rank can fall, but the interconnect enters the critical path. Two GPUs do not guarantee twice the speed.
+
+13
+00:01:31.733 --> 00:01:38.583
+Pipeline parallelism partitions layers across stages. A request traverses them in order.
+
+14
+00:01:38.583 --> 00:01:45.433
+Additional microbatches allow some work to overlap across devices.
+
+15
+00:01:45.433 --> 00:01:53.483
+Startup and drain bubbles remain. Fewer layers per device do not remove stage dependencies.
+
+16
+00:01:53.983 --> 00:02:00.833
+Data parallelism distributes requests across complete model replicas.
+
+17
+00:02:00.833 --> 00:02:07.683
+Expert parallelism distributes MoE experts and routes activations between them.
+
+18
+00:02:07.683 --> 00:02:15.350
+These placements solve different problems. An expert partition does not exist in every dense model.
+

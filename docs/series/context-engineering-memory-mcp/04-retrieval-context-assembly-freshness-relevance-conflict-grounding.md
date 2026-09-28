@@ -1,30 +1,44 @@
 ---
-title: "Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding"
-description: "Cómo separar la recuperación de candidatos de la política que decide qué evidencia entra en contexto, resolver frescura y conflictos y mantener un grounding verificable por afirmación."
+title: 'Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding'
+description: Cómo separar la recuperación de candidatos de la política que decide qué evidencia entra en contexto,
+  resolver frescura y conflictos y mantener un grounding verificable por afirmación.
 date: 2026-09-11
 date_modified: 2026-09-11
-keywords: "retrieval, RAG, context assembly, freshness, relevance, grounding, conflict resolution, hybrid search, context engineering"
+keywords: retrieval, RAG, context assembly, freshness, relevance, grounding, conflict resolution, hybrid search,
+  context engineering
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - Retrieval
-  - RAG
+- IA
+- Agentes
+- Context engineering
+- Retrieval
+- RAG
 video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
 video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
-video_title: "Retrieval, frescura, conflictos y grounding"
-video_summary: "Recuperar candidatos no basta: hay que ponderar relevancia y frescura, resolver conflictos y ensamblar evidencia trazable."
-video_duration: PT36S
+video_title: Recuperación y grounding
+video_summary: El assembler comprueba acceso, revisión y autoridad antes de utilizarlos juntos.
+video_date: '2026-09-28'
+video_duration: PT134.283333S
+video_captions: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding-visual-text.vtt
+video_transcript: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding-transcript.html
 video_chapters:
-- name: "Relevancia y frescura son señales distintas"
+- name: Tres maneras de encontrar evidencia
   start: 0
-  end: 12
-- name: "Resolver conflicto antes de ensamblar"
-  start: 12
-  end: 24
-- name: "Grounding mantiene evidencia y respuesta unidas"
-  start: 24
-  end: 36
+  end: 21.55
+- name: Los scores no comparten escala
+  start: 21.55
+  end: 44.55
+- name: Índice reciente, copia antigua
+  start: 44.55
+  end: 66.416667
+- name: No promediar contradicciones
+  start: 66.416667
+  end: 89.733333
+- name: Una cita debe sostener la frase
+  start: 89.733333
+  end: 111.283333
+- name: Identificar qué capa falló
+  start: 111.283333
+  end: 134.283333
 ---
 
 # Capítulo 4 — Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding

@@ -1,30 +1,44 @@
 ---
-title: "Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware"
-description: "Cómo diseñar benchmarks de inferencia reproducibles: workload, TTFT/TPOT/ITL, throughput/goodput, coste por tarea correcta, energía y restricciones reales de hardware."
+title: 'Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware'
+description: 'Cómo diseñar benchmarks de inferencia reproducibles: workload, TTFT/TPOT/ITL, throughput/goodput,
+  coste por tarea correcta, energía y restricciones reales de hardware.'
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "LLM inference benchmark, TTFT, TPOT, ITL, throughput, goodput, cost per task, energy per inference, MLPerf, AIPerf, vLLM"
+keywords: LLM inference benchmark, TTFT, TPOT, ITL, throughput, goodput, cost per task, energy per inference, MLPerf,
+  AIPerf, vLLM
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Benchmarking
-  - Serving
+- IA
+- LLMs
+- Inferencia
+- Benchmarking
+- Serving
 video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
 video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
-video_title: "Benchmarking: coste, throughput, latencia y energía"
-video_summary: "Un benchmark de inferencia sólo es comparable si fija workload, frontera de medida y hardware, y reporta distribución de latencia, throughput útil, coste y energía."
-video_duration: PT36S
+video_title: Medir el sistema completo
+video_summary: 'Son experimentos diferentes: el segundo puede reducir las llegadas justo cuando aumenta la latencia.'
+video_date: '2026-09-28'
+video_duration: PT135.283333S
+video_captions: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-visual-text.vtt
+video_transcript: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-transcript.html
 video_chapters:
-- name: "El workload define qué se está midiendo"
+- name: Llegadas o concurrencia
   start: 0
-  end: 12
-- name: "Una frontera común hace comparables las métricas"
-  start: 12
-  end: 24
-- name: "Aceptar requiere SLO, coste y restricciones juntos"
-  start: 24
-  end: 36
+  end: 21.866667
+- name: Dividir por tareas resueltas
+  start: 21.866667
+  end: 44.483333
+- name: La energía acumula potencia
+  start: 44.483333
+  end: 67.1
+- name: Dibuja lo que mides
+  start: 67.1
+  end: 89.35
+- name: La cola cambia el régimen
+  start: 89.35
+  end: 113.033333
+- name: Conservar la variación
+  start: 113.033333
+  end: 135.283333
 ---
 
 # Capítulo 6 — Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware

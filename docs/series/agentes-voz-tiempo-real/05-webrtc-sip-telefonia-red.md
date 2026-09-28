@@ -1,31 +1,43 @@
 ---
-title: "WebRTC, SIP y telefonía: seguir el camino real del audio"
-description: "Cómo razonar sobre WebRTC, SIP, RTP, codecs, jitter, pérdida de paquetes, NAT, TURN y telefonía sin confundir señalización, media y runtime del agente."
+title: 'WebRTC, SIP y telefonía: seguir el camino real del audio'
+description: Cómo razonar sobre WebRTC, SIP, RTP, codecs, jitter, pérdida de paquetes, NAT, TURN y telefonía sin
+  confundir señalización, media y runtime del agente.
 date: 2026-09-10
 date_modified: 2026-09-10
 tags:
-  - IA
-  - Voz
-  - Realtime
-  - WebRTC
-  - Telefonía
-  - Producción
+- IA
+- Voz
+- Realtime
+- WebRTC
+- Telefonía
+- Producción
 video: 05-webrtc-sip-telefonia-red.mp4
 video_poster: 05-webrtc-sip-telefonia-red.jpg
-video_title: WebRTC, SIP y red
-video_summary: El transporte decide dónde viven media, jitter, codecs y fronteras
-  de telefonía.
-video_duration: PT36S
+video_title: Media, red y telefonía
+video_summary: Comprueba cada ruta de media y su codec. No diagnostiques sólo con «conectado».
+video_date: '2026-09-28'
+video_duration: PT139S
+video_captions: 05-webrtc-sip-telefonia-red-visual-text.vtt
+video_transcript: 05-webrtc-sip-telefonia-red-transcript.html
 video_chapters:
-- name: Topología
+- name: Conectar no garantiza audio
   start: 0
-  end: 12
-- name: Jitter
-  start: 12
-  end: 24
-- name: Transcodificación
-  start: 24
-  end: 36
+  end: 23
+- name: La ruta real puede cambiar
+  start: 23
+  end: 46
+- name: El paquete perdido retiene a los demás
+  start: 46
+  end: 69
+- name: Suavizar llegadas añade espera
+  start: 69
+  end: 93
+- name: Más muestras no recuperan detalle
+  start: 93
+  end: 116
+- name: Reparar requiere llegar a tiempo
+  start: 116
+  end: 139
 ---
 
 # Capítulo 5 — WebRTC, SIP y telefonía: seguir el camino real del audio

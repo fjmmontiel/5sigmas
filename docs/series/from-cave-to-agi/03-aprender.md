@@ -1,14 +1,42 @@
 ---
 title: Aprender — de las reglas a los datos
-description: "Cómo la IA pasó de reglas escritas a mano al aprendizaje con datos: sistemas expertos, estadística, redes neuronales y el salto de AlexNet."
+description: 'Cómo la IA pasó de reglas escritas a mano al aprendizaje con datos: sistemas expertos, estadística,
+  redes neuronales y el salto de AlexNet.'
 date: 2026-03-27
-keywords: "historia machine learning, sistemas expertos, MYCIN, aprendizaje automático historia, backpropagation, AlexNet, inviernos ia, ia simbólica, perceptrón, deep learning historia"
+keywords: historia machine learning, sistemas expertos, MYCIN, aprendizaje automático historia, backpropagation,
+  AlexNet, inviernos ia, ia simbólica, perceptrón, deep learning historia
 tags:
-  - IA
-  - Historia
-  - LLMs
-video: "03-aprender.mp4"
-video_duration: "PT1M15S"
+- IA
+- Historia
+- LLMs
+video: 03-aprender.mp4
+video_poster: 03-aprender.jpg
+video_title: Aprender parámetros y representaciones
+video_summary: El mantenimiento crece cuando cambian las condiciones; automatizar una regla no resuelve todas sus
+  excepciones.
+video_date: '2026-09-28'
+video_duration: PT134.9S
+video_captions: 03-aprender-visual-text.vtt
+video_transcript: 03-aprender-transcript.html
+video_chapters:
+- name: Las excepciones amplían la base de reglas
+  start: 0
+  end: 21.866667
+- name: Ajustar los ejemplos no basta para generalizar
+  start: 21.866667
+  end: 43.733333
+- name: El gradiente indica una dirección local
+  start: 43.733333
+  end: 68.866667
+- name: Una representación cambia la separación posible
+  start: 68.866667
+  end: 90.416667
+- name: El error se propaga mediante derivadas
+  start: 90.416667
+  end: 111.966667
+- name: Una ventana corta descarta contexto lejano
+  start: 111.966667
+  end: 134.9
 ---
 
 # Capítulo 3 — Aprender (≈ 1956 – 2012)

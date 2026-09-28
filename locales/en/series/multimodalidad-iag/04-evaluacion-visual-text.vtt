@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+The target box measures four by two units. The prediction is shifted by one unit.
+
+2
+00:00:07.667 --> 00:00:14.517
+The intersection has area six and the union area ten.
+
+3
+00:00:14.517 --> 00:00:22.183
+IoU is 0.6: recognizing the class alone would not measure this localization error.
+
+4
+00:00:22.683 --> 00:00:29.533
+Two images are paired with two captions using the same object names.
+
+5
+00:00:29.533 --> 00:00:36.383
+Reversing above and below changes the correct matching.
+
+6
+00:00:36.383 --> 00:00:43.733
+Compositional evaluation requires the crossed relations, not only object recognition.
+
+7
+00:00:44.233 --> 00:00:51.083
+The answer claims that order B totals twenty.
+
+8
+00:00:51.083 --> 00:00:58.250
+Twenty appears in the table but belongs to order A; B totals thirty.
+
+9
+00:00:58.250 --> 00:01:06.300
+The test must validate row, column and value to detect a plausible but false answer.
+
+10
+00:01:06.800 --> 00:01:13.650
+Sequence A turns on a light and then opens a door.
+
+11
+00:01:13.650 --> 00:01:20.500
+Sequence B contains the same events in the opposite order.
+
+12
+00:01:20.500 --> 00:01:28.167
+A temporal test must distinguish them even when their object and action inventories match.
+
+13
+00:01:28.667 --> 00:01:35.517
+The question asks how many dots are in the image; its text stays identical.
+
+14
+00:01:35.517 --> 00:01:42.683
+Only the image changes from two dots to three, while other conditions are held fixed.
+
+15
+00:01:42.683 --> 00:01:51.100
+The answer must change; always answering two can reveal reliance on text rather than the image.
+
+16
+00:01:51.600 --> 00:01:58.450
+Five cases have confidence scores, but some answers are incorrect.
+
+17
+00:01:58.450 --> 00:02:07.133
+A high threshold accepts two with no errors here; lowering it accepts four with one error.
+
+18
+00:02:07.133 --> 00:02:14.800
+Report coverage and error together: two successes do not prove reliability beyond this sample.
+

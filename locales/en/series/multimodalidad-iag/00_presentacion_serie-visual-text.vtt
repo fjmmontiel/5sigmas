@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The scene contains a circle and a square, with the circle on the left.
+
+2
+00:00:07.350 --> 00:00:14.200
+The caption “a circle and a square” still fits after their positions are swapped.
+
+3
+00:00:14.200 --> 00:00:21.550
+That caption lost a spatial relation needed to answer where each object is.
+
+4
+00:00:22.050 --> 00:00:28.900
+We see a closed, open and closed door at three moments.
+
+5
+00:00:28.900 --> 00:00:35.750
+Keeping only the first and last frame hides the intervening opening.
+
+6
+00:00:35.750 --> 00:00:43.100
+Video requires evidence of events between frames, not only of visible objects.
+
+7
+00:00:43.600 --> 00:00:50.767
+A text query asks for a triangular sign. The archive contains images of three shapes.
+
+8
+00:00:50.767 --> 00:00:57.617
+An aligned system compares text and image representations.
+
+9
+00:00:57.617 --> 00:01:04.967
+The match returns a candidate; its geometry and context still need checking.
+
+10
+00:01:05.467 --> 00:01:12.317
+An image representation can be used to find another archive entry.
+
+11
+00:01:12.317 --> 00:01:19.167
+A generator instead produces a new output conditioned on the request.
+
+12
+00:01:19.167 --> 00:01:26.517
+The first operation retrieves an existing record; the second constructs new content.
+
+13
+00:01:27.017 --> 00:01:33.867
+A table places the twelve-euro amount in the row for order A.
+
+14
+00:01:33.867 --> 00:01:41.417
+The answer needs the value and its row relation, not just recognition of the number.
+
+15
+00:01:41.417 --> 00:01:48.767
+Keep region, row and document identity so the claim can be checked.
+
+16
+00:01:49.267 --> 00:01:56.117
+A screenshot contains the text of a write request.
+
+17
+00:01:56.117 --> 00:02:02.967
+Reading the text and proposing a tool are different from executing the operation.
+
+18
+00:02:02.967 --> 00:02:10.317
+Permission is checked outside the observed content, before the external effect.
+

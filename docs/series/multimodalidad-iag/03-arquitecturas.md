@@ -1,14 +1,39 @@
 ---
 title: Arquitecturas de sistemas multimodales
-description: "Cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y cuándo conviene cada forma de combinar modalidades."
+description: Cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y cuándo conviene cada forma de combinar modalidades.
 date: 2026-04-02
-keywords: "arquitecturas multimodales, fusión temprana tardía, ViT, encoder multimodal, decoder multimodal, LLaVA, GPT-4V, arquitectura IA generativa, visión transformer"
+keywords: arquitecturas multimodales, fusión temprana tardía, ViT, encoder multimodal, decoder multimodal, LLaVA, GPT-4V, arquitectura IA generativa, visión transformer
 tags:
-  - IA
-  - GenAI
-  - Multimodalidad
-video: "03-arquitecturas.mp4"
-video_duration: "PT52S"
+- IA
+- GenAI
+- Multimodalidad
+video: 03-arquitecturas.mp4
+video_poster: 03-arquitecturas.jpg
+video_title: Conectar representaciones y modelos
+video_summary: Ese sistema devuelve un registro; para redactar una respuesta hace falta una etapa generativa aparte.
+video_date: '2026-09-28'
+video_duration: PT132.766667S
+video_captions: 03-arquitecturas-visual-text.vtt
+video_transcript: 03-arquitecturas-transcript.html
+video_chapters:
+- name: Dos encoders pueden recuperar sin generar
+  start: 0.0
+  end: 21.866667
+- name: El conector aprende a cambiar la representación
+  start: 21.866667
+  end: 43.416667
+- name: Una consulta puede seleccionar información visual
+  start: 43.416667
+  end: 66.416667
+- name: La posición conecta imágenes y preguntas
+  start: 66.416667
+  end: 88.283333
+- name: Comprimir regiones puede ocultar un detalle
+  start: 88.283333
+  end: 110.15
+- name: Texto y audio necesitan coordinar sus salidas
+  start: 110.15
+  end: 132.766667
 ---
 
 # Capítulo 3 — Arquitecturas: espacios compartidos, conectores y modelos omni

@@ -1,38 +1,176 @@
 series/multimodalidad-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: Multimodality in Generative AI
-  video_duration: PT1M2S
+  video_title: Preserving evidence across modalities
+  video_summary: That caption lost a spatial relation needed to answer where each object is.
+  video_date: '2026-09-28'
+  video_duration: PT130.316667S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Naming objects does not preserve their relation
+    start: 0.0
+    end: 21.55
+  - name: The same states can form a different sequence
+    start: 21.55
+    end: 43.1
+  - name: Cross-modal search requires correspondences
+    start: 43.1
+    end: 64.966667
+  - name: An embedding is not a generated image
+    start: 64.966667
+    end: 86.516667
+  - name: The answer must retain its evidence
+    start: 86.516667
+    end: 108.766667
+  - name: Seeing an instruction does not authorize an action
+    start: 108.766667
+    end: 130.316667
 
 series/multimodalidad-iag/01-el-problema.md:
   video: 01-el-problema.mp4
   video_poster: 01-el-problema.jpg
-  video_title: The Real Problem of Multimodality
-  video_duration: PT1M2S
+  video_title: Structure, resolution and time
+  video_summary: If that position answered the question, the reduction already removed the needed evidence.
+  video_date: '2026-09-28'
+  video_duration: PT133.033333S
+  video_captions: 01-el-problema-visual-text.vtt
+  video_transcript: 01-el-problema-transcript.html
+  video_chapters:
+  - name: Lower resolution can erase a difference
+    start: 0.0
+    end: 21.55
+  - name: Reading numbers is not enough to read a table
+    start: 21.55
+    end: 43.733333
+  - name: A transcript can omit how words were spoken
+    start: 43.733333
+    end: 65.983333
+  - name: An event can fall between two samples
+    start: 65.983333
+    end: 88.6
+  - name: Synchronization requires knowing the offset
+    start: 88.6
+    end: 110.466667
+  - name: A number needs units and a reference frame
+    start: 110.466667
+    end: 133.033333
 
 series/multimodalidad-iag/02-alineamiento.md:
   video: 02-alineamiento.mp4
   video_poster: 02-alineamiento.jpg
-  video_title: "Alignment: From Pairs to Interactions"
-  video_duration: PT1M2S
+  video_title: Learning alignment
+  video_summary: The contrastive objective distinguishes those batch correspondences without guaranteeing every pair is correctly labelled.
+  video_date: '2026-09-28'
+  video_duration: PT131.75S
+  video_captions: 02-alineamiento-visual-text.vtt
+  video_transcript: 02-alineamiento-transcript.html
+  video_chapters:
+  - name: The matching pair is a training signal
+    start: 0.0
+    end: 22.616667
+  - name: Similarity can depend on direction
+    start: 22.616667
+    end: 44.166667
+  - name: Changing a relation creates a hard negative
+    start: 44.166667
+    end: 65.716667
+  - name: A pairing can teach a false association
+    start: 65.716667
+    end: 88.333333
+  - name: Aligning a clip does not locate every event
+    start: 88.333333
+    end: 110.2
+  - name: A shared anchor does not replace evaluation
+    start: 110.2
+    end: 131.75
 
 series/multimodalidad-iag/03-arquitecturas.md:
   video: 03-arquitecturas.mp4
   video_poster: 03-arquitecturas.jpg
-  video_title: Multimodal System Architectures
-  video_duration: PT1M2S
+  video_title: Connecting representations and models
+  video_summary: The system returns a record; writing an answer requires a separate generative stage.
+  video_date: '2026-09-28'
+  video_duration: PT132.766667S
+  video_captions: 03-arquitecturas-visual-text.vtt
+  video_transcript: 03-arquitecturas-transcript.html
+  video_chapters:
+  - name: Two encoders can retrieve without generating
+    start: 0.0
+    end: 21.866667
+  - name: A connector learns to change representations
+    start: 21.866667
+    end: 43.416667
+  - name: A query can select visual information
+    start: 43.416667
+    end: 66.416667
+  - name: Sequence position links images and questions
+    start: 66.416667
+    end: 88.283333
+  - name: Compressing regions can hide a detail
+    start: 88.283333
+    end: 110.15
+  - name: Text and audio outputs need coordination
+    start: 110.15
+    end: 132.766667
 
 series/multimodalidad-iag/04-evaluacion.md:
   video: 04-evaluacion.mp4
   video_poster: 04-evaluacion.jpg
-  video_title: Evaluating Multimodal Systems
-  video_duration: PT1M2S
+  video_title: Measuring distinct capabilities
+  video_summary: 'IoU is 0.6: recognizing the class alone would not measure this localization error.'
+  video_date: '2026-09-28'
+  video_duration: PT134.8S
+  video_captions: 04-evaluacion-visual-text.vtt
+  video_transcript: 04-evaluacion-transcript.html
+  video_chapters:
+  - name: Naming and locating are different successes
+    start: 0.0
+    end: 22.183333
+  - name: The same words can change who is where
+    start: 22.183333
+    end: 43.733333
+  - name: Checking a value requires checking the cell
+    start: 43.733333
+    end: 66.3
+  - name: Order can be the whole question
+    start: 66.3
+    end: 88.166667
+  - name: A test should require visual evidence
+    start: 88.166667
+    end: 111.1
+  - name: Answering more cases can admit more errors
+    start: 111.1
+    end: 134.8
 
 series/multimodalidad-iag/05-riesgos.md:
   video: 05-riesgos.mp4
   video_poster: 05-riesgos.jpg
-  video_title: Risks of Multimodal AI Systems
-  video_duration: PT1M2S
+  video_title: Data, permissions and consequences
+  video_summary: Correctly reading an instruction does not give it authority to change permissions.
+  video_date: '2026-09-28'
+  video_duration: PT132.7S
+  video_captions: 05-riesgos-visual-text.vtt
+  video_transcript: 05-riesgos-transcript.html
+  video_chapters:
+  - name: Text in an image remains external data
+    start: 0.0
+    end: 21.866667
+  - name: Permission checking must precede the effect
+    start: 21.866667
+    end: 43.416667
+  - name: Covering a region does not remove every data channel
+    start: 43.416667
+    end: 64.966667
+  - name: Stored false evidence can repeat an error
+    start: 64.966667
+    end: 87.583333
+  - name: A proposal can still be stopped
+    start: 87.583333
+    end: 110.516667
+  - name: An average can hide a failure group
+    start: 110.516667
+    end: 132.7
 
 series/fundamentos-ia-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
@@ -97,39 +235,177 @@ series/ia-pib-bienestar-energia/04-ia-pib-hoy.md:
 series/from-cave-to-agi/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: From the Caves to AGI
-  video_duration: PT1M3S
+  video_title: Five changes in how we handle information
+  video_summary: The record preserves the quantity after the objects are out of sight.
+  video_date: '2026-09-28'
+  video_duration: PT130.316667S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: A mark preserves a quantity
+    start: 0
+    end: 21.55
+  - name: Changing notation changes the work
+    start: 21.55
+    end: 43.1
+  - name: The instruction can change without changing the machine
+    start: 43.1
+    end: 64.966667
+  - name: Examples change the mapping
+    start: 64.966667
+    end: 87.216667
+  - name: Parallel work needs suitable structure
+    start: 87.216667
+    end: 108.766667
+  - name: Mechanisms accumulate; they do not replace everything
+    start: 108.766667
+    end: 130.316667
 
 series/from-cave-to-agi/01-representar.md:
   video: 01-representar.mp4
   video_poster: 01-representar.jpg
-  video_title: Represent — from counting to calculus
-  video_duration: PT1M3S
+  video_title: Representing quantities, relations and change
+  video_summary: Ten marks still represent ten units; organization changes, not quantity.
+  video_date: '2026-09-28'
+  video_duration: PT131.766667S
+  video_captions: 01-representar-visual-text.vtt
+  video_transcript: 01-representar-transcript.html
+  video_chapters:
+  - name: Grouping does not change the object count
+    start: 0
+    end: 21.55
+  - name: Zero preserves a position
+    start: 21.55
+    end: 43.8
+  - name: The same operation preserves equality
+    start: 43.8
+    end: 65.35
+  - name: A compact rule describes many terms
+    start: 65.35
+    end: 86.9
+  - name: A conclusion depends on its premises
+    start: 86.9
+    end: 109.516667
+  - name: Measuring change over smaller intervals
+    start: 109.516667
+    end: 131.766667
 
 series/from-cave-to-agi/02-mecanizar.md:
   video: 02-mecanizar.mp4
   video_poster: 02-mecanizar.jpg
-  video_title: Mechanize — from calculation to computing
-  video_duration: PT1M3S
+  video_title: Separating instructions, logic and memory
+  video_summary: The mechanism represents ten without requiring a person to remember the carry.
+  video_date: '2026-09-28'
+  video_duration: PT130.316667S
+  video_captions: 02-mecanizar-visual-text.vtt
+  video_transcript: 02-mecanizar-transcript.html
+  video_chapters:
+  - name: A carry connects two positions
+    start: 0
+    end: 21.866667
+  - name: Change the pattern, keep the mechanism
+    start: 21.866667
+    end: 43.416667
+  - name: A logical operation can control a circuit
+    start: 43.416667
+    end: 64.966667
+  - name: A local rule can traverse a tape
+    start: 64.966667
+    end: 87.216667
+  - name: Instructions and data can reside in memory
+    start: 87.216667
+    end: 108.766667
+  - name: Four equally likely alternatives require two bits
+    start: 108.766667
+    end: 130.316667
 
 series/from-cave-to-agi/03-aprender.md:
   video: 03-aprender.mp4
   video_poster: 03-aprender.jpg
-  video_title: Learn — from rules to data
-  video_duration: PT1M3S
+  video_title: Learning parameters and representations
+  video_summary: Maintenance grows as conditions change; automating a rule does not solve all its exceptions.
+  video_date: '2026-09-28'
+  video_duration: PT134.9S
+  video_captions: 03-aprender-visual-text.vtt
+  video_transcript: 03-aprender-transcript.html
+  video_chapters:
+  - name: Exceptions expand the rule base
+    start: 0
+    end: 21.866667
+  - name: Fitting examples is not enough to generalize
+    start: 21.866667
+    end: 43.733333
+  - name: The gradient gives a local direction
+    start: 43.733333
+    end: 68.866667
+  - name: A representation changes what can be separated
+    start: 68.866667
+    end: 90.416667
+  - name: Error propagates through derivatives
+    start: 90.416667
+    end: 111.966667
+  - name: A short window discards distant context
+    start: 111.966667
+    end: 134.9
 
 series/from-cave-to-agi/04-escalar.md:
+  date: 2026-03-30
   video: 04-escalar.mp4
   video_poster: 04-escalar.jpg
-  video_title: Scale — deep learning to foundation models
-  video_duration: PT1M3S
-  date: 2026-03-30
+  video_title: Scaling data, computation and reuse
+  video_summary: Learning those filters builds representations from pixels.
+  video_date: '2026-09-28'
+  video_duration: PT131.066667S
+  video_captions: 04-escalar-visual-text.vtt
+  video_transcript: 04-escalar-transcript.html
+  video_chapters:
+  - name: A filter shares parameters across positions
+    start: 0
+    end: 21.55
+  - name: Partitioning does not eliminate communication
+    start: 21.55
+    end: 43.1
+  - name: Doubling positions quadruples pairs
+    start: 43.1
+    end: 64.966667
+  - name: A fixed budget imposes a trade-off
+    start: 64.966667
+    end: 87.966667
+  - name: One base can adapt to different tasks
+    start: 87.966667
+    end: 109.516667
+  - name: Instruction following adds a training objective
+    start: 109.516667
+    end: 131.066667
 
 series/from-cave-to-agi/05-mas-alla.md:
   video: 05-mas-alla.mp4
   video_poster: 05-mas-alla.jpg
-  video_title: Beyond the Transformer
-  video_duration: PT1M3S
+  video_title: Search, memory and action with limits
+  video_summary: Search provides alternatives; the verifier provides evidence for this specific criterion.
+  video_date: '2026-09-28'
+  video_duration: PT132.516667S
+  video_captions: 05-mas-alla-visual-text.vtt
+  video_transcript: 05-mas-alla-transcript.html
+  video_chapters:
+  - name: Proposing and verifying are different operations
+    start: 0
+    end: 21.55
+  - name: Storing information does not require rereading everything
+    start: 21.55
+    end: 43.416667
+  - name: A compact state does not preserve every input intact
+    start: 43.416667
+    end: 66.033333
+  - name: A world prediction must be checked against observations
+    start: 66.033333
+    end: 89.416667
+  - name: Acting requires closing the loop with measurements
+    start: 89.416667
+    end: 110.966667
+  - name: A local improvement does not prove universal capability
+    start: 110.966667
+    end: 132.516667
 
 series/modelos-razonadores/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
@@ -527,103 +803,175 @@ series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md:
   video: 01-arquitecturas-de-voz.mp4
   video_poster: 01-arquitecturas-de-voz.jpg
   video_title: Voice architectures
-  video_summary: Where text appears and why full-duplex is a separate axis.
-  video_duration: PT36S
+  video_summary: The same turn crosses every stage. The runtime must coordinate their results.
+  video_date: '2026-09-28'
+  video_duration: PT138S
+  video_captions: 01-arquitecturas-de-voz-visual-text.vtt
+  video_transcript: 01-arquitecturas-de-voz-transcript.html
   video_chapters:
-  - name: Observable boundaries
+  - name: Where text enters the path
     start: 0
-    end: 12
-  - name: Modality
-    start: 12
-    end: 24
-  - name: Interaction
-    start: 24
-    end: 36
+    end: 23
+  - name: Hear audio. Return text.
+    start: 23
+    end: 46
+  - name: Fewer boundaries. The same controls.
+    start: 46
+    end: 69
+  - name: Two directions. A separate axis.
+    start: 69
+    end: 92
+  - name: Who owns each boundary
+    start: 92
+    end: 115
+  - name: The requirement before the ranking
+    start: 115
+    end: 138
 
 series/agentes-voz-tiempo-real/02-turn-taking.md:
   video: 02-turn-taking.mp4
   video_poster: 02-turn-taking.jpg
-  video_title: Turn-taking and interruptions
-  video_summary: VAD detects activity; endpointing decides turns; barge-in does not roll back business state.
-  video_duration: PT36S
+  video_title: Turns and interruptions
+  video_summary: VAD detects activity. End-of-turn needs evidence about the complete intent.
+  video_date: '2026-09-28'
+  video_duration: PT138S
+  video_captions: 02-turn-taking-visual-text.vtt
+  video_transcript: 02-turn-taking-transcript.html
   video_chapters:
-  - name: Signal vs decision
+  - name: A pause does not finish the thought
     start: 0
-    end: 12
-  - name: Turn state
-    start: 12
-    end: 24
-  - name: Two cancellation domains
-    start: 24
-    end: 36
+    end: 23
+  - name: Waiting has a cost too
+    start: 23
+    end: 46
+  - name: Fast start. Evidence for the end.
+    start: 46
+    end: 69
+  - name: Do they want the turn?
+    start: 69
+    end: 92
+  - name: Stopping generation is not enough
+    start: 92
+    end: 115
+  - name: One turn. One decision.
+    start: 115
+    end: 138
 
 series/agentes-voz-tiempo-real/03-presupuesto-latencia.md:
   video: 03-presupuesto-latencia.mp4
   video_poster: 03-presupuesto-latencia.jpg
-  video_title: Latency budget
-  video_summary: Measure the same-turn critical path and separate overlap from true blockers.
-  video_duration: PT36S
+  video_title: Latency budgeting
+  video_summary: On the same clock, total waiting is 300 plus 480. It is not the model’s TTFT.
+  video_date: '2026-09-28'
+  video_duration: PT139S
+  video_captions: 03-presupuesto-latencia-visual-text.vtt
+  video_transcript: 03-presupuesto-latencia-transcript.html
   video_chapters:
-  - name: Critical path
+  - name: Two events define latency
     start: 0
-    end: 12
-  - name: One clock
-    start: 12
-    end: 24
-  - name: Optimization
-    start: 24
-    end: 36
+    end: 23
+  - name: Follow the critical path
+    start: 23
+    end: 47
+  - name: Different clocks. Misleading differences.
+    start: 47
+    end: 70
+  - name: Generated does not mean played
+    start: 70
+    end: 93
+  - name: The average hides the tail
+    start: 93
+    end: 116
+  - name: Change one layer. Measure the effect.
+    start: 116
+    end: 139
 
 series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md:
   video: 04-tools-estado-acciones-asincronas.mp4
   video_poster: 04-tools-estado-acciones-asincronas.jpg
-  video_title: Tools, state and asynchronous actions
-  video_summary: Conversation can move on before an action finishes; identity and state prevent stale results from being applied.
-  video_duration: PT36S
+  video_title: Tools and durable state
+  video_summary: The conversation reports the observed result. A sentence does not create a booking.
+  video_date: '2026-09-28'
+  video_duration: PT139S
+  video_captions: 04-tools-estado-acciones-asincronas-visual-text.vtt
+  video_transcript: 04-tools-estado-acciones-asincronas-transcript.html
   video_chapters:
-  - name: Different lifecycles
+  - name: Requesting is not executing
     start: 0
-    end: 12
-  - name: Interruption
-    start: 12
-    end: 24
-  - name: Reconciliation
-    start: 24
-    end: 36
+    end: 23
+  - name: Four states. Four authorities.
+    start: 23
+    end: 46
+  - name: Silence does not undo a booking
+    start: 46
+    end: 69
+  - name: The result arrives in another turn
+    start: 69
+    end: 92
+  - name: Timeout does not mean failure
+    start: 92
+    end: 115
+  - name: Async needs an owner
+    start: 115
+    end: 139
 
 series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md:
   video: 05-webrtc-sip-telefonia-red.mp4
   video_poster: 05-webrtc-sip-telefonia-red.jpg
-  video_title: WebRTC, SIP and network
-  video_summary: Transport determines where media, jitter, codecs and telephony boundaries live.
-  video_duration: PT36S
+  video_title: Media, networks and telephony
+  video_summary: Check each media direction and its codec. Do not diagnose from “connected” alone.
+  video_date: '2026-09-28'
+  video_duration: PT139S
+  video_captions: 05-webrtc-sip-telefonia-red-visual-text.vtt
+  video_transcript: 05-webrtc-sip-telefonia-red-transcript.html
   video_chapters:
-  - name: Topology
+  - name: Connected does not guarantee audio
     start: 0
-    end: 12
-  - name: Jitter
-    start: 12
-    end: 24
-  - name: Transcoding
-    start: 24
-    end: 36
+    end: 23
+  - name: The actual path can change
+    start: 23
+    end: 46
+  - name: A missing packet holds back the rest
+    start: 46
+    end: 69
+  - name: Smoothing arrivals adds waiting
+    start: 69
+    end: 93
+  - name: More samples do not restore detail
+    start: 93
+    end: 116
+  - name: Repair must arrive in time
+    start: 116
+    end: 139
 
 series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md:
   video: 06-evaluacion-observabilidad-reliability.mp4
   video_poster: 06-evaluacion-observabilidad-reliability.jpg
-  video_title: Evaluation, observability and reliability
-  video_summary: 'The useful unit is a traceable turn: correlated evidence, taxonomy, and a production→eval→repair loop.'
-  video_duration: PT36S
+  video_title: Evaluation and observability
+  video_summary: Join business, turn, media and runtime evidence. A transcript does not prove the complete outcome.
+  video_date: '2026-09-28'
+  video_duration: PT139S
+  video_captions: 06-evaluacion-observabilidad-reliability-visual-text.vtt
+  video_transcript: 06-evaluacion-observabilidad-reliability-transcript.html
   video_chapters:
-  - name: Turn trace
+  - name: The sentence is not all the evidence
     start: 0
-    end: 12
-  - name: Taxonomy
-    start: 12
-    end: 24
-  - name: Repair loop
-    start: 24
-    end: 36
+    end: 23
+  - name: One turn can have several attempts
+    start: 23
+    end: 46
+  - name: The denominator changes the meaning
+    start: 46
+    end: 69
+  - name: Deterministic checks do not need a judge
+    start: 69
+    end: 92
+  - name: Replay the boundary that failed
+    start: 92
+    end: 115
+  - name: From incident to a useful regression
+    start: 115
+    end: 139
 
 series/coding-agents-agent-harnesses/01-que-es-agent-harness.md:
   video: 01-que-es-agent-harness.mp4
@@ -802,206 +1150,351 @@ series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuper
 series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md:
   video: 01-context-engineering-vs-prompt-engineering.mp4
   video_poster: 01-context-engineering-vs-prompt-engineering.jpg
-  video_title: "Context engineering versus prompt engineering"
-  video_summary: "Quality depends on which evidence, state, and tools enter each turn, not only on prompt wording."
-  video_duration: PT36S
+  video_title: What reaches the model
+  video_summary: The decision depends on this specific input, not everything held by the application.
+  video_date: '2026-09-28'
+  video_duration: PT131.7S
+  video_captions: 01-context-engineering-vs-prompt-engineering-visual-text.vtt
+  video_transcript: 01-context-engineering-vs-prompt-engineering-transcript.html
   video_chapters:
-  - name: "Fixed prompt versus live context"
+  - name: Available is not visible
     start: 0
-    end: 12
-  - name: "Per-turn selection and assembly"
-    start: 12
-    end: 24
-  - name: "Context changes after observation"
-    start: 24
-    end: 36
+    end: 22.25
+  - name: An outdated policy
+    start: 22.25
+    end: 44.866667
+  - name: Filter before ranking
+    start: 44.866667
+    end: 66.733333
+  - name: The next turn changes
+    start: 66.733333
+    end: 88.6
+  - name: Load when needed
+    start: 88.6
+    end: 110.15
+  - name: Reconstruct the turn
+    start: 110.15
+    end: 131.7
 
 series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md:
   video: 02-context-budgets-prioritisation-compaction-provenance.mp4
   video_poster: 02-context-budgets-prioritisation-compaction-provenance.jpg
-  video_title: "Budget, prioritization, compaction, and provenance"
-  video_summary: "A finite budget forces selection, compaction, or eviction while preserving provenance for what survives."
-  video_duration: PT36S
+  video_title: Budget and provenance
+  video_summary: That leaves 48 thousand for dynamic information. This is not a universal model property.
+  video_date: '2026-09-28'
+  video_duration: PT135.25S
+  video_captions: 02-context-budgets-prioritisation-compaction-provenance-visual-text.vtt
+  video_transcript: 02-context-budgets-prioritisation-compaction-provenance-transcript.html
   video_chapters:
-  - name: "The window is a finite budget"
+  - name: The window is not the budget
     start: 0
-    end: 12
-  - name: "Compact without losing the source"
-    start: 12
-    end: 24
-  - name: "Priority changes with the task"
-    start: 24
-    end: 36
+    end: 22.25
+  - name: Do not evict the specification
+    start: 22.25
+    end: 45.95
+  - name: A summary can lose the rule
+    start: 45.95
+    end: 68.2
+  - name: A derivative needs its source
+    start: 68.2
+    end: 89.75
+  - name: Caching is not summarising
+    start: 89.75
+    end: 111.933333
+  - name: A pointer must recover the version
+    start: 111.933333
+    end: 135.25
 
 series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md:
   video: 03-memory-architectures-working-episodic-semantic-persistent-state.mp4
   video_poster: 03-memory-architectures-working-episodic-semantic-persistent-state.jpg
-  video_title: "Memory architectures and persistent state"
-  video_summary: "Working memory, episodes, semantic knowledge, and persistent state have different write, retrieval, and expiry lifecycles."
-  video_duration: PT36S
+  video_title: Memory and authoritative state
+  video_summary: A checkpoint can persist too, but its contract is resuming execution, not learning a preference.
+  video_date: '2026-09-28'
+  video_duration: PT129.933333S
+  video_captions: 03-memory-architectures-working-episodic-semantic-persistent-state-visual-text.vtt
+  video_transcript: 03-memory-architectures-working-episodic-semantic-persistent-state-transcript.html
   video_chapters:
-  - name: "Four memories, four lifecycles"
+  - name: Lifetime is not meaning
     start: 0
-    end: 12
-  - name: "Writing requires a policy"
-    start: 12
-    end: 24
-  - name: "Retrieving does not mean trusting"
-    start: 24
-    end: 36
+    end: 21.866667
+  - name: Remember what happened and when
+    start: 21.866667
+    end: 43.416667
+  - name: A preference is derived
+    start: 43.416667
+    end: 64.966667
+  - name: Memory does not grant access
+    start: 64.966667
+    end: 86.833333
+  - name: Persistence needs a policy
+    start: 86.833333
+    end: 108.383333
+  - name: Correct the derivatives too
+    start: 108.383333
+    end: 129.933333
 
 series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md:
   video: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.mp4
   video_poster: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding.jpg
-  video_title: "Retrieval, freshness, conflict, and grounding"
-  video_summary: "Retrieving candidates is not enough: relevance and freshness must be weighed, conflicts resolved, and traceable evidence assembled."
-  video_duration: PT36S
+  video_title: Retrieval and grounding
+  video_summary: The assembler checks access, revision and authority before using them together.
+  video_date: '2026-09-28'
+  video_duration: PT134.283333S
+  video_captions: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding-visual-text.vtt
+  video_transcript: 04-retrieval-context-assembly-freshness-relevance-conflict-grounding-transcript.html
   video_chapters:
-  - name: "Relevance and freshness are different signals"
+  - name: Three ways to find evidence
     start: 0
-    end: 12
-  - name: "Resolve conflict before assembly"
-    start: 12
-    end: 24
-  - name: "Grounding keeps evidence and answer connected"
-    start: 24
-    end: 36
+    end: 21.55
+  - name: Scores do not share a scale
+    start: 21.55
+    end: 44.55
+  - name: Fresh index, old copy
+    start: 44.55
+    end: 66.416667
+  - name: Do not average contradictions
+    start: 66.416667
+    end: 89.733333
+  - name: A citation must support the claim
+    start: 89.733333
+    end: 111.283333
+  - name: Identify the failing layer
+    start: 111.283333
+    end: 134.283333
 
 series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md:
   video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
   video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
-  video_title: "MCP: lifecycle, capabilities, and trust boundaries"
-  video_summary: "MCP separates host, clients, and servers; capability discovery does not remove authorization, validation, or trust boundaries."
-  video_duration: PT36S
+  video_title: 'MCP: protocol and trust'
+  video_summary: Connecting two servers does not authorise either to receive the other’s data.
+  video_date: '2026-09-28'
+  video_duration: PT134.916667S
+  video_captions: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-visual-text.vtt
+  video_transcript: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-transcript.html
   video_chapters:
-  - name: "Host, client, and server have different roles"
+  - name: The host keeps the policy
     start: 0
-    end: 12
-  - name: "Discovering capabilities does not authorize them"
-    start: 12
-    end: 24
-  - name: "Remote data does not inherit authority"
-    start: 24
-    end: 36
+    end: 21.55
+  - name: Data, templates and actions
+    start: 21.55
+    end: 43.416667
+  - name: The version changes the contract
+    start: 43.416667
+    end: 65.283333
+  - name: A label does not enforce a limit
+    start: 65.283333
+    end: 88.6
+  - name: A timeout does not prove the outcome
+    start: 88.6
+    end: 111.533333
+  - name: Transport does not confer authority
+    start: 111.533333
+    end: 134.916667
 
 series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md:
   video: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.mp4
   video_poster: 06-skills-plugins-subagents-hooks-context-isolation-evaluation.jpg
-  video_title: "Skills, plugins, subagents, and context isolation"
-  video_summary: "Extensions and subagents scale only when each worker's context, authority, and evidence remain explicit and evaluable."
-  video_duration: PT36S
+  video_title: Extensions, delegation and controls
+  video_summary: Progressive loading limits context. It neither isolates the process nor grants new authorisation.
+  video_date: '2026-09-28'
+  video_duration: PT133.783333S
+  video_captions: 06-skills-plugins-subagents-hooks-context-isolation-evaluation-visual-text.vtt
+  video_transcript: 06-skills-plugins-subagents-hooks-context-isolation-evaluation-transcript.html
   video_chapters:
-  - name: "Extending does not mean sharing all context"
+  - name: Load a skill in stages
     start: 0
-    end: 12
-  - name: "Fan-out with isolated contexts"
-    start: 12
-    end: 24
-  - name: "Fan-in only with evaluated evidence"
-    start: 24
-    end: 36
+    end: 21.55
+  - name: A package is not a sandbox
+    start: 21.55
+    end: 43.1
+  - name: Delegate a precise contract
+    start: 43.1
+    end: 65.666667
+  - name: Another window is not another environment
+    start: 65.666667
+    end: 87.533333
+  - name: Block before the effect
+    start: 87.533333
+    end: 110.783333
+  - name: Measure success and isolation separately
+    start: 110.783333
+    end: 133.783333
 
 series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md:
   video: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.mp4
   video_poster: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.jpg
-  video_title: "Prefill, decode, and the latency budget"
-  video_summary: "Prefill processes context in parallel; decode generates tokens sequentially. TTFT, TPOT, and throughput measure different phases of the same service."
-  video_duration: PT36S
+  video_title: The request clock
+  video_summary: Long inputs and long outputs add work in different phases. One clock does not distinguish them.
+  video_date: '2026-09-28'
+  video_duration: PT133.05S
+  video_captions: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-visual-text.vtt
+  video_transcript: 01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-transcript.html
   video_chapters:
-  - name: "Prefill builds the state required for decoding"
+  - name: Read, then generate
     start: 0
-    end: 12
-  - name: "Decode advances one token at a time"
-    start: 12
-    end: 24
-  - name: "TTFT, TPOT, and throughput form the budget"
-    start: 24
-    end: 36
+    end: 22.566667
+  - name: The client also waits
+    start: 22.566667
+    end: 44.816667
+  - name: Each token adds time
+    start: 44.816667
+    end: 66.366667
+  - name: An event is not a token
+    start: 66.366667
+    end: 88.933333
+  - name: Completion is not enough
+    start: 88.933333
+    end: 110.483333
+  - name: Workload shape matters
+    start: 110.483333
+    end: 133.05
 
 series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md:
   video: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.mp4
   video_poster: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.jpg
-  video_title: "KV cache, memory hierarchy, and continuous batching"
-  video_summary: "The KV cache trades memory for less repeated compute; paging and continuous batching coordinate capacity, admission, and reuse across active requests."
-  video_duration: PT36S
+  video_title: State and capacity
+  video_summary: For 4096 tokens, KV payload is 512 MiB. Weights and buffers are excluded.
+  video_date: '2026-09-28'
+  video_duration: PT133.433333S
+  video_captions: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-visual-text.vtt
+  video_transcript: 02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-transcript.html
   video_chapters:
-  - name: "The KV cache consumes capacity per sequence"
+  - name: Context occupies memory
     start: 0
-    end: 12
-  - name: "Continuous batching rebuilds the batch each step"
-    start: 12
-    end: 24
-  - name: "Paging turns capacity into assignable pages"
-    start: 24
-    end: 36
+    end: 22.566667
+  - name: Not all GPU memory is KV
+    start: 22.566667
+    end: 44.816667
+  - name: Separate logical and physical
+    start: 44.816667
+    end: 67.066667
+  - name: Completion frees a slot
+    start: 67.066667
+    end: 88.933333
+  - name: Moving state also costs
+    start: 88.933333
+    end: 111.183333
+  - name: Cancellation releases state
+    start: 111.183333
+    end: 133.433333
 
 series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md:
   video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
   video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
-  video_title: "Quantization, parallelism, and trade-offs"
-  video_summary: "Quantization reduces bytes per parameter; tensor and pipeline parallelism distribute compute and memory. Each choice moves memory, quality, communication, and latency."
-  video_duration: PT36S
+  video_title: Precision and distribution
+  video_summary: The error is 0.12. Lower precision requires task evaluation, not just memory accounting.
+  video_date: '2026-09-28'
+  video_duration: PT135.35S
+  video_captions: 03-quantization-parallelism-memory-quality-tradeoffs-visual-text.vtt
+  video_transcript: 03-quantization-parallelism-memory-quality-tradeoffs-transcript.html
   video_chapters:
-  - name: "Fewer bits reduce memory and bandwidth"
+  - name: Fewer precision levels
     start: 0
-    end: 12
-  - name: "Parallelism distributes the model across devices"
-    start: 12
-    end: 24
-  - name: "Optimizing one metric moves others"
-    start: 24
-    end: 36
+    end: 21.55
+  - name: Payload is not total footprint
+    start: 21.55
+    end: 44.866667
+  - name: Three distinct precisions
+    start: 44.866667
+    end: 67.483333
+  - name: Splitting a layer communicates
+    start: 67.483333
+    end: 91.233333
+  - name: Pipeline stages also wait
+    start: 91.233333
+    end: 113.483333
+  - name: Replicas are not experts
+    start: 113.483333
+    end: 135.35
 
 series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md:
   video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
   video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
-  video_title: "Speculative decoding and prefix caching"
-  video_summary: "Speculative decoding proposes several cheap tokens and the target model verifies them; prefix caching reuses prefill work when the prefix truly matches."
-  video_duration: PT36S
+  video_title: Avoid and propose work
+  video_summary: The continuation must still be generated. A prefix hit does not retrieve a complete answer.
+  video_date: '2026-09-28'
+  video_duration: PT135.55S
+  video_captions: 04-speculative-decoding-prefix-caching-latency-optimisations-visual-text.vtt
+  video_transcript: 04-speculative-decoding-prefix-caching-latency-optimisations-transcript.html
   video_chapters:
-  - name: "The draft proposes a block of tokens"
+  - name: Reuse only the prefix
     start: 0
-    end: 12
-  - name: "The verifier accepts a prefix and rejects the rest"
-    start: 12
-    end: 24
-  - name: "A prefix hit avoids repeated prefill"
-    start: 24
-    end: 36
+    end: 22.566667
+  - name: Identity determines the hit
+    start: 22.566667
+    end: 44.433333
+  - name: A proposal is not a commit
+    start: 44.433333
+    end: 67.366667
+  - name: High acceptance is not enough
+    start: 67.366667
+    end: 90.3
+  - name: Retire the rejected branch
+    start: 90.3
+    end: 113.3
+  - name: Interleave the work
+    start: 113.3
+    end: 135.55
 
 series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md:
   video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
   video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
-  video_title: "Routing, fallback, caching, and workload-aware serving"
-  video_summary: "A router assigns each request by capacity, quality, cost, and latency; cache and fallback change the path without removing verification or policy bounds."
-  video_duration: PT36S
+  video_title: Decide under constraints
+  video_summary: Selection optimises within the eligible set. A cheap but incompatible alternative is not a valid
+    option.
+  video_date: '2026-09-28'
+  video_duration: PT134.95S
+  video_captions: 05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt
+  video_transcript: 05-model-routing-fallback-caching-workload-aware-serving-transcript.html
   video_chapters:
-  - name: "Routing separates workloads before serving"
+  - name: Eligibility comes first
     start: 0
-    end: 12
-  - name: "A cache hit avoids work when the key is valid"
-    start: 12
-    end: 24
-  - name: "Fallback recovers service under failure or saturation"
-    start: 24
-    end: 36
+    end: 22.616667
+  - name: Routing is not recovery
+    start: 22.616667
+    end: 45.233333
+  - name: The deadline does not reset
+    start: 45.233333
+    end: 68.916667
+  - name: Visible output is committed
+    start: 68.916667
+    end: 90.783333
+  - name: Two different forms of reuse
+    start: 90.783333
+    end: 112.333333
+  - name: Similarity is not equivalence
+    start: 112.333333
+    end: 134.95
 
-series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md:
-  video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
+? series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
+: video: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.mp4
   video_poster: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.jpg
-  video_title: "Benchmarking: cost, throughput, latency, and energy"
-  video_summary: "An inference benchmark is comparable only when workload, measurement boundary, and hardware are fixed, and latency distribution, useful throughput, cost, and energy are reported."
-  video_duration: PT36S
+  video_title: Measure the complete system
+  video_summary: 'These are different experiments: the second can reduce arrivals precisely when latency increases.'
+  video_date: '2026-09-28'
+  video_duration: PT135.283333S
+  video_captions: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-visual-text.vtt
+  video_transcript: 06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-transcript.html
   video_chapters:
-  - name: "The workload defines what is being measured"
+  - name: Arrivals or concurrency
     start: 0
-    end: 12
-  - name: "A common boundary makes metrics comparable"
-    start: 12
-    end: 24
-  - name: "Acceptance requires SLO, cost, and constraints together"
-    start: 24
-    end: 36
+    end: 21.866667
+  - name: Divide by successful tasks
+    start: 21.866667
+    end: 44.483333
+  - name: Energy accumulates power
+    start: 44.483333
+    end: 67.1
+  - name: Draw what you measure
+    start: 67.1
+    end: 89.35
+  - name: Queuing changes the regime
+    start: 89.35
+    end: 113.033333
+  - name: Preserve the variation
+    start: 113.033333
+    end: 135.283333
 
 series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md:
   video: 01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.mp4

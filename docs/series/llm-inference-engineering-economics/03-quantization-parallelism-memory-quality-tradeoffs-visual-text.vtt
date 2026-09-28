@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Cuantizar aproxima valores mediante una escala y un conjunto limitado de niveles.
+
+2
+00:00:07.350 --> 00:00:14.200
+Con escala 0,25, el valor 0,62 se representa como 2 y reconstruye como 0,50.
+
+3
+00:00:14.200 --> 00:00:21.550
+El error es 0,12. Menor precisión exige evaluar la tarea, no sólo el ahorro.
+
+4
+00:00:22.050 --> 00:00:28.900
+Ocho mil millones de parámetros a dieciséis bits necesitan dieciséis GB de payload ideal.
+
+5
+00:00:28.900 --> 00:00:36.067
+A cuatro bits, ese payload baja a cuatro GB, antes de escalas y otros costes.
+
+6
+00:00:36.067 --> 00:00:44.867
+La memoria real incluye metadatos, buffers y KV. No equivale automáticamente a una GPU cuatro veces menor.
+
+7
+00:00:45.367 --> 00:00:52.217
+Los pesos, las activaciones y el KV cache son objetos diferentes.
+
+8
+00:00:52.217 --> 00:00:59.067
+Un esquema weight-only cambia los pesos; no convierte automáticamente los otros dos.
+
+9
+00:00:59.067 --> 00:01:07.483
+Registra cada dtype y los kernels compatibles. El nombre de una cuantización no describe toda la ejecución.
+
+10
+00:01:07.983 --> 00:01:14.833
+Tensor parallel distribuye partes de una operación de capa entre dispositivos.
+
+11
+00:01:14.833 --> 00:01:21.683
+Los resultados parciales deben combinarse mediante comunicación según la partición elegida.
+
+12
+00:01:21.683 --> 00:01:31.233
+La memoria por rank puede bajar, pero la interconexión entra en el camino crítico. Dos GPUs no garantizan doble velocidad.
+
+13
+00:01:31.733 --> 00:01:38.583
+Pipeline parallel reparte capas entre etapas. Una petición debe recorrerlas en orden.
+
+14
+00:01:38.583 --> 00:01:45.433
+Con más microbatches, parte del trabajo se solapa entre dispositivos.
+
+15
+00:01:45.433 --> 00:01:53.483
+Persisten burbujas de arranque y vaciado. Menos capas por dispositivo no elimina la dependencia entre etapas.
+
+16
+00:01:53.983 --> 00:02:00.833
+Data parallel reparte peticiones entre réplicas completas del modelo.
+
+17
+00:02:00.833 --> 00:02:07.683
+Expert parallel distribuye expertos de un modelo MoE y enruta activaciones entre ellos.
+
+18
+00:02:07.683 --> 00:02:15.350
+Estos placements resuelven problemas distintos. Una partición de expertos no existe en cualquier modelo denso.
+

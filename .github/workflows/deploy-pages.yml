@@ -82,6 +82,9 @@ jobs:
       - name: Verify exact owner-approved Coding C1 MP4 bytes
         run: sha256sum -c .github/receipts/coding-c1.sha256
 
+      - name: Verify 60 exact owner-approved batch MP4 hashes
+        run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
@@ -325,6 +328,14 @@ jobs:
           S5_CODING_C1_ORIGIN: https://5sigmas.com
         run: node scripts/verify_coding_c1_browser.mjs
 
+      - name: Verify live approved batch exact bytes and discovery
+        run: python3 scripts/verify_approved_video_batch_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
+
+      - name: Verify 240 live batch native desktop and mobile cases
+        env:
+          S5_APPROVED_BATCH_ORIGIN: https://5sigmas.com
+        run: node scripts/verify_approved_video_batch_browser.mjs
+
       - name: Audit live Spanish resources
         env:
           S5_PREVIEW_URL: https://5sigmas.com
@@ -400,6 +411,15 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
           S5_REQUIRE_EN_TTC_MEDIA: '1'
         run: node scripts/validate_english_reasoning_ttc.mjs
+
+      - name: Upload exact approved batch live verification evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-batch-live-evidence
+          path: /tmp/approved-video-batch-20260928-*.json
+          if-no-files-found: warn
+          retention-days: 1
 
       - name: Upload live English screenshots on failure
         if: failure()

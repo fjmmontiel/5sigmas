@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+El catálogo muestra la descripción de una skill sin cargar todas sus instrucciones.
+
+2
+00:00:07.350 --> 00:00:14.200
+Cuando la tarea la necesita, se carga el procedimiento y después las referencias pertinentes.
+
+3
+00:00:14.200 --> 00:00:21.550
+La carga progresiva limita contexto. No aísla el proceso ni concede nuevas autorizaciones.
+
+4
+00:00:22.050 --> 00:00:28.900
+Un plugin distribuye una skill, un hook y una integración.
+
+5
+00:00:28.900 --> 00:00:35.750
+Esos componentes pueden ejecutarse en superficies diferentes, con permisos distintos.
+
+6
+00:00:35.750 --> 00:00:43.100
+Instalar el paquete no demuestra aislamiento. Hay que inspeccionar cada componente y su entorno.
+
+7
+00:00:43.600 --> 00:00:50.767
+El padre necesita revisar el diff A, no compartir toda la conversación.
+
+8
+00:00:50.767 --> 00:00:57.617
+El envelope fija objetivo, archivos permitidos, tools, presupuesto y formato de salida.
+
+9
+00:00:57.617 --> 00:01:05.667
+El especialista devuelve hallazgos y evidencia sobre A. Un resumen sin identidad no cierra la revisión.
+
+10
+00:01:06.167 --> 00:01:13.017
+Dos agentes tienen contextos de modelo separados, pero comparten el mismo filesystem.
+
+11
+00:01:13.017 --> 00:01:20.183
+Separar también archivos, tools y red exige controles adicionales. No se deduce del nombre subagente.
+
+12
+00:01:20.183 --> 00:01:27.533
+La evaluación comprueba cada frontera y los accesos prohibidos, además del éxito de tarea.
+
+13
+00:01:28.033 --> 00:01:35.200
+Un control preventivo decide antes de ejecutar una escritura. Si la deniega, no hay efecto.
+
+14
+00:01:35.200 --> 00:01:42.367
+Un hook posterior observa una escritura ya realizada. No puede deshacerla sólo por ejecutarse después.
+
+15
+00:01:42.367 --> 00:01:50.783
+El orden forma parte del contrato. Hay que probar el evento, el fallo y la decisión real.
+
+16
+00:01:51.283 --> 00:01:58.133
+Un especialista puede resolver la tarea y aun así leer un archivo prohibido.
+
+17
+00:01:58.133 --> 00:02:04.983
+Otra ejecución respeta el aislamiento, pero entrega un resultado incorrecto. Son fallos diferentes.
+
+18
+00:02:04.983 --> 00:02:13.783
+La entrega necesita evidencia de tarea y de fronteras sobre la misma ejecución, no una única etiqueta PASS.
+

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+In this trace, speech stops at zero and the turn commits after 300 milliseconds.
+
+2
+00:00:07.700 --> 00:00:14.700
+Playout starts at 780: another 480 milliseconds elapse after the commit.
+
+3
+00:00:14.700 --> 00:00:23.000
+On the same clock, total waiting is 300 plus 480. It is not the model’s TTFT.
+
+4
+00:00:23.700 --> 00:00:30.700
+STT already runs while the user speaks. Its full duration is not added again afterwards.
+
+5
+00:00:30.700 --> 00:00:37.700
+The first text starts TTS while the model continues generating the rest.
+
+6
+00:00:37.700 --> 00:00:47.000
+Here first playout arrives at 700 milliseconds. The full processing bars overlap.
+
+7
+00:00:47.700 --> 00:00:54.700
+The client reads 1000 and the server 1090. Subtraction gives 90, but mixes clocks.
+
+8
+00:00:54.700 --> 00:01:01.700
+In this example, a known offset of 80 leaves a represented interval of 10.
+
+9
+00:01:01.700 --> 00:01:10.000
+Without reconciling clocks, that subtraction does not measure latency. Matching IDs is not enough.
+
+10
+00:01:10.700 --> 00:01:17.700
+A1 is generated at 600 milliseconds. It still needs transport and a playback queue.
+
+11
+00:01:17.700 --> 00:01:24.700
+It arrives at 650, but playout starts at 700 in this trace.
+
+12
+00:01:24.700 --> 00:01:33.000
+Name the observed boundary. A server acknowledgement does not prove physical hearing.
+
+13
+00:01:33.700 --> 00:01:40.700
+These twenty synthetic turns include eighteen at 400 milliseconds and two at 1600.
+
+14
+00:01:40.700 --> 00:01:47.700
+The mean is 520. Nearest-rank P95 is 1600.
+
+15
+00:01:47.700 --> 00:01:56.000
+Segment by channel and conditions. Slow turns can have a different failure mechanism.
+
+16
+00:01:56.700 --> 00:02:03.700
+The illustrative budget totals 700 milliseconds: 300 for the turn and 400 for the rest.
+
+17
+00:02:03.700 --> 00:02:10.700
+Reducing model time from 180 to 90 brings the total to 610, not half.
+
+18
+00:02:10.700 --> 00:02:19.000
+Check quality and premature endings too. Less waiting cannot compensate for a misunderstood request.
+

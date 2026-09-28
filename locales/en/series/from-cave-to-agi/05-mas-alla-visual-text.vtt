@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+We seek an expression equal to six and generate several candidates.
+
+2
+00:00:07.350 --> 00:00:14.200
+The verifier rejects two plus five and retains one plus five.
+
+3
+00:00:14.200 --> 00:00:21.550
+Search provides alternatives; the verifier provides evidence for this specific criterion.
+
+4
+00:00:22.050 --> 00:00:28.900
+A persistent record retains three facts with provenance.
+
+5
+00:00:28.900 --> 00:00:35.750
+The current query selects only the relevant fact.
+
+6
+00:00:35.750 --> 00:00:43.417
+Useful memory needs selection and freshness, not merely an ever-longer window.
+
+7
+00:00:43.917 --> 00:00:51.833
+The example updates state with new s equals half the previous s plus x.
+
+8
+00:00:51.833 --> 00:00:58.683
+Inputs 1, 0 and 1 yield states 1, 0.5 and 1.25.
+
+9
+00:00:58.683 --> 00:01:06.033
+State size stays fixed, but the history is compressed and may lose detail.
+
+10
+00:01:06.533 --> 00:01:13.383
+From position zero, an action proposes moving two units.
+
+11
+00:01:13.383 --> 00:01:20.233
+The model predicts position two, but the observation measures one point five.
+
+12
+00:01:20.233 --> 00:01:29.417
+The half-unit error can revise the model or plan; imagining an outcome is not observing it.
+
+13
+00:01:29.917 --> 00:01:36.767
+The controller receives a position target and a current-state measurement.
+
+14
+00:01:36.767 --> 00:01:43.617
+The action moves the system, which may respond differently than predicted.
+
+15
+00:01:43.617 --> 00:01:50.967
+A new measurement updates the error before the next movement is chosen.
+
+16
+00:01:51.467 --> 00:01:58.317
+A modification increases correct answers from two to seven in ten memory cases.
+
+17
+00:01:58.317 --> 00:02:05.167
+That result must retain its conditions and exact test set.
+
+18
+00:02:05.167 --> 00:02:12.517
+Other tasks remain unmeasured; combining mechanisms does not replace checking where they work.
+

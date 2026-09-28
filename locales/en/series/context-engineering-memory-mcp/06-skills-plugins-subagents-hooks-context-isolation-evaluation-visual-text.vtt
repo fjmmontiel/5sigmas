@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The catalogue shows a skill description without loading all its instructions.
+
+2
+00:00:07.350 --> 00:00:14.200
+When needed, its procedure is loaded, followed by relevant references.
+
+3
+00:00:14.200 --> 00:00:21.550
+Progressive loading limits context. It neither isolates the process nor grants new authorisation.
+
+4
+00:00:22.050 --> 00:00:28.900
+A plugin distributes a skill, a hook and an integration.
+
+5
+00:00:28.900 --> 00:00:35.750
+Those components may run on different surfaces with different permissions.
+
+6
+00:00:35.750 --> 00:00:43.100
+Installing the package does not prove isolation. Inspect each component and its environment.
+
+7
+00:00:43.600 --> 00:00:50.767
+The parent needs a review of diff A, not a copy of the entire conversation.
+
+8
+00:00:50.767 --> 00:00:57.617
+The envelope fixes the goal, allowed files, tools, budget and output format.
+
+9
+00:00:57.617 --> 00:01:05.667
+The specialist returns findings and evidence for A. A summary without identity cannot close the review.
+
+10
+00:01:06.167 --> 00:01:13.017
+Two agents have separate model contexts but share the same filesystem.
+
+11
+00:01:13.017 --> 00:01:20.183
+Separating files, tools and network needs additional controls. The word subagent does not imply them.
+
+12
+00:01:20.183 --> 00:01:27.533
+Evaluation checks each boundary and prohibited accesses, as well as task success.
+
+13
+00:01:28.033 --> 00:01:35.200
+A preventive check decides before a write executes. Denial means no effect.
+
+14
+00:01:35.200 --> 00:01:42.367
+A post-action hook observes a completed write. Running later does not undo it.
+
+15
+00:01:42.367 --> 00:01:50.783
+Ordering is part of the contract. Test the event, failure and actual decision.
+
+16
+00:01:51.283 --> 00:01:58.133
+A specialist may solve the task while reading a prohibited file.
+
+17
+00:01:58.133 --> 00:02:04.983
+Another run respects isolation but returns an incorrect result. These are different failures.
+
+18
+00:02:04.983 --> 00:02:13.783
+Delivery needs task and boundary evidence for the same run, not a single PASS label.
+

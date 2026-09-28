@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Two requests share four initial tokens but have different suffixes.
+
+2
+00:00:07.350 --> 00:00:14.900
+The second prefill can reuse those four tokens’ state if the cache is compatible.
+
+3
+00:00:14.900 --> 00:00:22.567
+The continuation must still be generated. A prefix hit does not retrieve a complete answer.
+
+4
+00:00:23.067 --> 00:00:30.233
+Text can look identical while token IDs or the model revision differ.
+
+5
+00:00:30.233 --> 00:00:37.083
+The key must reflect actual dependencies and required access isolation.
+
+6
+00:00:37.083 --> 00:00:44.433
+An incomplete match does not authorise KV reuse. Correctness comes before hit rate.
+
+7
+00:00:44.933 --> 00:00:51.783
+The proposer drafts three candidate tokens: A, B and C.
+
+8
+00:00:51.783 --> 00:00:58.950
+The target accepts A and B, rejects C and produces D through the correct procedure.
+
+9
+00:00:58.950 --> 00:01:07.367
+The committed sequence is A, B, D. Unverified candidates must not become final output.
+
+10
+00:01:07.867 --> 00:01:14.717
+Three ordinary tokens cost twelve time units in this example.
+
+11
+00:01:14.717 --> 00:01:22.633
+Proposing and verifying costs nine in one case but eighteen in another with the same committed output.
+
+12
+00:01:22.633 --> 00:01:30.300
+Only the first saves time. Acceptance rate alone omits proposal and verification costs.
+
+13
+00:01:30.800 --> 00:01:37.650
+Speculative candidates can also reserve provisional KV state.
+
+14
+00:01:37.650 --> 00:01:44.500
+When C is rejected, its state cannot remain part of the committed prefix.
+
+15
+00:01:44.500 --> 00:01:53.300
+Rollback preserves A and B while discarding the invalid branch. Measure the cost of temporary state too.
+
+16
+00:01:53.800 --> 00:02:00.650
+A large prefill can occupy an interval while other requests wait for decode.
+
+17
+00:02:00.650 --> 00:02:07.500
+Splitting it into chunks lets the scheduler interleave generation steps.
+
+18
+00:02:07.500 --> 00:02:15.550
+The policy changes interference and efficiency. Measure both; chunking does not necessarily accelerate every workload.
+

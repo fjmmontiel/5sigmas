@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Una regla inicial resuelve un conjunto acotado de casos.
+
+2
+00:00:07.350 --> 00:00:14.200
+Un caso nuevo exige una excepción y puede entrar en conflicto con otra regla.
+
+3
+00:00:14.200 --> 00:00:21.867
+El mantenimiento crece cuando cambian las condiciones; automatizar una regla no resuelve todas sus excepciones.
+
+4
+00:00:22.367 --> 00:00:29.217
+Una curva flexible puede atravesar todos los puntos de entrenamiento.
+
+5
+00:00:29.217 --> 00:00:36.383
+Los puntos reservados permiten comprobar si ese ajuste conserva el patrón fuera de la muestra.
+
+6
+00:00:36.383 --> 00:00:43.733
+Un error de entrenamiento pequeño no garantiza un error pequeño en datos nuevos.
+
+7
+00:00:44.233 --> 00:00:52.150
+Usamos la pérdida L igual a w menos tres al cuadrado, empezando en w igual a cero.
+
+8
+00:00:52.150 --> 00:01:00.450
+El gradiente vale menos seis. Un paso de tamaño cero coma dos mueve w a uno coma dos.
+
+9
+00:01:00.450 --> 00:01:08.867
+La pérdida baja de nueve a tres coma veinticuatro; el paso siguiente vuelve a calcular el gradiente.
+
+10
+00:01:09.367 --> 00:01:16.217
+En XOR, las dos esquinas opuestas con una sola entrada activa tienen etiqueta uno.
+
+11
+00:01:16.217 --> 00:01:23.067
+Ninguna recta separa esas dos esquinas de las otras dos en el plano original.
+
+12
+00:01:23.067 --> 00:01:30.417
+Una transformación no lineal permite distinguir el caso de exactamente una entrada activa.
+
+13
+00:01:30.917 --> 00:01:37.767
+Una red compone operaciones: x pasa por dos pesos antes de producir una salida.
+
+14
+00:01:37.767 --> 00:01:44.617
+La regla de la cadena conecta cómo cambia la pérdida con cada operación intermedia.
+
+15
+00:01:44.617 --> 00:01:51.967
+Backpropagation reutiliza esas derivadas para ajustar pesos en varias capas.
+
+16
+00:01:52.467 --> 00:01:59.317
+Un modelo de trigramas condiciona el siguiente token a los dos anteriores.
+
+17
+00:01:59.317 --> 00:02:07.233
+Dos frases con el mismo final reciben ese mismo contexto corto, aunque antes hablen de cosas diferentes.
+
+18
+00:02:07.233 --> 00:02:14.900
+Limitar la memoria simplifica el modelo y elimina dependencias que queden fuera de la ventana.
+

@@ -1,30 +1,44 @@
 ---
-title: "MCP: hosts, clients y servers; tools, resources, prompts, ciclo de vida y fronteras de confianza"
-description: "Cómo razonar sobre MCP como protocolo: qué posee el host, qué expone cada servidor, cómo cambió el ciclo de vida en 2026-07-28 y dónde deben imponerse autorización, consentimiento y aislamiento."
+title: 'MCP: hosts, clients y servers; tools, resources, prompts, ciclo de vida y fronteras de confianza'
+description: 'Cómo razonar sobre MCP como protocolo: qué posee el host, qué expone cada servidor, cómo cambió el
+  ciclo de vida en 2026-07-28 y dónde deben imponerse autorización, consentimiento y aislamiento.'
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "MCP, Model Context Protocol, host, client, server, tools, resources, prompts, trust boundaries, authorization, lifecycle"
+keywords: MCP, Model Context Protocol, host, client, server, tools, resources, prompts, trust boundaries, authorization,
+  lifecycle
 tags:
-  - IA
-  - Agentes
-  - Context engineering
-  - MCP
-  - Seguridad
+- IA
+- Agentes
+- Context engineering
+- MCP
+- Seguridad
 video: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.mp4
 video_poster: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.jpg
-video_title: "MCP: lifecycle, capacidades y trust boundaries"
-video_summary: "MCP separa host, clientes y servidores; el descubrimiento de capacidades no elimina autorización, validación ni fronteras de confianza."
-video_duration: PT36S
+video_title: 'MCP: protocolo y confianza'
+video_summary: Conectar dos servidores no autoriza que uno reciba los datos del otro.
+video_date: '2026-09-28'
+video_duration: PT134.916667S
+video_captions: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-visual-text.vtt
+video_transcript: 05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-transcript.html
 video_chapters:
-- name: "Host, cliente y servidor tienen roles distintos"
+- name: El host conserva la política
   start: 0
-  end: 12
-- name: "Descubrir capacidades no las autoriza"
-  start: 12
-  end: 24
-- name: "Datos remotos no heredan autoridad"
-  start: 24
-  end: 36
+  end: 21.55
+- name: Datos, plantillas y acciones
+  start: 21.55
+  end: 43.416667
+- name: La versión cambia el contrato
+  start: 43.416667
+  end: 65.283333
+- name: Una etiqueta no impone un límite
+  start: 65.283333
+  end: 88.6
+- name: Un timeout no prueba el resultado
+  start: 88.6
+  end: 111.533333
+- name: Transportar no convierte en autoridad
+  start: 111.533333
+  end: 134.916667
 ---
 
 # Capítulo 5 — MCP: hosts, clients y servers; tools, resources, prompts, ciclo de vida y fronteras de confianza

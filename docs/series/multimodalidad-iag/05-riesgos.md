@@ -1,16 +1,41 @@
 ---
 title: Riesgos de seguridad en sistemas multimodales
-description: "Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar."
+description: Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar.
 date: 2026-04-03
 date_modified: 2026-08-23
-keywords: "riesgos IA multimodal, prompt injection visual, seguridad sistemas IA, privacidad imágenes IA, ataques LLM multimodal, alineamiento seguridad, IA responsable multimodal"
+keywords: riesgos IA multimodal, prompt injection visual, seguridad sistemas IA, privacidad imágenes IA, ataques LLM multimodal, alineamiento seguridad, IA responsable multimodal
 tags:
-  - IA
-  - GenAI
-  - Multimodalidad
-  - Alineamiento
-video: "05-riesgos.mp4"
-video_duration: "PT52S"
+- IA
+- GenAI
+- Multimodalidad
+- Alineamiento
+video: 05-riesgos.mp4
+video_poster: 05-riesgos.jpg
+video_title: Datos, permisos y consecuencias
+video_summary: Leer correctamente una instrucción no le concede autoridad para cambiar los permisos.
+video_date: '2026-09-28'
+video_duration: PT132.7S
+video_captions: 05-riesgos-visual-text.vtt
+video_transcript: 05-riesgos-transcript.html
+video_chapters:
+- name: El texto de una imagen sigue siendo dato externo
+  start: 0.0
+  end: 21.866667
+- name: Validar el permiso debe preceder al efecto
+  start: 21.866667
+  end: 43.416667
+- name: Tapar una región no elimina todos los datos
+  start: 43.416667
+  end: 64.966667
+- name: Guardar evidencia falsa puede repetir el error
+  start: 64.966667
+  end: 87.583333
+- name: Una propuesta aún puede detenerse
+  start: 87.583333
+  end: 110.516667
+- name: Un promedio puede ocultar un grupo de fallos
+  start: 110.516667
+  end: 132.7
 ---
 
 # Capítulo 5 — Riesgos: prompt injection visual, acción y seguridad operacional

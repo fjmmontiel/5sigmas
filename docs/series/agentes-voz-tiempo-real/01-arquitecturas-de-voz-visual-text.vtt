@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+El audio pasa por transcripción, decisión y síntesis. Cada frontera cambia su representación.
+
+2
+00:00:07.700 --> 00:00:14.700
+El texto permite inspeccionar y sustituir etapas, pero no conserva toda la señal acústica.
+
+3
+00:00:14.700 --> 00:00:23.000
+El mismo turno atraviesa todas las etapas. El runtime debe coordinar sus resultados.
+
+4
+00:00:23.700 --> 00:00:30.700
+Un modelo audio-native recibe la voz directamente, sin exigir primero una transcripción.
+
+5
+00:00:30.700 --> 00:00:37.700
+Si devuelve sólo texto, una voz externa puede sintetizar la respuesta.
+
+6
+00:00:37.700 --> 00:00:46.000
+La prosodia de entrada no viaja automáticamente al TTS. Esa frontera requiere un contrato.
+
+7
+00:00:46.700 --> 00:00:53.700
+Speech-to-speech conecta audio de entrada y salida sin una frontera textual obligatoria.
+
+8
+00:00:53.700 --> 00:01:00.700
+La ruta acústica se simplifica; las herramientas y sus permisos siguen fuera del modelo.
+
+9
+00:01:00.700 --> 00:01:09.000
+La aplicación valida la acción. Un modelo que habla no adquiere autoridad de negocio.
+
+10
+00:01:09.700 --> 00:01:16.700
+Aceptar audio y generar audio no implica escuchar y hablar a la vez.
+
+11
+00:01:16.700 --> 00:01:23.700
+En full-duplex, entrada y salida pueden coexistir. El sistema decide cómo responder al solapamiento.
+
+12
+00:01:23.700 --> 00:01:32.000
+Modalidad y gestión de turnos son decisiones diferentes. S2S no garantiza full-duplex.
+
+13
+00:01:32.700 --> 00:01:39.700
+Un navegador puede enviar media directamente al proveedor mientras el backend conserva el control.
+
+14
+00:01:39.700 --> 00:01:46.700
+Quitar un framework no elimina autenticación, estado, herramientas ni recuperación.
+
+15
+00:01:46.700 --> 00:01:55.000
+Dibuja el recorrido real y asigna un responsable a cada transición.
+
+16
+00:01:55.700 --> 00:02:02.700
+Una transcripción explícita favorece una cascade; una voz externa exige conservar su frontera.
+
+17
+00:02:02.700 --> 00:02:09.700
+Si importa la señal acústica, prueba una entrada audio-native con el mismo caso.
+
+18
+00:02:09.700 --> 00:02:18.000
+Compara tarea, voz y fiabilidad bajo condiciones iguales. No hay una arquitectura ganadora universal.
+

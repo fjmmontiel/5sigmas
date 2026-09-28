@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+An episode records an event; semantic memory consolidates a preference.
+
+2
+00:00:07.350 --> 00:00:14.200
+Either can persist. Storage does not determine what the record means.
+
+3
+00:00:14.200 --> 00:00:21.867
+A checkpoint can persist too, but its contract is resuming execution, not learning a preference.
+
+4
+00:00:22.367 --> 00:00:29.217
+In episode e17, the user requests follow-up by email.
+
+5
+00:00:29.217 --> 00:00:36.067
+e24 and e31 add observations. Each event retains its time, subject and provenance.
+
+6
+00:00:36.067 --> 00:00:43.417
+The sequence describes specific experiences; it is not yet a universal rule.
+
+7
+00:00:43.917 --> 00:00:50.767
+Three episodes support a preference for email.
+
+8
+00:00:50.767 --> 00:00:57.617
+Consolidation creates a reusable record linked to those three episodes.
+
+9
+00:00:57.617 --> 00:01:04.967
+A later correction can supersede it. Keeping only the conclusion loses its basis.
+
+10
+00:01:05.467 --> 00:01:12.317
+Memory says the account had a Pro plan yesterday.
+
+11
+00:01:12.317 --> 00:01:19.167
+The billing source says paid access is revoked today.
+
+12
+00:01:19.167 --> 00:01:26.833
+Current authorisation governs the operation. Relevant memory cannot replace the system of record.
+
+13
+00:01:27.333 --> 00:01:34.183
+The model proposes saving an observation. The proposal is not durable memory yet.
+
+14
+00:01:34.183 --> 00:01:41.033
+The application checks subject, sensitivity, duplication and evidence before writing.
+
+15
+00:01:41.033 --> 00:01:48.383
+A proposal from another tenant is rejected; a valid observation keeps its provenance.
+
+16
+00:01:48.883 --> 00:01:55.733
+The email preference feeds both a memory record and a user summary.
+
+17
+00:01:55.733 --> 00:02:02.583
+The user changes it to phone calls. The event invalidates dependent representations.
+
+18
+00:02:02.583 --> 00:02:09.933
+Updating only the original leaves stale copies. Lineage makes those copies discoverable.
+

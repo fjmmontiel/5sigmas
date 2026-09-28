@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+El mismo filtro local recorre distintas regiones de una imagen.
+
+2
+00:00:07.350 --> 00:00:14.200
+Su respuesta cambia con el contenido de cada región, aunque los pesos sean compartidos.
+
+3
+00:00:14.200 --> 00:00:21.550
+Aprender esos filtros permite construir representaciones a partir de píxeles.
+
+4
+00:00:22.050 --> 00:00:28.900
+Dividimos un producto matricial en cuatro bloques de salida.
+
+5
+00:00:28.900 --> 00:00:35.750
+Cada unidad calcula un bloque a partir de los operandos que necesita.
+
+6
+00:00:35.750 --> 00:00:43.100
+La salida reúne los bloques; mover operandos y resultados también consume recursos.
+
+7
+00:00:43.600 --> 00:00:50.450
+La atención densa sin máscara considera dieciséis pares para cuatro posiciones.
+
+8
+00:00:50.450 --> 00:00:57.300
+Con ocho posiciones, la cuadrícula tiene sesenta y cuatro pares.
+
+9
+00:00:57.300 --> 00:01:04.967
+Esta relación cuadrática cuenta interacciones; no predice por sí sola el tiempo de un kernel.
+
+10
+00:01:05.467 --> 00:01:12.317
+En el ejemplo normalizado, el coste es proporcional al producto de parámetros y datos.
+
+11
+00:01:12.317 --> 00:01:19.167
+Duplicar parámetros obliga a reducir datos si mantenemos ese presupuesto fijo.
+
+12
+00:01:19.167 --> 00:01:27.967
+El mejor reparto debe medirse con una ley de pérdida validada, no asumir que más parámetros siempre ganan.
+
+13
+00:01:28.467 --> 00:01:35.317
+El preentrenamiento construye parámetros compartidos a partir de datos amplios.
+
+14
+00:01:35.317 --> 00:01:42.167
+La misma base puede recibir instrucciones o adaptaciones para tareas distintas.
+
+15
+00:01:42.167 --> 00:01:49.517
+Reutilizar la base no implica que todas las tareas alcancen la misma calidad.
+
+16
+00:01:50.017 --> 00:01:56.867
+Completar texto y responder a una instrucción son objetivos distintos.
+
+17
+00:01:56.867 --> 00:02:03.717
+Ejemplos de respuestas y preferencias pueden guiar un ajuste posterior.
+
+18
+00:02:03.717 --> 00:02:11.067
+Cambia la conducta, pero no garantiza respuestas verdaderas o seguras.
+

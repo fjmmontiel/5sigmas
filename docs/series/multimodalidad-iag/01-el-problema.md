@@ -1,14 +1,39 @@
 ---
 title: El problema real de la multimodalidad
-description: "Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción."
+description: Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción.
 date: 2026-04-01
-keywords: "multimodalidad IA, sistemas multimodales, LLM multimodal, IA texto imagen audio, percepción multimodal, IA generativa multimodal, GPT-4V, Gemini multimodal"
+keywords: multimodalidad IA, sistemas multimodales, LLM multimodal, IA texto imagen audio, percepción multimodal, IA generativa multimodal, GPT-4V, Gemini multimodal
 tags:
-  - IA
-  - GenAI
-  - Multimodalidad
-video: "01-el-problema.mp4"
-video_duration: "PT1M15S"
+- IA
+- GenAI
+- Multimodalidad
+video: 01-el-problema.mp4
+video_poster: 01-el-problema.jpg
+video_title: Estructura, resolución y tiempo
+video_summary: Si esa posición resolvía la pregunta, la reducción ya eliminó la evidencia necesaria.
+video_date: '2026-09-28'
+video_duration: PT133.033333S
+video_captions: 01-el-problema-visual-text.vtt
+video_transcript: 01-el-problema-transcript.html
+video_chapters:
+- name: Reducir resolución puede borrar una diferencia
+  start: 0.0
+  end: 21.55
+- name: Leer números no basta para leer una tabla
+  start: 21.55
+  end: 43.733333
+- name: La transcripción puede omitir cómo se dijo
+  start: 43.733333
+  end: 65.983333
+- name: Un evento puede quedar entre dos muestras
+  start: 65.983333
+  end: 88.6
+- name: Sincronizar requiere conocer el desfase
+  start: 88.6
+  end: 110.466667
+- name: Un número necesita unidad y referencia
+  start: 110.466667
+  end: 133.033333
 ---
 
 # Capítulo 1 — El problema real: integrar modalidades distintas sin reducirlas demasiado pronto

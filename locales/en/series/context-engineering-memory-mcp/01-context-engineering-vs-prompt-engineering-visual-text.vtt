@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The application holds documents, memory and tools. The model does not automatically receive everything.
+
+2
+00:00:07.350 --> 00:00:14.200
+The assembler selects three items for this inference. Everything else stays outside.
+
+3
+00:00:14.200 --> 00:00:22.250
+The decision depends on this specific input, not everything held by the application.
+
+4
+00:00:22.750 --> 00:00:29.600
+The prompt asks for the current policy on a twenty-day-old order.
+
+5
+00:00:29.600 --> 00:00:36.450
+Copy A allows thirty days. Rewording the prompt does not update that source.
+
+6
+00:00:36.450 --> 00:00:44.867
+Current revision B allows fourteen days. With the same prompt, the evidence requires a different decision.
+
+7
+00:00:45.367 --> 00:00:52.217
+Three passages appear relevant, but one belongs to another customer.
+
+8
+00:00:52.217 --> 00:00:59.383
+The access boundary excludes it before utility is compared. Similarity grants no permission.
+
+9
+00:00:59.383 --> 00:01:06.733
+Only eligible items can compete for space in the context.
+
+10
+00:01:07.233 --> 00:01:14.400
+Context C0 contains a hypothesis about the failure. The test has not returned yet.
+
+11
+00:01:14.400 --> 00:01:21.250
+The actual result contradicts that hypothesis. This observation did not exist in C0.
+
+12
+00:01:21.250 --> 00:01:28.600
+The assembler puts the result in C1 and removes the invalidated hypothesis.
+
+13
+00:01:29.100 --> 00:01:35.950
+Stable instructions enter at the start. Large files remain behind references.
+
+14
+00:01:35.950 --> 00:01:42.800
+A new question triggers a read of the relevant file, not the whole repository.
+
+15
+00:01:42.800 --> 00:01:50.150
+On-demand loading saves context but adds a read that can fail.
+
+16
+00:01:50.650 --> 00:01:57.500
+An answer alone does not reveal which information the model received.
+
+17
+00:01:57.500 --> 00:02:04.350
+The receipt keeps IDs, revisions and reasons for inclusion or exclusion.
+
+18
+00:02:04.350 --> 00:02:11.700
+This separates missing evidence from evidence that was received but misused.
+

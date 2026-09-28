@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+Under open-loop load, requests arrive at a fixed rate even when the server slows down.
+
+2
+00:00:07.667 --> 00:00:14.517
+Under closed-loop load, each client waits for a response before sending another request.
+
+3
+00:00:14.517 --> 00:00:21.867
+These are different experiments: the second can reduce arrivals precisely when latency increases.
+
+4
+00:00:22.367 --> 00:00:29.217
+A run costs twenty-four euros and makes one thousand attempts.
+
+5
+00:00:29.217 --> 00:00:36.067
+Nine hundred and twenty pass the success criterion fixed in advance.
+
+6
+00:00:36.067 --> 00:00:44.483
+Cost per attempt is €0.024; per successful task, about €0.0261. Failures also cost money.
+
+7
+00:00:44.983 --> 00:00:51.833
+An illustrative constant six hundred watts over three hours consumes 1.8 kWh.
+
+8
+00:00:51.833 --> 00:00:58.683
+Dividing that energy by 920 successful tasks gives about 1.96 Wh per task.
+
+9
+00:00:58.683 --> 00:01:07.100
+This is not a measurement: power and outcomes must refer to the same window and system.
+
+10
+00:01:07.600 --> 00:01:14.450
+GPU telemetry does not necessarily include CPU, RAM, networking and system losses.
+
+11
+00:01:14.450 --> 00:01:21.300
+A wall meter observes a different boundary from the accelerator sensor.
+
+12
+00:01:21.300 --> 00:01:29.350
+Comparing them without a boundary mixes quantities. Rated power is not measured consumption either.
+
+13
+00:01:29.850 --> 00:01:36.700
+In this illustrative M/M/1 model, the server processes five requests per second on average.
+
+14
+00:01:36.700 --> 00:01:44.617
+As arrivals approach capacity, mean response time grows as one divided by five minus lambda.
+
+15
+00:01:44.617 --> 00:01:53.033
+At four arrivals per second, it is one second. A low-load test does not describe saturation.
+
+16
+00:01:53.533 --> 00:02:00.383
+Three equivalent repetitions take 1.0, 1.2 and 1.1 seconds in this example.
+
+17
+00:02:00.383 --> 00:02:07.233
+Publishing only the fastest removes information about variation between runs.
+
+18
+00:02:07.233 --> 00:02:15.283
+Fix warmup, cache state and protocol. Compare distributions and retain errors, not just the best scalar.
+

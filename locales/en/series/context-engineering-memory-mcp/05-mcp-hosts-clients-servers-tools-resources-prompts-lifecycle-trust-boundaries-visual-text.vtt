@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The host application manages clients that communicate with MCP servers.
+
+2
+00:00:07.350 --> 00:00:14.200
+Each server exposes capabilities; the host decides what enters the model context.
+
+3
+00:00:14.200 --> 00:00:21.550
+Connecting two servers does not authorise either to receive the other’s data.
+
+4
+00:00:22.050 --> 00:00:28.900
+A resource provides URI-identified data; a prompt provides a template.
+
+5
+00:00:28.900 --> 00:00:35.750
+A tool describes a callable operation and its accepted arguments.
+
+6
+00:00:35.750 --> 00:00:43.417
+Schema validity does not grant permission to execute. Policy applies to the specific operation.
+
+7
+00:00:43.917 --> 00:00:50.767
+In MCP 2026-07-28, each request carries protocol metadata; it no longer uses initialize.
+
+8
+00:00:50.767 --> 00:00:57.933
+Two requests may reach different instances. Business state must remain explicit.
+
+9
+00:00:57.933 --> 00:01:05.283
+server/discover can query capabilities. The client need not always call it first.
+
+10
+00:01:05.783 --> 00:01:14.083
+The server labels a tool read-only. That annotation is a hint, not a guarantee.
+
+11
+00:01:14.083 --> 00:01:20.933
+The application limits capabilities and the protected service checks actual permissions.
+
+12
+00:01:20.933 --> 00:01:28.600
+An unauthorised write must fail even when the tool description sounds safe.
+
+13
+00:01:29.100 --> 00:01:35.950
+A refund request reaches the service, but its response is lost.
+
+14
+00:01:35.950 --> 00:01:43.867
+A timeout proves neither failure nor completion. Repeating it can duplicate the effect.
+
+15
+00:01:43.867 --> 00:01:51.533
+An operation ID and read-back reconcile the state before a retry.
+
+16
+00:01:52.033 --> 00:01:58.883
+A resource contains text asking to send a secret to an external destination.
+
+17
+00:01:58.883 --> 00:02:05.733
+The text keeps its untrusted origin; it does not become host policy.
+
+18
+00:02:05.733 --> 00:02:14.917
+Egress controls and permissions prevent the effect. MCP connects systems; it does not decide which data is trusted.
+

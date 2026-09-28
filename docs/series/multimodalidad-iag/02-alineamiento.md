@@ -1,15 +1,40 @@
 ---
 title: Alineamiento de pares a interacciones multimodales
-description: "Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal."
+description: Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal.
 date: 2026-04-02
-keywords: "alineamiento multimodal, CLIP, contrastive learning, ImageBind, embedding multimodal, representaciones imagen texto, entrenamiento multimodal, aprendizaje contrastivo"
+keywords: alineamiento multimodal, CLIP, contrastive learning, ImageBind, embedding multimodal, representaciones imagen texto, entrenamiento multimodal, aprendizaje contrastivo
 tags:
-  - IA
-  - GenAI
-  - Multimodalidad
-  - Alineamiento
-video: "02-alineamiento.mp4"
-video_duration: "PT52S"
+- IA
+- GenAI
+- Multimodalidad
+- Alineamiento
+video: 02-alineamiento.mp4
+video_poster: 02-alineamiento.jpg
+video_title: Aprender alineamiento
+video_summary: El objetivo distingue los pares del lote; no garantiza que todas las etiquetas sean correctas.
+video_date: '2026-09-28'
+video_duration: PT131.75S
+video_captions: 02-alineamiento-visual-text.vtt
+video_transcript: 02-alineamiento-transcript.html
+video_chapters:
+- name: El par correcto es una señal de entrenamiento
+  start: 0.0
+  end: 22.616667
+- name: La similitud puede depender de la dirección
+  start: 22.616667
+  end: 44.166667
+- name: Cambiar una relación crea un negativo difícil
+  start: 44.166667
+  end: 65.716667
+- name: Un emparejamiento puede enseñar una asociación falsa
+  start: 65.716667
+  end: 88.333333
+- name: Alinear un clip no localiza cada evento
+  start: 88.333333
+  end: 110.2
+- name: Un ancla compartida no sustituye la evaluación
+  start: 110.2
+  end: 131.75
 ---
 
 # Capítulo 2 — Alineamiento: de pares a interacciones

@@ -1,30 +1,44 @@
 ---
-title: "Speculative decoding, prefix caching y otras optimizaciones de latencia"
-description: "Cómo distinguir trabajo reutilizado de trabajo especulado, qué cambia realmente en TTFT y decode, y cuándo prefix caching o speculative decoding ayudan o empeoran un serving real."
+title: Speculative decoding, prefix caching y otras optimizaciones de latencia
+description: Cómo distinguir trabajo reutilizado de trabajo especulado, qué cambia realmente en TTFT y decode, y
+  cuándo prefix caching o speculative decoding ayudan o empeoran un serving real.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "speculative decoding, prefix caching, KV cache reuse, TTFT, TPOT, acceptance rate, draft model, inference latency"
+keywords: speculative decoding, prefix caching, KV cache reuse, TTFT, TPOT, acceptance rate, draft model, inference
+  latency
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Serving
-  - Latencia
+- IA
+- LLMs
+- Inferencia
+- Serving
+- Latencia
 video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
 video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
-video_title: "Speculative decoding y prefix caching"
-video_summary: "Speculative decoding propone varios tokens baratos y el modelo objetivo los verifica; prefix caching reutiliza trabajo de prefill cuando el prefijo realmente coincide."
-video_duration: PT36S
+video_title: Evitar y adelantar trabajo
+video_summary: La continuación todavía debe generarse. Un hit de prefijo no recupera una respuesta completa.
+video_date: '2026-09-28'
+video_duration: PT135.55S
+video_captions: 04-speculative-decoding-prefix-caching-latency-optimisations-visual-text.vtt
+video_transcript: 04-speculative-decoding-prefix-caching-latency-optimisations-transcript.html
 video_chapters:
-- name: "El draft propone un bloque de tokens"
+- name: Reutilizar sólo el prefijo
   start: 0
-  end: 12
-- name: "El verifier acepta un prefijo y rechaza el resto"
-  start: 12
-  end: 24
-- name: "Un prefix hit evita repetir prefill"
-  start: 24
-  end: 36
+  end: 22.566667
+- name: La identidad decide el hit
+  start: 22.566667
+  end: 44.433333
+- name: Proponer no es confirmar
+  start: 44.433333
+  end: 67.366667
+- name: Aceptar mucho no basta
+  start: 67.366667
+  end: 90.3
+- name: La rama rechazada se retira
+  start: 90.3
+  end: 113.3
+- name: Intercalar trabajo
+  start: 113.3
+  end: 135.55
 ---
 
 # Capítulo 4 — Speculative decoding, prefix caching y otras optimizaciones de latencia

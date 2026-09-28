@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+En este ejemplo, la capacidad total es de 64 mil tokens.
+
+2
+00:00:07.350 --> 00:00:14.900
+Reservamos 8 mil para salida, 4 mil de margen y 4 mil para instrucciones obligatorias.
+
+3
+00:00:14.900 --> 00:00:22.250
+Quedan 48 mil para información dinámica. No es una propiedad universal del modelo.
+
+4
+00:00:22.750 --> 00:00:31.050
+Un bloque de logs de 42 mil tokens desplaza archivos necesarios dentro de un budget de 48 mil.
+
+5
+00:00:31.050 --> 00:00:37.900
+Extraemos sólo los fallos relevantes y conservamos una referencia al log completo.
+
+6
+00:00:37.900 --> 00:00:45.950
+El contrato y los archivos vuelven a caber. La extracción debe conservar el error que importa.
+
+7
+00:00:46.450 --> 00:00:53.300
+La fuente dice: devolver en catorce días, excepto artículos abiertos.
+
+8
+00:00:53.300 --> 00:01:00.850
+Un resumen conserva el plazo y elimina la excepción. Parece correcto, pero cambia la decisión.
+
+9
+00:01:00.850 --> 00:01:08.200
+La prueba de compactación comprueba ambas condiciones y rechaza esa pérdida.
+
+10
+00:01:08.700 --> 00:01:15.550
+El resumen S deriva del documento en revisión A mediante una transformación con pérdida.
+
+11
+00:01:15.550 --> 00:01:22.400
+Cuando cambia la revisión, S deja de estar validado para el estado actual.
+
+12
+00:01:22.400 --> 00:01:29.750
+La procedencia permite recuperar el fragmento afectado, sin regenerar todo por defecto.
+
+13
+00:01:30.250 --> 00:01:37.417
+Reutilizar un prefijo en caché evita repetir trabajo de procesamiento, según el contrato del proveedor.
+
+14
+00:01:37.417 --> 00:01:44.583
+El contenido sigue formando parte de la entrada lógica. No hemos seleccionado ni resumido nada.
+
+15
+00:01:44.583 --> 00:01:51.933
+Compactar sustituye la representación anterior por otra. Esa transformación sí puede perder información.
+
+16
+00:01:52.433 --> 00:01:59.283
+El contexto guarda un ID corto para el archivo A, no todas sus líneas.
+
+17
+00:01:59.283 --> 00:02:06.450
+Cuando hace falta el detalle, la lectura solicita la revisión A y verifica su identidad.
+
+18
+00:02:06.450 --> 00:02:15.250
+Si sólo aparece B, no se presenta como A. El ahorro de contexto crea una obligación de recuperación.
+

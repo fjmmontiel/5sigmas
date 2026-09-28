@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+La escena contiene un círculo y un cuadrado, con el círculo a la izquierda.
+
+2
+00:00:07.350 --> 00:00:14.200
+La descripción «un círculo y un cuadrado» también encaja si intercambiamos sus posiciones.
+
+3
+00:00:14.200 --> 00:00:21.550
+Esa descripción perdió una relación espacial necesaria para responder dónde está cada objeto.
+
+4
+00:00:22.050 --> 00:00:28.900
+Vemos una puerta cerrada, abierta y cerrada en tres instantes.
+
+5
+00:00:28.900 --> 00:00:35.750
+Conservar sólo la primera y la última imagen oculta la apertura intermedia.
+
+6
+00:00:35.750 --> 00:00:43.100
+En vídeo importa qué pasó entre los fotogramas, no sólo qué objetos aparecen.
+
+7
+00:00:43.600 --> 00:00:50.767
+La consulta textual pide una señal triangular. El archivo contiene imágenes de tres formas.
+
+8
+00:00:50.767 --> 00:00:57.617
+Un sistema alineado compara representaciones del texto y de las imágenes.
+
+9
+00:00:57.617 --> 00:01:04.967
+La coincidencia devuelve un candidato; su geometría y contexto todavía deben comprobarse.
+
+10
+00:01:05.467 --> 00:01:12.317
+La representación de una imagen puede servir para encontrar otra entrada del archivo.
+
+11
+00:01:12.317 --> 00:01:19.167
+Un generador, en cambio, produce una nueva salida condicionada por la petición.
+
+12
+00:01:19.167 --> 00:01:26.517
+La primera operación recupera un registro existente; la segunda construye contenido nuevo.
+
+13
+00:01:27.017 --> 00:01:33.867
+Una tabla sitúa el importe de doce euros en la fila del pedido A.
+
+14
+00:01:33.867 --> 00:01:41.417
+La respuesta necesita el valor y su relación con esa fila, no sólo reconocer el número.
+
+15
+00:01:41.417 --> 00:01:48.767
+Conserva región, fila y documento para poder contrastar la afirmación.
+
+16
+00:01:49.267 --> 00:01:56.117
+Una captura contiene el texto de una petición de escritura.
+
+17
+00:01:56.117 --> 00:02:02.967
+Percibir ese texto y proponer una herramienta son pasos distintos de ejecutar la operación.
+
+18
+00:02:02.967 --> 00:02:10.317
+El permiso se valida fuera del contenido observado, antes del efecto externo.
+

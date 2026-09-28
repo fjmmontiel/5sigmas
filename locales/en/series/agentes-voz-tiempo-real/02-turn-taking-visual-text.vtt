@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+“Change the address… for order 4182.” The internal pause lasts 350 milliseconds in this example.
+
+2
+00:00:07.700 --> 00:00:14.700
+Closing after 250 milliseconds cuts the request before the order is identified.
+
+3
+00:00:14.700 --> 00:00:23.000
+VAD detects activity. End-of-turn needs evidence about the complete intent.
+
+4
+00:00:23.700 --> 00:00:30.700
+A short window can mistake a pause for the end. A long one can create silence.
+
+5
+00:00:30.700 --> 00:00:37.700
+Increasing the timeout protects this unfinished sentence, but delays an already complete “yes”.
+
+6
+00:00:37.700 --> 00:00:46.000
+Tune premature endings and waiting together. A lower latency number is not enough.
+
+7
+00:00:46.700 --> 00:00:53.700
+Detecting the user’s speech early lets the system consider yielding the channel.
+
+8
+00:00:53.700 --> 00:01:00.700
+Closing the user’s turn too early can change the meaning of the request.
+
+9
+00:01:00.700 --> 00:01:09.000
+Use separate start and end decisions, with a clear authority for each.
+
+10
+00:01:09.700 --> 00:01:16.700
+“Uh-huh” can signal attention without asking the agent to stop speaking.
+
+11
+00:01:16.700 --> 00:01:23.700
+“Wait, change the time” can require stopping the response and listening.
+
+12
+00:01:23.700 --> 00:01:32.000
+Context decides: detected speech is evidence, not a universal cancellation command.
+
+13
+00:01:32.700 --> 00:01:39.700
+R7 already has one played chunk, more queued chunks and more audio being generated.
+
+14
+00:01:39.700 --> 00:01:46.700
+The interruption stops new output and removes pending audio from the queue.
+
+15
+00:01:46.700 --> 00:01:55.000
+Keep the confirmed prefix. Do not confuse generated audio with actual playout.
+
+16
+00:01:55.700 --> 00:02:02.700
+Two detectors can propose closing T12. They must not start two independent responses.
+
+17
+00:02:02.700 --> 00:02:09.700
+One authority admits the closure once and assigns response R7.
+
+18
+00:02:09.700 --> 00:02:18.000
+When T13 replaces the turn, late R7 audio must not reclaim the channel.
+

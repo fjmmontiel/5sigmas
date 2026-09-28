@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+In this example, total capacity is 64 thousand tokens.
+
+2
+00:00:07.350 --> 00:00:14.900
+We reserve 8 thousand for output, 4 thousand for margin and 4 thousand for mandatory instructions.
+
+3
+00:00:14.900 --> 00:00:22.250
+That leaves 48 thousand for dynamic information. This is not a universal model property.
+
+4
+00:00:22.750 --> 00:00:31.050
+A 42-thousand-token log crowds out necessary files within a 48-thousand-token budget.
+
+5
+00:00:31.050 --> 00:00:37.900
+We extract relevant failures and keep a reference to the complete log.
+
+6
+00:00:37.900 --> 00:00:45.950
+The contract and files now fit. The extraction must retain the error that matters.
+
+7
+00:00:46.450 --> 00:00:53.300
+The source says: return within fourteen days, except opened items.
+
+8
+00:00:53.300 --> 00:01:00.850
+A summary keeps the deadline but drops the exception. It looks correct but changes the decision.
+
+9
+00:01:00.850 --> 00:01:08.200
+The compaction check tests both conditions and rejects this loss.
+
+10
+00:01:08.700 --> 00:01:15.550
+Summary S derives from document revision A through a lossy transformation.
+
+11
+00:01:15.550 --> 00:01:22.400
+When the revision changes, S is no longer validated for the current state.
+
+12
+00:01:22.400 --> 00:01:29.750
+Provenance lets us recover the affected passage without regenerating everything by default.
+
+13
+00:01:30.250 --> 00:01:37.417
+Reusing a cached prefix avoids repeated processing work, subject to the provider contract.
+
+14
+00:01:37.417 --> 00:01:44.583
+The content remains part of the logical input. Nothing has been selected or summarised.
+
+15
+00:01:44.583 --> 00:01:51.933
+Compaction replaces the earlier representation. That transformation can lose information.
+
+16
+00:01:52.433 --> 00:01:59.283
+The context stores a short ID for file A rather than every line.
+
+17
+00:01:59.283 --> 00:02:06.450
+When detail is needed, the read requests revision A and verifies its identity.
+
+18
+00:02:06.450 --> 00:02:15.250
+If only B is returned, it is not presented as A. Saving context creates a recovery obligation.
+

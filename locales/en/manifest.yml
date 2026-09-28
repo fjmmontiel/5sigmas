@@ -372,6 +372,66 @@ published_files:
   - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates-visual-text.vtt
   - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-transcript.html
   - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops-visual-text.vtt
+  - series/from-cave-to-agi/00_presentacion_serie-transcript.html
+  - series/from-cave-to-agi/00_presentacion_serie-visual-text.vtt
+  - series/from-cave-to-agi/01-representar-transcript.html
+  - series/from-cave-to-agi/01-representar-visual-text.vtt
+  - series/from-cave-to-agi/02-mecanizar-transcript.html
+  - series/from-cave-to-agi/02-mecanizar-visual-text.vtt
+  - series/from-cave-to-agi/03-aprender-transcript.html
+  - series/from-cave-to-agi/03-aprender-visual-text.vtt
+  - series/from-cave-to-agi/04-escalar-transcript.html
+  - series/from-cave-to-agi/04-escalar-visual-text.vtt
+  - series/from-cave-to-agi/05-mas-alla-transcript.html
+  - series/from-cave-to-agi/05-mas-alla-visual-text.vtt
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-transcript.html
+  - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering-visual-text.vtt
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-transcript.html
+  - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance-visual-text.vtt
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-transcript.html
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state-visual-text.vtt
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-transcript.html
+  - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding-visual-text.vtt
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-transcript.html
+  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries-visual-text.vtt
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-transcript.html
+  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation-visual-text.vtt
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-transcript.html
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget-visual-text.vtt
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-transcript.html
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention-visual-text.vtt
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-transcript.html
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs-visual-text.vtt
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-transcript.html
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations-visual-text.vtt
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-transcript.html
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-transcript.html
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints-visual-text.vtt
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-transcript.html
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz-visual-text.vtt
+  - series/agentes-voz-tiempo-real/02-turn-taking-transcript.html
+  - series/agentes-voz-tiempo-real/02-turn-taking-visual-text.vtt
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia-transcript.html
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia-visual-text.vtt
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-transcript.html
+  - series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas-visual-text.vtt
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-transcript.html
+  - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red-visual-text.vtt
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-transcript.html
+  - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability-visual-text.vtt
+  - series/multimodalidad-iag/00_presentacion_serie-visual-text.vtt
+  - series/multimodalidad-iag/00_presentacion_serie-transcript.html
+  - series/multimodalidad-iag/01-el-problema-visual-text.vtt
+  - series/multimodalidad-iag/01-el-problema-transcript.html
+  - series/multimodalidad-iag/02-alineamiento-visual-text.vtt
+  - series/multimodalidad-iag/02-alineamiento-transcript.html
+  - series/multimodalidad-iag/03-arquitecturas-visual-text.vtt
+  - series/multimodalidad-iag/03-arquitecturas-transcript.html
+  - series/multimodalidad-iag/04-evaluacion-visual-text.vtt
+  - series/multimodalidad-iag/04-evaluacion-transcript.html
+  - series/multimodalidad-iag/05-riesgos-visual-text.vtt
+  - series/multimodalidad-iag/05-riesgos-transcript.html
 coverage:
   homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete

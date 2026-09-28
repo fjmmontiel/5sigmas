@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+The router has three candidate models. One lacks the required tool contract.
+
+2
+00:00:07.350 --> 00:00:14.200
+That model is excluded before price or latency are compared.
+
+3
+00:00:14.200 --> 00:00:22.617
+Selection optimises within the eligible set. A cheap but incompatible alternative is not a valid option.
+
+4
+00:00:23.117 --> 00:00:29.967
+Routing chooses the first model before the request executes.
+
+5
+00:00:29.967 --> 00:00:36.817
+Fallback starts after a failure or a defined degradation condition.
+
+6
+00:00:36.817 --> 00:00:45.233
+The trace must separate decision, attempt and recovery. Do not attribute every outcome to the first model.
+
+7
+00:00:45.733 --> 00:00:53.650
+The user has one thousand milliseconds. The first attempt spends four hundred, and backoff spends another hundred.
+
+8
+00:00:53.650 --> 00:01:00.500
+Five hundred remain for recovery, including network, processing and delivery.
+
+9
+00:01:00.500 --> 00:01:08.917
+A second attempt expected to take six hundred does not fit. Switching models creates no new budget.
+
+10
+00:01:09.417 --> 00:01:16.267
+The user has already received part of an answer when the stream fails.
+
+11
+00:01:16.267 --> 00:01:23.117
+Appending a fresh answer can duplicate or contradict what was shown.
+
+12
+00:01:23.117 --> 00:01:30.783
+The product needs an explicit interruption or replacement policy. This is not a transparent retry.
+
+13
+00:01:31.283 --> 00:01:38.133
+Response caching returns a validated answer without a new complete inference.
+
+14
+00:01:38.133 --> 00:01:44.983
+Prefix caching reuses some input state but still needs output generation.
+
+15
+00:01:44.983 --> 00:01:52.333
+Treating their hits as the same saving mixes different work boundaries.
+
+16
+00:01:52.833 --> 00:01:59.683
+Two almost identical questions refer to different policy revisions.
+
+17
+00:01:59.683 --> 00:02:06.533
+Semantic proximity can retrieve an old answer after the current deadline has changed.
+
+18
+00:02:06.533 --> 00:02:14.950
+The cache must respect versions, permissions and truth conditions. A nearby neighbour can still be wrong.
+

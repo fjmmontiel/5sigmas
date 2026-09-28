@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Dos patrones de cuatro píxeles difieren en la posición de un único píxel activo.
+
+2
+00:00:07.350 --> 00:00:14.200
+Promediar cada patrón en una sola celda produce el mismo valor: un cuarto.
+
+3
+00:00:14.200 --> 00:00:21.550
+Si esa posición resolvía la pregunta, la reducción ya eliminó la evidencia necesaria.
+
+4
+00:00:22.050 --> 00:00:28.900
+Las columnas son precio y cantidad; la fila contiene doce y dos.
+
+5
+00:00:28.900 --> 00:00:36.067
+Un listado plano conserva los números, pero puede perder a qué columna pertenece cada uno.
+
+6
+00:00:36.067 --> 00:00:43.733
+La estructura correcta produce doce euros por dos unidades, no la interpretación inversa.
+
+7
+00:00:44.233 --> 00:00:51.083
+Dos trazas de voz contienen las mismas palabras: «ya está».
+
+8
+00:00:51.083 --> 00:00:57.933
+Una termina con entonación ascendente y otra descendente.
+
+9
+00:00:57.933 --> 00:01:05.983
+El texto coincide, pero la señal prosódica difiere; no asignamos una emoción universal a esa curva.
+
+10
+00:01:06.483 --> 00:01:13.333
+El vídeo se muestrea en los segundos cero, dos y cuatro.
+
+11
+00:01:13.333 --> 00:01:21.250
+La luz sólo se enciende entre uno y uno y medio: ninguna muestra captura ese intervalo.
+
+12
+00:01:21.250 --> 00:01:28.600
+La ausencia en los fotogramas recibidos no demuestra que el evento no ocurriera.
+
+13
+00:01:29.100 --> 00:01:36.267
+Un destello y su sonido pertenecen al mismo evento, pero los registros usan relojes distintos.
+
+14
+00:01:36.267 --> 00:01:43.117
+El audio aparece tres décimas de segundo más tarde en la escala de vídeo.
+
+15
+00:01:43.117 --> 00:01:50.467
+Corregir ese desfase alinea el evento; mezclar timestamps sin calibración puede inventar un orden.
+
+16
+00:01:50.967 --> 00:01:57.817
+La cámara informa de ochenta centímetros respecto a su propio origen.
+
+17
+00:01:57.817 --> 00:02:04.983
+El mapa usa metros y su origen está veinte centímetros detrás del de la cámara.
+
+18
+00:02:04.983 --> 00:02:13.033
+La misma posición corresponde a un metro en el mapa: cambia la referencia, no el objeto.
+

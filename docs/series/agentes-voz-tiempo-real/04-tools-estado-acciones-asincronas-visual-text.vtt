@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+El modelo propone una tool. La aplicación valida identidad, permisos y precondiciones.
+
+2
+00:00:07.700 --> 00:00:14.700
+Sólo después admite op_42 y el sistema externo puede confirmar el efecto.
+
+3
+00:00:14.700 --> 00:00:23.000
+La conversación comunica el resultado observado. Una frase no crea una reserva.
+
+4
+00:00:23.700 --> 00:00:30.700
+Contexto, sesión, workflow durable y sistema de registro son almacenes distintos.
+
+5
+00:00:30.700 --> 00:00:37.700
+Un reinicio pierde datos efímeros, pero op_42 debe seguir siendo localizable.
+
+6
+00:00:37.700 --> 00:00:46.000
+Recupera el estado durable y consulta el efecto externo, no una frase anterior.
+
+7
+00:00:46.700 --> 00:00:53.700
+El usuario dice «espera» mientras op_42 sigue en curso. El audio debe detenerse.
+
+8
+00:00:53.700 --> 00:01:00.700
+Cancelar la generación o su espera local no demuestra que el proveedor cancelara el efecto.
+
+9
+00:01:00.700 --> 00:01:09.000
+Si el registro confirma la reserva, reconcíliala. No anuncies una cancelación inexistente.
+
+10
+00:01:09.700 --> 00:01:16.700
+T12 pidió las 21:00. T13 corrige a las 21:30 antes de recibir el resultado.
+
+11
+00:01:16.700 --> 00:01:23.700
+La confirmación tardía de op_42 sigue describiendo una reserva real a las 21:00.
+
+12
+00:01:23.700 --> 00:01:32.000
+Persiste el hecho y comprueba relevancia. No lo presentes como éxito de la nueva petición.
+
+13
+00:01:32.700 --> 00:01:39.700
+Se pierde la respuesta después de enviar op_42. El efecto queda UNKNOWN para la aplicación.
+
+14
+00:01:39.700 --> 00:01:46.700
+Con una API idempotente, el reintento conserva la clave y consulta la misma operación.
+
+15
+00:01:46.700 --> 00:01:55.000
+Dos intentos no crean dos efectos. Sin ese contrato, primero hay que reconciliar.
+
+16
+00:01:55.700 --> 00:02:02.700
+op_42 pertenece a un workflow durable, no al await de un agente temporal.
+
+17
+00:02:02.700 --> 00:02:09.700
+Un handoff cambia el interlocutor activo; la operación conserva identidad y deadline.
+
+18
+00:02:09.700 --> 00:02:19.000
+Un update de progreso no es el resultado final. El responsable debe cerrar o reconciliar.
+

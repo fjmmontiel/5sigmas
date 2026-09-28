@@ -1,30 +1,45 @@
 ---
-title: "Model routing, fallback, caching y serving adaptado al workload"
-description: "Cómo separar selección de modelo, fallback, cache de respuestas y placement de workers para optimizar calidad, latencia, capacidad y coste sin romper corrección."
+title: Model routing, fallback, caching y serving adaptado al workload
+description: Cómo separar selección de modelo, fallback, cache de respuestas y placement de workers para optimizar
+  calidad, latencia, capacidad y coste sin romper corrección.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "model routing, LLM routing, fallback, response cache, semantic cache, workload-aware serving, inference gateway, KV-aware routing"
+keywords: model routing, LLM routing, fallback, response cache, semantic cache, workload-aware serving, inference
+  gateway, KV-aware routing
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Serving
-  - Routing
+- IA
+- LLMs
+- Inferencia
+- Serving
+- Routing
 video: 05-model-routing-fallback-caching-workload-aware-serving.mp4
 video_poster: 05-model-routing-fallback-caching-workload-aware-serving.jpg
-video_title: "Routing, fallback, caching y serving adaptativo"
-video_summary: "Un router asigna cada request según capacidad, calidad, coste y latencia; cache y fallback cambian la ruta sin eliminar verificación ni límites de política."
-video_duration: PT36S
+video_title: Decidir bajo restricciones
+video_summary: La selección optimiza dentro del conjunto permitido. Una alternativa barata pero incompatible no
+  es una opción válida.
+video_date: '2026-09-28'
+video_duration: PT134.95S
+video_captions: 05-model-routing-fallback-caching-workload-aware-serving-visual-text.vtt
+video_transcript: 05-model-routing-fallback-caching-workload-aware-serving-transcript.html
 video_chapters:
-- name: "Routing separa workloads antes de servir"
+- name: Primero lo permitido
   start: 0
-  end: 12
-- name: "Un cache hit evita trabajo cuando la clave es válida"
-  start: 12
-  end: 24
-- name: "Fallback recupera el servicio bajo fallo o saturación"
-  start: 24
-  end: 36
+  end: 22.616667
+- name: Elegir no es recuperarse
+  start: 22.616667
+  end: 45.233333
+- name: El deadline no se reinicia
+  start: 45.233333
+  end: 68.916667
+- name: Lo visible ya cuenta
+  start: 68.916667
+  end: 90.783333
+- name: Dos ahorros diferentes
+  start: 90.783333
+  end: 112.333333
+- name: Parecido no es equivalente
+  start: 112.333333
+  end: 134.95
 ---
 
 # Capítulo 5 — Model routing, fallback, caching y serving adaptado al workload

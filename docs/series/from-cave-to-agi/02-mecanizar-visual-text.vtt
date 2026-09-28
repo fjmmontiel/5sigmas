@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Una rueda de unidades representa nueve y otra de decenas representa cero.
+
+2
+00:00:07.350 --> 00:00:14.517
+Añadir una unidad hace volver la primera a cero y avanzar la segunda a uno.
+
+3
+00:00:14.517 --> 00:00:21.867
+El mecanismo representa diez sin que una persona deba recordar el acarreo.
+
+4
+00:00:22.367 --> 00:00:29.217
+Un patrón de perforaciones codifica instrucciones para seleccionar posiciones.
+
+5
+00:00:29.217 --> 00:00:36.067
+Una segunda tarjeta activa otra secuencia sin reconstruir el mecanismo.
+
+6
+00:00:36.067 --> 00:00:43.417
+Separar instrucciones y ejecución permite repetir procedimientos distintos.
+
+7
+00:00:43.917 --> 00:00:50.767
+Dos interruptores en serie deben estar cerrados para completar el recorrido.
+
+8
+00:00:50.767 --> 00:00:57.617
+Si A o B permanece abierto, la salida es cero.
+
+9
+00:00:57.617 --> 00:01:04.967
+Con ambos cerrados, la salida es uno: el circuito implementa A AND B.
+
+10
+00:01:05.467 --> 00:01:12.317
+La cinta contiene tres unos seguidos de una celda vacía.
+
+11
+00:01:12.317 --> 00:01:19.167
+La regla avanza a la derecha mientras lee un uno.
+
+12
+00:01:19.167 --> 00:01:27.217
+Al encontrar la celda vacía, escribe otro uno y se detiene: ha incrementado un conteo unario.
+
+13
+00:01:27.717 --> 00:01:34.567
+La memoria contiene instrucciones de cargar, sumar y guardar, además de dos datos.
+
+14
+00:01:34.567 --> 00:01:41.417
+La unidad ejecutora lee una instrucción cada vez y actualiza su registro.
+
+15
+00:01:41.417 --> 00:01:48.767
+En este ejemplo carga tres, suma cuatro y guarda siete.
+
+16
+00:01:49.267 --> 00:01:56.117
+Un mensaje puede ser A, B, C o D, con la misma probabilidad.
+
+17
+00:01:56.117 --> 00:02:02.967
+Dos decisiones binarias distinguen las cuatro posibilidades.
+
+18
+00:02:02.967 --> 00:02:10.317
+Los bits cuantifican la incertidumbre de esta elección, no el significado del mensaje.
+

@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.667
+Each token stores keys and values per layer and KV head. Precision also matters.
+
+2
+00:00:07.667 --> 00:00:15.217
+With 32 layers, 8 heads, dimension 128 and two bytes, that is 128 KiB per token.
+
+3
+00:00:15.217 --> 00:00:22.567
+For 4096 tokens, KV payload is 512 MiB. Weights and buffers are excluded.
+
+4
+00:00:23.067 --> 00:00:29.917
+Start with sixteen GiB in a simplified example.
+
+5
+00:00:29.917 --> 00:00:36.767
+Ten GiB hold weights, while two hold buffers and other reservations.
+
+6
+00:00:36.767 --> 00:00:44.817
+Four remain for KV. Request capacity depends on live state, not just FLOPs.
+
+7
+00:00:45.317 --> 00:00:52.167
+The sequence needs six positions. Reserving a maximum of sixteen leaves ten unused.
+
+8
+00:00:52.167 --> 00:00:59.017
+With four-position blocks, a table maps those six positions to two physical blocks.
+
+9
+00:00:59.017 --> 00:01:07.067
+Two positions remain unused in the final block. Paging reduces waste; it does not eliminate it.
+
+10
+00:01:07.567 --> 00:01:14.417
+A and B share a decode iteration. A finishes before B.
+
+11
+00:01:14.417 --> 00:01:21.267
+The scheduler frees A’s KV and admits C while B continues generating.
+
+12
+00:01:21.267 --> 00:01:28.933
+Continuous batching changes membership at each step. It is not the same as memory paging.
+
+13
+00:01:29.433 --> 00:01:36.283
+A block evicted from the GPU remains in CPU memory.
+
+14
+00:01:36.283 --> 00:01:43.133
+Reusing it requires crossing the interconnect and restoring residency.
+
+15
+00:01:43.133 --> 00:01:51.183
+More total capacity can add critical-path movement. Measure transfers and waiting, not just occupancy.
+
+16
+00:01:51.683 --> 00:01:58.533
+A request reserves three blocks and keeps growing.
+
+17
+00:01:58.533 --> 00:02:05.383
+Cancellation stops the work and returns its blocks to the free pool.
+
+18
+00:02:05.383 --> 00:02:13.433
+Accounting must also close on errors. Orphaned blocks reduce capacity for later requests.
+

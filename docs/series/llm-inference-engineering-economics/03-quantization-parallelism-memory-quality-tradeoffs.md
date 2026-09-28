@@ -1,30 +1,44 @@
 ---
-title: "Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad"
-description: "Qué cambia realmente al cuantizar pesos, activaciones o KV cache, y cómo TP, PP, DP, EP y CP cambian la distribución, la comunicación, la memoria por rank y los dominios de fallo."
+title: Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad
+description: Qué cambia realmente al cuantizar pesos, activaciones o KV cache, y cómo TP, PP, DP, EP y CP cambian
+  la distribución, la comunicación, la memoria por rank y los dominios de fallo.
 date: 2026-09-12
 date_modified: 2026-09-12
-keywords: "LLM quantization, tensor parallelism, pipeline parallelism, expert parallelism, context parallelism, FP8, INT4, AWQ, GPTQ"
+keywords: LLM quantization, tensor parallelism, pipeline parallelism, expert parallelism, context parallelism, FP8,
+  INT4, AWQ, GPTQ
 tags:
-  - IA
-  - LLMs
-  - Inferencia
-  - Serving
-  - GPUs
+- IA
+- LLMs
+- Inferencia
+- Serving
+- GPUs
 video: 03-quantization-parallelism-memory-quality-tradeoffs.mp4
 video_poster: 03-quantization-parallelism-memory-quality-tradeoffs.jpg
-video_title: "Quantization, paralelismo y trade-offs"
-video_summary: "Quantization reduce bytes por parámetro; tensor y pipeline parallelism reparten cómputo y memoria. Cada elección mueve memoria, calidad, comunicación y latencia."
-video_duration: PT36S
+video_title: Precisión y distribución
+video_summary: El error es 0,12. Menor precisión exige evaluar la tarea, no sólo el ahorro.
+video_date: '2026-09-28'
+video_duration: PT135.35S
+video_captions: 03-quantization-parallelism-memory-quality-tradeoffs-visual-text.vtt
+video_transcript: 03-quantization-parallelism-memory-quality-tradeoffs-transcript.html
 video_chapters:
-- name: "Menos bits reducen memoria y ancho de banda"
+- name: Menos niveles de precisión
   start: 0
-  end: 12
-- name: "Paralelismo reparte el modelo entre dispositivos"
-  start: 12
-  end: 24
-- name: "Optimizar una métrica desplaza otras"
-  start: 24
-  end: 36
+  end: 21.55
+- name: Payload no es huella total
+  start: 21.55
+  end: 44.866667
+- name: Tres precisiones distintas
+  start: 44.866667
+  end: 67.483333
+- name: Dividir una capa comunica
+  start: 67.483333
+  end: 91.233333
+- name: Las etapas también esperan
+  start: 91.233333
+  end: 113.483333
+- name: Réplicas no son expertos
+  start: 113.483333
+  end: 135.35
 ---
 
 # Capítulo 3 — Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad

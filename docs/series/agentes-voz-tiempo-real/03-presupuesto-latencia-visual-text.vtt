@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.700 --> 00:00:07.700
+En esta traza, el habla termina en cero y el turno se confirma a los 300 milisegundos.
+
+2
+00:00:07.700 --> 00:00:14.700
+La reproducción empieza a los 780: después del commit quedan otros 480 milisegundos.
+
+3
+00:00:14.700 --> 00:00:23.000
+Con el mismo reloj, la espera total es 300 más 480. No es el TTFT del modelo.
+
+4
+00:00:23.700 --> 00:00:30.700
+El STT ya trabaja mientras habla el usuario. Su duración completa no vuelve a sumarse después.
+
+5
+00:00:30.700 --> 00:00:37.700
+El primer texto inicia TTS mientras el modelo continúa generando el resto.
+
+6
+00:00:37.700 --> 00:00:47.000
+Aquí el primer playout llega a 700 milisegundos. Las barras completas se solapan.
+
+7
+00:00:47.700 --> 00:00:54.700
+El cliente marca 1000 y el servidor 1090. Restar produce 90, pero mezcla dos relojes.
+
+8
+00:00:54.700 --> 00:01:01.700
+En este ejemplo conocemos un offset de 80: el intervalo real representado es 10.
+
+9
+00:01:01.700 --> 00:01:10.000
+Sin reconciliar los relojes, esa resta no mide latencia. Correlacionar IDs no basta.
+
+10
+00:01:10.700 --> 00:01:17.700
+A1 se genera a los 600 milisegundos. Todavía debe viajar y entrar en una cola.
+
+11
+00:01:17.700 --> 00:01:24.700
+Llega a los 650, pero la reproducción empieza a los 700 en esta traza.
+
+12
+00:01:24.700 --> 00:01:33.000
+Nombra la frontera observada. Un recibo del servidor no demuestra audición física.
+
+13
+00:01:33.700 --> 00:01:40.700
+Estos veinte turnos sintéticos incluyen dieciocho de 400 milisegundos y dos de 1600.
+
+14
+00:01:40.700 --> 00:01:47.700
+La media es 520. El percentil 95 por rango más próximo está en 1600.
+
+15
+00:01:47.700 --> 00:01:56.000
+Segmenta canal y condiciones. Los turnos lentos pueden tener un mecanismo diferente.
+
+16
+00:01:56.700 --> 00:02:03.700
+El presupuesto ilustrativo suma 700 milisegundos: 300 de turno y 400 del resto.
+
+17
+00:02:03.700 --> 00:02:10.700
+Reducir el modelo de 180 a 90 baja el total a 610, no a la mitad.
+
+18
+00:02:10.700 --> 00:02:19.000
+Comprueba también calidad y cortes. Reducir espera no compensa una petición mal entendida.
+

@@ -1,13 +1,40 @@
 ---
 title: Mecanizar — de Babbage a Turing
-description: "Cómo la humanidad automatizó el cálculo: de los primeros mecanismos físicos a la separación de programa y hardware, y los fundamentos teóricos de la computación moderna."
+description: 'Cómo la humanidad automatizó el cálculo: de los primeros mecanismos físicos a la separación de programa
+  y hardware, y los fundamentos teóricos de la computación moderna.'
 date: 2026-03-26
-keywords: "historia computación, Alan Turing, Charles Babbage, máquina de Turing, ENIAC, Von Neumann, historia ordenadores, automatización cálculo, computación teórica"
+keywords: historia computación, Alan Turing, Charles Babbage, máquina de Turing, ENIAC, Von Neumann, historia ordenadores,
+  automatización cálculo, computación teórica
 tags:
-  - IA
-  - Historia
-video: "02-mecanizar.mp4"
-video_duration: "PT1M26S"
+- IA
+- Historia
+video: 02-mecanizar.mp4
+video_poster: 02-mecanizar.jpg
+video_title: Separar instrucciones, lógica y memoria
+video_summary: El mecanismo representa diez sin que una persona deba recordar el acarreo.
+video_date: '2026-09-28'
+video_duration: PT130.316667S
+video_captions: 02-mecanizar-visual-text.vtt
+video_transcript: 02-mecanizar-transcript.html
+video_chapters:
+- name: Un acarreo conecta dos posiciones
+  start: 0
+  end: 21.866667
+- name: Cambiar el patrón, conservar el mecanismo
+  start: 21.866667
+  end: 43.416667
+- name: Una operación lógica puede gobernar un circuito
+  start: 43.416667
+  end: 64.966667
+- name: Una regla local puede recorrer una cinta
+  start: 64.966667
+  end: 87.216667
+- name: Instrucciones y datos pueden residir en memoria
+  start: 87.216667
+  end: 108.766667
+- name: Cuatro alternativas equiprobables requieren dos bits
+  start: 108.766667
+  end: 130.316667
 ---
 
 # Capítulo 2: Mecanizar (≈ 1640 - 1956)

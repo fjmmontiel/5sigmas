@@ -1,30 +1,42 @@
 ---
-title: "Tools y estado: ejecutar acciones sin romper la conversación"
-description: "Cómo diseñar tool calls, estado conversacional, acciones asíncronas, cancelación, idempotencia y recuperación en agentes de voz en tiempo real."
+title: 'Tools y estado: ejecutar acciones sin romper la conversación'
+description: Cómo diseñar tool calls, estado conversacional, acciones asíncronas, cancelación, idempotencia y recuperación
+  en agentes de voz en tiempo real.
 date: 2026-09-10
 date_modified: 2026-09-10
 tags:
-  - IA
-  - Voz
-  - Realtime
-  - Agentes
-  - Producción
+- IA
+- Voz
+- Realtime
+- Agentes
+- Producción
 video: 04-tools-estado-acciones-asincronas.mp4
 video_poster: 04-tools-estado-acciones-asincronas.jpg
-video_title: Tools, estado y acciones asíncronas
-video_summary: La conversación puede cambiar antes de que una acción termine; identidad
-  y estado evitan aplicar resultados stale.
-video_duration: PT36S
+video_title: Tools y estado durable
+video_summary: La conversación comunica el resultado observado. Una frase no crea una reserva.
+video_date: '2026-09-28'
+video_duration: PT139S
+video_captions: 04-tools-estado-acciones-asincronas-visual-text.vtt
+video_transcript: 04-tools-estado-acciones-asincronas-transcript.html
 video_chapters:
-- name: Lifecycles distintos
+- name: Solicitar no es ejecutar
   start: 0
-  end: 12
-- name: Interrupción
-  start: 12
-  end: 24
-- name: Reconciliación
-  start: 24
-  end: 36
+  end: 23
+- name: Cuatro estados. Cuatro autoridades.
+  start: 23
+  end: 46
+- name: Callarse no deshace una reserva
+  start: 46
+  end: 69
+- name: El resultado llega a otro turno
+  start: 69
+  end: 92
+- name: Timeout no significa fracaso
+  start: 92
+  end: 115
+- name: Async necesita un responsable
+  start: 115
+  end: 139
 ---
 
 # Capítulo 4 — Tools y estado: ejecutar acciones sin romper la conversación
