@@ -1,0 +1,36 @@
+name: Approved release source snapshot
+on:
+  push:
+    branches: ['release/owner-approved-video-batch-20260927']
+    paths: ['.github/workflows/approved-release-snapshot.yml']
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Snapshot tracked release sources and exact media inventory
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,subprocess,zipfile
+          root=pathlib.Path('.')
+          files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          allowed={'.py','.js','.mjs','.cjs','.json','.jsonl','.yml','.yaml','.md','.txt','.toml','.css','.vtt','.html','.lock','.ini','.cfg','.sh'}
+          media=[]
+          with zipfile.ZipFile('/tmp/approved-release-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
+            for name in files:
+              p=root/name
+              if not name or not p.is_file(): continue
+              if p.suffix in allowed or p.name in {'requirements.txt','package.json','CNAME'}:
+                if p.stat().st_size < 12000000: z.write(p,name)
+              if p.suffix=='.mp4':
+                media.append({'path':name,'bytes':p.stat().st_size,'sha256':hashlib.file_digest(p.open('rb'),'sha256').hexdigest(),'blob_sha':subprocess.check_output(['git','rev-parse','HEAD:'+name]).decode().strip()})
+            z.writestr('RECOVERY_MEDIA_INVENTORY.json',json.dumps(media,indent=2))
+            z.writestr('RECOVERY_HEAD.txt',subprocess.check_output(['git','rev-parse','HEAD']).decode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: approved-release-sources
+          path: /tmp/approved-release-sources.zip
+          retention-days: 5
