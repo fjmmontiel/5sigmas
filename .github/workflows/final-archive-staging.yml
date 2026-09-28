@@ -1,0 +1,38 @@
+name: Recover exact approved F1 W1 archive staging
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/final-archive-staging.yml]
+permissions:
+  contents: write
+concurrency:
+  group: final-approved-archive-staging
+  cancel-in-progress: false
+jobs:
+  stage:
+    if: github.actor == 'fjmmontiel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .release-media
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install media verification dependencies
+        run: |
+          python -m pip install cryptography
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Receive pinned originals and stage without merge
+        run: python -u .release-media/archive_receive.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-exact-media-evidence
+          path: /tmp/final-evidence/*
+          if-no-files-found: error
+          retention-days: 1
