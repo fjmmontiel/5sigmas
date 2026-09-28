@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "run": "36411374259",
+  "branch": "release/owner-approved-video-batch-20260927",
+  "target": "release/final-approved-f1-w1-20260928",
+  "expected_head": "6209a852b804338e31b95f06bdf604baeb04cf40",
+  "spec_sha256": "f843bc3678d08563f6339e9a7866b96c467b2c7ba7170f08882ffd759f4d632d",
+  "public_key": "AKsfz623vtkxz2R/9Oyzd5YzoA6ovVUa3vnInvugVD8=",
+  "expires_epoch": 1790594689,
+  "scope": "Twenty hash-pinned approved F1/W1 originals and derived posters; staging branch only; no merge or deployment."
+}
