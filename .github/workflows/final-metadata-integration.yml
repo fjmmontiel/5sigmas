@@ -1,4 +1,5 @@
 name: Integrate reviewed final F1 W1 metadata
+# Explicit retry after failed download; target branch remained unchanged.
 on:
   push:
     branches: [release/owner-approved-video-batch-20260927]
