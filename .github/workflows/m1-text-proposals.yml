@@ -1,0 +1,97 @@
+name: Prepare reviewed M1 text integration proposals
+on:
+  push:
+    branches: [release/owner-approved-video-batch-20260927]
+    paths: [.github/workflows/m1-text-proposals.yml]
+permissions:
+  contents: write
+concurrency:
+  group: m1-text-proposals-20260928
+  cancel-in-progress: false
+jobs:
+  propose:
+    if: github.actor == 'fjmmontiel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .release-media
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Decode and verify the exact reviewed proposal program
+        run: |
+          python -m pip install PyYAML==6.0.2
+          python - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,json,zlib
+          raw=''.join(Path(f'.release-media/m1-program-{i}.b64').read_text().strip() for i in (1,2))
+          # Repair three identified transport transcription duplications. The original digest remains mandatory.
+          for old,new in [('NRZZzXfb','NRZzXfb'),('Hbwiwi85','Hbwi85'),('THSZJJ74','THSZJ74')]:
+              raw=raw.replace(old,new)
+          data=base64.b64decode(raw,validate=True)
+          assert hashlib.sha256(data).hexdigest()=='c9c57d7d938e374d1e88cc889062c291dfb3e46cd143fbed2f0b0c0161db7b51','PROPOSAL_TRANSPORT_HASH_MISMATCH'
+          payload=json.loads(zlib.decompress(data));assert set(payload)=={'script','story'}
+          root=Path('/tmp/m1-program');root.mkdir()
+          (root/'build.py').write_text(payload['script'])
+          (root/'story.json').write_text(json.dumps(payload['story'],ensure_ascii=False))
+          print('Reviewed M1 program SHA256 verified; approved on-screen text only.')
+          PY
+      - name: Read pinned target text without modifying the publication branch
+        run: |
+          git fetch --quiet --depth=1 origin release/approved-golden-batch-20260928
+          test "$(git rev-parse FETCH_HEAD)" = 7daccc5611cf993e4a5110eb73822287f3c5be43
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,zipfile
+          ref='7daccc5611cf993e4a5110eb73822287f3c5be43'
+          files=subprocess.check_output(['git','ls-tree','-r','--name-only',ref],text=True).splitlines()
+          prefixes=('.github/','scripts/','hooks/','locales/','docs/series/','docs/approved-')
+          suffixes={'.py','.mjs','.json','.yml','.yaml','.md','.html','.vtt','.sha256','.txt','.sh','.js','.css'}
+          paths=[p for p in files if p.startswith(prefixes) and Path(p).suffix in suffixes]
+          subprocess.run(['git','archive','--format=zip','--output=/tmp/m1-base.zip',ref,'--',*paths],check=True)
+          with zipfile.ZipFile('/tmp/m1-base.zip') as z:z.extractall('/tmp/m1-base')
+          PY
+      - name: Generate and validate proposals, never regenerate approved media
+        run: python /tmp/m1-program/build.py
+      - name: Store reviewed text blobs under proposal paths only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os,subprocess
+          def git(*args,env=None):return subprocess.check_output(['git',*args],text=True,stderr=subprocess.PIPE,env=env).strip()
+          target='release/approved-golden-batch-20260928';expected='7daccc5611cf993e4a5110eb73822287f3c5be43'
+          package=json.loads(Path('/tmp/m1-proposal-package.json').read_text())
+          assert package['expected_head']==expected and package['target']==target and len(package['files'])==46
+          for item in package['files']:
+              p=Path('/tmp/m1-proposals')/item['path'];data=p.read_bytes()
+              assert len(data)==item['size'] and hashlib.sha256(data).hexdigest()==item['sha256']
+              item['blob_sha']=git('hash-object','-w',str(p))
+          raw=json.dumps(package,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+          assert hashlib.sha256(raw.encode()).hexdigest()=='bc0506c3c4343e67906331ce30c51f2ce43d393d4d2dcef2f5307a146c36cd7c','PROPOSAL_OUTPUT_DIFFERS_FROM_LOCAL_REVIEW'
+          assert git('ls-remote','origin','refs/heads/'+target).split()[0]==expected
+          git('config','user.name','github-actions[bot]');git('config','user.email','41898282+github-actions[bot]@users.noreply.github.com')
+          env=dict(os.environ,GIT_INDEX_FILE='/tmp/m1-proposals-index');git('read-tree','HEAD',env=env)
+          for item in package['files']:
+              git('update-index','--add','--cacheinfo','100644',item['blob_sha'],'.release-media/text-proposals/'+item['path'],env=env)
+          p=Path('/tmp/m1-proposals.json');p.write_text(raw+'\n');blob=git('hash-object','-w',str(p))
+          git('update-index','--add','--cacheinfo','100644',blob,'.release-media/m1-proposals.json',env=env)
+          tree=git('write-tree',env=env);commit=git('commit-tree',tree,'-p',git('rev-parse','HEAD'),'-m','release(video): store locally-reviewed M1 text proposals only; publication branch unchanged')
+          paths=git('diff','--name-only','HEAD',commit).splitlines();assert len(paths)==47 and all(p.startswith('.release-media/') for p in paths)
+          git('push','origin',commit+':refs/heads/release/owner-approved-video-batch-20260927')
+          print('M1_REVIEWED_PROPOSALS_READY',commit,'46 text blobs; target branch untouched; no merge or deployment.')
+          PY
+      - name: Retain transport diagnostics for current interactive reconciliation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m1-text-proposal-diagnostics
+          path: |
+            .release-media/m1-program-*.b64
+            /tmp/m1-proposals.json
+          if-no-files-found: warn
+          retention-days: 1
