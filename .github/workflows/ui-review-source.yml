@@ -1,0 +1,37 @@
+name: UI review source export (no deployment)
+
+on:
+  push:
+    branches: ['ui/series-discovery-review-20260929']
+    paths: ['.github/workflows/ui-review-source.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '6209a852b804338e31b95f06bdf604baeb04cf40'
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Export exact tracked repository and offline build dependencies
+        run: |
+          mkdir -p /tmp/ui-review/wheels
+          git rev-parse HEAD > /tmp/ui-review/BASE_SHA.txt
+          git archive --format=tar HEAD | gzip -1 > /tmp/ui-review/source.tar.gz
+          python -m pip wheel -r requirements.txt --wheel-dir /tmp/ui-review/wheels
+          sha256sum /tmp/ui-review/source.tar.gz > /tmp/ui-review/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ui-review-source-6209a852
+          path: /tmp/ui-review/
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
