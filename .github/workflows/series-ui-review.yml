@@ -1,0 +1,82 @@
+name: Series UI real browser review
+on:
+  push:
+    branches: ['ui/series-discovery-review-20260929']
+    paths:
+      - '.github/workflows/series-ui-review.yml'
+      - 'quality/series-ui-review-request.json'
+  pull_request:
+    paths:
+      - 'hooks/series_experience.py'
+      - 'hooks/series_guides.json'
+      - 'docs/stylesheets/series-experience.css'
+      - 'docs/assets/javascripts/series-experience.js'
+      - 'scripts/*series*review*'
+      - 'scripts/test_series_experience.py'
+permissions:
+  contents: read
+concurrency:
+  group: series-ui-review-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: fjmmontiel/5sigmas
+          ref: 6209a852b804338e31b95f06bdf604baeb04cf40
+          path: baseline
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact build and review dependencies
+        run: |
+          python -m pip install -r candidate/requirements.txt
+          python -m pip install playwright==1.55.0 beautifulsoup4==4.13.5 lxml==6.0.2
+          python -m playwright install --with-deps chromium
+      - name: Build unmodified baseline and candidate in both languages
+        run: |
+          set -euo pipefail
+          for directory in baseline candidate; do
+            cd "$GITHUB_WORKSPACE/$directory"
+            mkdocs build --clean --strict
+            python scripts/prepare_locale.py --locale en
+            S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          done
+          cd "$GITHUB_WORKSPACE/candidate"
+          node --check docs/assets/javascripts/series-experience.js
+          python scripts/test_series_experience.py
+      - name: Serve both exact builds and capture browser evidence
+        env:
+          REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          python baseline/scripts/serve_preview.py --directory baseline/site --port 8000 > /tmp/baseline.log 2>&1 &
+          BASE_PID=$!
+          python candidate/scripts/serve_preview.py --directory candidate/site --port 8001 > /tmp/candidate.log 2>&1 &
+          CANDIDATE_PID=$!
+          trap 'kill "$BASE_PID" "$CANDIDATE_PID" || true' EXIT
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8000/series/ >/dev/null && curl -fsS http://127.0.0.1:8001/en/series/ >/dev/null; then break; fi
+            sleep 1
+          done
+          cd candidate
+          python scripts/capture_series_ui_review.py
+      - name: Owner-requested real browser captures (one day, no built site)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: series-ui-real-browser-evidence
+          path: candidate/artifacts/series-ui-review/
+          retention-days: 1
+          if-no-files-found: warn
+          compression-level: 6
