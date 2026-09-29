@@ -6,6 +6,8 @@ on:
       - 'hooks/series_experience.py'
       - 'hooks/series_guides.json'
       - 'hooks/series_*.py'
+      - 'hooks/series_curriculum.json'
+      - 'scripts/test_series_scenes.mjs'
       - 'docs/stylesheets/series-experience.css'
       - 'docs/assets/javascripts/series-experience.js'
       - 'scripts/*series*review*'
@@ -73,6 +75,7 @@ jobs:
           node --check docs/assets/javascripts/series-experience.js
           python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
+          node scripts/test_series_scenes.mjs
       - name: Serve both exact builds and capture browser evidence
         env:
           REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
