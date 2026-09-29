@@ -273,6 +273,7 @@ hooks:
   - hooks/direct_reader_navigation.py
   - hooks/sitemap_noindex.py
   - hooks/serve_md_versions.py
+  - hooks/series_experience.py
   - hooks/semantic_navigation.py
   - hooks/video_key_moments.py
   - hooks/locale_alternates.py
@@ -308,6 +309,8 @@ extra_javascript:
   - path: assets/javascripts/reader-navigation.js
     defer: true
   - path: assets/javascripts/reader-direct-navigation.js
+    defer: true
+  - path: assets/javascripts/series-experience.js
     defer: true
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
