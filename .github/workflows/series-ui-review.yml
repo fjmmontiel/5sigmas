@@ -1,22 +1,20 @@
 name: Series UI real browser review
 on:
-  push:
-    branches: ['ui/series-discovery-review-20260929']
-    paths:
-      - '.github/workflows/series-ui-review.yml'
-      - 'quality/series-ui-review-request.json'
   pull_request:
     paths:
+      - '.github/workflows/series-ui-review.yml'
       - 'hooks/series_experience.py'
       - 'hooks/series_guides.json'
       - 'docs/stylesheets/series-experience.css'
       - 'docs/assets/javascripts/series-experience.js'
       - 'scripts/*series*review*'
       - 'scripts/test_series_experience.py'
+      - 'scripts/audit_publication_contract.py'
+      - 'scripts/test_publication_nav.py'
 permissions:
   contents: read
 concurrency:
-  group: series-ui-review-${{ github.head_ref || github.ref }}
+  group: series-ui-review-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
   review:
@@ -28,12 +26,12 @@ jobs:
           path: candidate
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - uses: actions/checkout@v4
-        with:
-          repository: fjmmontiel/5sigmas
-          ref: 6209a852b804338e31b95f06bdf604baeb04cf40
-          path: baseline
-          persist-credentials: false
+      - name: Check out pinned public baseline with shared Git objects
+        run: |
+          set -euo pipefail
+          git -C candidate fetch --no-tags --depth=1 origin 6209a852b804338e31b95f06bdf604baeb04cf40
+          git -C candidate worktree add --detach ../baseline 6209a852b804338e31b95f06bdf604baeb04cf40
+          test "$(git -C baseline rev-parse HEAD)" = 6209a852b804338e31b95f06bdf604baeb04cf40
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -57,6 +55,7 @@ jobs:
           done
           cd "$GITHUB_WORKSPACE/candidate"
           node --check docs/assets/javascripts/series-experience.js
+          python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
       - name: Serve both exact builds and capture browser evidence
         env:

@@ -2,12 +2,15 @@
 from __future__ import annotations
 import argparse
 import hashlib
+import io
 import json
+import math
 import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from bs4 import BeautifulSoup
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 BASE_SHA = '6209a852b804338e31b95f06bdf604baeb04cf40'
@@ -16,7 +19,7 @@ BASE_SHA = '6209a852b804338e31b95f06bdf604baeb04cf40'
 def run(args):
     out=args.output;out.mkdir(parents=True,exist_ok=True)
     report={'baseline_sha':BASE_SHA,'candidate_sha':os.environ.get('REVIEW_HEAD_SHA','local-uncommitted'),
-            'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Playwright Chromium screenshots; two local HTTP builds plus a separately labelled live-site reference',
+            'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Playwright Chromium screenshots; two local HTTP builds plus a separately labelled live-site reference. Component images crop actual full-page screenshots taken at scroll zero, without changing page styles or hiding fixed headers.',
             'captures':[], 'checks':[], 'errors':[], 'console_errors':[]}
     hub=BeautifulSoup((args.site/'series/index.html').read_text(),'lxml')
     series=[{'id':p['id'],'title':p.select_one('.s5-series-hero h2').get_text(),
@@ -30,11 +33,8 @@ def run(args):
     with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True)
         def context(width,height,dark=False):
-            ctx=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,
-                                    color_scheme='dark' if dark else 'light',reduced_motion='reduce',locale='es-ES')
-            if dark:
-                ctx.add_init_script("localStorage.setItem('__palette',JSON.stringify({index:1,color:{scheme:'slate',primary:'black',accent:'white'}}));")
-            return ctx
+            return browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,
+                                       color_scheme='dark' if dark else 'light',reduced_motion='reduce',locale='es-ES')
         def goto(page,url):
             response=page.goto(url,wait_until='networkidle',timeout=60000)
             if response and response.status >= 400: raise RuntimeError(f'{response.status}: {url}')
@@ -46,15 +46,28 @@ def run(args):
                 page.evaluate("async () => {for(let y=0;y<document.body.scrollHeight;y+=650){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,40));}window.scrollTo(0,0);}")
                 page.wait_for_timeout(250)
             if selector:
+                # Locator screenshots scroll tall elements under the sticky header.
+                # Capture the untouched page at scroll zero, then crop its real pixels.
+                page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})")
+                page.wait_for_timeout(120)
                 element=page.locator(selector).first
-                element.scroll_into_view_if_needed()
-                page.wait_for_timeout(100)
-                element.screenshot(path=str(path),animations='disabled')
+                element.wait_for(state='visible')
+                box=element.bounding_box()
+                if not box: raise RuntimeError(f'No bounding box for {selector}')
+                pixels=page.screenshot(full_page=True,animations='disabled')
+                with Image.open(io.BytesIO(pixels)) as shot:
+                    crop=(max(0,math.floor(box['x'])),max(0,math.floor(box['y'])),
+                          min(shot.width,math.ceil(box['x']+box['width'])),
+                          min(shot.height,math.ceil(box['y']+box['height'])))
+                    if crop[2]<=crop[0] or crop[3]<=crop[1]: raise RuntimeError(f'Invalid capture bounds: {crop}')
+                    shot.crop(crop).save(path)
             else:
                 page.screenshot(path=str(path),full_page=full,animations='disabled')
             style=page.evaluate("() => {const h=document.querySelector('h1');return {bodyFont:getComputedStyle(document.body).fontFamily,headingFont:h?getComputedStyle(h).fontFamily:null,headerBackground:getComputedStyle(document.querySelector('.md-header')).backgroundColor,scheme:document.body.dataset.mdColorScheme};}")
             report['captures'].append({'file':path.name,'kind':kind,'url':page.url,'viewport':page.viewport_size,
-                                       'selector':selector,'full_page':full,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'style':style})
+                                       'selector':selector,'full_page':full,'component_crop':bool(selector),
+                                       'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'style':style})
+            print('CAPTURE',path.name,flush=True)
             save()
         def safe(name,fn):
             try:fn()
@@ -102,22 +115,32 @@ def run(args):
                             capture(page,f'{label}-after-mechanism-{i:02}-changed','candidate-interaction',selector=selector)
                             root.locator('[data-sx-reset]').click()
                             record(f'{label}-guide-{i}-reset',root.get_attribute('data-active-step')=='0')
-                            # Our components must fit; the legacy full-reference diagram is audited separately.
                             fits=root.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2')
                             record(f'{label}-guide-{i}-fits',fits)
                     safe(f'{label}-{variant}-chapter-{i}',chapter)
                 safe(f'{label}-{variant}-ver',lambda:(goto(page,base+'/visuales/'),capture(page,f'{label}-{variant}-ver','baseline' if variant=='before' else 'candidate')))
                 ctx.close()
-        # English coverage and a dark-mode reference, using the same implementation.
+        # Activate dark mode using the real site control; assert the DOM state.
         for width,height,label,dark in [(1440,1000,'desktop-en',False),(390,844,'mobile-en',False),(1440,1000,'desktop-dark',True)]:
             ctx=context(width,height,dark);page=ctx.new_page();prefix='' if dark else '/en'
-            safe(label+'-catalog',lambda:(goto(page,args.after+prefix+'/series/'),capture(page,label+'-after-catalog','candidate',full=True)))
+            page.on('pageerror',lambda error: report['console_errors'].append(str(error)))
+            def themed_catalog():
+                goto(page,args.after+prefix+'/series/')
+                if dark:
+                    if page.locator('body').get_attribute('data-md-color-scheme')!='slate':
+                        palette=page.locator('input[data-md-color-scheme="slate"]').first
+                        control_id=palette.get_attribute('id')
+                        if not control_id: raise RuntimeError('Dark palette control missing')
+                        page.locator('label[for="'+control_id+'"]').first.click()
+                    page.wait_for_function("document.body.dataset.mdColorScheme === 'slate'")
+                    record('desktop-dark-active-scheme',page.locator('body').get_attribute('data-md-color-scheme')=='slate')
+                capture(page,label+'-after-catalog','candidate',full=True)
+            safe(label+'-catalog',themed_catalog)
             record(label+'-catalog-count',page.locator('[data-sx-card]').count()==13)
             if not dark:
                 for s in guides:
                     safe(label+'-'+s['id'],lambda s=s:(goto(page,args.after+prefix+s['first']),record(label+'-'+s['id']+'-guide',page.locator('[data-sx-guide][data-sx-ready]').count()==1)))
             ctx.close()
-        # Narrow/mobile breakpoint and keyboard assertions.
         for width in [360,768]:
             ctx=context(width,900);page=ctx.new_page();goto(page,args.after+'/series/')
             record(f'width-{width}-gallery-fits',page.evaluate('document.documentElement.scrollWidth<=innerWidth+2'))
@@ -137,7 +160,6 @@ def run(args):
         record('coding-fail-real-calculation','FAIL' in root.locator('[data-sx-scene]').inner_text())
         root.locator('[data-input=factor]').select_option('1.21')
         record('coding-correction','PASS' in root.locator('[data-sx-scene]').inner_text())
-        # Live website is a distinct reference, not silently equated with the built baseline.
         safe('live-production-series',lambda:(goto(page,'https://5sigmas.com/series/'),capture(page,'production-live-series','live-production',full=True)))
         safe('live-production-ver',lambda:(goto(page,'https://5sigmas.com/visuales/'),capture(page,'production-live-ver','live-production')))
         ctx.close()
@@ -146,7 +168,6 @@ def run(args):
         record('no-js-chapter-links',page.locator('#serie-agentes-ia [data-sx-chapter-url]').count()==5 and page.locator('#serie-agentes-ia .s5-series-start').is_visible())
         capture(page,'desktop-no-js-fallback','candidate-no-javascript')
         nojs.close()
-        # Actual screen recording of user-driven UI state changes, not generated motion.
         videoctx=browser.new_context(viewport={'width':1440,'height':1000},record_video_dir=str(out/'recording'),record_video_size={'width':1440,'height':1000})
         page=videoctx.new_page()
         for s in [guides[1],guides[5]]:
@@ -154,7 +175,7 @@ def run(args):
             for step in range(4):root.locator(f'[data-sx-step="{step}"]').click();page.wait_for_timeout(500)
             root.locator('select').first.select_option(index=1);page.wait_for_timeout(800)
         videoctx.close();browser.close()
-    report['status']='PASS' if not report['errors'] and all(c['pass'] for c in report['checks']) else 'FAIL'
+    report['status']='PASS' if not report['errors'] and not report['console_errors'] and all(c['pass'] for c in report['checks']) else 'FAIL'
     (out/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     links='\n'.join(f'<figure><figcaption>{c["file"]} · {c["kind"]}</figcaption><a href="{c["file"]}"><img loading="lazy" src="{c["file"]}" style="width:100%"></a></figure>' for c in report['captures'])
     (out/'index.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><title>5sigmas · Capturas reales</title><body style="font:16px system-ui;max-width:1400px;margin:30px auto"><h1>5sigmas · Capturas reales de navegador</h1><p>Antes: '+BASE_SHA+' · Después: '+report['candidate_sha']+'</p>'+links+'</body></html>')
