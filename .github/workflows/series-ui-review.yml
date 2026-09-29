@@ -5,6 +5,7 @@ on:
       - '.github/workflows/series-ui-review.yml'
       - 'hooks/series_experience.py'
       - 'hooks/series_guides.json'
+      - 'hooks/series_*.py'
       - 'docs/stylesheets/series-experience.css'
       - 'docs/assets/javascripts/series-experience.js'
       - 'scripts/*series*review*'
@@ -26,6 +27,21 @@ jobs:
           path: candidate
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+      - name: Editable public-source snapshot for local review (no built site or fonts)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          root = Path('candidate')
+          out = root / 'artifacts/series-ui-review'
+          out.mkdir(parents=True, exist_ok=True)
+          extensions = {'.py','.js','.mjs','.css','.json','.md','.html','.yml','.yaml','.txt','.svg','.sh','.toml'}
+          excluded = {'.git','site','site-en','node_modules','.venv','venv','artifacts','__pycache__','.cache'}
+          with ZipFile(out / 'editable-public-source.zip', 'w', ZIP_DEFLATED) as archive:
+              for p in root.rglob('*'):
+                  if p.is_file() and p.suffix in extensions and not (set(p.relative_to(root).parts) & excluded):
+                      archive.write(p, p.relative_to(root))
+          PY
       - name: Check out pinned public baseline with shared Git objects
         run: |
           set -euo pipefail
