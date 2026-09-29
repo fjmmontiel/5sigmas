@@ -1,188 +1,166 @@
-"""Real Chromium captures of exact baseline/candidate builds; never synthesize a UI image."""
+"""Actual browser evidence for every redesigned series and advanced chapter.
+
+No generated images, DOM content replacement or screenshot-specific CSS.
+Component crops retain exactly the pixels of the normal rendered full page.
+"""
 from __future__ import annotations
-import argparse
-import hashlib
-import io
-import json
-import math
-import os
-import time
-from datetime import datetime, timezone
+import argparse,hashlib,io,json,math,os,subprocess
+from datetime import datetime,timezone
 from pathlib import Path
 from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import sync_playwright
-
-BASE_SHA = '6209a852b804338e31b95f06bdf604baeb04cf40'
-
+BASE_SHA='6209a852b804338e31b95f06bdf604baeb04cf40'
 
 def run(args):
-    out=args.output;out.mkdir(parents=True,exist_ok=True)
-    report={'baseline_sha':BASE_SHA,'candidate_sha':os.environ.get('REVIEW_HEAD_SHA','local-uncommitted'),
-            'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Playwright Chromium screenshots; two local HTTP builds plus a separately labelled live-site reference. Component images crop actual full-page screenshots taken at scroll zero, without changing page styles or hiding fixed headers.',
-            'captures':[], 'checks':[], 'errors':[], 'console_errors':[]}
-    hub=BeautifulSoup((args.site/'series/index.html').read_text(),'lxml')
-    series=[{'id':p['id'],'title':p.select_one('.s5-series-hero h2').get_text(),
-             'first':p.select_one('[data-sx-chapter-url]')['data-sx-chapter-url']} for p in hub.select('[data-sx-detail]')]
-    guides=series[6:]
-    def save():
-        (out/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-    def record(name,ok,detail=''):
-        report['checks'].append({'name':name,'pass':bool(ok),'detail':detail})
-        save()
-    with sync_playwright() as pw:
-        browser=pw.chromium.launch(headless=True)
-        def context(width,height,dark=False):
-            return browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,
-                                       color_scheme='dark' if dark else 'light',reduced_motion='reduce',locale='es-ES')
-        def goto(page,url):
-            response=page.goto(url,wait_until='networkidle',timeout=60000)
-            if response and response.status >= 400: raise RuntimeError(f'{response.status}: {url}')
-            page.evaluate('document.fonts.ready')
-            page.wait_for_timeout(180)
-        def capture(page,name,kind,selector=None,full=False):
-            path=out/(name+'.png')
-            if full:
-                page.evaluate("async () => {for(let y=0;y<document.body.scrollHeight;y+=650){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,40));}window.scrollTo(0,0);}")
-                page.wait_for_timeout(250)
-            if selector:
-                # Locator screenshots scroll tall elements under the sticky header.
-                # Capture the untouched page at scroll zero, then crop its real pixels.
-                page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})")
-                page.wait_for_timeout(120)
-                element=page.locator(selector).first
-                element.wait_for(state='visible')
-                box=element.bounding_box()
-                if not box: raise RuntimeError(f'No bounding box for {selector}')
-                pixels=page.screenshot(full_page=True,animations='disabled')
-                with Image.open(io.BytesIO(pixels)) as shot:
-                    crop=(max(0,math.floor(box['x'])),max(0,math.floor(box['y'])),
-                          min(shot.width,math.ceil(box['x']+box['width'])),
-                          min(shot.height,math.ceil(box['y']+box['height'])))
-                    if crop[2]<=crop[0] or crop[3]<=crop[1]: raise RuntimeError(f'Invalid capture bounds: {crop}')
-                    shot.crop(crop).save(path)
-            else:
-                page.screenshot(path=str(path),full_page=full,animations='disabled')
-            style=page.evaluate("() => {const h=document.querySelector('h1');return {bodyFont:getComputedStyle(document.body).fontFamily,headingFont:h?getComputedStyle(h).fontFamily:null,headerBackground:getComputedStyle(document.querySelector('.md-header')).backgroundColor,scheme:document.body.dataset.mdColorScheme};}")
-            report['captures'].append({'file':path.name,'kind':kind,'url':page.url,'viewport':page.viewport_size,
-                                       'selector':selector,'full_page':full,'component_crop':bool(selector),
-                                       'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'style':style})
-            print('CAPTURE',path.name,flush=True)
-            save()
-        def safe(name,fn):
-            try:fn()
-            except Exception as ex:
-                report['errors'].append({'name':name,'error':str(ex)[:1500]})
-                save()
-        for width,height,label in [(1440,1000,'desktop'),(390,844,'mobile')]:
-            for variant,base in [('before',args.before),('after',args.after)]:
-                ctx=context(width,height);page=ctx.new_page()
-                page.on('pageerror',lambda error: report['console_errors'].append(str(error)))
-                safe(f'{label}-{variant}-catalog',lambda: (goto(page,base+'/series/'),capture(page,f'{label}-{variant}-catalog','baseline' if variant=='before' else 'candidate',full=True)))
-                if variant=='after':
-                    record(f'{label}-13-visible',page.locator('[data-sx-card]:visible').count()==13)
-                    page.locator('[data-sx-search]').fill('inferencia')
-                    record(f'{label}-search',page.locator('[data-sx-card]:visible').count()>=1)
-                    page.locator('[data-sx-search]').fill('zzzzzz-no-matches')
-                    record(f'{label}-empty',page.locator('[data-sx-empty]').is_visible())
-                    page.locator('[data-sx-clear]').click()
-                    page.locator('[data-sx-filter="evaluate"]').click()
-                    record(f'{label}-filter',page.locator('[data-sx-card]:visible').count()==2)
-                    page.locator('[data-sx-filter="all"]').click()
-                    for i,s in enumerate(series):
-                        safe(f'{label}-{s["id"]}',lambda s=s,i=i:(goto(page,base+'/series/#'+s['id']),capture(page,f'{label}-after-series-{i+1:02}','candidate',full=True)))
-                    goto(page,base+'/series/')
-                    origin=page.locator('[data-sx-card] .s5-series-explore').nth(7)
-                    origin.click()
-                    record(f'{label}-detail-navigation',page.locator('#serie-agentes-ia').is_visible())
-                    page.go_back(wait_until='networkidle')
-                    record(f'{label}-history-back',page.locator('[data-sx-overview]').is_visible())
-                for i,s in enumerate(guides,7):
-                    def chapter(s=s,i=i):
-                        goto(page,base+s['first'])
-                        capture(page,f'{label}-{variant}-chapter-{i:02}','baseline' if variant=='before' else 'candidate',full=False)
-                        selector='[data-sx-guide]' if variant=='after' else '.anim-brand-shell'
-                        capture(page,f'{label}-{variant}-mechanism-{i:02}','baseline' if variant=='before' else 'candidate',selector=selector)
-                        if variant=='after':
-                            root=page.locator('[data-sx-guide]')
-                            for step in range(4):root.locator(f'[data-sx-step="{step}"]').click()
-                            record(f'{label}-guide-{i}-steps',root.get_attribute('data-active-step')=='3')
-                            control=root.locator('select').first
-                            if control.count():control.select_option(index=1)
-                            else:
-                                root.locator('input[type=range]').focus()
-                                page.keyboard.press('End')
-                            capture(page,f'{label}-after-mechanism-{i:02}-changed','candidate-interaction',selector=selector)
-                            root.locator('[data-sx-reset]').click()
-                            record(f'{label}-guide-{i}-reset',root.get_attribute('data-active-step')=='0')
-                            fits=root.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2')
-                            record(f'{label}-guide-{i}-fits',fits)
-                    safe(f'{label}-{variant}-chapter-{i}',chapter)
-                safe(f'{label}-{variant}-ver',lambda:(goto(page,base+'/visuales/'),capture(page,f'{label}-{variant}-ver','baseline' if variant=='before' else 'candidate')))
-                ctx.close()
-        # Activate dark mode using the real site control; assert the DOM state.
-        for width,height,label,dark in [(1440,1000,'desktop-en',False),(390,844,'mobile-en',False),(1440,1000,'desktop-dark',True)]:
-            ctx=context(width,height,dark);page=ctx.new_page();prefix='' if dark else '/en'
-            page.on('pageerror',lambda error: report['console_errors'].append(str(error)))
-            def themed_catalog():
-                goto(page,args.after+prefix+'/series/')
-                if dark:
-                    if page.locator('body').get_attribute('data-md-color-scheme')!='slate':
-                        palette=page.locator('input[data-md-color-scheme="slate"]').first
-                        control_id=palette.get_attribute('id')
-                        if not control_id: raise RuntimeError('Dark palette control missing')
-                        page.locator('label[for="'+control_id+'"]').first.click()
-                    page.wait_for_function("document.body.dataset.mdColorScheme === 'slate'")
-                    record('desktop-dark-active-scheme',page.locator('body').get_attribute('data-md-color-scheme')=='slate')
-                capture(page,label+'-after-catalog','candidate',full=True)
-            safe(label+'-catalog',themed_catalog)
-            record(label+'-catalog-count',page.locator('[data-sx-card]').count()==13)
-            if not dark:
-                for s in guides:
-                    safe(label+'-'+s['id'],lambda s=s:(goto(page,args.after+prefix+s['first']),record(label+'-'+s['id']+'-guide',page.locator('[data-sx-guide][data-sx-ready]').count()==1)))
-            ctx.close()
-        for width in [360,768]:
-            ctx=context(width,900);page=ctx.new_page();goto(page,args.after+'/series/')
-            record(f'width-{width}-gallery-fits',page.evaluate('document.documentElement.scrollWidth<=innerWidth+2'))
-            for s in guides:
-                goto(page,args.after+s['first'])
-                root=page.locator('[data-sx-guide]')
-                record(f'width-{width}-{s["id"]}-fits',root.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2'))
-            ctx.close()
-        ctx=context(1440,1000);page=ctx.new_page()
-        goto(page,args.after+guides[1]['first'])
-        root=page.locator('[data-sx-guide]');root.locator('[data-sx-next]').focus();page.keyboard.press('Enter')
-        record('keyboard-next',root.get_attribute('data-active-step')=='1')
-        goto(page,args.after+guides[5]['first']);root=page.locator('[data-sx-guide]')
-        root.locator('[data-input=input]').select_option('2048');root.locator('[data-input=output]').select_option('128')
-        record('inference-arithmetic',abs(float(root.get_attribute('data-ttft'))-4.13125)<1e-6 and abs(float(root.get_attribute('data-total'))-8.1)<1e-6)
-        goto(page,args.after+guides[3]['first']);root=page.locator('[data-sx-guide]');root.locator('[data-sx-step="2"]').click()
-        record('coding-fail-real-calculation','FAIL' in root.locator('[data-sx-scene]').inner_text())
-        root.locator('[data-input=factor]').select_option('1.21')
-        record('coding-correction','PASS' in root.locator('[data-sx-scene]').inner_text())
-        safe('live-production-series',lambda:(goto(page,'https://5sigmas.com/series/'),capture(page,'production-live-series','live-production',full=True)))
-        safe('live-production-ver',lambda:(goto(page,'https://5sigmas.com/visuales/'),capture(page,'production-live-ver','live-production')))
-        ctx.close()
-        nojs=browser.new_context(java_script_enabled=False,viewport={'width':1440,'height':1000});page=nojs.new_page();goto(page,args.after+'/series/')
-        page.locator('#serie-agentes-ia > summary').click()
-        record('no-js-chapter-links',page.locator('#serie-agentes-ia [data-sx-chapter-url]').count()==5 and page.locator('#serie-agentes-ia .s5-series-start').is_visible())
-        capture(page,'desktop-no-js-fallback','candidate-no-javascript')
-        nojs.close()
-        videoctx=browser.new_context(viewport={'width':1440,'height':1000},record_video_dir=str(out/'recording'),record_video_size={'width':1440,'height':1000})
-        page=videoctx.new_page()
-        for s in [guides[1],guides[5]]:
-            goto(page,args.after+s['first']);root=page.locator('[data-sx-guide]');root.scroll_into_view_if_needed();page.wait_for_timeout(600)
-            for step in range(4):root.locator(f'[data-sx-step="{step}"]').click();page.wait_for_timeout(500)
-            root.locator('select').first.select_option(index=1);page.wait_for_timeout(800)
-        videoctx.close();browser.close()
-    report['status']='PASS' if not report['errors'] and not report['console_errors'] and all(c['pass'] for c in report['checks']) else 'FAIL'
-    (out/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-    links='\n'.join(f'<figure><figcaption>{c["file"]} · {c["kind"]}</figcaption><a href="{c["file"]}"><img loading="lazy" src="{c["file"]}" style="width:100%"></a></figure>' for c in report['captures'])
-    (out/'index.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><title>5sigmas · Capturas reales</title><body style="font:16px system-ui;max-width:1400px;margin:30px auto"><h1>5sigmas · Capturas reales de navegador</h1><p>Antes: '+BASE_SHA+' · Después: '+report['candidate_sha']+'</p>'+links+'</body></html>')
-    print(json.dumps({'status':report['status'],'captures':len(report['captures']),'checks':len(report['checks']),'errors':report['errors']},ensure_ascii=False))
-    if report['status']!='PASS':raise SystemExit(1)
-
+ out=args.output;out.mkdir(parents=True,exist_ok=True)
+ report={'baseline_sha':BASE_SHA,'candidate_sha':os.getenv('REVIEW_HEAD_SHA','local-uncommitted'),'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Exact source builds served on separate localhost ports in GitHub Actions. Playwright Chromium. Component images are pixel crops of full-page captures; no DOM/style substitution. Live production is a separately labelled reference.','captures':[],'checks':[],'errors':[],'console_errors':[],'baseline_console_errors':[],'live_reference_errors':[],'inventory':[]}
+ hub=BeautifulSoup((args.site/'series/index.html').read_text(),'lxml')
+ series=[]
+ for i,detail in enumerate(hub.select('[data-sx-detail]'),1):
+  chapters=[]
+  for j,c in enumerate(detail.select('[data-sx-chapter-url]'),1):
+   route=c['data-sx-chapter-url'];source=BeautifulSoup((args.site/route.strip('/')/'index.html').read_text(),'lxml');g=source.select_one('[data-sx-guide]')
+   chapters.append({'number':j,'route':route,'title':c.select_one('h3').get_text(' ',strip=True),'view':g.get('data-view') if g else None})
+  original=detail.select_one('.sx-original-intro')
+  series.append({'number':i,'id':detail['id'],'title':detail.select_one('.sx-detail-heading h2').get_text(' ',strip=True),'before':original['href'] if original else chapters[0]['route'],'chapters':chapters})
+ report['inventory']=series
+ def save(): (out/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+ def check(name,ok,detail=None):
+  report['checks'].append({'name':name,'pass':bool(ok),'detail':detail});save()
+ def safe(name,fn):
+  try: fn()
+  except Exception as e: report['errors'].append({'name':name,'error':str(e)[:1600]});save();print('ERROR',name,str(e)[:200],flush=True)
+ with sync_playwright() as pw:
+  browser=pw.chromium.launch(headless=True)
+  def context(width=1440,height=1000,**kw):
+   return browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,reduced_motion='reduce',locale='es-ES',**kw)
+  def page_for(ctx,baseline=False):
+   p=ctx.new_page();p.set_default_timeout(15000)
+   p.on('pageerror',lambda e: report['baseline_console_errors' if baseline else 'console_errors'].append({'url':p.url,'error':str(e)}))
+   return p
+  def goto(p,url):
+   r=p.goto(url,wait_until='networkidle',timeout=60000)
+   if r and r.status>=400: raise RuntimeError(f'{r.status} {url}')
+   p.evaluate('document.fonts.ready');p.wait_for_timeout(120)
+  def capture(p,name,kind,selector=None,full=False,**metadata):
+   path=out/(name+'.png')
+   if full:
+    p.evaluate("async()=>{for(let y=0;y<document.body.scrollHeight;y+=750){scrollTo(0,y);await new Promise(r=>setTimeout(r,15));}scrollTo(0,0);}")
+    p.wait_for_timeout(150)
+   bounds=None
+   if selector:
+    p.evaluate("scrollTo({top:0,left:0,behavior:'instant'})");p.wait_for_timeout(80)
+    el=p.locator(selector).first;el.wait_for(state='visible');b=el.bounding_box()
+    if not b: raise RuntimeError(f'Missing bounds {selector}')
+    with Image.open(io.BytesIO(p.screenshot(full_page=True,animations='disabled'))) as image:
+     bounds=(max(0,math.floor(b['x'])),max(0,math.floor(b['y'])),min(image.width,math.ceil(b['x']+b['width'])),min(image.height,math.ceil(b['y']+b['height'])))
+     if bounds[2]<=bounds[0] or bounds[3]<=bounds[1]: raise RuntimeError(str(bounds))
+     image.crop(bounds).save(path)
+   else: p.screenshot(path=str(path),full_page=full,animations='disabled')
+   style=p.evaluate("()=>{const h=document.querySelector('h1'),bar=document.querySelector('.md-header');return {bodyFont:getComputedStyle(document.body).fontFamily,headingFont:h?getComputedStyle(h).fontFamily:null,headerBackground:bar?getComputedStyle(bar).backgroundColor:null,scheme:document.body.dataset.mdColorScheme};}")
+   report['captures'].append({'file':path.name,'kind':kind,'url':p.url,'viewport':p.viewport_size,'selector':selector,'bounds':bounds,'full_page':full,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'style':style,**metadata});save();print('CAPTURE',name,flush=True)
+  for width,height,label in [(1440,1000,'desktop'),(390,844,'mobile')]:
+   for variant,base in [('before',args.before),('after',args.after)]:
+    ctx=context(width,height);p=page_for(ctx,variant=='before')
+    def catalogue():
+     goto(p,base+'/series/');capture(p,f'{label}-{variant}-catalog',variant,full=True,surface='catalog')
+     p.evaluate('scrollTo(0,0)');capture(p,f'{label}-{variant}-catalog-viewport',variant,surface='catalog-viewport')
+     if variant=='after':
+      check(label+'-all13',p.locator('[data-sx-card]:visible').count()==13)
+      check(label+'-catalog-fits',p.evaluate('document.documentElement.scrollWidth<=innerWidth+2'))
+      p.locator('[data-sx-search]').fill('inferencia');check(label+'-search',p.locator('[data-sx-card]:visible').count()>=1 and p.locator('[data-sx-card][data-series-number="12"]').is_visible())
+      capture(p,f'{label}-after-search',variant,surface='search')
+      p.locator('[data-sx-search]').fill('zz-no-such-concept');check(label+'-empty',p.locator('[data-sx-empty]').is_visible())
+      p.locator('[data-sx-clear]').click();p.locator('[data-sx-filter="evaluate"]').click();check(label+'-filter',p.locator('[data-sx-card]:visible').count()==3)
+      p.locator('[data-sx-filter="all"]').click();p.goto(base+'/series/#mapa',wait_until='networkidle');capture(p,f'{label}-after-map',variant,selector='#mapa',surface='map')
+    safe(label+'-'+variant+'-catalog',catalogue)
+    for s in series:
+     def detail(s=s):
+      goto(p,base+(('/series/#'+s['id']) if variant=='after' else s['before']))
+      capture(p,f'{label}-{variant}-series-{s["number"]:02}',variant,full=True,surface='series',series=s['number'])
+     safe(f'{label}-{variant}-series-{s["number"]}',detail)
+    for s in series[6:]:
+     for c in s['chapters']:
+      def lesson(s=s,c=c):
+       ident=f'{s["number"]:02}-{c["number"]:02}';goto(p,base+c['route'])
+       capture(p,f'{label}-{variant}-chapter-{ident}',variant,surface='chapter',series=s['number'],chapter=c['number'])
+       selector='[data-sx-guide]' if variant=='after' else '.anim-brand-shell, .aix-loop, .s5v'
+       if not p.locator(selector).count(): selector='article.md-content__inner'
+       capture(p,f'{label}-{variant}-mechanism-{ident}',variant,selector=selector,surface='mechanism',series=s['number'],chapter=c['number'],view=c['view'],state='initial')
+       if variant=='after':
+        g=p.locator('[data-sx-guide]');initial=g.locator('[data-sx-scene]').inner_text()
+        g.locator('[data-sx-step="3"]').click();final=g.locator('[data-sx-scene]').inner_text()
+        check(f'{label}-{ident}-steps',g.get_attribute('data-step')=='3' and initial!=final)
+        capture(p,f'{label}-after-mechanism-{ident}-result',variant,selector=selector,surface='mechanism',series=s['number'],chapter=c['number'],view=c['view'],state='result')
+        g.locator('[data-sx-scenario="1"]').click();other=g.locator('[data-sx-scene]').inner_text()
+        check(f'{label}-{ident}-scenario',g.get_attribute('data-scenario')=='1' and final!=other)
+        capture(p,f'{label}-after-mechanism-{ident}-alternative',variant,selector=selector,surface='mechanism',series=s['number'],chapter=c['number'],view=c['view'],state='alternative')
+        check(f'{label}-{ident}-fit',g.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2'))
+        g.locator('[data-sx-tab="original"]').click();check(f'{label}-{ident}-original',g.locator('#s5-diagrama-original').is_visible() and not g.locator('#sx-guided-panel').is_visible())
+        g.locator('[data-sx-tab="guided"]').click();g.locator('[data-sx-reset]').click();check(f'{label}-{ident}-reset',g.get_attribute('data-step')=='0' and g.get_attribute('data-scenario')=='0' and g.locator('[data-sx-scene]').inner_text()==initial)
+        check(f'{label}-{ident}-reader',p.locator('.sx-reader-context a').count()==2 and p.locator('.sx-reader-next a').count()==2)
+      safe(f'{label}-{variant}-{s["number"]}-{c["number"]}',lesson)
+    for path,name in [('/visuales/','ver'),('/videos/','videos'),('/videos/series/agentes-ia/01-que-es-un-agente/','watch')]:
+     safe(label+'-'+variant+'-'+name,lambda path=path,name=name:(goto(p,base+path),capture(p,f'{label}-{variant}-{name}',variant,surface=name)))
+    ctx.close()
+  # English and narrow widths: exercise every state without extrapolating from one pilot.
+  for width,prefix in [(1440,'/en'),(390,'/en'),(360,''),(768,'')]:
+   ctx=context(width,1000);p=page_for(ctx)
+   for s in series[6:]:
+    for c in s['chapters']:
+     def translated(s=s,c=c):
+      goto(p,args.after+prefix+c['route']);g=p.locator('[data-sx-guide]');g.locator('[data-sx-step="3"]').click();a=g.locator('[data-sx-scene]').inner_text();g.locator('[data-sx-scenario="1"]').click();b=g.locator('[data-sx-scene]').inner_text()
+      check(f'{width}-{prefix}-{c["view"]}-scenario',a!=b)
+      check(f'{width}-{prefix}-{c["view"]}-fit',g.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2'))
+      if prefix and c['number']==1: capture(p,f'{width}-en-after-mechanism-{s["number"]:02}', 'after',selector='[data-sx-guide]',surface='mechanism-en',series=s['number'],chapter=c['number'])
+     safe(f'{width}-{prefix}-{c["view"]}',translated)
+   safe(f'{width}-{prefix}-catalog',lambda:(goto(p,args.after+prefix+'/series/'),capture(p,f'{width}-{prefix.strip("/") or "es"}-after-catalog','after',full=True,surface='catalog-extra')))
+   ctx.close()
+  # Real dark-mode switch, keyboard, player, history, no-JS and a recording.
+  ctx=context();p=page_for(ctx)
+  def functional():
+   goto(p,args.after+'/series/');p.locator('[data-sx-card] .sx-card-open').nth(7).click();check('card-opens-series',p.locator('#serie-agentes-ia').is_visible())
+   p.go_back(wait_until='networkidle');check('back-to-catalog',p.locator('[data-sx-overview]').is_visible())
+   goto(p,args.after+'/series/#serie-agentes-ia');p.locator('#serie-agentes-ia [data-sx-play]').click();v=p.locator('#serie-agentes-ia video');p.wait_for_function("document.querySelector('#serie-agentes-ia video').currentTime > 0",timeout=30000);check('approved-video-plays',v.evaluate('(v)=>!v.paused && v.currentTime>0'));capture(p,'desktop-after-inline-playback','after',surface='inline-playback')
+   p.locator('#serie-agentes-ia [data-sx-preview]').last.click();p.wait_for_function("document.querySelector('#serie-agentes-ia video').currentTime > 0",timeout=30000);check('chapter-preview-in-place',p.locator('#serie-agentes-ia .sx-chapter.is-current').count()==1)
+   goto(p,args.after+series[7]['chapters'][0]['route']);g=p.locator('[data-sx-guide]');g.locator('[data-sx-next]').focus();p.keyboard.press('Enter');check('keyboard-next',g.get_attribute('data-step')=='1');g.locator('[data-sx-tab="guided"]').focus();p.keyboard.press('ArrowRight');check('keyboard-tab',g.locator('#s5-diagrama-original').is_visible())
+   g.locator('[data-sx-tab="guided"]').click();g.locator('[data-sx-fullscreen]').click();check('fullscreen',p.evaluate('!!document.fullscreenElement'));p.keyboard.press('Escape')
+   goto(p,args.after+'/series/');check('resume-real-last-reading',p.locator('[data-sx-resume]').is_visible())
+  safe('functional',functional)
+  def dark():
+   goto(p,args.after+'/series/');id_=p.locator('input[data-md-color-scheme="slate"]').first.get_attribute('id');p.locator(f'label[for="{id_}"]').first.click();p.wait_for_function("document.body.dataset.mdColorScheme==='slate'");check('real-dark-mode',True);capture(p,'desktop-dark-after-catalog','after',full=True,surface='catalog-dark')
+   for s in series[6:]:
+    goto(p,args.after+s['chapters'][0]['route']);capture(p,f'desktop-dark-after-mechanism-{s["number"]:02}','after',selector='[data-sx-guide]',surface='mechanism-dark',series=s['number'],chapter=1)
+  safe('dark',dark);ctx.close()
+  nojs=browser.new_context(java_script_enabled=False,viewport={'width':1440,'height':1000});p=nojs.new_page()
+  def fallback():
+   goto(p,args.after+'/series/');p.locator('#serie-agentes-ia>summary').click();check('nojs-series-links',p.locator('#serie-agentes-ia [data-sx-chapter-url]').count()==5);capture(p,'desktop-after-nojs-series','after',surface='nojs')
+   goto(p,args.after+series[7]['chapters'][0]['route']);check('nojs-original-visible',p.locator('#s5-diagrama-original').is_visible());check('nojs-step-explanation',p.locator('[data-sx-guide] noscript li').count()==4)
+  safe('nojs',fallback);nojs.close()
+  live=context();p=live.new_page()
+  for route,name in [('/series/','series'),('/visuales/','ver')]:
+   try: goto(p,'https://5sigmas.com'+route);capture(p,'production-live-'+name,'live-production',full=True,surface='live-'+name)
+   except Exception as e: report['live_reference_errors'].append(str(e))
+  live.close()
+  recording=browser.new_context(viewport={'width':1440,'height':1000},record_video_dir=str(out/'recording'),record_video_size={'width':1440,'height':1000},reduced_motion='no-preference');p=recording.new_page()
+  def film():
+   goto(p,args.after+'/series/');p.wait_for_timeout(900);p.locator('[data-sx-card] .sx-card-open').nth(7).click();p.wait_for_timeout(900)
+   for s in series[6:]:
+    goto(p,args.after+s['chapters'][0]['route']);g=p.locator('[data-sx-guide]');g.scroll_into_view_if_needed();p.wait_for_timeout(400)
+    for step in range(4): g.locator(f'[data-sx-step="{step}"]').click();p.wait_for_timeout(550)
+    g.locator('[data-sx-scenario="1"]').click();p.wait_for_timeout(1100)
+   goto(p,args.after+'/series/#mapa');p.wait_for_timeout(1100)
+  safe('recording',film);recording.close();browser.close()
+ for file in (out/'recording').glob('*.webm'):
+  subprocess.run(['ffmpeg','-y','-loglevel','error','-i',str(file),'-c:v','libx264','-pix_fmt','yuv420p','-movflags','+faststart',str(out/'real-interactions.mp4')],check=True);break
+ # Compare computed brand properties only for the exact same default theme.
+ for mode in ['desktop','mobile']:
+  a=next((c for c in report['captures'] if c['file']==f'{mode}-before-catalog.png'),None);b=next((c for c in report['captures'] if c['file']==f'{mode}-after-catalog.png'),None)
+  if a and b: check(mode+'-brand-preserved',a['style']==b['style'],{'before':a['style'],'after':b['style']})
+ report['status']='PASS' if not report['errors'] and not report['console_errors'] and all(c['pass'] for c in report['checks']) else 'FAIL';save()
+ print(json.dumps({'status':report['status'],'captures':len(report['captures']),'checks':len(report['checks']),'failed_checks':[c for c in report['checks'] if not c['pass']],'errors':report['errors'],'console_errors':report['console_errors'][:10]},ensure_ascii=False),flush=True)
+ if report['status']!='PASS':raise SystemExit(1)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--before',default='http://127.0.0.1:8000');p.add_argument('--after',default='http://127.0.0.1:8001');p.add_argument('--site',type=Path,default=Path('site'));p.add_argument('--output',type=Path,default=Path('artifacts/series-ui-review'))
-    run(p.parse_args())
+ p=argparse.ArgumentParser();p.add_argument('--before',default='http://127.0.0.1:8000');p.add_argument('--after',default='http://127.0.0.1:8001');p.add_argument('--site',type=Path,default=Path('site'));p.add_argument('--output',type=Path,default=Path('artifacts/series-ui-review'));run(p.parse_args())

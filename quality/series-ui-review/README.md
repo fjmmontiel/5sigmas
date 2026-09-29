@@ -1,42 +1,30 @@
-# Series UI review — real source, not generated mockups
+# Series experience v2 — review only
 
-Review-only branch. Do not merge or deploy before the owner's visual approval.
+Do not merge or deploy without owner visual approval. This revision replaces the rejected v1 gallery/guides, not the original editorial articles or approved video files.
 
-Baseline: `6209a852b804338e31b95f06bdf604baeb04cf40` (exact source archive tree verified locally).
+## Scope
 
-## Implemented scope
+- Build-derived catalogue of all 13 series / 67 chapters, in Spanish and English.
+- Mechanism-only SVG cover compositions instead of tiny title slides.
+- Four explicit learning paths, optional prerequisites and reasoned next-series recommendations.
+- In-page series presentation, native playback of approved media and chapter selection without leaving the series.
+- Forty causal teaching scenes: one for every substantive chapter in series 7–13, in both locales. Each has four stages and two explicit reproducible scenarios.
+- An original-diagram tab preserves the existing leading technical visualization rather than stacking two large panels. All original prose and remaining diagrams stay in the page.
+- Clear parent-series and next-chapter links; last-reading state is not labelled completion.
+- Existing site header, font families, theme palettes, original media and URLs are retained. The existing top-level Learn label now directly identifies Series.
 
-- A build-derived, bilingual gallery: all 13 series and 67 substantive chapters; no invented title/count/media inventory.
-- Search and discovery facets, direct-addressable in-page series presentations, real chapter cards and verified watch links.
-- Back/history navigation, retained filters, optional existing last-reading state; no login or invented completion progress.
-- Contextual discovery for the seven advanced series and the existing visual/video hubs.
-- Seven additive, user-controlled educational guides, one at the opening substantive chapter of each series 7–13. They preserve the existing complete diagrams and article prose. This is not a claim that all 40 advanced chapters received bespoke new simulations.
-- No video regeneration or modification; no typography, header, logo, global palette or production infrastructure redesign.
+## Scientific boundary
 
-## Browser evidence
+These are deterministic educational scenarios, not live agents, security guarantees or vendor benchmarks. Latencies, costs, sample datasets and simplified context blocks are labelled synthetic. The diagrams and primary-source explanations remain accessible. Different metrics inspect the same execution rather than altering its underlying facts.
 
-`Series UI real browser review` strictly builds the pinned baseline and candidate in ES/EN, serves them on separate local HTTP ports, and takes real Chromium screenshots. It also tries two clearly separated live-production reference captures.
+## Validation
 
-The artifact includes PNGs, a native browser screen recording, an HTML contact sheet and a manifest with candidate/base SHA, URL, viewport, selector, capture hash, computed typography/header style, checks and errors. No synthetic image generation is used. A screenshot cannot establish learning outcomes.
+`node scripts/test_series_scenes.mjs` covers 80 bilingual scene cases / 640 states, meaningful stage/scenario changes, determinism and invalid values.
 
-Local-container Chromium forbids even localhost/file navigation. Source edits and strict builds happen locally; the real browser runs on a GitHub Actions runner against the same source. The workflow does not publish the site.
+`python scripts/test_series_experience.py` checks the built inventories, real media/links, prerequisites, original-diagram preservation, controls, locales and reader navigation.
 
-Run locally:
+`python scripts/capture_series_ui_review.py` uses two local HTTP servers for the exact production baseline and candidate, then records the catalogue, 13 series and all 40 advanced chapters on desktop/mobile. It checks English, narrow widths, scenario changes, reset, original-diagram tabs, keyboard, fullscreen, history, actual video playback and no-JavaScript access. Live production captures are separate references. Every screenshot has URL, source SHA, viewport and checksum provenance.
 
-```sh
-pip install -r requirements.txt
-pip install playwright==1.55.0 beautifulsoup4==4.13.5 lxml==6.0.2
-playwright install chromium
-mkdocs build --clean --strict
-python scripts/prepare_locale.py --locale en
-S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
-python scripts/test_series_experience.py
-```
+Captures are actual browser pixels. Component crops do not replace page content, hide the header or change styles. Static comparisons use reduced motion; a separate recording demonstrates motion and state changes. A browser PASS is not proof of learning outcomes or owner approval.
 
-Use `scripts/capture_series_ui_review.py` with separate `--before` and `--after` local servers to reproduce browser evidence.
-
-## Intentional boundaries
-
-The original scientific Markdown, media, source diagrams and routes stay unchanged. Existing SEO experiments are not evaluated or declared successful. A global navigation change should be logged as an intervention before any future production rollout. All new calculated values/scenarios are explicitly labelled educational/synthetic, not live model execution, security guarantees or benchmarks.
-
-The new gallery is generated at build time. Without JavaScript its server-rendered details and chapter links remain accessible. Existing reader/library components are retained. The one-day screenshot artifact has a single explicit storage-policy exception for the owner's requested pixel review; it contains no built-site archive or fonts.
+The one-day `series-ui-real-browser-evidence` artifact is the existing owner-authorized visual-review exception. It contains no built-site archive or font files. New evidence and CI status are recorded in PR #378 after execution.
