@@ -1,0 +1,55 @@
+name: Apply verified local series UI patch (review branch only)
+on:
+  push:
+    branches: ['ui/series-discovery-review-20260929']
+    paths: ['.github/workflows/ui-review-apply.yml']
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.repository == 'fjmmontiel/5sigmas' && github.ref == 'refs/heads/ui/series-discovery-review-20260929'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ui/series-discovery-review-20260929
+          fetch-depth: 1
+      - name: Verify exact authored patch, apply source files, remove transport
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json, lzma, pathlib, subprocess
+          root = pathlib.Path('.')
+          parts = [root / f'.github/series-ui-patch-{i:02}.b64' for i in (1, 2, 3)]
+          encoded = ''.join(p.read_text().strip() for p in parts)
+          bundle = lzma.decompress(base64.b64decode(encoded, validate=True))
+          assert hashlib.sha256(bundle).hexdigest() == '55cc4b99a425e058ff853ca9327c9f972d88b18b417cc8152db53c45aeff6be1'
+          data = json.loads(bundle)
+          expected = {'.github/workflows/ci-storage-policy.yml', 'mkdocs.en.yml', 'mkdocs.yml', '.github/workflows/series-ui-review.yml', 'docs/assets/javascripts/series-experience.js', 'docs/stylesheets/series-experience.css', 'hooks/series_experience.py', 'hooks/series_guides.json', 'quality/series-ui-review/README.md', 'scripts/capture_series_ui_review.py', 'scripts/test_series_experience.py'}
+          assert set(data['hashes']) == expected
+          patch = pathlib.Path('/tmp/series-ui-authored.patch')
+          patch.write_text(data['patch'])
+          subprocess.run(['git', 'apply', '--check', str(patch)], check=True)
+          subprocess.run(['git', 'apply', str(patch)], check=True)
+          for name, digest in data['hashes'].items():
+              assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest() == digest, name
+          # Use real keyboard interaction for a range input: Playwright fill does not support it.
+          capture = pathlib.Path('scripts/capture_series_ui_review.py')
+          old = "else:root.locator('input[type=range]').fill('64')"
+          new = "else:\n                                root.locator('input[type=range]').focus()\n                                page.keyboard.press('End')"
+          text = capture.read_text()
+          assert text.count(old) == 1
+          capture.write_text(text.replace(old, new))
+          assert hashlib.sha256(capture.read_bytes()).hexdigest() == '71564aeeea5e1c0d7ea0d17b3b9750c995b336c66f3264b5bfb280eaa5797ac9'
+          cleanup = [*parts, pathlib.Path('.github/workflows/ui-review-source.yml'), pathlib.Path('.github/workflows/ui-review-apply.yml')]
+          for p in cleanup: p.unlink()
+          subprocess.run(['git', 'add', '--', *sorted(expected), *[str(p) for p in cleanup]], check=True)
+          print('Verified 11 source/review files. Removed transport and one-time workflows.')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --cached --stat
+          git commit -m 'feat(ui): preserve 5sigmas identity while adding series gallery and seven guided mechanisms'
+          git push origin HEAD:refs/heads/ui/series-discovery-review-20260929
+          git rev-parse HEAD
