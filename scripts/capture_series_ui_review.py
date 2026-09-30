@@ -122,7 +122,7 @@ def run(args):
       goto(p,base+path)
       if variant=='after' and name=='ver':
        entries=p.locator('.s5-visual-hub__jump .sx-series-entry')
-       check(label+'-ver-series-entry',entries.count()==1 and new_url(entries.first.get_attribute('href')).path.rstrip('/')==(base+'/series').rstrip('/'))
+       check(label+'-ver-series-entry',entries.count()==1 and urlparse(entries.first.get_attribute('href') or '').path.rstrip('/')=='/series')
       capture(p,f'{label}-{variant}-{name}',variant,surface=name)
      safe(label+'-'+variant+'-'+name,cross_surface)
     ctx.close()
