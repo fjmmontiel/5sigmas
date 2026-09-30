@@ -190,7 +190,7 @@ def on_page_content(html,page,config,files,**kwargs):
         if src == 'visuales/index.md' and 's5-visual-hub__jump' in html:
             html=re.sub(
                 r'<a\s+href=["\']#(?:rutas|routes)["\'][^>]*>.*?</a>',
-                lambda _: f'<a href="{PREFIX}/series/">{t("Series","Series")}</a>',
+                lambda _: f'<a class="sx-series-entry" href="{PREFIX}/series/">{t("Series","Series")}</a>',
                 html,
                 count=1,
                 flags=re.S,
