@@ -184,13 +184,17 @@ def on_page_content(html,page,config,files,**kwargs):
     src=page.file.src_uri
     if src=='series/index.md': return gallery()
     if src in {'visuales/index.md','videos/index.md'}:
-        # The visual hub already has a compact jump navigator. Reuse it so Series
-        # discovery is visible without pushing the first video below the fold.
+        # Ver already has a compact three-action jump navigator. Turn its
+        # "guided paths" action into the canonical Series entry instead of adding
+        # a second row of controls that pushes the first video below the fold.
         if src == 'visuales/index.md' and 's5-visual-hub__jump' in html:
-            links=(f'<a class="sx-series-entry" href="{PREFIX}/series/">{t("Series","Series")}</a>'
-                   f'<a class="sx-series-entry" href="{PREFIX}/series/#mapa">{t("Mapa de aprendizaje","Learning map")}</a>')
-            html=re.sub(r"(<nav[^>]*class=['\"][^'\"]*s5-visual-hub__jump[^'\"]*['\"][^>]*>.*?)(</nav>)",
-                        lambda m:m[1]+links+m[2],html,count=1,flags=re.S)
+            html=re.sub(
+                r'<a\s+href=["\']#(?:rutas|routes)["\'][^>]*>.*?</a>',
+                lambda _: f'<a href="{PREFIX}/series/">{t("Series","Series")}</a>',
+                html,
+                count=1,
+                flags=re.S,
+            )
         else:
             link=f'<nav class="sx-discovery-banner"><span>{t("¿Quieres entender el tema completo?","Want to understand the whole topic?")}</span><a href="{PREFIX}/series/">{t("Explora las 13 series","Explore all 13 series")} →</a><a href="{PREFIX}/series/#mapa">{t("Encuentra tu recorrido","Find your path")}</a></nav>'
             html=re.sub(r'(</h1>)',lambda m:m[0]+link,html,count=1)

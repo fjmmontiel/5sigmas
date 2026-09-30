@@ -86,9 +86,8 @@
   .sx-lab [data-sx-panel=original]{padding:0;}
 }
 
-/* Keep cross-surface Series discovery within the existing Ver navigation on
-   compact screens. The fallback banner is used by generated video indexes. */
-.s5-visual-hub__jump .sx-series-entry{font-weight:700;}
+/* The Ver hub reuses its original three-action navigator for Series.
+   Generated video indexes still use the compact fallback banner. */
 @media(max-width:700px){
   .sx-discovery-banner{margin:4px 0 8px;padding:6px 0;gap:6px 12px;}
   .sx-discovery-banner>span{display:none;}
