@@ -10,6 +10,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import sync_playwright, expect
+from urllib.parse import urlparse
 BASE_SHA=os.getenv('REVIEW_BASE_SHA','unknown-base')
 
 def run(args):
@@ -119,7 +120,9 @@ def run(args):
     for path,name in [('/visuales/','ver'),('/videos/','videos'),('/videos/series/agentes-ia/01-que-es-un-agente/','watch')]:
      def cross_surface(path=path,name=name):
       goto(p,base+path)
-      if variant=='after' and name=='ver': check(label+'-ver-series-entry',p.locator('.s5-visual-hub__jump .sx-series-entry').count()==2)
+      if variant=='after' and name=='ver':
+       entries=p.locator('.s5-visual-hub__jump .sx-series-entry')
+       check(label+'-ver-series-entry',entries.count()==1 and new_url(entries.first.get_attribute('href')).path.rstrip('/')==(base+'/series').rstrip('/'))
       capture(p,f'{label}-{variant}-{name}',variant,surface=name)
      safe(label+'-'+variant+'-'+name,cross_surface)
     ctx.close()
