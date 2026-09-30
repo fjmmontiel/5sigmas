@@ -36,7 +36,7 @@
     let previousY = 0;
     const map = $(hub, '#mapa');
     // Keep discovery visible first; the complete learning map opens explicitly.
-    map.open = location.hash === '#mapa';
+    map.open = location.hash === '#mapa' || window.matchMedia('(min-width: 900px)').matches;
     const applyFilter = () => {
       const words = normalize(search.value).split(/\s+/).filter(Boolean);
       let count = 0;
