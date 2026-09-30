@@ -220,6 +220,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify live AI discovery and crawler surfaces
+        run: python3 scripts/verify_ai_discovery_live.py --origin https://5sigmas.com
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
