@@ -30,6 +30,11 @@ jobs:
         working-directory: mcp-worker
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            mcp-worker
+            docs/robots.txt
+          sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v4
         with:
@@ -57,6 +62,11 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            mcp-worker
+            docs/robots.txt
+          sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v4
         with:
