@@ -10,7 +10,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import sync_playwright, expect
-BASE_SHA='381baa23af22cead9ce97720d941b7ac4ed3c67a'
+BASE_SHA=os.getenv('REVIEW_BASE_SHA','unknown-base')
 
 def run(args):
  out=args.output;out.mkdir(parents=True,exist_ok=True)
