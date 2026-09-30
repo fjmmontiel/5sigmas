@@ -79,8 +79,25 @@ const contentChecks = [
 ];
 for (const [route, expected] of contentChecks) {
   await page.goto(`${base}${route}`, { waitUntil: 'domcontentloaded' });
+  // The redesign keeps the translated visual behind a real, keyboard-accessible
+  // reference tab. Exercise that UI before asserting visible text; never accept
+  // hidden DOM text as proof that a reader can reach the original diagram.
+  const originalTab = page.locator('[data-sx-guide] [data-sx-tab="original"]');
+  if (await originalTab.count()) {
+    await originalTab.click();
+    const reference = page.locator('[data-sx-guide] #s5-diagrama-original');
+    if (!await reference.isVisible()) failures.push(`${route}: original-reference tab did not reveal the diagram`);
+    await assertNoSpanish(`${route} original reference`);
+    await assertNoOverflow(route, ' original reference');
+  }
   const body = await page.locator('body').innerText();
   if (!body.includes(expected)) failures.push(`${route}: translated visual missing: ${expected}`);
+  if (await originalTab.count()) {
+    await page.locator('[data-sx-guide] [data-sx-tab="guided"]').click();
+    if (!await page.locator('[data-sx-guide] #sx-guided-panel').isVisible()) {
+      failures.push(`${route}: could not return to the guided explanation`);
+    }
+  }
 }
 
 await page.goto(`${base}/en/`, { waitUntil: 'domcontentloaded' });
