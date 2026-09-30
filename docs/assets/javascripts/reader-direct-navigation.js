@@ -10,7 +10,7 @@
   // Gallery cards already link to their article. Expose the parent series
   // without changing the player, artwork, article URL, or anchor-card markup.
   const initializeGallerySeriesLinks = () => {
-    if (!document.querySelector('.sx-discovery-banner')) return;
+    if (!document.querySelector('.sx-series-entry, .sx-discovery-banner')) return;
     const en = document.documentElement.lang?.startsWith('en');
     for (const card of document.querySelectorAll('.s5-watch-card, .s5-media-card')) {
       if (card.matches('a') || card.dataset.sxParent) continue;
