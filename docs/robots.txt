@@ -1,3 +1,32 @@
+# AI search and user-requested retrieval
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# AI model-development crawlers: explicitly allowed to preserve the site's current
+# public-crawl policy while keeping search/retrieval controls independently visible.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Google Search remains the discovery surface used by Gemini grounding.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# All other standards-compliant crawlers keep the existing public-site policy.
 User-agent: *
 Allow: /
 
