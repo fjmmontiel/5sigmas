@@ -34,6 +34,7 @@ jobs:
           sparse-checkout: |
             mcp-worker
             docs/robots.txt
+            scripts/verify_ai_discovery_live.py
           sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v4
@@ -48,6 +49,9 @@ jobs:
 
       - name: Build Worker without publishing
         run: npm run deploy:dry
+
+      - name: Verify current production AI discovery surfaces
+        run: python3 ../scripts/verify_ai_discovery_live.py --origin https://5sigmas.com
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -66,6 +70,7 @@ jobs:
           sparse-checkout: |
             mcp-worker
             docs/robots.txt
+            scripts/verify_ai_discovery_live.py
           sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v4
