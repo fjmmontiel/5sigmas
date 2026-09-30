@@ -100,11 +100,16 @@ const assertSeriesHub = async ({ route, entries }) => {
       }
       await card.click();
       const detail = page.locator(target);
+      // Native anchor navigation dispatches hashchange asynchronously. Wait for
+      // the public view, not a delay or hidden links, before asserting discovery.
+      await detail.waitFor({ state: 'visible' });
       if (!await detail.isVisible()) failures.push(`${route}: card failed to reveal ${target}`);
       const chapter = detail.locator(`.sx-roadmap h3 a[href="${targetRoute}"]`);
       if (await chapter.count() !== 1 || !await chapter.isVisible()) failures.push(`${route}: chapter is not visibly reachable: ${targetRoute}`);
       if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
       await detail.locator('.sx-back').click();
+      await page.locator('[data-sx-overview]').waitFor({ state: 'visible' });
+      await detail.waitFor({ state: 'hidden' });
     }
   } else {
     const links = await cards.evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
