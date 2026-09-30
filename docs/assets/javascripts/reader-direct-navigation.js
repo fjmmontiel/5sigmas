@@ -67,9 +67,52 @@
     synchronize();
   };
 
+  // A saved link must still reach a diagram after it moves into the reference
+  // tab. A locale switch must preserve the selected series, not reset the hub.
+  let seriesDeepLinksBound = false;
+  const initializeSeriesDeepLinks = () => {
+    const synchronize = () => {
+      let id;
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+      if (document.querySelector('[data-sx-hub]')) {
+        const shared = /^(?:serie-[a-z0-9-]+|mapa|catalogo)$/.test(id) ? '#' + id : '';
+        for (const link of document.querySelectorAll('.md-select a[href]')) {
+          const target = new URL(link.href, location.href);
+          if (/^\/(?:en\/)?series\/$/.test(target.pathname)) {
+            target.hash = shared;
+            link.href = target.href;
+          }
+        }
+      }
+      const target = id ? document.getElementById(id) : null;
+      const panel = target?.closest('[data-sx-panel="original"]');
+      const guide = panel?.closest('[data-sx-guide]');
+      if (guide?.dataset.ready === 'true' && panel.hidden) {
+        guide.querySelector('[data-sx-tab="original"]')?.click();
+        target.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    };
+    if (!seriesDeepLinksBound) {
+      seriesDeepLinksBound = true;
+      window.addEventListener('hashchange', () => requestAnimationFrame(synchronize));
+      document.addEventListener('click', (event) => {
+        const link = event.target.closest?.('a[href]');
+        if (!link) return;
+        const target = new URL(link.href, location.href);
+        if (target.origin === location.origin && target.pathname === location.pathname && target.hash) {
+          requestAnimationFrame(synchronize);
+        }
+      });
+    }
+    // The series module is loaded after reader navigation; its initial render
+    // must finish before selecting the reference tab for an incoming fragment.
+    requestAnimationFrame(synchronize);
+  };
+
   const initializeDirectReaderNavigation = () => {
     initializeGallerySeriesLinks();
     initializeMechanismFullscreenNavigation();
+    initializeSeriesDeepLinks();
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';
