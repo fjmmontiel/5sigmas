@@ -16,6 +16,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            docs/assets/javascripts/series-experience.js
+            docs/stylesheets/series-experience.css
+            scripts/
+            hooks/
+            .github/workflows/series-ui-review.yml
+            .github/workflows/series-review-source-finish.yml
       - name: Apply checksum-verified source changes and validate syntax
         run: |
           python - <<'PY'
@@ -27,12 +35,22 @@ jobs:
           Path('scripts/finish_series_review.py').write_bytes(content)
           subprocess.run(['python','scripts/finish_series_review.py'],check=True)
           Path('scripts/finish_series_review.plan.b64').unlink()
+          p=Path('docs/assets/javascripts/series-experience.js');s=p.read_text()
+          old='      const outcome=memory?'
+          new="      const outcome=budget?(used>limit?t(`La selección ocupa ${used} de ${limit} bloques: no cabe; hay que reducirla.`,`The selection uses ${used} of ${limit} blocks: it does not fit; reduce it.`):t(`La selección usa ${used} de ${limit} bloques y cabe en el presupuesto.`,`The selection uses ${used} of ${limit} blocks and fits the budget.`)):memory?"
+          assert s.count(old)==1;s=s.replace(old,new)
+          old="!(alt&&(memory||retrieval||isolate))";assert s.count(old)==1;s=s.replace(old,"!(budget ? used>limit : alt&&(memory||retrieval||isolate))")
+          old="isolate?t('Entrada del subagente','Subagent input'):t('Entrada efectiva','Effective input')";assert s.count(old)==1;s=s.replace(old,"isolate?t('Entrada del subagente','Subagent input'):budget?t('Selección propuesta','Proposed selection'):t('Entrada efectiva','Effective input')")
+          old="      scene.innerHTML=sceneFor(data,step,scenario);";assert s.count(old)==1;s=s.replace(old,old+"\n      const status=$(root,'[data-sx-status]');\n      if(status)status.textContent=data.steps[step][0]+'. '+($(scene,'[data-sx-result]')?.textContent||'');")
+          p.write_text(s)
+          p=Path('hooks/series_experience.py');s=p.read_text();old='<nav class="sx-stages"';assert s.count(old)==1;s=s.replace(old,'<span class="sx-visually-hidden" role="status" aria-live="polite" data-sx-status></span>'+old);p.write_text(s)
+          p=Path('scripts/audit_browser_resources.mjs');s=p.read_text();old='        video.src = source.href;';assert s.count(old)==1;s=s.replace(old,"        video.preload = 'metadata';\n"+old);p.write_text(s)
           PY
           node --check docs/assets/javascripts/series-experience.js
           node --check scripts/audit_browser_resources.mjs
           python -m py_compile hooks/series_experience.py scripts/capture_series_ui_review.py
           node scripts/test_series_scenes.mjs
-      - name: Create reviewed commit object only (never move any branch or deploy)
+      - name: Publish content-addressed source blobs only (no ref changes, no deployment)
         env:
           GH_TOKEN: ${{ github.token }}
           BASE_SHA: ${{ github.event.pull_request.head.sha }}
@@ -54,8 +72,5 @@ jobs:
               blob=api('git/blobs',{'content':Path(name).read_text(),'encoding':'utf-8'})
               entries.append({'path':name,'mode':'100644','type':'blob','sha':blob['sha']})
           entries += [{'path':name,'mode':'100644','type':'blob','sha':None} for name in removed]
-          tree=api('git/trees',{'base_tree':base_commit['tree']['sha'],'tree':entries})
-          commit=api('git/commits',{'message':'feat(series): finish causal learning scenes, compact mobile discovery and codec-aware evidence','tree':tree['sha'],'parents':[base]})
-          print('REVIEW_COMMIT_CREATED='+commit['sha'])
-          print(json.dumps({'parent':base,'tree':tree['sha'],'changed':modified,'removed_one_off_transport':removed}))
+          print('REVIEW_VERIFIED_BLOBS='+json.dumps({'parent':base,'base_tree':base_commit['tree']['sha'],'entries':entries}))
           PY
