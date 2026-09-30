@@ -10,12 +10,12 @@
     "verify:live": "node scripts/verify-live.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/server": "2.2.0",
+    "@modelcontextprotocol/server": "2.0.0",
     "agents": "0.24.0",
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@modelcontextprotocol/client": "2.2.0",
+    "@modelcontextprotocol/client": "2.0.0",
     "wrangler": "4.143.0"
   },
   "engines": {
