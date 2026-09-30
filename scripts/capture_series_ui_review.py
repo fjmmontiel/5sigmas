@@ -64,6 +64,13 @@ def run(args):
   for width,height,label in [(1440,1000,'desktop'),(390,844,'mobile')]:
    for variant,base in [('before',args.before),('after',args.after)]:
     ctx=context(width,height);p=page_for(ctx,variant=='before')
+    def home():
+     goto(p,base+'/');capture(p,f'{label}-{variant}-home',variant,full=True,surface='home')
+     p.evaluate('scrollTo(0,0)');capture(p,f'{label}-{variant}-home-viewport',variant,surface='home-viewport')
+     if variant=='after':
+      href=p.locator('.s5-start-card__cta').get_attribute('href')
+      check(label+'-home-starts-foundations',href in {'/series/#serie-fundamentos-ia-iag','/en/series/#serie-fundamentos-ia-iag'} or 'serie-fundamentos-ia-iag' in (href or ''))
+    safe(label+'-'+variant+'-home',home)
     def catalogue():
      goto(p,base+'/series/');capture(p,f'{label}-{variant}-catalog',variant,full=True,surface='catalog')
      p.evaluate('scrollTo(0,0)');capture(p,f'{label}-{variant}-catalog-viewport',variant,surface='catalog-viewport')
