@@ -50,6 +50,34 @@ jobs:
       - name: Build Worker without publishing
         run: npm run deploy:dry
 
+      - name: Verify MCP protocol end-to-end with official client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm exec -- wrangler dev --local --port 8787 > /tmp/5sigmas-mcp-wrangler.log 2>&1 &
+          worker_pid=$!
+          cleanup() {
+            kill "$worker_pid" 2>/dev/null || true
+            wait "$worker_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=0
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:8787/mcp/health >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/5sigmas-mcp-wrangler.log
+            exit 1
+          fi
+
+          npm run verify:live -- http://127.0.0.1:8787/mcp
+
       - name: Verify current production AI discovery surfaces
         run: python3 ../scripts/verify_ai_discovery_live.py --origin https://5sigmas.com
 
