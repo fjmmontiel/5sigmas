@@ -35,7 +35,8 @@
     let facet = 'all';
     let previousY = 0;
     const map = $(hub, '#mapa');
-    if (window.innerWidth >= 1100 && !location.hash.startsWith('#serie-')) map.open = true;
+    // Keep discovery visible first; the complete learning map opens explicitly.
+    map.open = location.hash === '#mapa';
     const applyFilter = () => {
       const words = normalize(search.value).split(/\s+/).filter(Boolean);
       let count = 0;
@@ -52,12 +53,27 @@
       filters.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
       applyFilter();
     }));
+    const mobileFilter = document.createElement('select');
+    mobileFilter.className = 'sx-mobile-filter';
+    mobileFilter.dataset.sxMobileFilter = 'true';
+    mobileFilter.setAttribute('aria-label', en ? 'Filter by learning goal' : 'Filtrar por objetivo');
+    filters.forEach(button => {
+      const option = document.createElement('option');
+      option.value = button.dataset.sxFilter;
+      option.textContent = button.textContent;
+      mobileFilter.appendChild(option);
+      button.addEventListener('click', () => { mobileFilter.value = button.dataset.sxFilter; });
+    });
+    mobileFilter.addEventListener('change', () => filters.find(b => b.dataset.sxFilter === mobileFilter.value)?.click());
+    $(hub, '.sx-catalog-tools').appendChild(mobileFilter);
     search.addEventListener('input', applyFilter);
     $(hub, '[data-sx-clear]').addEventListener('click', () => {
       search.value = ''; filters[0].click(); search.focus();
     });
     const showHash = () => {
-      const hash = decodeURIComponent(location.hash.slice(1));
+      let hash;
+      try { hash = decodeURIComponent(location.hash.slice(1)); }
+      catch { hash = ''; } // A malformed shared fragment must not break the library.
       const selected = details.find(d => d.id === hash);
       if (selected && !overview.hidden) previousY = window.scrollY;
       overview.hidden = !!selected;
@@ -122,6 +138,16 @@
     const wave=(start=0)=>`<svg class="sx-wave" viewBox="0 0 440 58" aria-hidden="true">${Array.from({length:42},(_,i)=>{const h=7+((i*13+start*9)%24);return `<path d="M${i*10+8} ${29-h}v${h*2}"/>`;}).join('')}</svg>`;
     const flow=(items)=>`<div class="sx-causal-flow">${items.map((x,i)=>x+(i<items.length-1?`<span class="sx-transfer ${i===s-1?'is-crossing':''}" aria-hidden="true">→</span>`:'')).join('')}</div>`;
 
+    // The order example is a conversation plus an observable tool result, not four generic cards.
+    if (v === 'order') {
+      const known=s>=2&&!alt;
+      const answer=alt?t('No he podido confirmar el estado del pedido.','I could not confirm the order status.'):t('El pedido 1842 está enviado.','Order 1842 has shipped.');
+      return `<div class="sx-order-scene"><div class="sx-order-conversation"><span class="sx-object-label">${t('CONVERSACIÓN','CONVERSATION')}</span><div class="sx-order-message"><small>${t('Persona','Person')}</small><blockquote>${t('¿Dónde está mi pedido 1842?','Where is my order 1842?')}</blockquote></div><div class="sx-order-answer ${s>=3?'is-delivered':''}"><small>${t('Respuesta del asistente','Assistant reply')}</small><p>${s>=3?answer:t('Primero necesita consultar el estado.','The status must be checked first.')}</p></div></div><div class="sx-order-bridge ${s===1?'is-requesting':''} ${s>=2?'is-returning':''}" aria-hidden="true"><span>→</span><i></i><span>←</span></div><div class="sx-order-system"><span class="sx-object-label">${t('SISTEMA DE PEDIDOS · EJEMPLO','ORDER SYSTEM · EXAMPLE')}</span><div class="sx-order-call"><span>${s>=1?t('Consulta enviada','Query sent'):t('Consulta pendiente','Query pending')}</span><code>lookup({ order_id: 1842 })</code></div><div class="sx-order-evidence ${s>=2&&alt?'is-failed':''}" data-sx-order-evidence><div class="sx-package" aria-hidden="true">${s>=2&&alt?'?':'1842'}</div><div><small>${s<2?t('Evidencia todavía no recibida','Evidence not received yet'):alt?t('Error de la herramienta','Tool error'):t('Respuesta de la herramienta','Tool response')}</small><strong>${s<2?'—':alt?'timeout':t('Enviado','Shipped')}</strong>${known?'<code>{ "status": "shipped" }</code>':''}</div></div><ol class="sx-delivery-track" aria-label="${t('Estado confirmado del pedido','Confirmed order state')}">${[t('Recibido','Received'),t('Preparado','Packed'),t('Enviado','Shipped')].map((label,i)=>`<li class="${known?'is-confirmed':''}"><b>${known?'✓':i+1}</b><span>${label}</span></li>`).join('')}</ol><p class="sx-mini-note">${s>=2&&alt?t('Sin dato confirmado: no se puede afirmar que esté enviado.','No confirmed data: shipment cannot be asserted.'):t('El estado procede de la consulta, no de una suposición.','The status comes from the query, not an assumption.')}</p></div></div>${result(t('Conclusión apoyada por la evidencia','Evidence-supported conclusion'),s>=3?answer:t('Avanza hasta recibir el resultado de la consulta.','Advance until the query result arrives.'),!alt)}`;
+    }
+    if (v === 'voice-turn') {
+      const phrase=alt?t('¿Dónde está mi pedido?','Where is my order?'):t('Quiero cambiar… la fecha de entrega.','I want to change… the delivery date.');
+      return `<div class="sx-turn-scene"><div class="sx-turn-axis"><span>0</span><span>400</span><span>700</span><span>1.000 ms</span></div><div class="sx-turn-lane"><div class="sx-timeline-label"><span>${t('Persona','Person')}</span><blockquote>${phrase}</blockquote></div><div class="sx-turn-track"><div class="sx-turn-segment is-person" style="left:0;width:40%">${wave(1)}</div><span class="sx-turn-silence" style="left:40%;width:30%">${t('Pausa','Pause')}</span>${s>=2&&!alt?`<div class="sx-turn-segment is-person is-returned" style="left:70%;width:30%">${wave(2)}</div>`:''}<i class="sx-turn-cursor" style="left:${[8,40,65,99][s]}%"></i></div></div><div class="sx-turn-lane"><div class="sx-timeline-label"><span>${t('Agente','Agent')}</span><strong>${s<2?t('Escucha','Listening'):alt?t('Puede responder en este caso','Can answer in this case'):t('Espera: la persona continúa','Wait: the person continues')}</strong></div><div class="sx-turn-track is-agent">${s>=3&&alt?`<div class="sx-turn-segment is-answer" style="left:70%;width:30%">${wave(4)}</div>`:`<span class="sx-turn-hold">${t('No hay audio reproducido','No audio played')}</span>`}<i class="sx-turn-cursor" style="left:${[8,40,65,99][s]}%"></i></div></div><div class="sx-turn-decision ${s>=2?(alt?'is-ready':'is-holding'):''}"><span>${t('Decisión del ejemplo','Example decision')}</span><strong>${s<2?t('Una pausa no basta para decidir.','A pause alone is insufficient.'):alt?t('Fin de turno confirmado en este caso.','End of turn confirmed in this case.'):t('La continuación cambia la decisión: seguir escuchando.','Continuation changes the decision: keep listening.')}</strong></div></div>${result(t('Efecto observable','Observable effect'),s<3?t('Avanza y observa quién habla después de la pausa.','Advance and observe who speaks after the pause.'):alt?t('La respuesta comienza después del turno de la persona.','The reply starts after the person’s turn.'):t('Responder durante esa pausa habría interrumpido la petición.','Answering during that pause would have interrupted the request.'))}<p class="sx-mini-note">${t('Tiempos y ondas ilustrativos. No se ejecuta un detector de turnos ni se reproduce audio.','Illustrative timing and waves. No turn detector runs and no audio is played.')}</p>`;
+    }
     if (['order','identity','agent-eval','budget','agent-safety'].includes(v)) {
       if (v==='budget') {
         const budget=alt?4:2, attempts=Math.min(s,budget), closed=s>=budget;
@@ -166,8 +192,8 @@
       let chosen=memory?(alt?['task']:['task','current']):retrieval?(alt?['task','old']:['task','current']):budget?(alt?['task','current']:['task','current','old','noise']):alt?docs.map(d=>d.id):['task','current'];
       if(s===0)chosen=[];
       const used=docs.filter(d=>chosen.includes(d.id)).reduce((a,d)=>a+d.size,0);
-      const outcome=memory?(alt?t('La preferencia no se conservó para este turno.','The preference was not retained for this turn.'):t('La preferencia se conserva y se recupera explícitamente.','The preference is explicitly stored and retrieved.')):retrieval?(alt?t('Se seleccionó la versión antigua: 14 días.','The old version was selected: 14 days.'):t('Se seleccionó la versión vigente: 30 días.','The current version was selected: 30 days.')):alt&&!budget?t('También entra información innecesaria o contradictoria.','Unnecessary or conflicting information is also included.'):t('La tarea y la evidencia relevante llegan a la entrada.','The task and relevant evidence reach the input.');
-      return `<div class="sx-context-layout"><div class="sx-source-stack"><h3>${t('Información disponible','Available information')}</h3>${docs.map(d=>`<div class="sx-source ${chosen.includes(d.id)?'is-selected':''}"><span>${chosen.includes(d.id)?'✓':'—'}</span><div><strong>${esc(d.name)}</strong><small>${esc(d.info)}</small></div>${budget?`<b>${d.size}</b>`:''}</div>`).join('')}</div><div class="sx-context-gate">${isolate?t('DELEGAR','DELEGATE'):t('SELECCIONAR','SELECT')}<span aria-hidden="true">→</span></div><div class="sx-context-window"><h3>${isolate?t('Entrada del subagente','Subagent input'):t('Entrada efectiva','Effective input')}</h3><div class="sx-context-slots">${s>=2?docs.filter(d=>chosen.includes(d.id)).map(d=>`<div class="sx-context-token ${d.id==='old'?'is-stale':''}"><strong>${esc(d.name)}</strong><span>${esc(d.info)}</span></div>`).join(''):`<span class="sx-pending">${t('Todavía sin ensamblar','Not assembled yet')}</span>`}</div>${budget?`<div class="sx-context-capacity"><progress value="${s>=2?used:0}" max="${limit}"></progress><span>${s>=2?used:0} / ${limit} ${t('bloques didácticos','educational blocks')}</span></div>`:''}</div></div>${result(t('Consecuencia','Consequence'),s>=3?outcome:t('Observa qué cruza la frontera de selección.','Observe what crosses the selection boundary.'),!(alt&&(memory||retrieval||isolate)))}`;
+      const outcome=budget?(used>limit?t(`La selección ocupa ${used} de ${limit} bloques: no cabe; hay que reducirla.`,`The selection uses ${used} of ${limit} blocks: it does not fit; reduce it.`):t(`La selección usa ${used} de ${limit} bloques y cabe en el presupuesto.`,`The selection uses ${used} of ${limit} blocks and fits the budget.`)):memory?(alt?t('La preferencia no se conservó para este turno.','The preference was not retained for this turn.'):t('La preferencia se conserva y se recupera explícitamente.','The preference is explicitly stored and retrieved.')):retrieval?(alt?t('Se seleccionó la versión antigua: 14 días.','The old version was selected: 14 days.'):t('Se seleccionó la versión vigente: 30 días.','The current version was selected: 30 days.')):alt&&!budget?t('También entra información innecesaria o contradictoria.','Unnecessary or conflicting information is also included.'):t('La tarea y la evidencia relevante llegan a la entrada.','The task and relevant evidence reach the input.');
+      return `<div class="sx-context-layout"><div class="sx-source-stack"><h3>${t('Información disponible','Available information')}</h3>${docs.map(d=>`<div class="sx-source ${chosen.includes(d.id)?'is-selected':''}"><span>${chosen.includes(d.id)?'✓':'—'}</span><div><strong>${esc(d.name)}</strong><small>${esc(d.info)}</small></div>${budget?`<b>${d.size}</b>`:''}</div>`).join('')}</div><div class="sx-context-gate">${isolate?t('DELEGAR','DELEGATE'):t('SELECCIONAR','SELECT')}<span aria-hidden="true">→</span></div><div class="sx-context-window"><h3>${isolate?t('Entrada del subagente','Subagent input'):budget?t('Selección propuesta','Proposed selection'):t('Entrada efectiva','Effective input')}</h3><div class="sx-context-slots">${s>=2?docs.filter(d=>chosen.includes(d.id)).map(d=>`<div class="sx-context-token ${d.id==='old'?'is-stale':''}"><strong>${esc(d.name)}</strong><span>${esc(d.info)}</span></div>`).join(''):`<span class="sx-pending">${t('Todavía sin ensamblar','Not assembled yet')}</span>`}</div>${budget?`<div class="sx-context-capacity"><progress value="${s>=2?used:0}" max="${limit}"></progress><span>${s>=2?used:0} / ${limit} ${t('bloques didácticos','educational blocks')}</span></div>`:''}</div></div>${result(t('Consecuencia','Consequence'),s>=3?outcome:t('Observa qué cruza la frontera de selección.','Observe what crosses the selection boundary.'),!(budget ? used>limit : alt&&(memory||retrieval||isolate)))}`;
     }
     if(data.kind==='voice') {
       if(v==='voice-eval') {
@@ -240,6 +266,8 @@
     const paint=()=>{
       root.dataset.step=String(step);root.dataset.scenario=String(scenario);
       scene.innerHTML=sceneFor(data,step,scenario);
+      const status=$(root,'[data-sx-status]');
+      if(status)status.textContent=data.steps[step][0]+'. '+($(scene,'[data-sx-result]')?.textContent||'');
       steps.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===step)));
       options.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===scenario)));
       $(root,'[data-sx-title]').textContent=data.steps[step][0];
@@ -282,7 +310,7 @@
     const en=!!prefix;
     // Preserve the existing card/media layout. Add an actual parent-series link.
     $$ (document,'.s5-watch-card, .s5-media-card').forEach(card=>{
-      if(card.closest('[data-sx-hub]')||card.dataset.sxParent)return;
+      if(card.closest('[data-sx-hub]')||card.dataset.sxParent||card.matches('a'))return; // Never nest a link inside an anchor card.
       const link=$$(card,'a[href]').find(a=>/\/videos\/series\/[^/]+\//.test(a.pathname));
       if(!link)return;
       const slug=link.pathname.match(/\/videos\/series\/([^/]+)\//)[1];

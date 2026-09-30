@@ -9,12 +9,12 @@ from datetime import datetime,timezone
 from pathlib import Path
 from bs4 import BeautifulSoup
 from PIL import Image
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 BASE_SHA='6209a852b804338e31b95f06bdf604baeb04cf40'
 
 def run(args):
  out=args.output;out.mkdir(parents=True,exist_ok=True)
- report={'baseline_sha':BASE_SHA,'candidate_sha':os.getenv('REVIEW_HEAD_SHA','local-uncommitted'),'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Exact source builds served on separate localhost ports in GitHub Actions. Playwright Chromium. Component images are pixel crops of full-page captures; no DOM/style substitution. Live production is a separately labelled reference.','captures':[],'checks':[],'errors':[],'console_errors':[],'baseline_console_errors':[],'live_reference_errors':[],'inventory':[]}
+ report={'baseline_sha':BASE_SHA,'candidate_sha':os.getenv('REVIEW_HEAD_SHA','local-uncommitted'),'captured_at':datetime.now(timezone.utc).isoformat(),'method':'Exact source builds served on separate localhost ports in GitHub Actions. Playwright driving installed Google Chrome (codec-capable). Component images are pixel crops of full-page captures; no DOM/style substitution. Live production is a separately labelled reference.','captures':[],'checks':[],'errors':[],'console_errors':[],'baseline_console_errors':[],'live_reference_errors':[],'inventory':[]}
  hub=BeautifulSoup((args.site/'series/index.html').read_text(),'lxml')
  series=[]
  for i,detail in enumerate(hub.select('[data-sx-detail]'),1):
@@ -32,7 +32,8 @@ def run(args):
   try: fn()
   except Exception as e: report['errors'].append({'name':name,'error':str(e)[:1600]});save();print('ERROR',name,str(e)[:200],flush=True)
  with sync_playwright() as pw:
-  browser=pw.chromium.launch(headless=True)
+  browser=pw.chromium.launch(headless=True, channel='chrome')
+  report['browser']={'channel':'chrome','version':browser.version}
   def context(width=1440,height=1000,**kw):
    return browser.new_context(viewport={'width':width,'height':height},device_scale_factor=1,reduced_motion='reduce',locale='es-ES',**kw)
   def page_for(ctx,baseline=False):
@@ -72,8 +73,13 @@ def run(args):
       p.locator('[data-sx-search]').fill('inferencia');check(label+'-search',p.locator('[data-sx-card]:visible').count()>=1 and p.locator('[data-sx-card][data-series-number="12"]').is_visible())
       capture(p,f'{label}-after-search',variant,surface='search')
       p.locator('[data-sx-search]').fill('zz-no-such-concept');check(label+'-empty',p.locator('[data-sx-empty]').is_visible())
-      p.locator('[data-sx-clear]').click();p.locator('[data-sx-filter="evaluate"]').click();check(label+'-filter',p.locator('[data-sx-card]:visible').count()==3)
-      p.locator('[data-sx-filter="all"]').click();p.goto(base+'/series/#mapa',wait_until='networkidle');capture(p,f'{label}-after-map',variant,selector='#mapa',surface='map')
+      p.locator('[data-sx-clear]').click()
+      if width<=700: p.locator('[data-sx-mobile-filter]').select_option('evaluate')
+      else: p.locator('[data-sx-filter="evaluate"]').click()
+      check(label+'-filter',p.locator('[data-sx-card]:visible').count()==3)
+      if width<=700: p.locator('[data-sx-mobile-filter]').select_option('all')
+      else: p.locator('[data-sx-filter="all"]').click()
+      p.goto(base+'/series/#mapa',wait_until='networkidle');expect(p.locator('#mapa')).to_have_attribute('open','');capture(p,f'{label}-after-map',variant,selector='#mapa',surface='map')
     safe(label+'-'+variant+'-catalog',catalogue)
     for s in series:
      def detail(s=s):
@@ -98,6 +104,7 @@ def run(args):
         capture(p,f'{label}-after-mechanism-{ident}-alternative',variant,selector=selector,surface='mechanism',series=s['number'],chapter=c['number'],view=c['view'],state='alternative')
         check(f'{label}-{ident}-fit',g.evaluate('(e)=>e.scrollWidth<=e.clientWidth+2'))
         g.locator('[data-sx-tab="original"]').click();check(f'{label}-{ident}-original',g.locator('#s5-diagrama-original').is_visible() and not g.locator('#sx-guided-panel').is_visible())
+        if label=='desktop': capture(p,f'{label}-after-original-{ident}',variant,selector='#s5-diagrama-original',surface='original-retained',series=s['number'],chapter=c['number'])
         g.locator('[data-sx-tab="guided"]').click();g.locator('[data-sx-reset]').click();check(f'{label}-{ident}-reset',g.get_attribute('data-step')=='0' and g.get_attribute('data-scenario')=='0' and g.locator('[data-sx-scene]').inner_text()==initial)
         check(f'{label}-{ident}-reader',p.locator('.sx-reader-context a').count()==2 and p.locator('.sx-reader-next a').count()==2)
       safe(f'{label}-{variant}-{s["number"]}-{c["number"]}',lesson)
@@ -120,14 +127,26 @@ def run(args):
   # Real dark-mode switch, keyboard, player, history, no-JS and a recording.
   ctx=context();p=page_for(ctx)
   def functional():
-   goto(p,args.after+'/series/');p.locator('[data-sx-card] .sx-card-open').nth(7).click();check('card-opens-series',p.locator('#serie-agentes-ia').is_visible())
-   p.go_back(wait_until='networkidle');check('back-to-catalog',p.locator('[data-sx-overview]').is_visible())
-   goto(p,args.after+'/series/#serie-agentes-ia');p.locator('#serie-agentes-ia [data-sx-play]').click();v=p.locator('#serie-agentes-ia video');p.wait_for_function("document.querySelector('#serie-agentes-ia video').currentTime > 0",timeout=30000);check('approved-video-plays',v.evaluate('(v)=>!v.paused && v.currentTime>0'));capture(p,'desktop-after-inline-playback','after',surface='inline-playback')
+   goto(p,args.after+'/series/');p.locator('[data-sx-card] .sx-card-open').nth(7).click();expect(p.locator('#serie-agentes-ia')).to_be_visible();check('card-opens-series',p.locator('#serie-agentes-ia').is_visible())
+   p.go_back(wait_until='networkidle');expect(p.locator('[data-sx-overview]')).to_be_visible();check('back-to-catalog',p.locator('[data-sx-overview]').is_visible())
+   goto(p,args.after+'/series/#serie-agentes-ia');expect(p.locator('#serie-agentes-ia')).to_be_visible();p.locator('#serie-agentes-ia [data-sx-play]').click();v=p.locator('#serie-agentes-ia video');p.wait_for_function("document.querySelector('#serie-agentes-ia video').currentTime > 0",timeout=30000);check('approved-video-plays',v.evaluate('(v)=>!v.paused && v.currentTime>0'));capture(p,'desktop-after-inline-playback','after',surface='inline-playback')
    p.locator('#serie-agentes-ia [data-sx-preview]').last.click();p.wait_for_function("document.querySelector('#serie-agentes-ia video').currentTime > 0",timeout=30000);check('chapter-preview-in-place',p.locator('#serie-agentes-ia .sx-chapter.is-current').count()==1)
    goto(p,args.after+series[7]['chapters'][0]['route']);g=p.locator('[data-sx-guide]');g.locator('[data-sx-next]').focus();p.keyboard.press('Enter');check('keyboard-next',g.get_attribute('data-step')=='1');g.locator('[data-sx-tab="guided"]').focus();p.keyboard.press('ArrowRight');check('keyboard-tab',g.locator('#s5-diagrama-original').is_visible())
-   g.locator('[data-sx-tab="guided"]').click();g.locator('[data-sx-fullscreen]').click();check('fullscreen',p.evaluate('!!document.fullscreenElement'));p.keyboard.press('Escape')
+   g.locator('[data-sx-tab="guided"]').click();g.locator('[data-sx-fullscreen]').click();p.wait_for_function('!!document.fullscreenElement');check('fullscreen',p.evaluate('!!document.fullscreenElement'));p.keyboard.press('Escape');p.wait_for_function('!document.fullscreenElement')
    goto(p,args.after+'/series/');check('resume-real-last-reading',p.locator('[data-sx-resume]').is_visible())
   safe('functional',functional)
+  def all_players():
+   for s in series:
+    goto(p,args.after+'/series/#'+s['id']);detail=p.locator('#'+s['id']);expect(detail).to_be_visible()
+    video=detail.locator('video')
+    if not video.count(): continue
+    check(f'player-{s["number"]}-deferred',not video.get_attribute('src') and video.get_attribute('preload')=='none')
+    detail.locator('[data-sx-play]').click()
+    p.wait_for_function('(id)=>{const v=document.querySelector("#"+id+" video");return v.currentTime>0 && v.videoWidth>0 && !v.error;}',arg=s['id'],timeout=30000)
+    check(f'player-{s["number"]}-decoded',video.evaluate('v=>v.currentTime>0 && v.videoWidth>0 && !v.error'),video.evaluate('v=>({time:v.currentTime,width:v.videoWidth,error:!!v.error})'))
+    video.evaluate('v=>v.pause()')
+   goto(p,args.after+'/series/#%E0%A4%A');expect(p.locator('[data-sx-overview]')).to_be_visible();check('malformed-fragment-safe',True)
+  safe('all-approved-inline-players',all_players)
   def dark():
    goto(p,args.after+'/series/');id_=p.locator('input[data-md-color-scheme="slate"]').first.get_attribute('id');p.locator(f'label[for="{id_}"]').first.click();p.wait_for_function("document.body.dataset.mdColorScheme==='slate'");check('real-dark-mode',True);capture(p,'desktop-dark-after-catalog','after',full=True,surface='catalog-dark')
    for s in series[6:]:

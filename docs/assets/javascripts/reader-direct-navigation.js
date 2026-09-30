@@ -7,7 +7,29 @@
     .toLowerCase()
     .trim();
 
+  // Gallery cards already link to their article. Expose the parent series
+  // without changing the player, artwork, article URL, or anchor-card markup.
+  const initializeGallerySeriesLinks = () => {
+    if (!document.querySelector('.sx-discovery-banner')) return;
+    const en = document.documentElement.lang?.startsWith('en');
+    for (const card of document.querySelectorAll('.s5-watch-card, .s5-media-card')) {
+      if (card.matches('a') || card.dataset.sxParent) continue;
+      const chapter = [...card.querySelectorAll('a[href]')].find((link) =>
+        link.origin === location.origin && /\/(?:videos\/)?series\/[^/]+\/[^/]+\//.test(link.pathname),
+      );
+      if (!chapter) continue;
+      const slug = chapter.pathname.match(/\/(?:videos\/)?series\/([^/]+)\//)[1];
+      const parent = document.createElement('a');
+      parent.className = 'sx-parent-series';
+      parent.href = `${en ? '/en' : ''}/series/#serie-${slug}`;
+      parent.textContent = en ? 'Explore this series →' : 'Explorar esta serie →';
+      card.appendChild(parent);
+      card.dataset.sxParent = 'true';
+    }
+  };
+
   const initializeDirectReaderNavigation = () => {
+    initializeGallerySeriesLinks();
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';

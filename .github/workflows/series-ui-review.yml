@@ -10,10 +10,12 @@ on:
       - 'scripts/test_series_scenes.mjs'
       - 'docs/stylesheets/series-experience.css'
       - 'docs/assets/javascripts/series-experience.js'
+      - 'docs/assets/javascripts/reader-direct-navigation.js'
       - 'scripts/*series*review*'
       - 'scripts/test_series_experience.py'
       - 'scripts/audit_publication_contract.py'
       - 'scripts/test_publication_nav.py'
+      - 'scripts/audit_browser_resources.mjs'
 permissions:
   contents: read
 concurrency:
@@ -22,7 +24,7 @@ concurrency:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -73,10 +75,11 @@ jobs:
           done
           cd "$GITHUB_WORKSPACE/candidate"
           node --check docs/assets/javascripts/series-experience.js
+          node --check docs/assets/javascripts/reader-direct-navigation.js
           python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
           node scripts/test_series_scenes.mjs
-      - name: Diagnose navigation and approved-video playback (NOT final acceptance)
+      - name: Capture both real builds and validate all series, mechanisms and players
         env:
           REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -92,7 +95,8 @@ jobs:
             sleep 1
           done
           cd candidate
-          python scripts/diagnose_series_review.py
+          python scripts/capture_gallery_series_review.py
+          python scripts/capture_series_ui_review.py
       - name: Owner-requested real browser captures (one day, no built site)
         if: always()
         uses: actions/upload-artifact@v4

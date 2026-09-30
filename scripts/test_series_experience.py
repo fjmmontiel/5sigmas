@@ -52,13 +52,13 @@ def check(site: Path, output: Path):
             assert len(data['steps'])==4 and len(data['options'])==2 and data['caveat']
             assert guide.select_one('#s5-diagrama-original')
             original=guide.select_one('[data-sx-panel="original"]')
-            originals+=bool(original.select_one('.anim-brand-shell, .aix-loop, .s5v, svg'))
+            originals+=bool(original.select_one('.anim-brand-shell, .aix-loop, .aix-eval, .aix-sec, .s5v, svg'))
             assert not guide.find('article'), 'Do not break native reader-end placement'
             assert doc.select_one('.s5-reader-direct'),str(path)
             assert doc.select_one('.sx-reader-context') and doc.select_one('.sx-reader-next')
             ids=[n['id'] for n in guide.select('[id]')]
             assert len(ids)==len(set(ids)),str(path)
-            guides.append({'path':str(path.relative_to(site)),'view':data['view'],'kind':data['kind'],'integrated_original':bool(original.select_one('.anim-brand-shell, .aix-loop, .s5v, svg'))})
+            guides.append({'path':str(path.relative_to(site)),'view':data['view'],'kind':data['kind'],'integrated_original':bool(original.select_one('.anim-brand-shell, .aix-loop, .aix-eval, .aix-sec, .s5v, svg'))})
         assert len(guides)==40, len(guides)
         results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':40,'guides':guides,'integrated_originals':originals,'inline_players':len(players),'generated_links_resolve':True})
     output.parent.mkdir(parents=True,exist_ok=True)
