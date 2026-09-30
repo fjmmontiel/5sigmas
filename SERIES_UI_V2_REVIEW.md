@@ -22,8 +22,8 @@ collector, user account, payment, subscription service or production deployment.
 
 ## Review evidence
 
-The `Series UI real browser review` job checks out the candidate SHA and pinned
-public baseline `6209a852b804338e31b95f06bdf604baeb04cf40`. It builds both in ES/EN,
+The `Series UI real browser review` job checks out the candidate SHA and the
+exact pull-request base SHA. Both SHAs are recorded in the evidence manifest. It builds both in ES/EN,
 serves them on separate local HTTP ports inside the Actions runner, and uses real
 Chromium for screenshots and MP4 interaction recording. The manifest retains
 source SHA, viewport, route, crop bounds and SHA-256 for each original PNG.
