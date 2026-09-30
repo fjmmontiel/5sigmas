@@ -76,7 +76,7 @@ jobs:
           python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
           node scripts/test_series_scenes.mjs
-      - name: Serve both exact builds and capture browser evidence
+      - name: Diagnose navigation and approved-video playback (NOT final acceptance)
         env:
           REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -92,7 +92,7 @@ jobs:
             sleep 1
           done
           cd candidate
-          python scripts/capture_series_ui_review.py
+          python scripts/diagnose_series_review.py
       - name: Owner-requested real browser captures (one day, no built site)
         if: always()
         uses: actions/upload-artifact@v4
