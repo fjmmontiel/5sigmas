@@ -28,8 +28,48 @@
     }
   };
 
+  // Fullscreen belongs to the current learning scene. Escape must also work in
+  // embedded/kiosk browsers, without depending on browser-chrome key handling.
+  // One delegated listener survives document$ navigation; native video fullscreen
+  // remains owned by the browser and is deliberately not intercepted.
+  let fullscreenNavigationBound = false;
+  let expandedMechanism = null;
+  const initializeMechanismFullscreenNavigation = () => {
+    const synchronize = () => {
+      const current = document.fullscreenElement;
+      const previous = expandedMechanism;
+      expandedMechanism = current?.matches('[data-sx-guide]') ? current : null;
+      for (const button of document.querySelectorAll('[data-sx-fullscreen]')) {
+        const root = button.closest('[data-sx-guide]');
+        const expanded = root === expandedMechanism;
+        const en = (root?.dataset.locale || document.documentElement.lang || 'es').startsWith('en');
+        const label = expanded
+          ? (en ? 'Exit fullscreen' : 'Salir de pantalla completa')
+          : (en ? 'Expand mechanism' : 'Ampliar mecanismo');
+        button.setAttribute('aria-label', label);
+        button.setAttribute('aria-pressed', String(expanded));
+        button.title = label;
+      }
+      if (previous && !current && previous.isConnected) {
+        previous.querySelector('[data-sx-fullscreen]')?.focus({ preventScroll: true });
+      }
+    };
+    if (!fullscreenNavigationBound) {
+      fullscreenNavigationBound = true;
+      document.addEventListener('fullscreenchange', synchronize);
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !document.fullscreenElement?.matches('[data-sx-guide]')) return;
+        event.preventDefault();
+        // The existing button still provides an exit if a browser rejects the API.
+        document.exitFullscreen().catch(synchronize);
+      });
+    }
+    synchronize();
+  };
+
   const initializeDirectReaderNavigation = () => {
     initializeGallerySeriesLinks();
+    initializeMechanismFullscreenNavigation();
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';

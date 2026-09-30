@@ -13,6 +13,7 @@ on:
       - 'docs/assets/javascripts/reader-direct-navigation.js'
       - 'scripts/*series*review*'
       - 'scripts/test_series_experience.py'
+      - 'scripts/test_series_fullscreen.py'
       - 'scripts/audit_publication_contract.py'
       - 'scripts/test_publication_nav.py'
       - 'scripts/audit_browser_resources.mjs'
@@ -95,6 +96,7 @@ jobs:
             sleep 1
           done
           cd candidate
+          python scripts/test_series_fullscreen.py
           python scripts/capture_gallery_series_review.py
           python scripts/capture_series_ui_review.py
       - name: Owner-requested real browser captures (one day, no built site)
