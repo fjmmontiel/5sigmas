@@ -148,6 +148,19 @@ def guide(s, index, original=''):
     data={'kind':GUIDES[s['slug']], 'view':spec['view'], 'title':local(spec['question']),
           'options':local(spec['options']), 'steps':local(spec['steps']), 'locale':t('es','en'),
           'caveat':t('Ejemplo didáctico reproducible. Los datos y tiempos son sintéticos; no se ejecuta un modelo ni se mide un proveedor.','Reproducible educational example. Data and timings are synthetic; no model runs and no provider is measured.')}
+    # This shared explanation accompanies BOTH selectable cases. The concrete
+    # outcome remains in the scene; do not describe a blocked action as universal.
+    comparison_copy = {
+        'agent-safety': t(
+            'Con la comprobación, se bloquea el cambio de destinatario; sin ella, el envío sale del permiso. El documento no concede autorización.',
+            'With the check, the recipient change is blocked; without it, sending exceeds permission. The document does not grant authorization.'),
+        'code-permissions': t(
+            'Con la comprobación se bloquea la escritura fuera de ámbito; sin ella, el archivo externo se modifica. Compara los dos resultados.',
+            'With the check, the out-of-scope write is blocked; without it, the external file changes. Compare both outcomes.'),
+    }
+    if data['view'] in comparison_copy:
+        data['steps'] = [list(step) for step in data['steps']]
+        data['steps'][-1][1] = comparison_copy[data['view']]
     stages=''.join(f'<button type="button" data-sx-step="{i}" aria-pressed="{str(i==0).lower()}"><span>{i+1:02}</span>{esc(step[0])}</button>' for i,step in enumerate(data['steps']))
     options=''.join(f'<button type="button" data-sx-scenario="{i}" aria-pressed="{str(i==0).lower()}">{esc(label)}</button>' for i,label in enumerate(data['options']))
     fallback=''.join(f'<li><strong>{esc(a)}</strong> {esc(b)}</li>' for a,b in data['steps'])

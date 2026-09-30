@@ -45,6 +45,20 @@ def run(base: str, output: Path) -> None:
                     expect(page.locator('#s5-diagrama-original')).to_be_visible()
                 report['checks'].append({'name': f'{width}-{locale}-original-and-inner-deeplink', 'pass': True})
                 page.screenshot(path=str(output.parent / f'navigation-{width}-{locale}-reference.png'), full_page=False)
+                # Every visible body cell must use the content column, not the
+                # 83px label column. A no-overflow check alone missed this defect.
+                if width < 700:
+                    for slug, name in (
+                        ('agentes-voz-tiempo-real', '01-arquitecturas-de-voz'),
+                        ('context-engineering-memory-mcp', '05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries'),
+                    ):
+                        page.goto(base + prefix + '/series/' + slug + '/' + name + '/', wait_until='networkidle')
+                        page.locator('[data-sx-step="3"]').click()
+                        cells = page.locator('.sx-causal-flow .sx-object > :not(.sx-object-label)')
+                        widths = cells.evaluate_all('nodes => nodes.map(n => n.getBoundingClientRect().width)')
+                        assert widths and min(widths) >= 130, (locale, slug, widths)
+                        report['checks'].append({'name': f'{width}-{locale}-{slug}-readable-body-column', 'pass': True})
+                        page.locator('[data-sx-guide]').screenshot(path=str(output.parent / f'readability-{width}-{locale}-{slug}.png'))
             page.close()
         browser.close()
     report['status'] = 'PASS' if not report['errors'] else 'FAIL'

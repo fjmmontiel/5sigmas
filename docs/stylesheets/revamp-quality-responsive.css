@@ -32,3 +32,18 @@
     margin-top: 1rem !important;
   }
 }
+
+/* The guided causal view uses a label column on mobile. Keep every body
+   element in the wider content column; otherwise a second paragraph is
+   auto-placed under the short label and breaks words into narrow fragments. */
+@media (max-width: 700px) {
+  .sx-lab .sx-causal-flow .sx-object > :not(.sx-object-label) {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .sx-lab .sx-causal-flow .sx-object > .sx-object-label {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+}
