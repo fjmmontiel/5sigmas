@@ -10,7 +10,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import sync_playwright, expect
-BASE_SHA='6209a852b804338e31b95f06bdf604baeb04cf40'
+BASE_SHA='381baa23af22cead9ce97720d941b7ac4ed3c67a'
 
 def run(args):
  out=args.output;out.mkdir(parents=True,exist_ok=True)
@@ -165,7 +165,7 @@ def run(args):
    goto(p,args.after+series[7]['chapters'][0]['route']);check('nojs-original-visible',p.locator('#s5-diagrama-original').is_visible());check('nojs-step-explanation',p.locator('[data-sx-guide] noscript li').count()==4)
   safe('nojs',fallback);nojs.close()
   live=context();p=live.new_page()
-  for route,name in [('/series/','series'),('/visuales/','ver')]:
+  for route,name in [('/','home'),('/series/','series'),('/visuales/','ver')]:
    try: goto(p,'https://5sigmas.com'+route);capture(p,'production-live-'+name,'live-production',full=True,surface='live-'+name)
    except Exception as e: report['live_reference_errors'].append(str(e))
   live.close()
