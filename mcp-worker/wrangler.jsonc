@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "five-sigmas-mcp",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-30",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "5sigmas.com/mcp*",
+      "zone_name": "5sigmas.com"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
