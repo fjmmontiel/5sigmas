@@ -16,7 +16,6 @@ on:
       - 'locales/en/manifest.yml'
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
-      - 'scripts/run_original_visual_test.mjs'
       - '.github/workflows/pr-coding-agents-golden.yml'
 
 permissions:
@@ -116,33 +115,21 @@ jobs:
         run: node scripts/audit_browser_resources.mjs
 
       - name: Validate chapter 2.1 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
 
       - name: Validate chapter 2.2 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
 
       - name: Validate chapter 2.3 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
 
       - name: Validate chapter 2.4 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
 
       - name: Validate chapter 2.5 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch5_accessibility.mjs
 
       - name: Validate chapter 2.6 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
 
       - name: Validate direct reader navigation

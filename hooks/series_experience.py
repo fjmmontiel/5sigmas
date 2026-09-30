@@ -2,8 +2,7 @@
 from __future__ import annotations
 import json
 import re
-from html import escape, unescape
-from html.parser import HTMLParser
+from html import escape
 from pathlib import Path
 import yaml
 from mkdocs.utils.meta import get_data
@@ -121,64 +120,12 @@ def gallery():
         for i,c in enumerate(s['chapters']):
             question=local(learn[i]['question']) if learn else c['title']
             watch=f'<button type="button" data-sx-preview="{esc(json.dumps(c,ensure_ascii=False))}">{t("Ver aquí","Watch here")}</button>' if c.get('video') else ''
-            interactive=f'<a href="{esc(c["url"])}#mecanismo">{t("Experimentar","Experiment")}</a>' if learn else ''
-            steps.append(f'''<li class="sx-chapter" data-sx-chapter-url="{esc(c['url'])}"><span class="sx-chapter-number">{i+1:02}</span><div><span class="sx-meta">{esc(c['title']) if learn else t('Capítulo','Chapter')+' '+str(i+1)}</span><h3><a href="{esc(c['url'])}">{esc(question)}</a></h3><div class="sx-chapter-actions"><a href="{esc(c['url'])}">{t('Leer','Read')} →</a>{watch}{interactive}</div></div></li>''')
+            steps.append(f'''<li class="sx-chapter" data-sx-chapter-url="{esc(c['url'])}"><span class="sx-chapter-number">{i+1:02}</span><div><span class="sx-meta">{esc(c['title']) if learn else t('Capítulo','Chapter')+' '+str(i+1)}</span><h3><a href="{esc(c['url'])}">{esc(question)}</a></h3><div class="sx-chapter-actions"><a href="{esc(c['url'])}">{t('Leer','Read')} →</a>{watch}</div></div></li>''')
         prereq=''.join(f'<a href="#serie-{slug}">{esc(by_slug[slug]["title"])}</a>' for slug in curricula['prerequisites']) or t('No necesitas conocimientos previos.','No prior knowledge needed.')
         next_s=by_slug[curricula['next']]
         details.append(f'''<details class="sx-series-detail" id="serie-{s['slug']}" data-sx-detail data-number="{s['number']}"><summary>{esc(s['title'])} · {n} {t('capítulos','chapters')}</summary><a class="sx-back" href="#catalogo">← {t('Todas las series','All series')}</a><div class="sx-detail-heading"><div class="sx-meta">{t('Serie','Series')} {s['number']:02} / 13 · {n} {t('capítulos','chapters')}</div><h2 tabindex="-1">{esc(s['title'])}</h2><p>{esc(s['description'])}</p></div><div class="sx-series-stage"><div class="sx-feature-video">{video_panel(preview,'sx-video-'+s['slug']) or cover(s)}<div class="sx-current-video" data-sx-current-video>{esc(preview['title']) if preview else ''}</div><div class="sx-preparation"><strong>{t('Antes de empezar','Before you start')}</strong><span>{prereq}</span>{('<a class="sx-original-intro" href="'+esc(s['intro']['url'])+'">'+t('Leer la presentación original','Read the original introduction')+' →</a>') if s['intro'] else ''}</div></div><div class="sx-roadmap"><div class="sx-roadmap-title"><h3>{t('El recorrido','The path')}</h3><span>{n} {t('capítulos','chapters')}</span></div><ol>{''.join(steps)}</ol></div></div><div class="sx-series-bottom"><a class="sx-primary" href="{esc(s['chapters'][0]['url'])}">{t('Empezar por el capítulo 1','Start with chapter 1')} →</a><a href="#mapa">{t('Ver el mapa de aprendizaje','See the learning map')}</a></div><nav class="sx-next-series"><div><span class="sx-meta">{t('Siguiente paso recomendado','Suggested next step')}</span><p>{esc(local(curricula['why']))}</p></div><a href="#serie-{next_s['slug']}">{esc(next_s['title'])} →</a></nav></details>''')
     featured=SERIES[0]
-    return f'''<div class="s5-landing s5-series-hub sx-v2" data-sx-hub data-locale="{t('es','en')}"><div data-sx-overview><header class="sx-library-heading"><div><span class="sx-meta">{t('Aprender · 13 series · 67 capítulos','Learn · 13 series · 67 chapters')}</span><h1>{t('Explora las series de IA.','Explore the AI series.')}</h1><p>{t('Empieza desde cero o elige qué quieres entender. Vídeos, mecanismos y fuentes, en un recorrido claro.','Start from scratch or choose what to understand. Videos, mechanisms and sources along a clear path.')}</p></div><a class="sx-primary" href="#serie-{featured['slug']}">{t('Empieza desde cero','Start from scratch')} →</a></header><aside class="sx-resume" data-sx-resume hidden><span>{t('Última lectura en este navegador','Last reading in this browser')}</span><strong data-sx-resume-title></strong><a data-sx-resume-link>{t('Continuar','Continue')} →</a></aside><details class="sx-learning-map" id="mapa"><summary><span>{t('Encuentra tu recorrido','Find your path')}</span><small>{t('4 recorridos conectados · puedes entrar por cualquier serie','4 connected paths · start with any series')}</small><span aria-hidden="true">+</span></summary><div class="sx-map-grid">{''.join(paths)}</div></details><section class="sx-catalog" id="catalogo"><div class="sx-catalog-tools"><h2>{t('Todas las series','All series')} <span data-sx-count role="status">13</span></h2><label><span class="sx-visually-hidden">{t('Buscar serie o pregunta','Search a series or question')}</span><input type="search" data-sx-search placeholder="{t('Busca una idea, tema o pregunta…','Find an idea, topic or question…')}" autocomplete="off"></label></div><div class="sx-filters" role="group" aria-label="{t('Recorrido','Path')}">{filters}</div><div class="sx-catalog-grid">{''.join(cards)}</div><div data-sx-empty hidden><p>{t('No hay coincidencias para esta búsqueda.','No matches for this search.')}</p><button type="button" data-sx-clear>{t('Mostrar las 13 series','Show all 13 series')}</button></div></section></div><div class="sx-series-details">{''.join(details)}</div><noscript><p>{t('Sin JavaScript puedes desplegar las series y abrir todos sus capítulos.','Without JavaScript you can expand each series and open every chapter.')}</p></noscript></div>'''
-
-class _Span(HTMLParser):
-    """Find the end of one balanced outer element without rewriting its bytes."""
-    def __init__(self, text, tag):
-        super().__init__(convert_charrefs=False); self.text=text; self.tag=tag; self.depth=0; self.end=None
-        self.lines=[0]
-        for m in re.finditer('\n',text): self.lines.append(m.end())
-    def handle_starttag(self,tag,attrs):
-        if tag==self.tag and self.end is None: self.depth+=1
-    def handle_endtag(self,tag):
-        if tag==self.tag and self.end is None:
-            self.depth-=1
-            if self.depth==0:
-                line,col=self.getpos(); self.end=self.text.find('>',self.lines[line-1]+col)+1
-
-def guide(s, index, original=''):
-    spec=s['curriculum']['lessons'][index]
-    data={'kind':GUIDES[s['slug']], 'view':spec['view'], 'title':local(spec['question']),
-          'options':local(spec['options']), 'steps':local(spec['steps']), 'locale':t('es','en'),
-          'caveat':t('Ejemplo didáctico reproducible. Los datos y tiempos son sintéticos; no se ejecuta un modelo ni se mide un proveedor.','Reproducible educational example. Data and timings are synthetic; no model runs and no provider is measured.')}
-    # This shared explanation accompanies BOTH selectable cases. The concrete
-    # outcome remains in the scene; do not describe a blocked action as universal.
-    comparison_copy = {
-        'agent-safety': t(
-            'Con la comprobación, se bloquea el cambio de destinatario; sin ella, el envío sale del permiso. El documento no concede autorización.',
-            'With the check, the recipient change is blocked; without it, sending exceeds permission. The document does not grant authorization.'),
-        'code-permissions': t(
-            'Con la comprobación se bloquea la escritura fuera de ámbito; sin ella, el archivo externo se modifica. Compara los dos resultados.',
-            'With the check, the out-of-scope write is blocked; without it, the external file changes. Compare both outcomes.'),
-    }
-    if data['view'] in comparison_copy:
-        data['steps'] = [list(step) for step in data['steps']]
-        data['steps'][-1][1] = comparison_copy[data['view']]
-    stages=''.join(f'<button type="button" data-sx-step="{i}" aria-pressed="{str(i==0).lower()}"><span>{i+1:02}</span>{esc(step[0])}</button>' for i,step in enumerate(data['steps']))
-    options=''.join(f'<button type="button" data-sx-scenario="{i}" aria-pressed="{str(i==0).lower()}">{esc(label)}</button>' for i,label in enumerate(data['options']))
-    fallback=''.join(f'<li><strong>{esc(a)}</strong> {esc(b)}</li>' for a,b in data['steps'])
-    original_html=original or f'<p>{t("La explicación técnica y las fuentes están a continuación.","The technical explanation and sources follow below.")}</p>'
-    return f'''<section class="sx-lab" id="mecanismo" data-sx-guide="{data['kind']}" data-view="{data['view']}" data-guide="{esc(json.dumps(data,ensure_ascii=False))}" data-locale="{t('es','en')}"><header class="sx-lab-heading"><div><span class="sx-meta">{t('Comprueba el mecanismo','Inspect the mechanism')}</span><h2>{esc(data['title'])}</h2></div><button type="button" data-sx-fullscreen aria-label="{t('Ampliar mecanismo','Expand mechanism')}">⤢</button></header><div class="sx-lab-tabs" role="tablist" aria-label="{t('Vista del mecanismo','Mechanism view')}"><button id="sx-guided-tab" type="button" role="tab" aria-selected="true" aria-controls="sx-guided-panel" data-sx-tab="guided">{t('Paso a paso','Step by step')}</button><button id="sx-original-tab" type="button" role="tab" aria-selected="false" aria-controls="s5-diagrama-original" data-sx-tab="original">{t('Diagrama original','Original diagram') if original else t('Capítulo técnico','Technical chapter')}</button></div><div id="sx-guided-panel" role="tabpanel" aria-labelledby="sx-guided-tab" data-sx-panel="guided"><div class="sx-scenarios" role="group" aria-label="{t('Compara dos casos','Compare two cases')}"><span>{t('Compara','Compare')}</span>{options}</div><div class="sx-scene" data-sx-scene aria-label="{esc(data['title'])}"></div><span class="sx-visually-hidden" role="status" aria-live="polite" data-sx-status></span><nav class="sx-stages" aria-label="{t('Pasos del mecanismo','Mechanism steps')}">{stages}</nav><div class="sx-explanation" aria-live="polite"><strong data-sx-title>{esc(data['steps'][0][0])}</strong><p data-sx-copy>{esc(data['steps'][0][1])}</p></div><div class="sx-playback"><button type="button" data-sx-run>▶ {t('Ver secuencia','Play sequence')}</button><button type="button" data-sx-prev disabled>← {t('Anterior','Previous')}</button><button type="button" data-sx-next>{t('Siguiente','Next')} →</button><button type="button" data-sx-reset>{t('Reiniciar','Reset')}</button><a href="#mecanismo" data-sx-share>{t('Enlace al mecanismo','Link to mechanism')} ↗</a></div><p class="sx-caveat">{esc(data['caveat'])}</p><noscript><ol>{fallback}</ol></noscript></div><div id="s5-diagrama-original" role="tabpanel" aria-labelledby="sx-original-tab" data-sx-panel="original">{original_html}</div></section>'''
-
-def wrap_mechanism(html, s, index):
-    pattern=r'<(?P<tag>section|div)\b[^>]*class=["\'][^"\']*\b(?:anim-brand-shell|aix-loop|aix-eval|aix-sec|s5v)\b[^"\']*["\'][^>]*>'
-    marker=re.search(pattern,html)
-    if marker:
-        parser=_Span(html[marker.start():],marker['tag']);parser.feed(html[marker.start():])
-        if parser.end:
-            end=marker.start()+parser.end
-            return html[:marker.start()]+guide(s,index,html[marker.start():end])+html[end:]
-    # Some chapters have no leading interactive wrapper; keep all prose untouched.
-    match=re.search(r'<h2\b',html)
-    pos=match.start() if match else len(html)
-    return html[:pos]+guide(s,index)+html[pos:]
+    return f'''<div class="s5-landing s5-series-hub sx-v2" data-sx-hub data-locale="{t('es','en')}"><div data-sx-overview><header class="sx-library-heading"><div><span class="sx-meta">{t('Aprender · 13 series · 67 capítulos','Learn · 13 series · 67 chapters')}</span><h1>{t('Explora las series de IA.','Explore the AI series.')}</h1><p>{t('Empieza desde cero o elige qué quieres entender. Vídeos, visuales GOLDEN y fuentes, en un recorrido claro.','Start from scratch or choose what to understand. Videos, GOLDEN visuals and sources along a clear path.')}</p></div><a class="sx-primary" href="#serie-{featured['slug']}">{t('Empieza desde cero','Start from scratch')} →</a></header><aside class="sx-resume" data-sx-resume hidden><span>{t('Última lectura en este navegador','Last reading in this browser')}</span><strong data-sx-resume-title></strong><a data-sx-resume-link>{t('Continuar','Continue')} →</a></aside><details class="sx-learning-map" id="mapa"><summary><span>{t('Encuentra tu recorrido','Find your path')}</span><small>{t('4 recorridos conectados · puedes entrar por cualquier serie','4 connected paths · start with any series')}</small><span aria-hidden="true">+</span></summary><div class="sx-map-grid">{''.join(paths)}</div></details><section class="sx-catalog" id="catalogo"><div class="sx-catalog-tools"><h2>{t('Todas las series','All series')} <span data-sx-count role="status">13</span></h2><label><span class="sx-visually-hidden">{t('Buscar serie o pregunta','Search a series or question')}</span><input type="search" data-sx-search placeholder="{t('Busca una idea, tema o pregunta…','Find an idea, topic or question…')}" autocomplete="off"></label></div><div class="sx-filters" role="group" aria-label="{t('Recorrido','Path')}">{filters}</div><div class="sx-catalog-grid">{''.join(cards)}</div><div data-sx-empty hidden><p>{t('No hay coincidencias para esta búsqueda.','No matches for this search.')}</p><button type="button" data-sx-clear>{t('Mostrar las 13 series','Show all 13 series')}</button></div></section></div><div class="sx-series-details">{''.join(details)}</div><noscript><p>{t('Sin JavaScript puedes desplegar las series y abrir todos sus capítulos.','Without JavaScript you can expand each series and open every chapter.')}</p></noscript></div>'''
 
 def on_page_content(html,page,config,files,**kwargs):
     src=page.file.src_uri
@@ -207,8 +154,6 @@ def on_page_content(html,page,config,files,**kwargs):
     position=t('Presentación','Introduction') if index is None else f'{t("Capítulo","Chapter")} {index+1} / {count}'
     bar=f'<nav class="sx-reader-context" aria-label="{t("Tu recorrido","Your path")}"><a href="{PREFIX}/series/">{t("Todas las series","All series")}</a><span aria-hidden="true">/</span><a href="{target(s)}">{esc(s["title"])}</a><span>{position}</span></nav>'
     html=re.sub(r'(</h1>)',lambda m:m[0]+bar,html,count=1)
-    if src.startswith('series/') and s['slug'] in GUIDES and index is not None:
-        html=wrap_mechanism(html,s,index)
     if index is not None:
         if index+1<count:
             following=s['chapters'][index+1];url=following['url'];label=following['title'];why=t('Continúa dentro de esta serie.','Continue within this series.')

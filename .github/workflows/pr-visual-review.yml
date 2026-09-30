@@ -19,7 +19,6 @@ on:
       - 'VIDEO_DELIVERY.md'
       - '.github/workflows/deploy-pages.yml'
       - '.github/workflows/publish-video-media.yml'
-      - 'scripts/run_original_visual_test.mjs'
       - '.github/workflows/pr-visual-review.yml'
 
 permissions:
@@ -243,8 +242,6 @@ jobs:
         run: node scripts/capture_animation_density_review.mjs
 
       - name: Validate Seguridad en IA visuals end-to-end
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/capture_security_visuals.mjs
 
       - name: Validate reader continuation outside animations
@@ -254,53 +251,39 @@ jobs:
         run: node scripts/capture_voice_report_animations.mjs
 
       - name: Validate Realtime Voice Agents chapter 1 end-to-end
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_architecture_ch1.mjs
 
       - name: Validate Realtime Voice Agents chapter 1 accessibility and intermediate states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
 
       - name: Validate Realtime Voice Agents chapter 2 source contract
         run: node scripts/validate_voice_turn_taking_ch2_source.mjs
 
       - name: Validate Realtime Voice Agents chapter 2 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
 
       - name: Validate Realtime Voice Agents chapter 3 source contract
         run: node scripts/validate_voice_latency_ch3_source.mjs
 
       - name: Validate Realtime Voice Agents chapter 3 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_latency_ch3_accessibility.mjs
 
       - name: Validate Realtime Voice Agents chapter 4 source contract
         run: node scripts/validate_voice_tools_state_ch4_source.mjs
 
       - name: Validate Realtime Voice Agents chapter 4 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
 
       - name: Validate Realtime Voice Agents chapter 5 source contract
         run: node scripts/validate_voice_network_telephony_ch5_source.mjs
 
       - name: Validate Realtime Voice Agents chapter 5 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
 
       - name: Validate Realtime Voice Agents chapter 6 source contract
         run: node scripts/validate_voice_evaluation_observability_ch6_source.mjs
 
       - name: Validate Realtime Voice Agents chapter 6 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
 
       - name: Validate Coding Agents chapter 1 source contract
@@ -310,24 +293,18 @@ jobs:
         run: node scripts/validate_coding_agent_harness_ch1_locale_navigation.mjs
 
       - name: Validate Coding Agents chapter 1 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
 
       - name: Validate Coding Agents chapter 2 source contract
         run: node scripts/validate_coding_agent_harness_ch2_source.mjs
 
       - name: Validate Coding Agents chapter 2 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
 
       - name: Validate Coding Agents chapter 3 source contract
         run: node scripts/validate_coding_agent_harness_ch3_source.mjs
 
       - name: Validate Coding Agents chapter 3 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
 
       - name: Validate Coding Agents chapter 4 source contract
@@ -337,64 +314,48 @@ jobs:
         run: node scripts/validate_context_engineering_ch1_source.mjs
 
       - name: Validate Context Engineering chapter 1 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch1_accessibility.mjs
 
       - name: Validate Context Engineering chapter 2 source contract
         run: node scripts/validate_context_engineering_ch2_source.mjs
 
       - name: Validate Context Engineering chapter 2 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch2_accessibility.mjs
 
       - name: Validate Context Engineering chapter 3 source contract
         run: node scripts/validate_context_engineering_ch3_source.mjs
 
       - name: Validate Context Engineering chapter 3 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch3_accessibility.mjs
 
       - name: Validate Context Engineering chapter 4 source contract
         run: node scripts/validate_context_engineering_ch4_source.mjs
 
       - name: Validate Context Engineering chapter 4 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch4_accessibility.mjs
 
       - name: Validate Context Engineering chapter 5 source contract
         run: node scripts/validate_context_engineering_ch5_source.mjs
 
       - name: Validate Context Engineering chapter 5 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch5_accessibility.mjs
 
       - name: Validate Context Engineering chapter 6 source contract
         run: node scripts/validate_context_engineering_ch6_source.mjs
 
       - name: Validate Context Engineering chapter 6 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_context_engineering_ch6_accessibility.mjs
 
       - name: Validate LLM Inference Engineering chapter 1 source contract
         run: node scripts/validate_inference_engineering_ch1_source.mjs
 
       - name: Validate LLM Inference Engineering chapter 1 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_inference_engineering_ch1_accessibility.mjs
 
       - name: Validate LLM Inference Engineering chapter 2 source contract
         run: node scripts/validate_inference_engineering_ch2_source.mjs
 
       - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_inference_engineering_ch2_accessibility.mjs
 
       - name: Validate complete video experience lifecycle

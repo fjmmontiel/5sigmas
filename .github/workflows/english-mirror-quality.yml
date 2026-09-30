@@ -46,7 +46,6 @@ on:
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - 'docs/assets/javascripts/visual-hub.js'
       - 'docs/assets/javascripts/video-library.js'
-      - 'scripts/run_original_visual_test.mjs'
       - '.github/workflows/english-mirror-quality.yml'
 
 permissions:
@@ -184,8 +183,6 @@ jobs:
         run: node scripts/validate_english_datacenters_media.mjs
 
       - name: Validate complete English AI Security series
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_english_security_complete.mjs
 
       - name: Validate native English AI Security media

@@ -7,8 +7,7 @@
     .toLowerCase()
     .trim();
 
-  // Gallery cards already link to their article. Expose the parent series
-  // without changing the player, artwork, article URL, or anchor-card markup.
+
   const initializeGallerySeriesLinks = () => {
     const en = document.documentElement.lang?.startsWith('en');
     for (const card of document.querySelectorAll('.s5-watch-card, .s5-media-card')) {
@@ -22,97 +21,28 @@
       parent.className = 'sx-parent-series';
       parent.href = `${en ? '/en' : ''}/series/#serie-${slug}`;
       parent.textContent = en ? 'Explore this series →' : 'Explorar esta serie →';
-      const host = card.querySelector('.s5-watch-card__body') || card;
-      host.appendChild(parent);
+      (card.querySelector('.s5-watch-card__body') || card).appendChild(parent);
       card.dataset.sxParent = 'true';
     }
   };
 
-  // Fullscreen belongs to the current learning scene. Escape must also work in
-  // embedded/kiosk browsers, without depending on browser-chrome key handling.
-  // One delegated listener survives document$ navigation; native video fullscreen
-  // remains owned by the browser and is deliberately not intercepted.
-  let fullscreenNavigationBound = false;
-  let expandedMechanism = null;
-  const initializeMechanismFullscreenNavigation = () => {
-    const synchronize = () => {
-      const current = document.fullscreenElement;
-      const previous = expandedMechanism;
-      expandedMechanism = current?.matches('[data-sx-guide]') ? current : null;
-      for (const button of document.querySelectorAll('[data-sx-fullscreen]')) {
-        const root = button.closest('[data-sx-guide]');
-        const expanded = root === expandedMechanism;
-        const en = (root?.dataset.locale || document.documentElement.lang || 'es').startsWith('en');
-        const label = expanded
-          ? (en ? 'Exit fullscreen' : 'Salir de pantalla completa')
-          : (en ? 'Expand mechanism' : 'Ampliar mecanismo');
-        button.setAttribute('aria-label', label);
-        button.setAttribute('aria-pressed', String(expanded));
-        button.title = label;
+  const preserveSeriesLocaleHash = () => {
+    if (!document.querySelector('[data-sx-hub]')) return;
+    let id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const shared = /^(?:serie-[a-z0-9-]+|mapa|catalogo)$/.test(id) ? '#' + id : '';
+    for (const link of document.querySelectorAll('.md-select a[href]')) {
+      const target = new URL(link.href, location.href);
+      if (/^\/(?:en\/)?series\/$/.test(target.pathname)) {
+        target.hash = shared;
+        link.href = target.href;
       }
-      if (previous && !current && previous.isConnected) {
-        previous.querySelector('[data-sx-fullscreen]')?.focus({ preventScroll: true });
-      }
-    };
-    if (!fullscreenNavigationBound) {
-      fullscreenNavigationBound = true;
-      document.addEventListener('fullscreenchange', synchronize);
-      document.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape' || !document.fullscreenElement?.matches('[data-sx-guide]')) return;
-        event.preventDefault();
-        // The existing button still provides an exit if a browser rejects the API.
-        document.exitFullscreen().catch(synchronize);
-      });
     }
-    synchronize();
-  };
-
-  // A saved link must still reach a diagram after it moves into the reference
-  // tab. A locale switch must preserve the selected series, not reset the hub.
-  let seriesDeepLinksBound = false;
-  const initializeSeriesDeepLinks = () => {
-    const synchronize = () => {
-      let id;
-      try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-      if (document.querySelector('[data-sx-hub]')) {
-        const shared = /^(?:serie-[a-z0-9-]+|mapa|catalogo)$/.test(id) ? '#' + id : '';
-        for (const link of document.querySelectorAll('.md-select a[href]')) {
-          const target = new URL(link.href, location.href);
-          if (/^\/(?:en\/)?series\/$/.test(target.pathname)) {
-            target.hash = shared;
-            link.href = target.href;
-          }
-        }
-      }
-      const target = id ? document.getElementById(id) : null;
-      const panel = target?.closest('[data-sx-panel="original"]');
-      const guide = panel?.closest('[data-sx-guide]');
-      if (guide?.dataset.ready === 'true' && panel.hidden) {
-        guide.querySelector('[data-sx-tab="original"]')?.click();
-        target.scrollIntoView({ block: 'start', behavior: 'instant' });
-      }
-    };
-    if (!seriesDeepLinksBound) {
-      seriesDeepLinksBound = true;
-      window.addEventListener('hashchange', () => requestAnimationFrame(synchronize));
-      document.addEventListener('click', (event) => {
-        const link = event.target.closest?.('a[href]');
-        if (!link) return;
-        const target = new URL(link.href, location.href);
-        if (target.origin === location.origin && target.pathname === location.pathname && target.hash) {
-          requestAnimationFrame(synchronize);
-        }
-      });
-    }
-    // The series module is loaded after reader navigation; its initial render
-    // must finish before selecting the reference tab for an incoming fragment.
-    requestAnimationFrame(synchronize);
   };
 
   const initializeDirectReaderNavigation = () => {
     initializeGallerySeriesLinks();
-    initializeMechanismFullscreenNavigation();
-    initializeSeriesDeepLinks();
+    preserveSeriesLocaleHash();
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';

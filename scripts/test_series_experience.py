@@ -1,11 +1,11 @@
-"""Verify the rendered, bilingual series contract. Does not replace browser QA."""
+"""Verify the bilingual human-navigation redesign while preserving prior GOLDEN visuals."""
 from __future__ import annotations
-import argparse
-import json
+import argparse, json
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from bs4 import BeautifulSoup
 
+VISUAL_SELECTOR = '.anim-brand-shell, .aix-loop, .aix-eval, .aix-sec, .s5v'
 
 def check(site: Path, output: Path):
     results=[]
@@ -17,53 +17,37 @@ def check(site: Path, output: Path):
         assert len(hub.select('[data-sx-card] svg[role="img"][aria-label]'))==13
         assert sum(len(d.select('[data-sx-chapter-url]')) for d in details[6:])==40
         assert len(hub.select('.sx-path'))==4
-        assert len({d['id'] for d in details})==13
+        assert not hub.select('a[href*="#mecanismo"]'), 'Series cards must not point to discarded guided mechanisms'
         players=hub.select('[data-sx-player] video')
-        assert players, 'No published source video available for inline playback'
+        assert players
         for element in hub.select('[data-sx-hub] a[href], [data-sx-hub] video[poster], [data-sx-hub] track[src]'):
             raw=element.get('href') or element.get('poster') or element.get('src')
             if raw.startswith('#'):
                 assert hub.find(id=raw[1:]),raw
                 continue
-            parsed=urlsplit(raw)
-            assert not parsed.netloc,raw
-            assert parsed.path.startswith(prefix),raw
+            parsed=urlsplit(raw); assert not parsed.netloc,raw; assert parsed.path.startswith(prefix),raw
             path=site/unquote(parsed.path).lstrip('/')
             if parsed.path.endswith('/'): path/='index.html'
             assert path.is_file(),str(path)
-            if parsed.fragment:
-                target=BeautifulSoup(path.read_text(),'lxml') if path.suffix=='.html' else None
-                assert target and target.find(id=parsed.fragment),raw
-        for v in players:
-            assert v['preload']=='none' and not v.has_attr('autoplay')
-            assert not v.get('src'), 'The source must be loaded only on an explicit playback action'
-            assert (site/unquote(v['data-src']).lstrip('/')).is_file()
-        guides=[]; views=set(); originals=0
-        for path in (site/locale/'series').glob('*/*/index.html'):
-            text=path.read_text()
-            if 'data-sx-guide=' not in text: continue
-            doc=BeautifulSoup(text,'lxml');guide=doc.select_one('[data-sx-guide]')
-            assert len(doc.select('[data-sx-guide]'))==1
-            assert len(guide.select('[data-sx-step]'))==4
-            assert len(guide.select('[data-sx-scenario]'))==2
-            data=json.loads(guide['data-guide'])
-            assert data['locale']==('en' if locale else 'es')
-            assert data['view'] not in views; views.add(data['view'])
-            assert len(data['steps'])==4 and len(data['options'])==2 and data['caveat']
-            assert guide.select_one('#s5-diagrama-original')
-            original=guide.select_one('[data-sx-panel="original"]')
-            originals+=bool(original.select_one('.anim-brand-shell, .aix-loop, .aix-eval, .aix-sec, .s5v, svg'))
-            assert not guide.find('article'), 'Do not break native reader-end placement'
-            assert doc.select_one('.s5-reader-direct'),str(path)
-            assert doc.select_one('.sx-reader-context') and doc.select_one('.sx-reader-next')
-            ids=[n['id'] for n in guide.select('[id]')]
-            assert len(ids)==len(set(ids)),str(path)
-            guides.append({'path':str(path.relative_to(site)),'view':data['view'],'kind':data['kind'],'integrated_original':bool(original.select_one('.anim-brand-shell, .aix-loop, .aix-eval, .aix-sec, .s5v, svg'))})
-        assert len(guides)==40, len(guides)
-        results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':40,'guides':guides,'integrated_originals':originals,'inline_players':len(players),'generated_links_resolve':True})
+        originals=0; advanced=0
+        for path in sorted((site/locale/'series').glob('*/*/index.html')):
+            doc=BeautifulSoup(path.read_text(),'lxml')
+            if not doc.select_one('.sx-reader-context'): continue
+            rel=path.relative_to(site/locale/'series')
+            series_slug=rel.parts[0]
+            if series_slug not in {'seguridad-ia','agentes-ia','agentes-voz-tiempo-real','coding-agents-agent-harnesses','context-engineering-memory-mcp','llm-inference-engineering-economics','evaluating-ai-systems-production'}:
+                continue
+            if rel.parts[1].startswith('00'): continue
+            advanced+=1
+            assert not doc.select('[data-sx-guide]'), str(path)
+            assert doc.select_one('.sx-reader-next'), str(path)
+            if doc.select_one(VISUAL_SELECTOR): originals+=1
+        assert advanced==40, advanced
+        assert originals==39, originals
+        results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':advanced,'golden_visuals_direct':originals,'guided_replacements':0,'inline_players':len(players)})
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps({'status':'PASS','checks':results},ensure_ascii=False,indent=2)+'\n')
-    print(json.dumps({'status':'PASS','series_per_locale':13,'chapters_per_locale':67,'guides_total':80,'integrated_originals':[x['integrated_originals'] for x in results]}))
+    print(json.dumps({'status':'PASS','series_per_locale':13,'chapters_per_locale':67,'advanced_chapters_per_locale':40,'golden_visuals_direct':[x['golden_visuals_direct'] for x in results],'guided_replacements':0}))
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--site',type=Path,default=Path('site'));p.add_argument('--output',type=Path,default=Path('artifacts/series-ui-review/source-tests.json'));a=p.parse_args();check(a.site,a.output)

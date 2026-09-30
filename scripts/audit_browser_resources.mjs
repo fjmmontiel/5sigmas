@@ -392,20 +392,6 @@ const exerciseLazyResources = async (page) => {
     }
 
     for (const video of videos) {
-      // This is resource activation, not UI acceptance. UI playback is separately
-      // exercised via real clicks for every series in capture_series_ui_review.py.
-      if (video.matches('[data-sx-player] video[data-src]') && !video.getAttribute('src')) {
-        const raw = video.dataset.src;
-        const source = new URL(raw, document.baseURI);
-        if (!raw || source.origin !== location.origin || !source.pathname.endsWith('.mp4')
-            || video.preload !== 'none' || video.autoplay
-            || !video.closest('[data-sx-player]').querySelector('[data-sx-play]')) {
-          throw new Error('Invalid deferred-series media contract');
-        }
-        video.preload = 'metadata';
-        video.src = source.href;
-        video.dataset.s5AuditActivation = 'declared-deferred-source';
-      }
       // Changing preload from none to metadata is sufficient to ask Chromium to run
       // media resource selection. Calling load() in the same task races that selection
       // and can itself cancel the valid range request we are trying to observe.
@@ -438,7 +424,6 @@ const captureVideoHealth = async (page) => page.evaluate(() => [...document.quer
   ].map(resolveUrl).filter(Boolean);
   return {
     sources: [...new Set(sources)],
-    auditActivation: video.dataset.s5AuditActivation ?? 'existing-source',
     readyState: video.readyState,
     networkState: video.networkState,
     errorCode: video.error?.code ?? null,

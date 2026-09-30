@@ -35,7 +35,6 @@ on:
       - 'mkdocs.en.yml'
       - 'locales/en/media.yml'
       - 'locales/en/manifest.yml'
-      - 'scripts/run_original_visual_test.mjs'
       - '.github/workflows/series4-golden-review.yml'
       - '.github/workflows/inference-engineering-live-qa.yml'
 
@@ -156,8 +155,6 @@ jobs:
           S5_PREVIEW_URL: http://127.0.0.1:8000
         run: node scripts/validate_inference_series_browser_milestone.mjs
       - name: Validate all Series 4 relationship geometry and accessibility
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: |
           node scripts/validate_inference_engineering_ch1_accessibility.mjs
           node scripts/validate_inference_engineering_ch2_accessibility.mjs
@@ -166,12 +163,8 @@ jobs:
           node scripts/validate_inference_engineering_ch5_accessibility.mjs
           node scripts/validate_inference_engineering_ch6_accessibility.mjs
       - name: Validate inference mobile text fit and negative mutation
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_inference_mobile_text_fit.mjs
       - name: Validate routed short-edge shaft shape and negative mutations
-        env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
         run: node scripts/validate_inference_mobile_edge_shaft_shape.mjs
       - name: Validate reader navigation and responsive shell
         run: |

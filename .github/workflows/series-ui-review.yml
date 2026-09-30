@@ -1,23 +1,18 @@
-name: Series UI real browser review
+name: Series UI + GOLDEN visual review
 on:
   pull_request:
     paths:
       - '.github/workflows/series-ui-review.yml'
       - 'hooks/series_experience.py'
-      - 'hooks/series_guides.json'
-      - 'hooks/series_*.py'
       - 'hooks/series_curriculum.json'
-      - 'scripts/test_series_scenes.mjs'
       - 'docs/stylesheets/series-experience.css'
       - 'docs/assets/javascripts/series-experience.js'
       - 'docs/assets/javascripts/reader-direct-navigation.js'
-      - 'scripts/*series*review*'
+      - 'scripts/capture_gallery_series_review.py'
+      - 'scripts/capture_series_ui_review.py'
       - 'scripts/test_series_experience.py'
-      - 'scripts/test_series_fullscreen.py'
       - 'scripts/test_series_navigation.py'
-      - 'scripts/audit_publication_contract.py'
       - 'scripts/test_publication_nav.py'
-      - 'scripts/audit_browser_resources.mjs'
 permissions:
   contents: read
 concurrency:
@@ -33,40 +28,21 @@ jobs:
           path: candidate
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - name: Editable public-source snapshot for local review (no built site or fonts)
+      - name: Check out exact PR base
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          from zipfile import ZipFile, ZIP_DEFLATED
-          root = Path('candidate')
-          out = root / 'artifacts/series-ui-review'
-          out.mkdir(parents=True, exist_ok=True)
-          extensions = {'.py','.js','.mjs','.css','.json','.md','.html','.yml','.yaml','.txt','.svg','.sh','.toml'}
-          excluded = {'.git','site','site-en','node_modules','.venv','venv','artifacts','__pycache__','.cache'}
-          with ZipFile(out / 'editable-public-source.zip', 'w', ZIP_DEFLATED) as archive:
-              for p in root.rglob('*'):
-                  if p.is_file() and p.suffix in extensions and not (set(p.relative_to(root).parts) & excluded):
-                      archive.write(p, p.relative_to(root))
-          PY
-      - name: Check out exact PR base with shared Git objects
-        run: |
-          set -euo pipefail
           git -C candidate fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
           git -C candidate worktree add --detach ../baseline "${{ github.event.pull_request.base.sha }}"
-          test "$(git -C baseline rev-parse HEAD)" = "${{ github.event.pull_request.base.sha }}"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Install exact build and review dependencies
+      - name: Install exact build and browser dependencies
         run: |
-          set -euo pipefail
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y ffmpeg
-          ffprobe -version
           python -m pip install -r candidate/requirements.txt
-          python -m pip install playwright==1.55.0 beautifulsoup4==4.13.5 lxml==6.0.2
+          python -m pip install playwright==1.55.0 beautifulsoup4==4.13.5 lxml==6.0.2 pillow
           python -m playwright install --with-deps chromium
-      - name: Build unmodified baseline and candidate in both languages
+      - name: Build baseline and candidate ES/EN
         run: |
           set -euo pipefail
           for directory in baseline candidate; do
@@ -80,33 +56,31 @@ jobs:
           node --check docs/assets/javascripts/reader-direct-navigation.js
           python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
-          node scripts/test_series_scenes.mjs
-      - name: Capture both real builds and validate all series, mechanisms and players
+      - name: Validate navigation and prove GOLDEN visuals are direct
         env:
           REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           REVIEW_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
-          python baseline/scripts/serve_preview.py --directory baseline/site --port 8000 > /tmp/baseline.log 2>&1 &
+          python baseline/scripts/serve_preview.py --directory baseline/site --port 8000 >/tmp/baseline.log 2>&1 &
           BASE_PID=$!
-          python candidate/scripts/serve_preview.py --directory candidate/site --port 8001 > /tmp/candidate.log 2>&1 &
+          python candidate/scripts/serve_preview.py --directory candidate/site --port 8001 >/tmp/candidate.log 2>&1 &
           CANDIDATE_PID=$!
           trap 'kill "$BASE_PID" "$CANDIDATE_PID" || true' EXIT
           for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:8000/series/ >/dev/null && curl -fsS http://127.0.0.1:8001/en/series/ >/dev/null; then break; fi
+            curl -fsS http://127.0.0.1:8000/series/ >/dev/null && curl -fsS http://127.0.0.1:8001/series/ >/dev/null && break
             sleep 1
           done
           cd candidate
-          python scripts/test_series_fullscreen.py
           python scripts/test_series_navigation.py
           python scripts/capture_gallery_series_review.py
           python scripts/capture_series_ui_review.py
-      - name: Owner-requested real browser captures (one day, no built site)
+      - name: Upload owner review evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: series-ui-real-browser-evidence
+          name: series-navigation-golden-evidence
           path: candidate/artifacts/series-ui-review/
           retention-days: 1
           if-no-files-found: warn

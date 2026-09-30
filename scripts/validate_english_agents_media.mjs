@@ -28,7 +28,7 @@ try {
       const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
       if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
       const body = await page.locator('body').innerText().catch(() => '');
-      const defaultHasMarker = body.includes(marker);
+      if (!body.includes(marker)) failures.push(`${route}: missing English marker ${JSON.stringify(marker)}`);
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
       if (videoCount !== 1) {
@@ -47,26 +47,6 @@ try {
       if (await page.locator('audio').count()) failures.push(`${route}: unexpected inherited audio`);
       const sizes = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
       if (sizes.scroll > sizes.client + 2) failures.push(`${route}: ${label} horizontal overflow ${sizes.scroll - sizes.client}px`);
-      // Media and overflow above are checked in the default guided view. A
-      // preserved diagram's heading must also be readable via its real tab;
-      // hidden DOM text is not evidence of an accessible English explanation.
-      if (!defaultHasMarker) {
-        const originalTab = page.locator('[data-sx-guide] [data-sx-tab="original"]');
-        if (await originalTab.count() !== 1) {
-          failures.push(`${route}: missing English marker ${JSON.stringify(marker)}`);
-        } else {
-          await page.locator('[data-sx-guide][data-ready="true"]').waitFor({ state: 'visible' });
-          await originalTab.click();
-          await page.locator('[data-sx-guide] [data-sx-panel="original"]').waitFor({ state: 'visible' });
-          if (await originalTab.getAttribute('aria-selected') !== 'true') failures.push(`${route}: original diagram tab did not activate`);
-          const originalBody = await page.locator('body').innerText();
-          if (!originalBody.includes(marker)) failures.push(`${route}: missing English marker ${JSON.stringify(marker)} in the visible original view`);
-          const guideTab = page.locator('[data-sx-guide] [data-sx-tab="guided"]');
-          await guideTab.click();
-          await page.locator('[data-sx-guide] [data-sx-panel="guided"]').waitFor({ state: 'visible' });
-          if (await guideTab.getAttribute('aria-selected') !== 'true') failures.push(`${route}: guided view did not restore`);
-        }
-      }
       for (const error of runtimeErrors) failures.push(`${route}: pageerror: ${error}`);
       await page.close();
     }

@@ -29,7 +29,6 @@ on:
       - 'mkdocs.yml'
       - 'mkdocs.en.yml'
       - 'locales/en/manifest.yml'
-      - 'scripts/run_original_visual_test.mjs'
       - '.github/workflows/series5-golden-review.yml'
       - '.github/workflows/evaluating-ai-systems-live-qa.yml'
 
@@ -168,7 +167,6 @@ jobs:
 
       - name: Validate native relationships, runtime lifecycle and accessibility
         env:
-          NODE_OPTIONS: --import=./scripts/run_original_visual_test.mjs
           S5_PREVIEW_BASE: http://127.0.0.1:8000
         run: node scripts/validate_evaluating_ai_relationship_accessibility.mjs
 
