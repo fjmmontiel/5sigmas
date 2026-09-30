@@ -116,6 +116,26 @@ async function openStaticPage(page, url) {
   return response;
 }
 
+async function revealShellThroughPublicUi(shell) {
+  if (await shell.isVisible()) return 'default';
+  const originalPanel = shell.locator('xpath=ancestor::*[@data-sx-panel="original"][1]');
+  if (!await originalPanel.count()) {
+    throw new Error('Animation shell is hidden and has no public reference panel');
+  }
+  const guide = originalPanel.locator('xpath=ancestor::*[@data-sx-guide][1]');
+  const tab = guide.locator('[data-sx-tab="original"]');
+  if (!await tab.count() || !await tab.isVisible()) {
+    throw new Error('Animation shell reference tab is not visibly reachable');
+  }
+  await tab.click();
+  await originalPanel.waitFor({ state: 'visible', timeout: 5_000 });
+  await shell.waitFor({ state: 'visible', timeout: 5_000 });
+  if (await tab.getAttribute('aria-selected') !== 'true') {
+    throw new Error('Animation shell reference tab did not activate');
+  }
+  return 'reference-tab';
+}
+
 function severity(metrics) {
   return (
     Math.max(0, (metrics.words - 65) / 65)
@@ -205,9 +225,10 @@ try {
     const count = await shells.count();
     for (let index = 0; index < count; index += 1) {
       const shell = shells.nth(index);
+      const view = await revealShellThroughPublicUi(shell);
       const metrics = await inspectShell(shell);
       const flags = flagsFor(metrics);
-      const entry = { url, index: index + 1, metrics, flags, severity: severity(metrics) };
+      const entry = { url, index: index + 1, view, metrics, flags, severity: severity(metrics) };
       report.animations.push(entry);
       if (flags.length) report.flags.push(entry);
     }
@@ -225,6 +246,7 @@ try {
     if (!response?.ok()) continue;
     const shell = desktop.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
+    await revealShellThroughPublicUi(shell);
     await shell.scrollIntoViewIfNeeded();
     const id = `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}`;
     await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-default.png`), animations: 'disabled' });
@@ -239,6 +261,7 @@ try {
     if (!response?.ok()) continue;
     const shell = mobile.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
+    await revealShellThroughPublicUi(shell);
     await shell.scrollIntoViewIfNeeded();
     await shell.screenshot({
       path: path.join(outputDir, `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}__mobile-default.png`),
