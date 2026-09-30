@@ -77,6 +77,7 @@ def run(args):
      if variant=='after':
       check(label+'-all13',p.locator('[data-sx-card]:visible').count()==13)
       check(label+'-catalog-fits',p.evaluate('document.documentElement.scrollWidth<=innerWidth+2'))
+      check(label+'-map-default',p.locator('#mapa').get_attribute('open') is not None if width>=900 else p.locator('#mapa').get_attribute('open') is None)
       p.locator('[data-sx-search]').fill('inferencia');check(label+'-search',p.locator('[data-sx-card]:visible').count()>=1 and p.locator('[data-sx-card][data-series-number="12"]').is_visible())
       capture(p,f'{label}-after-search',variant,surface='search')
       p.locator('[data-sx-search]').fill('zz-no-such-concept');check(label+'-empty',p.locator('[data-sx-empty]').is_visible())
@@ -116,7 +117,11 @@ def run(args):
         check(f'{label}-{ident}-reader',p.locator('.sx-reader-context a').count()==2 and p.locator('.sx-reader-next a').count()==2)
       safe(f'{label}-{variant}-{s["number"]}-{c["number"]}',lesson)
     for path,name in [('/visuales/','ver'),('/videos/','videos'),('/videos/series/agentes-ia/01-que-es-un-agente/','watch')]:
-     safe(label+'-'+variant+'-'+name,lambda path=path,name=name:(goto(p,base+path),capture(p,f'{label}-{variant}-{name}',variant,surface=name)))
+     def cross_surface(path=path,name=name):
+      goto(p,base+path)
+      if variant=='after' and name=='ver': check(label+'-ver-series-entry',p.locator('.s5-visual-hub__jump .sx-series-entry').count()==2)
+      capture(p,f'{label}-{variant}-{name}',variant,surface=name)
+     safe(label+'-'+variant+'-'+name,cross_surface)
     ctx.close()
   # English and narrow widths: exercise every state without extrapolating from one pilot.
   for width,prefix in [(1440,'/en'),(390,'/en'),(360,''),(768,'')]:
