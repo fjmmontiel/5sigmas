@@ -51,9 +51,9 @@ jobs:
       - name: Check out pinned public baseline with shared Git objects
         run: |
           set -euo pipefail
-          git -C candidate fetch --no-tags --depth=1 origin 6209a852b804338e31b95f06bdf604baeb04cf40
-          git -C candidate worktree add --detach ../baseline 6209a852b804338e31b95f06bdf604baeb04cf40
-          test "$(git -C baseline rev-parse HEAD)" = 6209a852b804338e31b95f06bdf604baeb04cf40
+          git -C candidate fetch --no-tags --depth=1 origin 381baa23af22cead9ce97720d941b7ac4ed3c67a
+          git -C candidate worktree add --detach ../baseline 381baa23af22cead9ce97720d941b7ac4ed3c67a
+          test "$(git -C baseline rev-parse HEAD)" = 381baa23af22cead9ce97720d941b7ac4ed3c67a
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
