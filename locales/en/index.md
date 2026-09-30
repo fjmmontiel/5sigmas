@@ -33,31 +33,30 @@ hide:
 
   <article class="s5-start-card">
     <header class="s5-start-card__header">
-      <span>Recommended path</span>
-      <span>01 · Reasoning Models</span>
+      <span>Start here</span>
+      <span>01 · AI Foundations</span>
     </header>
 
-    <a class="s5-start-card__media" href="/en/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Understand test-time compute in a one-minute video">
-      <img src="/en/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual explaining test-time compute" />
+    <a class="s5-start-card__media" href="/en/series/#serie-fundamentos-ia-iag" aria-label="Start from scratch with AI Foundations">
+      <img src="/en/series/fundamentos-ia-iag/01-que-es-ia.jpg" alt="Visual for the first explanation of what artificial intelligence is" />
     </a>
 
-    <a class="s5-start-card__cta" href="/en/videos/series/modelos-razonadores/03-test-time-compute/">
+    <a class="s5-start-card__cta" href="/en/series/#serie-fundamentos-ia-iag">
       <span>
-        <small>Start with one idea</small>
-        <strong>Understand test-time compute</strong>
+        <small>If you do not know where to begin</small>
+        <strong>Understand AI from first principles</strong>
       </span>
-      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Video · 1:00</span>
+      <span class="s5-start-card__cta-meta">4 chapters →</span>
     </a>
 
     <div class="s5-start-card__detail">
-      <p>Why spending more compute before answering can improve quality, and what that costs in latency and inference budget.</p>
-      <a class="s5-start-card__chapter" href="/en/series/modelos-razonadores/03-test-time-compute/">
-        <span>Open the technical chapter</span>
-        <small>9 min →</small>
+      <p>Separate software, machine learning, deep learning and generative AI before moving into agents, reasoning or infrastructure.</p>
+      <a class="s5-start-card__chapter" href="/en/videos/series/fundamentos-ia-iag/01-que-es-ia/">
+        <span>Watch the first explanation</span>
+        <small><span aria-hidden="true">▶</span> 1:03 →</small>
       </a>
     </div>
-  </article>
-</section>
+  </article></section>
 
 <section class="s5-why" aria-labelledby="s5-why-title">
   <div class="s5-why__copy">
@@ -90,8 +89,8 @@ hide:
     </a>
     <a class="s5-entry" href="/en/series/">
       <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Learn</div>
-      <div class="s5-entry__text">Ordered series for building knowledge progressively.</div>
+      <div class="s5-entry__title">Series</div>
+      <div class="s5-entry__text">13 connected series for starting from scratch or going deeper by goal.</div>
     </a>
     <a class="s5-entry" href="/en/articulos-tecnicos/">
       <div class="s5-entry__index">03</div>
@@ -176,7 +175,7 @@ hide:
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Choose a path</h2>
-    <a href="/en/series/">View all series →</a>
+    <a href="/en/series/#mapa">View the learning map →</a>
   </div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/en/series/fundamentos-ia-iag/00_presentacion_serie/">
