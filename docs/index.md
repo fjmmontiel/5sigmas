@@ -33,31 +33,30 @@ hide:
 
   <article class="s5-start-card">
     <header class="s5-start-card__header">
-      <span>Ruta recomendada</span>
-      <span>01 · Modelos razonadores</span>
+      <span>Empieza aquí</span>
+      <span>01 · Fundamentos de IA</span>
     </header>
 
-    <a class="s5-start-card__media" href="/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Entender test-time compute en un vídeo de un minuto y veintinueve segundos">
-      <img src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual del vídeo sobre test-time compute" />
+    <a class="s5-start-card__media" href="/series/#serie-fundamentos-ia-iag" aria-label="Empezar desde cero con Fundamentos de IA">
+      <img src="/series/fundamentos-ia-iag/01-que-es-ia.jpg" alt="Visual de la primera explicación sobre qué es la inteligencia artificial" />
     </a>
 
-    <a class="s5-start-card__cta" href="/videos/series/modelos-razonadores/03-test-time-compute/">
+    <a class="s5-start-card__cta" href="/series/#serie-fundamentos-ia-iag">
       <span>
-        <small>Empieza por una idea</small>
-        <strong>Entender test-time compute</strong>
+        <small>Si no sabes por dónde empezar</small>
+        <strong>Entiende qué es la IA desde cero</strong>
       </span>
-      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Vídeo · 1:29</span>
+      <span class="s5-start-card__cta-meta">4 capítulos →</span>
     </a>
 
     <div class="s5-start-card__detail">
-      <p>Por qué dedicar más cómputo antes de responder puede mejorar la calidad, y qué se paga en coste y latencia.</p>
-      <a class="s5-start-card__chapter" href="/series/modelos-razonadores/03-test-time-compute/">
-        <span>Abrir capítulo técnico</span>
-        <small>9 min →</small>
+      <p>Distingue software, aprendizaje automático, deep learning e IA generativa antes de entrar en agentes, razonamiento o infraestructura.</p>
+      <a class="s5-start-card__chapter" href="/videos/series/fundamentos-ia-iag/01-que-es-ia/">
+        <span>Ver la primera explicación</span>
+        <small><span aria-hidden="true">▶</span> 1:26 →</small>
       </a>
     </div>
-  </article>
-</section>
+  </article></section>
 
 <section class="s5-why" aria-labelledby="s5-why-title">
   <div class="s5-why__copy">
@@ -90,8 +89,8 @@ hide:
     </a>
     <a class="s5-entry" href="/series/">
       <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Aprender</div>
-      <div class="s5-entry__text">Series ordenadas para construir conocimiento de forma progresiva.</div>
+      <div class="s5-entry__title">Series</div>
+      <div class="s5-entry__text">13 series conectadas para empezar desde cero o profundizar por objetivo.</div>
     </a>
     <a class="s5-entry" href="/articulos-tecnicos/">
       <div class="s5-entry__index">03</div>
@@ -176,7 +175,7 @@ hide:
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Elige una ruta</h2>
-    <a href="/series/">Ver todas las series →</a>
+    <a href="/series/#mapa">Ver el mapa de aprendizaje →</a>
   </div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/series/fundamentos-ia-iag/00_presentacion_serie/">
