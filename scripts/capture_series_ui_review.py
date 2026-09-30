@@ -138,6 +138,20 @@ def run(args):
    ctx.close()
   # Real dark-mode switch, keyboard, player, history, no-JS and a recording.
   ctx=context();p=page_for(ctx)
+  def human_journey():
+   goto(p,args.after+'/')
+   p.locator('.s5-start-card__cta').click()
+   p.wait_for_url('**/series/#serie-fundamentos-ia-iag')
+   expect(p.locator('#serie-fundamentos-ia-iag')).to_be_visible()
+   check('home-to-foundations-series',True)
+   p.locator('#serie-fundamentos-ia-iag .sx-primary').click()
+   p.wait_for_load_state('networkidle')
+   check('foundations-series-to-first-chapter',p.locator('.sx-reader-context').count()==1)
+   goto(p,args.after+'/visuales/')
+   p.locator('.s5-visual-hub__jump .sx-series-entry').first.click()
+   p.wait_for_load_state('networkidle')
+   check('ver-to-series-hub',p.locator('[data-sx-hub]').count()==1)
+  safe('human-journey',human_journey)
   def functional():
    goto(p,args.after+'/series/');p.locator('[data-sx-card] .sx-card-open').nth(7).click();expect(p.locator('#serie-agentes-ia')).to_be_visible();check('card-opens-series',p.locator('#serie-agentes-ia').is_visible())
    p.go_back(wait_until='networkidle');expect(p.locator('[data-sx-overview]')).to_be_visible();check('back-to-catalog',p.locator('[data-sx-overview]').is_visible())
