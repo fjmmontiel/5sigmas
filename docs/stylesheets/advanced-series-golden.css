@@ -1011,3 +1011,18 @@ body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-m
 body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe > i {
   color: #829294 !important;
 }
+
+
+/* Series 9 architecture-map dark tabs: keep active state obvious without a light-theme pill. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map .s5v__steps button {
+  background: #151b1c !important;
+  border-color: rgba(225,240,240,.16) !important;
+  color: #aebcbc !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="1"] [data-s5v-step="1"],
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="2"] [data-s5v-step="2"],
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="3"] [data-s5v-step="3"] {
+  background: #3158db !important;
+  border-color: #5472e3 !important;
+  color: #fff !important;
+}
