@@ -19,6 +19,7 @@ from hooks.video_sitemap import (
 )
 from hooks.video_sitemap_en import (
     _render_watch_page as render_watch_page_en,
+    _topic_for as topic_for_en,
     _video_schema as video_schema_en,
 )
 from hooks.video_publication_policy import is_video_source_published
@@ -421,6 +422,21 @@ def main() -> None:
 
     topic, label = _topic_for("series/seguridad-ia/01-prompt-injection.md")
     assert (topic, label) == ("seguridad", "Seguridad en IA")
+
+    published_series_topics = {
+        "agentes-ia": (("agentes", "Agentes de IA"), ("agents", "AI agents")),
+        "agentes-voz-tiempo-real": (("voz", "Agentes de voz"), ("voice", "Voice agents")),
+        "coding-agents-agent-harnesses": (("coding-agents", "Coding agents"), ("coding-agents", "Coding agents")),
+        "context-engineering-memory-mcp": (("context-engineering", "Context engineering"), ("context-engineering", "Context engineering")),
+        "llm-inference-engineering-economics": (("inferencia", "Inferencia de LLMs"), ("inference", "LLM inference")),
+        "evaluating-ai-systems-production": (("evaluacion", "Evaluación de sistemas de IA"), ("evaluation", "AI systems evaluation")),
+    }
+    for series, (expected_es, expected_en) in published_series_topics.items():
+        route = f"series/{series}/01-placeholder.md"
+        assert _topic_for(route) == expected_es, f"Spanish video topic missing for {series}"
+        assert topic_for_en(route) == expected_en, f"English video topic missing for {series}"
+        assert _topic_for(route)[0] != "otros"
+        assert topic_for_en(route)[0] != "other"
 
     embed_source = (ROOT / "hooks" / "video_embed.py").read_text(encoding="utf-8")
     assert 'crossorigin="anonymous"' in embed_source, (
