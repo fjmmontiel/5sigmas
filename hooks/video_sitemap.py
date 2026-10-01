@@ -63,6 +63,12 @@ TOPICS = {
     "ia-pib-bienestar-energia": ("impacto", "Economía, energía y bienestar"),
     "datacenters-espacio": ("infraestructura", "Infraestructura"),
     "seguridad-ia": ("seguridad", "Seguridad en IA"),
+    "agentes-ia": ("agentes", "Agentes de IA"),
+    "agentes-voz-tiempo-real": ("voz", "Agentes de voz"),
+    "coding-agents-agent-harnesses": ("coding-agents", "Coding agents"),
+    "context-engineering-memory-mcp": ("context-engineering", "Context engineering"),
+    "llm-inference-engineering-economics": ("inferencia", "Inferencia de LLMs"),
+    "evaluating-ai-systems-production": ("evaluacion", "Evaluación de sistemas de IA"),
     "articulos-tecnicos": ("ingenieria", "Ingeniería de sistemas"),
 }
 NOISY_HEADINGS = {
