@@ -107,6 +107,29 @@ def run(args):
             }"""
         )
 
+    def motion_signature(page,index):
+        return page.locator(VISUAL_ROOT).nth(index).evaluate(
+            """el => {
+              const seconds=value => Math.max(...String(value||'0s').split(',').map(part => {
+                const v=part.trim();
+                if (v.endsWith('ms')) return (parseFloat(v)||0)/1000;
+                return parseFloat(v)||0;
+              }));
+              const nodes=[el,...el.querySelectorAll('*')];
+              let animated=0, transitioned=0, maxAnimation=0, maxTransition=0;
+              for (const node of nodes) {
+                const s=getComputedStyle(node);
+                const ad=seconds(s.animationDuration);
+                const td=seconds(s.transitionDuration);
+                maxAnimation=Math.max(maxAnimation,ad);
+                maxTransition=Math.max(maxTransition,td);
+                if (s.animationName!=='none' && ad>0.001) animated++;
+                if (td>0.001) transitioned++;
+              }
+              return {animated,transitioned,maxAnimation,maxTransition};
+            }"""
+        )
+
     with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True,channel='chrome')
         report['browser']=browser.version
@@ -152,6 +175,9 @@ def run(args):
                     style=style_signature(after,visual_index)
                     check(ident+'-golden-layer',style['body'] and style['root'],style)
                     check(ident+'-presentation-uplift',style['radius']>=12 and style['shadow']!='none',style)
+                    motion=motion_signature(after,visual_index)
+                    check(ident+'-reduced-motion-safe',
+                          motion['animated']==0 and motion['transitioned']==0,motion)
                     shot(before,'golden-'+ident+'-before',selector=VISUAL_ROOT,nth=visual_index,
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'before'})
                     shot(after,'golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
@@ -172,41 +198,51 @@ def run(args):
                     after.wait_for_timeout(30)
                 before.close();after.close()
 
-            # One mobile chapter per series, preserving topology while improving presentation.
-            route=item['chapters'][0]
-            before=browser.new_page(viewport={'width':390,'height':844},reduced_motion='reduce')
-            after=browser.new_page(viewport={'width':390,'height':844},reduced_motion='reduce')
-            before.goto(args.before+route,wait_until='networkidle')
-            after.goto(args.after+route,wait_until='networkidle')
-            count=min(before.locator(VISUAL_ROOT).count(),after.locator(VISUAL_ROOT).count())
-            for visual_index in range(count):
-                if not before.locator(VISUAL_ROOT).nth(visual_index).is_visible() or not after.locator(VISUAL_ROOT).nth(visual_index).is_visible():
-                    continue
-                ident=f'{item["number"]:02}-{visual_index+1:02}'
-                check('mobile-'+ident+'-mechanism-preserved',
-                      signature(before,visual_index)==signature(after,visual_index))
-                style=style_signature(after,visual_index)
-                check('mobile-'+ident+'-root-fit',style['width']<=style['viewport']+1,style)
-                shot(before,'mobile-golden-'+ident+'-before',selector=VISUAL_ROOT,nth=visual_index,
-                     meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'before'})
-                shot(after,'mobile-golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
-                     meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'after'})
-                light_sig=signature(after,visual_index)
-                light_style=style_signature(after,visual_index)
-                original_scheme=after.evaluate("document.body.getAttribute('data-md-color-scheme') || 'default'")
-                after.evaluate("document.body.setAttribute('data-md-color-scheme','slate')")
-                after.wait_for_timeout(60)
-                dark_sig=signature(after,visual_index)
-                dark_style=style_signature(after,visual_index)
-                check('mobile-'+ident+'-dark-mechanism-preserved',dark_sig==light_sig)
-                check('mobile-'+ident+'-dark-scheme-applied',
-                      dark_style['scheme']=='slate' and dark_style['color']!=light_style['color'],
-                      {'light':light_style,'dark':dark_style})
-                shot(after,'mobile-golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
-                     meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'dark'})
-                after.evaluate("(scheme) => document.body.setAttribute('data-md-color-scheme', scheme)",original_scheme)
-                after.wait_for_timeout(30)
-            before.close();after.close()
+            # Every advanced visual on mobile: preserve topology, fit root, dark mode and reduced motion.
+            for chapter_no,route in enumerate(item['chapters'],1):
+                before=browser.new_page(viewport={'width':390,'height':844},reduced_motion='reduce')
+                after=browser.new_page(viewport={'width':390,'height':844},reduced_motion='reduce')
+                before.goto(args.before+route,wait_until='networkidle')
+                after.goto(args.after+route,wait_until='networkidle')
+                before_roots=before.locator(VISUAL_ROOT)
+                after_roots=after.locator(VISUAL_ROOT)
+                count_before=before_roots.count()
+                count_after=after_roots.count()
+                check(f'mobile-{item["number"]:02}-{chapter_no:02}-visual-count',
+                      count_before==count_after,{'before':count_before,'after':count_after})
+                count=min(count_before,count_after)
+                for visual_index in range(count):
+                    if not before_roots.nth(visual_index).is_visible() or not after_roots.nth(visual_index).is_visible():
+                        continue
+                    ident=f'{item["number"]:02}-{chapter_no:02}-{visual_index+1:02}'
+                    before_sig=signature(before,visual_index)
+                    light_sig=signature(after,visual_index)
+                    check('mobile-'+ident+'-mechanism-preserved',before_sig==light_sig,
+                          {'before':before_sig,'after':light_sig})
+                    light_style=style_signature(after,visual_index)
+                    check('mobile-'+ident+'-root-fit',light_style['width']<=light_style['viewport']+1,light_style)
+                    motion=motion_signature(after,visual_index)
+                    check('mobile-'+ident+'-reduced-motion-safe',
+                          motion['animated']==0 and motion['transitioned']==0,motion)
+                    shot(before,'mobile-golden-'+ident+'-before',selector=VISUAL_ROOT,nth=visual_index,
+                         meta={'surface':'advanced-visual-mobile','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'before'})
+                    shot(after,'mobile-golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
+                         meta={'surface':'advanced-visual-mobile','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'after'})
+                    original_scheme=after.evaluate("document.body.getAttribute('data-md-color-scheme') || 'default'")
+                    after.evaluate("document.body.setAttribute('data-md-color-scheme','slate')")
+                    after.wait_for_timeout(60)
+                    dark_sig=signature(after,visual_index)
+                    dark_style=style_signature(after,visual_index)
+                    check('mobile-'+ident+'-dark-mechanism-preserved',dark_sig==light_sig,
+                          {'light':light_sig,'dark':dark_sig})
+                    check('mobile-'+ident+'-dark-scheme-applied',
+                          dark_style['scheme']=='slate' and dark_style['color']!=light_style['color'],
+                          {'light':light_style,'dark':dark_style})
+                    shot(after,'mobile-golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
+                         meta={'surface':'advanced-visual-mobile','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'dark'})
+                    after.evaluate("(scheme) => document.body.setAttribute('data-md-color-scheme', scheme)",original_scheme)
+                    after.wait_for_timeout(30)
+                before.close();after.close()
 
         check('all-advanced-visuals-reviewed',visual_count>=50,{'visuals':visual_count})
         browser.close()
