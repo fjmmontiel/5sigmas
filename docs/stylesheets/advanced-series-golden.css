@@ -847,3 +847,143 @@ body.s5-series-evaluating-ai-systems-production .s5v-mobile-native__rel {
     transform: none !important;
   }
 }
+
+
+/* GOLDEN pass 4 — Voice dark-mode integration.
+ * Presentation-only overrides for Series 9's legacy light-only visual surfaces.
+ * Existing topology, copy, controls, timing and state remain unchanged.
+ */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-timeline,
+  .s5v-latency-timeline,
+  .s5v-action-state-machine,
+  .s5v-network-topology,
+  .s5v-turn-evidence-graph,
+  .s5v-decision-map
+) {
+  --ink: #edf5f5;
+  --muted: #aebcbc;
+  --line: rgba(225,240,240,.16);
+  --soft: #151b1c;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-timeline {
+  --speech-soft: rgba(8,127,143,.18);
+  --decision-soft: rgba(122,90,248,.18);
+  --ok-soft: rgba(35,134,58,.17);
+  --stop-soft: rgba(199,58,49,.16);
+  --pause-soft: rgba(217,138,0,.16);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-latency-timeline {
+  --voice-soft: rgba(8,127,143,.18);
+  --turn-soft: rgba(122,90,248,.18);
+  --model-soft: rgba(49,90,168,.2);
+  --tts-soft: rgba(173,93,0,.18);
+  --media-soft: rgba(35,134,58,.17);
+  --critical-soft: rgba(196,62,53,.17);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-timeline__sheet,
+  .s5v-latency-timeline__sheet,
+  .s5v-action-state-machine__sheet,
+  .s5v-network-topology__sheet,
+  .s5v-turn-evidence-graph__sheet
+) {
+  background:
+    radial-gradient(86% 94% at 0% 0%,rgba(49,88,219,.08),transparent 54%),
+    linear-gradient(180deg,#111617,#0d1112) !important;
+  border-color: rgba(225,240,240,.15) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.36) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-case,
+  .s5v-latency-timeline__case,
+  .s5v-action-state-machine__figure,
+  .s5v-network-topology__figure,
+  .s5v-turn-evidence-graph__figure,
+  .s5v-action-state-machine__mobile-step,
+  .s5v-network-topology__mobile-route,
+  .s5v-turn-evidence-graph__mobile-node,
+  .s5v-turn-evidence-graph__mobile-diagnosis
+) {
+  background: #111718 !important;
+  border-color: rgba(225,240,240,.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 8px 24px rgba(0,0,0,.16);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-marker span,
+  .s5v-latency-marker span
+) {
+  background: #161c1d !important;
+  border-color: rgba(225,240,240,.17) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-segment--cancelled {
+  background: repeating-linear-gradient(135deg,rgba(199,58,49,.18) 0 8px,#161c1d 8px 16px) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-latency-segment--stt-residual {
+  background: repeating-linear-gradient(135deg,rgba(8,127,143,.18) 0 8px,#161c1d 8px 16px) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-action-state-machine__mobile-reconcile {
+  background: rgba(173,93,0,.13) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-action-state-machine__reconcile {
+  fill: rgba(173,93,0,.13) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__node {
+  fill: #121819 !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-browser {
+  fill: rgba(49,90,168,.12) !important;
+  stroke: rgba(96,132,202,.55) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-network {
+  fill: rgba(173,93,0,.11) !important;
+  stroke: rgba(197,136,64,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-platform {
+  fill: rgba(8,127,143,.12) !important;
+  stroke: rgba(54,155,164,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-carrier {
+  fill: rgba(180,61,53,.1) !important;
+  stroke: rgba(205,105,91,.48) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-app {
+  fill: rgba(122,90,248,.11) !important;
+  stroke: rgba(147,124,246,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-label {
+  fill: #aebcbc !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-evidence-graph__diagnosis {
+  fill: #13191a !important;
+  stroke: rgba(225,240,240,.16) !important;
+}
+
+/* Voice decision map: remove the remaining light islands without changing its axes/points. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map {
+  --accent-soft: rgba(115,87,255,.18);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map .s5v__steps button {
+  background: #151b1c !important;
+  border-color: rgba(225,240,240,.16) !important;
+  color: var(--muted) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map .s5v__steps button[aria-pressed="true"] {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__node {
+  background: rgba(17,23,24,.94) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__node::after {
+  box-shadow: 0 0 0 4px #111718,0 0 0 5px rgba(225,240,240,.16) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__plot {
+  border-color: rgba(225,240,240,.28) !important;
+  background:
+    linear-gradient(90deg,transparent 49.8%,rgba(225,240,240,.06) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,rgba(225,240,240,.06) 50%,transparent 50.2%),
+    radial-gradient(circle at 50% 50%,rgba(115,87,255,.08),transparent 58%) !important;
+}
