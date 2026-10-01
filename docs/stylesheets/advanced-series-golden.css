@@ -294,7 +294,7 @@ body.s5-advanced-series .s5g-visual.s5g-state-pulse {
   body.s5-advanced-series .s5g-visual::before,
   body.s5-advanced-series .s5g-visual::after {
     animation: none !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 }
