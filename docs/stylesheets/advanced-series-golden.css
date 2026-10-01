@@ -822,3 +822,28 @@ body.s5-series-evaluating-ai-systems-production .s5v-mobile-native__rel {
     transition: none !important;
   }
 }
+
+
+/* Final reduced-motion cascade lock.
+ * Some interactive visual rules intentionally use !important transitions and are
+ * declared after the shared reduced-motion block. Repeat the override with
+ * higher specificity at the end of the file so no presentation transition can
+ * leak through when the OS/browser requests reduced motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  body.s5-advanced-series .s5g-visual.s5g-visual,
+  body.s5-advanced-series .s5g-visual.s5g-visual *,
+  body.s5-advanced-series .s5g-visual.s5g-visual::before,
+  body.s5-advanced-series .s5g-visual.s5g-visual::after,
+  body.s5-advanced-series .s5g-visual.s5g-visual *::before,
+  body.s5-advanced-series .s5g-visual.s5g-visual *::after {
+    animation: none !important;
+    transition: none !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  body.s5-advanced-series .s5g-visual.s5g-visual button:hover {
+    transform: none !important;
+  }
+}
