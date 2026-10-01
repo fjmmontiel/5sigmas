@@ -55,6 +55,21 @@
     if (io) io.observe(root);
     else root.classList.add('is-inview');
 
+    const markScrollable = () => {
+      root.querySelectorAll('[class*="__scroll"]').forEach((scroller) => {
+        const overflow = scroller.scrollWidth > scroller.clientWidth + 12;
+        scroller.classList.toggle('s5g-scrollable', overflow);
+        if (overflow && scroller.dataset.s5GoldenScrollBound !== '1') {
+          scroller.dataset.s5GoldenScrollBound = '1';
+          scroller.addEventListener('scroll', () => {
+            if (scroller.scrollLeft > 8) scroller.classList.add('is-scrolled');
+          }, { passive: true });
+        }
+      });
+    };
+    requestAnimationFrame(markScrollable);
+    if ('ResizeObserver' in window) new ResizeObserver(markScrollable).observe(root);
+
     const mutations = new MutationObserver((records) => {
       if (records.some((record) => stateAttributes.has(record.attributeName))) pulse(root);
     });

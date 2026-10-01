@@ -298,3 +298,129 @@ body.s5-advanced-series .s5g-visual.s5g-state-pulse {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* GOLDEN pass 2 — preserve the existing mechanisms, strengthen their visual storytelling. */
+body.s5-advanced-series .s5g-visual { scroll-margin-top: 112px; }
+
+/* Series 7 · security: clarify the authority boundary without changing any state. */
+body.s5-series-seguridad-ia .ctxmix__diagram {
+  border-color: var(--s5g-line-strong) !important;
+  background:
+    radial-gradient(80% 90% at 0% 0%,color-mix(in srgb,var(--s5g-red) 5%,transparent),transparent 58%),
+    color-mix(in srgb,var(--s5g-bg) 97%,var(--s5g-ink) 3%) !important;
+}
+body.s5-series-seguridad-ia .ctxmix__steps { gap: .5rem; }
+body.s5-series-seguridad-ia .ctxmix__steps button {
+  width: 2.7rem;
+  height: 2.7rem;
+  box-shadow: 0 3px 12px color-mix(in srgb,var(--s5g-ink) 7%,transparent);
+}
+body.s5-series-seguridad-ia .ctxmix__source {
+  border-radius: 12px;
+  border-inline: 1px solid var(--s5g-line);
+  border-bottom: 1px solid var(--s5g-line);
+  box-shadow: 0 7px 18px color-mix(in srgb,var(--s5g-ink) 5%,transparent);
+}
+body.s5-series-seguridad-ia .ctxmix__runtime {
+  border-radius: 14px;
+  box-shadow: var(--s5g-shadow-soft);
+}
+body.s5-series-seguridad-ia .ctxmix__model {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb,var(--s5g-blue) 9%,transparent),
+    0 10px 30px color-mix(in srgb,var(--s5g-blue) 8%,transparent);
+}
+
+/* Series 8 · agents: make the existing loop read as a causal loop, not four loose cards. */
+body.s5-series-agentes-ia .aix-loop-grid {
+  grid-template-columns: minmax(0,2.35fr) minmax(210px,.65fr);
+  gap: 1.15rem;
+}
+body.s5-series-agentes-ia .aix-loop-diagram {
+  padding: 1.25rem;
+  border: 1px solid var(--s5g-line);
+  background:
+    radial-gradient(75% 110% at 0% 0%,color-mix(in srgb,var(--s5g-teal) 8%,transparent),transparent 60%),
+    color-mix(in srgb,var(--s5g-bg) 96%,var(--s5g-ink) 4%);
+}
+body.s5-series-agentes-ia .aix-node {
+  min-height: 94px;
+  border-color: var(--s5g-line-strong);
+  box-shadow: 0 8px 21px color-mix(in srgb,var(--s5g-ink) 5%,transparent);
+}
+body.s5-series-agentes-ia .aix-node strong {
+  font-size: .94rem;
+  letter-spacing: -.018em;
+}
+body.s5-series-agentes-ia .aix-arrow {
+  position: relative;
+  font-size: 1.34rem;
+  font-weight: 850;
+}
+body.s5-series-agentes-ia .aix-loop-side {
+  border: 1px solid color-mix(in srgb,var(--s5g-blue) 18%,var(--s5g-line));
+  background:
+    radial-gradient(90% 100% at 100% 0%,color-mix(in srgb,var(--s5g-blue) 9%,transparent),transparent 60%),
+    color-mix(in srgb,var(--s5g-bg) 94%,var(--s5g-blue) 6%);
+  box-shadow: var(--s5g-shadow-soft);
+}
+body.s5-series-agentes-ia .aix-chips span {
+  min-height: 29px;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: .62rem;
+  border-color: color-mix(in srgb,var(--s5g-blue) 26%,var(--s5g-line));
+  background: color-mix(in srgb,var(--s5g-bg) 90%,var(--s5g-blue) 10%);
+}
+body.s5-series-agentes-ia .aix-eval-trace,
+body.s5-series-agentes-ia .aix-sec-path { margin-top: 1.15rem; }
+body.s5-series-agentes-ia .aix-eval-event,
+body.s5-series-agentes-ia .aix-eval-dimension,
+body.s5-series-agentes-ia .aix-sec-node,
+body.s5-series-agentes-ia .aix-sec-gate {
+  box-shadow: 0 7px 19px color-mix(in srgb,var(--s5g-ink) 5%,transparent);
+}
+
+/* One-time causal entrance motion for the existing Agent diagrams. */
+body.s5-series-agentes-ia .aix-loop.is-inview .aix-node--observe { animation:s5g-causal-in .38s .08s both; }
+body.s5-series-agentes-ia .aix-loop.is-inview .aix-node--plan { animation:s5g-causal-in .38s .16s both; }
+body.s5-series-agentes-ia .aix-loop.is-inview .aix-node--act { animation:s5g-causal-in .38s .24s both; }
+body.s5-series-agentes-ia .aix-loop.is-inview .aix-node--verify { animation:s5g-causal-in .38s .32s both; }
+body.s5-series-agentes-ia .aix-loop.is-inview .aix-return { animation:s5g-causal-in .38s .4s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(1) { animation:s5g-causal-in .34s .06s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(2) { animation:s5g-causal-in .34s .12s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(3) { animation:s5g-causal-in .34s .18s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(4) { animation:s5g-causal-in .34s .24s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(5) { animation:s5g-causal-in .34s .30s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(6) { animation:s5g-causal-in .34s .36s both; }
+body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > :nth-child(7) { animation:s5g-causal-in .34s .42s both; }
+
+@keyframes s5g-causal-in {
+  from { opacity:.32; transform:translateY(7px) scale(.985); }
+  to { opacity:1; transform:none; }
+}
+
+/* Wide technical canvases keep their topology; make horizontal exploration obvious. */
+body.s5-advanced-series .s5g-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb,var(--s5g-accent) 54%,transparent) transparent;
+  background-image: linear-gradient(to left,
+    color-mix(in srgb,var(--s5g-accent) 9%,transparent),
+    transparent 28px);
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+body.s5-advanced-series .s5g-scrollable.is-scrolled { background-image: none; }
+
+@media (max-width:700px) {
+  body.s5-series-agentes-ia .aix-loop-grid { grid-template-columns:1fr; gap:.85rem; }
+  body.s5-series-agentes-ia .aix-loop-diagram { padding:1rem; }
+  body.s5-series-agentes-ia .aix-node { min-height:0; }
+  body.s5-series-seguridad-ia .ctxmix__steps button { width:2.6rem; height:2.6rem; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body.s5-series-agentes-ia .aix-loop.is-inview :is(.aix-node,.aix-return),
+  body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > * { animation:none!important; }
+}
