@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated": "2026-09-25",
+  "updated": "2026-10-01",
   "scope": "OpenAI release-reported benchmark history selected for explicit provenance and configuration notes. No cross-vendor normalization is attempted in v1.",
   "freshness_policy": "Review on every relevant model release and at least every 30 days while the tool is active.",
   "sources": {
@@ -51,6 +51,24 @@
       "title": "GPT-6 Astra: A new generation of intelligence",
       "url": "https://openai.com/index/gpt-6-astra/",
       "published": "2026-09-03"
+    },
+    "gpt61sol": {
+      "organization": "OpenAI",
+      "title": "GPT-6.1 Sol Model | OpenAI API",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+      "published": "2026-09-29"
+    },
+    "sonnet55": {
+      "organization": "Anthropic",
+      "title": "Claude Sonnet 5.5 | Claude Platform Docs",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+      "published": "2026-09-28"
+    },
+    "gemini4argon": {
+      "organization": "Google",
+      "title": "Gemini 4 Argon: our next era of frontier intelligence",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+      "published": "2026-09-30"
     }
   },
   "series": [
@@ -386,7 +404,7 @@
     }
   ],
   "release_coverage": {
-    "reviewed_through": "2026-09-25",
+    "reviewed_through": "2026-10-01",
     "releases": [
       {
         "model": "GPT-6 Astra",
@@ -405,6 +423,27 @@
         "date": "2026-09-22",
         "status": "reviewed_not_added",
         "reason": "Primary API/changelog sources publish availability and specs but no release benchmark table matching the existing timeline series."
+      },
+      {
+        "model": "Claude Sonnet 5.5",
+        "date": "2026-09-28",
+        "status": "reviewed_not_added",
+        "source": "sonnet55",
+        "reason": "Primary Anthropic material documents the release and its own evaluations, but this timeline keeps cross-generation series only where protocols are directly comparable; no cross-vendor point is inserted by name alone."
+      },
+      {
+        "model": "GPT-6.1 Sol",
+        "date": "2026-09-29",
+        "status": "reviewed_not_added",
+        "source": "gpt61sol",
+        "reason": "The current model/API documentation establishes availability, pricing and capabilities, but does not publish a release benchmark table matching the existing OpenAI timeline series. No synthetic continuity is created."
+      },
+      {
+        "model": "Gemini 4 Argon",
+        "date": "2026-09-30",
+        "status": "reviewed_not_added",
+        "source": "gemini4argon",
+        "reason": "Google announced Argon with a new benchmark set and phased pre-release access. Those results are not mixed into the existing OpenAI longitudinal series without a justified comparable protocol."
       }
     ]
   }
