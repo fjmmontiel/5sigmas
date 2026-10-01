@@ -63,7 +63,7 @@ def run(args):
 
     def golden_style(page):
         return page.locator(VISUAL_ROOT).first.evaluate("""el => {
-          const target=el.matches('.s5v') ? el.querySelector('.s5v__canvas') : el;
+          const target=el.matches('.s5v') ? (el.querySelector('.s5v__canvas') || el.querySelector(':scope > [class$="__sheet"]') || el) : el;
           const s=getComputedStyle(target||el);
           const r=parseFloat(s.borderRadius)||0;
           return {

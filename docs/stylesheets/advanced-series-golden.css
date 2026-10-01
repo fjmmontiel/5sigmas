@@ -194,6 +194,17 @@ body.s5-advanced-series .s5g-visual.s5v svg :is(rect,circle,path,polygon,line,po
   transition: fill .22s ease, stroke .22s ease, opacity .22s ease, filter .22s ease;
 }
 
+
+/* Voice chapters 9.2–9.6 use their own sheet instead of .s5v__canvas. */
+body.s5-advanced-series .s5g-visual.s5v > [class$="__sheet"] {
+  border-color: var(--s5g-line-strong) !important;
+  background:
+    radial-gradient(105% 120% at 0% 0%, color-mix(in srgb,var(--s5g-accent) 6%,transparent), transparent 46%),
+    radial-gradient(82% 110% at 100% 0%, color-mix(in srgb,var(--s5g-blue) 4%,transparent), transparent 50%),
+    linear-gradient(180deg, color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-ink) 2%), var(--s5g-bg)) !important;
+  box-shadow: var(--s5g-shadow) !important;
+}
+
 /* Existing animation shell stays functional; make it look like one coherent GOLDEN object. */
 body.s5-advanced-series .anim-brand-shell:has(.anim-brand-shell__viewport > .s5g-visual) {
   margin-block: 2rem 3.2rem;
