@@ -63,6 +63,12 @@ TOPICS = {
     "ia-pib-bienestar-energia": ("impacto", "Economía, energía y bienestar"),
     "datacenters-espacio": ("infraestructura", "Infraestructura"),
     "seguridad-ia": ("seguridad", "Seguridad en IA"),
+    "agentes-ia": ("agentes", "Agentes de IA"),
+    "agentes-voz-tiempo-real": ("voz", "Agentes de voz"),
+    "coding-agents-agent-harnesses": ("coding-agents", "Coding agents"),
+    "context-engineering-memory-mcp": ("context-engineering", "Context engineering"),
+    "llm-inference-engineering-economics": ("inferencia", "Inferencia de LLMs"),
+    "evaluating-ai-systems-production": ("evaluacion", "Evaluación de sistemas de IA"),
     "articulos-tecnicos": ("ingenieria", "Ingeniería de sistemas"),
 }
 NOISY_HEADINGS = {
@@ -735,6 +741,24 @@ def _render_watch_page(
 {entry['transcript']}
 
   </details>
+"""
+    else:
+        context_points = "\n".join(
+            f"<li><strong>{html_escape(snippet['title'])}</strong>"
+            + (f": {html_escape(snippet['excerpt'])}" if snippet["excerpt"] else "")
+            + "</li>"
+            for snippet in entry["snippets"]
+        )
+        transcript = f"""
+  <section class="s5-video-watch__machine-context" aria-labelledby="video-machine-context-title">
+    <div class="s5-video-watch__section-head">
+      <span class="s5-eyebrow">Contexto textual para búsqueda y agentes</span>
+      <h2 id="video-machine-context-title">Qué cubre este vídeo</h2>
+    </div>
+    <p>Este vídeo no dispone todavía de una transcripción sincronizada revisada. Este contexto editorial describe su contenido sin presentarlo como voz ni como texto literal del vídeo.</p>
+    <p>{html_escape(entry['description'])}</p>
+    <ul>{context_points}</ul>
+  </section>
 """
 
     related_cards = "\n".join(_render_related_card(item) for item in related)

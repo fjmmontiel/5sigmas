@@ -85,6 +85,11 @@ jobs:
       - name: Validate video structured-data contract
         run: python scripts/test_video_schema_contract.py
 
+      - name: Validate video AI discovery contract
+        run: |
+          python -m py_compile hooks/video_sitemap.py hooks/video_sitemap_en.py scripts/test_video_ai_discovery_contract.py scripts/audit_site_perfection_live.py
+          python scripts/test_video_ai_discovery_contract.py
+
       - name: Build site strictly
         run: mkdocs build --clean --strict
 

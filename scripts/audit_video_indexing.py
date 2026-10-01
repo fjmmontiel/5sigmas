@@ -27,6 +27,7 @@ SITE_ORIGIN = "https://5sigmas.com"
 NS = {
     "sm": "http://www.sitemaps.org/schemas/sitemap/0.9",
     "video": "http://www.google.com/schemas/sitemap-video/1.1",
+    "xhtml": "http://www.w3.org/1999/xhtml",
 }
 
 
@@ -92,6 +93,22 @@ def canonical(html: str) -> str:
             re.IGNORECASE,
         )
     return match.group(1) if match else ""
+
+
+def alternate_href(html: str, hreflang: str) -> str:
+    for tag in re.findall(r"<link\b[^>]*>", html, re.IGNORECASE):
+        rel = re.search(r'\brel="([^"]*)"', tag, re.IGNORECASE)
+        lang = re.search(r'\bhreflang="([^"]*)"', tag, re.IGNORECASE)
+        href = re.search(r'\bhref="([^"]*)"', tag, re.IGNORECASE)
+        if (
+            rel
+            and "alternate" in {part.casefold() for part in rel.group(1).split()}
+            and lang
+            and lang.group(1).casefold() == hreflang.casefold()
+            and href
+        ):
+            return href.group(1)
+    return ""
 
 
 def meta_content(html: str, key: str, *, attr: str = "name") -> list[str]:
@@ -252,6 +269,16 @@ def main() -> int:
         node.text or ""
         for node in sitemap.findall(".//sm:loc", NS)
     }
+    sitemap_alternates: dict[str, dict[str, str]] = {}
+    for url_node in sitemap.findall(".//sm:url", NS):
+        loc = url_node.findtext("sm:loc", default="", namespaces=NS)
+        sitemap_alternates[loc] = {
+            str(link.attrib.get("hreflang") or "").lower(): str(link.attrib.get("href") or "")
+            for link in url_node.findall("xhtml:link", NS)
+            if str(link.attrib.get("rel") or "").lower() == "alternate"
+            and str(link.attrib.get("hreflang") or "")
+            and str(link.attrib.get("href") or "")
+        }
     video_records: dict[str, dict[str, str]] = {}
     for url_node in video_sitemap.findall(".//sm:url", NS):
         loc = url_node.findtext("sm:loc", default="", namespaces=NS)
@@ -352,6 +379,23 @@ def main() -> int:
         watch_html = watch_path.read_text(encoding="utf-8", errors="replace")
         require("md-content" in watch_html, f"{md}: watch page is not using the Material layout", failures)
         require(canonical(watch_html) == target_watch_url, f"{md}: wrong watch canonical", failures)
+        expected_en_watch = target_watch_url.replace(f"{SITE_ORIGIN}/", f"{SITE_ORIGIN}/en/", 1)
+        watch_alternates = sitemap_alternates.get(target_watch_url, {})
+        require(
+            watch_alternates.get("es") == target_watch_url,
+            f"{md}: sitemap missing self-referential es hreflang",
+            failures,
+        )
+        require(
+            watch_alternates.get("en") == expected_en_watch,
+            f"{md}: sitemap missing paired en hreflang",
+            failures,
+        )
+        require(
+            "s5-video-watch__transcript" in watch_html or "s5-video-watch__machine-context" in watch_html,
+            f"{md}: watch page exposes neither reviewed transcript nor truthful text context",
+            failures,
+        )
         robots = ",".join(meta_content(watch_html, "robots")).lower()
         require("noindex" not in robots and "index" in robots, f"{md}: watch page is not indexable", failures)
         require(

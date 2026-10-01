@@ -47,6 +47,11 @@ TOPICS = {
     "datacenters-espacio": ("infrastructure", "Infrastructure"),
     "seguridad-ia": ("security", "AI security"),
     "agentes-ia": ("agents", "AI agents"),
+    "agentes-voz-tiempo-real": ("voice", "Voice agents"),
+    "coding-agents-agent-harnesses": ("coding-agents", "Coding agents"),
+    "context-engineering-memory-mcp": ("context-engineering", "Context engineering"),
+    "llm-inference-engineering-economics": ("inference", "LLM inference"),
+    "evaluating-ai-systems-production": ("evaluation", "AI systems evaluation"),
     "articulos-tecnicos": ("engineering", "Systems engineering"),
 }
 NOISY_HEADINGS = {
@@ -222,6 +227,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     )
     if video_meta:
         output = output.replace("</head>", f"  {video_meta}\n</head>", 1)
+
     return _inject_jsonld(output, _video_schema(entry, site_url, global_root))
 
 
@@ -593,6 +599,20 @@ def _render_watch_page(entry: dict[str, Any], related: list[dict[str, Any]], sit
     transcript = ""
     if entry["transcript"]:
         transcript = f'<details class="s5-video-watch__transcript"><summary>Read the reviewed transcript</summary>\n\n{entry["transcript"]}\n\n</details>'
+    else:
+        context_points = "".join(
+            f'<li><strong>{html_escape(snippet["title"])}</strong>'
+            + (f': {html_escape(snippet["excerpt"])}' if snippet["excerpt"] else "")
+            + '</li>'
+            for snippet in entry["snippets"]
+        )
+        transcript = (
+            '<section class="s5-video-watch__machine-context" aria-labelledby="video-machine-context-title">'
+            '<div class="s5-video-watch__section-head"><span class="s5-eyebrow">Text context for search and agents</span>'
+            '<h2 id="video-machine-context-title">What this video covers</h2></div>'
+            '<p>This video does not yet have a reviewed synchronized transcript. This editorial context describes its content without presenting it as spoken audio or literal on-screen text.</p>'
+            f'<p>{html_escape(entry["description"])}</p><ul>{context_points}</ul></section>'
+        )
     related_cards = "\n".join(_render_related_card(item) for item in related)
     return _yaml_frontmatter(meta) + f"""
 <div class="s5-video-watch" data-s5-video-watch data-video-id="{html_escape(entry['id'], quote=True)}">

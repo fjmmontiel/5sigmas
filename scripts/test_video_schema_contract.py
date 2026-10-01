@@ -19,6 +19,7 @@ from hooks.video_sitemap import (
 )
 from hooks.video_sitemap_en import (
     _render_watch_page as render_watch_page_en,
+    _topic_for as topic_for_en,
     _video_schema as video_schema_en,
 )
 from hooks.video_publication_policy import is_video_source_published
@@ -374,6 +375,8 @@ def main() -> None:
         'srclang="es" label="Español" default>'
     ) in watch_html
     assert 'class="s5-video-watch__source-link"' in watch_html
+    assert 'class="s5-video-watch__machine-context"' in watch_html
+    assert "no dispone todavía de una transcripción sincronizada revisada" in watch_html
     assert '<video controls crossorigin="anonymous"' in watch_html, (
         "watch pages must opt into anonymous CORS so cross-origin captions and media "
         "from media.5sigmas.com work under the documented R2 CORS policy"
@@ -410,6 +413,8 @@ def main() -> None:
         'srclang="en" label="English" default>'
     ) in en_watch_html
     assert 'class="s5-video-watch__source-link"' in en_watch_html
+    assert 'class="s5-video-watch__machine-context"' in en_watch_html
+    assert "does not yet have a reviewed synchronized transcript" in en_watch_html
     assert '<video controls crossorigin="anonymous"' in en_watch_html
 
     en_curated_html = render_watch_page_en(en_curated, [], en_site_url)
@@ -421,6 +426,21 @@ def main() -> None:
 
     topic, label = _topic_for("series/seguridad-ia/01-prompt-injection.md")
     assert (topic, label) == ("seguridad", "Seguridad en IA")
+
+    published_series_topics = {
+        "agentes-ia": (("agentes", "Agentes de IA"), ("agents", "AI agents")),
+        "agentes-voz-tiempo-real": (("voz", "Agentes de voz"), ("voice", "Voice agents")),
+        "coding-agents-agent-harnesses": (("coding-agents", "Coding agents"), ("coding-agents", "Coding agents")),
+        "context-engineering-memory-mcp": (("context-engineering", "Context engineering"), ("context-engineering", "Context engineering")),
+        "llm-inference-engineering-economics": (("inferencia", "Inferencia de LLMs"), ("inference", "LLM inference")),
+        "evaluating-ai-systems-production": (("evaluacion", "Evaluación de sistemas de IA"), ("evaluation", "AI systems evaluation")),
+    }
+    for series, (expected_es, expected_en) in published_series_topics.items():
+        route = f"series/{series}/01-placeholder.md"
+        assert _topic_for(route) == expected_es, f"Spanish video topic missing for {series}"
+        assert topic_for_en(route) == expected_en, f"English video topic missing for {series}"
+        assert _topic_for(route)[0] != "otros"
+        assert topic_for_en(route)[0] != "other"
 
     embed_source = (ROOT / "hooks" / "video_embed.py").read_text(encoding="utf-8")
     assert 'crossorigin="anonymous"' in embed_source, (
