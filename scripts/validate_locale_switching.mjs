@@ -80,12 +80,56 @@ const assertSeriesHub = async ({ route, entries }) => {
     failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
     return;
   }
-  const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+  const isGallery = await page.locator('[data-sx-hub]').count() > 0;
+  const cards = page.locator(isGallery ? '[data-sx-card]' : '.s5-simple-list a.s5-list-row');
+  const count = await cards.count();
   const body = await page.locator('body').innerText();
-  if (links.length !== 13) failures.push(`${route}: expected 13 canonical series cards, got ${links.length}`);
-  for (const { targetRoute, title } of entries) {
-    if (!links.includes(targetRoute)) failures.push(`${route}: missing canonical series route ${targetRoute}`);
-    if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
+  if (count !== 13) failures.push(`${route}: expected 13 canonical series cards, got ${count}`);
+  if (isGallery) {
+    // Follow a reader-realistic path once per series, then verify every relevant
+    // chapter while the series detail is visible. The old validator reopened the
+    // same card for every chapter and could exhaust the job before later series.
+    const destinations = await cards.locator('.sx-card-art').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
+    if (new Set(destinations).size !== 13) failures.push(`${route}: series cards do not have 13 distinct destinations`);
+    const grouped = new Map();
+    for (const entry of entries) {
+      const slug = entry.targetRoute.match(/\/series\/([^/]+)\//)?.[1];
+      if (!slug) {
+        failures.push(`${route}: could not derive series slug from ${entry.targetRoute}`);
+        continue;
+      }
+      if (!grouped.has(slug)) grouped.set(slug, []);
+      grouped.get(slug).push(entry);
+    }
+    for (const [slug, seriesEntries] of grouped) {
+      const target = '#serie-' + slug;
+      const card = cards.locator(`.sx-card-art[href="${target}"]`);
+      if (await card.count() !== 1) {
+        failures.push(`${route}: missing unique card for ${target}`);
+        continue;
+      }
+      await card.click();
+      const detail = page.locator(target);
+      await detail.waitFor({ state: 'visible' });
+      if (!await detail.isVisible()) {
+        failures.push(`${route}: card failed to reveal ${target}`);
+      } else {
+        for (const { targetRoute, title } of seriesEntries) {
+          const chapter = detail.locator(`.sx-roadmap h3 a[href="${targetRoute}"]`);
+          if (await chapter.count() !== 1 || !await chapter.isVisible()) failures.push(`${route}: chapter is not visibly reachable: ${targetRoute}`);
+          if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
+        }
+      }
+      await detail.locator('.sx-back').click();
+      await page.locator('[data-sx-overview]').waitFor({ state: 'visible' });
+      await detail.waitFor({ state: 'hidden' });
+    }
+  } else {
+    const links = await cards.evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
+    for (const { targetRoute, title } of entries) {
+      if (!links.includes(targetRoute)) failures.push(`${route}: missing canonical series route ${targetRoute}`);
+      if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
+    }
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });

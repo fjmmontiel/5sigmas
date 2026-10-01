@@ -82,6 +82,8 @@ jobs:
               if unwrap_condition(expression) != 'always()':
                   return False
               allowed = {
+                  'series-ui-review.yml': 'series-ui-real-browser-evidence',
+                  'series-owner-workbench.yml': 'series-owner-interactive-review',
                   'realtime-voice-browser-milestone.yml': 'realtime-voice-browser-pixel-evidence',
                   'coding-browser-visual-milestone.yml': 'coding-agents-browser-visual-evidence',
                   'coding-media-bootstrap.yml': 'coding-agents-browser-visual-evidence',

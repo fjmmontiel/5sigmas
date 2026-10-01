@@ -7,7 +7,42 @@
     .toLowerCase()
     .trim();
 
+
+  const initializeGallerySeriesLinks = () => {
+    const en = document.documentElement.lang?.startsWith('en');
+    for (const card of document.querySelectorAll('.s5-watch-card, .s5-media-card')) {
+      if (card.matches('a') || card.dataset.sxParent) continue;
+      const chapter = [...card.querySelectorAll('a[href]')].find((link) =>
+        link.origin === location.origin && /\/(?:videos\/)?series\/[^/]+\/[^/]+\//.test(link.pathname),
+      );
+      if (!chapter) continue;
+      const slug = chapter.pathname.match(/\/(?:videos\/)?series\/([^/]+)\//)[1];
+      const parent = document.createElement('a');
+      parent.className = 'sx-parent-series';
+      parent.href = `${en ? '/en' : ''}/series/#serie-${slug}`;
+      parent.textContent = en ? 'Explore this series →' : 'Explorar esta serie →';
+      (card.querySelector('.s5-watch-card__body') || card).appendChild(parent);
+      card.dataset.sxParent = 'true';
+    }
+  };
+
+  const preserveSeriesLocaleHash = () => {
+    if (!document.querySelector('[data-sx-hub]')) return;
+    let id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const shared = /^(?:serie-[a-z0-9-]+|mapa|catalogo)$/.test(id) ? '#' + id : '';
+    for (const link of document.querySelectorAll('.md-select a[href]')) {
+      const target = new URL(link.href, location.href);
+      if (/^\/(?:en\/)?series\/$/.test(target.pathname)) {
+        target.hash = shared;
+        link.href = target.href;
+      }
+    }
+  };
+
   const initializeDirectReaderNavigation = () => {
+    initializeGallerySeriesLinks();
+    preserveSeriesLocaleHash();
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';

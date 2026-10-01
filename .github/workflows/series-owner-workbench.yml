@@ -1,0 +1,62 @@
+name: Series owner interactive workbench
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/series-owner-workbench.yml'
+      - 'docs/stylesheets/advanced-series-golden.css'
+      - 'docs/stylesheets/series-experience.css'
+      - 'docs/assets/javascripts/advanced-series-golden.js'
+      - 'docs/assets/javascripts/series-experience.js'
+      - 'scripts/build_series_owner_review.py'
+      - 'scripts/test_series_owner_review.py'
+      - 'quality/series-owner-review/reviewer.html'
+permissions:
+  contents: read
+concurrency:
+  group: series-owner-workbench-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build exact review candidate
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ffmpeg
+          python -m pip install -r requirements.txt
+          python -m pip install beautifulsoup4==4.13.5 lxml==6.0.2 playwright==1.55.0
+          python -m playwright install --with-deps chromium
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Build the exact owner-rejected reference for A/B inspection
+        run: |
+          git fetch --no-tags --depth=1 origin b8a0ec5a4b9461b5b68f5d65ea504b549de4d7dc
+          git worktree add --detach ../owner-before b8a0ec5a4b9461b5b68f5d65ea504b549de4d7dc
+          cd ../owner-before
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Build and exercise the standalone owner review
+        env:
+          REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python scripts/build_series_owner_review.py --site site --before-site ../owner-before/site --output artifacts/owner-review/5sigmas-revision-interactiva.html --candidate-sha "$REVIEW_HEAD_SHA" --baseline-sha b8a0ec5a4b9461b5b68f5d65ea504b549de4d7dc
+          python scripts/test_series_owner_review.py --html artifacts/owner-review/5sigmas-revision-interactiva.html --output artifacts/owner-review/tests
+      - name: Retain interactive review and its actual browser results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: series-owner-interactive-review
+          path: artifacts/owner-review/
+          retention-days: 1
+          compression-level: 6
+          if-no-files-found: warn

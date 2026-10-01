@@ -128,7 +128,8 @@ def slugs_from_llms(text: str) -> set[str]:
 
 
 def slugs_from_nav(text: str) -> set[str]:
-    return set(re.findall(r"series/([^/]+)/[^/\s'\"]+\.md", text))
+    # A root catalogue entry must not consume subsequent YAML lines as its slug.
+    return set(re.findall(r"series/([^/\s'\"]+)/[^/\s'\"]+\.md", text))
 
 
 def slugs_from_redirects(text: str) -> set[str]:

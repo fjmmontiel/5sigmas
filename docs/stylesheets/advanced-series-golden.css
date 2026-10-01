@@ -1,0 +1,446 @@
+/* Series 7–13 · owner iteration 2026-10-01.
+ * Original scientific diagrams, labels, controls and state machines are retained.
+ * Reference: the compact editorial hierarchy in Series 3 and 4, not a poster skin.
+ */
+body.s5-advanced-series {
+  --s5g-ink:var(--md-default-fg-color,#18232f);
+  --s5g-bg:var(--md-default-bg-color,#fff);
+  --s5g-muted:color-mix(in srgb,var(--s5g-ink) 72%,var(--s5g-bg));
+  --s5g-line:color-mix(in srgb,var(--s5g-ink) 17%,var(--s5g-bg));
+  --s5g-plot:color-mix(in srgb,var(--s5g-ink) 3%,var(--s5g-bg));
+  --s5g-accent:#324ab2; --s5g-teal:#13887e; --s5g-amber:#a96912;
+  --s5g-red:#bc4448; --s5g-green:#247a4d;
+  --s5g-shadow:0 3px 12px color-mix(in srgb,var(--s5g-ink) 5%,transparent);
+}
+body.s5-series-seguridad-ia {--s5g-accent:#a34b43}
+body.s5-series-agentes-ia {--s5g-accent:#13887e}
+body.s5-series-context-engineering-memory-mcp {--s5g-accent:#7456bc}
+body.s5-series-llm-inference-engineering-economics {--s5g-accent:#a96912}
+body.s5-series-evaluating-ai-systems-production {--s5g-accent:#247a4d}
+body[data-md-color-scheme="slate"].s5-advanced-series {
+  --s5g-muted:color-mix(in srgb,var(--s5g-ink) 80%,var(--s5g-bg));
+  --s5g-accent:#99adff; --s5g-teal:#68c9bb; --s5g-amber:#edbc70;
+  --s5g-red:#ec9397; --s5g-green:#80cc9b;
+  --s5g-shadow:0 4px 18px rgba(0,0,0,.12);
+}
+body[data-md-color-scheme="slate"].s5-series-seguridad-ia {--s5g-accent:#e8aaa1}
+body[data-md-color-scheme="slate"].s5-series-agentes-ia {--s5g-accent:#68c9bb}
+body[data-md-color-scheme="slate"].s5-series-context-engineering-memory-mcp {--s5g-accent:#c0a8ed}
+body[data-md-color-scheme="slate"].s5-series-llm-inference-engineering-economics {--s5g-accent:#edbc70}
+body[data-md-color-scheme="slate"].s5-series-evaluating-ai-systems-production {--s5g-accent:#80cc9b}
+
+/* A reading object, not an oversized slide. Nothing here overrides diagram state. */
+body.s5-advanced-series .s5g-visual {
+  color:var(--s5g-ink); box-sizing:border-box; isolation:isolate;
+  margin-block:1.6rem 2.4rem; scroll-margin-top:96px;
+  -webkit-font-smoothing:antialiased;
+}
+body.s5-advanced-series .s5g-visual:not(.s5v) {
+  max-width:1080px!important; padding:24px!important;
+  border:1px solid var(--s5g-line)!important;border-radius:20px!important;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--s5g-accent) 3%,var(--s5g-bg)),var(--s5g-bg) 65%)!important;
+  box-shadow:var(--s5g-shadow);
+}
+body.s5-advanced-series .s5g-visual.s5v {width:min(100%,1160px);max-width:1160px}
+body.s5-advanced-series .s5g-visual .s5v__canvas,
+body.s5-advanced-series .s5g-visual > [class$="__sheet"] {
+  padding:24px!important;border:1px solid var(--s5g-line)!important;border-radius:20px!important;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--s5g-accent) 3%,var(--s5g-bg)),var(--s5g-bg) 65%)!important;
+  box-shadow:var(--s5g-shadow)!important;
+}
+body.s5-advanced-series .s5g-visual .s5v__canvas::after {display:none}
+body.s5-advanced-series .s5g-visual > :is(header,.ctxmix__head,.aix-loop-head,.aix-eval-head,.aix-sec-head),
+body.s5-advanced-series .s5g-visual .s5v__canvas > .s5v__head,
+body.s5-advanced-series .s5g-visual > [class$="__sheet"] > [class$="__head"] {
+  display:block!important; margin-bottom:18px!important; padding:0!important;
+  border:0!important;gap:0!important;
+}
+body.s5-advanced-series .s5g-visual > h3,
+body.s5-advanced-series .s5g-visual :is(.s5v__head,[class$="__head"]) h3,
+body.s5-advanced-series :is(.aix-loop-title,.aix-eval-title,.aix-sec-title) {
+  font-family:inherit!important;font-size:clamp(20px,2.2vw,25px)!important;
+  font-weight:750!important;line-height:1.22!important;letter-spacing:-.025em!important;
+  max-width:none!important; margin:0 0 8px!important; text-wrap:pretty;
+}
+body.s5-advanced-series .s5g-visual :is(.s5v__head,[class$="__head"]) p,
+body.s5-advanced-series .s5g-visual > [class$="__sub"],
+body.s5-advanced-series .s5g-visual [class$="__lead"],
+body.s5-advanced-series :is(.aix-loop-sub,.aix-eval-sub,.aix-sec-sub) {
+  color:var(--s5g-muted)!important;max-width:none!important;text-align:left!important;
+  font-size:14px!important;font-weight:400!important;line-height:1.6!important;
+  margin:0 0 16px!important;opacity:1!important;
+}
+body.s5-advanced-series .s5g-visual :is(.s5v__kicker,[class$="__kicker"]) {
+  display:block;margin-bottom:9px;color:var(--s5g-accent)!important;
+  font-size:10px!important;font-weight:750!important;letter-spacing:.12em!important;line-height:1.5;
+}
+body.s5-advanced-series .s5g-visual .s5v__copy {
+  text-align:left!important; font-size:13px!important;font-weight:400!important;
+  line-height:1.6!important;color:var(--s5g-muted)!important;
+  padding:13px 15px!important;margin-top:16px!important;border-left:3px solid var(--s5g-accent);
+  border-radius:0 8px 8px 0;background:color-mix(in srgb,var(--s5g-accent) 4%,var(--s5g-bg));
+}
+body.s5-advanced-series .s5g-visual .s5v__copy strong {font-weight:700;color:var(--s5g-ink)}
+body.s5-advanced-series .s5g-visual button {
+  min-height:44px; cursor:pointer; font-family:inherit!important;
+  transition:background-color .16s,border-color .16s,box-shadow .16s!important;
+}
+body.s5-advanced-series .s5g-visual :is(button,input,select,[tabindex]):focus-visible {
+  outline:3px solid var(--s5g-accent)!important;outline-offset:3px!important;
+}
+
+/* The 24 systems diagrams: improve the drawing, not just its enclosing card.
+ * Original directed paths and dash semantics stay intact. Marker sizing and
+ * node-label wrapping are handled by the presentation runtime, not a new model.
+ */
+body.s5-advanced-series .s5g-technical [class*="__scroll"],
+body.s5-advanced-series .s5g-technical [class*="-scroll"] {
+  background:var(--s5g-plot);border:1px solid var(--s5g-line);border-radius:12px;
+  padding:12px!important;scrollbar-width:auto;scrollbar-color:var(--s5g-accent) transparent;
+}
+body.s5-advanced-series .s5g-technical svg {
+  color:color-mix(in srgb,var(--s5g-ink) 73%,var(--s5g-bg));
+}
+body.s5-advanced-series .s5g-technical svg text {
+  font-family:inherit!important;fill:var(--s5g-ink);font-weight:600;
+}
+body.s5-advanced-series .s5g-technical svg :is([class$="-sub"],[class$="-small"],[class$="-note"]) {
+  fill:var(--s5g-muted)!important;opacity:1!important;font-weight:450!important;
+}
+body.s5-advanced-series .s5g-technical svg [class*="edge-label"] {
+  fill:var(--s5g-muted)!important;stroke:var(--s5g-plot)!important;
+  stroke-width:4px!important;font-weight:550!important;
+}
+body.s5-advanced-series .s5g-technical svg :is([class$="-kicker"],[class$="-lane-label"]) {
+  fill:var(--s5g-muted)!important;opacity:1!important;font-weight:650!important;letter-spacing:.05em;
+}
+body.s5-advanced-series .s5g-technical .s5g-boundary {
+  fill:color-mix(in srgb,var(--s5g-accent) 3%,var(--s5g-bg))!important;
+  stroke:color-mix(in srgb,var(--s5g-accent) 35%,var(--s5g-line))!important;
+  stroke-width:1.2!important;opacity:1!important;
+}
+body.s5-advanced-series .s5g-technical .s5g-node-shape {
+  fill:var(--s5g-node-fill,var(--s5g-bg))!important;
+  stroke:var(--s5g-node-stroke,color-mix(in srgb,var(--s5g-accent) 38%,var(--s5g-line)))!important;
+  stroke-width:1.8!important;filter:none!important;
+}
+body.s5-advanced-series .s5g-technical .s5g-node-key {
+  --s5g-node-fill:color-mix(in srgb,var(--s5g-accent) 12%,var(--s5g-bg));--s5g-node-stroke:var(--s5g-accent);
+}
+body.s5-advanced-series .s5g-technical .s5g-node-evidence {
+  --s5g-node-fill:color-mix(in srgb,var(--s5g-teal) 9%,var(--s5g-bg));--s5g-node-stroke:var(--s5g-teal);
+}
+body.s5-advanced-series .s5g-technical .s5g-node-caution {
+  --s5g-node-fill:color-mix(in srgb,var(--s5g-amber) 10%,var(--s5g-bg));--s5g-node-stroke:var(--s5g-amber);
+}
+body.s5-advanced-series .s5g-technical .s5g-node-failure {
+  --s5g-node-fill:color-mix(in srgb,var(--s5g-red) 9%,var(--s5g-bg));--s5g-node-stroke:var(--s5g-red);
+}
+body.s5-advanced-series .s5g-technical .s5g-edge {
+  stroke:color-mix(in srgb,var(--s5g-accent) 40%,var(--s5g-muted))!important;
+}
+body.s5-advanced-series .s5g-technical .s5g-edge-return {stroke:var(--s5g-teal)!important}
+body.s5-advanced-series .s5g-technical .s5g-edge-failure {stroke:var(--s5g-red)!important}
+body.s5-advanced-series .s5g-technical [class$="__legend"] {
+  font-size:12px!important;font-weight:450!important;line-height:1.5!important;
+  padding-top:12px;color:var(--s5g-muted);opacity:1!important;gap:10px 22px!important;
+}
+
+/* 10: harness runtime; keep the loop distinct from the workspace and model. */
+body.s5-series-coding-agents-agent-harnesses .s5g-technical .h-boundary {fill:color-mix(in srgb,var(--s5g-accent) 5%,var(--s5g-bg))!important}
+body.s5-series-coding-agents-agent-harnesses .s5g-technical [data-node="model"] {--s5g-node-fill:color-mix(in srgb,var(--s5g-accent) 16%,var(--s5g-bg))}
+body.s5-series-coding-agents-agent-harnesses .s5g-technical [data-node="workspace"] {--s5g-node-fill:color-mix(in srgb,var(--s5g-amber) 12%,var(--s5g-bg))}
+/* 11: candidate sources and bounded context are visibly different surfaces. */
+body.s5-series-context-engineering-memory-mcp .s5g-technical .c-source {
+  fill:var(--s5g-bg)!important;stroke:var(--s5g-line)!important;
+}
+body.s5-series-context-engineering-memory-mcp .s5g-technical [data-node="assembler"] {--s5g-node-fill:color-mix(in srgb,var(--s5g-accent) 16%,var(--s5g-bg))}
+body.s5-series-context-engineering-memory-mcp .s5g-technical [data-boundary="authority-plane"] {fill:color-mix(in srgb,var(--s5g-teal) 5%,var(--s5g-bg))!important;stroke:var(--s5g-teal)!important}
+/* 12: separate the client measurement lane from server work and capacity. */
+body.s5-series-llm-inference-engineering-economics .s5g-technical [data-boundary="client-observation"],
+body.s5-series-llm-inference-engineering-economics .s5g-technical [data-boundary="client-clock"] {
+  fill:color-mix(in srgb,#6073ba 6%,var(--s5g-bg))!important;stroke:color-mix(in srgb,#6073ba 55%,var(--s5g-line))!important;
+}
+body.s5-series-llm-inference-engineering-economics .s5g-technical [data-boundary="scheduler-pressure"],
+body.s5-series-llm-inference-engineering-economics .s5g-technical [data-boundary="continuous-scheduler"] {
+  fill:color-mix(in srgb,var(--s5g-teal) 5%,var(--s5g-bg))!important;stroke:var(--s5g-teal)!important;
+}
+/* 13: scope is not a pass/fail result. Only existing terminal result labels
+ * receive the failure/success treatment, never an unevaluated outcome. */
+body.s5-series-evaluating-ai-systems-production .s5g-technical [data-boundary="component"] {fill:color-mix(in srgb,var(--s5g-amber) 7%,var(--s5g-bg))!important}
+body.s5-series-evaluating-ai-systems-production .s5g-technical [data-boundary="workflow"] {fill:color-mix(in srgb,#6073ba 5%,var(--s5g-bg))!important}
+
+/* 08: give the causal loop the available width; supporting policy sits below. */
+body.s5-series-agentes-ia .aix-loop-grid {grid-template-columns:1fr!important;gap:14px!important}
+body.s5-series-agentes-ia .aix-loop-diagram {
+  padding:22px!important;gap:10px!important;background:var(--s5g-plot)!important;border:1px solid var(--s5g-line);border-radius:14px;
+}
+body.s5-series-agentes-ia .aix-node {min-height:115px;padding:18px 14px;border-radius:12px;gap:8px;box-shadow:none;border-width:1px}
+body.s5-series-agentes-ia .aix-node strong {font-size:18px!important;font-weight:700}
+body.s5-series-agentes-ia .aix-node small {font-size:12px!important;line-height:1.45;opacity:.85}
+body.s5-series-agentes-ia .aix-node span {font-size:10px;opacity:.7}
+body.s5-series-agentes-ia .aix-arrow {font-size:22px;color:var(--s5g-muted);opacity:1}
+body.s5-series-agentes-ia .aix-return {margin-top:12px;padding-top:12px;font-size:13px;color:var(--s5g-teal)}
+body.s5-series-agentes-ia .aix-loop-side {padding:16px 18px;background:color-mix(in srgb,var(--s5g-accent) 4%,var(--s5g-bg));border:1px solid var(--s5g-line);border-radius:12px}
+body.s5-series-agentes-ia .aix-loop-side p {font-size:14px;line-height:1.6;margin:8px 0 12px;opacity:1;color:var(--s5g-muted)}
+body.s5-series-agentes-ia .aix-chips span {font-size:11px;padding:5px 10px;border-radius:7px}
+body.s5-series-agentes-ia :is(.aix-eval-task,.aix-eval-counterexample,.aix-sec-feedback) {box-shadow:none;border-radius:12px;padding:16px!important}
+body.s5-series-agentes-ia :is(.aix-eval-dimension,.aix-sec-node,.aix-sec-gate) {box-shadow:none;border-width:1px;border-radius:12px}
+
+/* 07: distinct control families, with actual state styling left in charge. */
+body.s5-series-seguridad-ia .s5g-visual :is([class$="__controls"],[class$="__toggles"],[class$="__tabs"],[class$="__scenarios"]) {gap:8px}
+body.s5-series-seguridad-ia .s5g-visual :is(.defsim__canvas,.ctxmix__diagram,.memlife__stage,.memlayers__lab,.releasegate__stage) {border-radius:14px!important;border-color:var(--s5g-line)!important;box-shadow:none!important}
+body.s5-series-seguridad-ia .s5g-visual :is(.jbsearch__arena,.memprop__map,.mcpbound__map) {border-radius:14px!important;background:var(--s5g-plot)!important;border:1px solid var(--s5g-line)!important;box-shadow:none!important}
+body.s5-series-seguridad-ia .ctxmix__head {display:block!important}
+body.s5-series-seguridad-ia .ctxmix__steps {justify-content:flex-start;margin-block:16px 0!important}
+body.s5-series-seguridad-ia .ctxmix__steps button {height:44px!important;width:44px!important;border-radius:10px!important}
+body.s5-series-seguridad-ia :is(.ctxmix__source,.ctxmix__runtime,.ctxmix__model) {box-shadow:none!important}
+body.s5-series-seguridad-ia .jbsearch__grid {gap:16px!important}
+body.s5-series-seguridad-ia .jbsearch__value {font-variant-numeric:tabular-nums;font-size:24px;letter-spacing:-.025em}
+body.s5-series-seguridad-ia :is(.jbsearch__card,.jbsearch__note,.threatbuild__result,.memgov__result) {border-radius:12px;box-shadow:none}
+body.s5-series-seguridad-ia :is(.jbbudget__value,.memlife__value) {font-variant-numeric:tabular-nums}
+body.s5-series-seguridad-ia .s5g-visual button {font-size:12px!important;letter-spacing:0!important}
+
+/* 09: timelines keep their lanes, units, branches and control semantics.
+ * Only the surrounding hierarchy is compacted to match the existing series. */
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case,.s5v-latency-timeline__case,.s5v-action-state-machine__figure,.s5v-network-topology__figure,.s5v-turn-evidence-graph__figure) {
+  border-radius:12px!important;padding:18px!important;border-color:var(--s5g-line)!important;box-shadow:none;
+}
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case__title,.s5v-latency-timeline__caption,.s5v-action-state-machine__caption,.s5v-network-topology__caption,.s5v-turn-evidence-graph__caption) {gap:15px;align-items:flex-start}
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-rule,.s5v-latency-rule,.s5v-action-state-machine__truth,.s5v-network-topology__callout,.s5v-turn-evidence-graph__truth) {font-size:13px;font-weight:450;line-height:1.6;border-radius:10px}
+body.s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe {gap:14px;border-radius:12px;min-height:134px}
+body.s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe span {border-radius:10px;font-size:14px;min-height:64px}
+
+/* Native mobile projections already in the source remain unchanged. Wide
+ * graphs retain their meaningful axes/topology and can be explored by touch. */
+body.s5-advanced-series .s5g-scrollable {overscroll-behavior-inline:contain;scrollbar-width:auto;scrollbar-color:var(--s5g-accent) transparent}
+body.s5-advanced-series .anim-brand-shell:has(.s5g-visual) {border-radius:20px}
+body.s5-advanced-series .anim-brand-shell:has(.s5g-visual) .anim-brand-shell__viewport {border-radius:16px}
+@media(max-width:700px) {
+  body.s5-advanced-series .s5g-visual:not(.s5v),
+  body.s5-advanced-series .s5g-visual .s5v__canvas,
+  body.s5-advanced-series .s5g-visual > [class$="__sheet"] {padding:16px!important;border-radius:16px!important}
+  body.s5-advanced-series .s5g-visual {margin-block:20px 30px!important}
+  body.s5-advanced-series .s5g-visual > h3,
+  body.s5-advanced-series .s5g-visual :is(.s5v__head,[class$="__head"]) h3,
+  body.s5-advanced-series :is(.aix-loop-title,.aix-eval-title,.aix-sec-title) {font-size:20px!important;line-height:1.28!important}
+  body.s5-advanced-series .s5g-visual :is(.s5v__head,[class$="__head"]) p,
+  body.s5-advanced-series .s5g-visual > [class$="__sub"],body.s5-advanced-series .s5g-visual [class$="__lead"] {font-size:13px!important;line-height:1.55!important}
+  body.s5-advanced-series .s5g-technical [class*="__scroll"] {padding:10px!important;max-height:65vh}
+  body.s5-advanced-series .s5g-technical .s5v__copy {font-size:12px!important;padding:12px!important}
+  body.s5-series-agentes-ia .aix-loop-diagram {padding:14px!important;gap:8px!important}
+  body.s5-series-agentes-ia .aix-node {min-height:76px;padding:12px 14px;gap:5px}
+  body.s5-series-agentes-ia .aix-node strong {font-size:17px!important}
+}
+
+/* GOLDEN pass 4 — Voice dark-mode integration.
+ * Presentation-only overrides for Series 9's legacy light-only visual surfaces.
+ * Existing topology, copy, controls, timing and state remain unchanged.
+ */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-timeline,
+  .s5v-latency-timeline,
+  .s5v-action-state-machine,
+  .s5v-network-topology,
+  .s5v-turn-evidence-graph,
+  .s5v-decision-map
+) {
+  --ink: #edf5f5;
+  --muted: #aebcbc;
+  --line: rgba(225,240,240,.16);
+  --soft: #151b1c;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-timeline {
+  --speech-soft: rgba(8,127,143,.18);
+  --decision-soft: rgba(122,90,248,.18);
+  --ok-soft: rgba(35,134,58,.17);
+  --stop-soft: rgba(199,58,49,.16);
+  --pause-soft: rgba(217,138,0,.16);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-latency-timeline {
+  --voice-soft: rgba(8,127,143,.18);
+  --turn-soft: rgba(122,90,248,.18);
+  --model-soft: rgba(49,90,168,.2);
+  --tts-soft: rgba(173,93,0,.18);
+  --media-soft: rgba(35,134,58,.17);
+  --critical-soft: rgba(196,62,53,.17);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-timeline__sheet,
+  .s5v-latency-timeline__sheet,
+  .s5v-action-state-machine__sheet,
+  .s5v-network-topology__sheet,
+  .s5v-turn-evidence-graph__sheet
+) {
+  background:
+    radial-gradient(86% 94% at 0% 0%,rgba(49,88,219,.08),transparent 54%),
+    linear-gradient(180deg,#111617,#0d1112) !important;
+  border-color: rgba(225,240,240,.15) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.36) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-case,
+  .s5v-latency-timeline__case,
+  .s5v-action-state-machine__figure,
+  .s5v-network-topology__figure,
+  .s5v-turn-evidence-graph__figure,
+  .s5v-action-state-machine__mobile-step,
+  .s5v-network-topology__mobile-route,
+  .s5v-turn-evidence-graph__mobile-node,
+  .s5v-turn-evidence-graph__mobile-diagnosis
+) {
+  background: #111718 !important;
+  border-color: rgba(225,240,240,.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 8px 24px rgba(0,0,0,.16);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(
+  .s5v-turn-marker span,
+  .s5v-latency-marker span
+) {
+  background: #161c1d !important;
+  border-color: rgba(225,240,240,.17) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-segment--cancelled {
+  background: repeating-linear-gradient(135deg,rgba(199,58,49,.18) 0 8px,#161c1d 8px 16px) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-latency-segment--stt-residual {
+  background: repeating-linear-gradient(135deg,rgba(8,127,143,.18) 0 8px,#161c1d 8px 16px) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-action-state-machine__mobile-reconcile {
+  background: rgba(173,93,0,.13) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-action-state-machine__reconcile {
+  fill: rgba(173,93,0,.13) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__node {
+  fill: #121819 !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-browser {
+  fill: rgba(49,90,168,.12) !important;
+  stroke: rgba(96,132,202,.55) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-network {
+  fill: rgba(173,93,0,.11) !important;
+  stroke: rgba(197,136,64,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-platform {
+  fill: rgba(8,127,143,.12) !important;
+  stroke: rgba(54,155,164,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-carrier {
+  fill: rgba(180,61,53,.1) !important;
+  stroke: rgba(205,105,91,.48) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-app {
+  fill: rgba(122,90,248,.11) !important;
+  stroke: rgba(147,124,246,.5) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-network-topology__zone-label {
+  fill: #aebcbc !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-turn-evidence-graph__diagnosis {
+  fill: #13191a !important;
+  stroke: rgba(225,240,240,.16) !important;
+}
+
+/* Voice decision map: remove the remaining light islands without changing its axes/points. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map {
+  --accent-soft: rgba(115,87,255,.18);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map .s5v__steps button {
+  background: #151b1c !important;
+  border-color: rgba(225,240,240,.16) !important;
+  color: var(--muted) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map .s5v__steps button[aria-pressed="true"] {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__node {
+  background: rgba(17,23,24,.94) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__node::after {
+  box-shadow: 0 0 0 4px #111718,0 0 0 5px rgba(225,240,240,.16) !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-decision-map__plot {
+  border-color: rgba(225,240,240,.28) !important;
+  background:
+    linear-gradient(90deg,transparent 49.8%,rgba(225,240,240,.06) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,rgba(225,240,240,.06) 50%,transparent 50.2%),
+    radial-gradient(circle at 50% 50%,rgba(115,87,255,.08),transparent 58%) !important;
+}
+
+
+/* Series 9 architecture-map final dark pass: remove the last light-only pipeline island. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map {
+  --ink: #edf5f5;
+  --muted: #aebcbc;
+  --line: rgba(225,240,240,.16);
+  --blue-soft: rgba(49,90,168,.18);
+  --teal-soft: rgba(8,126,141,.18);
+  --amber-soft: rgba(217,138,0,.16);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe {
+  background: #111718 !important;
+  border-color: rgba(225,240,240,.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 8px 22px rgba(0,0,0,.14);
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe > span:not(.is-audio):not(.is-model):not(.is-text) {
+  background: #161c1d !important;
+  border-color: rgba(225,240,240,.16) !important;
+  color: #dfe8e8 !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map__pipe > i {
+  color: #829294 !important;
+}
+
+
+/* Series 9 architecture-map dark tabs: keep active state obvious without a light-theme pill. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map .s5v__steps button {
+  background: #151b1c !important;
+  border-color: rgba(225,240,240,.16) !important;
+  color: #aebcbc !important;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="1"] [data-s5v-step="1"],
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="2"] [data-s5v-step="2"],
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-arch-map[data-step="3"] [data-s5v-step="3"] {
+  background: #3158db !important;
+  border-color: #5472e3 !important;
+  color: #fff !important;
+}
+
+/* Voice semantic colors need readable contrast inside the dark plot too. */
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5g-visual {
+ --speech:#6ccbbf;--voice:#6ccbbf;--audio:#6ccbbf;--teal:#6ccbbf;
+ --model:#9cb6f3;--conv:#9cb6f3;--blue:#9cb6f3;--boundary:#9cb6f3;
+ --decision:#bba1ff;--turn:#bba1ff;--op:#bba1ff;--runtime:#bba1ff;--control:#bba1ff;
+ --ok:#90d1a1;--media:#90d1a1;--outcome:#90d1a1;
+ --stop:#eeaaa4;--fail:#eeaaa4;--harm:#eeaaa4;--critical:#eeaaa4;
+ --unknown:#ebc28a;--tts:#ebc28a;--pause:#ebc28a;--recover:#ebc28a;--relay:#ebc28a;
+}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(.s5v-turn-segment--speech,.s5v-latency-segment--speech,.s5v-latency-segment--stt,.s5v-latency-segment--stt-residual){color:#6ccbbf!important}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real .s5v-latency-segment--turn{color:#bba1ff!important}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(.s5v-turn-segment--silence,.s5v-latency-segment--tts,.is-text){color:#ebc28a!important}
+body[data-md-color-scheme="slate"].s5-series-agentes-voz-tiempo-real :is(.s5v-turn-segment--play,.s5v-latency-segment--play){color:#102522!important}
+body.s5-advanced-series .s5g-technical [class$="__legend"] i{border-color:color-mix(in srgb,var(--s5g-accent) 40%,var(--s5g-muted))!important}
+
+/* Final cascade: original mechanisms remain operable without added motion. */
+@media(prefers-reduced-motion:reduce){
+ body.s5-advanced-series .s5g-visual.s5g-visual,
+ body.s5-advanced-series .s5g-visual.s5g-visual *,
+ body.s5-advanced-series .s5g-visual.s5g-visual::before,
+ body.s5-advanced-series .s5g-visual.s5g-visual::after,
+ body.s5-advanced-series .s5g-visual.s5g-visual *::before,
+ body.s5-advanced-series .s5g-visual.s5g-visual *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* Original security form controls remain native, with usable pointer targets. */
+body.s5-series-seguridad-ia .s5g-visual select{min-height:44px;padding:8px 12px;border:1px solid var(--s5g-line);border-radius:8px;background:var(--s5g-bg);color:var(--s5g-ink);font-family:inherit;font-size:13px;line-height:1.4;font-weight:500;max-width:100%}
+
+/* Do not let MkDocs figure/figcaption shrink-to-fit compress a scientific plot. */
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case,.s5v-latency-timeline__case,.s5v-action-state-machine__figure,.s5v-network-topology__figure,.s5v-turn-evidence-graph__figure){width:100%!important;max-width:none!important;text-align:left!important;margin-inline:0!important}
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case__title,.s5v-latency-timeline__caption,.s5v-action-state-machine__caption,.s5v-network-topology__caption,.s5v-turn-evidence-graph__caption){width:100%!important;max-width:none!important;font-style:normal!important;text-align:left!important;margin:0 0 18px!important;padding:0!important}
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case__title,.s5v-latency-timeline__caption,.s5v-action-state-machine__caption,.s5v-network-topology__caption,.s5v-turn-evidence-graph__caption) strong{font-size:15px!important;line-height:1.45!important;font-weight:700!important;max-width:52ch}
+body.s5-series-agentes-voz-tiempo-real .s5g-visual :is(.s5v-turn-case__title,.s5v-latency-timeline__caption,.s5v-action-state-machine__caption,.s5v-network-topology__caption,.s5v-turn-evidence-graph__caption) span{font-size:12px!important;line-height:1.5!important;font-weight:400!important;text-align:left!important}

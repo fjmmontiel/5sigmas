@@ -1,0 +1,2475 @@
+{
+  "series": {
+    "seguridad-ia": {
+      "promise": {
+        "es": "Distingue una instrucción de un dato y comprueba qué acciones permite el sistema.",
+        "en": "Distinguish instructions from data and inspect which actions a system permits."
+      },
+      "prerequisites": [
+        "agentes-ia"
+      ],
+      "next": "evaluating-ai-systems-production",
+      "why": {
+        "es": "Ahora comprueba los controles con casos de evaluación reproducibles.",
+        "en": "Next, check controls with reproducible evaluation cases."
+      },
+      "lessons": [
+        {
+          "view": "trust",
+          "question": {
+            "es": "¿Puede un documento autorizar una acción?",
+            "en": "Can a document authorize an action?"
+          },
+          "options": {
+            "es": [
+              "Permiso comprobado",
+              "Sin comprobar el permiso"
+            ],
+            "en": [
+              "Permission checked",
+              "Permission unchecked"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Documento",
+                "El documento contiene una orden, pero sigue siendo una fuente externa."
+              ],
+              [
+                "Propuesta",
+                "El modelo propone enviar información. Una propuesta no es una autorización."
+              ],
+              [
+                "Permiso",
+                "El runtime contrasta la acción con el permiso de esta tarea."
+              ],
+              [
+                "Efecto",
+                "Compara el efecto permitido en este caso. No es una garantía contra todos los ataques."
+              ]
+            ],
+            "en": [
+              [
+                "Document",
+                "The document contains an instruction, but remains an external source."
+              ],
+              [
+                "Proposal",
+                "The model proposes sending information. A proposal is not authorization."
+              ],
+              [
+                "Permission",
+                "The runtime checks the action against this task’s permission."
+              ],
+              [
+                "Effect",
+                "Compare the permitted effect in this case. This is not a guarantee against every attack."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "refusal",
+          "question": {
+            "es": "¿Rechazar una respuesta protege también las herramientas?",
+            "en": "Does refusing an answer also protect tools?"
+          },
+          "options": {
+            "es": [
+              "Control de salida y acción",
+              "Solo control de salida"
+            ],
+            "en": [
+              "Output and action checks",
+              "Output check only"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Solicitud",
+                "Una solicitud intenta producir una salida no permitida en esta demostración."
+              ],
+              [
+                "Salida",
+                "El control de salida rechaza ese texto en este caso concreto."
+              ],
+              [
+                "Herramienta",
+                "La herramienta tiene un contrato distinto. Hay que comprobar también la acción."
+              ],
+              [
+                "Frontera",
+                "El rechazo del texto no demuestra que todas las rutas de ejecución estén protegidas."
+              ]
+            ],
+            "en": [
+              [
+                "Request",
+                "A request attempts a disallowed output in this demonstration."
+              ],
+              [
+                "Output",
+                "The output check rejects that text in this particular case."
+              ],
+              [
+                "Tool",
+                "The tool has a separate contract. Its action must also be checked."
+              ],
+              [
+                "Boundary",
+                "Refusing text does not prove that every execution path is protected."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "poison",
+          "question": {
+            "es": "¿Qué ocurre si una fuente contaminada se guarda?",
+            "en": "What happens when a contaminated source is stored?"
+          },
+          "options": {
+            "es": [
+              "Fuente en cuarentena",
+              "Fuente aceptada"
+            ],
+            "en": [
+              "Source quarantined",
+              "Source accepted"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Fuente",
+                "Una fuente propone cambiar un dato de referencia."
+              ],
+              [
+                "Ingreso",
+                "El ingreso puede conservarla separada hasta su validación."
+              ],
+              [
+                "Memoria",
+                "Aceptar la fuente introduce información que persiste más allá de este turno."
+              ],
+              [
+                "Recuperación",
+                "Una recuperación posterior puede reutilizarla. El origen y la validación importan."
+              ]
+            ],
+            "en": [
+              [
+                "Source",
+                "A source proposes changing a reference fact."
+              ],
+              [
+                "Ingestion",
+                "Ingestion can keep it separate until validation."
+              ],
+              [
+                "Memory",
+                "Accepting it introduces information that persists beyond this turn."
+              ],
+              [
+                "Retrieval",
+                "Later retrieval can reuse it. Provenance and validation matter."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "redteam",
+          "question": {
+            "es": "¿Qué demuestra una prueba de ataque?",
+            "en": "What does an attack test establish?"
+          },
+          "options": {
+            "es": [
+              "Casos conocidos",
+              "Añadir variaciones"
+            ],
+            "en": [
+              "Known cases",
+              "Include variations"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Contrato",
+                "Define qué efecto no debe producirse antes de ejecutar la prueba."
+              ],
+              [
+                "Casos",
+                "Un único caso deja variaciones sin observar. Amplía el conjunto de forma explícita."
+              ],
+              [
+                "Ejecuciones",
+                "Cada casilla muestra un resultado de este conjunto sintético, no de un modelo real."
+              ],
+              [
+                "Cobertura",
+                "Más casos pueden revelar fallos que el primer caso no cubría. No prueban ausencia universal de fallos."
+              ]
+            ],
+            "en": [
+              [
+                "Contract",
+                "Define the forbidden effect before running the test."
+              ],
+              [
+                "Cases",
+                "A single case leaves variations unobserved. Explicitly expand the set."
+              ],
+              [
+                "Runs",
+                "Each cell shows a result from this synthetic set, not a real model."
+              ],
+              [
+                "Coverage",
+                "More cases can reveal failures the first case missed. They cannot prove universal absence of failures."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "permissions",
+          "question": {
+            "es": "¿Dónde debe detenerse una acción no autorizada?",
+            "en": "Where should an unauthorized action stop?"
+          },
+          "options": {
+            "es": [
+              "Mínimo permiso",
+              "Permiso amplio"
+            ],
+            "en": [
+              "Least privilege",
+              "Broad permission"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Identidad",
+                "La identidad establece quién solicita y con qué ámbito."
+              ],
+              [
+                "Propuesta",
+                "La propuesta del modelo incluye una acción concreta."
+              ],
+              [
+                "Ejecución",
+                "El permiso de ejecución es una comprobación del sistema, no una promesa del prompt."
+              ],
+              [
+                "Registro",
+                "Conserva el resultado y su motivo para poder auditar este recorrido."
+              ]
+            ],
+            "en": [
+              [
+                "Identity",
+                "Identity establishes who is asking and the permitted scope."
+              ],
+              [
+                "Proposal",
+                "The model’s proposal specifies an action."
+              ],
+              [
+                "Execution",
+                "Execution permission is a system check, not a promise in the prompt."
+              ],
+              [
+                "Record",
+                "Keep the outcome and reason so this path can be audited."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "agentes-ia": {
+      "promise": {
+        "es": "Sigue una tarea realista: consultar, actuar y comprobar el resultado.",
+        "en": "Follow a realistic task: inspect, act and verify the result."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag"
+      ],
+      "next": "context-engineering-memory-mcp",
+      "why": {
+        "es": "El siguiente paso es entender qué información llega al agente en cada turno.",
+        "en": "Next, understand what information reaches the agent on each turn."
+      },
+      "lessons": [
+        {
+          "view": "order",
+          "question": {
+            "es": "¿Qué cambia cuando la herramienta falla?",
+            "en": "What changes when the tool fails?"
+          },
+          "options": {
+            "es": [
+              "La consulta responde",
+              "La consulta falla"
+            ],
+            "en": [
+              "Lookup succeeds",
+              "Lookup fails"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Petición",
+                "La persona pregunta por el pedido 1842. Aún no sabemos su estado."
+              ],
+              [
+                "Consulta",
+                "El agente solicita el estado a una herramienta. La consulta no cambia el pedido."
+              ],
+              [
+                "Evidencia",
+                "La herramienta devuelve un estado o un error: son observaciones distintas."
+              ],
+              [
+                "Respuesta",
+                "La respuesta debe apoyarse en la evidencia recibida. Un timeout no permite inventar el estado."
+              ]
+            ],
+            "en": [
+              [
+                "Request",
+                "A person asks about order 1842. Its status is not yet known."
+              ],
+              [
+                "Lookup",
+                "The agent requests status from a tool. Looking it up does not change the order."
+              ],
+              [
+                "Evidence",
+                "The tool returns a status or an error: these are different observations."
+              ],
+              [
+                "Response",
+                "The answer must follow the evidence received. A timeout does not justify inventing a status."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "identity",
+          "question": {
+            "es": "¿Un nombre basta para ejecutar una acción?",
+            "en": "Is a name enough to execute an action?"
+          },
+          "options": {
+            "es": [
+              "Identificador confirmado",
+              "Nombre ambiguo"
+            ],
+            "en": [
+              "Identifier confirmed",
+              "Ambiguous name"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Objetivo",
+                "La tarea pide consultar el pedido de una persona."
+              ],
+              [
+                "Argumentos",
+                "El contrato de herramienta necesita un identificador, no una conjetura."
+              ],
+              [
+                "Resolución",
+                "Un nombre ambiguo puede corresponder a dos registros."
+              ],
+              [
+                "Acción",
+                "Con identidad confirmada se consulta; con ambigüedad se pide aclaración antes de actuar."
+              ]
+            ],
+            "en": [
+              [
+                "Goal",
+                "The task asks for a person’s order."
+              ],
+              [
+                "Arguments",
+                "The tool contract needs an identifier, not a guess."
+              ],
+              [
+                "Resolution",
+                "An ambiguous name can match two records."
+              ],
+              [
+                "Action",
+                "With confirmed identity, look it up; with ambiguity, clarify before acting."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "agent-eval",
+          "question": {
+            "es": "¿Una buena respuesta implica una tarea resuelta?",
+            "en": "Does a good answer mean the task is done?"
+          },
+          "options": {
+            "es": [
+              "Solo respuesta",
+              "Respuesta y estado final"
+            ],
+            "en": [
+              "Answer only",
+              "Answer and final state"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Objetivo",
+                "El objetivo de este caso es guardar un borrador, no solo describirlo."
+              ],
+              [
+                "Respuesta",
+                "La respuesta dice «borrador listo» en ambas ejecuciones."
+              ],
+              [
+                "Estado",
+                "Una ejecución conserva el borrador; la otra no ha cambiado el almacenamiento."
+              ],
+              [
+                "Resultado",
+                "Evaluar el estado distingue las ejecuciones. La apariencia de la respuesta no basta."
+              ]
+            ],
+            "en": [
+              [
+                "Goal",
+                "The goal in this case is to save a draft, not just describe it."
+              ],
+              [
+                "Answer",
+                "The answer says “draft ready” in both runs."
+              ],
+              [
+                "State",
+                "One run saves the draft; the other has not changed storage."
+              ],
+              [
+                "Outcome",
+                "Checking state distinguishes the runs. The answer’s appearance is not enough."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "agent-safety",
+          "question": {
+            "es": "¿Puede un texto externo cambiar el destinatario?",
+            "en": "Can external text change the recipient?"
+          },
+          "options": {
+            "es": [
+              "Destinatario validado",
+              "Aceptar propuesta externa"
+            ],
+            "en": [
+              "Recipient validated",
+              "Accept external proposal"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea",
+                "La tarea autoriza un destinatario concreto."
+              ],
+              [
+                "Dato externo",
+                "Un documento propone otro destinatario dentro de su contenido."
+              ],
+              [
+                "Destinatario",
+                "Compara el destinatario propuesto con el autorizado."
+              ],
+              [
+                "Envío",
+                "En este caso, la comprobación bloquea el cambio. No convierte el documento en una fuente de permisos."
+              ]
+            ],
+            "en": [
+              [
+                "Task",
+                "The task authorizes a specific recipient."
+              ],
+              [
+                "External data",
+                "A document proposes another recipient within its content."
+              ],
+              [
+                "Recipient",
+                "Compare the proposed recipient with the authorized one."
+              ],
+              [
+                "Send",
+                "In this case, the check blocks the change. The document does not become a permission source."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "budget",
+          "question": {
+            "es": "¿Cuándo debe detenerse el agente?",
+            "en": "When should the agent stop?"
+          },
+          "options": {
+            "es": [
+              "Presupuesto de 2 intentos",
+              "Presupuesto de 4 intentos"
+            ],
+            "en": [
+              "Budget: 2 attempts",
+              "Budget: 4 attempts"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea",
+                "El sistema dispone de un presupuesto explícito para esta tarea."
+              ],
+              [
+                "Primer intento",
+                "Una consulta fallida consume un intento, sin aportar el resultado buscado."
+              ],
+              [
+                "Recuperación",
+                "La recuperación utiliza otro intento; no se repite indefinidamente."
+              ],
+              [
+                "Cierre",
+                "Si se agota el presupuesto, el sistema informa del resultado parcial y se detiene."
+              ]
+            ],
+            "en": [
+              [
+                "Task",
+                "The system has an explicit budget for this task."
+              ],
+              [
+                "First attempt",
+                "A failed lookup consumes an attempt without producing the requested result."
+              ],
+              [
+                "Recovery",
+                "Recovery uses another attempt; it does not repeat indefinitely."
+              ],
+              [
+                "Close",
+                "If the budget is exhausted, the system reports the partial result and stops."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "agentes-voz-tiempo-real": {
+      "promise": {
+        "es": "Ve los turnos, las interrupciones y el audio que realmente llega a la persona.",
+        "en": "See turns, interruptions and the audio that actually reaches the listener."
+      },
+      "prerequisites": [
+        "agentes-ia"
+      ],
+      "next": "evaluating-ai-systems-production",
+      "why": {
+        "es": "Comprueba después la conversación completa, no solo la rapidez del primer audio.",
+        "en": "Next, evaluate the whole conversation, not just first-audio speed."
+      },
+      "lessons": [
+        {
+          "view": "voice-architecture",
+          "question": {
+            "es": "¿Por qué la arquitectura cambia el recorrido del audio?",
+            "en": "Why does architecture change the audio path?"
+          },
+          "options": {
+            "es": [
+              "Cascada",
+              "Audio nativo"
+            ],
+            "en": [
+              "Cascade",
+              "Native audio"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Entrada",
+                "El audio entra desde la persona."
+              ],
+              [
+                "Procesamiento",
+                "La cascada separa transcripción y modelo; la otra ruta procesa audio de forma nativa."
+              ],
+              [
+                "Generación",
+                "Generar texto o audio no significa que la persona ya lo haya recibido."
+              ],
+              [
+                "Reproducción",
+                "Las dos rutas terminan en transporte y reproducción. Los tiempos son ilustrativos, no un benchmark."
+              ]
+            ],
+            "en": [
+              [
+                "Input",
+                "Audio arrives from the speaker."
+              ],
+              [
+                "Processing",
+                "The cascade separates transcription and the model; the other path processes audio natively."
+              ],
+              [
+                "Generation",
+                "Generating text or audio does not mean the listener has received it."
+              ],
+              [
+                "Playback",
+                "Both paths end in transport and playback. Times are illustrative, not a benchmark."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "voice-turn",
+          "question": {
+            "es": "¿Una pausa significa que ha terminado el turno?",
+            "en": "Does a pause mean the turn is over?"
+          },
+          "options": {
+            "es": [
+              "La persona continúa",
+              "La persona termina"
+            ],
+            "en": [
+              "Speaker continues",
+              "Speaker finishes"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Habla",
+                "La persona está hablando; la señal de voz es observable."
+              ],
+              [
+                "Pausa",
+                "Una pausa no revela por sí sola si el turno ha terminado."
+              ],
+              [
+                "Decisión",
+                "En estos dos ejemplos, el sistema debe distinguir continuación y cierre."
+              ],
+              [
+                "Turno",
+                "Compara el momento de respuesta. Este ejemplo no implementa un detector universal de turnos."
+              ]
+            ],
+            "en": [
+              [
+                "Speech",
+                "The person is speaking; voice activity is observable."
+              ],
+              [
+                "Pause",
+                "A pause alone does not reveal whether the turn has ended."
+              ],
+              [
+                "Decision",
+                "In these two examples, the system must distinguish continuation from completion."
+              ],
+              [
+                "Turn",
+                "Compare response timing. This example does not implement a universal turn detector."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "voice-latency",
+          "question": {
+            "es": "¿Dónde se consume el tiempo antes de oír la respuesta?",
+            "en": "Where is time spent before hearing a reply?"
+          },
+          "options": {
+            "es": [
+              "Espera corta",
+              "Espera de red mayor"
+            ],
+            "en": [
+              "Short wait",
+              "Longer network wait"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Fin de turno",
+                "El reloj comienza en el evento definido como fin de turno."
+              ],
+              [
+                "Modelo",
+                "El modelo prepara el contenido de respuesta."
+              ],
+              [
+                "Audio",
+                "Producción y transporte añaden tiempo antes de reproducirlo."
+              ],
+              [
+                "Primer sonido",
+                "La suma de estas fases forma el presupuesto ilustrativo. No es la latencia de un proveedor."
+              ]
+            ],
+            "en": [
+              [
+                "End of turn",
+                "The clock starts at the defined end-of-turn event."
+              ],
+              [
+                "Model",
+                "The model prepares response content."
+              ],
+              [
+                "Audio",
+                "Production and transport add time before playback."
+              ],
+              [
+                "First sound",
+                "The sum of these phases is the illustrative budget. It is not a provider’s latency."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "voice-interrupt",
+          "question": {
+            "es": "¿Cancelar la generación vacía el audio pendiente?",
+            "en": "Does cancelling generation clear queued audio?"
+          },
+          "options": {
+            "es": [
+              "Vaciar audio pendiente",
+              "Solo cancelar generación"
+            ],
+            "en": [
+              "Clear queued audio",
+              "Cancel generation only"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Respuesta",
+                "El agente ha generado fragmentos y algunos ya esperan en reproducción."
+              ],
+              [
+                "Interrupción",
+                "La persona empieza a hablar antes de terminar ese audio."
+              ],
+              [
+                "Cancelación",
+                "Se cancela la generación, pero la cola tiene su propio estado."
+              ],
+              [
+                "Audio pendiente",
+                "Compara lo que se reproduce al vaciar la cola o dejarla intacta."
+              ]
+            ],
+            "en": [
+              [
+                "Response",
+                "The agent has generated chunks, some already queued for playback."
+              ],
+              [
+                "Interruption",
+                "The person starts speaking before that audio finishes."
+              ],
+              [
+                "Cancellation",
+                "Generation is cancelled, but the queue has its own state."
+              ],
+              [
+                "Queued audio",
+                "Compare what plays when the queue is cleared or left intact."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "voice-network",
+          "question": {
+            "es": "¿Por qué el audio puede llegar fuera de tiempo?",
+            "en": "Why can audio arrive late?"
+          },
+          "options": {
+            "es": [
+              "Entrega regular",
+              "Jitter y reordenación"
+            ],
+            "en": [
+              "Regular delivery",
+              "Jitter and reordering"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Envío",
+                "Se envía una secuencia ordenada de fragmentos."
+              ],
+              [
+                "Transporte",
+                "El transporte puede introducir diferencias de llegada."
+              ],
+              [
+                "Recepción",
+                "Orden de envío y orden de recepción no tienen por qué coincidir."
+              ],
+              [
+                "Buffer",
+                "El buffer intenta regularizar la reproducción a cambio de espera. Es un ejemplo sintético de red."
+              ]
+            ],
+            "en": [
+              [
+                "Send",
+                "An ordered sequence of chunks is sent."
+              ],
+              [
+                "Transport",
+                "Transport can introduce differences in arrival time."
+              ],
+              [
+                "Receive",
+                "Send order and receive order need not match."
+              ],
+              [
+                "Buffer",
+                "The buffer attempts to regularize playback at the cost of waiting. This is a synthetic network example."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "voice-eval",
+          "question": {
+            "es": "¿Una llamada rápida puede estar mal resuelta?",
+            "en": "Can a fast call still fail?"
+          },
+          "options": {
+            "es": [
+              "Solo primer audio",
+              "Conversación completa"
+            ],
+            "en": [
+              "First audio only",
+              "Whole conversation"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Audio inicial",
+                "El primer audio llega pronto en las dos trazas de ejemplo."
+              ],
+              [
+                "Interrupción",
+                "Una traza no detiene a tiempo el audio cuando habla la persona."
+              ],
+              [
+                "Acción",
+                "Una acción externa también puede fallar después de responder."
+              ],
+              [
+                "Resultado",
+                "Evalúa turnos, acciones y objetivo. La primera latencia es una parte de la experiencia."
+              ]
+            ],
+            "en": [
+              [
+                "First audio",
+                "First audio arrives quickly in both example traces."
+              ],
+              [
+                "Interruption",
+                "One trace fails to stop audio when the person speaks."
+              ],
+              [
+                "Action",
+                "An external action can also fail after the reply starts."
+              ],
+              [
+                "Outcome",
+                "Evaluate turns, actions and the goal. First latency is only part of the experience."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "coding-agents-agent-harnesses": {
+      "promise": {
+        "es": "Observa cambios de código, permisos, tests y recuperación sobre una tarea concreta.",
+        "en": "Observe code changes, permissions, tests and recovery on a concrete task."
+      },
+      "prerequisites": [
+        "agentes-ia",
+        "context-engineering-memory-mcp"
+      ],
+      "next": "evaluating-ai-systems-production",
+      "why": {
+        "es": "Después evalúa el cambio y la trayectoria que lo produjo.",
+        "en": "Next, evaluate both the change and the trajectory that produced it."
+      },
+      "lessons": [
+        {
+          "view": "code-test",
+          "question": {
+            "es": "¿Qué convierte un cambio propuesto en un cambio verificado?",
+            "en": "What turns a proposed change into a verified one?"
+          },
+          "options": {
+            "es": [
+              "Cambio incorrecto",
+              "Corregir el cambio"
+            ],
+            "en": [
+              "Incorrect change",
+              "Fix the change"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea",
+                "La tarea es sumar dos números con add(a, b)."
+              ],
+              [
+                "Diff",
+                "El diff permite ver exactamente qué operador ha cambiado."
+              ],
+              [
+                "Test",
+                "El ejemplo comprueba add(2, 3) frente a 5."
+              ],
+              [
+                "Veredicto",
+                "Un test fallido aporta evidencia para reparar; un test correcto solo cubre este caso."
+              ]
+            ],
+            "en": [
+              [
+                "Task",
+                "The task is to add two numbers with add(a, b)."
+              ],
+              [
+                "Diff",
+                "The diff shows exactly which operator changed."
+              ],
+              [
+                "Test",
+                "The example checks add(2, 3) against 5."
+              ],
+              [
+                "Verdict",
+                "A failing test provides repair evidence; a passing test covers only this case."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "code-workspace",
+          "question": {
+            "es": "¿Hasta dónde puede escribir el agente?",
+            "en": "Where can the agent write?"
+          },
+          "options": {
+            "es": [
+              "Workspace aislado",
+              "Ámbito sin aislamiento"
+            ],
+            "en": [
+              "Isolated workspace",
+              "Unisolated scope"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea",
+                "La tarea necesita modificar un archivo del proyecto."
+              ],
+              [
+                "Workspace",
+                "El workspace define qué archivos están dentro del entorno de trabajo."
+              ],
+              [
+                "Escritura",
+                "El ejemplo intenta también escribir fuera de ese ámbito."
+              ],
+              [
+                "Frontera",
+                "La comprobación de ámbito decide qué escritura se permite en esta simulación."
+              ]
+            ],
+            "en": [
+              [
+                "Task",
+                "The task needs a project file changed."
+              ],
+              [
+                "Workspace",
+                "The workspace defines which files are inside the working environment."
+              ],
+              [
+                "Write",
+                "The example also attempts a write outside that scope."
+              ],
+              [
+                "Boundary",
+                "The scope check decides which write is permitted in this simulation."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "code-plan",
+          "question": {
+            "es": "¿Qué significa que un paso esté terminado?",
+            "en": "What does completing a step mean?"
+          },
+          "options": {
+            "es": [
+              "Criterio comprobado",
+              "Solo marcado como hecho"
+            ],
+            "en": [
+              "Criterion checked",
+              "Marked done only"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Contrato",
+                "La tarea define un resultado verificable."
+              ],
+              [
+                "Pasos",
+                "Dividirla crea pasos con dependencias, no pruebas de éxito."
+              ],
+              [
+                "Evidencia",
+                "Cada paso necesita evidencia de su condición de cierre."
+              ],
+              [
+                "Checkpoint",
+                "Solo se guarda como verificado el checkpoint cuyo criterio se comprobó."
+              ]
+            ],
+            "en": [
+              [
+                "Contract",
+                "The task defines a verifiable result."
+              ],
+              [
+                "Steps",
+                "Splitting it creates dependent steps, not evidence of success."
+              ],
+              [
+                "Evidence",
+                "Each step needs evidence for its completion condition."
+              ],
+              [
+                "Checkpoint",
+                "Only a checkpoint with a checked criterion is recorded as verified."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "code-permissions",
+          "question": {
+            "es": "¿Un comando propuesto está autorizado?",
+            "en": "Is a proposed command authorized?"
+          },
+          "options": {
+            "es": [
+              "Comprobar permiso",
+              "Permitir cualquier comando"
+            ],
+            "en": [
+              "Check permission",
+              "Allow every command"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Propuesta",
+                "El agente propone una operación sobre archivos."
+              ],
+              [
+                "Ámbito",
+                "La operación puede leer, escribir o modificar un recurso externo."
+              ],
+              [
+                "Aprobación",
+                "La política de esta demostración requiere aprobación para una acción sensible."
+              ],
+              [
+                "Ejecución",
+                "La propuesta solo se ejecuta cuando cumple el contrato de autorización."
+              ]
+            ],
+            "en": [
+              [
+                "Proposal",
+                "The agent proposes a file operation."
+              ],
+              [
+                "Scope",
+                "The operation may read, write or modify an external resource."
+              ],
+              [
+                "Approval",
+                "This demonstration’s policy requires approval for a sensitive action."
+              ],
+              [
+                "Execution",
+                "The proposal executes only when it satisfies the authorization contract."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "code-verifier",
+          "question": {
+            "es": "¿Pasar un ejemplo cubre los casos límite?",
+            "en": "Does passing one example cover edge cases?"
+          },
+          "options": {
+            "es": [
+              "Un test",
+              "Añadir caso límite"
+            ],
+            "en": [
+              "One test",
+              "Add edge case"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Implementación",
+                "La implementación propuesta funciona para un caso habitual."
+              ],
+              [
+                "Caso simple",
+                "El test habitual pasa: esa observación es válida pero limitada."
+              ],
+              [
+                "Caso límite",
+                "El caso vacío revela una condición que no se había probado."
+              ],
+              [
+                "Revisión",
+                "El verificador necesita casos ligados al contrato, no solo una señal verde."
+              ]
+            ],
+            "en": [
+              [
+                "Implementation",
+                "The proposed implementation works for a common case."
+              ],
+              [
+                "Simple case",
+                "The common test passes: that observation is valid but limited."
+              ],
+              [
+                "Edge case",
+                "The empty case reveals an untested condition."
+              ],
+              [
+                "Review",
+                "The verifier needs cases tied to the contract, not just a green signal."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "code-checkpoint",
+          "question": {
+            "es": "¿Desde dónde se recupera una tarea interrumpida?",
+            "en": "Where does an interrupted task resume?"
+          },
+          "options": {
+            "es": [
+              "Checkpoint verificado",
+              "Último mensaje"
+            ],
+            "en": [
+              "Verified checkpoint",
+              "Last message"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Trabajo",
+                "El agente ha preparado un cambio y una comprobación."
+              ],
+              [
+                "Checkpoint",
+                "El checkpoint conserva la revisión y su evidencia."
+              ],
+              [
+                "Interrupción",
+                "La ejecución se interrumpe antes de cerrar toda la tarea."
+              ],
+              [
+                "Recuperación",
+                "Recuperar el estado verificado evita confundir lo dicho con lo que quedó guardado."
+              ]
+            ],
+            "en": [
+              [
+                "Work",
+                "The agent has prepared a change and a check."
+              ],
+              [
+                "Checkpoint",
+                "The checkpoint preserves the revision and its evidence."
+              ],
+              [
+                "Interruption",
+                "Execution stops before the whole task is closed."
+              ],
+              [
+                "Recovery",
+                "Recovering verified state avoids confusing what was said with what was saved."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "context-engineering-memory-mcp": {
+      "promise": {
+        "es": "Comprueba qué información se selecciona, se conserva y llega al modelo.",
+        "en": "Inspect which information is selected, stored and passed to the model."
+      },
+      "prerequisites": [
+        "agentes-ia"
+      ],
+      "next": "agentes-voz-tiempo-real",
+      "why": {
+        "es": "Aplica después el contexto y el estado a una conversación en tiempo real.",
+        "en": "Next, apply context and state to a real-time conversation."
+      },
+      "lessons": [
+        {
+          "view": "context-select",
+          "question": {
+            "es": "¿Todo lo disponible entra en el modelo?",
+            "en": "Does all available information reach the model?"
+          },
+          "options": {
+            "es": [
+              "Seleccionar evidencia",
+              "Añadir todo"
+            ],
+            "en": [
+              "Select evidence",
+              "Include everything"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Fuentes",
+                "Hay más información disponible que la necesaria para la pregunta."
+              ],
+              [
+                "Selección",
+                "El ensamblado elige qué parte se incorpora a esta petición."
+              ],
+              [
+                "Contexto",
+                "Solo lo incluido aparece en la entrada efectiva del modelo."
+              ],
+              [
+                "Respuesta",
+                "Compara la evidencia relevante con el ruido añadido. Más información no prueba mayor calidad."
+              ]
+            ],
+            "en": [
+              [
+                "Sources",
+                "More information is available than the question needs."
+              ],
+              [
+                "Selection",
+                "Assembly chooses which part is included in this request."
+              ],
+              [
+                "Context",
+                "Only included information appears in the model’s effective input."
+              ],
+              [
+                "Answer",
+                "Compare relevant evidence with added noise. More information does not prove higher quality."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "context-budget",
+          "question": {
+            "es": "¿Qué conservas cuando el contexto no cabe?",
+            "en": "What do you keep when context does not fit?"
+          },
+          "options": {
+            "es": [
+              "Presupuesto de 6 bloques",
+              "Presupuesto de 3 bloques"
+            ],
+            "en": [
+              "Budget: 6 blocks",
+              "Budget: 3 blocks"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Inventario",
+                "Cada ficha ocupa bloques didácticos, no tokens medidos."
+              ],
+              [
+                "Presupuesto",
+                "El presupuesto limita cuánto cabe en la entrada."
+              ],
+              [
+                "Prioridad",
+                "La prioridad conserva la tarea y la evidencia antes que información secundaria."
+              ],
+              [
+                "Entrada",
+                "El contexto final muestra qué se incluyó y qué quedó fuera."
+              ]
+            ],
+            "en": [
+              [
+                "Inventory",
+                "Each card occupies educational blocks, not measured tokens."
+              ],
+              [
+                "Budget",
+                "The budget limits what fits in the input."
+              ],
+              [
+                "Priority",
+                "Priority preserves the task and evidence before secondary information."
+              ],
+              [
+                "Input",
+                "The final context shows what was included and what was left out."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "context-memory",
+          "question": {
+            "es": "¿Qué persiste entre dos turnos?",
+            "en": "What persists between two turns?"
+          },
+          "options": {
+            "es": [
+              "Guardar estado explícito",
+              "Solo historial del turno"
+            ],
+            "en": [
+              "Save explicit state",
+              "Turn history only"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Turno 1",
+                "Una preferencia aparece en el primer turno de la tarea."
+              ],
+              [
+                "Almacenamiento",
+                "Persistirla es una operación explícita, distinta de mencionarla."
+              ],
+              [
+                "Turno 2",
+                "El segundo turno se ensambla con las fuentes disponibles entonces."
+              ],
+              [
+                "Recuperación",
+                "Solo la información conservada y recuperada llega a esta nueva petición."
+              ]
+            ],
+            "en": [
+              [
+                "Turn 1",
+                "A preference appears in the first turn of the task."
+              ],
+              [
+                "Storage",
+                "Persisting it is an explicit operation, distinct from mentioning it."
+              ],
+              [
+                "Turn 2",
+                "The second turn is assembled from sources available then."
+              ],
+              [
+                "Retrieval",
+                "Only information retained and retrieved reaches this new request."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "context-retrieval",
+          "question": {
+            "es": "¿Qué pasa si dos fuentes se contradicen?",
+            "en": "What happens when two sources conflict?"
+          },
+          "options": {
+            "es": [
+              "Priorizar versión vigente",
+              "Usar primera coincidencia"
+            ],
+            "en": [
+              "Prioritize current version",
+              "Use first match"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Consulta",
+                "La pregunta pide la política vigente de devolución."
+              ],
+              [
+                "Recuperación",
+                "La búsqueda recupera una versión antigua y una actual."
+              ],
+              [
+                "Conflicto",
+                "Coincidencia de texto no resuelve la contradicción entre versiones."
+              ],
+              [
+                "Selección",
+                "La fecha y procedencia permiten elegir la versión relevante en este ejemplo."
+              ]
+            ],
+            "en": [
+              [
+                "Query",
+                "The question asks for the current returns policy."
+              ],
+              [
+                "Retrieval",
+                "Retrieval finds an old version and a current one."
+              ],
+              [
+                "Conflict",
+                "Text similarity does not resolve the contradiction between versions."
+              ],
+              [
+                "Selection",
+                "Date and provenance allow selecting the relevant version in this example."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "context-mcp",
+          "question": {
+            "es": "¿Conectar una herramienta le da permiso para actuar?",
+            "en": "Does connecting a tool authorize its actions?"
+          },
+          "options": {
+            "es": [
+              "Permiso explícito",
+              "Sin permiso de escritura"
+            ],
+            "en": [
+              "Explicit permission",
+              "No write permission"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Host",
+                "El host incorpora una conexión a un servidor de herramientas."
+              ],
+              [
+                "Cliente",
+                "El cliente transmite una solicitud dentro de ese protocolo."
+              ],
+              [
+                "Servidor",
+                "Descubrir una herramienta describe una capacidad, no la autoriza por sí solo."
+              ],
+              [
+                "Acción",
+                "La acción de escritura necesita su permiso aunque la conexión funcione."
+              ]
+            ],
+            "en": [
+              [
+                "Host",
+                "The host adds a connection to a tool server."
+              ],
+              [
+                "Client",
+                "The client transmits a request within that protocol."
+              ],
+              [
+                "Server",
+                "Discovering a tool describes a capability; it does not authorize it by itself."
+              ],
+              [
+                "Action",
+                "The write action needs permission even when the connection works."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "context-isolation",
+          "question": {
+            "es": "¿Qué debe recibir un subagente?",
+            "en": "What should a subagent receive?"
+          },
+          "options": {
+            "es": [
+              "Contexto mínimo",
+              "Copiar todo el contexto"
+            ],
+            "en": [
+              "Minimum context",
+              "Copy all context"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea principal",
+                "La tarea principal contiene información de varias actividades."
+              ],
+              [
+                "Delegación",
+                "La delegación define un objetivo concreto para otro componente."
+              ],
+              [
+                "Subagente",
+                "El subagente recibe el subconjunto seleccionado, no necesariamente todo el historial."
+              ],
+              [
+                "Retorno",
+                "La respuesta regresa con su evidencia; el aislamiento no elimina la necesidad de validarla."
+              ]
+            ],
+            "en": [
+              [
+                "Main task",
+                "The main task contains information about several activities."
+              ],
+              [
+                "Delegation",
+                "Delegation defines a specific goal for another component."
+              ],
+              [
+                "Subagent",
+                "The subagent receives the selected subset, not necessarily the whole history."
+              ],
+              [
+                "Return",
+                "Its result returns with evidence; isolation does not remove the need to validate it."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "llm-inference-engineering-economics": {
+      "promise": {
+        "es": "Sigue tokens, memoria y tiempo para entender el coste de servir un modelo.",
+        "en": "Follow tokens, memory and time to understand model-serving cost."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag",
+        "modelos-razonadores"
+      ],
+      "next": "evaluating-ai-systems-production",
+      "why": {
+        "es": "Comprueba después rendimiento y calidad sobre la misma tarea.",
+        "en": "Next, check performance and quality on the same task."
+      },
+      "lessons": [
+        {
+          "view": "infer-phases",
+          "question": {
+            "es": "¿Qué sucede antes y después del primer token?",
+            "en": "What happens before and after the first token?"
+          },
+          "options": {
+            "es": [
+              "Entrada corta",
+              "Entrada larga"
+            ],
+            "en": [
+              "Short input",
+              "Long input"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Petición",
+                "La entrada llega antes de que exista una respuesta."
+              ],
+              [
+                "Prefill",
+                "El prefill procesa la entrada y prepara estado para continuar."
+              ],
+              [
+                "Primer token",
+                "El primer token marca un punto observable por el cliente."
+              ],
+              [
+                "Decode",
+                "El decode genera nuevos tokens. Los tiempos del ejemplo son sintéticos y están declarados."
+              ]
+            ],
+            "en": [
+              [
+                "Request",
+                "Input arrives before an answer exists."
+              ],
+              [
+                "Prefill",
+                "Prefill processes the input and prepares state for continuation."
+              ],
+              [
+                "First token",
+                "The first token marks a client-observable point."
+              ],
+              [
+                "Decode",
+                "Decode generates new tokens. Example timings are synthetic and declared."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "infer-cache",
+          "question": {
+            "es": "¿Qué se reutiliza al generar el siguiente token?",
+            "en": "What is reused for the next token?"
+          },
+          "options": {
+            "es": [
+              "Reutilizar KV",
+              "Sin reutilización ilustrativa"
+            ],
+            "en": [
+              "Reuse KV",
+              "Illustrative no-reuse case"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Entrada",
+                "La secuencia ya contiene tokens procesados."
+              ],
+              [
+                "Estado KV",
+                "Sus claves y valores ocupan memoria en esta representación simplificada."
+              ],
+              [
+                "Siguiente token",
+                "Un nuevo token añade estado mientras consulta el existente."
+              ],
+              [
+                "Reutilización",
+                "Reutilizar estado evita repetir parte del trabajo; no hace gratuita la generación."
+              ]
+            ],
+            "en": [
+              [
+                "Input",
+                "The sequence already contains processed tokens."
+              ],
+              [
+                "KV state",
+                "Their keys and values occupy memory in this simplified view."
+              ],
+              [
+                "Next token",
+                "A new token adds state while consulting existing state."
+              ],
+              [
+                "Reuse",
+                "State reuse avoids some repeated work; it does not make generation free."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "infer-quant",
+          "question": {
+            "es": "¿Qué cambia al representar un número con menos niveles?",
+            "en": "What changes with fewer numeric levels?"
+          },
+          "options": {
+            "es": [
+              "8 niveles",
+              "4 niveles"
+            ],
+            "en": [
+              "8 levels",
+              "4 levels"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Valor",
+                "El ejemplo representa un valor normalizado entre cero y uno."
+              ],
+              [
+                "Niveles",
+                "Reducir niveles limita los valores que podemos representar."
+              ],
+              [
+                "Redondeo",
+                "El redondeo selecciona el nivel disponible más próximo."
+              ],
+              [
+                "Error",
+                "Se observa error numérico. Este ejemplo no predice la calidad de un modelo cuantizado."
+              ]
+            ],
+            "en": [
+              [
+                "Value",
+                "The example represents a normalized value between zero and one."
+              ],
+              [
+                "Levels",
+                "Fewer levels restrict representable values."
+              ],
+              [
+                "Rounding",
+                "Rounding selects the nearest available level."
+              ],
+              [
+                "Error",
+                "Numeric error is visible. This example does not predict quantized model quality."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "infer-prefix",
+          "question": {
+            "es": "¿Cuándo puede reutilizarse un prefijo?",
+            "en": "When can a prefix be reused?"
+          },
+          "options": {
+            "es": [
+              "Prefijo idéntico",
+              "Prefijo modificado"
+            ],
+            "en": [
+              "Identical prefix",
+              "Modified prefix"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Petición A",
+                "La primera petición procesa una secuencia inicial."
+              ],
+              [
+                "Prefijo guardado",
+                "El ejemplo conserva estado asociado a ese prefijo."
+              ],
+              [
+                "Petición B",
+                "La segunda petición comparte o modifica parte de la secuencia."
+              ],
+              [
+                "Coincidencia",
+                "La coincidencia válida permite reutilización en el ejemplo; una modificación invalida ese tramo."
+              ]
+            ],
+            "en": [
+              [
+                "Request A",
+                "The first request processes an initial sequence."
+              ],
+              [
+                "Saved prefix",
+                "The example retains state associated with that prefix."
+              ],
+              [
+                "Request B",
+                "The second request shares or changes part of the sequence."
+              ],
+              [
+                "Match",
+                "A valid match enables reuse in this example; a change invalidates that portion."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "infer-routing",
+          "question": {
+            "es": "¿Todas las tareas deben seguir la misma ruta?",
+            "en": "Must all tasks follow the same route?"
+          },
+          "options": {
+            "es": [
+              "Tarea simple",
+              "Tarea con comprobación"
+            ],
+            "en": [
+              "Simple task",
+              "Task requiring verification"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Tarea",
+                "Dos tareas tienen requisitos distintos en este ejemplo."
+              ],
+              [
+                "Criterio",
+                "La regla de routing utiliza el requisito declarado, no una etiqueta de mejor modelo."
+              ],
+              [
+                "Ruta",
+                "Se selecciona una ruta y su coste ilustrativo."
+              ],
+              [
+                "Verificación",
+                "La ruta más barata solo es útil si satisface el criterio de la tarea."
+              ]
+            ],
+            "en": [
+              [
+                "Task",
+                "Two tasks have different requirements in this example."
+              ],
+              [
+                "Criterion",
+                "The routing rule uses the stated requirement, not a “best model” label."
+              ],
+              [
+                "Route",
+                "A route and its illustrative cost are selected."
+              ],
+              [
+                "Verification",
+                "The cheaper route is useful only if it meets the task’s criterion."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "infer-benchmark",
+          "question": {
+            "es": "¿Dos latencias son comparables con cargas distintas?",
+            "en": "Are two latencies comparable under different workloads?"
+          },
+          "options": {
+            "es": [
+              "Misma carga",
+              "Mezclar cargas"
+            ],
+            "en": [
+              "Same workload",
+              "Mixed workloads"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Carga",
+                "Define longitudes, concurrencia y criterio antes de comparar."
+              ],
+              [
+                "Ejecuciones",
+                "Cada marca representa una ejecución de un conjunto sintético."
+              ],
+              [
+                "Distribución",
+                "Una distribución muestra diferencias que una media puede ocultar."
+              ],
+              [
+                "Comparación",
+                "Comparar cargas distintas confunde cambio de sistema y cambio de trabajo."
+              ]
+            ],
+            "en": [
+              [
+                "Workload",
+                "Define lengths, concurrency and criteria before comparing."
+              ],
+              [
+                "Runs",
+                "Each mark represents a run in a synthetic set."
+              ],
+              [
+                "Distribution",
+                "A distribution shows differences an average can hide."
+              ],
+              [
+                "Comparison",
+                "Comparing different workloads confounds a system change with a work change."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "evaluating-ai-systems-production": {
+      "promise": {
+        "es": "Mira la evidencia detrás de una métrica y comprueba el resultado de una tarea.",
+        "en": "Inspect the evidence behind a metric and verify a task’s outcome."
+      },
+      "prerequisites": [
+        "agentes-ia",
+        "context-engineering-memory-mcp"
+      ],
+      "next": "seguridad-ia",
+      "why": {
+        "es": "Amplía después los casos hacia permisos y fallos de seguridad.",
+        "en": "Next, extend cases to permissions and security failures."
+      },
+      "lessons": [
+        {
+          "view": "eval-boundary",
+          "question": {
+            "es": "¿Estás evaluando una respuesta o el sistema?",
+            "en": "Are you evaluating an answer or the system?"
+          },
+          "options": {
+            "es": [
+              "Solo texto",
+              "Objetivo y restricciones"
+            ],
+            "en": [
+              "Text only",
+              "Goal and constraints"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Objetivo",
+                "El objetivo incluye producir un resultado y respetar una restricción."
+              ],
+              [
+                "Respuesta",
+                "Dos respuestas pueden parecer igualmente correctas."
+              ],
+              [
+                "Trayectoria",
+                "La trayectoria revela cómo se obtuvo cada resultado."
+              ],
+              [
+                "Criterios",
+                "Cambiar la frontera de evaluación cambia qué fallos puedes observar."
+              ]
+            ],
+            "en": [
+              [
+                "Goal",
+                "The goal includes producing a result and respecting a constraint."
+              ],
+              [
+                "Answer",
+                "Two answers can appear equally correct."
+              ],
+              [
+                "Trajectory",
+                "The trajectory reveals how each result was obtained."
+              ],
+              [
+                "Criteria",
+                "Changing the evaluation boundary changes which failures are observable."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "eval-dataset",
+          "question": {
+            "es": "¿Qué oculta un conjunto de pruebas demasiado fácil?",
+            "en": "What does an overly easy test set hide?"
+          },
+          "options": {
+            "es": [
+              "Casos habituales",
+              "Añadir casos difíciles"
+            ],
+            "en": [
+              "Common cases",
+              "Add difficult cases"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Conjunto",
+                "El conjunto inicial contiene seis casos habituales."
+              ],
+              [
+                "Cobertura",
+                "Añadir cuatro casos difíciles cambia lo que se pone a prueba."
+              ],
+              [
+                "Ejecución",
+                "Los resultados son datos sintéticos declarados, no un benchmark publicado."
+              ],
+              [
+                "Desglose",
+                "Desglosar por tipo revela qué fallos quedaban fuera del conjunto inicial."
+              ]
+            ],
+            "en": [
+              [
+                "Set",
+                "The initial set contains six common cases."
+              ],
+              [
+                "Coverage",
+                "Adding four difficult cases changes what is tested."
+              ],
+              [
+                "Execution",
+                "Results are declared synthetic data, not a published benchmark."
+              ],
+              [
+                "Breakdown",
+                "Breaking down by type reveals failures outside the original set."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "eval-judge",
+          "question": {
+            "es": "¿Coinciden el juez automático y la referencia?",
+            "en": "Do the automated judge and reference agree?"
+          },
+          "options": {
+            "es": [
+              "Sin calibrar",
+              "Regla calibrada del ejemplo"
+            ],
+            "en": [
+              "Uncalibrated",
+              "Example calibrated rule"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Rúbrica",
+                "Una rúbrica define qué significa una respuesta aceptable en este conjunto."
+              ],
+              [
+                "Referencias",
+                "Las etiquetas de referencia se conservan junto a cada caso."
+              ],
+              [
+                "Juez",
+                "El juez del ejemplo produce etiquetas que podemos contrastar."
+              ],
+              [
+                "Desacuerdos",
+                "Los desacuerdos son evidencia para revisar. Ajustar este conjunto no demuestra generalización."
+              ]
+            ],
+            "en": [
+              [
+                "Rubric",
+                "A rubric defines an acceptable answer in this set."
+              ],
+              [
+                "References",
+                "Reference labels are retained with each case."
+              ],
+              [
+                "Judge",
+                "The example judge produces labels we can compare."
+              ],
+              [
+                "Disagreements",
+                "Disagreements provide review evidence. Fitting this set does not prove generalization."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "eval-trace",
+          "question": {
+            "es": "¿Llegar al objetivo basta si se incumple el permiso?",
+            "en": "Is reaching the goal enough if permission is violated?"
+          },
+          "options": {
+            "es": [
+              "Ruta autorizada",
+              "Ruta no autorizada"
+            ],
+            "en": [
+              "Authorized path",
+              "Unauthorized path"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Objetivo",
+                "Las dos rutas buscan el mismo resultado."
+              ],
+              [
+                "Herramientas",
+                "La secuencia permite inspeccionar las herramientas utilizadas."
+              ],
+              [
+                "Permisos",
+                "Una ruta utiliza una acción fuera del permiso de la tarea."
+              ],
+              [
+                "Resultado",
+                "El resultado debe evaluarse junto con sus restricciones, no solo por el texto final."
+              ]
+            ],
+            "en": [
+              [
+                "Goal",
+                "Both paths seek the same result."
+              ],
+              [
+                "Tools",
+                "The sequence lets us inspect the tools used."
+              ],
+              [
+                "Permissions",
+                "One path uses an action outside the task’s permission."
+              ],
+              [
+                "Outcome",
+                "The result must be evaluated alongside constraints, not only final text."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "eval-rollout",
+          "question": {
+            "es": "¿Qué señal detiene una ampliación del despliegue?",
+            "en": "What signal stops a rollout expansion?"
+          },
+          "options": {
+            "es": [
+              "Dentro del umbral",
+              "Fallo observado"
+            ],
+            "en": [
+              "Within threshold",
+              "Observed failure"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Shadow",
+                "La versión se observa primero en una fase delimitada."
+              ],
+              [
+                "Canary",
+                "El canary expone una fracción de casos en este ejemplo simplificado."
+              ],
+              [
+                "Comprobación",
+                "La regla de parada está definida antes de observar el resultado."
+              ],
+              [
+                "Decisión",
+                "Superar el umbral detiene la ampliación. Este umbral didáctico no es una recomendación operativa."
+              ]
+            ],
+            "en": [
+              [
+                "Shadow",
+                "The version is first observed in a bounded phase."
+              ],
+              [
+                "Canary",
+                "The canary exposes a fraction of cases in this simplified example."
+              ],
+              [
+                "Check",
+                "The stop rule is defined before observing the outcome."
+              ],
+              [
+                "Decision",
+                "Crossing the threshold stops expansion. This educational threshold is not operational advice."
+              ]
+            ]
+          }
+        },
+        {
+          "view": "eval-feedback",
+          "question": {
+            "es": "¿Cómo se convierte un fallo en una prueba reproducible?",
+            "en": "How does a failure become a reproducible test?"
+          },
+          "options": {
+            "es": [
+              "Añadir prueba y verificar",
+              "Solo corregir el ejemplo"
+            ],
+            "en": [
+              "Add test and verify",
+              "Fix the example only"
+            ]
+          },
+          "steps": {
+            "es": [
+              [
+                "Fallo",
+                "Una traza de producción revela un resultado inesperado."
+              ],
+              [
+                "Caso",
+                "Se conserva un caso reproducible y se añade una versión al conjunto."
+              ],
+              [
+                "Reparación",
+                "La reparación se comprueba contra ese caso y los anteriores."
+              ],
+              [
+                "Regresión",
+                "Conservar la prueba permite detectar una reaparición. Corregir sin prueba deja ese vacío."
+              ]
+            ],
+            "en": [
+              [
+                "Failure",
+                "A production trace reveals an unexpected outcome."
+              ],
+              [
+                "Case",
+                "A reproducible case is retained and the set is versioned."
+              ],
+              [
+                "Repair",
+                "The repair is checked against that case and the earlier ones."
+              ],
+              [
+                "Regression",
+                "Retaining the test can detect recurrence. Fixing without a test leaves that gap."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "fundamentos-ia-iag": {
+      "lessons": [],
+      "promise": {
+        "es": "Qué es la IA, cómo aprende y qué la diferencia de la IA generativa.",
+        "en": "What AI is, how it learns and how it differs from generative AI."
+      },
+      "prerequisites": [],
+      "next": "from-cave-to-agi",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    },
+    "from-cave-to-agi": {
+      "lessons": [],
+      "promise": {
+        "es": "Sigue las ideas que llevaron de representar el mundo a entrenar modelos.",
+        "en": "Follow the ideas from representing the world to training models."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag"
+      ],
+      "next": "multimodalidad-iag",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    },
+    "multimodalidad-iag": {
+      "lessons": [],
+      "promise": {
+        "es": "Descubre cómo se conectan texto, imagen, audio y vídeo.",
+        "en": "Discover how text, images, audio and video connect."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag"
+      ],
+      "next": "modelos-razonadores",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    },
+    "modelos-razonadores": {
+      "lessons": [],
+      "promise": {
+        "es": "Comprueba qué cambia cuando un modelo dedica más cómputo a responder.",
+        "en": "Inspect what changes when a model spends more compute answering."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag"
+      ],
+      "next": "agentes-ia",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    },
+    "ia-pib-bienestar-energia": {
+      "lessons": [],
+      "promise": {
+        "es": "Separa energía, crecimiento económico y bienestar al analizar el impacto de la IA.",
+        "en": "Separate energy, economic growth and wellbeing when examining AI impact."
+      },
+      "prerequisites": [
+        "fundamentos-ia-iag"
+      ],
+      "next": "datacenters-espacio",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    },
+    "datacenters-espacio": {
+      "lessons": [],
+      "promise": {
+        "es": "Explora los límites físicos de llevar centros de datos fuera de la Tierra.",
+        "en": "Explore the physical constraints of putting data centres beyond Earth."
+      },
+      "prerequisites": [
+        "ia-pib-bienestar-energia"
+      ],
+      "next": "llm-inference-engineering-economics",
+      "why": {
+        "es": "Continúa con una serie conectada con lo que acabas de aprender.",
+        "en": "Continue with a series connected to what you just learned."
+      }
+    }
+  },
+  "paths": [
+    {
+      "id": "understand",
+      "title": {
+        "es": "Entender la IA",
+        "en": "Understand AI"
+      },
+      "description": {
+        "es": "Del concepto a cómo generan y razonan los modelos.",
+        "en": "From the concept to how models generate and reason."
+      },
+      "series": [
+        "fundamentos-ia-iag",
+        "from-cave-to-agi",
+        "multimodalidad-iag",
+        "modelos-razonadores"
+      ]
+    },
+    {
+      "id": "build",
+      "title": {
+        "es": "Construir sistemas",
+        "en": "Build systems"
+      },
+      "description": {
+        "es": "Agentes, contexto, voz, código e inferencia.",
+        "en": "Agents, context, voice, code and inference."
+      },
+      "series": [
+        "agentes-ia",
+        "context-engineering-memory-mcp",
+        "agentes-voz-tiempo-real",
+        "coding-agents-agent-harnesses",
+        "llm-inference-engineering-economics"
+      ]
+    },
+    {
+      "id": "evaluate",
+      "title": {
+        "es": "Evaluar y proteger",
+        "en": "Evaluate and protect"
+      },
+      "description": {
+        "es": "De la tarea a los permisos y la evidencia.",
+        "en": "From tasks to permissions and evidence."
+      },
+      "series": [
+        "agentes-ia",
+        "seguridad-ia",
+        "evaluating-ai-systems-production"
+      ]
+    },
+    {
+      "id": "impact",
+      "title": {
+        "es": "Entender el impacto",
+        "en": "Understand the impact"
+      },
+      "description": {
+        "es": "Energía, bienestar e infraestructura.",
+        "en": "Energy, wellbeing and infrastructure."
+      },
+      "series": [
+        "ia-pib-bienestar-energia",
+        "datacenters-espacio"
+      ]
+    }
+  ]
+}

@@ -99,3 +99,49 @@
     padding-top: .7rem !important;
   }
 }
+
+
+/* Human navigation review: keep the saved-progress affordance useful without pushing the first explanation below the mobile fold. */
+@media (max-width: 800px) {
+  .s5-resume {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .45rem;
+    margin-top: .45rem;
+    padding: .48rem .55rem;
+  }
+
+  .s5-resume > div:first-child {
+    min-width: 0;
+    gap: .05rem;
+  }
+
+  .s5-resume span {
+    font-size: .44rem;
+  }
+
+  .s5-resume strong {
+    overflow: hidden;
+    font-size: .64rem;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .s5-resume small {
+    font-size: .48rem;
+  }
+
+  .s5-resume__actions {
+    gap: .25rem;
+  }
+
+  .s5-resume__actions button {
+    min-height: 34px;
+    padding: .32rem .46rem;
+    font-size: .48rem;
+  }
+
+  .s5-resume__actions [data-s5-resume-chapter] {
+    display: none;
+  }
+}
