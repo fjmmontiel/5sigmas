@@ -96,22 +96,22 @@ const base = {
 }
 
 const presets = new Map(pricing.presets.map((preset) => [preset.id, preset]));
-const sonnet5 = presets.get('anthropic-claude-sonnet-5');
+const sonnet55 = presets.get('anthropic-claude-sonnet-5-5');
 const astra = presets.get('openai-gpt-6-astra');
-const sol6 = presets.get('openai-gpt-6-sol');
+const sol61 = presets.get('openai-gpt-6-1-sol');
 const luna6 = presets.get('openai-gpt-6-luna');
 const sol56 = presets.get('openai-gpt-5-6-sol');
 const gemini38 = presets.get('google-gemini-3-8-flash');
 
 for (const [label, preset] of [
-  ['Claude Sonnet 5', sonnet5], ['GPT-6 Astra', astra], ['GPT-6 Sol', sol6],
+  ['Claude Sonnet 5.5', sonnet55], ['GPT-6 Astra', astra], ['GPT-6.1 Sol', sol61],
   ['GPT-6 Luna', luna6], ['GPT-5.6 Sol', sol56], ['Gemini 3.8 Flash', gemini38]
 ]) assert.ok(preset, `${label} preset required`);
 
-assert.deepEqual([sonnet5.input_usd_per_million, sonnet5.cached_input_usd_per_million, sonnet5.output_usd_per_million], [2, 0.2, 10]);
-assert.equal(sonnet5.future_price, undefined, 'Cancelled Sonnet 5 September increase must not remain encoded');
+assert.deepEqual([sonnet55.input_usd_per_million, sonnet55.cached_input_usd_per_million, sonnet55.output_usd_per_million], [2, 0.2, 10]);
+assert.equal(sonnet55.future_price, undefined, 'Sonnet 5.5 must use its current published standard pricing');
 assert.deepEqual([astra.input_usd_per_million, astra.cached_input_usd_per_million, astra.output_usd_per_million], [10, 1, 50]);
-assert.deepEqual([sol6.input_usd_per_million, sol6.cached_input_usd_per_million, sol6.output_usd_per_million], [2, 0.2, 10]);
+assert.deepEqual([sol61.input_usd_per_million, sol61.cached_input_usd_per_million, sol61.output_usd_per_million], [2, 0.1, 10]);
 assert.deepEqual([luna6.input_usd_per_million, luna6.cached_input_usd_per_million, luna6.output_usd_per_million], [0.1, 0.01, 0.5]);
 assert.deepEqual([sol56.input_usd_per_million, sol56.cached_input_usd_per_million, sol56.output_usd_per_million], [4, 0.4, 20]);
 
@@ -129,11 +129,17 @@ assert.deepEqual([sol56.input_usd_per_million, sol56.cached_input_usd_per_millio
 }
 
 assert.equal(pricing.schema_version, 3);
-assert.equal(pricing.updated_at, '2026-09-25');
+assert.equal(pricing.updated_at, '2026-10-01');
 assert.equal(pricing.freshness_policy?.review_interval_days, 7, 'pricing freshness policy must be explicit');
-assert.ok(pricing.release_coverage?.corrections?.some((row) => row.model === 'Claude Sonnet 5'));
+assert.ok(pricing.release_coverage?.included?.includes('GPT-6.1 Sol'));
+assert.ok(pricing.release_coverage?.included?.includes('Claude Sonnet 5.5'));
+assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'GPT-6 Sol'));
+assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Claude Sonnet 5'));
+assert.ok(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.6 Flash'));
 assert.equal(presets.has('google-gemini-3-6-flash'), false, 'Previous-generation Gemini 3.6 preset must be retired');
+assert.equal(presets.has('openai-gpt-6-sol'), false, 'GPT-6 Sol must be retired after GPT-6.1 Sol');
+assert.equal(presets.has('anthropic-claude-sonnet-5'), false, 'Claude Sonnet 5 must be retired after Sonnet 5.5');
 assert.ok(pricing.presets.length >= 10, 'expected a current, sourced pricing preset set');
 
 for (const preset of pricing.presets) {
