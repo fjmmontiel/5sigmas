@@ -30,17 +30,17 @@ def run(args):
         series.append({'number':i,'id':d['id'],'before':intro['href'] if intro else chapters[0],'chapters':chapters})
 
     def check(name,ok,detail=None): report['checks'].append({'name':name,'pass':bool(ok),'detail':detail})
-    def shot(page,name,selector=None,full=False,meta=None):
+    def shot(page,name,selector=None,full=False,meta=None,nth=0):
         path=out/(name+'.png')
         if selector:
-            el=page.locator(selector).first; el.wait_for(state='visible'); el.screenshot(path=str(path),animations='disabled')
+            el=page.locator(selector).nth(nth); el.wait_for(state='visible'); el.screenshot(path=str(path),animations='disabled')
         else:
             page.screenshot(path=str(path),full_page=full,animations='disabled')
         report['captures'].append({'file':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),**(meta or {})})
         return path
 
-    def signature(page):
-        return page.locator(VISUAL_ROOT).first.evaluate("""el => {
+    def signature(page,index):
+        return page.locator(VISUAL_ROOT).nth(index).evaluate("""el => {
           const text = (el.innerText || '').replace(/\s+/g,' ').trim();
           const svgs=[...el.querySelectorAll('svg')].map(svg=>({
             viewBox:svg.getAttribute('viewBox')||'',
@@ -61,8 +61,8 @@ def run(args):
           };
         }""")
 
-    def golden_style(page):
-        return page.locator(VISUAL_ROOT).first.evaluate("""el => {
+    def golden_style(page,index):
+        return page.locator(VISUAL_ROOT).nth(index).evaluate("""el => {
           const target=el.matches('.s5v') ? (el.querySelector('.s5v__canvas') || el.querySelector(':scope > [class$="__sheet"]') || el) : el;
           const s=getComputedStyle(target||el);
           const r=parseFloat(s.borderRadius)||0;
@@ -100,37 +100,53 @@ def run(args):
                     check(f'{label}-ver-series-entry',entry.count()==1)
                 page.close()
 
-        # Preserve the mechanism byte-for-byte at the DOM/signature level; improve only rendering.
+        # Preserve every existing mechanism at the DOM/signature level; improve only rendering.
+        total_visuals=0
         mobile_representatives={7:1,8:1,9:2,10:1,11:1,12:1,13:1}
         for s in series[6:]:
             for chapter_no,route in enumerate(s['chapters'],1):
-                signatures={}; styles={}
+                pages={}
+                counts={}
                 for variant,base in (('before',args.before),('after',args.after)):
                     page=browser.new_page(viewport={'width':1440,'height':1000},reduced_motion='reduce')
                     page.goto(base+route,wait_until='networkidle')
-                    visual=page.locator(VISUAL_ROOT).first
-                    if visual.count() and visual.is_visible():
-                        signatures[variant]=signature(page)
-                        shot(page,f'golden-{s["number"]:02}-{chapter_no:02}-{variant}',selector=VISUAL_ROOT,meta={'surface':'advanced-visual','series':s['number'],'chapter':chapter_no,'state':variant})
+                    pages[variant]=page
+                    counts[variant]=page.locator(VISUAL_ROOT).count()
+                check(f'{s["number"]:02}-{chapter_no:02}-visual-count-preserved',counts['before']==counts['after'],counts)
+                total_visuals+=counts['after']
+
+                for visual_index in range(min(counts['before'],counts['after'])):
+                    signatures={}
+                    for variant in ('before','after'):
+                        page=pages[variant]
+                        visual=page.locator(VISUAL_ROOT).nth(visual_index)
+                        if not visual.is_visible():
+                            continue
+                        signatures[variant]=signature(page,visual_index)
+                        shot(page,f'golden-{s["number"]:02}-{chapter_no:02}-{visual_index+1:02}-{variant}',selector=VISUAL_ROOT,nth=visual_index,meta={'surface':'advanced-visual','series':s['number'],'chapter':chapter_no,'visual':visual_index+1,'state':variant})
                         if variant=='after':
-                            styles[variant]=golden_style(page)
-                            check(f'{s["number"]:02}-{chapter_no:02}-no-guide',page.locator('[data-sx-guide]').count()==0)
-                            check(f'{s["number"]:02}-{chapter_no:02}-golden-class',styles[variant]['body'] and styles[variant]['root'],styles[variant])
-                            check(f'{s["number"]:02}-{chapter_no:02}-golden-shell',styles[variant]['radius']>=20 and styles[variant]['shadow']!='none',styles[variant])
-                    page.close()
-                if 'before' in signatures and 'after' in signatures:
-                    check(f'{s["number"]:02}-{chapter_no:02}-mechanism-preserved',signatures['before']==signatures['after'],{'before':signatures['before'],'after':signatures['after']})
+                            style=golden_style(page,visual_index)
+                            check(f'{s["number"]:02}-{chapter_no:02}-{visual_index+1:02}-no-guide',page.locator('[data-sx-guide]').count()==0)
+                            check(f'{s["number"]:02}-{chapter_no:02}-{visual_index+1:02}-golden-class',style['body'] and style['root'],style)
+                            check(f'{s["number"]:02}-{chapter_no:02}-{visual_index+1:02}-golden-shell',style['radius']>=20 and style['shadow']!='none',style)
+                    if 'before' in signatures and 'after' in signatures:
+                        check(f'{s["number"]:02}-{chapter_no:02}-{visual_index+1:02}-mechanism-preserved',signatures['before']==signatures['after'],{'before':signatures['before'],'after':signatures['after']})
+
+                for page in pages.values(): page.close()
 
                 if mobile_representatives.get(s['number'])==chapter_no:
-                    for variant,base in (('before',args.before),('after',args.after)):
+                    for variant,base in (('before',args.before),('after',args.after')):
                         page=browser.new_page(viewport={'width':390,'height':844},reduced_motion='reduce')
                         page.goto(base+route,wait_until='networkidle')
-                        if page.locator(VISUAL_ROOT).count():
-                            shot(page,f'mobile-golden-{s["number"]:02}-{variant}',selector=VISUAL_ROOT,meta={'surface':'advanced-visual-mobile','series':s['number'],'chapter':chapter_no,'state':variant})
+                        roots=page.locator(VISUAL_ROOT)
+                        for visual_index in range(roots.count()):
+                            if not roots.nth(visual_index).is_visible(): continue
+                            shot(page,f'mobile-golden-{s["number"]:02}-{visual_index+1:02}-{variant}',selector=VISUAL_ROOT,nth=visual_index,meta={'surface':'advanced-visual-mobile','series':s['number'],'chapter':chapter_no,'visual':visual_index+1,'state':variant})
                             if variant=='after':
-                                root=page.locator(VISUAL_ROOT).first
-                                check(f'{s["number"]:02}-mobile-root-fit',root.evaluate('(e)=>e.getBoundingClientRect().width<=innerWidth+1'))
+                                root=roots.nth(visual_index)
+                                check(f'{s["number"]:02}-{visual_index+1:02}-mobile-root-fit',root.evaluate('(e)=>e.getBoundingClientRect().width<=innerWidth+1'))
                         page.close()
+        check('all-advanced-visuals-covered',total_visuals>=50,{'candidate_visuals':total_visuals})
 
         # Human journey.
         page=browser.new_page(viewport={'width':1440,'height':1000},reduced_motion='reduce')
