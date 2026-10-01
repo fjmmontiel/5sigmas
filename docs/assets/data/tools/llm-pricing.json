@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at": "2026-09-25",
+  "updated_at": "2026-10-01",
   "currency": "USD",
   "unit": "per_1m_tokens",
   "freshness_policy": {
@@ -13,6 +13,28 @@
     "en": "Public API prices verified against primary documentation. Every rate remains editable. Cache represents reads of already-cached tokens; cache writes and storage are not modelled. Tool calls, search, priority processing and other add-ons are also excluded unless explicitly stated."
   },
   "presets": [
+    {
+      "id": "openai-gpt-6-1-sol",
+      "provider": "OpenAI",
+      "model": "GPT-6.1 Sol",
+      "input_usd_per_million": 2,
+      "cached_input_usd_per_million": 0.1,
+      "output_usd_per_million": 10,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-6.1 Sol Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "verified_on": "2026-10-01"
+      },
+      "notes": {
+        "es": "Modelo actual para trabajo complejo con rendimiento cercano a Astra. Contexto de 1,05M; por encima de 272k tokens de entrada, OpenAI aplica 2× a entrada/caché y 1,5× a salida para toda la solicitud.",
+        "en": "Current model for complex work with near-Astra performance. 1.05M context; above 272k input tokens, OpenAI applies 2× input/cache and 1.5× output pricing to the full request."
+      }
+    },
     {
       "id": "openai-gpt-6-astra",
       "provider": "OpenAI",
@@ -28,7 +50,7 @@
       "source": {
         "title": "GPT-6 Astra Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Modelo insignia actual. Por encima de 272k tokens de entrada, OpenAI aplica 2× a entrada/caché y 1,5× a salida para toda la solicitud.",
@@ -36,25 +58,20 @@
       }
     },
     {
-      "id": "openai-gpt-6-sol",
-      "provider": "OpenAI",
-      "model": "GPT-6 Sol",
+      "id": "anthropic-claude-sonnet-5-5",
+      "provider": "Anthropic",
+      "model": "Claude Sonnet 5.5",
       "input_usd_per_million": 2,
       "cached_input_usd_per_million": 0.2,
       "output_usd_per_million": 10,
-      "long_context": {
-        "threshold_input_tokens": 272000,
-        "input_multiplier": 2,
-        "output_multiplier": 1.5
-      },
       "source": {
-        "title": "GPT-6 Sol Model | OpenAI API",
-        "url": "https://developers.openai.com/api/docs/models/gpt-6-sol",
-        "verified_on": "2026-09-25"
+        "title": "Claude Sonnet 5.5 | Claude Platform Docs",
+        "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "verified_on": "2026-10-01"
       },
       "notes": {
-        "es": "Modelo actual para equilibrar inteligencia y coste. La regla de contexto largo >272k se aplica automáticamente.",
-        "en": "Current model balancing intelligence and cost. The >272k long-context rule is applied automatically."
+        "es": "Sonnet actual: 1M de contexto, hasta 128K de salida, 2 USD/MTok de entrada, 0,20 de lectura de caché y 10 de salida.",
+        "en": "Current Sonnet: 1M context, up to 128K output, $2/MTok input, $0.20 cache reads and $10 output."
       }
     },
     {
@@ -72,7 +89,7 @@
       "source": {
         "title": "GPT-6 Luna Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Modelo actual de alta eficiencia. La regla de contexto largo >272k se aplica automáticamente.",
@@ -94,7 +111,7 @@
       "source": {
         "title": "GPT-5.6 Sol Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Precio promocional actual publicado por OpenAI al menos hasta el 21-11-2026; contexto largo >272k: 2× entrada y 1,5× salida.",
@@ -116,7 +133,7 @@
       "source": {
         "title": "GPT-5.6 Terra Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Baseline GPT-5.6 todavía publicado; contexto largo >272k se aplica automáticamente.",
@@ -138,28 +155,11 @@
       "source": {
         "title": "GPT-5.6 Luna Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Baseline GPT-5.6 de bajo coste todavía publicado; contexto largo >272k se aplica automáticamente.",
         "en": "Still-published low-cost GPT-5.6 baseline; >272k long-context pricing is applied automatically."
-      }
-    },
-    {
-      "id": "anthropic-claude-sonnet-5",
-      "provider": "Anthropic",
-      "model": "Claude Sonnet 5",
-      "input_usd_per_million": 2,
-      "cached_input_usd_per_million": 0.2,
-      "output_usd_per_million": 10,
-      "source": {
-        "title": "Pricing | Claude Platform Docs",
-        "url": "https://platform.claude.com/docs/en/about-claude/pricing",
-        "verified_on": "2026-09-25"
-      },
-      "notes": {
-        "es": "Anthropic confirmó que 2/10 USD por MTok es ahora el precio estándar; la subida anunciada previamente a 3/15 para el 01-09-2026 fue cancelada. Las escrituras de caché se facturan aparte.",
-        "en": "Anthropic confirmed $2/$10 per MTok is now the standard price; the previously scheduled $3/$15 increase for 2026-09-01 was cancelled. Cache writes are billed separately."
       }
     },
     {
@@ -179,7 +179,7 @@
       "source": {
         "title": "Gemini 3.8 Flash pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Tarifa introductoria hasta el 31-12-2026; desde el 01-01-2027 Google publica 1,50/0,15/7,50 USD por MTok. El almacenamiento de caché y grounding se facturan aparte.",
@@ -203,7 +203,7 @@
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Tarifa estándar promocional vigente hasta el 31 de diciembre de 2026: 0,75 USD/MTok de entrada, 0,075 de lectura de caché y 3,75 de salida. Desde el 1 de enero de 2027 Google anuncia 1,50/0,15/7,50 USD por MTok. El almacenamiento de caché y grounding se facturan aparte y no se incluyen.",
@@ -220,7 +220,7 @@
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Tarifa estándar de Gemini 3.5 Flash-Lite para entrada de texto, imagen, vídeo y audio. El almacenamiento de caché por hora y grounding se facturan aparte.",
@@ -237,7 +237,7 @@
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-09-25"
+        "verified_on": "2026-10-01"
       },
       "notes": {
         "es": "Tarifa estándar para entrada de texto, imagen o vídeo. El audio usa otra tarifa. El almacenamiento de caché por hora y grounding se facturan aparte.",
@@ -246,15 +246,15 @@
     }
   ],
   "release_coverage": {
-    "reviewed_through": "2026-09-25",
+    "reviewed_through": "2026-10-01",
     "included": [
+      "Claude Sonnet 5.5",
+      "GPT-6.1 Sol",
       "GPT-6 Astra",
-      "GPT-6 Sol",
       "GPT-6 Luna",
       "GPT-5.6 Sol",
       "GPT-5.6 Terra",
       "GPT-5.6 Luna",
-      "Claude Sonnet 5",
       "Gemini 3.8 Flash",
       "Gemini 3.7 Flash",
       "Gemini 3.5 Flash-Lite",
@@ -264,6 +264,14 @@
       {
         "model": "Gemini 3.6 Flash",
         "reason": "Google labels it previous-generation and Gemini 3.8 Flash is the current Flash model; 3.6 is not retained as a default pricing preset."
+      },
+      {
+        "model": "GPT-6 Sol",
+        "reason": "Superseded by GPT-6.1 Sol for the current balanced OpenAI preset; historical pricing remains documented in source history."
+      },
+      {
+        "model": "Claude Sonnet 5",
+        "reason": "Superseded by Claude Sonnet 5.5, which Anthropic marks active/latest at the same $2/$10 token price."
       }
     ],
     "corrections": [
@@ -274,6 +282,12 @@
       {
         "model": "GPT-5.6 Sol",
         "reason": "Current primary model page lists $4 input / $0.40 cached / $20 output per MTok."
+      }
+    ],
+    "reviewed_not_included": [
+      {
+        "model": "Gemini 4 Argon",
+        "reason": "Announced with $2/$10 introductory pricing and 95% cached-input discount, but access is still phased to trusted cyber defenders rather than generally available to developers. Do not present it as a normal selectable API preset yet."
       }
     ]
   }
