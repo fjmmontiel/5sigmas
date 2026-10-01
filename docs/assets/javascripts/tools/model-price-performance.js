@@ -383,9 +383,10 @@
   function shortName(row) {
     const names = {
       'anthropic-claude-opus-5-5-xhigh': 'Opus 5.5',
+      'anthropic-claude-sonnet-5-5-max': 'Sonnet 5.5',
       'anthropic-claude-fable-5-1-max': 'Fable 5.1',
       'openai-gpt-6-astra-max': 'Astra',
-      'openai-gpt-6-sol-max': 'Sol',
+      'openai-gpt-6-1-sol-max': 'Sol 6.1',
       'openai-gpt-6-luna-max': 'Luna',
       'openai-gpt-5-6-terra-max': 'Terra',
       'google-gemini-3-8-flash-high': 'Gemini 3.8',

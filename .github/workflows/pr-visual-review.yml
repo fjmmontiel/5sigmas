@@ -47,7 +47,11 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
       - name: Install FFmpeg for exact video validation
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+        run: |
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
 
       - name: Prepare exact Modelos R2 media for discovery checks
         run: bash scripts/prepare_modelos_r2_ci_media.sh

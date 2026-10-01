@@ -55,7 +55,7 @@ for (const spec of cases) {
     if (visible !== expectedCount) failures.push(`${spec.route} ${viewport.name}: expected ${expectedCount} visible models, got ${visible}`);
 
     const tableText = await page.locator('[data-model-table-body]').innerText();
-    for (const sentinel of ['Claude Opus 5.5', 'GPT-6 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'DeepSeek V4.1 Flash']) {
+    for (const sentinel of ['Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'DeepSeek V4.1 Flash']) {
       if (!tableText.includes(sentinel)) failures.push(`${spec.route} ${viewport.name}: refreshed model missing from table: ${sentinel}`);
     }
 

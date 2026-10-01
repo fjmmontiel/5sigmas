@@ -7,7 +7,7 @@ const dataset = JSON.parse(fs.readFileSync(new URL('../docs/assets/data/tools/mo
 
 Core.assertDataset(dataset);
 assert.equal(dataset.series.length, 6, 'Expected six distinct benchmark series in v1');
-assert.equal(dataset.updated, '2026-09-25');
+assert.equal(dataset.updated, '2026-10-01');
 
 const gpqa = Core.seriesById(dataset, 'gpqa-diamond');
 const gpqaStats = Core.stats(gpqa);
@@ -55,5 +55,11 @@ assert.ok(domain.min <= 66.3 && domain.max >= 96.0 && domain.min >= 0 && domain.
 assert.ok(dataset.sources.gpt6astra?.url.includes('/gpt-6-astra/'));
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Sol' && row.status === 'reviewed_not_added'));
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Luna' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6.1 Sol' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'Claude Sonnet 5.5' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'Gemini 4 Argon' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.sources.gpt61sol?.url.includes('/gpt-6.1-sol'));
+assert.ok(dataset.sources.sonnet55?.url.includes('/sonnet-5-5/'));
+assert.ok(dataset.sources.gemini4argon?.url.includes('/gemini-4-argon/'));
 
 console.log('model capability timeline: numerical, protocol, export and provenance gates passed');

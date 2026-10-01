@@ -29,7 +29,7 @@ assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialana
 assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
 
 for (const requiredRelease of [
-  'Claude Opus 5.5', 'GPT-6 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
+  'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
   'Gemini 3.8 Flash', 'DeepSeek V4.1 Flash', 'Qwen3.8 Max (0902)',
   'Qwen3.8-Flash-Next', 'Muse Spark 1.3', 'MiMo-V2.6-Pro', 'Step 5 Preview',
   'GLM 5.3 Flash', 'Claude Fable 5.1'
@@ -63,6 +63,7 @@ for (const model of data.models) {
 for (const retiredId of [
   'anthropic-claude-opus-5-max',
   'openai-gpt-5-6-sol-max',
+  'openai-gpt-6-sol-max',
   'openai-gpt-5-6-luna-max',
   'google-gemini-3-6-flash-high'
 ]) {
@@ -71,15 +72,17 @@ for (const retiredId of [
 
 const byId = new Map(data.models.map((model) => [model.id, model]));
 const opus = byId.get('anthropic-claude-opus-5-5-xhigh');
+const sonnet = byId.get('anthropic-claude-sonnet-5-5-max');
 const astra = byId.get('openai-gpt-6-astra-max');
-const sol = byId.get('openai-gpt-6-sol-max');
+const sol = byId.get('openai-gpt-6-1-sol-max');
 const luna = byId.get('openai-gpt-6-luna-max');
 const gemini = byId.get('google-gemini-3-8-flash-high');
 const grok = byId.get('spacexai-grok-4-7-high');
 const deepseek = byId.get('deepseek-v4-1-flash-max');
-for (const model of [opus, astra, sol, luna, gemini, grok, deepseek]) assert.ok(model, 'required refreshed comparison model missing');
+for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, deepseek]) assert.ok(model, 'required refreshed comparison model missing');
 
 assert.deepEqual([opus.input_usd_per_million, opus.output_usd_per_million], [4, 20]);
+assert.deepEqual([sonnet.input_usd_per_million, sonnet.output_usd_per_million], [2, 10]);
 assert.deepEqual([astra.input_usd_per_million, astra.output_usd_per_million], [10, 50]);
 assert.deepEqual([sol.input_usd_per_million, sol.output_usd_per_million], [2, 10]);
 assert.deepEqual([luna.input_usd_per_million, luna.output_usd_per_million], [0.1, 0.5]);
@@ -145,11 +148,13 @@ assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.map((row) => N
 const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map((row) => [row.model, row.reason]));
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
 assert.match(excluded.get('Grok 4.6') || '', /Superseded/i);
+assert.match(excluded.get('Gemini 4 Argon') || '', /speed|TTFT/i);
 assert.ok(excluded.size >= 25, 'release coverage ledger should record every reviewed-but-not-charted release');
 const supersession = new Map((data.release_coverage.supersession_events || []).map((row) => [row.model, row]));
 assert.equal(data.release_coverage.retained_active_baselines.includes('Gemini 3.6 Flash'), false);
 assert.match(supersession.get('Gemini 3.6 Flash')?.reason || '', /deprecated|historical/i);
 assert.equal(supersession.get('Gemini 3.6 Flash')?.replacement, 'Gemini 3.8 Flash');
 assert.match(supersession.get('Gemini 3.7 Flash')?.reason || '', /deprecated|supersession/i);
+assert.equal(supersession.get('GPT-6 Sol')?.replacement, 'GPT-6.1 Sol');
 
 console.log(`Model price/performance tests passed: ${data.models.length} current configurations; v4.3.2 provenance, release coverage, pricing rules, filters, sorting and Pareto frontier verified.`);

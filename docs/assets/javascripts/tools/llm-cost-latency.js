@@ -65,7 +65,7 @@
   let presetMap = new Map();
 
   const defaults = {
-    model: 'openai-gpt-6-sol',
+    model: 'openai-gpt-6-1-sol',
     inputTokens: 4000,
     outputTokens: 500,
     cacheHitRate: 50,
