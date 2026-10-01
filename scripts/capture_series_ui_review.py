@@ -99,7 +99,7 @@ def run(args):
                 width:el.getBoundingClientRect().width,
                 viewport:innerWidth,
                 scrollWidth:el.scrollWidth,
-                scheme:document.documentElement.getAttribute('data-md-color-scheme')||'',
+                scheme:document.body.getAttribute('data-md-color-scheme')||document.documentElement.getAttribute('data-md-color-scheme')||'',
                 color:s.color,
                 backgroundColor:s.backgroundColor,
                 backgroundImage:s.backgroundImage
@@ -156,8 +156,8 @@ def run(args):
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'before'})
                     shot(after,'golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'after'})
-                    original_scheme=after.evaluate("document.documentElement.getAttribute('data-md-color-scheme') || 'default'")
-                    after.evaluate("document.documentElement.setAttribute('data-md-color-scheme','slate')")
+                    original_scheme=after.evaluate("document.body.getAttribute('data-md-color-scheme') || 'default'")
+                    after.evaluate("document.body.setAttribute('data-md-color-scheme','slate')")
                     after.wait_for_timeout(60)
                     dark_sig=signature(after,visual_index)
                     dark_style=style_signature(after,visual_index)
@@ -168,7 +168,7 @@ def run(args):
                           {'light':style,'dark':dark_style})
                     shot(after,'golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'dark'})
-                    after.evaluate("(scheme) => document.documentElement.setAttribute('data-md-color-scheme', scheme)",original_scheme)
+                    after.evaluate("(scheme) => document.body.setAttribute('data-md-color-scheme', scheme)",original_scheme)
                     after.wait_for_timeout(30)
                 before.close();after.close()
 
@@ -193,8 +193,8 @@ def run(args):
                      meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'after'})
                 light_sig=signature(after,visual_index)
                 light_style=style_signature(after,visual_index)
-                original_scheme=after.evaluate("document.documentElement.getAttribute('data-md-color-scheme') || 'default'")
-                after.evaluate("document.documentElement.setAttribute('data-md-color-scheme','slate')")
+                original_scheme=after.evaluate("document.body.getAttribute('data-md-color-scheme') || 'default'")
+                after.evaluate("document.body.setAttribute('data-md-color-scheme','slate')")
                 after.wait_for_timeout(60)
                 dark_sig=signature(after,visual_index)
                 dark_style=style_signature(after,visual_index)
@@ -204,7 +204,7 @@ def run(args):
                       {'light':light_style,'dark':dark_style})
                 shot(after,'mobile-golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
                      meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'dark'})
-                after.evaluate("(scheme) => document.documentElement.setAttribute('data-md-color-scheme', scheme)",original_scheme)
+                after.evaluate("(scheme) => document.body.setAttribute('data-md-color-scheme', scheme)",original_scheme)
                 after.wait_for_timeout(30)
             before.close();after.close()
 

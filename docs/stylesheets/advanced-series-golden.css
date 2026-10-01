@@ -16,7 +16,8 @@ body.s5-advanced-series {
   --s5g-shadow-soft: 0 9px 28px color-mix(in srgb, var(--s5g-ink) 7%, transparent);
 }
 
-[data-md-color-scheme="slate"] body.s5-advanced-series {
+body[data-md-color-scheme="slate"].s5-advanced-series,
+:root[data-md-color-scheme="slate"] body.s5-advanced-series {
   --s5g-line: color-mix(in srgb, var(--s5g-ink) 18%, transparent);
   --s5g-line-strong: color-mix(in srgb, var(--s5g-ink) 30%, transparent);
   --s5g-shadow: 0 20px 58px rgba(0,0,0,.28);
