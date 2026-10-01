@@ -1,4 +1,4 @@
-name: Series UI + GOLDEN visual review
+name: Series UI + advanced GOLDEN polish review
 on:
   pull_request:
     paths:
@@ -6,7 +6,9 @@ on:
       - 'hooks/series_experience.py'
       - 'hooks/series_curriculum.json'
       - 'docs/stylesheets/series-experience.css'
+      - 'docs/stylesheets/advanced-series-golden.css'
       - 'docs/assets/javascripts/series-experience.js'
+      - 'docs/assets/javascripts/advanced-series-golden.js'
       - 'docs/assets/javascripts/reader-direct-navigation.js'
       - 'scripts/capture_gallery_series_review.py'
       - 'scripts/capture_series_ui_review.py'
@@ -54,9 +56,10 @@ jobs:
           cd "$GITHUB_WORKSPACE/candidate"
           node --check docs/assets/javascripts/series-experience.js
           node --check docs/assets/javascripts/reader-direct-navigation.js
+          node --check docs/assets/javascripts/advanced-series-golden.js
           python scripts/test_publication_nav.py
           python scripts/test_series_experience.py
-      - name: Validate navigation and prove GOLDEN visuals are direct
+      - name: Validate navigation, preserved mechanisms and GOLDEN polish
         env:
           REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           REVIEW_BASE_SHA: ${{ github.event.pull_request.base.sha }}

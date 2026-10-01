@@ -1,32 +1,30 @@
-# Series human-navigation review — GOLDEN visuals preserved
+# Series human-navigation + GOLDEN polish review
 
 Do not merge or deploy without owner visual approval.
 
 ## Scope
 
-- Build-derived catalogue of all 13 series / 67 chapters in Spanish and English.
-- Visual cards, search, four learning paths, optional prerequisites and next-series recommendations.
-- In-page presentation for every series, including original approved video playback where available.
-- Ver → Series discovery and parent-series links from playable video cards.
-- Existing reader context and next-step navigation.
+The approved Series explorer, learning map and per-series presentation stay unchanged.
 
-## Explicit non-scope
+Series 7–13 keep their existing mechanisms, labels, SVG topology, controls and state
+machines. The improvement is a shared presentation layer only:
 
-The experimental guided mechanisms from the earlier PR iteration have been removed.
-Series 7–13 render their existing GOLDEN animations and technical visuals directly,
-with their original code, responsive behaviour and interaction model.
+- stronger visual shell and hierarchy;
+- consistent 5sigmas typography, spacing and surfaces;
+- clearer focus/hover states;
+- subtle entry/state-change motion without changing the state machine;
+- dark-mode and mobile polish;
+- reduced-motion support.
 
-No article body, approved video, poster, subtitle, audio or GOLDEN animation-owned
-file is changed by this redesign.
+No series article, snippet, video, poster, transcript or caption is rewritten.
 
 ## Validation
 
-The dedicated browser review builds the exact PR base and candidate separately.
-It verifies the 13-series/67-chapter inventory, navigation, locale behaviour and
-real playback, then captures the directly rendered GOLDEN visuals in series 7–13
-before and after the navigation redesign.
+The browser review builds the exact PR base and candidate separately. For every
+available advanced visual it compares a semantic signature containing text,
+controls and SVG topology. That signature must remain identical. It then captures
+before/after pixels and verifies the candidate receives the GOLDEN presentation
+class/shell.
 
-The normal Series 4, Series 5, Coding Agents, Context Engineering and full visual
-GOLDEN gates run unchanged from the pinned base.
-
-Captures are real browser pixels; owner approval remains required.
+Normal Series 4, Series 5, Coding Agents, Context Engineering and PR visual gates
+continue to run independently.
