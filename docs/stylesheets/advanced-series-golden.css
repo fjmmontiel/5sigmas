@@ -436,3 +436,388 @@ body.s5-advanced-series .s5g-scrollable.is-scrolled { background-image: none; }
     transition: none !important;
   }
 }
+
+
+/* GOLDEN pass 3 — semantic art direction.
+ * Still presentation-only: semantic data attributes choose color and hierarchy;
+ * no labels, controls, SVG geometry, state machines, or article content change.
+ */
+
+/* Series 7 · security: let each existing mechanism keep a distinct visual role. */
+body.s5-series-seguridad-ia .jbsearch { --s5g-accent: #b87400; }
+body.s5-series-seguridad-ia :is(.memlife,.memgov,.memprop,.memlayers) { --s5g-accent: #7357c8; }
+body.s5-series-seguridad-ia :is(.threatbuild,.causalrt,.proddef,.killpath) { --s5g-accent: #c84d56; }
+body.s5-series-seguridad-ia :is(.mcpbound,.releasegate) { --s5g-accent: #247a4d; }
+body.s5-series-seguridad-ia .s5g-visual:is(
+  .jbsearch,.memlife,.memgov,.memprop,.memlayers,.threatbuild,.causalrt,.proddef,.mcpbound,.killpath,.releasegate
+) {
+  border-top: 3px solid color-mix(in srgb,var(--s5g-accent) 68%,transparent) !important;
+}
+
+/* Series 8 · agents: distinguish loop, evaluation and security mechanisms. */
+body.s5-series-agentes-ia .aix-loop { --s5g-accent: #16877e; }
+body.s5-series-agentes-ia .aix-eval { --s5g-accent: #3158db; }
+body.s5-series-agentes-ia .aix-sec { --s5g-accent: #c84d56; }
+body.s5-series-agentes-ia :is(.aix-loop-diagram,.aix-eval-task,.aix-sec-path) {
+  position: relative;
+}
+body.s5-series-agentes-ia :is(.aix-loop-diagram,.aix-eval-task,.aix-sec-path)::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb,var(--s5g-accent) 72%,transparent);
+  pointer-events: none;
+}
+body.s5-series-agentes-ia :is(.aix-loop-side,.aix-eval-counterexample,.aix-sec-feedback) {
+  border-top: 3px solid color-mix(in srgb,var(--s5g-accent) 54%,transparent) !important;
+}
+
+/* Dense Series 10–13 diagrams: editorial header separation and tactile scroll areas. */
+body.s5-advanced-series:is(
+  .s5-series-coding-agents-agent-harnesses,
+  .s5-series-context-engineering-memory-mcp,
+  .s5-series-llm-inference-engineering-economics,
+  .s5-series-evaluating-ai-systems-production
+) .s5g-visual.s5v .s5v__head {
+  padding-bottom: clamp(.95rem,2.2vw,1.35rem);
+  border-bottom: 1px solid color-mix(in srgb,var(--s5g-accent) 24%,var(--s5g-line));
+}
+body.s5-advanced-series:is(
+  .s5-series-coding-agents-agent-harnesses,
+  .s5-series-context-engineering-memory-mcp,
+  .s5-series-llm-inference-engineering-economics,
+  .s5-series-evaluating-ai-systems-production
+) .s5g-visual.s5v .s5v__head h3 {
+  text-wrap: balance;
+}
+body.s5-advanced-series:is(
+  .s5-series-coding-agents-agent-harnesses,
+  .s5-series-context-engineering-memory-mcp,
+  .s5-series-llm-inference-engineering-economics,
+  .s5-series-evaluating-ai-systems-production
+) .s5g-visual.s5v [class$="__scroll"] {
+  border-radius: 18px;
+  transition: box-shadow .2s ease, background-color .2s ease;
+}
+body.s5-advanced-series:is(
+  .s5-series-coding-agents-agent-harnesses,
+  .s5-series-context-engineering-memory-mcp,
+  .s5-series-llm-inference-engineering-economics,
+  .s5-series-evaluating-ai-systems-production
+) .s5g-visual.s5v [class$="__scroll"]:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb,var(--s5g-accent) 24%,transparent), var(--s5g-shadow-soft) !important;
+}
+
+/* Series 10 · coding agents / harnesses — execution blue, evidence green, risk red. */
+body.s5-series-coding-agents-agent-harnesses {
+  --s5g-code-blue: #3158db;
+  --s5g-code-cyan: #16877e;
+  --s5g-code-amber: #b87400;
+  --s5g-code-green: #247a4d;
+  --s5g-code-red: #c84d56;
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v .s5v__canvas {
+  background:
+    radial-gradient(88% 92% at 0% 0%,color-mix(in srgb,var(--s5g-code-blue) 10%,transparent),transparent 51%),
+    radial-gradient(72% 80% at 100% 12%,color-mix(in srgb,var(--s5g-code-cyan) 7%,transparent),transparent 58%),
+    linear-gradient(180deg,color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-code-blue) 2%),var(--s5g-bg));
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg [data-boundary]:is(rect,path,polygon),
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg [data-boundary] > :is(rect,path,polygon):first-child {
+  fill: color-mix(in srgb,var(--s5g-bg) 91%,var(--s5g-code-blue) 9%) !important;
+  stroke: color-mix(in srgb,var(--s5g-code-blue) 60%,var(--s5g-ink)) !important;
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg [data-node] {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 95%,var(--s5g-code-blue) 5%);
+  --s5g-node-stroke: color-mix(in srgb,var(--s5g-code-blue) 38%,var(--s5g-ink));
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg [data-node] > :is(rect,circle,ellipse,polygon,path):first-child,
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg [data-node]:is(rect,circle,ellipse,polygon,path) {
+  fill: var(--s5g-node-fill) !important;
+  stroke: var(--s5g-node-stroke) !important;
+  filter: drop-shadow(0 5px 8px color-mix(in srgb,var(--s5g-ink) 8%,transparent));
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg :is(
+  [data-node="model"],[data-node="context"],[data-node="dispatch"],[data-node="canonical-request"],
+  [data-node="local-gate"],[data-node="durable-ledger"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-code-blue) 17%);
+  --s5g-node-stroke: var(--s5g-code-blue);
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg :is(
+  [data-node="verifier"],[data-node="verification-head"],[data-node="evidence-set"],
+  [data-node="freshness-gate"],[data-node="reverify"],[data-node="merge"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-code-green) 16%);
+  --s5g-node-stroke: var(--s5g-code-green);
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg :is(
+  [data-node="workspace"],[data-node="integration"],[data-node="effective-invocation"],
+  [data-node="worker-a"],[data-node="worker-b"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-code-amber) 16%);
+  --s5g-node-stroke: var(--s5g-code-amber);
+}
+body.s5-series-coding-agents-agent-harnesses .s5g-visual.s5v svg :is(
+  [data-node="stale-evidence"],[data-node="terminal-failure"],[data-node="failure"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-code-red) 16%);
+  --s5g-node-stroke: var(--s5g-code-red);
+}
+
+/* Series 11 · context engineering — provenance purple, active context blue, authority green. */
+body.s5-series-context-engineering-memory-mcp {
+  --s5g-ctx-purple: #7357c8;
+  --s5g-ctx-blue: #3158db;
+  --s5g-ctx-teal: #16877e;
+  --s5g-ctx-green: #247a4d;
+  --s5g-ctx-red: #c84d56;
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v .s5v__canvas {
+  background:
+    radial-gradient(92% 92% at 0% 0%,color-mix(in srgb,var(--s5g-ctx-purple) 11%,transparent),transparent 52%),
+    radial-gradient(78% 82% at 100% 10%,color-mix(in srgb,var(--s5g-ctx-teal) 6%,transparent),transparent 58%),
+    linear-gradient(180deg,color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-ctx-purple) 2%),var(--s5g-bg));
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg [data-boundary]:is(rect,path,polygon),
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg [data-boundary] > :is(rect,path,polygon):first-child {
+  fill: color-mix(in srgb,var(--s5g-bg) 92%,var(--s5g-ctx-purple) 8%) !important;
+  stroke: color-mix(in srgb,var(--s5g-ctx-purple) 54%,var(--s5g-ink)) !important;
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg [data-node] {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 95%,var(--s5g-ctx-purple) 5%);
+  --s5g-node-stroke: color-mix(in srgb,var(--s5g-ctx-purple) 34%,var(--s5g-ink));
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg [data-node] > :is(rect,circle,ellipse,polygon,path):first-child,
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg [data-node]:is(rect,circle,ellipse,polygon,path) {
+  fill: var(--s5g-node-fill) !important;
+  stroke: var(--s5g-node-stroke) !important;
+  filter: drop-shadow(0 5px 8px color-mix(in srgb,var(--s5g-ink) 7%,transparent));
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg :is(
+  [data-node="assembler"],[data-node="inference-context"],[data-node="bounded-context"],
+  [data-node="parent-context"],[data-node="child-context"],[data-node="working-set"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 82%,var(--s5g-ctx-purple) 18%);
+  --s5g-node-stroke: var(--s5g-ctx-purple);
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg :is(
+  [data-node="model"],[data-node="candidate-pool"],[data-node="retrieval"],[data-node="semantic-store"],
+  [data-node="activation"],[data-node="delegation-envelope"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-ctx-blue) 16%);
+  --s5g-node-stroke: var(--s5g-ctx-blue);
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg :is(
+  [data-node="authority-gate"],[data-node="system-of-record"],[data-node="checkpoint"],
+  [data-node="integration-auth"],[data-node="verify"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-ctx-green) 16%);
+  --s5g-node-stroke: var(--s5g-ctx-green);
+}
+body.s5-series-context-engineering-memory-mcp .s5g-visual.s5v svg :is(
+  [data-node="rejected-stale"],[data-node="abstain"],[data-node="external-effect"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-ctx-red) 16%);
+  --s5g-node-stroke: var(--s5g-ctx-red);
+}
+
+/* Series 12 · inference — measurement blue, runtime amber, capacity teal, SLO green/red. */
+body.s5-series-llm-inference-engineering-economics {
+  --s5g-inf-blue: #3158db;
+  --s5g-inf-amber: #b87400;
+  --s5g-inf-teal: #16877e;
+  --s5g-inf-green: #247a4d;
+  --s5g-inf-red: #c84d56;
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v .s5v__canvas {
+  background:
+    radial-gradient(90% 90% at 0% 0%,color-mix(in srgb,var(--s5g-inf-amber) 9%,transparent),transparent 52%),
+    radial-gradient(78% 82% at 100% 12%,color-mix(in srgb,var(--s5g-inf-teal) 7%,transparent),transparent 58%),
+    linear-gradient(180deg,color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-inf-amber) 2%),var(--s5g-bg));
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-boundary] {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 93%,var(--s5g-inf-amber) 7%);
+  --s5g-boundary-stroke: color-mix(in srgb,var(--s5g-inf-amber) 50%,var(--s5g-ink));
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-boundary="client-observation"],
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-boundary="client-clock"] {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 90%,var(--s5g-inf-blue) 10%);
+  --s5g-boundary-stroke: var(--s5g-inf-blue);
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg :is(
+  [data-boundary="scheduler-pressure"],[data-boundary="continuous-scheduler"],
+  [data-boundary="allocation-manager"],[data-boundary="parallelism"]
+) {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 90%,var(--s5g-inf-teal) 10%);
+  --s5g-boundary-stroke: var(--s5g-inf-teal);
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-boundary]:is(rect,path,polygon),
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-boundary] > :is(rect,path,polygon):first-child {
+  fill: var(--s5g-boundary-fill) !important;
+  stroke: var(--s5g-boundary-stroke) !important;
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-node] {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 95%,var(--s5g-inf-amber) 5%);
+  --s5g-node-stroke: color-mix(in srgb,var(--s5g-inf-amber) 34%,var(--s5g-ink));
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-node] > :is(rect,circle,ellipse,polygon,path):first-child,
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg [data-node]:is(rect,circle,ellipse,polygon,path) {
+  fill: var(--s5g-node-fill) !important;
+  stroke: var(--s5g-node-stroke) !important;
+  filter: drop-shadow(0 5px 8px color-mix(in srgb,var(--s5g-ink) 7%,transparent));
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg :is(
+  [data-node="first-output"],[data-node="throughput"],[data-node="goodput"],
+  [data-node="success"],[data-node="free-pool"],[data-node="capacity-event"],[data-node="admitted-c"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-inf-green) 17%);
+  --s5g-node-stroke: var(--s5g-inf-green);
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg :is(
+  [data-node="queue"],[data-node="scheduler"],[data-node="block-table"],[data-node="kv-cache"],
+  [data-node="gpu-pool"],[data-node="worker-placement"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-inf-teal) 17%);
+  --s5g-node-stroke: var(--s5g-inf-teal);
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg :is(
+  [data-node="latency-slos"],[data-node="terminal-failure"],[data-node="miss"],[data-node="reject"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 84%,var(--s5g-inf-red) 16%);
+  --s5g-node-stroke: var(--s5g-inf-red);
+}
+body.s5-series-llm-inference-engineering-economics .s5g-visual.s5v svg :is(
+  [data-node="prefill"],[data-node="decode-1"],[data-node="decode-2"],[data-node="service"],
+  [data-node="primary-attempt"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-inf-amber) 17%);
+  --s5g-node-stroke: var(--s5g-inf-amber);
+}
+
+/* Series 13 · evaluation — diagnostic amber, evidence purple/blue, pass green, failure red. */
+body.s5-series-evaluating-ai-systems-production {
+  --s5g-eval-green: #247a4d;
+  --s5g-eval-amber: #b87400;
+  --s5g-eval-blue: #3158db;
+  --s5g-eval-purple: #7357c8;
+  --s5g-eval-red: #c84d56;
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v .s5v__canvas {
+  background:
+    radial-gradient(92% 92% at 0% 0%,color-mix(in srgb,var(--s5g-eval-green) 9%,transparent),transparent 52%),
+    radial-gradient(76% 84% at 100% 8%,color-mix(in srgb,var(--s5g-eval-purple) 7%,transparent),transparent 58%),
+    linear-gradient(180deg,color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-eval-green) 2%),var(--s5g-bg));
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-boundary] {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 92%,var(--s5g-eval-purple) 8%);
+  --s5g-boundary-stroke: color-mix(in srgb,var(--s5g-eval-purple) 50%,var(--s5g-ink));
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-boundary="component"],[data-boundary="diagnosis-boundary"],[data-boundary="shadow-boundary"]
+) {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 90%,var(--s5g-eval-amber) 10%);
+  --s5g-boundary-stroke: var(--s5g-eval-amber);
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-boundary="system"],[data-boundary="release"],[data-boundary="eval-boundary"],
+  [data-boundary="evidence-boundary"]
+) {
+  --s5g-boundary-fill: color-mix(in srgb,var(--s5g-bg) 90%,var(--s5g-eval-green) 10%);
+  --s5g-boundary-stroke: var(--s5g-eval-green);
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-boundary]:is(rect,path,polygon),
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-boundary] > :is(rect,path,polygon):first-child {
+  fill: var(--s5g-boundary-fill) !important;
+  stroke: var(--s5g-boundary-stroke) !important;
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-node] {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 95%,var(--s5g-eval-purple) 5%);
+  --s5g-node-stroke: color-mix(in srgb,var(--s5g-eval-purple) 34%,var(--s5g-ink));
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-node] > :is(rect,circle,ellipse,polygon,path):first-child,
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg [data-node]:is(rect,circle,ellipse,polygon,path) {
+  fill: var(--s5g-node-fill) !important;
+  stroke: var(--s5g-node-stroke) !important;
+  filter: drop-shadow(0 5px 8px color-mix(in srgb,var(--s5g-ink) 7%,transparent));
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-node="change"],[data-node="question"],[data-node="diagnose"],[data-node="shadow"],
+  [data-node="canary"],[data-node="repair"],[data-node="taxonomy"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-eval-amber) 17%);
+  --s5g-node-stroke: var(--s5g-eval-amber);
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-node="manifest"],[data-node="judge-version"],[data-node="trajectory-events"],
+  [data-node="trajectory-verifier"],[data-node="versioned-eval"],[data-node="reconstruct"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-eval-blue) 17%);
+  --s5g-node-stroke: var(--s5g-eval-blue);
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-node="outcome"],[data-node="confirm"],[data-node="release-pass"],[data-node="promote"],
+  [data-node="controlled-release"],[data-node="verify-production"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 82%,var(--s5g-eval-green) 18%);
+  --s5g-node-stroke: var(--s5g-eval-green);
+}
+body.s5-series-evaluating-ai-systems-production .s5g-visual.s5v svg :is(
+  [data-node="policy-deny"],[data-node="release-fail"],[data-node="rollback"],
+  [data-node="pause"],[data-node="duplicate-hazard"]
+) {
+  --s5g-node-fill: color-mix(in srgb,var(--s5g-bg) 83%,var(--s5g-eval-red) 17%);
+  --s5g-node-stroke: var(--s5g-eval-red);
+}
+
+/* Native evaluation mobile keeps the same graph but gains the same semantic hierarchy. */
+body.s5-series-evaluating-ai-systems-production .s5v-mobile-native__node {
+  border-color: color-mix(in srgb,var(--s5g-eval-purple) 30%,var(--s5g-line-strong)) !important;
+  background: color-mix(in srgb,var(--s5g-bg) 94%,var(--s5g-eval-purple) 6%) !important;
+  box-shadow: 0 7px 18px color-mix(in srgb,var(--s5g-ink) 6%,transparent);
+}
+body.s5-series-evaluating-ai-systems-production .s5v-mobile-native__rel {
+  color: color-mix(in srgb,var(--s5g-eval-green) 80%,var(--s5g-ink));
+}
+
+/* Mobile: keep the original wide topology, make the horizontal exploration legible. */
+@media (max-width:700px) {
+  body.s5-advanced-series:is(
+    .s5-series-coding-agents-agent-harnesses,
+    .s5-series-context-engineering-memory-mcp,
+    .s5-series-llm-inference-engineering-economics
+  ) .s5g-visual.s5v .s5g-scrollable {
+    border: 1px solid color-mix(in srgb,var(--s5g-accent) 16%,var(--s5g-line));
+    background:
+      linear-gradient(90deg,transparent 0,transparent calc(100% - 42px),color-mix(in srgb,var(--s5g-accent) 8%,transparent) 100%);
+    box-shadow:
+      inset -18px 0 24px -22px color-mix(in srgb,var(--s5g-accent) 62%,transparent),
+      0 8px 22px color-mix(in srgb,var(--s5g-ink) 5%,transparent);
+  }
+  body.s5-advanced-series:is(
+    .s5-series-coding-agents-agent-harnesses,
+    .s5-series-context-engineering-memory-mcp,
+    .s5-series-llm-inference-engineering-economics,
+    .s5-series-evaluating-ai-systems-production
+  ) .s5g-visual.s5v .s5v__head {
+    padding-bottom: .9rem;
+  }
+  body.s5-advanced-series:is(
+    .s5-series-coding-agents-agent-harnesses,
+    .s5-series-context-engineering-memory-mcp,
+    .s5-series-llm-inference-engineering-economics,
+    .s5-series-evaluating-ai-systems-production
+  ) .s5g-visual.s5v .s5v__head h3 {
+    line-height: 1.01;
+    letter-spacing: -.045em;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body.s5-advanced-series .s5g-visual.s5v svg [data-node] > :is(rect,circle,ellipse,polygon,path):first-child,
+  body.s5-advanced-series .s5g-visual.s5v svg [data-boundary] {
+    transition: none !important;
+  }
+}
