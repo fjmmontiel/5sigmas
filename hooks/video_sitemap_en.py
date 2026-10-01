@@ -47,6 +47,11 @@ TOPICS = {
     "datacenters-espacio": ("infrastructure", "Infrastructure"),
     "seguridad-ia": ("security", "AI security"),
     "agentes-ia": ("agents", "AI agents"),
+    "agentes-voz-tiempo-real": ("voice", "Voice agents"),
+    "coding-agents-agent-harnesses": ("coding-agents", "Coding agents"),
+    "context-engineering-memory-mcp": ("context-engineering", "Context engineering"),
+    "llm-inference-engineering-economics": ("inference", "LLM inference"),
+    "evaluating-ai-systems-production": ("evaluation", "AI systems evaluation"),
     "articulos-tecnicos": ("engineering", "Systems engineering"),
 }
 NOISY_HEADINGS = {
