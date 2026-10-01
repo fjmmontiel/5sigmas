@@ -98,7 +98,11 @@ def run(args):
                 shadow:s.boxShadow,
                 width:el.getBoundingClientRect().width,
                 viewport:innerWidth,
-                scrollWidth:el.scrollWidth
+                scrollWidth:el.scrollWidth,
+                scheme:document.documentElement.getAttribute('data-md-color-scheme')||'',
+                color:s.color,
+                backgroundColor:s.backgroundColor,
+                backgroundImage:s.backgroundImage
               };
             }"""
         )
@@ -152,6 +156,20 @@ def run(args):
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'before'})
                     shot(after,'golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
                          meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'after'})
+                    original_scheme=after.evaluate("document.documentElement.getAttribute('data-md-color-scheme') || 'default'")
+                    after.evaluate("document.documentElement.setAttribute('data-md-color-scheme','slate')")
+                    after.wait_for_timeout(60)
+                    dark_sig=signature(after,visual_index)
+                    dark_style=style_signature(after,visual_index)
+                    check(ident+'-dark-mechanism-preserved',dark_sig==sig_after,
+                          {'light':sig_after,'dark':dark_sig})
+                    check(ident+'-dark-scheme-applied',
+                          dark_style['scheme']=='slate' and dark_style['color']!=style['color'],
+                          {'light':style,'dark':dark_style})
+                    shot(after,'golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
+                         meta={'surface':'advanced-visual','series':item['number'],'chapter':chapter_no,'visual':visual_index+1,'state':'dark'})
+                    after.evaluate("(scheme) => document.documentElement.setAttribute('data-md-color-scheme', scheme)",original_scheme)
+                    after.wait_for_timeout(30)
                 before.close();after.close()
 
             # One mobile chapter per series, preserving topology while improving presentation.
@@ -173,6 +191,21 @@ def run(args):
                      meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'before'})
                 shot(after,'mobile-golden-'+ident+'-after',selector=VISUAL_ROOT,nth=visual_index,
                      meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'after'})
+                light_sig=signature(after,visual_index)
+                light_style=style_signature(after,visual_index)
+                original_scheme=after.evaluate("document.documentElement.getAttribute('data-md-color-scheme') || 'default'")
+                after.evaluate("document.documentElement.setAttribute('data-md-color-scheme','slate')")
+                after.wait_for_timeout(60)
+                dark_sig=signature(after,visual_index)
+                dark_style=style_signature(after,visual_index)
+                check('mobile-'+ident+'-dark-mechanism-preserved',dark_sig==light_sig)
+                check('mobile-'+ident+'-dark-scheme-applied',
+                      dark_style['scheme']=='slate' and dark_style['color']!=light_style['color'],
+                      {'light':light_style,'dark':dark_style})
+                shot(after,'mobile-golden-'+ident+'-dark',selector=VISUAL_ROOT,nth=visual_index,
+                     meta={'surface':'advanced-visual-mobile','series':item['number'],'visual':visual_index+1,'state':'dark'})
+                after.evaluate("(scheme) => document.documentElement.setAttribute('data-md-color-scheme', scheme)",original_scheme)
+                after.wait_for_timeout(30)
             before.close();after.close()
 
         check('all-advanced-visuals-reviewed',visual_count>=50,{'visuals':visual_count})
