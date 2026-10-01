@@ -64,8 +64,10 @@ jobs:
 
       - name: Install media probe dependency
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
 
       - name: Verify calculator math and pricing provenance
         run: node scripts/test_llm_cost_latency_tool.mjs
