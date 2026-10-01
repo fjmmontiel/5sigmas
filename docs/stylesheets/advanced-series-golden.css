@@ -1,0 +1,289 @@
+/* Series 7–13 GOLDEN polish.
+ * Presentation-only: preserves every existing diagram, control, state and causal relation.
+ */
+body.s5-advanced-series {
+  --s5g-ink: var(--md-default-fg-color, #0f172a);
+  --s5g-bg: var(--md-default-bg-color, #fff);
+  --s5g-muted: color-mix(in srgb, var(--s5g-ink) 60%, transparent);
+  --s5g-line: color-mix(in srgb, var(--s5g-ink) 14%, transparent);
+  --s5g-line-strong: color-mix(in srgb, var(--s5g-ink) 24%, transparent);
+  --s5g-teal: #16877e;
+  --s5g-blue: #3158db;
+  --s5g-amber: #b87400;
+  --s5g-red: #c84d56;
+  --s5g-green: #247a4d;
+  --s5g-shadow: 0 18px 48px color-mix(in srgb, var(--s5g-ink) 10%, transparent);
+  --s5g-shadow-soft: 0 9px 28px color-mix(in srgb, var(--s5g-ink) 7%, transparent);
+}
+
+[data-md-color-scheme="slate"] body.s5-advanced-series {
+  --s5g-line: color-mix(in srgb, var(--s5g-ink) 18%, transparent);
+  --s5g-line-strong: color-mix(in srgb, var(--s5g-ink) 30%, transparent);
+  --s5g-shadow: 0 20px 58px rgba(0,0,0,.28);
+  --s5g-shadow-soft: 0 10px 32px rgba(0,0,0,.2);
+}
+
+body.s5-advanced-series .s5g-visual {
+  --s5g-accent: var(--s5g-teal);
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 1040px);
+  margin-top: 2rem !important;
+  margin-bottom: 3.1rem !important;
+  color: var(--s5g-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+body.s5-advanced-series.s5-series-seguridad-ia .s5g-visual { --s5g-accent: var(--s5g-red); }
+body.s5-advanced-series.s5-series-agentes-ia .s5g-visual { --s5g-accent: var(--s5g-teal); }
+body.s5-advanced-series.s5-series-agentes-voz-tiempo-real .s5g-visual { --s5g-accent: var(--s5g-blue); }
+body.s5-advanced-series.s5-series-coding-agents-agent-harnesses .s5g-visual { --s5g-accent: var(--s5g-blue); }
+body.s5-advanced-series.s5-series-context-engineering-memory-mcp .s5g-visual { --s5g-accent: #7357c8; }
+body.s5-advanced-series.s5-series-llm-inference-engineering-economics .s5g-visual { --s5g-accent: var(--s5g-amber); }
+body.s5-advanced-series.s5-series-evaluating-ai-systems-production .s5g-visual { --s5g-accent: var(--s5g-green); }
+
+/* Existing non-s5v visuals: preserve layout, upgrade the editorial shell. */
+body.s5-advanced-series .s5g-visual:is(
+  .ctxmix,.aix-loop,.aix-eval,.aix-sec,
+  .defsim,.jbsearch,.jbbudget,.jbladder,.memlife,.memgov,.memprop,.memlayers,
+  .threatbuild,.uplift3,.causalrt,.regloop,.proddef,.mcpbound,.killpath,.releasegate
+) {
+  max-width: 1040px !important;
+  padding: clamp(1.05rem, 2.4vw, 1.55rem) !important;
+  border: 1px solid var(--s5g-line) !important;
+  border-radius: 26px !important;
+  background:
+    radial-gradient(95% 110% at 0% 0%, color-mix(in srgb,var(--s5g-accent) 8%,transparent), transparent 48%),
+    radial-gradient(75% 100% at 100% 0%, color-mix(in srgb,var(--s5g-blue) 5%,transparent), transparent 52%),
+    linear-gradient(180deg, color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-ink) 2%), var(--s5g-bg)) !important;
+  box-shadow: var(--s5g-shadow);
+}
+
+body.s5-advanced-series .s5g-visual:is(.ctxmix,.aix-loop,.aix-eval,.aix-sec)::after,
+body.s5-advanced-series .s5g-visual:is(.defsim,.jbsearch,.jbbudget,.jbladder,.memlife,.memgov,.memprop,.memlayers,.threatbuild,.uplift3,.causalrt,.regloop,.proddef,.mcpbound,.killpath,.releasegate)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: .24;
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--s5g-ink) 4%,transparent) 1px, transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--s5g-ink) 4%,transparent) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom,#000,transparent 72%);
+}
+
+/* Align the simpler Agent visuals with the strongest existing GOLDEN cards. */
+body.s5-advanced-series :is(.aix-loop-title,.aix-eval-title,.aix-sec-title,.ctxmix h3) {
+  max-width: 22ch;
+  font-size: clamp(1.45rem, 3vw, 2.25rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -.045em !important;
+  font-weight: 900 !important;
+}
+body.s5-advanced-series :is(.aix-loop-sub,.aix-eval-sub,.aix-sec-sub,.ctxmix__sub) {
+  max-width: 72ch;
+  margin-top: .55rem !important;
+  color: var(--s5g-muted) !important;
+  font-size: .9rem !important;
+  line-height: 1.55 !important;
+}
+body.s5-advanced-series :is(.aix-loop-diagram,.aix-loop-side,.aix-eval-task,.aix-eval-dimension,.aix-eval-counterexample,.aix-sec-node,.aix-sec-gate,.aix-sec-blocked,.aix-sec-feedback,.ctxmix__diagram) {
+  border-color: var(--s5g-line) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb,var(--s5g-bg) 80%,transparent), var(--s5g-shadow-soft);
+}
+body.s5-advanced-series :is(.aix-node,.aix-eval-event,.aix-eval-dimension,.aix-sec-node,.aix-sec-gate) {
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
+}
+@media (hover:hover) {
+  body.s5-advanced-series :is(.aix-node,.aix-eval-event,.aix-eval-dimension,.aix-sec-node,.aix-sec-gate):hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb,var(--s5g-accent) 38%,var(--s5g-line)) !important;
+    box-shadow: var(--s5g-shadow-soft);
+  }
+}
+body.s5-advanced-series :is(.aix-arrow,.aix-eval-trace>i,.aix-return) {
+  color: color-mix(in srgb,var(--s5g-accent) 76%,var(--s5g-ink)) !important;
+  opacity: .78 !important;
+}
+body.s5-advanced-series .aix-return {
+  border-top-color: color-mix(in srgb,var(--s5g-accent) 28%,transparent) !important;
+}
+
+/* Security interactive family: larger controls, clearer cards, same interaction/state machine. */
+body.s5-advanced-series .s5g-visual:is(
+  .defsim,.jbsearch,.jbbudget,.jbladder,.memlife,.memgov,.memprop,.memlayers,
+  .threatbuild,.uplift3,.causalrt,.regloop,.proddef,.mcpbound,.killpath,.releasegate
+) :is(button,input,select) {
+  min-height: 42px;
+}
+body.s5-advanced-series .s5g-visual button {
+  transition: transform .16s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease, color .18s ease !important;
+}
+body.s5-advanced-series .s5g-visual button:focus-visible,
+body.s5-advanced-series .s5g-visual [tabindex]:focus-visible {
+  outline: 3px solid color-mix(in srgb,var(--s5g-accent) 28%,transparent) !important;
+  outline-offset: 3px !important;
+}
+@media (hover:hover) {
+  body.s5-advanced-series .s5g-visual button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px color-mix(in srgb,var(--s5g-ink) 9%,transparent);
+  }
+}
+
+/* s5v: keep each diagram untouched, upgrade its frame and reading hierarchy. */
+body.s5-advanced-series .s5g-visual.s5v {
+  width: min(100%, 1100px);
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__canvas {
+  border: 1px solid var(--s5g-line-strong);
+  border-radius: 28px;
+  background:
+    radial-gradient(105% 120% at 0% 0%, color-mix(in srgb,var(--s5g-accent) 7%,transparent), transparent 46%),
+    radial-gradient(82% 110% at 100% 0%, color-mix(in srgb,var(--s5g-blue) 5%,transparent), transparent 50%),
+    linear-gradient(180deg, color-mix(in srgb,var(--s5g-bg) 98%,var(--s5g-ink) 2%), var(--s5g-bg));
+  box-shadow: var(--s5g-shadow);
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__canvas::after {
+  opacity: .2;
+  background-size: 34px 34px;
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__head {
+  align-items: flex-end;
+  gap: clamp(1rem,3vw,2.2rem);
+  margin-bottom: clamp(1.1rem,2.8vw,2rem);
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__head h3 {
+  max-width: 19ch;
+  font-size: clamp(1.65rem,4.1cqi,2.75rem);
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__head p {
+  max-width: 38ch !important;
+  font-size: clamp(.8rem,1.55cqi,.96rem);
+  line-height: 1.48;
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__kicker {
+  color: var(--s5g-accent);
+  letter-spacing: .14em;
+}
+body.s5-advanced-series .s5g-visual.s5v :is(
+  [class$="__scroll"],[class*="__scroll "]
+) {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb,var(--s5g-accent) 45%,transparent) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+body.s5-advanced-series .s5g-visual.s5v :is(
+  [class$="__legend"],[class*="__legend "]
+) {
+  color: var(--s5g-muted);
+  line-height: 1.4;
+}
+body.s5-advanced-series .s5g-visual.s5v .s5v__copy {
+  color: var(--s5g-muted);
+  font-size: .84rem;
+  line-height: 1.48;
+}
+body.s5-advanced-series .s5g-visual.s5v svg :is(rect,circle,path,polygon,line,polyline) {
+  transition: fill .22s ease, stroke .22s ease, opacity .22s ease, filter .22s ease;
+}
+
+/* Existing animation shell stays functional; make it look like one coherent GOLDEN object. */
+body.s5-advanced-series .anim-brand-shell:has(.anim-brand-shell__viewport > .s5g-visual) {
+  margin-block: 2rem 3.2rem;
+  border-radius: 30px;
+}
+body.s5-advanced-series .anim-brand-shell:has(.anim-brand-shell__viewport > .s5g-visual) .anim-brand-shell__viewport {
+  border-radius: 26px;
+}
+body.s5-advanced-series .anim-brand-shell:has(.anim-brand-shell__viewport > .s5g-visual) .anim-brand-shell__toolbar {
+  min-height: 36px;
+}
+
+/* Motion polish: entrance/state feedback only. It never changes the diagram state machine. */
+body.s5-advanced-series .s5g-visual.is-inview {
+  animation: s5g-enter .48s cubic-bezier(.2,.78,.2,1) both;
+}
+body.s5-advanced-series .s5g-visual.is-inview :is(
+  .aix-loop-head,.aix-eval-head,.aix-sec-head,.ctxmix__head,.s5v__head
+) {
+  animation: s5g-head .52s .06s cubic-bezier(.2,.78,.2,1) both;
+}
+body.s5-advanced-series .s5g-visual.s5g-state-pulse {
+  animation: s5g-state .28s ease-out;
+}
+@keyframes s5g-enter {
+  from { opacity:.76; transform:translateY(8px); }
+  to { opacity:1; transform:none; }
+}
+@keyframes s5g-head {
+  from { opacity:.65; transform:translateY(6px); }
+  to { opacity:1; transform:none; }
+}
+@keyframes s5g-state {
+  0% { filter:saturate(.92); }
+  45% { filter:saturate(1.08); }
+  100% { filter:none; }
+}
+
+@media (max-width:700px) {
+  body.s5-advanced-series .s5g-visual {
+    width: 100%;
+    margin-top: 1.45rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+  body.s5-advanced-series .s5g-visual:is(
+    .ctxmix,.aix-loop,.aix-eval,.aix-sec,
+    .defsim,.jbsearch,.jbbudget,.jbladder,.memlife,.memgov,.memprop,.memlayers,
+    .threatbuild,.uplift3,.causalrt,.regloop,.proddef,.mcpbound,.killpath,.releasegate
+  ) {
+    padding: 1rem !important;
+    border-radius: 21px !important;
+    box-shadow: 0 12px 34px color-mix(in srgb,var(--s5g-ink) 9%,transparent);
+  }
+  body.s5-advanced-series :is(.aix-loop-title,.aix-eval-title,.aix-sec-title,.ctxmix h3) {
+    max-width: 19ch;
+    font-size: clamp(1.3rem,7.3vw,1.8rem) !important;
+  }
+  body.s5-advanced-series :is(.aix-loop-sub,.aix-eval-sub,.aix-sec-sub,.ctxmix__sub) {
+    font-size: .84rem !important;
+  }
+  body.s5-advanced-series .s5g-visual.s5v .s5v__canvas {
+    border-radius: 22px;
+    box-shadow: 0 12px 34px color-mix(in srgb,var(--s5g-ink) 9%,transparent);
+  }
+  body.s5-advanced-series .s5g-visual.s5v .s5v__head {
+    display: grid;
+    gap: .7rem;
+    align-items: start;
+  }
+  body.s5-advanced-series .s5g-visual.s5v .s5v__head h3 {
+    max-width: 18ch;
+    font-size: clamp(1.5rem,8vw,2rem);
+  }
+  body.s5-advanced-series .s5g-visual.s5v .s5v__head p {
+    max-width: none !important;
+    text-align: left;
+    font-size: .82rem;
+  }
+  body.s5-advanced-series .s5g-visual.s5v :is([class$="__scroll"],[class*="__scroll "]) {
+    scroll-snap-type: x proximity;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body.s5-advanced-series .s5g-visual,
+  body.s5-advanced-series .s5g-visual *,
+  body.s5-advanced-series .s5g-visual::before,
+  body.s5-advanced-series .s5g-visual::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

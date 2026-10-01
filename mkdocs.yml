@@ -233,6 +233,8 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/series-experience.js
     defer: true
+  - path: assets/javascripts/advanced-series-golden.js
+    defer: true
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 extra_css:
@@ -261,6 +263,7 @@ extra_css:
   - stylesheets/reader-editorial-v3-iteration.css
   - stylesheets/security-visuals.css
   - stylesheets/series-experience.css
+  - stylesheets/advanced-series-golden.css
 
 hooks:
   - hooks/reading_time.py
