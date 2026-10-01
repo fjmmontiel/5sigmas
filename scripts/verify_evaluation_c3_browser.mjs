@@ -9,16 +9,24 @@ const preview=['127.0.0.1','localhost'].includes(new URL(requestedOrigin).hostna
 // production requests are never proxied, intercepted or replaced.
 const previewServer=preview?await startVideoPreview('site'):null;
 const origin=previewServer?.origin||requestedOrigin;
-const browser=await chromium.launch({channel:'chrome',headless:true});const rows=[];
-const report={status:'IN_PROGRESS',scope:'48 native route/viewport interaction probes, not full-duration viewings',requestedOrigin,origin,preview,browser:browser.version(),channel:'chrome',rows};
+const rows=[];let activeBrowser=null;
+const report={status:'IN_PROGRESS',scope:'48 native route/viewport interaction probes, not full-duration viewings',requestedOrigin,origin,preview,browser:null,channel:'chrome',rows};
 const save=()=>fs.writeFileSync('/tmp/evaluation-c3-browser.json',JSON.stringify(report,null,2));
 try {
-  const diagnostic=await browser.newPage();
-  report.codecSupport=await diagnostic.evaluate(()=>({h264:document.createElement('video').canPlayType('video/mp4; codecs="avc1.64002a"'),agent:navigator.userAgent}));
-  console.log('NATIVE_CODEC_PREFLIGHT',JSON.stringify(report.codecSupport));
-  assert.ok(report.codecSupport.h264,'Browser lacks the codec required by the approved MP4');await diagnostic.close();
   for(const width of [1440,390]) {
-    const context=await browser.newContext({viewport:{width,height:width===390?844:1000}});
+    // Media playback/seeking across 24 route probes can leave decoder/network state
+    // behind in headless Chromium. A fresh browser per viewport preserves all 48
+    // live probes while preventing desktop stress from contaminating mobile QA.
+    activeBrowser=await chromium.launch({channel:'chrome',headless:true});
+    report.browser??=activeBrowser.version();
+    if(!report.codecSupport){
+      const diagnostic=await activeBrowser.newPage();
+      report.codecSupport=await diagnostic.evaluate(()=>({h264:document.createElement('video').canPlayType('video/mp4; codecs="avc1.64002a"'),agent:navigator.userAgent}));
+      console.log('NATIVE_CODEC_PREFLIGHT',JSON.stringify(report.codecSupport));
+      assert.ok(report.codecSupport.h264,'Browser lacks the codec required by the approved MP4');
+      await diagnostic.close();
+    }
+    const context=await activeBrowser.newContext({viewport:{width,height:width===390?844:1000}});
     if(preview)await context.route('https://5sigmas.com/**',async route=>{
       const u=new URL(route.request().url());
       await route.fulfill({response:await route.fetch({url:new URL(u.pathname+u.search,origin).href})});
@@ -77,6 +85,8 @@ try {
       }finally{await page.close();}
     }
     await context.close();
+    await activeBrowser.close();
+    activeBrowser=null;
   }
   assert.equal(rows.length,48);report.status='PASS';save();console.log('C3_NATIVE_BROWSER_PASS 48/48 desktop/mobile article/watch cases');
-}finally{await browser.close();if(previewServer)await previewServer.close();}
+}finally{if(activeBrowser)await activeBrowser.close();if(previewServer)await previewServer.close();}
