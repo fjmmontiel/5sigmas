@@ -39,7 +39,7 @@
       {
         "model": "Gemini 4 Argon",
         "status": "reviewed_not_charted",
-        "reason": "Artificial Analysis reports Intelligence Index and introductory price, but output speed is not publicly available. The explorer requires price, context, Intelligence Index, output speed and TTFT before charting a row."
+        "reason": "Artificial Analysis has a model page with Intelligence Index and introductory price, but Argon is not yet the latest generally released model in its release feed and output speed is not publicly available. The explorer requires price, context, Intelligence Index, output speed and TTFT before charting a row."
       },
       {
         "model": "GPT-6 Sol",
@@ -202,7 +202,7 @@
         "reason": "No priced comparable API entry in the AA release snapshot."
       }
     ],
-    "latest_release_slug": "gemini-4-argon",
+    "latest_release_slug": "gpt-6-1-sol",
     "supersession_events": [
       {
         "model": "GPT-6 Sol",
