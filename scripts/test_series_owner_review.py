@@ -14,7 +14,12 @@ def run(args):
   report['browser']=browser.version
   page=browser.new_page(viewport={'width':1600,'height':1100})
   page.on('pageerror',lambda e:report['errors'].append(str(e)))
-  page.set_content(args.html.read_text(encoding='utf-8'),wait_until='domcontentloaded',timeout=90000)
+  if args.chromium:
+   # Managed local Chromium disallows file navigation; exercise the same HTML
+   # in memory there. CI also verifies the real double-click file:// entrypoint.
+   page.set_content(args.html.read_text(encoding='utf-8'),wait_until='domcontentloaded',timeout=90000)
+  else:
+   page.goto(args.html.resolve().as_uri(),wait_until='domcontentloaded',timeout=90000)
   page.wait_for_function('window.__REVIEW_DATA && document.querySelector("#busy").textContent===""',timeout=90000)
   def ready():
    page.wait_for_function('document.querySelector("#busy").textContent===""');page.wait_for_timeout(180)
@@ -57,8 +62,16 @@ def run(args):
    page.evaluate('(i)=>{S.index=i;render()}',i);f=ready()
    record=page.evaluate('target()')
    check(record['id']+'-rendered',f.locator('.review-isolated').inner_text().strip()!='')
-   check(record['id']+'-single-source-root',f.locator('.review-isolated').evaluate('e=>e.children.length')>=1)
+   check(record['id']+'-single-source-root',f.locator('.review-isolated').evaluate('e=>e.children.length')==1)
+   geometry=f.locator('.review-isolated > :first-child').evaluate('e=>({width:e.getBoundingClientRect().width,viewport:innerWidth})')
+   check(record['id']+'-legible-desktop-width',geometry['width']>=min(500,geometry['viewport']-100),geometry)
    if record['id'] in {'10-01-01','09-06-01','12-01-01','13-01-01'}:shot('visual-'+record['id'])
+   page.evaluate('S.device="mobile";render()');f=ready()
+   mobile=f.locator('.review-isolated > :first-child').evaluate('e=>({width:e.getBoundingClientRect().width,viewport:innerWidth})')
+   check(record['id']+'-mobile-root-fits',0<mobile['width']<=mobile['viewport']+1,mobile)
+   page.evaluate('S.theme="slate";render()');f=ready()
+   check(record['id']+'-mobile-dark-visible',f.locator('.review-isolated > :first-child').is_visible() and f.locator('body').get_attribute('data-md-color-scheme')=='slate')
+   page.evaluate('S.device="desktop";S.theme="default"')
   page.evaluate('S.index=D.visuals.findIndex(x=>x.id==="10-01-01");render()');f=ready()
   newSize=f.locator('.s5v__head h3').evaluate('e=>getComputedStyle(e).fontSize')
   page.locator('[data-version="before"]').click();f=ready();oldSize=f.locator('.s5v__head h3').evaluate('e=>getComputedStyle(e).fontSize')

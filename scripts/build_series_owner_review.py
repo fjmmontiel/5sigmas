@@ -73,6 +73,12 @@ class Pack:
                     if info.get(key):info[key]=urljoin('https://5sigmas.com'+route,info[key])
                 el['data-sx-preview']=json.dumps(info,ensure_ascii=False)
             except (ValueError,TypeError):pass
+        # Material makes body a flex container. An isolated size-contained SVG
+        # has no intrinsic width; without this review-only layout contract its
+        # article collapses to padding and every label wraps one letter wide.
+        isolation=soup.new_tag('style')
+        isolation.string='body:has(>.review-isolated){display:block!important}.review-isolated{width:100%!important;min-width:0;box-sizing:border-box}'
+        soup.head.append(isolation)
         soup.html['class']=['js']
         self.pages[version][route]={'html':str(soup),'title':soup.title.get_text() if soup.title else route}
 
