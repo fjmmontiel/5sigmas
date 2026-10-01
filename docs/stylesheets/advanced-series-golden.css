@@ -424,3 +424,15 @@ body.s5-advanced-series .s5g-scrollable.is-scrolled { background-image: none; }
   body.s5-series-agentes-ia .aix-loop.is-inview :is(.aix-node,.aix-return),
   body.s5-series-agentes-ia .aix-sec.is-inview .aix-sec-path > * { animation:none!important; }
 }
+
+
+/* Security 7.1 mobile styles define their own transitions after the shared
+   reduced-motion block. Make the final cascade explicitly motion-free without
+   changing any normal-motion state or geometry. */
+@media (prefers-reduced-motion: reduce) {
+  body.s5-series-seguridad-ia .ctxmix,
+  body.s5-series-seguridad-ia .ctxmix * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
