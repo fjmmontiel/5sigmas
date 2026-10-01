@@ -1,0 +1,82 @@
+name: Series owner interactive workbench
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/series-owner-workbench.yml'
+      - 'docs/stylesheets/advanced-series-golden.css'
+      - 'docs/stylesheets/series-experience.css'
+      - 'docs/assets/javascripts/advanced-series-golden.js'
+      - 'docs/assets/javascripts/series-experience.js'
+      - 'scripts/build_series_owner_review.py'
+permissions:
+  contents: read
+concurrency:
+  group: series-owner-workbench-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Export tracked review sources without media or credentials
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, shutil, os, json
+          out=pathlib.Path('owner-source'); out.mkdir()
+          extensions={'.html','.css','.js','.mjs','.json','.md','.py','.yml','.yaml','.txt','.svg'}
+          for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
+              p=pathlib.Path(name)
+              if not name or not p.is_file() or p.suffix not in extensions: continue
+              if not (name.startswith(('docs/','locales/','hooks/','scripts/','overrides/','.github/workflows/')) or p.parent==pathlib.Path('.')): continue
+              target=out/p; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(p,target)
+          (out/'review-source.json').write_text(json.dumps({'head_sha':os.environ['HEAD_SHA']})+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: series-owner-source
+          path: owner-source/
+          retention-days: 1
+          compression-level: 6
+          include-hidden-files: true
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build exact review candidate
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ffmpeg
+          python -m pip install -r requirements.txt
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Package source HTML and runtime assets, not video binaries
+        run: |
+          python - <<'PY'
+          import pathlib, shutil
+          out=pathlib.Path('owner-preview')
+          allowed={'.html','.css','.js','.json','.svg','.png','.jpg','.jpeg','.webp'}
+          for p in pathlib.Path('site').rglob('*'):
+              if not p.is_file() or p.suffix not in allowed: continue
+              if p.stat().st_size>4_000_000: continue
+              target=out/p.relative_to('site'); target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(p,target)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: series-owner-runnable-preview
+          path: owner-preview/
+          retention-days: 1
+          compression-level: 6
