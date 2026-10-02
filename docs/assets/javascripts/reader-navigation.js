@@ -48,7 +48,10 @@
       link.href = source.href;
       link.textContent = source.textContent?.trim() || '';
       link.className = 's5-reader-global-nav__link';
-      if (source.classList.contains('md-tabs__link--active')) {
+      const isActive = source.classList.contains('md-tabs__link--active')
+        || source.closest('.md-tabs__item--active') !== null
+        || source.getAttribute('aria-current') === 'page';
+      if (isActive) {
         link.classList.add('is-active');
         link.setAttribute('aria-current', 'page');
       }
