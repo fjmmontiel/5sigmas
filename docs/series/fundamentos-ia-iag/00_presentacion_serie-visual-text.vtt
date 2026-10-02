@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Una transacción puede necesitar una etiqueta; una consulta, una explicación redactada.
+
+2
+00:00:07.350 --> 00:00:14.200
+Clasificar elige entre categorías definidas. Generar construye una secuencia de contenido.
+
+3
+00:00:14.200 --> 00:00:21.550
+La forma de la salida determina qué errores debemos medir.
+
+4
+00:00:22.050 --> 00:00:28.900
+El modelo transforma una entrada en una predicción o continuación.
+
+5
+00:00:28.900 --> 00:00:35.750
+El producto añade contexto, permisos, herramientas y controles de calidad.
+
+6
+00:00:35.750 --> 00:00:43.100
+Cambiar esos componentes puede cambiar el resultado sin entrenar de nuevo el modelo.
+
+7
+00:00:43.600 --> 00:00:50.450
+La familia describe la técnica: por ejemplo, una red neuronal.
+
+8
+00:00:50.450 --> 00:00:57.300
+La señal describe cómo aprende: etiquetas, estructura del dato o recompensa.
+
+9
+00:00:57.300 --> 00:01:04.650
+El ajuste describe qué cambia: aquí, los pesos de esa misma red.
+
+10
+00:01:05.150 --> 00:01:12.000
+Una tienda recibe un mensaje sobre la devolución de un pedido.
+
+11
+00:01:12.000 --> 00:01:18.850
+Una regla valida el plazo; un clasificador identifica la intención del mensaje.
+
+12
+00:01:18.850 --> 00:01:26.517
+Un modelo generativo redacta la respuesta usando la política y el resultado de la regla.
+
+13
+00:01:27.017 --> 00:01:33.867
+Separa los datos de entrenamiento de los casos reservados para evaluación.
+
+14
+00:01:33.867 --> 00:01:40.717
+Sólo despliega la versión que supera los criterios definidos para esa tarea.
+
+15
+00:01:40.717 --> 00:01:48.067
+Observa errores reales y deriva: una nueva versión vuelve a pasar por evaluación.
+
+16
+00:01:48.567 --> 00:01:55.417
+Un sistema puede resolver una tarea difícil y limitarse a recomendar.
+
+17
+00:01:55.417 --> 00:02:02.267
+Otro puede ejecutar acciones sencillas con permisos amplios.
+
+18
+00:02:02.267 --> 00:02:09.617
+Describe por separado qué sabe hacer y qué está autorizado a ejecutar.
+

@@ -7,8 +7,33 @@ tags:
   - IA
   - LLMs
   - GenAI
-video: "01-que-es-ia.mp4"
-video_duration: "PT1M26S"
+video: 01-que-es-ia.mp4
+video_duration: PT131.766667S
+video_poster: 01-que-es-ia.jpg
+video_title: Qué aprende un sistema de IA
+video_summary: 'Generar contenido describe una finalidad: las redes profundas también pueden clasificar, no sólo generar.'
+video_date: '2026-09-28'
+video_captions: 01-que-es-ia-visual-text.vtt
+video_transcript: 01-que-es-ia-transcript.html
+video_chapters:
+- name: Familia técnica y finalidad no son lo mismo
+  start: 0.0
+  end: 21.55
+- name: Un árbol aprende una pregunta concreta
+  start: 21.55
+  end: 43.8
+- name: Contar frecuencias no es demostrar una causa
+  start: 43.8
+  end: 65.35
+- name: El centro se mueve hacia sus ejemplos
+  start: 65.35
+  end: 86.9
+- name: Una neurona calcula, compara y se ajusta
+  start: 86.9
+  end: 109.516667
+- name: Los datos de mañana pueden cambiar
+  start: 109.516667
+  end: 131.766667
 ---
 
 # Capítulo 1 — Qué es IA

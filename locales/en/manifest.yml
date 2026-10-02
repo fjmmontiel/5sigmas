@@ -208,6 +208,16 @@ published_files:
   - series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg
   - series/fundamentos-ia-iag/04-agi.mp4
   - series/fundamentos-ia-iag/04-agi.jpg
+  - series/fundamentos-ia-iag/00_presentacion_serie-transcript.html
+  - series/fundamentos-ia-iag/00_presentacion_serie-visual-text.vtt
+  - series/fundamentos-ia-iag/01-que-es-ia-transcript.html
+  - series/fundamentos-ia-iag/01-que-es-ia-visual-text.vtt
+  - series/fundamentos-ia-iag/02-que-es-ia-generativa-transcript.html
+  - series/fundamentos-ia-iag/02-que-es-ia-generativa-visual-text.vtt
+  - series/fundamentos-ia-iag/03-ia-vs-ia-generativa-transcript.html
+  - series/fundamentos-ia-iag/03-ia-vs-ia-generativa-visual-text.vtt
+  - series/fundamentos-ia-iag/04-agi-transcript.html
+  - series/fundamentos-ia-iag/04-agi-visual-text.vtt
   - series/multimodalidad-iag/00_presentacion_serie.mp4
   - series/multimodalidad-iag/00_presentacion_serie.jpg
   - series/multimodalidad-iag/01-el-problema.mp4
@@ -230,6 +240,16 @@ published_files:
   - series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg
   - series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4
   - series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg
+  - series/ia-pib-bienestar-energia/00_presentacion_serie-transcript.html
+  - series/ia-pib-bienestar-energia/00_presentacion_serie-visual-text.vtt
+  - series/ia-pib-bienestar-energia/01-electricidad-bienestar-transcript.html
+  - series/ia-pib-bienestar-energia/01-electricidad-bienestar-visual-text.vtt
+  - series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-transcript.html
+  - series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-visual-text.vtt
+  - series/ia-pib-bienestar-energia/03-pib-vs-bienestar-transcript.html
+  - series/ia-pib-bienestar-energia/03-pib-vs-bienestar-visual-text.vtt
+  - series/ia-pib-bienestar-energia/04-ia-pib-hoy-transcript.html
+  - series/ia-pib-bienestar-energia/04-ia-pib-hoy-visual-text.vtt
   - series/from-cave-to-agi/00_presentacion_serie.mp4
   - series/from-cave-to-agi/00_presentacion_serie.jpg
   - series/from-cave-to-agi/01-representar.mp4

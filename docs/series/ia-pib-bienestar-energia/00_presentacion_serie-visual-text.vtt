@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Dos suministros entregan diez kilovatios-hora a lo largo del día.
+
+2
+00:00:07.350 --> 00:00:14.900
+El proceso necesita electricidad por la mañana; uno de los suministros llega solo por la noche.
+
+3
+00:00:14.900 --> 00:00:22.567
+El total diario coincide, pero no la capacidad de prestar ese servicio en su horario.
+
+4
+00:00:23.067 --> 00:00:29.917
+Una máquina consume dos kilovatios durante tres horas.
+
+5
+00:00:29.917 --> 00:00:36.767
+La energía es el área bajo la potencia: seis kilovatios-hora.
+
+6
+00:00:36.767 --> 00:00:44.117
+Tres kilovatios durante dos horas dan la misma energía, pero exigen más potencia instantánea.
+
+7
+00:00:44.617 --> 00:00:51.467
+Cien respuestas consumen cincuenta vatios-hora en este ejemplo.
+
+8
+00:00:51.467 --> 00:00:58.317
+Solo ochenta superan el criterio de calidad fijado antes de la prueba.
+
+9
+00:00:58.317 --> 00:01:06.367
+Son 0.5 vatios-hora por intento, pero 0.625 por respuesta válida: el denominador cambia la conclusión.
+
+10
+00:01:06.867 --> 00:01:15.917
+Un productor sin compras intermedias vende un insumo por sesenta; el siguiente vende el producto final por cien.
+
+11
+00:01:15.917 --> 00:01:22.767
+El segundo añade cuarenta de valor, no cien adicionales.
+
+12
+00:01:22.767 --> 00:01:30.117
+El producto interior bruto cuenta aquí sesenta más cuarenta: cien, sin duplicar el insumo.
+
+13
+00:01:30.617 --> 00:01:37.467
+Cuatro personas reciben cien unidades cada una: el total es cuatrocientas.
+
+14
+00:01:37.467 --> 00:01:44.317
+Otra distribución reparte cuarenta, cuarenta, cuarenta y doscientas ochenta.
+
+15
+00:01:44.317 --> 00:01:52.733
+La media sigue en cien, pero la mediana pasa a cuarenta; el agregado no revela la distribución.
+
+16
+00:01:53.233 --> 00:02:00.083
+La infraestructura puede influir tanto en el acceso eléctrico como en la producción.
+
+17
+00:02:00.083 --> 00:02:06.933
+Observar que ambas variables crecen juntas no separa ese factor compartido.
+
+18
+00:02:06.933 --> 00:02:14.600
+Para atribuir un efecto a la electricidad hace falta un diseño causal y supuestos explícitos.
+

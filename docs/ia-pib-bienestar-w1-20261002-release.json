@@ -1,0 +1,587 @@
+{
+  "schema_version": 1,
+  "release_id": "ia-pib-bienestar-w1-20261002",
+  "series": "ia-pib-bienestar-energia",
+  "round": "W1",
+  "source_delivery_manifest_owner_approved_on": "2026-09-28",
+  "publication_authorized_on": "2026-10-02",
+  "publication_authorization": "EXPLICIT_USER_REQUEST_RELEASE_NOW",
+  "exact_byte_policy": "NO_RERENDER_NO_TRANSCODE",
+  "web_horizontal_originals": 10,
+  "locales": [
+    "es",
+    "en"
+  ],
+  "objects": [
+    {
+      "path": "series/ia-pib-bienestar-energia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "f6679c3ee5b981d88e8b2a7ce1b13481f982a5b68a6e4eefa822b479254343a7",
+      "bytes": 5640541,
+      "duration": 134.6,
+      "duration_iso": "PT134.6S",
+      "frames": 8076,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "watch": "videos/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "poster_path": "series/ia-pib-bienestar-energia/00_presentacion_serie.jpg",
+      "poster_sha256": "25d38dce4c961019fd732f76d6b2a8b2e37ac950205e06cf489177e096ae4f1a",
+      "chapters": [
+        {
+          "name": "La energía debe llegar cuando hace falta",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "Potencia y energía responden preguntas distintas",
+          "start": 22.566667,
+          "end": 44.116667
+        },
+        {
+          "name": "Contar intentos no mide servicio útil",
+          "start": 44.116667,
+          "end": 66.366667
+        },
+        {
+          "name": "Sumar ventas puede contar dos veces",
+          "start": 66.366667,
+          "end": 90.116667
+        },
+        {
+          "name": "Una media no describe a cada persona",
+          "start": 90.116667,
+          "end": 112.733333
+        },
+        {
+          "name": "Una asociación no identifica su causa",
+          "start": 112.733333,
+          "end": 134.6
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "91a08aa4deaa6698f7b1afab540e435d2003e396af04f0d246e2e2478907e643",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "fb382774d1cf0c516df4dffbdb99bc101916eb13e90237bb78bd50f8f80c7696"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "cd344d7bb49fb4465179c498bcb909388f46fcf4bc6078cbaf6f9850a7b9623c",
+      "bytes": 5491649,
+      "duration": 134.6,
+      "duration_iso": "PT134.6S",
+      "frames": 8076,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/00_presentacion_serie/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie.jpg",
+      "poster_sha256": "97b391a662875af45ad4e5fa0b2f16f0f6d74a83a4bdaa58d660ea293b07a8e3",
+      "chapters": [
+        {
+          "name": "Energy must arrive when it is needed",
+          "start": 0,
+          "end": 22.566667
+        },
+        {
+          "name": "Power and energy answer different questions",
+          "start": 22.566667,
+          "end": 44.116667
+        },
+        {
+          "name": "Counting attempts does not measure useful service",
+          "start": 44.116667,
+          "end": 66.366667
+        },
+        {
+          "name": "Adding sales can count the same value twice",
+          "start": 66.366667,
+          "end": 90.116667
+        },
+        {
+          "name": "A mean does not describe every person",
+          "start": 90.116667,
+          "end": 112.733333
+        },
+        {
+          "name": "An association does not identify its cause",
+          "start": 112.733333,
+          "end": 134.6
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "0d00d9049a5521461e194755b4822c9d024ebd3b0afbf4f8121d91eb258b8ea4",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "92643a18534c4bd54d571c7d000cbc7bc192143cb448dc27dcf7580c38a06c45"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "257a53e4bf582c15db54be818e50d2e425463a31208c81c4221e9df120acfc45",
+      "bytes": 5681124,
+      "duration": 131.383333,
+      "duration_iso": "PT131.383333S",
+      "frames": 7883,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "watch": "videos/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "poster_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar.jpg",
+      "poster_sha256": "82ea05271e95421ede6cf4655b8060843a25f1b661699b17d2fcc2139aae8fe5",
+      "chapters": [
+        {
+          "name": "Estar conectado no garantiza el servicio",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Un corte puede costar más que su duración",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "La continuidad puede ser una condición del proceso",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "Más energía no siempre añade otra tarea",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "El horario cambia el pico de potencia",
+          "start": 86.516667,
+          "end": 109.516667
+        },
+        {
+          "name": "Una batería tiene dos límites diferentes",
+          "start": 109.516667,
+          "end": 131.383333
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar-visual-text.vtt",
+      "captions_sha256": "83e01d345fc003035aef8d8a00e0b7e37a5328ec879b32e0ff1ad45235467252",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/01-electricidad-bienestar-transcript.html",
+      "transcript_sha256": "1a519b9ccfba0783afa990e3ec6600d7da7ddccdd256013f994690ac2d662beb"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "8c63614474a09f138e37bc82b382d17deaea8f214c8f436d87444bf1a190abea",
+      "bytes": 5365903,
+      "duration": 131.383333,
+      "duration_iso": "PT131.383333S",
+      "frames": 7883,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/01-electricidad-bienestar/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.jpg",
+      "poster_sha256": "2d8b6a8aa2e257cde77bb60f0405736c02a5188d77593c58926e8ff9e92bcbc4",
+      "chapters": [
+        {
+          "name": "A connection does not guarantee service",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "An outage can cost more than its duration",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Continuity can be a process requirement",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "More energy does not always add another task",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Scheduling changes peak power",
+          "start": 86.516667,
+          "end": 109.516667
+        },
+        {
+          "name": "A battery has two different limits",
+          "start": 109.516667,
+          "end": 131.383333
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar-visual-text.vtt",
+      "captions_sha256": "11e265db5298eb5fdac12ee9b8345f2f5b3aaa847df3b7d0a178c5ce07fc1643",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/01-electricidad-bienestar-transcript.html",
+      "transcript_sha256": "082681999d322949b9395dd27bb4422b8a68af80a785e9fa09facdac96a0b0d4"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "5871cc0a7133ba51df1474022c5337017c0dc61a4171d2373cbfa98d42723608",
+      "bytes": 5863664,
+      "duration": 134.816667,
+      "duration_iso": "PT134.816667S",
+      "frames": 8089,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "watch": "videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "poster_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg",
+      "poster_sha256": "1d27c5c9e11db1f1d7c3ff8ba8d1f6aa2cd64703eee941761b606bce50e697d8",
+      "chapters": [
+        {
+          "name": "Entrenar e inferir acumulan energía de forma distinta",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "Mejorar por tarea no fija el consumo total",
+          "start": 22.25,
+          "end": 44.433333
+        },
+        {
+          "name": "El servidor no es todo el edificio",
+          "start": 44.433333,
+          "end": 67.816667
+        },
+        {
+          "name": "La capacidad la limita la restricción más estricta",
+          "start": 67.816667,
+          "end": 89.683333
+        },
+        {
+          "name": "La fabricación exige declarar cómo se reparte",
+          "start": 89.683333,
+          "end": 112.25
+        },
+        {
+          "name": "Los kilovatios-hora no son kilogramos de emisiones",
+          "start": 112.25,
+          "end": 134.816667
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-visual-text.vtt",
+      "captions_sha256": "8b7266f95550383ce445db03253c5ec2059fb67c7454932d0b0bc9d589cb7e4d",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-transcript.html",
+      "transcript_sha256": "d3e6aa709c9855d9da2a2dfdd67cad1af0d770a648da4dd56a9d0e9127467590"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "fa6ed6d30afdb13c853751a5b46fac9520f7a582c117c1ffb09505fe7f9dac86",
+      "bytes": 5655289,
+      "duration": 134.816667,
+      "duration_iso": "PT134.816667S",
+      "frames": 8089,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.jpg",
+      "poster_sha256": "a5e1b99171f0beb330964f7d35fad97976547f2df4ef77a5936f7393a5c95039",
+      "chapters": [
+        {
+          "name": "Training and inference accumulate energy differently",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "Efficiency per task does not fix total consumption",
+          "start": 22.25,
+          "end": 44.433333
+        },
+        {
+          "name": "The server is not the whole facility",
+          "start": 44.433333,
+          "end": 67.816667
+        },
+        {
+          "name": "Capacity is limited by the tightest constraint",
+          "start": 67.816667,
+          "end": 89.683333
+        },
+        {
+          "name": "Manufacturing impact needs an allocation rule",
+          "start": 89.683333,
+          "end": 112.25
+        },
+        {
+          "name": "Kilowatt-hours are not kilograms of emissions",
+          "start": 112.25,
+          "end": 134.816667
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-visual-text.vtt",
+      "captions_sha256": "58ad35033c83e075f530fedcfcfd3d6ccfb16921607cb334b4f9a2020d30e624",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica-transcript.html",
+      "transcript_sha256": "932f1c9489e998fceb3af00df8e2add63e82a3c9214583609af30982bbb5d0c2"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "83fbea277199aaed221e1624f99c1903b34404f29e39d0543abbcc0eb0ff3ab4",
+      "bytes": 5698379,
+      "duration": 134.65,
+      "duration_iso": "PT134.65S",
+      "frames": 8079,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "watch": "videos/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "poster_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg",
+      "poster_sha256": "6e75460cced7043bfc267b50d8de728b2555ae96d9cde5f68fb14e35b02e8ade",
+      "chapters": [
+        {
+          "name": "El precio puede ocultar un cambio de cantidad",
+          "start": 0,
+          "end": 22.616667
+        },
+        {
+          "name": "El servicio y su medición no son idénticos",
+          "start": 22.616667,
+          "end": 44.866667
+        },
+        {
+          "name": "El total puede subir y la cifra por persona bajar",
+          "start": 44.866667,
+          "end": 66.416667
+        },
+        {
+          "name": "Producto bruto y neto son distintos",
+          "start": 66.416667,
+          "end": 89.033333
+        },
+        {
+          "name": "El tiempo también puede cambiar sin más producción",
+          "start": 89.033333,
+          "end": 110.583333
+        },
+        {
+          "name": "El gasto no equivale a todo el valor recibido",
+          "start": 110.583333,
+          "end": 134.65
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar-visual-text.vtt",
+      "captions_sha256": "a77ecf3c9e9682e8e194cf9085b4ed6755d209bc68cf3977b3c9d666e125babf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/03-pib-vs-bienestar-transcript.html",
+      "transcript_sha256": "816e2dfae6bbe101e524e195d6a21c5a8df36ec304fe45fbe73f0b83a593ad3b"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "aeb2e163c7dfe6eba6d6b3e36cd51f971a02c51b704effac1bc3384f38309c92",
+      "bytes": 5843590,
+      "duration": 134.65,
+      "duration_iso": "PT134.65S",
+      "frames": 8079,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg",
+      "poster_sha256": "8b5c2f88ffb90467e7a33101b9fbafd5b9dfadf0fa94dc0e76f5ee845ad06014",
+      "chapters": [
+        {
+          "name": "Price can hide a quantity change",
+          "start": 0,
+          "end": 22.616667
+        },
+        {
+          "name": "A service and its measurement are not identical",
+          "start": 22.616667,
+          "end": 44.866667
+        },
+        {
+          "name": "The total can rise while the per-person figure falls",
+          "start": 44.866667,
+          "end": 66.416667
+        },
+        {
+          "name": "Gross and net domestic product differ",
+          "start": 66.416667,
+          "end": 89.033333
+        },
+        {
+          "name": "Time can change without more output",
+          "start": 89.033333,
+          "end": 110.583333
+        },
+        {
+          "name": "Spending is not all the value received",
+          "start": 110.583333,
+          "end": 134.65
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar-visual-text.vtt",
+      "captions_sha256": "a9962c9adc03aba922a12a44c1e2ff9f699b38134d26d80c66eec4af415db086",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar-transcript.html",
+      "transcript_sha256": "5feb4df94bc15d35111522381f7ccd3862424d02ce111f31b088099f2cb91c12"
+    },
+    {
+      "path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a306b35b49a56b3cbb19a0203697d2040506d9776cd09a88db47f17e141d01ca",
+      "bytes": 5774965,
+      "duration": 136.366667,
+      "duration_iso": "PT136.366667S",
+      "frames": 8182,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "watch": "videos/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "poster_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg",
+      "poster_sha256": "feb17410cea042be8a132b99652cd2749c3132826c5a57ad6dd69e1ec08a214d",
+      "chapters": [
+        {
+          "name": "Acelerar una parte no duplica el proceso",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "Una mejora local debe ponderarse por su cobertura",
+          "start": 22.25,
+          "end": 46.316667
+        },
+        {
+          "name": "El coste y el beneficio pueden llegar en momentos distintos",
+          "start": 46.316667,
+          "end": 70.383333
+        },
+        {
+          "name": "Duplicar entregas no duplica resultados válidos",
+          "start": 70.383333,
+          "end": 92.25
+        },
+        {
+          "name": "Ahorrar tiempo no decide qué se hace con él",
+          "start": 92.25,
+          "end": 114.816667
+        },
+        {
+          "name": "Comparar antes y después no aísla el efecto",
+          "start": 114.816667,
+          "end": 136.366667
+        }
+      ],
+      "captions_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy-visual-text.vtt",
+      "captions_sha256": "8ddcdd0a745d0496f568f4484d49e88445118f94f53003807c390972ac704dbf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/ia-pib-bienestar-energia/04-ia-pib-hoy-transcript.html",
+      "transcript_sha256": "ae263e54884450fb9d109af6d6f43d8f9039783557a2f251fbc6c31e23d434f6"
+    },
+    {
+      "path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4",
+      "kind": "video",
+      "series": "ia-pib-bienestar-energia",
+      "round": "W1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "02aad92eb66392d4ed9eea8101af81831618b6232ce575d8e7e652828b3d7e20",
+      "bytes": 5459322,
+      "duration": 136.366667,
+      "duration_iso": "PT136.366667S",
+      "frames": 8182,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "watch": "en/videos/series/ia-pib-bienestar-energia/04-ia-pib-hoy/",
+      "poster_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg",
+      "poster_sha256": "598070f51097a2407fe416d71d003590d4a61dfd4272fcd8d353fc48114bdf10",
+      "chapters": [
+        {
+          "name": "Speeding up one part does not double the process",
+          "start": 0,
+          "end": 22.25
+        },
+        {
+          "name": "A local improvement must be weighted by coverage",
+          "start": 22.25,
+          "end": 46.316667
+        },
+        {
+          "name": "Costs and benefits can arrive at different times",
+          "start": 46.316667,
+          "end": 70.383333
+        },
+        {
+          "name": "Doubling deliveries does not double valid results",
+          "start": 70.383333,
+          "end": 92.25
+        },
+        {
+          "name": "Saving time does not decide how it is used",
+          "start": 92.25,
+          "end": 114.816667
+        },
+        {
+          "name": "Before-and-after comparison does not isolate an effect",
+          "start": 114.816667,
+          "end": 136.366667
+        }
+      ],
+      "captions_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy-visual-text.vtt",
+      "captions_sha256": "7491effbb9618f29ad25ff1bfacbbace9d2370846aa6a0b199557ab1da745b1f",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/ia-pib-bienestar-energia/04-ia-pib-hoy-transcript.html",
+      "transcript_sha256": "a187c965b4a57e45e193f0fcd530dfc6c1a654b9a7520559787ff14c4debe5ec"
+    }
+  ]
+}

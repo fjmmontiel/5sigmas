@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "series": "fundamentos-ia-iag",
+  "round": "F1",
+  "owner_approved_on": "2026-09-28",
+  "release_prepared_on": "2026-10-02",
+  "scope": "Ten exact owner-approved horizontal ES/EN originals; no rerender, no transcode; vertical originals remain outside public web scope.",
+  "objects": [
+    {
+      "path": "docs/series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "sha256": "62fc35e360620546f1b9adc753b1e22dbc75d267d68bcb36639add3d58e03b65",
+      "bytes": 12413230,
+      "git_blob_sha": "5a73aeab8840ea97fee6441d145efeb42b23d7d9"
+    },
+    {
+      "path": "locales/en/series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "sha256": "3163ccc2fc943016d1c160fc44d30e297f139c37431ade225215e6808368d386",
+      "bytes": 11781209,
+      "git_blob_sha": "4f4d6de6380d00020a492b7633fee4fcf9cc8c5d"
+    },
+    {
+      "path": "docs/series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "sha256": "3a15988693d6f800630c35f0fc36d8bad6a116e4349b8982a3766f1ae8157c40",
+      "bytes": 12581918,
+      "git_blob_sha": "63a152c65705cb001c4b0634115a99b89983cd7d"
+    },
+    {
+      "path": "locales/en/series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "sha256": "a4ac9e7b21824f4e9d8dcbac9075d95b9ca277df09be5ce8352ad0b5ace4782b",
+      "bytes": 12223646,
+      "git_blob_sha": "4bb53d2bbc02bdba733368a39e217386ab55fedb"
+    },
+    {
+      "path": "docs/series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "sha256": "6283bab0f7871d3915e21989aa7eae7b396a49835f4b7eb39b4a9fb5458cbe94",
+      "bytes": 12852779,
+      "git_blob_sha": "527d912b4e5bb5c34302fcf7dba7f0267f70a4ed"
+    },
+    {
+      "path": "locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "sha256": "9b5c386ecf98f24f1ed505fb61d2b1efa918a669ac1016c70c42c62c99d2e2f4",
+      "bytes": 12191615,
+      "git_blob_sha": "1c516a0f604567f1ba7241351acbb38188db9dc9"
+    },
+    {
+      "path": "docs/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "sha256": "77df3f67740fbfb93a76caf95fa3a6cd9eeaebbc0a9efb78b8cefb3f583c9c6e",
+      "bytes": 12781600,
+      "git_blob_sha": "681d0135deafb7225734590b3faeb7e92631fc6c"
+    },
+    {
+      "path": "locales/en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "sha256": "666419db979be49ad12b4c84cf1898979dd461c091af363d8ec53cb26f194fd5",
+      "bytes": 12331377,
+      "git_blob_sha": "f4fb84f787477e25d276ab942c3aba091b5b4357"
+    },
+    {
+      "path": "docs/series/fundamentos-ia-iag/04-agi.mp4",
+      "sha256": "751f422b58f37932f4484c9dbf6600804a71f0f2a785313587a14383fa6e84e6",
+      "bytes": 14059813,
+      "git_blob_sha": "1d0eb59fba6f0253cd0f8761737cd547d8314659"
+    },
+    {
+      "path": "locales/en/series/fundamentos-ia-iag/04-agi.mp4",
+      "sha256": "925280a3fa22996ea629f0c5fd7eb1d2d0baaff2289cf542b6331333f47479ae",
+      "bytes": 13220365,
+      "git_blob_sha": "afbdb45e62af60672793759aacf5de37f94a93f6"
+    }
+  ]
+}

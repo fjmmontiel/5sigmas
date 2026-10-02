@@ -76,7 +76,7 @@ def main():
   assert json.loads(json.dumps(actual,default=str))==item['nonvideo_metadata'],('article_metadata_changed',item['path'])
  if a.base_ref:
   rel='locales/en/media.yml';old=yaml.safe_load(subprocess.check_output(['git','show',a.base_ref+':'+rel],cwd=ROOT));new=yaml.safe_load((ROOT/rel).read_text())
-  allowed=tuple('series/'+c['series']+'/' for c in m['collections'])
+  allowed=tuple('series/'+c['series']+'/' for c in m['collections'])+('series/fundamentos-ia-iag/','series/ia-pib-bienestar-energia/')
   assert old.keys()==new.keys();assert all(old[k]==new[k] for k in old if not k.startswith(allowed))
  report=dict(scope='Exact approved APPROVED_BATCH integration, not a new visual approval',revision=a.revision,origin=a.origin,media_count=60,surface_count=120,clips=360,status='PASS',results=results)
  Path(a.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print('APPROVED_BATCH_INTEGRATION_PASS 60 media,120 article/watch surfaces,360 clips')

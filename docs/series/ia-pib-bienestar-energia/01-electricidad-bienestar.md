@@ -7,8 +7,33 @@ tags:
   - Economía
   - Energía
   - IA
-video: "01-electricidad-bienestar.mp4"
-video_duration: "PT1M15S"
+video: 01-electricidad-bienestar.mp4
+video_duration: PT131.383333S
+video_poster: 01-electricidad-bienestar.jpg
+video_title: Electricidad y servicio efectivo
+video_summary: 'Capacidad y duración son condiciones distintas: una conexión nominal no demuestra acceso efectivo.'
+video_date: '2026-09-28'
+video_captions: 01-electricidad-bienestar-visual-text.vtt
+video_transcript: 01-electricidad-bienestar-transcript.html
+video_chapters:
+- name: Estar conectado no garantiza el servicio
+  start: 0.0
+  end: 21.55
+- name: Un corte puede costar más que su duración
+  start: 21.55
+  end: 43.1
+- name: La continuidad puede ser una condición del proceso
+  start: 43.1
+  end: 64.65
+- name: Más energía no siempre añade otra tarea
+  start: 64.65
+  end: 86.516667
+- name: El horario cambia el pico de potencia
+  start: 86.516667
+  end: 109.516667
+- name: Una batería tiene dos límites diferentes
+  start: 109.516667
+  end: 131.383333
 ---
 
 # Capítulo 1 — Electricidad y bienestar: los mecanismos reales

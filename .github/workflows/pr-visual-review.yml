@@ -76,6 +76,18 @@ jobs:
       - name: Verify 60 exact owner-approved batch MP4 hashes
         run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
 
+      - name: Verify exact owner-approved Fundamentos F1 MP4 bytes
+        run: sha256sum -c .github/receipts/fundamentos-f1-20261002.sha256
+
+      - name: Verify complete Fundamentos F1 exact release assets
+        run: python3 scripts/verify_fundamentos_f1_release.py
+
+      - name: Verify exact owner-authorized IA PIB bienestar W1 MP4 bytes
+        run: sha256sum -c .github/receipts/ia-pib-bienestar-w1-20261002.sha256
+
+      - name: Verify complete IA PIB bienestar W1 exact release assets
+        run: python3 scripts/verify_ia_pib_bienestar_w1_release.py
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
@@ -141,16 +153,14 @@ jobs:
               docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production \
               docs/series/datacenters-espacio locales/en/series/datacenters-espacio \
               docs/series/agentes-ia locales/en/series/agentes-ia \
-              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses \
-              docs/series/fundamentos-ia-iag locales/en/series/fundamentos-ia-iag \
-              docs/series/ia-pib-bienestar-energia locales/en/series/ia-pib-bienestar-energia
+              docs/series/coding-agents-agent-harnesses locales/en/series/coding-agents-agent-harnesses
           )"
           if [ -n "$protected" ]; then
-            echo "This release must not modify later-unapproved series or Modelos assets:" >&2
+            echo "This release must not modify protected approved baselines outside the authorized F1/W1 scope:" >&2
             echo "$protected" >&2
             exit 1
           fi
-          echo "PASS: later-unapproved series plus Modelos R2 are byte-untouched."
+          echo "PASS: protected approved baselines outside F1/W1 are byte-untouched."
 
 
       - name: Verify exact approved C3 bytes and discovery
