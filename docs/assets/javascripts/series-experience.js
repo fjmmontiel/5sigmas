@@ -304,7 +304,7 @@
     window.addEventListener('hashchange', showHash);
     disposeHub = () => window.removeEventListener('hashchange', showHash);
     showHash();
-    $(hub, '[data-sx-player]').forEach(player=>initializePlayer(player,en));
+    $$(hub, '[data-sx-player]').forEach(player=>initializePlayer(player,en));
     $$(hub, '[data-sx-preview]').forEach(button => button.addEventListener('click', () => {
       const entry = JSON.parse(button.dataset.sxPreview);
       const detail = button.closest('[data-sx-detail]');
@@ -368,7 +368,7 @@
 
   function initialize(){
     recordReaderProgress();
-    const hubs=$(document,'[data-sx-hub]');
+    const hubs=$$(document,'[data-sx-hub]');
     if(!hubs.length){disposeHub?.();disposeHub=null}
     hubs.forEach(initializeHub);
     initializeReaderIndex();
