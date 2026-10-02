@@ -34,7 +34,12 @@ async function desktopFlow(){
   }
 
   const first=cards.first();
-  await first.locator('.sx-card-art').hover();
+  const firstArt=first.locator('.sx-card-art');
+  const firstBox=await firstArt.boundingBox();
+  assert.ok(firstBox,'first series cover must have measurable geometry');
+  await page.mouse.move(Math.max(1,firstBox.x-20),Math.max(1,firstBox.y+10));
+  await page.mouse.move(firstBox.x+Math.min(40,firstBox.width/3),firstBox.y+Math.min(30,firstBox.height/3),{steps:4});
+  await firstArt.hover();
   await page.waitForTimeout(250);
   const firstPreview=first.locator('[data-sx-card-video] .sx-card-preview');
   await firstPreview.waitFor({state:'attached'});
@@ -132,7 +137,12 @@ async function reducedMotionFlow(){
   const page=await context.newPage();
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
   const first=page.locator('[data-sx-card]').first();
-  await first.locator('.sx-card-art').hover();
+  const firstArt=first.locator('.sx-card-art');
+  const firstBox=await firstArt.boundingBox();
+  assert.ok(firstBox,'reduced-motion cover must have measurable geometry');
+  await page.mouse.move(Math.max(1,firstBox.x-20),Math.max(1,firstBox.y+10));
+  await page.mouse.move(firstBox.x+Math.min(40,firstBox.width/3),firstBox.y+Math.min(30,firstBox.height/3),{steps:4});
+  await firstArt.hover();
   await page.waitForTimeout(250);
   assert.equal(await first.locator('[data-sx-card-video] video').count(),0,'reduced motion must not instantiate cover motion previews');
   await context.close();
