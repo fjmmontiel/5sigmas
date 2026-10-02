@@ -135,7 +135,9 @@
   isolation:isolate;
 }
 .sx-card-cover{position:absolute;inset:0;display:block;overflow:hidden;}
-.sx-card-poster,.sx-card-preview{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;}
+.sx-card-poster,.sx-card-preview-slot,.sx-card-preview{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.sx-card-preview-slot{z-index:1;overflow:hidden;}
+.sx-card-preview{object-fit:cover;}
 .sx-card-poster{transform:scale(1.002);filter:saturate(.92) contrast(1.02);transition:transform 260ms ease,filter 260ms ease;}
 .sx-card-preview{opacity:0;background:#05080b;transition:opacity 180ms ease;}
 .sx-card-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,5,9,.05) 22%,rgba(2,5,9,.18) 55%,rgba(2,5,9,.74) 100%);pointer-events:none;}
