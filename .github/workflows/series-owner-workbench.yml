@@ -1,19 +1,13 @@
 name: Series owner interactive workbench
+
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/series-owner-workbench.yml'
-      - 'docs/stylesheets/advanced-series-golden.css'
-      - 'docs/stylesheets/series-experience.css'
-      - 'docs/assets/javascripts/advanced-series-golden.js'
-      - 'docs/assets/javascripts/series-experience.js'
-      - 'scripts/build_series_owner_review.py'
-      - 'scripts/test_series_owner_review.py'
-      - 'quality/series-owner-review/reviewer.html'
+  workflow_call:
+  workflow_dispatch:
+
 permissions:
   contents: read
 concurrency:
-  group: series-owner-workbench-${{ github.event.pull_request.number }}
+  group: series-owner-workbench-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   preview:
@@ -22,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
