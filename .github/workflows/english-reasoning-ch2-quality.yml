@@ -1,23 +1,26 @@
 name: English Reasoning Chapter 2 quality
 
 on:
-  pull_request:
-    paths:
-      - 'locales/en/snippets/modelos-razonadores/02-*'
-      - 'locales/en/snippets/modelos-razonadores/05-specification-gaming*'
-      - 'locales/en/series/modelos-razonadores/02-fallos.md'
-      - 'scripts/validate_english_reasoning_ch2.mjs'
-      - 'scripts/validate_english_reasoning_ch2_cot.mjs'
-      - 'scripts/validate_english_reasoning_ch2_failure_types.mjs'
-      - 'scripts/validate_english_reasoning_ch2_spec_gaming.mjs'
-      - 'locale_main.py'
-      - '.github/workflows/english-reasoning-ch2-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:

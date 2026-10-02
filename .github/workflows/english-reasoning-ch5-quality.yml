@@ -1,19 +1,26 @@
 name: English Reasoning Chapter 5 quality
 
 on:
-  pull_request:
-    paths:
-      - 'locales/en/snippets/modelos-razonadores/05-*'
-      - 'locales/en/series/modelos-razonadores/05-riesgos.md'
-      - 'scripts/validate_english_reasoning_ch5.mjs'
-      - 'locale_main.py'
-      - '.github/workflows/english-reasoning-ch5-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
