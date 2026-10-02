@@ -8,8 +8,33 @@ tags:
   - IA
   - GenAI
   - LLMs
-video: "03-ia-vs-ia-generativa.mp4"
-video_duration: "PT1M15S"
+video: 03-ia-vs-ia-generativa.mp4
+video_duration: PT130.95S
+video_poster: 03-ia-vs-ia-generativa.jpg
+video_title: Elegir y evaluar una configuración
+video_summary: El texto fluido no sustituye la validación del riesgo ni la comprobación de sus afirmaciones.
+video_date: '2026-09-28'
+video_captions: 03-ia-vs-ia-generativa-visual-text.vtt
+video_transcript: 03-ia-vs-ia-generativa-transcript.html
+video_chapters:
+- name: Una puntuación y un texto se evalúan distinto
+  start: 0.0
+  end: 21.866667
+- name: Temperatura cambia el reparto de probabilidad
+  start: 21.866667
+  end: 44.05
+- name: Una explicación debe poder contrastarse
+  start: 44.05
+  end: 65.6
+- name: Una cifra depende de qué error cuenta
+  start: 65.6
+  end: 87.85
+- name: ¿Quién elige el siguiente paso?
+  start: 87.85
+  end: 109.4
+- name: Primero fija requisitos verificables
+  start: 109.4
+  end: 130.95
 ---
 
 # Capítulo 3 — IA vs IA Generativa
