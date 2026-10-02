@@ -31,29 +31,10 @@
     if (!container || !player || container.dataset.s5FollowReady === 'true') return;
     container.dataset.s5FollowReady = 'true';
 
-    const placeholder = document.createElement('div');
-    placeholder.className = 's5-follow-placeholder';
-    placeholder.setAttribute('aria-hidden', 'true');
-    container.before(placeholder);
-
-    const tools = document.createElement('div');
-    tools.className = 's5-follow-tools';
-    tools.hidden = true;
-
-    const back = document.createElement('button');
-    back.type = 'button';
-    back.className = 's5-follow-back';
-    back.textContent = isEnglish() ? 'Back to video' : 'Volver al vídeo';
-
-    const close = document.createElement('button');
-    close.type = 'button';
-    close.className = 's5-follow-close';
-    close.setAttribute('aria-label', isEnglish() ? 'Close mini player' : 'Cerrar mini reproductor');
-    close.textContent = '×';
-
-    tools.append(back, close);
-    container.appendChild(tools);
-
+    let placeholder = null;
+    let tools = null;
+    let back = null;
+    let close = null;
     let interacted = false;
     let suppressed = false;
     let floating = false;
@@ -62,27 +43,69 @@
 
     const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const ensureScaffold = () => {
+      if (placeholder) return;
+      placeholder = document.createElement('div');
+      placeholder.className = 's5-follow-placeholder';
+      placeholder.setAttribute('aria-hidden', 'true');
+      container.before(placeholder);
+
+      tools = document.createElement('div');
+      tools.className = 's5-follow-tools';
+      tools.hidden = true;
+
+      back = document.createElement('button');
+      back.type = 'button';
+      back.className = 's5-follow-back';
+      back.textContent = isEnglish() ? 'Back to video' : 'Volver al vídeo';
+
+      close = document.createElement('button');
+      close.type = 'button';
+      close.className = 's5-follow-close';
+      close.setAttribute('aria-label', isEnglish() ? 'Close mini player' : 'Cerrar mini reproductor');
+      close.textContent = '×';
+
+      tools.append(back, close);
+      container.appendChild(tools);
+
+      back.addEventListener('click', () => {
+        placeholder.scrollIntoView({
+          block: 'center',
+          behavior: reducedMotion() ? 'auto' : 'smooth',
+        });
+        requestAnimationFrame(schedule);
+      });
+
+      close.addEventListener('click', () => {
+        player.pause();
+        suppressed = true;
+        setFloating(false);
+      });
+    };
+
     const captureHeight = () => {
       if (floating) return;
       const height = container.getBoundingClientRect().height;
-      if (height > 0) normalHeight = height;
+      if (height > 0) normalHeight = Math.max(normalHeight, height);
     };
 
     const setFloating = (value) => {
       if (floating === value) return;
       if (value) {
+        ensureScaffold();
         captureHeight();
-        placeholder.style.height = `${normalHeight}px`;
-      } else {
+        placeholder.style.height = Math.max(1, normalHeight) + 'px';
+      } else if (placeholder) {
         placeholder.style.height = '0px';
       }
       floating = value;
       container.classList.toggle('is-following', value);
-      tools.hidden = !value;
+      if (tools) tools.hidden = !value;
     };
 
     const evaluate = () => {
       raf = 0;
+      if (!interacted || !placeholder) return;
       captureHeight();
       const anchor = floating ? placeholder : container;
       const rect = anchor.getBoundingClientRect();
@@ -91,40 +114,28 @@
       const ratio = visible / Math.max(1, Math.min(height, innerHeight));
       const passedTop = rect.top < 72;
 
-      if (interacted && !suppressed && !player.ended && passedTop && ratio < 0.18) {
+      if (!suppressed && !player.ended && passedTop && ratio < 0.18) {
         setFloating(true);
       } else if (floating && ratio > 0.52) {
         setFloating(false);
       }
     };
 
-    const schedule = () => {
+    function schedule() {
       if (!raf) raf = requestAnimationFrame(evaluate);
-    };
+    }
 
     player.addEventListener('play', () => {
+      ensureScaffold();
       interacted = true;
       if (!floating) suppressed = false;
+      captureHeight();
       schedule();
     });
 
     player.addEventListener('ended', () => {
       interacted = false;
       suppressed = false;
-      setFloating(false);
-    });
-
-    back.addEventListener('click', () => {
-      placeholder.scrollIntoView({
-        block: 'center',
-        behavior: reducedMotion() ? 'auto' : 'smooth',
-      });
-      requestAnimationFrame(schedule);
-    });
-
-    close.addEventListener('click', () => {
-      player.pause();
-      suppressed = true;
       setFloating(false);
     });
 
@@ -137,8 +148,6 @@
         setFloating(false);
       }
     });
-
-    captureHeight();
   };
 
   const searchScore = (card, query, tokens) => {
