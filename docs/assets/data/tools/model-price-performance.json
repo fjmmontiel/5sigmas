@@ -287,7 +287,7 @@
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/opus-5-5/overview",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "Claude Opus 5.5 (xhigh) | Artificial Analysis",
@@ -347,7 +347,7 @@
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "Claude Fable 5.1 (max) | Artificial Analysis",
@@ -377,7 +377,7 @@
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "GPT-6 Astra (max) | Artificial Analysis",
@@ -452,7 +452,7 @@
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "GPT-6 Luna (max) | Artificial Analysis",
@@ -487,7 +487,7 @@
         "specs_pricing": {
           "title": "GPT-5.6 Terra Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "GPT-5.6 Terra (max) | Artificial Analysis",
@@ -523,7 +523,7 @@
         "specs_pricing": {
           "title": "What's new in Gemini 3.8 Flash | Google AI for Developers",
           "url": "https://ai.google.dev/gemini-api/docs/latest-model?hl=en",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "Gemini 3.8 Flash (high) | Artificial Analysis",
@@ -557,7 +557,7 @@
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
           "url": "https://docs.x.ai/docs/models/grok-4.7",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "Grok 4.7 (high) | Artificial Analysis",
@@ -586,7 +586,7 @@
         "specs_pricing": {
           "title": "DeepSeek API pricing",
           "url": "https://api-docs.deepseek.com/quick_start/pricing/",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "Peak first-party API rate; DeepSeek's off-peak rate can be lower."
         },
         "benchmark": {
@@ -617,7 +617,7 @@
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
           "url": "https://help.aliyun.com/en/model-studio/qwen3-8-max",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "USD rates use Artificial Analysis's observed first-party Alibaba API pricing; Alibaba's public regional table is denominated in CNY."
         },
         "benchmark": {
@@ -647,7 +647,7 @@
         "specs_pricing": {
           "title": "Alibaba Cloud Model Studio pricing",
           "url": "https://help.aliyun.com/en/model-studio/model-pricing",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "USD rates use Artificial Analysis's observed first-party Alibaba API pricing where the public regional table is denominated in CNY."
         },
         "benchmark": {
@@ -677,7 +677,7 @@
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
           "url": "https://ai.meta.com/llama/",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "Token rates are the USD first-party Meta API rates observed and reported by Artificial Analysis."
         },
         "benchmark": {
@@ -707,7 +707,7 @@
         "specs_pricing": {
           "title": "Xiaomi MiMo",
           "url": "https://mimo.xiaomi.com/",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "Token rates are the USD first-party Xiaomi API rates observed and reported by Artificial Analysis."
         },
         "benchmark": {
@@ -737,7 +737,7 @@
         "specs_pricing": {
           "title": "StepFun Open Platform | Step 5 Preview",
           "url": "https://platform.stepfun.com/",
-          "verified_on": "2026-09-24",
+          "verified_on": "2026-10-02",
           "note": "Token rates are the USD first-party StepFun API rates observed and reported by Artificial Analysis."
         },
         "benchmark": {
@@ -767,7 +767,7 @@
         "specs_pricing": {
           "title": "Z.AI API pricing",
           "url": "https://docs.z.ai/guides/overview/pricing",
-          "verified_on": "2026-09-24"
+          "verified_on": "2026-10-02"
         },
         "benchmark": {
           "title": "GLM 5.3 Flash | Artificial Analysis",
