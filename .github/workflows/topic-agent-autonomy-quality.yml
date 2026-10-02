@@ -1,21 +1,26 @@
 name: Agent autonomy visual quality
 
 on:
-  pull_request:
-    paths:
-      - 'docs/temas/agentes-ia.md'
-      - 'docs/snippets/temas/agent-autonomy-spectrum.html'
-      - 'locales/en/temas/agentes-ia.md'
-      - 'locales/en/snippets/temas/agent-autonomy-spectrum.html'
-      - 'locales/en/snippets/temas/agent-autonomy-spectrum.i18n.json'
-      - 'scripts/validate_agent_autonomy_visual.mjs'
-      - '.github/workflows/topic-agent-autonomy-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
