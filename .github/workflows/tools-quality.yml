@@ -1,37 +1,7 @@
 name: Interactive tools quality
 
 on:
-  pull_request:
-    paths:
-      - 'docs/herramientas/**'
-      - 'locales/en/tools/**'
-      - 'docs/assets/data/tools/**'
-      - 'docs/assets/javascripts/tools/**'
-      - 'docs/stylesheets/tools.css'
-      - 'docs/stylesheets/tools-kv-context.css'
-      - 'docs/stylesheets/tools-attention.css'
-      - 'docs/stylesheets/tools-context-budget.css'
-      - 'docs/stylesheets/tools-rag-retrieval.css'
-      - 'docs/stylesheets/tools-rag-evaluation.css'
-      - 'docs/stylesheets/tools-voice-latency.css'
-      - 'docs/stylesheets/tools-voice-cost-capacity.css'
-      - 'docs/stylesheets/tools-agent-reliability.css'
-      - 'docs/stylesheets/tools-prompt-injection.css'
-      - 'docs/stylesheets/tools-benchmark-reliability.css'
-      - 'docs/stylesheets/tools-model-capability-timeline.css'
-      - 'docs/stylesheets/tools-scaling-laws.css'
-      - 'docs/stylesheets/tools-training-energy.css'
-      - 'docs/stylesheets/tools-datacenter-capacity.css'
-      - 'docs/stylesheets/tools-global-ai-ecosystem.css'
-      - 'tools/**'
-      - 'hooks/locale_alternates.py'
-      - 'scripts/prepare_locale.py'
-      - 'scripts/audit_english_full_parity.py'
-      - 'scripts/audit_multilingual_search_foundation.py'
-      - 'scripts/*tool*.mjs'
-      - 'scripts/validate_locale_switching.mjs'
-      - 'mkdocs.yml'
-      - 'mkdocs.en.yml'
+  workflow_call:
   workflow_dispatch:
 
 concurrency:
