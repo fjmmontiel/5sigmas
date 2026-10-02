@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Plan delegated CI suites from the current PR diff or a manual suite request."""
-
+"""Plan autonomous quality workers from a PR diff or one manual delegated suite."""
 from __future__ import annotations
 
 import argparse
@@ -10,15 +9,14 @@ import os
 import subprocess
 from pathlib import Path
 
-SUITES = ("core", "series", "owner", "english", "locale", "tools")
+SUITES = ("core", "series", "owner", "english", "tools", "topics")
+AUTO_SUITES = ("core", "series", "english", "tools", "topics")
 
 PATTERNS = {
     "core": [
         "docs/**", "locales/**", "discovery/**", "overrides/**", "overrides_locale/**",
-        "hooks/**", "scripts/**", "mkdocs.yml", "mkdocs.en.yml", "main.py", "locale_main.py",
-        "requirements.txt", "Makefile", "VIDEO_DELIVERY.md",
-        ".github/workflows/deploy-pages.yml", ".github/workflows/publish-video-media.yml",
-        ".github/workflows/pr-visual-review.yml", ".github/workflows/delegate-quality.yml",
+        "hooks/**", "scripts/**", "quality/**", "mkdocs.yml", "mkdocs.en.yml",
+        "main.py", "locale_main.py", "requirements.txt", "Makefile", "VIDEO_DELIVERY.md",
     ],
     "series": [
         "hooks/series_experience.py", "hooks/series_curriculum.json",
@@ -26,44 +24,41 @@ PATTERNS = {
         "docs/assets/javascripts/series-experience.js",
         "docs/assets/javascripts/advanced-series-golden.js",
         "docs/assets/javascripts/reader-direct-navigation.js",
-        "scripts/capture_gallery_series_review.py", "scripts/capture_series_ui_review.py",
-        "scripts/test_series_experience.py", "scripts/test_series_navigation.py",
-        "scripts/test_publication_nav.py", ".github/workflows/series-ui-review.yml",
-    ],
-    "owner": [
-        "docs/stylesheets/advanced-series-golden.css", "docs/stylesheets/series-experience.css",
-        "docs/assets/javascripts/advanced-series-golden.js",
-        "docs/assets/javascripts/series-experience.js",
-        "scripts/build_series_owner_review.py", "scripts/test_series_owner_review.py",
-        "quality/series-owner-review/reviewer.html",
-        ".github/workflows/series-owner-workbench.yml",
+        "scripts/capture_*series*review.py", "scripts/test_series*.py",
+        "scripts/test_publication_nav.py", "scripts/validate_series_covers_follow_player.mjs",
+        "quality/series-owner-review/**",
     ],
     "english": [
         "locales/en/**", "discovery/**", "mkdocs.en.yml", "locale_main.py",
         "hooks/video_sitemap_en.py", "hooks/locale_alternates.py",
         "scripts/prepare_locale.py", "scripts/prepare_modelos_r2_ci_media.sh",
-        "scripts/audit_english_full_parity.py", "scripts/validate_english_*.mjs",
-        ".github/workflows/english-mirror-quality.yml",
-    ],
-    "locale": [
-        "mkdocs.yml", "mkdocs.en.yml", "locales/**", "discovery/**", "hooks/**",
-        "overrides/**", "overrides_locale/**", "scripts/validate_locale_switching.mjs",
-        "scripts/prepare_modelos_r2_ci_media.sh", ".github/workflows/locale-switch-quality.yml",
+        "scripts/audit_english*.py", "scripts/validate_english*.mjs",
+        "scripts/validate_locale_switching.mjs",
     ],
     "tools": [
         "docs/herramientas/**", "locales/en/tools/**", "docs/assets/data/tools/**",
         "docs/assets/javascripts/tools/**", "docs/stylesheets/tools*.css", "tools/**",
         "hooks/locale_alternates.py", "scripts/prepare_locale.py",
-        "scripts/audit_english_full_parity.py", "scripts/audit_multilingual_search_foundation.py",
-        "scripts/*tool*.mjs", "scripts/validate_locale_switching.mjs",
-        "mkdocs.yml", "mkdocs.en.yml", ".github/workflows/tools-quality.yml",
+        "scripts/audit_multilingual_search_foundation.py", "scripts/*tool*.mjs",
+        "scripts/audit_tool_seo_geo_shell.py", "scripts/tests/test_audit_tool_seo_geo_shell.py",
+        "scripts/validate_locale_switching.mjs", "mkdocs.yml", "mkdocs.en.yml",
+    ],
+    "topics": [
+        "docs/temas/**", "locales/en/temas/**", "docs/snippets/temas/**",
+        "locales/en/snippets/temas/**", "docs/articulos-tecnicos/voice-agent-architectures.md",
+        "locales/en/articulos-tecnicos/voice-agent-architectures.md",
+        "scripts/validate_*_visual.mjs", "scripts/validate_voice_architecture_article.mjs",
     ],
 }
 
 
+def git_rev(value: str, fallback: str) -> str:
+    if value:
+        return value
+    return subprocess.check_output(["git", "rev-parse", fallback], text=True).strip()
+
+
 def changed_files(base: str, head: str) -> list[str]:
-    if not base or not head:
-        return []
     result = subprocess.run(
         ["git", "diff", "--name-only", f"{base}...{head}"],
         check=True,
@@ -77,28 +72,41 @@ def matches(path: str, patterns: list[str]) -> bool:
     return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
 
 
-def plan(files: list[str], requested: str) -> dict[str, bool]:
+def explicit_plan(requested: str) -> dict[str, bool]:
     selected = {suite: False for suite in SUITES}
-    if requested and requested != "auto":
-        if requested == "full":
-            return {suite: True for suite in SUITES}
-        if requested == "reader":
-            selected["core"] = True
-            return selected
-        if requested not in selected:
-            raise SystemExit(f"Unknown delegated suite: {requested}")
+    if requested == "full":
+        for suite in AUTO_SUITES:
+            selected[suite] = True
+    elif requested in {"core", "reader"}:
+        selected["core"] = True
+    elif requested == "owner":
+        selected["core"] = True
+        selected["series"] = True
+        selected["owner"] = True
+    elif requested in {"series", "english", "tools", "topics"}:
+        selected["core"] = True
         selected[requested] = True
-        if requested == "series":
-            selected["owner"] = True
-        if requested == "english":
-            selected["locale"] = True
+    else:
+        raise SystemExit(f"Unknown delegated suite: {requested}")
+    return selected
+
+
+def auto_plan(files: list[str]) -> dict[str, bool]:
+    selected = {suite: False for suite in SUITES}
+    infrastructure_change = any(
+        path.startswith(".github/workflows/")
+        or path in {"scripts/ci_plan.py", "scripts/audit_ci_storage_policy.py"}
+        for path in files
+    )
+    if infrastructure_change:
+        for suite in AUTO_SUITES:
+            selected[suite] = True
         return selected
 
-    for suite in SUITES:
+    for suite in ("series", "english", "tools", "topics"):
         selected[suite] = any(matches(path, PATTERNS[suite]) for path in files)
-
-    # Core is the canonical site-wide safety net. A focused suite never replaces it.
-    if any(selected[suite] for suite in ("series", "owner", "english", "locale", "tools")):
+    selected["core"] = any(matches(path, PATTERNS["core"]) for path in files)
+    if any(selected[suite] for suite in ("series", "english", "tools", "topics")):
         selected["core"] = True
     return selected
 
@@ -111,14 +119,19 @@ def main() -> None:
     parser.add_argument("--github-output", default=os.environ.get("GITHUB_OUTPUT", ""))
     args = parser.parse_args()
 
-    files = changed_files(args.base, args.head) if args.suite == "auto" else []
-    selected = plan(files, args.suite)
-    payload = {"changed_files": files, **selected}
+    head = git_rev(args.head, "HEAD")
+    base = git_rev(args.base, "HEAD^")
+    requested = args.suite or "auto"
+    files = changed_files(base, head) if requested == "auto" else []
+    selected = auto_plan(files) if requested == "auto" else explicit_plan(requested)
+
+    payload = {"base_sha": base, "head_sha": head, "changed_files": files, **selected}
     print(json.dumps(payload, indent=2, sort_keys=True))
 
     if args.github_output:
-        output = Path(args.github_output)
-        with output.open("a", encoding="utf-8") as handle:
+        with Path(args.github_output).open("a", encoding="utf-8") as handle:
+            handle.write(f"base_sha={base}\n")
+            handle.write(f"head_sha={head}\n")
             for suite, enabled in selected.items():
                 handle.write(f"{suite}={'true' if enabled else 'false'}\n")
             handle.write("changed_count=" + str(len(files)) + "\n")
