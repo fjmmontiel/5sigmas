@@ -1,32 +1,15 @@
 name: PR visual review
 
 on:
-  pull_request:
-    paths:
-      - 'docs/**'
-      - 'locales/**'
-      - 'discovery/**'
-      - 'overrides/**'
-      - 'overrides_locale/**'
-      - 'hooks/**'
-      - 'scripts/**'
-      - 'mkdocs.yml'
-      - 'mkdocs.en.yml'
-      - 'main.py'
-      - 'locale_main.py'
-      - 'requirements.txt'
-      - 'Makefile'
-      - 'VIDEO_DELIVERY.md'
-      - '.github/workflows/deploy-pages.yml'
-      - '.github/workflows/publish-video-media.yml'
-      - '.github/workflows/pr-visual-review.yml'
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
   actions: read
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:

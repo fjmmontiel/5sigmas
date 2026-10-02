@@ -1,20 +1,9 @@
 name: Series UI + advanced GOLDEN polish review
+
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/series-ui-review.yml'
-      - 'hooks/series_experience.py'
-      - 'hooks/series_curriculum.json'
-      - 'docs/stylesheets/series-experience.css'
-      - 'docs/stylesheets/advanced-series-golden.css'
-      - 'docs/assets/javascripts/series-experience.js'
-      - 'docs/assets/javascripts/advanced-series-golden.js'
-      - 'docs/assets/javascripts/reader-direct-navigation.js'
-      - 'scripts/capture_gallery_series_review.py'
-      - 'scripts/capture_series_ui_review.py'
-      - 'scripts/test_series_experience.py'
-      - 'scripts/test_series_navigation.py'
-      - 'scripts/test_publication_nav.py'
+  workflow_call:
+  workflow_dispatch:
+
 permissions:
   contents: read
 concurrency:
@@ -31,9 +20,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - name: Check out exact PR base
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha || github.event.repository.default_branch }}
         run: |
-          git -C candidate fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
-          git -C candidate worktree add --detach ../baseline "${{ github.event.pull_request.base.sha }}"
+          git -C candidate fetch --no-tags --depth=1 origin "$BASE_REF"
+          git -C candidate worktree add --detach ../baseline FETCH_HEAD
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
