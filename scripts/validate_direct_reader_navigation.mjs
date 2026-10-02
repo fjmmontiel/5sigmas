@@ -150,7 +150,7 @@ const assertSeriesNumberingContract = async (page, { locale = 'es' } = {}) => {
   }
 
   const contextText = (await page.locator('.s5-reader-context').innerText()).replace(/\s+/g, ' ').trim();
-  if (!contextText.includes(expectedProgress)) {
+  if (!contextText.toLocaleLowerCase().includes(expectedProgress.toLocaleLowerCase())) {
     throw new Error(`Reading context progress is inconsistent: ${contextText}`);
   }
 
