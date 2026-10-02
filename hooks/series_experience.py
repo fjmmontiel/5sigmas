@@ -97,13 +97,31 @@ def cover(s, small=False):
     else: art=''.join(f'<rect x="{56+i*45}" y="{42+j*47}" width="28" height="28" rx="2" class="{("sx-fill" if (i+j)%4==0 else "")}"/>' for j in range(3) for i in range(5))
     return f'<svg class="sx-cover" viewBox="0 0 340 184" role="img" aria-label="{esc(s["title"])}"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{art}</g></svg>'
 
+def card_visual(s, label):
+    """Editorial series cover built from the already-published presentation poster/video."""
+    intro=s.get('intro') or {}
+    poster=intro.get('poster')
+    video=intro.get('video')
+    if not poster:
+        return cover(s)
+    preview=(f'<video class="sx-card-preview" muted playsinline preload="none" data-sx-card-video data-src="{esc(video)}" aria-hidden="true" tabindex="-1"></video>' if video else '')
+    return (
+        f'<span class="sx-card-cover" data-sx-card-cover>'
+        f'<img class="sx-card-poster" src="{esc(poster)}" alt="" loading="lazy" decoding="async" aria-hidden="true">'
+        f'{preview}<span class="sx-card-cover-shade" aria-hidden="true"></span>'
+        f'<span class="sx-card-number">{s["number"]:02}</span>'
+        f'<span class="sx-card-badge">{esc(label)}</span>'
+        f'</span>'
+    )
+
 def video_panel(entry, identifier):
     if not entry or not entry.get('video'): return ''
     track=f'<track kind="captions" src="{esc(entry["track"])}" srclang="{t("es","en")}" label="{t("Español","English")}" default>' if entry.get('track') else ''
-    return f'''<div class="sx-player" data-sx-player><video id="{identifier}" controls playsinline preload="none" poster="{esc(entry['poster'])}" data-src="{esc(entry['video'])}" aria-label="{esc(entry['title'])}">{track}</video><button type="button" class="sx-player-start" data-sx-play aria-controls="{identifier}"><span aria-hidden="true">▶</span>{t('Reproducir aquí','Play here')}</button><a class="sx-player-fallback" href="{esc(entry['watch'])}">{t('Abrir página del vídeo y transcripción','Open video page and transcript')} ↗</a></div>'''
+    return f'''<div class="sx-player" data-sx-player data-sx-follow-player><video id="{identifier}" controls playsinline preload="none" poster="{esc(entry['poster'])}" data-src="{esc(entry['video'])}" aria-label="{esc(entry['title'])}">{track}</video><button type="button" class="sx-player-start" data-sx-play aria-controls="{identifier}"><span aria-hidden="true">▶</span>{t('Reproducir aquí','Play here')}</button><a class="sx-player-fallback" href="{esc(entry['watch'])}">{t('Abrir página del vídeo y transcripción','Open video page and transcript')} ↗</a></div>'''
 
 def gallery():
     by_slug={s['slug']:s for s in SERIES}
+    path_titles={p['id']:local(p['title']) for p in CURRICULUM['paths']}
     cards,details=[],[]
     labels=[('all',t('Todas','All'))]+[(p['id'],local(p['title'])) for p in CURRICULUM['paths']]
     filters=''.join(f'<button type="button" data-sx-filter="{k}" aria-pressed="{str(k=="all").lower()}">{esc(v)}</button>' for k,v in labels)
@@ -114,7 +132,8 @@ def gallery():
     for s in SERIES:
         n=len(s['chapters']); curricula=s['curriculum']; learn=curricula['lessons']
         search=' '.join([s['title'],s['description'],*(c['title'] for c in s['chapters'])])
-        cards.append(f'''<div class="sx-series-card" data-sx-card data-facets="{' '.join(s['facets'])}" data-search="{esc(search)}" data-series-number="{s['number']}"><a class="sx-card-art" href="#serie-{s['slug']}">{cover(s)}<span class="sx-card-number">{s['number']:02}</span></a><div class="sx-card-copy"><span class="sx-meta">{n} {t('capítulos','chapters')} · {t('Desde cero','From scratch') if s['number']==1 else t('Serie guiada','Guided series')}</span><h2><a href="#serie-{s['slug']}">{esc(s['title'])}</a></h2><p>{esc(s['description'])}</p><a class="sx-card-open" href="#serie-{s['slug']}">{t('Explorar','Explore')} <span aria-hidden="true">→</span></a></div></div>''')
+        label=path_titles.get(s['facets'][0],t('Serie','Series')) if s['facets'] else t('Serie','Series')
+        cards.append(f'''<div class="sx-series-card" data-sx-card data-facets="{' '.join(s['facets'])}" data-search="{esc(search)}" data-series-number="{s['number']}" data-series-slug="{esc(s['slug'])}"><a class="sx-card-art" href="#serie-{s['slug']}" aria-label="{t('Abrir serie','Open series')}: {esc(s['title'])}">{card_visual(s,label)}</a><div class="sx-card-copy"><span class="sx-meta">{n} {t('capítulos','chapters')} · {esc(label)}</span><h2><a href="#serie-{s['slug']}">{esc(s['title'])}</a></h2><p>{esc(s['description'])}</p><div class="sx-card-progress" data-sx-progress data-sx-total="{n}" hidden><div><span>{t('Tu progreso','Your progress')}</span><strong data-sx-progress-label></strong></div><i aria-hidden="true"><span data-sx-progress-bar></span></i></div><a class="sx-card-open" href="#serie-{s['slug']}">{t('Explorar serie','Explore series')} <span aria-hidden="true">→</span></a></div></div>''')
         preview=next((e for e in ([s['intro']] if s['intro'] else [])+s['chapters'] if e and e.get('video')),None)
         steps=[]
         for i,c in enumerate(s['chapters']):
