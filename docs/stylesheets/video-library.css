@@ -706,3 +706,84 @@
     transform: none;
   }
 }
+
+
+/* User-initiated follow player shared by article embeds and watch pages. */
+.s5-follow-placeholder{height:0;min-width:0;}
+.s5-video-embed__frame,
+.s5-video-watch__player{position:relative;}
+.s5-video-embed__frame.is-following,
+.s5-video-watch__player.is-following{
+  position:fixed;
+  right:18px;
+  bottom:max(18px,env(safe-area-inset-bottom));
+  z-index:72;
+  width:min(420px,calc(100vw - 36px));
+  margin:0!important;
+  border:1px solid color-mix(in srgb,var(--s5-text) 30%,var(--s5-line-strong));
+  border-radius:10px;
+  background:var(--md-default-bg-color);
+  box-shadow:0 24px 80px rgba(0,0,0,.36);
+  overflow:hidden;
+}
+.s5-video-watch__player.is-following video,
+.s5-video-embed__frame.is-following>video{
+  width:100%;
+  aspect-ratio:16/9;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:#020509;
+}
+.s5-video-watch__player.is-following>p{display:none!important;}
+.s5-follow-tools{
+  position:absolute;
+  top:8px;
+  right:8px;
+  z-index:90;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.s5-follow-tools[hidden]{display:none!important;}
+.s5-follow-tools button{
+  min-height:34px;
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:999px;
+  background:rgba(6,9,13,.78);
+  backdrop-filter:blur(12px);
+  color:#fff;
+  cursor:pointer;
+  font:inherit;
+  font-size:10px;
+  font-weight:720;
+  line-height:1;
+}
+.s5-follow-tools button:hover,
+.s5-follow-tools button:focus-visible{
+  border-color:rgba(255,255,255,.72);
+  background:rgba(6,9,13,.95);
+  outline:2px solid rgba(255,255,255,.88);
+  outline-offset:2px;
+}
+.s5-follow-close{
+  width:34px;
+  padding:0!important;
+  font-size:19px!important;
+  font-weight:400!important;
+}
+@media(max-width:760px){
+  .s5-video-embed__frame.is-following,
+  .s5-video-watch__player.is-following{
+    right:12px;
+    bottom:max(12px,env(safe-area-inset-bottom));
+    width:min(330px,calc(100vw - 24px));
+    border-radius:8px;
+  }
+  .s5-follow-back{font-size:9px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  .s5-video-embed__frame.is-following,
+  .s5-video-watch__player.is-following{transition:none!important;}
+}
