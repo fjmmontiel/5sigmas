@@ -40,7 +40,15 @@ def run(args):
    links=f.locator('[data-current-collection="true"] [data-s5-direct-entry]')
    check('reader-all-series-entries',links.count()>=6,links.count())
    check('reader-current-chapter-labelled',f.locator('[data-current-collection="true"] [aria-current="page"]').count()==1)
-   shot('02-reader-chapter-index');href=links.nth(1).get_attribute('href');links.nth(1).click();f=ready()
+   shot('02-reader-chapter-index')
+   target=links.nth(1);href=target.get_attribute('href')
+   if not target.is_visible():
+    toggle=f.locator('[data-s5-reader-direct-open]')
+    check('reader-compact-drawer-trigger-present',toggle.count()==1,toggle.count())
+    if toggle.count():
+     toggle.click()
+     f.locator('[data-s5-reader-direct].is-open').wait_for(state='visible')
+   target.click();f=ready()
    check('reader-jump-works',page.evaluate('S.route')==href)
   page.locator('#home').click();f=ready();check('catalog-search-persists-after-reading',f.locator('[data-sx-search]').input_value()=='prefill')
   f.locator('[data-sx-search]').fill('');page.wait_for_timeout(80)
