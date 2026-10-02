@@ -8,16 +8,16 @@
 /* Restore a recognisable 5σ monogram instead of a generic app tile. */
 .md-header__button.md-logo {
   display: grid;
-  width: 2.9rem;
-  height: 2.4rem;
-  margin: 0 .25rem 0 0 !important;
+  width: 2.55rem;
+  height: 2.25rem;
+  margin: 0 .12rem 0 0 !important;
   padding: 0 !important;
   place-items: center;
 }
 
 .md-logo img {
-  width: 2.55rem !important;
-  height: 2.05rem !important;
+  width: 2.25rem !important;
+  height: 1.82rem !important;
   object-fit: contain;
   object-position: center;
 }
@@ -28,9 +28,9 @@
 
 .md-header__title {
   margin-left: 0 !important;
-  font-size: .9rem !important;
+  font-size: .86rem !important;
   font-weight: 800 !important;
-  letter-spacing: -.04em !important;
+  letter-spacing: -.035em !important;
 }
 
 /* Keep search and shell controls readable in both themes. */
@@ -175,8 +175,9 @@ article:has(.ctxmix) .s5-video-embed__watch {
 
   .md-header__button.md-logo {
     order: 1;
-    width: 2.65rem;
-    margin-left: .1rem !important;
+    width: 2.45rem;
+    margin-left: .06rem !important;
+    margin-right: 0 !important;
   }
 
   .md-header__title {
