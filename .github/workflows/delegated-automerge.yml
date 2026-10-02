@@ -1,0 +1,107 @@
+name: Merge delegated owner PRs
+
+on:
+  workflow_run:
+    workflows:
+      - Delegated PR quality
+    types:
+      - completed
+
+permissions:
+  checks: read
+  contents: write
+  pull-requests: write
+  statuses: read
+
+concurrency:
+  group: delegated-automerge-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Resolve trusted owner PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          payload="$(gh api             -H 'Accept: application/vnd.github+json'             "/repos/$REPO/commits/$HEAD_SHA/pulls")"
+          pr_number="$(jq -r 'map(select(.state == "open")) | first | .number // empty' <<<"$payload")"
+          if [[ -z "$pr_number" ]]; then
+            echo "No open PR for $HEAD_SHA; nothing to merge."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          pr="$(gh api "/repos/$REPO/pulls/$pr_number")"
+          author="$(jq -r '.user.login' <<<"$pr")"
+          head_repo="$(jq -r '.head.repo.full_name' <<<"$pr")"
+          draft="$(jq -r '.draft' <<<"$pr")"
+          if [[ "$author" != "$OWNER" || "$head_repo" != "$REPO" || "$draft" != "false" ]]; then
+            echo "PR #$pr_number is not an eligible same-repository owner PR."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "eligible=true" >> "$GITHUB_OUTPUT"
+          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for every head check to settle green
+        if: steps.pr.outputs.eligible == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          for attempt in {1..180}; do
+            checks="$(gh api               -H 'Accept: application/vnd.github+json'               "/repos/$REPO/commits/$HEAD_SHA/check-runs?per_page=100")"
+            statuses="$(gh api               -H 'Accept: application/vnd.github+json'               "/repos/$REPO/commits/$HEAD_SHA/status")"
+
+            pending_checks="$(jq '[.check_runs[] | select(.status != "completed")] | length' <<<"$checks")"
+            failed_checks="$(jq '[.check_runs[] | select(
+              .status == "completed" and
+              (.conclusion != "success" and .conclusion != "neutral" and .conclusion != "skipped")
+            )] | length' <<<"$checks")"
+            failed_statuses="$(jq '[.statuses[] | select(.state == "failure" or .state == "error")] | length' <<<"$statuses")"
+            pending_statuses="$(jq '[.statuses[] | select(.state == "pending")] | length' <<<"$statuses")"
+
+            if (( failed_checks > 0 || failed_statuses > 0 )); then
+              echo "At least one head check failed; delegated merge stops."
+              exit 1
+            fi
+            if (( pending_checks == 0 && pending_statuses == 0 )); then
+              echo "All head checks settled green."
+              exit 0
+            fi
+
+            echo "Waiting for head checks: $pending_checks check-runs, $pending_statuses statuses pending."
+            sleep 30
+          done
+          echo "Timed out waiting for the PR head checks."
+          exit 1
+
+      - name: Squash merge delegated PR
+        if: steps.pr.outputs.eligible == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          current_sha="$(gh api "/repos/$REPO/pulls/$PR_NUMBER" --jq '.head.sha')"
+          if [[ "$current_sha" != "$HEAD_SHA" ]]; then
+            echo "PR head moved from $HEAD_SHA to $current_sha; refusing stale merge."
+            exit 1
+          fi
+          gh pr merge "$PR_NUMBER" --repo "$REPO" --squash --delete-branch
