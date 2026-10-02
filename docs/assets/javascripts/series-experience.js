@@ -9,6 +9,10 @@
   let disposeHub = null;
 
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let pointerIntentAt=0;
+  window.addEventListener('pointermove',event=>{
+    if(event.pointerType==='mouse')pointerIntentAt=performance.now();
+  },{passive:true});
 
   function progressKey(en){ return 's5:series-progress:v1:'+(en?'en':'es'); }
 
@@ -90,9 +94,13 @@
       video.remove();
       video=null;
     };
-    art.addEventListener('pointerenter',event=>{ if(event.pointerType!=='touch')start(); });
+    art.addEventListener('pointerenter',event=>{
+      const deliberate=event.pointerType!=='touch' && pointerIntentAt>0 && performance.now()-pointerIntentAt<650;
+      if(deliberate)start();
+    });
     art.addEventListener('pointerleave',stop);
     art.addEventListener('blur',stop,true);
+    window.addEventListener('pagehide',stop);
   }
 
   function initializeFollowPlayer(player,video,en){
