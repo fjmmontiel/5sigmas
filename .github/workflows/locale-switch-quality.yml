@@ -1,19 +1,21 @@
 name: Locale switch quality
 
 on:
-  pull_request:
-    paths:
-      - 'mkdocs.yml'
-      - 'mkdocs.en.yml'
-      - 'locales/**'
-      - 'discovery/**'
-      - 'hooks/**'
-      - 'overrides/**'
-      - 'overrides_locale/**'
-      - 'scripts/validate_locale_switching.mjs'
-      - 'scripts/prepare_modelos_r2_ci_media.sh'
-      - '.github/workflows/locale-switch-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 

@@ -1,13 +1,20 @@
 name: First-party measurement contract
 
 on:
-  pull_request:
-    paths:
-      - 'docs/assets/javascripts/measurement.js'
-      - 'docs/javascripts/external-links.js'
-      - 'scripts/test_measurement_contract.mjs'
-      - 'MEASUREMENT.md'
-      - '.github/workflows/measurement-contract.yml'
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   push:
     branches: [main]
     paths:
@@ -17,6 +24,7 @@ on:
       - 'MEASUREMENT.md'
       - '.github/workflows/measurement-contract.yml'
 
+  workflow_dispatch:
 permissions:
   contents: read
 
