@@ -82,6 +82,12 @@ jobs:
       - name: Verify complete Fundamentos F1 exact release assets
         run: python3 scripts/verify_fundamentos_f1_release.py
 
+      - name: Verify exact owner-authorized IA PIB bienestar W1 MP4 bytes
+        run: sha256sum -c .github/receipts/ia-pib-bienestar-w1-20261002.sha256
+
+      - name: Verify complete IA PIB bienestar W1 exact release assets
+        run: python3 scripts/verify_ia_pib_bienestar_w1_release.py
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
