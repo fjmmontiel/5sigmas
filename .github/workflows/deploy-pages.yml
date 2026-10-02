@@ -31,6 +31,18 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enforce delegated CI architecture
+        run: python scripts/audit_ci_storage_policy.py
+
+      - name: Validate first-party measurement contract
+        run: |
+          node scripts/test_measurement_contract.mjs
+          node --check docs/assets/javascripts/measurement.js
+
       - name: Regenerate Modelos R2 posters from exact approved MP4s
         shell: bash
         run: |

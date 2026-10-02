@@ -2,11 +2,7 @@ name: Interactive tools quality
 
 on:
   workflow_call:
-  workflow_dispatch:
 
-concurrency:
-  group: interactive-tools-quality-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -27,6 +23,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Audit published ES/EN tool shells
+        run: |
+          mkdir -p seo-audit
+          python scripts/tests/test_audit_tool_seo_geo_shell.py
+          python scripts/audit_tool_seo_geo_shell.py --output seo-audit/tool-seo-geo-shell.json
 
       - uses: actions/setup-node@v4
         with:

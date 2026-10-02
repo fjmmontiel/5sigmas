@@ -2,15 +2,15 @@ name: PR visual review
 
 on:
   workflow_call:
-  workflow_dispatch:
+    inputs:
+      base_sha:
+        required: true
+        type: string
 
 permissions:
   actions: read
   contents: read
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   build-and-capture:
@@ -103,8 +103,8 @@ jobs:
       - name: Capture representative frames from changed public videos
         shell: bash
         run: |
-          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
-          git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD > /tmp/pr-changed-files.txt
+          git fetch --no-tags --depth=1 origin "${{ inputs.base_sha }}"
+          git diff --name-only "${{ inputs.base_sha }}" HEAD > /tmp/pr-changed-files.txt
           mapfile -t changed_videos < <(
             grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' /tmp/pr-changed-files.txt || true
           )
@@ -130,7 +130,7 @@ jobs:
         run: |
           set -euo pipefail
           protected="$(
-            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- \
+            git diff --name-only "${{ inputs.base_sha }}" HEAD -- \
               docs/series/modelos-razonadores locales/en/series/modelos-razonadores \
               docs/series/seguridad-ia locales/en/series/seguridad-ia \
               docs/series/evaluating-ai-systems-production locales/en/series/evaluating-ai-systems-production \
@@ -159,7 +159,7 @@ jobs:
         run: python3 scripts/verify_coding_c1_release.py --site-dir site
 
       - name: Verify approved batch exact media, text preservation and discovery
-        run: python3 scripts/verify_approved_video_batch_release.py --site-dir site --base-ref "${{ github.event.pull_request.base.sha }}"
+        run: python3 scripts/verify_approved_video_batch_release.py --site-dir site --base-ref "${{ inputs.base_sha }}"
 
       - name: Audit generated SEO crawl
         run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
@@ -173,6 +173,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Validate first-party measurement contract
+        run: |
+          node scripts/test_measurement_contract.mjs
+          node --check docs/assets/javascripts/measurement.js
 
       - name: Install Playwright
         run: |

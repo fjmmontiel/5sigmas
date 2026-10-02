@@ -2,21 +2,15 @@ name: English mirror quality
 
 on:
   workflow_call:
-  workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   series-mirror:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
-    env:
-      S5_LOCALE: en
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +27,16 @@ jobs:
       - name: Prepare exact Modelos R2 media for discovery checks
         run: bash scripts/prepare_modelos_r2_ci_media.sh
 
+      - name: Audit English editorial quality
+        run: |
+          mkdir -p artifacts/english-editorial-quality
+          python scripts/audit_english_editorial_quality.py --strict --json artifacts/english-editorial-quality/markdown-report.json
+          python scripts/audit_english_ordered_list_quality.py --strict --json artifacts/english-editorial-quality/ordered-list-report.json
+          python scripts/audit_english_html_editorial_quality.py --strict --json artifacts/english-editorial-quality/html-report.json
+
+      - name: Build Spanish site for bilingual route checks
+        run: mkdocs build --clean --strict
+
       - name: Prepare strict English locale
         run: python scripts/prepare_locale.py --locale en
 
@@ -40,6 +44,8 @@ jobs:
         run: python scripts/audit_locale.py --locale en
 
       - name: Build English locale strictly
+        env:
+          S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
       - name: Audit rendered English locale
@@ -63,6 +69,29 @@ jobs:
           done
           cat /tmp/5sigmas-en-mirror.log
           exit 1
+
+      - name: Validate bilingual locale switching
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate focused English Reasoning and Energy visuals
+        run: |
+          set -euo pipefail
+          validators=(
+            scripts/validate_english_energy_ch2_bottlenecks.mjs
+            scripts/validate_english_reasoning_ch1.mjs
+            scripts/validate_english_reasoning_ch2.mjs
+            scripts/validate_english_reasoning_ch2_cot.mjs
+            scripts/validate_english_reasoning_ch2_failure_types.mjs
+            scripts/validate_english_reasoning_ch2_spec_gaming.mjs
+            scripts/validate_english_reasoning_ch3.mjs
+            scripts/validate_english_reasoning_ch4.mjs
+            scripts/validate_english_reasoning_ch5.mjs
+          )
+          for validator in "${validators[@]}"; do
+            echo "::group::$validator"
+            node "$validator"
+            echo "::endgroup::"
+          done
 
       - name: Validate English series mirror under series 07+ video rollback
         run: node scripts/validate_english_series_video_rollback.mjs
