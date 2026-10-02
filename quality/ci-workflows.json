@@ -7,7 +7,11 @@
       "workflow": ".github/workflows/ci-storage-policy.yml",
       "suite": "core",
       "paths": [
-        ".github/workflows/**"
+        ".github/workflows/**",
+        "quality/ci-workflows.json",
+        "scripts/plan_pr_quality.py",
+        "scripts/validate_ci_manager.py",
+        ".github/workflows/pr-quality-manager.yml"
       ]
     },
     {
