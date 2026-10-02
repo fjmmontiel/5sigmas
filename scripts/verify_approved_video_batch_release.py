@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse,hashlib,json,os,re,subprocess,time
 from pathlib import Path
 from urllib.parse import urlsplit
+from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 ROOT=Path(__file__).resolve().parents[1]
 def objects(v):
@@ -21,8 +22,18 @@ def main():
   if path in cache:return cache[path]
   if a.origin:
    url=a.origin.rstrip('/')+'/'+path;sep='&' if '?' in url else '?'
-   req=Request(url+sep+'revision='+a.revision,headers={'Cache-Control':'no-cache','User-Agent':'5sigmas-c3-release-check/1'})
-   with urlopen(req,timeout=60) as r:assert r.status==200;value=r.read()
+   target=url+sep+'revision='+a.revision
+   transient={500,502,503,504}
+   for attempt in range(4):
+    req=Request(target,headers={'Cache-Control':'no-cache','User-Agent':'5sigmas-approved-batch-release-check/2'})
+    try:
+     with urlopen(req,timeout=60) as r:assert r.status==200;value=r.read()
+     break
+    except HTTPError as exc:
+     if exc.code not in transient or attempt==3:raise
+    except URLError:
+     if attempt==3:raise
+    time.sleep(2**attempt)
   else:
    rel=path+'index.html' if path.endswith('/') else path;value=(ROOT/a.site_dir/rel).read_bytes()
   cache[path]=value;return value
