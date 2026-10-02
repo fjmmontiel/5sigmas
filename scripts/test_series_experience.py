@@ -14,7 +14,9 @@ def check(site: Path, output: Path):
         hub=BeautifulSoup((site/locale/'series/index.html').read_text(),'lxml')
         cards=hub.select('[data-sx-card]');details=hub.select('[data-sx-detail]');chapters=hub.select('[data-sx-chapter-url]')
         assert len(cards)==13 and len(details)==13 and len(chapters)==67
-        assert len(hub.select('[data-sx-card] svg[role="img"][aria-label]'))==13
+        assert len(hub.select('[data-sx-card] .sx-card-poster'))==13
+        assert len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))==13
+        assert not hub.select('[data-sx-card] [data-sx-card-video][src]'), 'Series previews must remain lazy until user intent'
         assert sum(len(d.select('[data-sx-chapter-url]')) for d in details[6:])==40
         assert len(hub.select('.sx-path'))==4
         assert not hub.select('a[href*="#mecanismo"]'), 'Series cards must not point to discarded guided mechanisms'
@@ -44,7 +46,7 @@ def check(site: Path, output: Path):
             if doc.select_one(VISUAL_SELECTOR): originals+=1
         assert advanced==40, advanced
         assert originals==39, originals
-        results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':advanced,'golden_visuals_direct':originals,'guided_replacements':0,'inline_players':len(players)})
+        results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':advanced,'golden_visuals_direct':originals,'guided_replacements':0,'inline_players':len(players),'editorial_covers':len(hub.select('[data-sx-card] .sx-card-poster')),'lazy_motion_previews':len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))})
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps({'status':'PASS','checks':results},ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'status':'PASS','series_per_locale':13,'chapters_per_locale':67,'advanced_chapters_per_locale':40,'golden_visuals_direct':[x['golden_visuals_direct'] for x in results],'guided_replacements':0}))
