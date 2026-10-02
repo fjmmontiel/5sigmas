@@ -175,33 +175,143 @@ series/multimodalidad-iag/05-riesgos.md:
 series/fundamentos-ia-iag/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI and Generative AI Foundations
-  video_duration: PT53S
-
+  video_title: A map of tasks and systems
+  video_summary: The output format determines which errors we need to measure.
+  video_date: '2026-09-28'
+  video_duration: PT129.616667S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: What must the system produce?
+    start: 0.0
+    end: 21.55
+  - name: A model is not the entire product
+    start: 21.55
+    end: 43.1
+  - name: Three questions, not three synonyms
+    start: 43.1
+    end: 64.65
+  - name: One request can use several components
+    start: 64.65
+    end: 86.516667
+  - name: Training is one step, not completion
+    start: 86.516667
+    end: 108.066667
+  - name: Capability and autonomy are different
+    start: 108.066667
+    end: 129.616667
 series/fundamentos-ia-iag/01-que-es-ia.md:
   video: 01-que-es-ia.mp4
   video_poster: 01-que-es-ia.jpg
-  video_title: What is AI?
-  video_duration: PT1M3S
-
+  video_title: What an AI system learns
+  video_summary: 'Generating content describes a purpose: deep networks can also classify, not only generate.'
+  video_date: '2026-09-28'
+  video_duration: PT131.766667S
+  video_captions: 01-que-es-ia-visual-text.vtt
+  video_transcript: 01-que-es-ia-transcript.html
+  video_chapters:
+  - name: Technical family and purpose are different
+    start: 0.0
+    end: 21.55
+  - name: A tree learns a concrete question
+    start: 21.55
+    end: 43.8
+  - name: Counting frequencies does not prove causation
+    start: 43.8
+    end: 65.35
+  - name: The center moves toward its examples
+    start: 65.35
+    end: 86.9
+  - name: A neuron computes, compares and updates
+    start: 86.9
+    end: 109.516667
+  - name: Tomorrow’s data can change
+    start: 109.516667
+    end: 131.766667
 series/fundamentos-ia-iag/02-que-es-ia-generativa.md:
   video: 02-que-es-ia-generativa.mp4
   video_poster: 02-que-es-ia-generativa.jpg
-  video_title: What is Generative AI?
-  video_duration: PT1M3S
-
+  video_title: How a generative response is built
+  video_summary: Closeness depends on the model and task; it does not guarantee two statements are equivalent.
+  video_date: '2026-09-28'
+  video_duration: PT130.95S
+  video_captions: 02-que-es-ia-generativa-visual-text.vtt
+  video_transcript: 02-que-es-ia-generativa-transcript.html
+  video_chapters:
+  - name: Representation enables comparison
+    start: 0.0
+    end: 21.866667
+  - name: The same word receives different context
+    start: 21.866667
+    end: 44.116667
+  - name: A distribution before the next token
+    start: 44.116667
+    end: 65.983333
+  - name: Providing examples does not update weights
+    start: 65.983333
+    end: 87.533333
+  - name: Retrieval adds evidence, not certainty
+    start: 87.533333
+    end: 109.4
+  - name: Proposing an action is not executing it
+    start: 109.4
+    end: 130.95
 series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md:
   video: 03-ia-vs-ia-generativa.mp4
   video_poster: 03-ia-vs-ia-generativa.jpg
-  video_title: Classical AI vs Generative AI
-  video_duration: PT1M3S
-
+  video_title: Choosing and evaluating a configuration
+  video_summary: Fluent text replaces neither risk validation nor fact-checking its claims.
+  video_date: '2026-09-28'
+  video_duration: PT130.95S
+  video_captions: 03-ia-vs-ia-generativa-visual-text.vtt
+  video_transcript: 03-ia-vs-ia-generativa-transcript.html
+  video_chapters:
+  - name: A score and a text need different evaluation
+    start: 0.0
+    end: 21.866667
+  - name: Temperature changes the probability allocation
+    start: 21.866667
+    end: 44.05
+  - name: An explanation must be testable
+    start: 44.05
+    end: 65.6
+  - name: A metric depends on which error it counts
+    start: 65.6
+    end: 87.85
+  - name: Who chooses the next step?
+    start: 87.85
+    end: 109.4
+  - name: First define testable requirements
+    start: 109.4
+    end: 130.95
 series/fundamentos-ia-iag/04-agi.md:
   video: 04-agi.mp4
   video_poster: 04-agi.jpg
-  video_title: "AGI: Artificial General Intelligence"
-  video_duration: PT1M3S
-
+  video_title: What evaluating generality means
+  video_summary: Describe depth and breadth separately; a performance peak does not cover the whole map.
+  video_date: '2026-09-28'
+  video_duration: PT132.083333S
+  video_captions: 04-agi-visual-text.vtt
+  video_transcript: 04-agi-transcript.html
+  video_chapters:
+  - name: Excelling at one task does not measure all generality
+    start: 0.0
+    end: 21.866667
+  - name: Generalization requires real separation
+    start: 21.866667
+    end: 43.416667
+  - name: A permission does not demonstrate intelligence
+    start: 43.416667
+    end: 64.966667
+  - name: Failures accumulate along a chain
+    start: 64.966667
+    end: 87.966667
+  - name: The metric can diverge from the goal
+    start: 87.966667
+    end: 109.516667
+  - name: A useful definition says how to test it
+    start: 109.516667
+    end: 132.083333
 series/ia-pib-bienestar-energia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg

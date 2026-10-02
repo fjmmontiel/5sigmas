@@ -76,6 +76,9 @@ jobs:
       - name: Verify 60 exact owner-approved batch MP4 hashes
         run: sha256sum -c .github/receipts/approved-video-batch-20260928.sha256
 
+      - name: Verify exact owner-approved Fundamentos F1 MP4 bytes
+        run: sha256sum -c .github/receipts/fundamentos-f1-20261002.sha256
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
