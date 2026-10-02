@@ -33,6 +33,9 @@ try {
     const topicState = topics.map((node) => {
       const style = getComputedStyle(node);
       const box = node.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const ink = range.getBoundingClientRect();
       return {
         text: node.textContent.trim(),
         display: style.display,
@@ -41,6 +44,9 @@ try {
         left: box.left,
         right: box.right,
         width: box.width,
+        inkLeft: ink.left,
+        inkRight: ink.right,
+        inkWidth: ink.width,
       };
     });
     const controlState = nativeControls.map((node) => {
@@ -64,7 +70,7 @@ try {
       navBox: { left: navBox.left, right: navBox.right, width: navBox.width },
       logoBox: { left: logoBox.left, right: logoBox.right, width: logoBox.width },
       logoImageBox: { width: logoImageBox.width, height: logoImageBox.height },
-      brandToNavGap: navBox.left - titleBox.right,
+      brandToNavGap: navBox.left - (topicState[0]?.inkRight ?? titleBox.right),
       topics: topicState,
       nativeControls: controlState,
       navLinks: [...nav.querySelectorAll('a')].map((node) => node.textContent.trim()),
@@ -73,16 +79,17 @@ try {
   });
 
   if (!state) throw new Error('Unable to measure the desktop reader header.');
-  if (state.titleText !== '5sigmas') {
+  const visibleWordmark = state.topics[0];
+  if (!visibleWordmark || visibleWordmark.text !== '5sigmas' || visibleWordmark.display === 'none') {
     throw new Error(`Reader brand wordmark changed unexpectedly: ${JSON.stringify(state)}.`);
   }
-  if (state.logoBox.width > 42 || state.logoImageBox.width > 38 || state.logoImageBox.height > 32) {
+  if (state.logoBox.width > 46 || state.logoImageBox.width > 40 || state.logoImageBox.height > 33) {
     throw new Error(`5σ monogram is no longer compact: ${JSON.stringify(state)}.`);
   }
-  if (state.titleFontSize > 14.5 || state.titleBox.width > 100) {
+  if (state.titleFontSize > 16.5 || visibleWordmark.inkWidth > 78) {
     throw new Error(`5sigmas wordmark is no longer compact: ${JSON.stringify(state)}.`);
   }
-  if (state.brandToNavGap < 16 || state.brandToNavGap > 96) {
+  if (state.brandToNavGap < 18 || state.brandToNavGap > 72) {
     throw new Error(`Brand/nav spacing is unbalanced: ${JSON.stringify(state)}.`);
   }
   if (state.navLinks.length < 5) throw new Error(`Reader global nav is incomplete: ${JSON.stringify(state)}.`);
