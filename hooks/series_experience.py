@@ -105,7 +105,7 @@ def card_visual(s, label):
     video=source.get('video')
     if not poster:
         return cover(s)
-    preview=(f'<video class="sx-card-preview" muted playsinline preload="none" data-sx-card-video data-src="{esc(video)}" aria-hidden="true" tabindex="-1"></video>' if video else '')
+    preview=(f'<span class="sx-card-preview-slot" data-sx-card-video data-src="{esc(video)}" aria-hidden="true"></span>' if video else '')
     return (
         f'<span class="sx-card-cover" data-sx-card-cover>'
         f'<img class="sx-card-poster" src="{esc(poster)}" alt="" loading="lazy" decoding="async" aria-hidden="true">'
