@@ -84,57 +84,70 @@
   function initializeFollowPlayer(player,video,en){
     if(!player||!video||player.dataset.followReady)return;
     player.dataset.followReady='true';
-    const shell=document.createElement('div');
-    shell.className='sx-player-follow-shell';
-    player.before(shell);shell.appendChild(player);
+    let placeholder=null,tools=null,back=null,close=null;
     let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
-    const tools=document.createElement('div');tools.className='sx-follow-tools';tools.hidden=true;
-    const back=document.createElement('button');back.type='button';back.className='sx-follow-back';
-    back.textContent=en?'Back to video':'Volver al vídeo';
-    const close=document.createElement('button');close.type='button';close.className='sx-follow-close';
-    close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
-    tools.append(back,close);player.appendChild(tools);
+
+    const ensureScaffold=()=>{
+      if(placeholder)return;
+      placeholder=document.createElement('div');
+      placeholder.className='sx-player-follow-placeholder';
+      placeholder.setAttribute('aria-hidden','true');
+      player.before(placeholder);
+      tools=document.createElement('div');tools.className='sx-follow-tools';tools.hidden=true;
+      back=document.createElement('button');back.type='button';back.className='sx-follow-back';
+      back.textContent=en?'Back to video':'Volver al vídeo';
+      close=document.createElement('button');close.type='button';close.className='sx-follow-close';
+      close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
+      tools.append(back,close);player.appendChild(tools);
+      back.addEventListener('click',()=>{
+        placeholder.scrollIntoView({block:'center',behavior:reduced.matches?'auto':'smooth'});
+        requestAnimationFrame(schedule);
+      });
+      close.addEventListener('click',()=>{
+        video.pause();suppressed=true;setFloating(false);
+      });
+    };
     const captureHeight=()=>{
       if(floating)return;
       normalHeight=Math.max(normalHeight,player.getBoundingClientRect().height);
-      if(normalHeight>0)shell.style.minHeight=normalHeight+'px';
     };
     const setFloating=value=>{
       if(floating===value)return;
-      if(value)captureHeight();
+      if(value){
+        ensureScaffold();captureHeight();
+        placeholder.style.height=Math.max(1,normalHeight)+'px';
+      }else if(placeholder){
+        placeholder.style.height='0px';
+      }
       floating=value;
       player.classList.toggle('is-following',value);
-      tools.hidden=!value;
+      if(tools)tools.hidden=!value;
     };
     const evaluate=()=>{
-      raf=0;captureHeight();
-      const rect=shell.getBoundingClientRect();
+      raf=0;
+      if(!interacted||!placeholder)return;
+      captureHeight();
+      const anchor=floating?placeholder:player;
+      const rect=anchor.getBoundingClientRect();
+      const height=Math.max(1,rect.height||normalHeight||1);
       const visible=Math.max(0,Math.min(rect.bottom,innerHeight)-Math.max(rect.top,0));
-      const ratio=visible/Math.max(1,Math.min(rect.height||normalHeight||1,innerHeight));
+      const ratio=visible/Math.max(1,Math.min(height,innerHeight));
       const passedTop=rect.top<72;
-      if(interacted&&!suppressed&&!video.ended&&passedTop&&ratio<0.18)setFloating(true);
+      if(!suppressed&&!video.ended&&passedTop&&ratio<0.18)setFloating(true);
       else if(floating&&ratio>0.52)setFloating(false);
     };
-    const schedule=()=>{ if(!raf)raf=requestAnimationFrame(evaluate); };
+    function schedule(){if(!raf)raf=requestAnimationFrame(evaluate)}
     video.addEventListener('play',()=>{
-      interacted=true;
+      ensureScaffold();interacted=true;
       if(!floating)suppressed=false;
-      schedule();
+      captureHeight();schedule();
     });
     video.addEventListener('ended',()=>{interacted=false;suppressed=false;setFloating(false);});
-    back.addEventListener('click',()=>{
-      shell.scrollIntoView({block:'center',behavior:reduced.matches?'auto':'smooth'});
-      requestAnimationFrame(schedule);
-    });
-    close.addEventListener('click',()=>{
-      video.pause();suppressed=true;setFloating(false);
-    });
     window.addEventListener('scroll',schedule,{passive:true});
     window.addEventListener('resize',schedule,{passive:true});
     document.addEventListener('keydown',event=>{
       if(event.key==='Escape'&&floating){video.pause();suppressed=true;setFloating(false);}
     });
-    captureHeight();
   }
 
   function initializePlayer(player, en) {
