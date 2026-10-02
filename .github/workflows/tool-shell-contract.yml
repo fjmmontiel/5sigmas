@@ -1,20 +1,24 @@
 name: Tool SEO GEO shell contract
 
 on:
-  pull_request:
-    paths:
-      - 'docs/herramientas/**'
-      - 'locales/en/tools/**'
-      - 'docs/llms.txt'
-      - 'locales/en/llms.txt'
-      - 'tools/locale-en.yml'
-      - 'scripts/audit_tool_seo_geo_shell.py'
-      - 'scripts/tests/test_audit_tool_seo_geo_shell.py'
-      - '.github/workflows/tool-shell-contract.yml'
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
 
 concurrency:
-  group: tool-seo-geo-shell-${{ github.event.pull_request.number || github.ref }}
+  group: tool-seo-geo-shell-${{ inputs.pr_number || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:

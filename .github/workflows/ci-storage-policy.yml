@@ -1,16 +1,27 @@
 name: CI storage policy
 
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.pr_number || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -19,6 +30,9 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate centralized PR workflow management
+        run: python scripts/validate_ci_manager.py
 
       - name: Reject wasteful Actions artifacts
         shell: bash
