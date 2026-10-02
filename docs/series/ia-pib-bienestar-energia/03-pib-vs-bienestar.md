@@ -7,8 +7,33 @@ tags:
   - Economía
   - Bienestar
   - IA
-video: "03-pib-vs-bienestar.mp4"
-video_duration: "PT52S"
+video: 03-pib-vs-bienestar.mp4
+video_duration: PT134.65S
+video_poster: 03-pib-vs-bienestar.jpg
+video_title: Qué mide el PIB y qué deja fuera
+video_summary: 'A precios del primer periodo, el volumen pasa de cien a doscientos: distingue PIB nominal y real.'
+video_date: '2026-09-28'
+video_captions: 03-pib-vs-bienestar-visual-text.vtt
+video_transcript: 03-pib-vs-bienestar-transcript.html
+video_chapters:
+- name: El precio puede ocultar un cambio de cantidad
+  start: 0.0
+  end: 22.616667
+- name: El servicio y su medición no son idénticos
+  start: 22.616667
+  end: 44.866667
+- name: El total puede subir y la cifra por persona bajar
+  start: 44.866667
+  end: 66.416667
+- name: Producto bruto y neto son distintos
+  start: 66.416667
+  end: 89.033333
+- name: El tiempo también puede cambiar sin más producción
+  start: 89.033333
+  end: 110.583333
+- name: El gasto no equivale a todo el valor recibido
+  start: 110.583333
+  end: 134.65
 ---
 
 # Capítulo 3 — Medición: PIB vs bienestar
