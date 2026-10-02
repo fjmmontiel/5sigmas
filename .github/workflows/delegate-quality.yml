@@ -15,9 +15,10 @@ on:
           - core
           - reader
           - series
+          - owner
           - english
-          - locale
           - tools
+          - topics
 
 permissions:
   actions: read
@@ -32,56 +33,94 @@ jobs:
     name: Plan delegated suites
     runs-on: ubuntu-latest
     outputs:
+      base_sha: ${{ steps.plan.outputs.base_sha }}
+      head_sha: ${{ steps.plan.outputs.head_sha }}
       core: ${{ steps.plan.outputs.core }}
       series: ${{ steps.plan.outputs.series }}
       owner: ${{ steps.plan.outputs.owner }}
       english: ${{ steps.plan.outputs.english }}
-      locale: ${{ steps.plan.outputs.locale }}
       tools: ${{ steps.plan.outputs.tools }}
+      topics: ${{ steps.plan.outputs.topics }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: plan
-        name: Route changed files to autonomous suites
+        name: Route changed files to autonomous workers
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           DELEGATED_SUITE: ${{ inputs.suite || 'auto' }}
         run: python scripts/ci_plan.py
 
+  policy:
+    name: Delegation policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/audit_ci_storage_policy.py
+
   core:
     name: Core E2E
     needs: plan
     if: needs.plan.outputs.core == 'true'
     uses: ./.github/workflows/pr-visual-review.yml
+    with:
+      base_sha: ${{ needs.plan.outputs.base_sha }}
 
   series:
     name: Series UX
     needs: plan
     if: needs.plan.outputs.series == 'true'
     uses: ./.github/workflows/series-ui-review.yml
-
-  owner-review:
-    name: Series owner review
-    needs: plan
-    if: needs.plan.outputs.owner == 'true'
-    uses: ./.github/workflows/series-owner-workbench.yml
+    with:
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      owner_review: ${{ needs.plan.outputs.owner == 'true' }}
 
   english:
-    name: English mirror
+    name: English + locale
     needs: plan
     if: needs.plan.outputs.english == 'true'
     uses: ./.github/workflows/english-mirror-quality.yml
-
-  locale:
-    name: Locale routing
-    needs: plan
-    if: needs.plan.outputs.locale == 'true'
-    uses: ./.github/workflows/locale-switch-quality.yml
 
   tools:
     name: Tools
     needs: plan
     if: needs.plan.outputs.tools == 'true'
     uses: ./.github/workflows/tools-quality.yml
+
+  topics:
+    name: Topics
+    needs: plan
+    if: needs.plan.outputs.topics == 'true'
+    uses: ./.github/workflows/topic-quality.yml
+
+  result:
+    name: Delegated quality result
+    if: always()
+    needs: [plan, policy, core, series, english, tools, topics]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every delegated worker to settle green
+        env:
+          PLAN: ${{ needs.plan.result }}
+          POLICY: ${{ needs.policy.result }}
+          CORE: ${{ needs.core.result }}
+          SERIES: ${{ needs.series.result }}
+          ENGLISH: ${{ needs.english.result }}
+          TOOLS: ${{ needs.tools.result }}
+          TOPICS: ${{ needs.topics.result }}
+        run: |
+          set -euo pipefail
+          failed=0
+          for pair in "plan:$PLAN" "policy:$POLICY" "core:$CORE" "series:$SERIES" "english:$ENGLISH" "tools:$TOOLS" "topics:$TOPICS"; do
+            name="${pair%%:*}"
+            outcome="${pair#*:}"
+            echo "$name=$outcome"
+            if [ "$outcome" != "success" ] && [ "$outcome" != "skipped" ]; then
+              failed=1
+            fi
+          done
+          test "$failed" -eq 0
+          echo "DELEGATED_QUALITY_PASS"
