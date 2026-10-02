@@ -45,7 +45,7 @@
       if(label)label.textContent=`${count}/${total}`;
       if(bar)bar.style.width=(total?Math.round((count/total)*100):0)+'%';
       const detail=$(hub,`#serie-${CSS.escape(slug)}`);
-      $(detail||hub,'[data-sx-chapter-url]').forEach(chapter=>{
+      $$(detail||hub,'[data-sx-chapter-url]').forEach(chapter=>{
         chapter.classList.toggle('is-visited',visited.has(chapter.dataset.sxChapterUrl));
       });
     });
@@ -176,7 +176,7 @@
     const details = $$(hub, '[data-sx-detail]');
     const cards = $$(hub, '[data-sx-card]');
     const search = $(hub, '[data-sx-search]');
-    const filters = $(hub, '[data-sx-filter]');
+    const filters = $$(hub, '[data-sx-filter]');
     cards.forEach(initializeCardPreview);
     applySeriesProgress(hub,cards,en);
 
