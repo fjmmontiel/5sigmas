@@ -1,0 +1,499 @@
+{
+  "schema": 1,
+  "description": "Single source of truth for PR quality delegation. Child workflows are reusable and do not self-trigger on pull_request.",
+  "workflows": [
+    {
+      "id": "ci-storage-policy",
+      "workflow": ".github/workflows/ci-storage-policy.yml",
+      "suite": "core",
+      "paths": [
+        ".github/workflows/**"
+      ]
+    },
+    {
+      "id": "deploy-mcp-worker",
+      "workflow": ".github/workflows/deploy-mcp-worker.yml",
+      "suite": "mcp",
+      "paths": [
+        "mcp-worker/**",
+        "docs/robots.txt",
+        ".github/workflows/deploy-mcp-worker.yml"
+      ]
+    },
+    {
+      "id": "english-editorial-quality",
+      "workflow": ".github/workflows/english-editorial-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/**/*.md",
+        "locales/en/**/*.html",
+        "docs/**/*.md",
+        "locales/en/manifest.yml",
+        "scripts/audit_english_editorial_quality.py",
+        "scripts/audit_english_ordered_list_quality.py",
+        "scripts/audit_english_html_editorial_quality.py",
+        ".github/workflows/english-editorial-quality.yml"
+      ]
+    },
+    {
+      "id": "english-energy-ch2-bottlenecks-quality",
+      "workflow": ".github/workflows/english-energy-ch2-bottlenecks-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/ia-pib-bienestar-energia/02-cuellos-botella.*",
+        "locales/en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md",
+        "scripts/validate_english_energy_ch2_bottlenecks.mjs",
+        "locale_main.py",
+        ".github/workflows/english-energy-ch2-bottlenecks-quality.yml"
+      ]
+    },
+    {
+      "id": "english-mirror-quality",
+      "workflow": ".github/workflows/english-mirror-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/**",
+        "discovery/**",
+        "mkdocs.en.yml",
+        "hooks/video_sitemap_en.py",
+        "hooks/locale_alternates.py",
+        "scripts/prepare_locale.py",
+        "scripts/prepare_modelos_r2_ci_media.sh",
+        "scripts/audit_english_full_parity.py",
+        "scripts/validate_english_series_mirror.mjs",
+        "scripts/validate_english_series_video_rollback.mjs",
+        "scripts/validate_english_reasoning_ttc.mjs",
+        "scripts/validate_english_energy_ch1.mjs",
+        "scripts/validate_english_energy_ch2.mjs",
+        "scripts/validate_english_energy_ch3.mjs",
+        "scripts/validate_english_energy_complete.mjs",
+        "scripts/validate_english_energy_media.mjs",
+        "scripts/validate_english_cave_ch1.mjs",
+        "scripts/validate_english_history_ch2.mjs",
+        "scripts/validate_english_history_ch3.mjs",
+        "scripts/validate_english_caves_ch3_nlp.mjs",
+        "scripts/validate_english_caves_ch4_alexnet.mjs",
+        "scripts/validate_english_caves_ch4_transformer.mjs",
+        "scripts/validate_english_caves_ch4_remaining.mjs",
+        "scripts/validate_english_caves_ch5_agents.mjs",
+        "scripts/validate_english_caves_ch5_search.mjs",
+        "scripts/validate_english_caves_ch5_memory.mjs",
+        "scripts/validate_english_caves_complete.mjs",
+        "scripts/validate_english_caves_media.mjs",
+        "scripts/validate_english_foundations_complete.mjs",
+        "scripts/validate_english_multimodality_complete.mjs",
+        "scripts/validate_english_multimodality_ch4_metrics.mjs",
+        "scripts/validate_english_datacenters_complete.mjs",
+        "scripts/validate_english_datacenters_media.mjs",
+        "scripts/validate_english_security_complete.mjs",
+        "scripts/validate_english_security_media.mjs",
+        "scripts/validate_english_agents_media.mjs",
+        "scripts/validate_english_technical_articles.mjs",
+        "scripts/validate_english_concepts.mjs",
+        "scripts/validate_english_visual_hub.mjs",
+        "scripts/validate_english_video_hub.mjs",
+        "docs/assets/javascripts/series_energy_ai_preview.js",
+        "docs/assets/javascripts/visual-hub.js",
+        "docs/assets/javascripts/video-library.js",
+        ".github/workflows/english-mirror-quality.yml"
+      ]
+    },
+    {
+      "id": "english-reasoning-ch1-quality",
+      "workflow": ".github/workflows/english-reasoning-ch1-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/modelos-razonadores/01-*",
+        "scripts/validate_english_reasoning_ch1.mjs",
+        "locale_main.py",
+        ".github/workflows/english-reasoning-ch1-quality.yml"
+      ]
+    },
+    {
+      "id": "english-reasoning-ch2-quality",
+      "workflow": ".github/workflows/english-reasoning-ch2-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/modelos-razonadores/02-*",
+        "locales/en/snippets/modelos-razonadores/05-specification-gaming*",
+        "locales/en/series/modelos-razonadores/02-fallos.md",
+        "scripts/validate_english_reasoning_ch2.mjs",
+        "scripts/validate_english_reasoning_ch2_cot.mjs",
+        "scripts/validate_english_reasoning_ch2_failure_types.mjs",
+        "scripts/validate_english_reasoning_ch2_spec_gaming.mjs",
+        "locale_main.py",
+        ".github/workflows/english-reasoning-ch2-quality.yml"
+      ]
+    },
+    {
+      "id": "english-reasoning-ch3-quality",
+      "workflow": ".github/workflows/english-reasoning-ch3-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/modelos-razonadores/03-*",
+        "locales/en/series/modelos-razonadores/03-test-time-compute.md",
+        "scripts/validate_english_reasoning_ch3.mjs",
+        "locale_main.py",
+        ".github/workflows/english-reasoning-ch3-quality.yml"
+      ]
+    },
+    {
+      "id": "english-reasoning-ch4-quality",
+      "workflow": ".github/workflows/english-reasoning-ch4-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/modelos-razonadores/04-*",
+        "locales/en/series/modelos-razonadores/04-latencia-streaming.md",
+        "scripts/validate_english_reasoning_ch4.mjs",
+        "locale_main.py",
+        ".github/workflows/english-reasoning-ch4-quality.yml"
+      ]
+    },
+    {
+      "id": "english-reasoning-ch5-quality",
+      "workflow": ".github/workflows/english-reasoning-ch5-quality.yml",
+      "suite": "english",
+      "paths": [
+        "locales/en/snippets/modelos-razonadores/05-*",
+        "locales/en/series/modelos-razonadores/05-riesgos.md",
+        "scripts/validate_english_reasoning_ch5.mjs",
+        "locale_main.py",
+        ".github/workflows/english-reasoning-ch5-quality.yml"
+      ]
+    },
+    {
+      "id": "locale-switch-quality",
+      "workflow": ".github/workflows/locale-switch-quality.yml",
+      "suite": "core",
+      "paths": [
+        "mkdocs.yml",
+        "mkdocs.en.yml",
+        "locales/**",
+        "discovery/**",
+        "hooks/**",
+        "overrides/**",
+        "overrides_locale/**",
+        "scripts/validate_locale_switching.mjs",
+        "scripts/prepare_modelos_r2_ci_media.sh",
+        ".github/workflows/locale-switch-quality.yml"
+      ]
+    },
+    {
+      "id": "measurement-contract",
+      "workflow": ".github/workflows/measurement-contract.yml",
+      "suite": "core",
+      "paths": [
+        "docs/assets/javascripts/measurement.js",
+        "docs/javascripts/external-links.js",
+        "scripts/test_measurement_contract.mjs",
+        "MEASUREMENT.md",
+        ".github/workflows/measurement-contract.yml"
+      ]
+    },
+    {
+      "id": "pr-visual-review",
+      "workflow": ".github/workflows/pr-visual-review.yml",
+      "suite": "core",
+      "paths": [
+        "docs/**",
+        "locales/**",
+        "discovery/**",
+        "overrides/**",
+        "overrides_locale/**",
+        "hooks/**",
+        "scripts/**",
+        "mkdocs.yml",
+        "mkdocs.en.yml",
+        "main.py",
+        "locale_main.py",
+        "requirements.txt",
+        "Makefile",
+        "VIDEO_DELIVERY.md",
+        ".github/workflows/deploy-pages.yml",
+        ".github/workflows/publish-video-media.yml",
+        ".github/workflows/pr-visual-review.yml"
+      ]
+    },
+    {
+      "id": "series-owner-workbench",
+      "workflow": ".github/workflows/series-owner-workbench.yml",
+      "suite": "series",
+      "paths": [
+        ".github/workflows/series-owner-workbench.yml",
+        "docs/stylesheets/advanced-series-golden.css",
+        "docs/stylesheets/series-experience.css",
+        "docs/assets/javascripts/advanced-series-golden.js",
+        "docs/assets/javascripts/series-experience.js",
+        "scripts/build_series_owner_review.py",
+        "scripts/test_series_owner_review.py",
+        "quality/series-owner-review/reviewer.html"
+      ]
+    },
+    {
+      "id": "series-ui-review",
+      "workflow": ".github/workflows/series-ui-review.yml",
+      "suite": "series",
+      "paths": [
+        ".github/workflows/series-ui-review.yml",
+        "hooks/series_experience.py",
+        "hooks/series_curriculum.json",
+        "docs/stylesheets/series-experience.css",
+        "docs/stylesheets/advanced-series-golden.css",
+        "docs/assets/javascripts/series-experience.js",
+        "docs/assets/javascripts/advanced-series-golden.js",
+        "docs/assets/javascripts/reader-direct-navigation.js",
+        "scripts/capture_gallery_series_review.py",
+        "scripts/capture_series_ui_review.py",
+        "scripts/test_series_experience.py",
+        "scripts/test_series_navigation.py",
+        "scripts/test_publication_nav.py"
+      ]
+    },
+    {
+      "id": "tool-shell-contract",
+      "workflow": ".github/workflows/tool-shell-contract.yml",
+      "suite": "tools",
+      "paths": [
+        "docs/herramientas/**",
+        "locales/en/tools/**",
+        "docs/llms.txt",
+        "locales/en/llms.txt",
+        "tools/locale-en.yml",
+        "scripts/audit_tool_seo_geo_shell.py",
+        "scripts/tests/test_audit_tool_seo_geo_shell.py",
+        ".github/workflows/tool-shell-contract.yml"
+      ]
+    },
+    {
+      "id": "tools-quality",
+      "workflow": ".github/workflows/tools-quality.yml",
+      "suite": "tools",
+      "paths": [
+        "docs/herramientas/**",
+        "locales/en/tools/**",
+        "docs/assets/data/tools/**",
+        "docs/assets/javascripts/tools/**",
+        "docs/stylesheets/tools.css",
+        "docs/stylesheets/tools-kv-context.css",
+        "docs/stylesheets/tools-attention.css",
+        "docs/stylesheets/tools-context-budget.css",
+        "docs/stylesheets/tools-rag-retrieval.css",
+        "docs/stylesheets/tools-rag-evaluation.css",
+        "docs/stylesheets/tools-voice-latency.css",
+        "docs/stylesheets/tools-voice-cost-capacity.css",
+        "docs/stylesheets/tools-agent-reliability.css",
+        "docs/stylesheets/tools-prompt-injection.css",
+        "docs/stylesheets/tools-benchmark-reliability.css",
+        "docs/stylesheets/tools-model-capability-timeline.css",
+        "docs/stylesheets/tools-scaling-laws.css",
+        "docs/stylesheets/tools-training-energy.css",
+        "docs/stylesheets/tools-datacenter-capacity.css",
+        "docs/stylesheets/tools-global-ai-ecosystem.css",
+        "tools/**",
+        "hooks/locale_alternates.py",
+        "scripts/prepare_locale.py",
+        "scripts/audit_english_full_parity.py",
+        "scripts/audit_multilingual_search_foundation.py",
+        "scripts/*tool*.mjs",
+        "scripts/validate_locale_switching.mjs",
+        "mkdocs.yml",
+        "mkdocs.en.yml"
+      ]
+    },
+    {
+      "id": "topic-agent-autonomy-quality",
+      "workflow": ".github/workflows/topic-agent-autonomy-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/agentes-ia.md",
+        "docs/snippets/temas/agent-autonomy-spectrum.html",
+        "locales/en/temas/agentes-ia.md",
+        "locales/en/snippets/temas/agent-autonomy-spectrum.html",
+        "locales/en/snippets/temas/agent-autonomy-spectrum.i18n.json",
+        "scripts/validate_agent_autonomy_visual.mjs",
+        ".github/workflows/topic-agent-autonomy-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-evaluation-benchmark-contamination-quality",
+      "workflow": ".github/workflows/topic-evaluation-benchmark-contamination-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/evaluacion-modelos.md",
+        "docs/snippets/temas/evaluation-benchmark-contamination.html",
+        "locales/en/temas/evaluacion-modelos.md",
+        "locales/en/snippets/temas/evaluation-benchmark-contamination.html",
+        "locales/en/snippets/temas/evaluation-benchmark-contamination.i18n.json",
+        "scripts/validate_evaluation_benchmark_contamination_visual.mjs",
+        ".github/workflows/topic-evaluation-benchmark-contamination-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-evaluation-human-protocol-quality",
+      "workflow": ".github/workflows/topic-evaluation-human-protocol-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/evaluacion-modelos.md",
+        "docs/snippets/temas/evaluation-human-protocol.html",
+        "locales/en/temas/evaluacion-modelos.md",
+        "locales/en/snippets/temas/evaluation-human-protocol.html",
+        "locales/en/snippets/temas/evaluation-human-protocol.i18n.json",
+        "scripts/validate_evaluation_human_protocol_visual.mjs",
+        ".github/workflows/topic-evaluation-human-protocol-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-evaluation-offline-online-quality",
+      "workflow": ".github/workflows/topic-evaluation-offline-online-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/evaluacion-modelos.md",
+        "docs/snippets/temas/evaluation-offline-online.html",
+        "locales/en/temas/evaluacion-modelos.md",
+        "locales/en/snippets/temas/evaluation-offline-online.html",
+        "locales/en/snippets/temas/evaluation-offline-online.i18n.json",
+        "scripts/validate_evaluation_offline_online_visual.mjs",
+        ".github/workflows/topic-evaluation-offline-online-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-evaluation-uncertainty-quality",
+      "workflow": ".github/workflows/topic-evaluation-uncertainty-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/evaluacion-modelos.md",
+        "docs/snippets/temas/evaluation-uncertainty.html",
+        "locales/en/temas/evaluacion-modelos.md",
+        "locales/en/snippets/temas/evaluation-uncertainty.html",
+        "locales/en/snippets/temas/evaluation-uncertainty.i18n.json",
+        "scripts/validate_evaluation_uncertainty_visual.mjs",
+        ".github/workflows/topic-evaluation-uncertainty-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-evaluation-verifier-quality",
+      "workflow": ".github/workflows/topic-evaluation-verifier-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/evaluacion-modelos.md",
+        "docs/snippets/temas/evaluation-verifier-routing.html",
+        "locales/en/temas/evaluacion-modelos.md",
+        "locales/en/snippets/temas/evaluation-verifier-routing.html",
+        "locales/en/snippets/temas/evaluation-verifier-routing.i18n.json",
+        "scripts/validate_evaluation_verifier_visual.mjs",
+        ".github/workflows/topic-evaluation-verifier-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-prompt-injection-taxonomy-quality",
+      "workflow": ".github/workflows/topic-prompt-injection-taxonomy-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/prompt-injection.md",
+        "docs/snippets/temas/prompt-injection-taxonomy.html",
+        "locales/en/temas/prompt-injection.md",
+        "locales/en/snippets/temas/prompt-injection-taxonomy.html",
+        "locales/en/snippets/temas/prompt-injection-taxonomy.i18n.json",
+        "scripts/validate_prompt_injection_taxonomy_visual.mjs",
+        ".github/workflows/topic-prompt-injection-taxonomy-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-reasoning-evaluation-quality",
+      "workflow": ".github/workflows/topic-reasoning-evaluation-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/razonamiento.md",
+        "docs/snippets/temas/reasoning-evaluation.html",
+        "locales/en/temas/razonamiento.md",
+        "locales/en/snippets/temas/reasoning-evaluation.html",
+        "locales/en/snippets/temas/reasoning-evaluation.i18n.json",
+        "scripts/validate_reasoning_evaluation_visual.mjs",
+        ".github/workflows/topic-reasoning-evaluation-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-reasoning-evidence-surfaces-quality",
+      "workflow": ".github/workflows/topic-reasoning-evidence-surfaces-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/razonamiento.md",
+        "docs/snippets/temas/reasoning-evidence-surfaces.html",
+        "locales/en/temas/razonamiento.md",
+        "locales/en/snippets/temas/reasoning-evidence-surfaces.html",
+        "locales/en/snippets/temas/reasoning-evidence-surfaces.i18n.json",
+        "scripts/validate_reasoning_evidence_surfaces_visual.mjs",
+        ".github/workflows/topic-reasoning-evidence-surfaces-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-reasoning-latency-quality",
+      "workflow": ".github/workflows/topic-reasoning-latency-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/razonamiento.md",
+        "docs/snippets/temas/reasoning-latency-clocks.html",
+        "locales/en/temas/razonamiento.md",
+        "locales/en/snippets/temas/reasoning-latency-clocks.html",
+        "locales/en/snippets/temas/reasoning-latency-clocks.i18n.json",
+        "scripts/validate_reasoning_latency_visual.mjs",
+        ".github/workflows/topic-reasoning-latency-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-reasoning-verifier-quality",
+      "workflow": ".github/workflows/topic-reasoning-verifier-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/razonamiento.md",
+        "docs/snippets/temas/reasoning-verifier-signal.html",
+        "locales/en/temas/razonamiento.md",
+        "locales/en/snippets/temas/reasoning-verifier-signal.html",
+        "locales/en/snippets/temas/reasoning-verifier-signal.i18n.json",
+        "scripts/validate_reasoning_verifier_visual.mjs",
+        ".github/workflows/topic-reasoning-verifier-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-transformer-attention-cost-quality",
+      "workflow": ".github/workflows/topic-transformer-attention-cost-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/transformer.md",
+        "docs/snippets/temas/transformer-attention-cost.html",
+        "locales/en/temas/transformer.md",
+        "locales/en/snippets/temas/transformer-attention-cost.html",
+        "locales/en/snippets/temas/transformer-attention-cost.i18n.json",
+        "scripts/validate_transformer_attention_cost_visual.mjs",
+        ".github/workflows/topic-transformer-attention-cost-quality.yml"
+      ]
+    },
+    {
+      "id": "topic-transformer-rnn-attention-quality",
+      "workflow": ".github/workflows/topic-transformer-rnn-attention-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/temas/transformer.md",
+        "docs/snippets/temas/transformer-rnn-vs-attention.html",
+        "locales/en/temas/transformer.md",
+        "locales/en/snippets/temas/transformer-rnn-vs-attention.html",
+        "locales/en/snippets/temas/transformer-rnn-vs-attention.i18n.json",
+        "scripts/validate_transformer_rnn_attention_visual.mjs",
+        ".github/workflows/topic-transformer-rnn-attention-quality.yml"
+      ]
+    },
+    {
+      "id": "voice-architecture-article-quality",
+      "workflow": ".github/workflows/voice-architecture-article-quality.yml",
+      "suite": "topics",
+      "paths": [
+        "docs/articulos-tecnicos/voice-agent-architectures.md",
+        "locales/en/articulos-tecnicos/voice-agent-architectures.md",
+        "docs/snippets/articulos-tecnicos/voice-arch-*.html",
+        "locales/en/snippets/articulos-tecnicos/voice-arch-*",
+        "scripts/validate_voice_architecture_article.mjs",
+        ".github/workflows/voice-architecture-article-quality.yml"
+      ]
+    }
+  ]
+}
