@@ -39,7 +39,7 @@
       {
         "model": "Gemini 4 Argon",
         "status": "reviewed_not_charted",
-        "reason": "Artificial Analysis now lists Gemini 4 Argon as the latest release and reports Intelligence Index 53, $2/$10 pricing, 95% cache discount and 1M context, but output speed remains N/A. The explorer requires price, context, Intelligence Index, output speed and TTFT before charting a row."
+        "reason": "Artificial Analysis exposes a Gemini 4 Argon model page with Intelligence Index 53, $2/$10 introductory pricing, 95% cache discount and 1M context, but Argon is not the latest generally released model in the release feed and output speed remains N/A. The explorer requires price, context, Intelligence Index, output speed and TTFT before charting a row."
       },
       {
         "model": "GPT-6 Sol",
@@ -202,7 +202,7 @@
         "reason": "No priced comparable API entry in the AA release snapshot."
       }
     ],
-    "latest_release_slug": "gemini-4-argon",
+    "latest_release_slug": "gpt-6-1-sol",
     "supersession_events": [
       {
         "model": "GPT-6 Sol",
