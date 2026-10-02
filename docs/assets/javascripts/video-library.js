@@ -27,6 +27,120 @@
     return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
   };
 
+  const initializeFollowPlayer = (container, player) => {
+    if (!container || !player || container.dataset.s5FollowReady === 'true') return;
+    container.dataset.s5FollowReady = 'true';
+
+    const placeholder = document.createElement('div');
+    placeholder.className = 's5-follow-placeholder';
+    placeholder.setAttribute('aria-hidden', 'true');
+    container.before(placeholder);
+
+    const tools = document.createElement('div');
+    tools.className = 's5-follow-tools';
+    tools.hidden = true;
+
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 's5-follow-back';
+    back.textContent = isEnglish() ? 'Back to video' : 'Volver al vídeo';
+
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 's5-follow-close';
+    close.setAttribute('aria-label', isEnglish() ? 'Close mini player' : 'Cerrar mini reproductor');
+    close.textContent = '×';
+
+    tools.append(back, close);
+    container.appendChild(tools);
+
+    let interacted = false;
+    let suppressed = false;
+    let floating = false;
+    let normalHeight = 0;
+    let raf = 0;
+
+    const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const captureHeight = () => {
+      if (floating) return;
+      const height = container.getBoundingClientRect().height;
+      if (height > 0) normalHeight = height;
+    };
+
+    const setFloating = (value) => {
+      if (floating === value) return;
+      if (value) {
+        captureHeight();
+        placeholder.style.height = `${normalHeight}px`;
+      } else {
+        placeholder.style.height = '0px';
+      }
+      floating = value;
+      container.classList.toggle('is-following', value);
+      tools.hidden = !value;
+    };
+
+    const evaluate = () => {
+      raf = 0;
+      captureHeight();
+      const anchor = floating ? placeholder : container;
+      const rect = anchor.getBoundingClientRect();
+      const height = Math.max(1, rect.height || normalHeight || 1);
+      const visible = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0));
+      const ratio = visible / Math.max(1, Math.min(height, innerHeight));
+      const passedTop = rect.top < 72;
+
+      if (interacted && !suppressed && !player.ended && passedTop && ratio < 0.18) {
+        setFloating(true);
+      } else if (floating && ratio > 0.52) {
+        setFloating(false);
+      }
+    };
+
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(evaluate);
+    };
+
+    player.addEventListener('play', () => {
+      interacted = true;
+      if (!floating) suppressed = false;
+      schedule();
+    });
+
+    player.addEventListener('ended', () => {
+      interacted = false;
+      suppressed = false;
+      setFloating(false);
+    });
+
+    back.addEventListener('click', () => {
+      placeholder.scrollIntoView({
+        block: 'center',
+        behavior: reducedMotion() ? 'auto' : 'smooth',
+      });
+      requestAnimationFrame(schedule);
+    });
+
+    close.addEventListener('click', () => {
+      player.pause();
+      suppressed = true;
+      setFloating(false);
+    });
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && floating) {
+        player.pause();
+        suppressed = true;
+        setFloating(false);
+      }
+    });
+
+    captureHeight();
+  };
+
   const searchScore = (card, query, tokens) => {
     const title = normalize(card.querySelector('h2')?.textContent);
     const haystack = normalize(card.dataset.search || card.textContent);
@@ -135,6 +249,7 @@
 
     const player = root.querySelector('[data-s5-watch-player]');
     if (!player) return;
+    initializeFollowPlayer(player.closest('.s5-video-watch__player') || player, player);
 
     const seek = (seconds, { play = false } = {}) => {
       if (!Number.isFinite(seconds) || seconds < 0) return;
@@ -175,6 +290,8 @@
     const player = root.querySelector('[data-s5-inline-video-player]');
     const start = root.querySelector('[data-s5-inline-video-start]');
     if (!player || !start) return;
+    const frame = root.querySelector('.s5-video-embed__frame') || root;
+    initializeFollowPlayer(frame, player);
 
     start.addEventListener('click', () => {
       root.classList.add('is-playing');
