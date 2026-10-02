@@ -34,11 +34,12 @@ def run(args):
   shot('01-catalog-search')
   dest=results.first.get_attribute('href');results.first.click();f=ready()
   check('search-result-opens-chapter',page.evaluate('S.route')==dest,[dest,page.evaluate('S.route')])
-  check('reader-chapter-menu-present',f.locator('[data-sx-reader-index]').count()==1)
-  if f.locator('[data-sx-reader-index]').count():
-   f.locator('[data-sx-reader-index] summary').click();links=f.locator('[data-sx-reader-index] a')
-   check('reader-all-six-chapters',links.count()==6,links.count())
-   check('reader-current-chapter-labelled',f.locator('[data-sx-reader-index] [aria-current="page"]').count()==1)
+  check('reader-canonical-menu-present',f.locator('[data-s5-reader-direct]').count()==1)
+  check('reader-legacy-menu-absent',f.locator('[data-sx-reader-index]').count()==0)
+  if f.locator('[data-s5-reader-direct]').count():
+   links=f.locator('[data-current-collection="true"] [data-s5-direct-entry]')
+   check('reader-all-series-entries',links.count()>=6,links.count())
+   check('reader-current-chapter-labelled',f.locator('[data-current-collection="true"] [aria-current="page"]').count()==1)
    shot('02-reader-chapter-index');href=links.nth(1).get_attribute('href');links.nth(1).click();f=ready()
    check('reader-jump-works',page.evaluate('S.route')==href)
   page.locator('#home').click();f=ready();check('catalog-search-persists-after-reading',f.locator('[data-sx-search]').input_value()=='prefill')

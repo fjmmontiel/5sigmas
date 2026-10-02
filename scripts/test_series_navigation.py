@@ -25,7 +25,9 @@ def run(base: str, output: Path) -> None:
                 page.goto(base+prefix+'/series/agentes-ia/01-que-es-un-agente/',wait_until='networkidle')
                 assert page.locator('[data-sx-guide]').count()==0
                 expect(page.locator(VISUAL).first).to_be_visible()
-                expect(page.locator('.sx-reader-context')).to_be_visible()
+                expect(page.locator('.s5-reader-context')).to_be_visible()
+                assert page.locator('.sx-reader-context').count()==0
+                assert page.locator('[data-sx-reader-index]').count()==0
                 report['checks'].append({'name':f'{width}-{locale}-golden-visual-direct','pass':True})
             page.close()
         browser.close()

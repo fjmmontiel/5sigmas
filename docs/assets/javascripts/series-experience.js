@@ -362,6 +362,9 @@
 
 
   function initializeReaderIndex(){
+    // Canonical article readers already expose responsive chapter navigation.
+    // Only generated watch pages need this lightweight fallback index.
+    if(document.querySelector('[data-s5-reader-direct]'))return;
     const context=document.querySelector('.sx-reader-context');
     if(!context||document.querySelector('[data-sx-reader-index]'))return;
     const current=location.pathname;

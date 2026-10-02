@@ -53,7 +53,7 @@ extra:
 
 nav:
   - Inicio: index.md
-  - Ver: visuales/index.md
+  - Visuales: visuales/index.md
   - Vídeos: videos/index.md
   - Herramientas:
       - herramientas/index.md

@@ -44,6 +44,10 @@ _DEFAULT_UI = {
     "context_aria": "Contexto de lectura",
     "navigation_aria": "Navegación de {collection}",
     "progress_of": "de",
+    "chapter_label": "Capítulo",
+    "chapter_singular": "capítulo",
+    "chapter_plural": "capítulos",
+    "intro_label": "Intro",
 }
 
 
@@ -112,6 +116,72 @@ def _pages(items: list[Any], *, prefix: str = "", skip_indexes: bool = False) ->
 def _content_count(count: int, ui: dict[str, str]) -> str:
     template = ui["content_singular"] if count == 1 else ui["content_plural"]
     return template.format(count=count)
+
+
+def _is_learning_series(collection: dict[str, Any]) -> bool:
+    return collection["type"] == "series" and any(
+        page["path"].startswith("series/") for page in collection["pages"]
+    )
+
+
+def _is_intro(page: dict[str, str]) -> bool:
+    return Path(page["path"]).name.startswith("00")
+
+
+def _series_chapters(collection: dict[str, Any]) -> list[dict[str, str]]:
+    return [page for page in collection["pages"] if not _is_intro(page)]
+
+
+def _page_position_label(
+    collection: dict[str, Any],
+    page: dict[str, str],
+    page_index: int,
+    ui: dict[str, str],
+) -> str:
+    if not _is_learning_series(collection):
+        return f"{page_index + 1:02d}"
+    if _is_intro(page):
+        return ui["intro_label"]
+    chapters = _series_chapters(collection)
+    chapter_index = next(index for index, chapter in enumerate(chapters) if chapter["path"] == page["path"])
+    return f"{chapter_index + 1:02d}"
+
+
+def _collection_count_label(collection: dict[str, Any], ui: dict[str, str]) -> str:
+    if not _is_learning_series(collection):
+        return _content_count(len(collection["pages"]), ui)
+    count = len(_series_chapters(collection))
+    noun = ui["chapter_singular"] if count == 1 else ui["chapter_plural"]
+    return f"{count} {noun}"
+
+
+def _progress_label(
+    collection: dict[str, Any],
+    page: dict[str, str],
+    page_index: int,
+    ui: dict[str, str],
+) -> str:
+    if not _is_learning_series(collection):
+        return f"{page_index + 1:02d} {ui['progress_of']} {len(collection['pages']):02d}"
+    chapters = _series_chapters(collection)
+    if _is_intro(page):
+        return f"{ui['intro_label']} · {_collection_count_label(collection, ui)}"
+    chapter_index = next(index for index, chapter in enumerate(chapters) if chapter["path"] == page["path"])
+    return f"{ui['chapter_label']} {chapter_index + 1} {ui['progress_of']} {len(chapters)}"
+
+
+def _progress_percent(
+    collection: dict[str, Any],
+    page: dict[str, str],
+    page_index: int,
+) -> float:
+    if not _is_learning_series(collection):
+        return round(((page_index + 1) / len(collection["pages"])) * 100, 2)
+    chapters = _series_chapters(collection)
+    if _is_intro(page):
+        return 0.0
+    chapter_index = next(index for index, chapter in enumerate(chapters) if chapter["path"] == page["path"])
+    return round(((chapter_index + 1) / len(chapters)) * 100, 2)
 
 
 def _library(config, ui: dict[str, str], prefix: str) -> list[dict[str, Any]]:
@@ -187,12 +257,12 @@ def _neighbor_link(
 
 def _chapter_rail(collection: dict[str, Any], src_path: str, ui: dict[str, str]) -> str:
     links: list[str] = []
-    for number, page in enumerate(collection["pages"], start=1):
+    for page_index, page in enumerate(collection["pages"]):
         current = page["path"] == src_path
         current_attr = ' aria-current="page"' if current else ""
         links.append(
             f'<a href="{page["url"]}"{current_attr}>'
-            f'<span>{number:02d}</span><strong>{escape(page["title"])}</strong></a>'
+            f'<span>{escape(_page_position_label(collection, page, page_index, ui))}</span><strong>{escape(page["title"])}</strong></a>'
         )
     aria = ui["chapters_aria"].format(collection=collection["title"])
     return f'<nav class="s5-reader-rail" aria-label="{escape(aria, quote=True)}">{"".join(links)}</nav>'
@@ -214,7 +284,7 @@ def _series_tab(collection: dict[str, Any], number: int, is_current: bool, ui: d
         f'aria-selected="{selected}" tabindex="{0 if is_current else -1}" '
         f'data-s5-series-tab="{_series_id(number)}" data-search="{search_value}">'
         f'<span>{number:02d}</span><span><strong>{escape(collection["title"])}</strong>'
-        f'<small>{escape(collection["kind"])} · {_content_count(len(collection["pages"]), ui)}</small></span></button>'
+        f'<small>{escape(collection["kind"])} · {escape(_collection_count_label(collection, ui))}</small></span></button>'
     )
 
 
@@ -226,13 +296,13 @@ def _series_panel(
     ui: dict[str, str],
 ) -> str:
     chapter_links: list[str] = []
-    for page_number, page in enumerate(collection["pages"], start=1):
+    for page_index, page in enumerate(collection["pages"]):
         current = page["path"] == src_path
         current_attr = ' aria-current="page"' if current else ""
         search_value = escape(f'{collection["title"]} {page["title"]}', quote=True)
         chapter_links.append(
             f'<a href="{page["url"]}" data-s5-reader-entry data-search="{search_value}"{current_attr}>'
-            f'<span>{page_number:02d}</span><strong>{escape(page["title"])}</strong>'
+            f'<span>{escape(_page_position_label(collection, page, page_index, ui))}</span><strong>{escape(page["title"])}</strong>'
             f'<b>{escape(ui["reading"] if current else ui["open"])}</b></a>'
         )
 
@@ -243,7 +313,7 @@ def _series_panel(
         f'aria-labelledby="{_series_id(number)}-tab" data-s5-series-panel="{_series_id(number)}"{hidden}>'
         '<header>'
         f'<div><span>{escape(collection["kind"])}</span><h3>{escape(collection["title"])}</h3></div>'
-        f'<small>{_content_count(len(collection["pages"]), ui)}</small>'
+        f'<small>{escape(_collection_count_label(collection, ui))}</small>'
         '</header>'
         f'<nav aria-label="{escape(contents_aria, quote=True)}">{"".join(chapter_links)}</nav>'
         '</section>'
@@ -335,11 +405,12 @@ def _render_end(
 
 def _render_context(collection: dict[str, Any], index: int, ui: dict[str, str]) -> str:
     section = ui["learn_section"] if collection["type"] == "series" else ui["build_section"]
+    page = collection["pages"][index]
     return (
         f'<div class="s5-reader-context" aria-label="{escape(ui["context_aria"], quote=True)}">'
         f'<button type="button" data-s5-reader-open>{escape(section)}</button>'
         '<span aria-hidden="true">·</span>'
-        f'<span>{index + 1:02d} {escape(ui["progress_of"])} {len(collection["pages"]):02d}</span>'
+        f'<span>{escape(_progress_label(collection, page, index, ui))}</span>'
         '<span aria-hidden="true">·</span>'
         f'<strong>{escape(collection["title"])}</strong>'
         '</div>'
@@ -356,7 +427,7 @@ def _render(
 ) -> tuple[str, str, str]:
     pages = collection["pages"]
     current = pages[index]
-    progress = round(((index + 1) / len(pages)) * 100, 2)
+    progress = _progress_percent(collection, current, index)
     previous = pages[index - 1] if index > 0 else None
     following = pages[index + 1] if index + 1 < len(pages) else None
 
@@ -370,7 +441,7 @@ def _render(
         f'{_neighbor_link(previous, "prev", collection, ui)}'
         '<button class="s5-reader-course" type="button" data-s5-reader-open aria-haspopup="dialog">'
         f'<span>{escape(collection["title"])}</span>'
-        f'<strong>{index + 1:02d}/{len(pages):02d} · {escape(current["title"])}</strong>'
+        f'<strong>{escape(_progress_label(collection, current, index, ui))} · {escape(current["title"])}</strong>'
         f'<i style="--s5-reader-progress:{progress}%" aria-hidden="true"></i>'
         '</button>'
         f'{_neighbor_link(following, "next", collection, ui)}'
