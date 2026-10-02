@@ -117,7 +117,7 @@ def card_visual(s, label):
 
 def video_panel(entry, identifier):
     if not entry or not entry.get('video'): return ''
-    track=f'<track kind="captions" src="{esc(entry["track"])}" srclang="{t("es","en")}" label="{t("Español","English")}" default>' if entry.get('track') else ''
+    track=f'<track kind="captions" src="{esc(entry["track"])}" srclang="{t("es","en")}" label="{t("Español","English")}">' if entry.get('track') else ''
     return f'''<div class="sx-player" data-sx-player data-sx-follow-player><video id="{identifier}" controls playsinline preload="none" poster="{esc(entry['poster'])}" data-src="{esc(entry['video'])}" aria-label="{esc(entry['title'])}">{track}</video><button type="button" class="sx-player-start" data-sx-play aria-controls="{identifier}"><span aria-hidden="true">▶</span>{t('Reproducir aquí','Play here')}</button><a class="sx-player-fallback" href="{esc(entry['watch'])}">{t('Abrir página del vídeo y transcripción','Open video page and transcript')} ↗</a></div>'''
 
 def gallery():
