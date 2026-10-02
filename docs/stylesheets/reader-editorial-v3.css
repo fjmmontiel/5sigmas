@@ -21,7 +21,8 @@ body:has(.s5-reader-shell) {
 }
 
 body:has(.s5-reader-shell) .md-path,
-body:has(.s5-reader-shell) .md-tags {
+body:has(.s5-reader-shell) .md-tags,
+body:has(.s5-reader-shell) .md-content__button {
   display: none !important;
 }
 
