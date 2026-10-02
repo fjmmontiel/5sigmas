@@ -7,8 +7,33 @@ tags:
   - Economía
   - IA
   - Productividad
-video: "04-ia-pib-hoy.mp4"
-video_duration: "PT52S"
+video: 04-ia-pib-hoy.mp4
+video_duration: PT136.366667S
+video_poster: 04-ia-pib-hoy.jpg
+video_title: De la mejora de tarea al efecto agregado
+video_summary: 'El total queda en ochenta y cinco minutos: la mejora depende de la fracción realmente afectada.'
+video_date: '2026-09-28'
+video_captions: 04-ia-pib-hoy-visual-text.vtt
+video_transcript: 04-ia-pib-hoy-transcript.html
+video_chapters:
+- name: Acelerar una parte no duplica el proceso
+  start: 0.0
+  end: 22.25
+- name: Una mejora local debe ponderarse por su cobertura
+  start: 22.25
+  end: 46.316667
+- name: El coste y el beneficio pueden llegar en momentos distintos
+  start: 46.316667
+  end: 70.383333
+- name: Duplicar entregas no duplica resultados válidos
+  start: 70.383333
+  end: 92.25
+- name: Ahorrar tiempo no decide qué se hace con él
+  start: 92.25
+  end: 114.816667
+- name: Comparar antes y después no aísla el efecto
+  start: 114.816667
+  end: 136.366667
 ---
 
 # Capítulo 4 — IA y PIB hoy: impacto real, desfases y señales tempranas
