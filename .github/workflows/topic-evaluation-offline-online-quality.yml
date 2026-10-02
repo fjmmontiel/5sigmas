@@ -1,21 +1,26 @@
 name: Evaluation offline-online visual quality
 
 on:
-  pull_request:
-    paths:
-      - 'docs/temas/evaluacion-modelos.md'
-      - 'docs/snippets/temas/evaluation-offline-online.html'
-      - 'locales/en/temas/evaluacion-modelos.md'
-      - 'locales/en/snippets/temas/evaluation-offline-online.html'
-      - 'locales/en/snippets/temas/evaluation-offline-online.i18n.json'
-      - 'scripts/validate_evaluation_offline_online_visual.mjs'
-      - '.github/workflows/topic-evaluation-offline-online-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
