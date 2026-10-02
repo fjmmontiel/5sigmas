@@ -1,0 +1,138 @@
+name: Quality Gate
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Delegated quality scope
+        required: true
+        default: full
+        type: choice
+        options:
+          - full
+          - site
+          - tools
+          - english
+          - topics
+          - series
+          - owner
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: quality-gate-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      base_sha: ${{ steps.plan.outputs.base_sha }}
+      head_sha: ${{ steps.plan.outputs.head_sha }}
+      site: ${{ steps.plan.outputs.site }}
+      tools: ${{ steps.plan.outputs.tools }}
+      english: ${{ steps.plan.outputs.english }}
+      topics: ${{ steps.plan.outputs.topics }}
+      series: ${{ steps.plan.outputs.series }}
+      owner: ${{ steps.plan.outputs.owner }}
+      changed_count: ${{ steps.plan.outputs.changed_count }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: plan
+        name: Delegate changed surfaces
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          REQUESTED_SCOPE: ${{ inputs.scope }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE="$PR_BASE"
+            HEAD="$PR_HEAD"
+            SCOPE="auto"
+          else
+            HEAD="$(git rev-parse HEAD)"
+            BASE="$(git rev-parse HEAD^)"
+            SCOPE="${REQUESTED_SCOPE:-full}"
+          fi
+          git fetch --no-tags origin "$BASE" "$HEAD" >/dev/null 2>&1 || true
+          echo "base_sha=$BASE" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD" >> "$GITHUB_OUTPUT"
+          python scripts/plan_quality_gate.py --base "$BASE" --head "$HEAD" --scope "$SCOPE" >> "$GITHUB_OUTPUT"
+
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce delegated CI architecture
+        run: python scripts/audit_ci_storage_policy.py
+
+  site:
+    needs: plan
+    if: needs.plan.outputs.site == 'true'
+    uses: ./.github/workflows/pr-visual-review.yml
+    with:
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+
+  tools:
+    needs: plan
+    if: needs.plan.outputs.tools == 'true'
+    uses: ./.github/workflows/tools-quality.yml
+
+  english:
+    needs: plan
+    if: needs.plan.outputs.english == 'true'
+    uses: ./.github/workflows/english-mirror-quality.yml
+
+  topics:
+    needs: plan
+    if: needs.plan.outputs.topics == 'true'
+    uses: ./.github/workflows/topic-quality.yml
+
+  series:
+    needs: plan
+    if: needs.plan.outputs.series == 'true'
+    uses: ./.github/workflows/series-ui-review.yml
+    with:
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      owner_review: ${{ needs.plan.outputs.owner == 'true' }}
+
+  gate:
+    if: always()
+    needs: [plan, policy, site, tools, english, topics, series]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all delegated workers to finish cleanly
+        env:
+          PLAN: ${{ needs.plan.result }}
+          POLICY: ${{ needs.policy.result }}
+          SITE: ${{ needs.site.result }}
+          TOOLS: ${{ needs.tools.result }}
+          ENGLISH: ${{ needs.english.result }}
+          TOPICS: ${{ needs.topics.result }}
+          SERIES: ${{ needs.series.result }}
+        run: |
+          set -euo pipefail
+          failed=0
+          for pair in             "plan:$PLAN" "policy:$POLICY" "site:$SITE" "tools:$TOOLS"             "english:$ENGLISH" "topics:$TOPICS" "series:$SERIES"; do
+            name="${pair%%:*}"
+            result="${pair#*:}"
+            echo "$name=$result"
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
+              failed=1
+            fi
+          done
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more delegated quality workers failed." >&2
+            exit 1
+          fi
+          echo "QUALITY_GATE_PASS"
