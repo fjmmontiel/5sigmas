@@ -329,7 +329,7 @@
       $$(video,'track').forEach(t => t.remove());
       if (entry.track) {
         const track = document.createElement('track');
-        Object.assign(track, {kind:'captions', src:entry.track, srclang:en?'en':'es', label:en?'English':'Español', default:true});
+        Object.assign(track, {kind:'captions', src:entry.track, srclang:en?'en':'es', label:en?'English':'Español'});
         video.appendChild(track);
       }
       $(detail,'[data-sx-current-video]').textContent = entry.title;
