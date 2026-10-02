@@ -1,11 +1,20 @@
 name: Validate and deploy 5sigmas remote MCP
 
 on:
-  pull_request:
-    paths:
-      - 'mcp-worker/**'
-      - 'docs/robots.txt'
-      - '.github/workflows/deploy-mcp-worker.yml'
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   push:
     branches: [main]
     paths:
