@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plan delegated CI suites from the current PR diff or a manual suite request."""
+"""Plan delegated CI workflows from changed files or a requested manual suite."""
 
 from __future__ import annotations
 
@@ -7,121 +7,59 @@ import argparse
 import fnmatch
 import json
 import os
-import subprocess
 from pathlib import Path
 
-SUITES = ("core", "series", "owner", "english", "locale", "tools")
 
-PATTERNS = {
-    "core": [
-        "docs/**", "locales/**", "discovery/**", "overrides/**", "overrides_locale/**",
-        "hooks/**", "scripts/**", "mkdocs.yml", "mkdocs.en.yml", "main.py", "locale_main.py",
-        "requirements.txt", "Makefile", "VIDEO_DELIVERY.md",
-        ".github/workflows/deploy-pages.yml", ".github/workflows/publish-video-media.yml",
-        ".github/workflows/pr-visual-review.yml", ".github/workflows/delegate-quality.yml",
-    ],
-    "series": [
-        "hooks/series_experience.py", "hooks/series_curriculum.json",
-        "docs/stylesheets/series-experience.css", "docs/stylesheets/advanced-series-golden.css",
-        "docs/assets/javascripts/series-experience.js",
-        "docs/assets/javascripts/advanced-series-golden.js",
-        "docs/assets/javascripts/reader-direct-navigation.js",
-        "scripts/capture_gallery_series_review.py", "scripts/capture_series_ui_review.py",
-        "scripts/test_series_experience.py", "scripts/test_series_navigation.py",
-        "scripts/test_publication_nav.py", ".github/workflows/series-ui-review.yml",
-    ],
-    "owner": [
-        "docs/stylesheets/advanced-series-golden.css", "docs/stylesheets/series-experience.css",
-        "docs/assets/javascripts/advanced-series-golden.js",
-        "docs/assets/javascripts/series-experience.js",
-        "scripts/build_series_owner_review.py", "scripts/test_series_owner_review.py",
-        "quality/series-owner-review/reviewer.html",
-        ".github/workflows/series-owner-workbench.yml",
-    ],
-    "english": [
-        "locales/en/**", "discovery/**", "mkdocs.en.yml", "locale_main.py",
-        "hooks/video_sitemap_en.py", "hooks/locale_alternates.py",
-        "scripts/prepare_locale.py", "scripts/prepare_modelos_r2_ci_media.sh",
-        "scripts/audit_english_full_parity.py", "scripts/validate_english_*.mjs",
-        ".github/workflows/english-mirror-quality.yml",
-    ],
-    "locale": [
-        "mkdocs.yml", "mkdocs.en.yml", "locales/**", "discovery/**", "hooks/**",
-        "overrides/**", "overrides_locale/**", "scripts/validate_locale_switching.mjs",
-        "scripts/prepare_modelos_r2_ci_media.sh", ".github/workflows/locale-switch-quality.yml",
-    ],
-    "tools": [
-        "docs/herramientas/**", "locales/en/tools/**", "docs/assets/data/tools/**",
-        "docs/assets/javascripts/tools/**", "docs/stylesheets/tools*.css", "tools/**",
-        "hooks/locale_alternates.py", "scripts/prepare_locale.py",
-        "scripts/audit_english_full_parity.py", "scripts/audit_multilingual_search_foundation.py",
-        "scripts/*tool*.mjs", "scripts/validate_locale_switching.mjs",
-        "mkdocs.yml", "mkdocs.en.yml", ".github/workflows/tools-quality.yml",
-    ],
-}
+def matches(path: str, pattern: str) -> bool:
+    candidates = {pattern}
+    if "**/" in pattern:
+        candidates.add(pattern.replace("**/", ""))
+    return any(fnmatch.fnmatchcase(path, candidate) for candidate in candidates)
 
 
-def changed_files(base: str, head: str) -> list[str]:
-    if not base or not head:
+def select(manifest: dict, files: list[str], requested: str, draft: bool = False) -> list[str]:
+    workflows = manifest["workflows"]
+    if draft and requested == "auto":
         return []
-    result = subprocess.run(
-        ["git", "diff", "--name-only", f"{base}...{head}"],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
-
-
-def matches(path: str, patterns: list[str]) -> bool:
-    return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
-
-
-def plan(files: list[str], requested: str) -> dict[str, bool]:
-    selected = {suite: False for suite in SUITES}
-    if requested and requested != "auto":
-        if requested == "full":
-            return {suite: True for suite in SUITES}
-        if requested == "reader":
-            selected["core"] = True
-            return selected
-        if requested not in selected:
-            raise SystemExit(f"Unknown delegated suite: {requested}")
-        selected[requested] = True
-        if requested == "series":
-            selected["owner"] = True
+    if requested in {"full", "all"}:
+        return [item["id"] for item in workflows]
+    if requested == "reader":
+        requested = "core"
+    if requested != "auto":
+        suites = {"core", requested}
         if requested == "english":
-            selected["locale"] = True
-        return selected
+            suites.add("locale")
+        return [item["id"] for item in workflows if item.get("suite") in suites]
 
-    for suite in SUITES:
-        selected[suite] = any(matches(path, PATTERNS[suite]) for path in files)
-
-    # Core is the canonical site-wide safety net. A focused suite never replaces it.
-    if any(selected[suite] for suite in ("series", "owner", "english", "locale", "tools")):
-        selected["core"] = True
+    selected: list[str] = []
+    for item in workflows:
+        own_workflow = item["workflow"]
+        if own_workflow in files or any(matches(path, pattern) for path in files for pattern in item.get("paths", [])):
+            selected.append(item["id"])
     return selected
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--base", default=os.environ.get("BASE_SHA", ""))
-    parser.add_argument("--head", default=os.environ.get("HEAD_SHA", ""))
+    parser.add_argument("--manifest", type=Path, default=Path("quality/ci-workflows.json"))
+    parser.add_argument("--changed-files", type=Path)
     parser.add_argument("--suite", default=os.environ.get("DELEGATED_SUITE", "auto"))
-    parser.add_argument("--github-output", default=os.environ.get("GITHUB_OUTPUT", ""))
+    parser.add_argument("--draft", default=os.environ.get("IS_DRAFT", "false"))
+    parser.add_argument("--github-output", type=Path, default=Path(os.environ["GITHUB_OUTPUT"]) if os.environ.get("GITHUB_OUTPUT") else None)
     args = parser.parse_args()
 
-    files = changed_files(args.base, args.head) if args.suite == "auto" else []
-    selected = plan(files, args.suite)
-    payload = {"changed_files": files, **selected}
+    manifest = json.loads(args.manifest.read_text())
+    files = []
+    if args.changed_files and args.changed_files.exists():
+        files = [line.strip() for line in args.changed_files.read_text().splitlines() if line.strip()]
+    selected = select(manifest, files, args.suite, args.draft.lower() == "true")
+    payload = {"suite": args.suite, "changed_files": files, "selected": selected}
     print(json.dumps(payload, indent=2, sort_keys=True))
 
     if args.github_output:
-        output = Path(args.github_output)
-        with output.open("a", encoding="utf-8") as handle:
-            for suite, enabled in selected.items():
-                handle.write(f"{suite}={'true' if enabled else 'false'}\n")
-            handle.write("changed_count=" + str(len(files)) + "\n")
+        with args.github_output.open("a", encoding="utf-8") as handle:
+            handle.write("selected=" + json.dumps(selected, separators=(",", ":")) + "\n")
+            handle.write(f"selected_count={len(selected)}\n")
 
 
 if __name__ == "__main__":
