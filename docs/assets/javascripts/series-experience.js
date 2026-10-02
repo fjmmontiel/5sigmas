@@ -106,7 +106,7 @@
   function initializeFollowPlayer(player,video,en){
     if(!player||!video||player.dataset.followReady)return;
     player.dataset.followReady='true';
-    let placeholder=null,tools=null,back=null,close=null;
+    let placeholder=null,sentinel=null,tools=null,back=null,close=null;
     let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
 
     const ensureScaffold=()=>{
@@ -114,7 +114,11 @@
       placeholder=document.createElement('div');
       placeholder.className='sx-player-follow-placeholder';
       placeholder.setAttribute('aria-hidden','true');
+      sentinel=document.createElement('div');
+      sentinel.className='sx-player-follow-sentinel';
+      sentinel.setAttribute('aria-hidden','true');
       player.before(placeholder);
+      player.after(sentinel);
       tools=document.createElement('div');tools.className='sx-follow-tools';tools.hidden=true;
       back=document.createElement('button');back.type='button';back.className='sx-follow-back';
       back.textContent=en?'Back to video':'Volver al vídeo';
@@ -131,37 +135,35 @@
     };
     const captureHeight=()=>{
       if(floating)return;
-      normalHeight=Math.max(normalHeight,player.getBoundingClientRect().height);
+      const height=player.getBoundingClientRect().height;
+      if(height>0)normalHeight=Math.max(normalHeight,height);
     };
     const setFloating=value=>{
       if(floating===value)return;
       if(value){
         ensureScaffold();captureHeight();
         placeholder.style.height=Math.max(1,normalHeight)+'px';
-      }else if(placeholder){
-        placeholder.style.height='0px';
+        floating=true;
+        player.classList.add('is-following');
+      }else{
+        player.classList.remove('is-following');
+        floating=false;
+        if(placeholder)placeholder.style.height='0px';
       }
-      floating=value;
-      player.classList.toggle('is-following',value);
       if(tools)tools.hidden=!value;
     };
     const evaluate=()=>{
       raf=0;
-      if(!interacted||!placeholder)return;
+      if(!interacted||!sentinel)return;
       captureHeight();
-      const anchor=floating?placeholder:player;
-      const rect=anchor.getBoundingClientRect();
-      const height=Math.max(1,rect.height||normalHeight||1);
-      const visible=Math.max(0,Math.min(rect.bottom,innerHeight)-Math.max(rect.top,0));
-      const ratio=visible/Math.max(1,Math.min(height,innerHeight));
-      const passedTop=rect.top<72;
-      if(!suppressed&&!video.ended&&passedTop&&ratio<0.18)setFloating(true);
-      else if(floating&&ratio>0.52)setFloating(false);
+      const originBottom=sentinel.getBoundingClientRect().top;
+      const shouldFollow=!suppressed&&!video.ended&&!video.paused&&originBottom<72;
+      if(shouldFollow)setFloating(true);
+      else if(floating&&originBottom>=72)setFloating(false);
     };
     function schedule(){if(!raf)raf=requestAnimationFrame(evaluate)}
     video.addEventListener('play',()=>{
-      ensureScaffold();interacted=true;
-      if(!floating)suppressed=false;
+      ensureScaffold();interacted=true;suppressed=false;
       captureHeight();schedule();
     });
     video.addEventListener('ended',()=>{interacted=false;suppressed=false;setFloating(false);});
