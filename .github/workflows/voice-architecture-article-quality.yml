@@ -1,20 +1,26 @@
 name: Voice architecture article quality
 
 on:
-  pull_request:
-    paths:
-      - 'docs/articulos-tecnicos/voice-agent-architectures.md'
-      - 'locales/en/articulos-tecnicos/voice-agent-architectures.md'
-      - 'docs/snippets/articulos-tecnicos/voice-arch-*.html'
-      - 'locales/en/snippets/articulos-tecnicos/voice-arch-*'
-      - 'scripts/validate_voice_architecture_article.mjs'
-      - '.github/workflows/voice-architecture-article-quality.yml'
-
+  workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
 permissions:
   contents: read
 
 concurrency:
-  group: voice-article-quality-${{ github.event.pull_request.number }}
+  group: voice-article-quality-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
