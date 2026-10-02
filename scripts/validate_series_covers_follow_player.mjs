@@ -15,7 +15,12 @@ async function waitPlaying(page,selector){
 async function desktopFlow(){
   const context=await browser.newContext({viewport:{width:1440,height:1000}});
   const page=await context.newPage();
+  const pageErrors=[];
+  page.on('pageerror',error=>pageErrors.push(error.message));
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
+  const hub=page.locator('[data-sx-hub]');
+  assert.equal(await hub.getAttribute('data-ready'),'true','series hub must enhance successfully');
+  assert.equal(await hub.locator('[data-sx-detail]:visible').count(),0,'fallback series details must be hidden after enhancement');
 
   const cards=page.locator('[data-sx-card]');
   assert.equal(await cards.count(),13,'series catalogue must expose 13 cards');
@@ -39,6 +44,13 @@ async function desktopFlow(){
   await page.waitForTimeout(250);
   const detail=page.locator('#serie-fundamentos-ia-iag');
   await detail.waitFor({state:'visible'});
+  assert.equal(await hub.locator('[data-sx-detail]:visible').count(),1,'only the selected series detail may be visible');
+  assert.equal(await detail.locator('.sx-player-follow-placeholder').count(),0,'series follow-player DOM must not exist before Play');
+  await detail.locator('.sx-back').click();
+  await page.waitForTimeout(150);
+  assert.equal(await hub.locator('[data-sx-detail]:visible').count(),0,'back to catalogue must hide the selected detail');
+  await first.locator('.sx-card-open').click();
+  await detail.waitFor({state:'visible'});
   const hubVideo=detail.locator('.sx-player video');
   await detail.locator('[data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
@@ -61,6 +73,7 @@ async function desktopFlow(){
   assert.equal(await hubVideo.evaluate(v=>v.paused),true,'closing the mini player must pause playback');
 
   await page.goto(base+'/series/fundamentos-ia-iag/01-que-es-ia/',{waitUntil:'networkidle',timeout:60000});
+  assert.equal(await page.locator('.s5-follow-placeholder').count(),0,'inline follow-player DOM must not exist before Play');
   const inlineStart=page.locator('[data-s5-inline-video-start]').first();
   await inlineStart.click();
   await waitPlaying(page,'[data-s5-inline-video-player]');
@@ -75,6 +88,7 @@ async function desktopFlow(){
   assert.equal((await progress.locator('[data-sx-progress-label]').innerText()).trim(),'1/4');
 
   await page.goto(base+'/videos/series/fundamentos-ia-iag/00_presentacion_serie/',{waitUntil:'networkidle',timeout:60000});
+  assert.equal(await page.locator('.s5-follow-placeholder').count(),0,'watch follow-player DOM must not exist before playback');
   const seek=page.locator('[data-s5-video-seek]').first();
   if(await seek.count()){
     await seek.click();
@@ -85,12 +99,15 @@ async function desktopFlow(){
     await page.locator('.s5-video-watch__player.is-following .s5-follow-close').click();
   }
 
+  assert.deepEqual(pageErrors,[],'desktop flow must not emit runtime errors');
   await context.close();
 }
 
 async function mobileFlow(){
   const context=await browser.newContext({viewport:{width:390,height:844}});
   const page=await context.newPage();
+  const pageErrors=[];
+  page.on('pageerror',error=>pageErrors.push(error.message));
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'series catalogue must not overflow at 390px');
   assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),13);
@@ -105,6 +122,7 @@ async function mobileFlow(){
   const box=await floating.boundingBox();
   assert.ok(box && box.x>=0 && box.x+box.width<=391 && box.width<=366,'mobile follow player must fit the viewport');
   await floating.locator('.sx-follow-close').click();
+  assert.deepEqual(pageErrors,[],'mobile flow must not emit runtime errors');
   await context.close();
 }
 
