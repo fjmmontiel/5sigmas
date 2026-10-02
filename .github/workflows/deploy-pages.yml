@@ -216,7 +216,9 @@ jobs:
   live-qa:
     needs: deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # Full production QA includes 240 browser playback cases plus locale/EN gates.
+    # Two verified runs exhausted 25 minutes before the locale suite could finish.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
