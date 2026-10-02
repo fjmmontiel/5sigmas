@@ -8,10 +8,35 @@ tags:
   - IA
   - Energía
   - Productividad
-video: "00_presentacion_serie.mp4"
-video_duration: "PT1M0S"
+video: 00_presentacion_serie.mp4
+video_duration: PT134.6S
 hide:
-  - toc
+- toc
+video_poster: 00_presentacion_serie.jpg
+video_title: Separar energía, producción y bienestar
+video_summary: El total diario coincide, pero no la capacidad de prestar ese servicio en su horario.
+video_date: '2026-09-28'
+video_captions: 00_presentacion_serie-visual-text.vtt
+video_transcript: 00_presentacion_serie-transcript.html
+video_chapters:
+- name: La energía debe llegar cuando hace falta
+  start: 0.0
+  end: 22.566667
+- name: Potencia y energía responden preguntas distintas
+  start: 22.566667
+  end: 44.116667
+- name: Contar intentos no mide servicio útil
+  start: 44.116667
+  end: 66.366667
+- name: Sumar ventas puede contar dos veces
+  start: 66.366667
+  end: 90.116667
+- name: Una media no describe a cada persona
+  start: 90.116667
+  end: 112.733333
+- name: Una asociación no identifica su causa
+  start: 112.733333
+  end: 134.6
 ---
 # IA, PIB, bienestar y energía
 
