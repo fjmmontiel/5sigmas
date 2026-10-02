@@ -123,6 +123,59 @@ const assertContextualDesktopRail = async (page) => {
   return { library, browse };
 };
 
+const assertSeriesNumberingContract = async (page, { locale = 'es' } = {}) => {
+  const en = locale === 'en';
+  const expectedProgress = en ? 'Chapter 2 of 4' : 'Capítulo 2 de 4';
+  const expectedBrowse = en ? 'Explore library' : 'Explorar biblioteca';
+  const expectedVisuals = en ? 'Visuals' : 'Visuales';
+  const library = page.locator('[data-s5-reader-direct]');
+  const currentCollection = library.locator('[data-current-collection="true"]');
+  const links = currentCollection.locator('[data-s5-direct-entry]');
+  const numberLabels = await links.locator(':scope > span').allTextContents();
+  if (JSON.stringify(numberLabels) !== JSON.stringify(['Intro', '01', '02', '03', '04'])) {
+    throw new Error(`Series numbering must separate Intro from chapters: ${JSON.stringify(numberLabels)}`);
+  }
+
+  const current = links.filter({ has: page.locator('span:text-is("02")') }).filter({
+    hasText: en ? 'AI as an electrical technology' : 'IA como tecnología eléctrica',
+  });
+  if (await current.count() !== 1 || await current.getAttribute('aria-current') !== 'page') {
+    throw new Error('The URL/current chapter does not resolve to chapter 02 in the persistent rail.');
+  }
+
+  const headerText = (await library.locator('.s5-reader-direct__header small').innerText()).trim();
+  if (!headerText.includes(expectedProgress)) {
+    throw new Error(`Reader header progress is inconsistent: ${headerText}`);
+  }
+
+  const contextText = (await page.locator('.s5-reader-context').innerText()).replace(/\s+/g, ' ').trim();
+  if (!contextText.includes(expectedProgress)) {
+    throw new Error(`Reading context progress is inconsistent: ${contextText}`);
+  }
+
+  if (await page.locator('.sx-reader-context, [data-sx-reader-index]').count()) {
+    throw new Error('Article page still contains the legacy duplicate Series breadcrumb/chapter index.');
+  }
+  if (await page.locator('.md-content__button:visible').count()) {
+    throw new Error('Public edit/view-source action still overlaps reader content.');
+  }
+
+  const browse = library.locator('.s5-reader-direct__browse');
+  if ((await browse.innerText()).replace(/\s+/g, ' ').trim() !== `${expectedBrowse} →`) {
+    throw new Error(`Library affordance is unclear: ${await browse.innerText()}`);
+  }
+
+  const globalLinks = page.locator('.s5-reader-global-nav__link:visible');
+  if (await globalLinks.filter({ hasText: expectedVisuals }).count() !== 1) {
+    throw new Error(`Global navigation does not expose the explicit ${expectedVisuals} label.`);
+  }
+  const active = globalLinks.filter({ has: page.locator(':scope.is-active') });
+  const activeText = await page.locator('.s5-reader-global-nav__link.is-active:visible').allTextContents();
+  if (!activeText.some((text) => text.trim() === 'Series')) {
+    throw new Error(`Series is not visibly marked as the active global section: ${JSON.stringify(activeText)}`);
+  }
+};
+
 const openFullLibrary = async (page, trigger = null) => {
   const openButton = trigger || page.locator('.s5-reader-course');
   const dialog = page.locator('[data-s5-reader-library]');
@@ -176,6 +229,13 @@ const assertCompactMobileReader = async (page) => {
   if ((await topbar.evaluate((node) => getComputedStyle(node).position)) !== 'sticky') {
     throw new Error('Mobile lesson navigator must remain sticky while reading.');
   }
+  const courseText = (await topbar.locator('.s5-reader-course strong').innerText()).replace(/\s+/g, ' ').trim();
+  if (!/(?:Capítulo|Chapter) \d+ (?:de|of) \d+/.test(courseText)) {
+    throw new Error(`Mobile series progress must use semantic chapter numbering: ${courseText}`);
+  }
+  if (await page.locator('[data-sx-reader-index]:visible, .sx-reader-context:visible').count()) {
+    throw new Error('Mobile article still exposes a duplicate Series navigation layer.');
+  }
   await assertNoHorizontalOverflow(page, 'Mobile reader');
 };
 
@@ -209,6 +269,14 @@ try {
   await desktop.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
 
   let contextual = await assertContextualDesktopRail(desktop);
+
+  await desktop.goto(`${baseUrl}/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/`, { waitUntil: 'networkidle' });
+  await assertSeriesNumberingContract(desktop, { locale: 'es' });
+  await desktop.goto(`${baseUrl}/en/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/`, { waitUntil: 'networkidle' });
+  await assertSeriesNumberingContract(desktop, { locale: 'en' });
+  await desktop.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
+  contextual = await assertContextualDesktopRail(desktop);
+
   let dialog = await openFullLibrary(desktop, contextual.browse);
   const librarySearch = dialog.locator('[data-s5-reader-search]');
   await librarySearch.fill('qué es un llm');
