@@ -36,6 +36,50 @@ async function validateHub(page, mobile) {
   const publicationErrors = cataloguePublicationErrors(catalog);
   if (publicationErrors.length) throw new Error(publicationErrors.join('; '));
 
+  if (!mobile) {
+    const expectedTaxonomy = {
+      '/videos/catalog.json': {
+        generic: 'otros',
+        topics: {
+          agentes: 6,
+          voz: 6,
+          'coding-agents': 6,
+          'context-engineering': 6,
+          inferencia: 6,
+          evaluacion: 6,
+        },
+      },
+      '/en/videos/catalog.json': {
+        generic: 'other',
+        topics: {
+          agents: 6,
+          voice: 6,
+          'coding-agents': 6,
+          'context-engineering': 6,
+          inference: 6,
+          evaluation: 6,
+        },
+      },
+    };
+    for (const [catalogPath, contract] of Object.entries(expectedTaxonomy)) {
+      const response = await page.request.get(new URL(catalogPath, baseUrl).href);
+      if (!response.ok()) throw new Error(`${catalogPath} returned ${response.status()}.`);
+      const payload = await response.json();
+      const counts = (payload.videos || []).reduce((acc, video) => {
+        acc[video.topic] = (acc[video.topic] || 0) + 1;
+        return acc;
+      }, {});
+      if ((counts[contract.generic] || 0) !== 0) {
+        throw new Error(`${catalogPath} still routes ${counts[contract.generic]} videos to generic topic ${contract.generic}.`);
+      }
+      for (const [topic, expected] of Object.entries(contract.topics)) {
+        if ((counts[topic] || 0) !== expected) {
+          throw new Error(`${catalogPath} topic ${topic} count=${counts[topic] || 0}; expected ${expected}.`);
+        }
+      }
+    }
+  }
+
   await root.locator('img').evaluateAll((nodes) => nodes.forEach((node) => {
     const source = new URL(node.currentSrc || node.src);
     node.removeAttribute('srcset');
