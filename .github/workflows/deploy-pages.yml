@@ -384,6 +384,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_locale_switching.mjs
 
+      - name: Validate live series covers and follow-player UX
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_series_covers_follow_player.mjs
+
       - name: Validate live English series mirror
         env:
           S5_PREVIEW_BASE: https://5sigmas.com

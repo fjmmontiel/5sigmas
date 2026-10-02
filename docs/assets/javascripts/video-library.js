@@ -27,6 +27,131 @@
     return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
   };
 
+  const initializeFollowPlayer = (container, player) => {
+    if (!container || !player || container.dataset.s5FollowReady === 'true') return;
+    container.dataset.s5FollowReady = 'true';
+
+    let placeholder = null;
+    let sentinel = null;
+    let tools = null;
+    let back = null;
+    let close = null;
+    let interacted = false;
+    let suppressed = false;
+    let floating = false;
+    let normalHeight = 0;
+    let raf = 0;
+
+    const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const ensureScaffold = () => {
+      if (placeholder) return;
+      placeholder = document.createElement('div');
+      placeholder.className = 's5-follow-placeholder';
+      placeholder.setAttribute('aria-hidden', 'true');
+      sentinel = document.createElement('div');
+      sentinel.className = 's5-follow-sentinel';
+      sentinel.setAttribute('aria-hidden', 'true');
+      container.before(placeholder);
+      container.after(sentinel);
+
+      tools = document.createElement('div');
+      tools.className = 's5-follow-tools';
+      tools.hidden = true;
+
+      back = document.createElement('button');
+      back.type = 'button';
+      back.className = 's5-follow-back';
+      back.textContent = isEnglish() ? 'Back to video' : 'Volver al vídeo';
+
+      close = document.createElement('button');
+      close.type = 'button';
+      close.className = 's5-follow-close';
+      close.setAttribute('aria-label', isEnglish() ? 'Close mini player' : 'Cerrar mini reproductor');
+      close.textContent = '×';
+
+      tools.append(back, close);
+      container.appendChild(tools);
+
+      back.addEventListener('click', () => {
+        placeholder.scrollIntoView({
+          block: 'center',
+          behavior: reducedMotion() ? 'auto' : 'smooth',
+        });
+        requestAnimationFrame(schedule);
+      });
+
+      close.addEventListener('click', () => {
+        player.pause();
+        suppressed = true;
+        setFloating(false);
+      });
+    };
+
+    const captureHeight = () => {
+      if (floating) return;
+      const height = container.getBoundingClientRect().height;
+      if (height > 0) normalHeight = Math.max(normalHeight, height);
+    };
+
+    const setFloating = (value) => {
+      if (floating === value) return;
+      if (value) {
+        ensureScaffold();
+        captureHeight();
+        placeholder.style.height = Math.max(1, normalHeight) + 'px';
+        floating = true;
+        container.classList.add('is-following');
+      } else {
+        container.classList.remove('is-following');
+        floating = false;
+        if (placeholder) placeholder.style.height = '0px';
+      }
+      if (tools) tools.hidden = !value;
+    };
+
+    const evaluate = () => {
+      raf = 0;
+      if (!interacted || !sentinel) return;
+      captureHeight();
+      const originBottom = sentinel.getBoundingClientRect().top;
+      const shouldFollow = !suppressed && !player.ended && !player.paused && originBottom < 72;
+      if (shouldFollow) {
+        setFloating(true);
+      } else if (floating && originBottom >= 72) {
+        setFloating(false);
+      }
+    };
+
+    function schedule() {
+      if (!raf) raf = requestAnimationFrame(evaluate);
+    }
+
+    player.addEventListener('play', () => {
+      ensureScaffold();
+      interacted = true;
+      suppressed = false;
+      captureHeight();
+      schedule();
+    });
+
+    player.addEventListener('ended', () => {
+      interacted = false;
+      suppressed = false;
+      setFloating(false);
+    });
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && floating) {
+        player.pause();
+        suppressed = true;
+        setFloating(false);
+      }
+    });
+  };
+
   const searchScore = (card, query, tokens) => {
     const title = normalize(card.querySelector('h2')?.textContent);
     const haystack = normalize(card.dataset.search || card.textContent);
@@ -135,6 +260,7 @@
 
     const player = root.querySelector('[data-s5-watch-player]');
     if (!player) return;
+    initializeFollowPlayer(player.closest('.s5-video-watch__player') || player, player);
 
     const seek = (seconds, { play = false } = {}) => {
       if (!Number.isFinite(seconds) || seconds < 0) return;
@@ -175,6 +301,8 @@
     const player = root.querySelector('[data-s5-inline-video-player]');
     const start = root.querySelector('[data-s5-inline-video-start]');
     if (!player || !start) return;
+    const frame = root.querySelector('.s5-video-embed__frame') || root;
+    initializeFollowPlayer(frame, player);
 
     start.addEventListener('click', () => {
       root.classList.add('is-playing');

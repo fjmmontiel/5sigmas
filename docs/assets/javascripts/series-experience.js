@@ -8,7 +8,187 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   let disposeHub = null;
 
-  function initializePlayer(player) {
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let pointerIntentAt=0;
+  window.addEventListener('pointermove',event=>{
+    if(event.pointerType==='mouse')pointerIntentAt=performance.now();
+  },{passive:true});
+
+  function progressKey(en){ return 's5:series-progress:v1:'+(en?'en':'es'); }
+
+  function readProgress(en){
+    try {
+      const value=JSON.parse(localStorage.getItem(progressKey(en))||'{}');
+      return value&&typeof value==='object'?value:{};
+    } catch { return {}; }
+  }
+
+  function recordReaderProgress(){
+    const match=location.pathname.match(/^\/(en\/)?series\/([^/]+)\/([^/]+)\/?$/);
+    if(!match || match[3].startsWith('00')) return;
+    const en=Boolean(match[1]), slug=match[2], path=location.pathname;
+    const store=readProgress(en);
+    const visited=new Set(Array.isArray(store[slug])?store[slug]:[]);
+    visited.add(path);
+    store[slug]=[...visited].slice(-32);
+    try { localStorage.setItem(progressKey(en),JSON.stringify(store)); } catch {}
+  }
+
+  function applySeriesProgress(hub,cards,en){
+    const store=readProgress(en);
+    cards.forEach(card=>{
+      const slug=card.dataset.seriesSlug||'';
+      const progress=$(card,'[data-sx-progress]');
+      if(!slug||!progress)return;
+      const total=Number(progress.dataset.sxTotal||0);
+      const visited=new Set(Array.isArray(store[slug])?store[slug]:[]);
+      const count=Math.min(total,visited.size);
+      progress.hidden=count===0;
+      const label=$(progress,'[data-sx-progress-label]');
+      const bar=$(progress,'[data-sx-progress-bar]');
+      if(label)label.textContent=`${count}/${total}`;
+      if(bar)bar.style.width=(total?Math.round((count/total)*100):0)+'%';
+      const detail=$(hub,`#serie-${CSS.escape(slug)}`);
+      $$(detail||hub,'[data-sx-chapter-url]').forEach(chapter=>{
+        chapter.classList.toggle('is-visited',visited.has(chapter.dataset.sxChapterUrl));
+      });
+    });
+  }
+
+  function initializeCardPreview(card){
+    if(!card || card.dataset.previewReady) return;
+    card.dataset.previewReady='true';
+    const slot=$(card,'[data-sx-card-video]');
+    const art=$(card,'.sx-card-art');
+    if(!slot||!art||!finePointer.matches)return;
+    let video=null;
+    const ensureVideo=()=>{
+      if(video)return video;
+      video=document.createElement('video');
+      video.className='sx-card-preview';
+      video.muted=true;
+      video.playsInline=true;
+      video.preload='none';
+      video.setAttribute('aria-hidden','true');
+      video.tabIndex=-1;
+      video.src=slot.dataset.src||'';
+      slot.replaceChildren(video);
+      return video;
+    };
+    const start=()=>{
+      if(reduced.matches)return;
+      const node=ensureVideo();
+      node.currentTime=0;
+      const promise=node.play();
+      if(promise&&typeof promise.then==='function'){
+        promise.then(()=>card.classList.add('is-previewing')).catch(()=>card.classList.remove('is-previewing'));
+      }
+    };
+    const stop=()=>{
+      if(!video)return;
+      video.pause();
+      card.classList.remove('is-previewing');
+      try{video.currentTime=0}catch{}
+      video.removeAttribute('src');
+      video.load();
+      video.remove();
+      video=null;
+    };
+    art.addEventListener('pointerenter',event=>{
+      const deliberate=event.pointerType!=='touch' && pointerIntentAt>0 && performance.now()-pointerIntentAt<650;
+      if(deliberate)start();
+    });
+    art.addEventListener('pointerleave',stop);
+    art.addEventListener('blur',stop,true);
+    window.addEventListener('pagehide',stop);
+  }
+
+  function initializeFollowPlayer(player,video,en){
+    if(!player||!video||player.dataset.followReady)return;
+    player.dataset.followReady='true';
+    let placeholder=null,sentinel=null,tools=null,back=null,close=null;
+    let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
+    let originTop=0,originBottom=0;
+
+    const ensureScaffold=()=>{
+      if(placeholder)return;
+      placeholder=document.createElement('div');
+      placeholder.className='sx-player-follow-placeholder';
+      placeholder.setAttribute('aria-hidden','true');
+      sentinel=document.createElement('div');
+      sentinel.className='sx-player-follow-sentinel';
+      sentinel.setAttribute('aria-hidden','true');
+      player.before(placeholder);
+      player.after(sentinel);
+      tools=document.createElement('div');tools.className='sx-follow-tools';tools.hidden=true;
+      back=document.createElement('button');back.type='button';back.className='sx-follow-back';
+      back.textContent=en?'Back to video':'Volver al vídeo';
+      close=document.createElement('button');close.type='button';close.className='sx-follow-close';
+      close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
+      tools.append(back,close);player.appendChild(tools);
+      back.addEventListener('click',()=>{
+        window.scrollTo({
+          top:Math.max(0,originTop-110),
+          behavior:reduced.matches?'auto':'smooth'
+        });
+        requestAnimationFrame(schedule);
+      });
+      close.addEventListener('click',()=>{
+        video.pause();suppressed=true;setFloating(false);
+      });
+    };
+    const captureHeight=()=>{
+      if(floating)return;
+      const height=player.getBoundingClientRect().height;
+      if(height>0)normalHeight=Math.max(normalHeight,height);
+    };
+    const setFloating=value=>{
+      if(floating===value)return;
+      if(value){
+        ensureScaffold();captureHeight();
+        placeholder.style.height=Math.max(1,normalHeight)+'px';
+        floating=true;
+        player.classList.add('is-following');
+      }else{
+        player.classList.remove('is-following');
+        floating=false;
+        if(placeholder)placeholder.style.height='0px';
+      }
+      if(tools)tools.hidden=!value;
+    };
+    const evaluate=()=>{
+      raf=0;
+      if(!interacted||!originBottom)return;
+      captureHeight();
+      // The Series media column itself is sticky. DOM sentinels inside that
+      // column therefore move with the sticky container and cannot tell us
+      // when the player's original document position has scrolled away.
+      // Compare the immutable document-space origin captured on Play instead.
+      const originBottomInViewport=originBottom-window.scrollY;
+      const shouldFollow=!suppressed&&!video.ended&&!video.paused&&originBottomInViewport<72;
+      if(shouldFollow)setFloating(true);
+      else if(floating&&originBottomInViewport>=72)setFloating(false);
+    };
+    function schedule(){if(!raf)raf=requestAnimationFrame(evaluate)}
+    video.addEventListener('play',()=>{
+      ensureScaffold();interacted=true;suppressed=false;
+      captureHeight();
+      if(!floating){
+        const rect=player.getBoundingClientRect();
+        originTop=rect.top+window.scrollY;
+        originBottom=rect.bottom+window.scrollY;
+      }
+      schedule();
+    });
+    video.addEventListener('ended',()=>{interacted=false;suppressed=false;setFloating(false);});
+    window.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',schedule,{passive:true});
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&floating){video.pause();suppressed=true;setFloating(false);}
+    });
+  }
+
+  function initializePlayer(player, en) {
     if (!player || player.dataset.ready) return;
     player.dataset.ready = 'true';
     const video = $(player, 'video');
@@ -21,6 +201,7 @@
     });
     video.addEventListener('play', () => { play.hidden = true; });
     video.addEventListener('error', () => { play.hidden = false; });
+    initializeFollowPlayer(player,video,en);
   }
 
   function initializeHub(hub) {
@@ -34,6 +215,8 @@
     const cards = $$(hub, '[data-sx-card]');
     const search = $(hub, '[data-sx-search]');
     const filters = $$(hub, '[data-sx-filter]');
+    cards.forEach(initializeCardPreview);
+    applySeriesProgress(hub,cards,en);
 
     const storageKey='s5:catalog:v3:'+(en?'en':'es');
     let stored={};
@@ -159,7 +342,7 @@
     window.addEventListener('hashchange', showHash);
     disposeHub = () => window.removeEventListener('hashchange', showHash);
     showHash();
-    $$(hub, '[data-sx-player]').forEach(initializePlayer);
+    $$(hub, '[data-sx-player]').forEach(player=>initializePlayer(player,en));
     $$(hub, '[data-sx-preview]').forEach(button => button.addEventListener('click', () => {
       const entry = JSON.parse(button.dataset.sxPreview);
       const detail = button.closest('[data-sx-detail]');
@@ -225,6 +408,7 @@
   }
 
   function initialize(){
+    recordReaderProgress();
     const hubs=$$(document,'[data-sx-hub]');
     if(!hubs.length){disposeHub?.();disposeHub=null}
     hubs.forEach(initializeHub);

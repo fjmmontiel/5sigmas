@@ -380,6 +380,9 @@ jobs:
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
+      - name: Validate series covers and follow-player UX
+        run: node scripts/validate_series_covers_follow_player.mjs
+
       - name: Validate direct series and article navigation
         run: node scripts/validate_direct_reader_navigation.mjs
 
