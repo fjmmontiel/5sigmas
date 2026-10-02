@@ -8,7 +8,7 @@ const browser=await chromium.launch({headless:true});
 async function waitPlaying(page,selector){
   await page.waitForFunction((sel)=>{
     const video=document.querySelector(sel);
-    return Boolean(video && (video.currentTime>0 || (!video.paused && video.readyState>=2)));
+    return Boolean(video && (!video.paused || video.currentTime>0));
   },selector,{timeout:12000});
 }
 
