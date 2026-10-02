@@ -8,7 +8,136 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   let disposeHub = null;
 
-  function initializePlayer(player) {
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function progressKey(en){ return 's5:series-progress:v1:'+(en?'en':'es'); }
+
+  function readProgress(en){
+    try {
+      const value=JSON.parse(localStorage.getItem(progressKey(en))||'{}');
+      return value&&typeof value==='object'?value:{};
+    } catch { return {}; }
+  }
+
+  function recordReaderProgress(){
+    const match=location.pathname.match(/^\/(en\/)?series\/([^/]+)\/([^/]+)\/?$/);
+    if(!match || match[3].startsWith('00')) return;
+    const en=Boolean(match[1]), slug=match[2], path=location.pathname;
+    const store=readProgress(en);
+    const visited=new Set(Array.isArray(store[slug])?store[slug]:[]);
+    visited.add(path);
+    store[slug]=[...visited].slice(-32);
+    try { localStorage.setItem(progressKey(en),JSON.stringify(store)); } catch {}
+  }
+
+  function applySeriesProgress(hub,cards,en){
+    const store=readProgress(en);
+    cards.forEach(card=>{
+      const slug=card.dataset.seriesSlug||'';
+      const progress=$(card,'[data-sx-progress]');
+      if(!slug||!progress)return;
+      const total=Number(progress.dataset.sxTotal||0);
+      const visited=new Set(Array.isArray(store[slug])?store[slug]:[]);
+      const count=Math.min(total,visited.size);
+      progress.hidden=count===0;
+      const label=$(progress,'[data-sx-progress-label]');
+      const bar=$(progress,'[data-sx-progress-bar]');
+      if(label)label.textContent=`${count}/${total}`;
+      if(bar)bar.style.width=(total?Math.round((count/total)*100):0)+'%';
+      const detail=$(hub,`#serie-${CSS.escape(slug)}`);
+      $(detail||hub,'[data-sx-chapter-url]').forEach(chapter=>{
+        chapter.classList.toggle('is-visited',visited.has(chapter.dataset.sxChapterUrl));
+      });
+    });
+  }
+
+  function initializeCardPreview(card){
+    if(!card || card.dataset.previewReady) return;
+    card.dataset.previewReady='true';
+    const video=$(card,'[data-sx-card-video]');
+    const art=$(card,'.sx-card-art');
+    if(!video||!art||!finePointer.matches)return;
+    let loaded=false;
+    const start=()=>{
+      if(reduced.matches)return;
+      if(!loaded){
+        video.src=video.dataset.src||'';
+        video.load();
+        loaded=true;
+      }
+      video.muted=true;
+      const promise=video.play();
+      if(promise&&typeof promise.then==='function'){
+        promise.then(()=>card.classList.add('is-previewing')).catch(()=>card.classList.remove('is-previewing'));
+      }
+    };
+    const stop=()=>{
+      video.pause();
+      card.classList.remove('is-previewing');
+      if(video.readyState>=1){ try{video.currentTime=0}catch{} }
+    };
+    art.addEventListener('pointerenter',event=>{ if(event.pointerType!=='touch')start(); });
+    art.addEventListener('pointerleave',stop);
+    art.addEventListener('blur',stop,true);
+  }
+
+  function initializeFollowPlayer(player,video,en){
+    if(!player||!video||player.dataset.followReady)return;
+    player.dataset.followReady='true';
+    const shell=document.createElement('div');
+    shell.className='sx-player-follow-shell';
+    player.before(shell);shell.appendChild(player);
+    let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
+    const tools=document.createElement('div');tools.className='sx-follow-tools';tools.hidden=true;
+    const back=document.createElement('button');back.type='button';back.className='sx-follow-back';
+    back.textContent=en?'Back to video':'Volver al vídeo';
+    const close=document.createElement('button');close.type='button';close.className='sx-follow-close';
+    close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
+    tools.append(back,close);player.appendChild(tools);
+    const captureHeight=()=>{
+      if(floating)return;
+      normalHeight=Math.max(normalHeight,player.getBoundingClientRect().height);
+      if(normalHeight>0)shell.style.minHeight=normalHeight+'px';
+    };
+    const setFloating=value=>{
+      if(floating===value)return;
+      if(value)captureHeight();
+      floating=value;
+      player.classList.toggle('is-following',value);
+      tools.hidden=!value;
+    };
+    const evaluate=()=>{
+      raf=0;captureHeight();
+      const rect=shell.getBoundingClientRect();
+      const visible=Math.max(0,Math.min(rect.bottom,innerHeight)-Math.max(rect.top,0));
+      const ratio=visible/Math.max(1,Math.min(rect.height||normalHeight||1,innerHeight));
+      const passedTop=rect.top<72;
+      if(interacted&&!suppressed&&!video.ended&&passedTop&&ratio<0.18)setFloating(true);
+      else if(floating&&ratio>0.52)setFloating(false);
+    };
+    const schedule=()=>{ if(!raf)raf=requestAnimationFrame(evaluate); };
+    video.addEventListener('play',()=>{
+      interacted=true;
+      if(!floating)suppressed=false;
+      schedule();
+    });
+    video.addEventListener('ended',()=>{interacted=false;suppressed=false;setFloating(false);});
+    back.addEventListener('click',()=>{
+      shell.scrollIntoView({block:'center',behavior:reduced.matches?'auto':'smooth'});
+      requestAnimationFrame(schedule);
+    });
+    close.addEventListener('click',()=>{
+      video.pause();suppressed=true;setFloating(false);
+    });
+    window.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',schedule,{passive:true});
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&floating){video.pause();suppressed=true;setFloating(false);}
+    });
+    captureHeight();
+  }
+
+  function initializePlayer(player, en) {
     if (!player || player.dataset.ready) return;
     player.dataset.ready = 'true';
     const video = $(player, 'video');
@@ -21,6 +150,7 @@
     });
     video.addEventListener('play', () => { play.hidden = true; });
     video.addEventListener('error', () => { play.hidden = false; });
+    initializeFollowPlayer(player,video,en);
   }
 
   function initializeHub(hub) {
@@ -33,7 +163,9 @@
     const details = $$(hub, '[data-sx-detail]');
     const cards = $$(hub, '[data-sx-card]');
     const search = $(hub, '[data-sx-search]');
-    const filters = $$(hub, '[data-sx-filter]');
+    const filters = $(hub, '[data-sx-filter]');
+    cards.forEach(initializeCardPreview);
+    applySeriesProgress(hub,cards,en);
 
     const storageKey='s5:catalog:v3:'+(en?'en':'es');
     let stored={};
@@ -159,7 +291,7 @@
     window.addEventListener('hashchange', showHash);
     disposeHub = () => window.removeEventListener('hashchange', showHash);
     showHash();
-    $$(hub, '[data-sx-player]').forEach(initializePlayer);
+    $(hub, '[data-sx-player]').forEach(player=>initializePlayer(player,en));
     $$(hub, '[data-sx-preview]').forEach(button => button.addEventListener('click', () => {
       const entry = JSON.parse(button.dataset.sxPreview);
       const detail = button.closest('[data-sx-detail]');
@@ -222,7 +354,8 @@
   }
 
   function initialize(){
-    const hubs=$$(document,'[data-sx-hub]');
+    recordReaderProgress();
+    const hubs=$(document,'[data-sx-hub]');
     if(!hubs.length){disposeHub?.();disposeHub=null}
     hubs.forEach(initializeHub);
     initializeReaderIndex();
