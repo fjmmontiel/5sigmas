@@ -7,6 +7,42 @@ const failures = [];
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
+const RETRYABLE_HTTP = new Set([429, 500, 502, 503, 504]);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const requestGetWithRetry = async (url) => {
+  let lastError = null;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      const response = await page.request.get(url);
+      if (response.ok() || !RETRYABLE_HTTP.has(response.status()) || attempt === 3) return response;
+      lastError = new Error(`${url}: transient HTTP ${response.status()}`);
+    } catch (error) {
+      lastError = error;
+      if (attempt === 3) throw error;
+    }
+    await sleep((2 ** attempt) * 1000);
+  }
+  throw lastError || new Error(`${url}: request failed after retries`);
+};
+
+const gotoWithRetry = async (url) => {
+  let lastError = null;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      const response = await page.goto(url, { waitUntil: 'networkidle' });
+      const status = response?.status();
+      if (response?.ok() || !RETRYABLE_HTTP.has(status) || attempt === 3) return response;
+      lastError = new Error(`${url}: transient HTTP ${status}`);
+    } catch (error) {
+      lastError = error;
+      if (attempt === 3) throw error;
+    }
+    await sleep((2 ** attempt) * 1000);
+  }
+  throw lastError || new Error(`${url}: navigation failed after retries`);
+};
+
 const absolute = (path) => `https://5sigmas.com${path}`;
 const normalizeTarget = (href) => {
   if (!href) return null;
@@ -31,7 +67,7 @@ const assertNoPageAlternates = async (route) => {
 };
 
 const sitemapText = async (route) => {
-  const response = await page.request.get(`${base}${route}`);
+  const response = await requestGetWithRetry(`${base}${route}`);
   if (!response.ok()) {
     failures.push(`${route}: HTTP ${response.status()}`);
     return '';
@@ -53,7 +89,7 @@ const assertSitemapPair = (esRoute, enRoute) => {
 
 const assertTranslatedPair = async ({ es, en }) => {
   for (const [route, currentLanguage] of [[es, 'es'], [en, 'en']]) {
-    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+    const response = await gotoWithRetry(`${base}${route}`);
     if (!response?.ok()) {
       failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
       continue;
@@ -67,7 +103,7 @@ const assertTranslatedPair = async ({ es, en }) => {
     const opposite = currentLanguage === 'es' ? english : spanish;
     if (opposite?.href) {
       const target = new URL(opposite.href, `${base}${route}`);
-      const targetResponse = await page.request.get(`${base}${target.pathname}`);
+      const targetResponse = await requestGetWithRetry(`${base}${target.pathname}`);
       if (!targetResponse.ok()) failures.push(`${route}: opposite-locale selector target returns ${targetResponse.status()}: ${target.pathname}`);
     }
   }
@@ -75,7 +111,7 @@ const assertTranslatedPair = async ({ es, en }) => {
 };
 
 const assertSeriesHub = async ({ route, entries }) => {
-  const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+  const response = await gotoWithRetry(`${base}${route}`);
   if (!response?.ok()) {
     failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
     return;
@@ -186,7 +222,7 @@ const evaluationPairs = [
 const assertReaderSequence = async (routes, hubRoute, label) => {
   for (let index = 0; index < routes.length; index += 1) {
     const route = routes[index];
-    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+    const response = await gotoWithRetry(`${base}${route}`);
     if (!response?.ok()) {
       failures.push(`${route}: ${label} reader route returned ${response?.status() ?? 'no response'}`);
       continue;
@@ -282,7 +318,7 @@ await assertTranslatedPair({ es: '/herramientas/coste-latencia-llm/', en: '/en/t
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
 const untranslated = '/temas/agi/';
-await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
+await gotoWithRetry(`${base}${untranslated}`);
 await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
 const untranslatedEnglish = untranslatedTargets.find((item) => item.hreflang === 'en' || item.text === 'English');
