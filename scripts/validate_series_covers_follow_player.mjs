@@ -29,14 +29,15 @@ async function desktopFlow(){
 
   const previews=page.locator('[data-sx-card] [data-sx-card-video]');
   for(let i=0;i<await previews.count();i++){
-    assert.equal(await previews.nth(i).getAttribute('src'),null,'card previews must not preload all MP4s');
+    assert.equal(await previews.nth(i).locator('video').count(),0,'card previews must not create video elements before user intent');
     assert.match(await previews.nth(i).getAttribute('data-src'),/\.mp4$/);
   }
 
   const first=cards.first();
   await first.locator('.sx-card-art').hover();
   await page.waitForTimeout(250);
-  const firstPreview=first.locator('[data-sx-card-video]');
+  const firstPreview=first.locator('[data-sx-card-video] .sx-card-preview');
+  await firstPreview.waitFor({state:'attached'});
   assert.match((await firstPreview.getAttribute('src'))||'',/\.mp4$/,'hover should opt into only that preview');
   assert.equal(await firstPreview.evaluate(v=>v.muted),true,'preview must stay muted');
 
@@ -133,7 +134,7 @@ async function reducedMotionFlow(){
   const first=page.locator('[data-sx-card]').first();
   await first.locator('.sx-card-art').hover();
   await page.waitForTimeout(250);
-  assert.equal(await first.locator('[data-sx-card-video]').getAttribute('src'),null,'reduced motion must not start cover motion previews');
+  assert.equal(await first.locator('[data-sx-card-video] video').count(),0,'reduced motion must not instantiate cover motion previews');
   await context.close();
 }
 
