@@ -173,7 +173,7 @@ def _inject_track(html: str, source: dict[str, Any], compiled: dict[str, Any], *
     locale = source["locale"]
     track = (
         f'<track kind="captions" src="{vtt_path}" srclang="{locale}" '
-        f'label="{compiled["track_label"]}" default data-s5-visual-text-track>'
+        f'label="{compiled["track_label"]}" data-s5-visual-text-track>'
     )
     marker = re.compile(r'(<source\b[^>]*type=["\']video/mp4["\'][^>]*>)', re.IGNORECASE)
     if article:
