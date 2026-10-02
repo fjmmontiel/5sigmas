@@ -315,33 +315,143 @@ series/fundamentos-ia-iag/04-agi.md:
 series/ia-pib-bienestar-energia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
-  video_title: AI, GDP, Well-being and Energy
-  video_duration: PT1M2S
-
+  video_title: Separating energy, production and wellbeing
+  video_summary: Daily energy is equal, but the ability to deliver that scheduled service differs.
+  video_date: '2026-09-28'
+  video_duration: PT134.6S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: Energy must arrive when it is needed
+    start: 0.0
+    end: 22.566667
+  - name: Power and energy answer different questions
+    start: 22.566667
+    end: 44.116667
+  - name: Counting attempts does not measure useful service
+    start: 44.116667
+    end: 66.366667
+  - name: Adding sales can count the same value twice
+    start: 66.366667
+    end: 90.116667
+  - name: A mean does not describe every person
+    start: 90.116667
+    end: 112.733333
+  - name: An association does not identify its cause
+    start: 112.733333
+    end: 134.6
 series/ia-pib-bienestar-energia/01-electricidad-bienestar.md:
   video: 01-electricidad-bienestar.mp4
   video_poster: 01-electricidad-bienestar.jpg
-  video_title: Electricity and Well-being
-  video_duration: PT1M2S
-
+  video_title: Electricity and effective service
+  video_summary: 'Capacity and duration are separate conditions: a nominal connection does not prove effective access.'
+  video_date: '2026-09-28'
+  video_duration: PT131.383333S
+  video_captions: 01-electricidad-bienestar-visual-text.vtt
+  video_transcript: 01-electricidad-bienestar-transcript.html
+  video_chapters:
+  - name: A connection does not guarantee service
+    start: 0.0
+    end: 21.55
+  - name: An outage can cost more than its duration
+    start: 21.55
+    end: 43.1
+  - name: Continuity can be a process requirement
+    start: 43.1
+    end: 64.65
+  - name: More energy does not always add another task
+    start: 64.65
+    end: 86.516667
+  - name: Scheduling changes peak power
+    start: 86.516667
+    end: 109.516667
+  - name: A battery has two different limits
+    start: 109.516667
+    end: 131.383333
 series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md:
   video: 02-ia-tecnologia-electrica.mp4
   video_poster: 02-ia-tecnologia-electrica.jpg
-  video_title: AI as an Electrical Technology
-  video_duration: PT1M2S
-
+  video_title: AI within an electricity system
+  video_summary: 'At twenty thousand queries, inference uses two hundred and the total reaches three hundred: volume matters.'
+  video_date: '2026-09-28'
+  video_duration: PT134.816667S
+  video_captions: 02-ia-tecnologia-electrica-visual-text.vtt
+  video_transcript: 02-ia-tecnologia-electrica-transcript.html
+  video_chapters:
+  - name: Training and inference accumulate energy differently
+    start: 0.0
+    end: 22.25
+  - name: Efficiency per task does not fix total consumption
+    start: 22.25
+    end: 44.433333
+  - name: The server is not the whole facility
+    start: 44.433333
+    end: 67.816667
+  - name: Capacity is limited by the tightest constraint
+    start: 67.816667
+    end: 89.683333
+  - name: Manufacturing impact needs an allocation rule
+    start: 89.683333
+    end: 112.25
+  - name: Kilowatt-hours are not kilograms of emissions
+    start: 112.25
+    end: 134.816667
 series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md:
   video: 03-pib-vs-bienestar.mp4
   video_poster: 03-pib-vs-bienestar.jpg
-  video_title: "Measurement: GDP vs Well-being"
-  video_duration: PT1M2S
-
+  video_title: What GDP measures and what it leaves out
+  video_summary: 'At first-period prices, volume rises from one hundred to two hundred: distinguish nominal and real GDP.'
+  video_date: '2026-09-28'
+  video_duration: PT134.65S
+  video_captions: 03-pib-vs-bienestar-visual-text.vtt
+  video_transcript: 03-pib-vs-bienestar-transcript.html
+  video_chapters:
+  - name: Price can hide a quantity change
+    start: 0.0
+    end: 22.616667
+  - name: A service and its measurement are not identical
+    start: 22.616667
+    end: 44.866667
+  - name: The total can rise while the per-person figure falls
+    start: 44.866667
+    end: 66.416667
+  - name: Gross and net domestic product differ
+    start: 66.416667
+    end: 89.033333
+  - name: Time can change without more output
+    start: 89.033333
+    end: 110.583333
+  - name: Spending is not all the value received
+    start: 110.583333
+    end: 134.65
 series/ia-pib-bienestar-energia/04-ia-pib-hoy.md:
   video: 04-ia-pib-hoy.mp4
   video_poster: 04-ia-pib-hoy.jpg
-  video_title: AI and GDP Today
-  video_duration: PT1M2S
-
+  video_title: From task improvement to aggregate effects
+  video_summary: 'Total time becomes eighty-five minutes: improvement depends on the fraction actually affected.'
+  video_date: '2026-09-28'
+  video_duration: PT136.366667S
+  video_captions: 04-ia-pib-hoy-visual-text.vtt
+  video_transcript: 04-ia-pib-hoy-transcript.html
+  video_chapters:
+  - name: Speeding up one part does not double the process
+    start: 0.0
+    end: 22.25
+  - name: A local improvement must be weighted by coverage
+    start: 22.25
+    end: 46.316667
+  - name: Costs and benefits can arrive at different times
+    start: 46.316667
+    end: 70.383333
+  - name: Doubling deliveries does not double valid results
+    start: 70.383333
+    end: 92.25
+  - name: Saving time does not decide how it is used
+    start: 92.25
+    end: 114.816667
+  - name: Before-and-after comparison does not isolate an effect
+    start: 114.816667
+    end: 136.366667
 series/from-cave-to-agi/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
