@@ -81,7 +81,7 @@ def main():
         assert row["article"] in watch and "s5-video-watch__transcript" in watch
         assert row["captions_path"] in watch and "<track" in watch
         found=[]
-        for text in re.findall(r'<script[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',watch,re.S):
+        for text in re.findall(r"<script[^>]*type=[\"']application/ld\\+json[\"'][^>]*>(.*?)</script>",watch,re.S):
             found.extend(n for n in objects(json.loads(text)) if n.get("@type")=="VideoObject")
         assert len(found)==1,row["watch"]
         v=found[0]
