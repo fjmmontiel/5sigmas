@@ -47,6 +47,35 @@ LLMS_PATHS = (
     "/en/llms.txt",
 )
 
+VIDEO_TAXONOMY = {
+    "es": {
+        "hub": "/videos/",
+        "catalog": "/videos/catalog.json",
+        "generic": "otros",
+        "topics": {
+            "agentes": 6,
+            "voz": 6,
+            "coding-agents": 6,
+            "context-engineering": 6,
+            "inferencia": 6,
+            "evaluacion": 6,
+        },
+    },
+    "en": {
+        "hub": "/en/videos/",
+        "catalog": "/en/videos/catalog.json",
+        "generic": "other",
+        "topics": {
+            "agents": 6,
+            "voice": 6,
+            "coding-agents": 6,
+            "context-engineering": 6,
+            "inference": 6,
+            "evaluation": 6,
+        },
+    },
+}
+
 
 def fetch(url: str, user_agent: str, accept: str = "*/*") -> tuple[bytes, dict[str, str]]:
     req = urllib.request.Request(
@@ -104,6 +133,7 @@ def main() -> int:
         "llms": {},
         "graphs": {},
         "markdown_probe": {},
+        "video_taxonomy": {},
     }
 
     robots_bytes, robots_headers = fetch(
@@ -145,6 +175,64 @@ def main() -> int:
         if len(body) < 200:
             raise AssertionError(f"{path}: unexpectedly small llms surface ({len(body)} bytes)")
         results["llms"][path] = {"status": 200, "bytes": len(body)}
+
+    for locale, contract in VIDEO_TAXONOMY.items():
+        catalog_bytes, catalog_headers = fetch(
+            origin + contract["catalog"], "ChatGPT-User", "application/json"
+        )
+        assert_crawlable(catalog_headers, origin + contract["catalog"])
+        catalog = json.loads(catalog_bytes)
+        videos = catalog.get("videos")
+        if not isinstance(videos, list) or catalog.get("count") != len(videos):
+            raise AssertionError(f"{contract['catalog']}: invalid catalogue count")
+
+        counts: dict[str, int] = {}
+        for video in videos:
+            topic = str(video.get("topic") or "")
+            counts[topic] = counts.get(topic, 0) + 1
+
+        generic_count = counts.get(contract["generic"], 0)
+        if generic_count:
+            raise AssertionError(
+                f"{contract['catalog']}: {generic_count} videos still use generic topic "
+                f"{contract['generic']!r}"
+            )
+        for topic, expected in contract["topics"].items():
+            actual = counts.get(topic, 0)
+            if actual != expected:
+                raise AssertionError(
+                    f"{contract['catalog']}: topic {topic!r} count={actual}, expected={expected}"
+                )
+
+        hub_bytes, hub_headers = fetch(
+            origin + contract["hub"], "OAI-SearchBot", "text/html"
+        )
+        assert_crawlable(hub_headers, origin + contract["hub"])
+        hub = hub_bytes.decode("utf-8", errors="replace")
+        card_topics = re.findall(r'data-topic="([^"]+)"', hub)
+        if len(card_topics) != len(videos):
+            raise AssertionError(
+                f"{contract['hub']}: HTML cards={len(card_topics)} catalog={len(videos)}"
+            )
+        if contract["generic"] in card_topics:
+            raise AssertionError(
+                f"{contract['hub']}: rendered HTML still contains generic topic "
+                f"{contract['generic']!r}"
+            )
+        for topic, expected in contract["topics"].items():
+            actual = card_topics.count(topic)
+            if actual != expected:
+                raise AssertionError(
+                    f"{contract['hub']}: rendered topic {topic!r} count={actual}, expected={expected}"
+                )
+
+        results["video_taxonomy"][locale] = {
+            "catalog_count": len(videos),
+            "generic_count": generic_count,
+            "modern_topics": {
+                topic: counts.get(topic, 0) for topic in contract["topics"]
+            },
+        }
 
     graphs: list[dict] = []
     for path in GRAPH_PATHS:
