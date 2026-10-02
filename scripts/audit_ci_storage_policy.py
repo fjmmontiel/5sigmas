@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keep GitHub Actions small, failure-evidence-only, and delegation-first."""
+"""Enforce one delegated CI entrypoint with reusable workers and bounded evidence."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,6 +10,27 @@ WORKFLOW_DIR = Path(".github/workflows")
 UPLOAD = re.compile(r"^\s*(?:-\s*)?uses:\s*actions/upload-artifact@")
 PAGES_UPLOAD = re.compile(r"^\s*(?:-\s*)?uses:\s*actions/upload-pages-artifact@")
 OWNER_EVIDENCE = {"series-owner-interactive-review"}
+
+CANONICAL = {
+    "cleanup-actions-artifacts.yml",
+    "cleanup-pages-artifact.yml",
+    "delegate-quality.yml",
+    "delegated-automerge.yml",
+    "deploy-mcp-worker.yml",
+    "deploy-pages.yml",
+    "english-mirror-quality.yml",
+    "pr-visual-review.yml",
+    "series-ui-review.yml",
+    "tools-quality.yml",
+    "topic-quality.yml",
+}
+WORKERS = {
+    "english-mirror-quality.yml",
+    "pr-visual-review.yml",
+    "series-ui-review.yml",
+    "tools-quality.yml",
+    "topic-quality.yml",
+}
 
 
 def step_block(lines: list[str], index: int) -> str:
@@ -58,6 +79,31 @@ def owner_review_exception(block: str, expr: str) -> bool:
 def main() -> int:
     errors: list[str] = []
     pages_uploads: list[tuple[Path, int]] = []
+    present = {p.name for p in WORKFLOW_DIR.glob("*.yml")}
+
+    missing = sorted(CANONICAL - present)
+    extra = sorted(present - CANONICAL)
+    if missing:
+        errors.append("missing canonical workflows: " + ", ".join(missing))
+    if extra:
+        errors.append("legacy/autonomous workflows remain: " + ", ".join(extra))
+    if len(present) != len(CANONICAL):
+        errors.append(f"expected exactly {len(CANONICAL)} workflows, found {len(present)}")
+
+    delegate = (WORKFLOW_DIR / "delegate-quality.yml").read_text(encoding="utf-8")
+    for required in ("pull_request:", "workflow_dispatch:", "topic-quality.yml", "owner_review:"):
+        if required not in delegate:
+            errors.append(f"delegate-quality.yml missing {required!r}")
+
+    for name in WORKERS:
+        path = WORKFLOW_DIR / name
+        text = path.read_text(encoding="utf-8") if path.exists() else ""
+        if "workflow_call:" not in text:
+            errors.append(f"{name}: worker must expose workflow_call")
+        if "pull_request:" in text:
+            errors.append(f"{name}: worker must not self-trigger on pull_request")
+        if "workflow_dispatch:" in text:
+            errors.append(f"{name}: manual dispatch must go through delegate-quality.yml")
 
     for path in sorted([*WORKFLOW_DIR.glob("*.yml"), *WORKFLOW_DIR.glob("*.yaml")]):
         lines = path.read_text(encoding="utf-8").splitlines()
@@ -83,42 +129,6 @@ def main() -> int:
         rendered = ", ".join(f"{p}:{line}" for p, line in pages_uploads) or "none"
         errors.append(f"upload-pages-artifact must exist exactly once in deploy-pages.yml; found {rendered}")
 
-    required = {
-        "quality-gate.yml",
-        "pr-visual-review.yml",
-        "tools-quality.yml",
-        "english-mirror-quality.yml",
-        "topic-quality.yml",
-        "series-ui-review.yml",
-        "deploy-pages.yml",
-        "deploy-mcp-worker.yml",
-        "cleanup-actions-artifacts.yml",
-        "cleanup-pages-artifact.yml",
-    }
-    present = {p.name for p in WORKFLOW_DIR.glob("*.yml")}
-    missing = sorted(required - present)
-    if missing:
-        errors.append("missing canonical delegated workflows: " + ", ".join(missing))
-
-    forbidden_prefixes = (
-        "topic-evaluation-", "topic-reasoning-", "topic-transformer-",
-        "english-reasoning-",
-    )
-    forbidden_exact = {
-        "ci-storage-policy.yml", "dom-inspection-diagnostic.yml",
-        "english-editorial-quality.yml", "english-energy-ch2-bottlenecks-quality.yml",
-        "locale-switch-quality.yml", "measurement-contract.yml",
-        "series-owner-workbench.yml", "tool-shell-contract.yml",
-        "topic-agent-autonomy-quality.yml", "topic-prompt-injection-taxonomy-quality.yml",
-        "voice-architecture-article-quality.yml",
-    }
-    leftovers = sorted(
-        name for name in present
-        if name in forbidden_exact or name.startswith(forbidden_prefixes)
-    )
-    if leftovers:
-        errors.append("legacy babysitting workflows remain: " + ", ".join(leftovers))
-
     for cleanup, snippets in {
         "cleanup-actions-artifacts.yml": ("schedule:", "actions: write", "deleteArtifact"),
         "cleanup-pages-artifact.yml": ("workflow_run:", "actions: write", "deleteArtifact"),
@@ -129,12 +139,12 @@ def main() -> int:
                 errors.append(f"{cleanup}: missing safeguard {snippet!r}")
 
     if errors:
-        print("CI delegation/storage policy violations:", file=sys.stderr)
+        print("CI delegation policy violations:", file=sys.stderr)
         for error in errors:
             print(" - " + error, file=sys.stderr)
         return 1
 
-    print("CI delegation policy OK: one Quality Gate entrypoint, reusable workers, bounded evidence, deploy/cleanup separated.")
+    print("CI delegation policy OK: one PR/manual entrypoint, five reusable workers, automerge, deploy and cleanup.")
     return 0
 
 
