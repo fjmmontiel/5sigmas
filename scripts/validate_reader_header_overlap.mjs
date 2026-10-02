@@ -18,15 +18,18 @@ try {
     const title = document.querySelector('.md-header__title');
     const nav = document.querySelector('.s5-reader-global-nav');
     const logo = document.querySelector('.md-header .md-logo');
+    const logoImage = logo?.querySelector('img');
     const topics = [...document.querySelectorAll('.md-header__topic')];
     const nativeControls = [...document.querySelectorAll(
       '.md-header__inner > .md-header__option, .md-header__inner > .md-header__button[for="__search"]'
     )];
-    if (!title || !nav || !logo) return null;
+    if (!title || !nav || !logo || !logoImage) return null;
 
     const titleBox = title.getBoundingClientRect();
     const navBox = nav.getBoundingClientRect();
     const logoBox = logo.getBoundingClientRect();
+    const logoImageBox = logoImage.getBoundingClientRect();
+    const titleStyle = getComputedStyle(title);
     const topicState = topics.map((node) => {
       const style = getComputedStyle(node);
       const box = node.getBoundingClientRect();
@@ -57,8 +60,11 @@ try {
     return {
       titleText: title.textContent.trim(),
       titleBox: { left: titleBox.left, right: titleBox.right, width: titleBox.width },
+      titleFontSize: Number.parseFloat(titleStyle.fontSize),
       navBox: { left: navBox.left, right: navBox.right, width: navBox.width },
       logoBox: { left: logoBox.left, right: logoBox.right, width: logoBox.width },
+      logoImageBox: { width: logoImageBox.width, height: logoImageBox.height },
+      brandToNavGap: navBox.left - titleBox.right,
       topics: topicState,
       nativeControls: controlState,
       navLinks: [...nav.querySelectorAll('a')].map((node) => node.textContent.trim()),
@@ -67,6 +73,18 @@ try {
   });
 
   if (!state) throw new Error('Unable to measure the desktop reader header.');
+  if (state.titleText !== '5sigmas') {
+    throw new Error(`Reader brand wordmark changed unexpectedly: ${JSON.stringify(state)}.`);
+  }
+  if (state.logoBox.width > 42 || state.logoImageBox.width > 38 || state.logoImageBox.height > 32) {
+    throw new Error(`5σ monogram is no longer compact: ${JSON.stringify(state)}.`);
+  }
+  if (state.titleFontSize > 14.5 || state.titleBox.width > 100) {
+    throw new Error(`5sigmas wordmark is no longer compact: ${JSON.stringify(state)}.`);
+  }
+  if (state.brandToNavGap < 16 || state.brandToNavGap > 96) {
+    throw new Error(`Brand/nav spacing is unbalanced: ${JSON.stringify(state)}.`);
+  }
   if (state.navLinks.length < 5) throw new Error(`Reader global nav is incomplete: ${JSON.stringify(state)}.`);
   if (state.horizontalOverflow > 2) throw new Error(`Reader header introduces ${state.horizontalOverflow}px of horizontal overflow.`);
   if (state.titleBox.right > state.navBox.left - 12) {
