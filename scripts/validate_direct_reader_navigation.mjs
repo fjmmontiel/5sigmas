@@ -136,9 +136,10 @@ const assertSeriesNumberingContract = async (page, { locale = 'es' } = {}) => {
     throw new Error(`Series numbering must separate Intro from chapters: ${JSON.stringify(numberLabels)}`);
   }
 
-  const current = links.filter({ has: page.locator('span:text-is("02")') }).filter({
-    hasText: en ? 'AI as an electrical technology' : 'IA como tecnología eléctrica',
-  });
+  const chapterPath = `${en ? '/en' : ''}/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/`;
+  const current = links.filter({ has: page.locator('span:text-is("02")') }).and(
+    currentCollection.locator(`a[href="${chapterPath}"]`)
+  );
   if (await current.count() !== 1 || await current.getAttribute('aria-current') !== 'page') {
     throw new Error('The URL/current chapter does not resolve to chapter 02 in the persistent rail.');
   }
@@ -169,7 +170,6 @@ const assertSeriesNumberingContract = async (page, { locale = 'es' } = {}) => {
   if (await globalLinks.filter({ hasText: expectedVisuals }).count() !== 1) {
     throw new Error(`Global navigation does not expose the explicit ${expectedVisuals} label.`);
   }
-  const active = globalLinks.filter({ has: page.locator(':scope.is-active') });
   const activeText = await page.locator('.s5-reader-global-nav__link.is-active:visible').allTextContents();
   if (!activeText.some((text) => text.trim() === 'Series')) {
     throw new Error(`Series is not visibly marked as the active global section: ${JSON.stringify(activeText)}`);
