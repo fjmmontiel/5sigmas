@@ -184,7 +184,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     ui = _ui(config)
     track = ""
     if captions_url:
-        track = f'      <track kind="captions" src="{_esc(captions_url)}" srclang="{ui["caption_lang"]}" label="{_esc(ui["caption_label"])}" default>\n'
+        track = f'      <track kind="captions" src="{_esc(captions_url)}" srclang="{ui["caption_lang"]}" label="{_esc(ui["caption_label"])}">\n'
     watch_html = f'  <p class="s5-video-embed__watch"><a href="{_esc(watch_url)}">{_esc(ui["watch"])}</a></p>\n' if watch_url else ""
     video_html = (
         '<div class="s5-video-embed" data-s5-inline-video>\n  <div class="s5-video-embed__frame">\n'

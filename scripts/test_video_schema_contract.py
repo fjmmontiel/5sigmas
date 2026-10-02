@@ -372,7 +372,7 @@ def main() -> None:
     assert 'poster="/series/example/demo.jpg"' in watch_html
     assert (
         '<track kind="captions" src="/series/example/demo.vtt" '
-        'srclang="es" label="Español" default>'
+        'srclang="es" label="Español">'
     ) in watch_html
     assert 'class="s5-video-watch__source-link"' in watch_html
     assert 'class="s5-video-watch__machine-context"' in watch_html
@@ -410,7 +410,7 @@ def main() -> None:
     assert 'poster="/en/series/example/demo.jpg"' in en_watch_html
     assert (
         '<track kind="captions" src="/en/series/example/demo.vtt" '
-        'srclang="en" label="English" default>'
+        'srclang="en" label="English">'
     ) in en_watch_html
     assert 'class="s5-video-watch__source-link"' in en_watch_html
     assert 'class="s5-video-watch__machine-context"' in en_watch_html
