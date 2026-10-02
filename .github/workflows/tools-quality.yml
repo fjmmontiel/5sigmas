@@ -2,10 +2,23 @@ name: Interactive tools quality
 
 on:
   workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
 
 concurrency:
-  group: interactive-tools-quality-${{ github.event.pull_request.number || github.ref }}
+  group: interactive-tools-quality-${{ inputs.pr_number || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:

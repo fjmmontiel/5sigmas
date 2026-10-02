@@ -2,12 +2,25 @@ name: Series owner interactive workbench
 
 on:
   workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
 
 permissions:
   contents: read
 concurrency:
-  group: series-owner-workbench-${{ github.event.pull_request.number || github.ref }}
+  group: series-owner-workbench-${{ inputs.pr_number || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   preview:
@@ -16,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ inputs.head_sha || github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -41,7 +54,7 @@ jobs:
           S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
       - name: Build and exercise the standalone owner review
         env:
-          REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REVIEW_HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha || github.sha }}
         run: |
           python scripts/build_series_owner_review.py --site site --before-site ../owner-before/site --output artifacts/owner-review/5sigmas-revision-interactiva.html --candidate-sha "$REVIEW_HEAD_SHA" --baseline-sha b8a0ec5a4b9461b5b68f5d65ea504b549de4d7dc
           python scripts/test_series_owner_review.py --html artifacts/owner-review/5sigmas-revision-interactiva.html --output artifacts/owner-review/tests

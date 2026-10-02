@@ -2,6 +2,19 @@ name: Locale switch quality
 
 on:
   workflow_call:
+    inputs:
+      head_sha:
+        type: string
+        required: false
+        default: ''
+      base_sha:
+        type: string
+        required: false
+        default: ''
+      pr_number:
+        type: string
+        required: false
+        default: ''
   workflow_dispatch:
 
 permissions:
