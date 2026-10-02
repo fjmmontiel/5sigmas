@@ -108,6 +108,7 @@
     player.dataset.followReady='true';
     let placeholder=null,sentinel=null,tools=null,back=null,close=null;
     let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
+    let originTop=0,originBottom=0;
 
     const ensureScaffold=()=>{
       if(placeholder)return;
@@ -126,7 +127,10 @@
       close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
       tools.append(back,close);player.appendChild(tools);
       back.addEventListener('click',()=>{
-        placeholder.scrollIntoView({block:'center',behavior:reduced.matches?'auto':'smooth'});
+        window.scrollTo({
+          top:Math.max(0,originTop-110),
+          behavior:reduced.matches?'auto':'smooth'
+        });
         requestAnimationFrame(schedule);
       });
       close.addEventListener('click',()=>{
@@ -154,17 +158,27 @@
     };
     const evaluate=()=>{
       raf=0;
-      if(!interacted||!sentinel)return;
+      if(!interacted||!originBottom)return;
       captureHeight();
-      const originBottom=sentinel.getBoundingClientRect().top;
-      const shouldFollow=!suppressed&&!video.ended&&!video.paused&&originBottom<72;
+      // The Series media column itself is sticky. DOM sentinels inside that
+      // column therefore move with the sticky container and cannot tell us
+      // when the player's original document position has scrolled away.
+      // Compare the immutable document-space origin captured on Play instead.
+      const originBottomInViewport=originBottom-window.scrollY;
+      const shouldFollow=!suppressed&&!video.ended&&!video.paused&&originBottomInViewport<72;
       if(shouldFollow)setFloating(true);
-      else if(floating&&originBottom>=72)setFloating(false);
+      else if(floating&&originBottomInViewport>=72)setFloating(false);
     };
     function schedule(){if(!raf)raf=requestAnimationFrame(evaluate)}
     video.addEventListener('play',()=>{
       ensureScaffold();interacted=true;suppressed=false;
-      captureHeight();schedule();
+      captureHeight();
+      if(!floating){
+        const rect=player.getBoundingClientRect();
+        originTop=rect.top+window.scrollY;
+        originBottom=rect.bottom+window.scrollY;
+      }
+      schedule();
     });
     video.addEventListener('ended',()=>{interacted=false;suppressed=false;setFloating(false);});
     window.addEventListener('scroll',schedule,{passive:true});
