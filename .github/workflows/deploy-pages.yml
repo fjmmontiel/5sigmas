@@ -88,6 +88,9 @@ jobs:
       - name: Verify exact owner-approved Fundamentos F1 MP4 bytes
         run: sha256sum -c .github/receipts/fundamentos-f1-20261002.sha256
 
+      - name: Verify complete Fundamentos F1 exact release assets
+        run: python3 scripts/verify_fundamentos_f1_release.py
+
       - name: Test fractional video timing parity
         run: python3 scripts/test_video_fractional_timing.py
 
