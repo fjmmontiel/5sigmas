@@ -85,8 +85,17 @@ def main() -> int:
         for name in EXPLICIT[scope]:
             enabled[name] = True
     else:
-        for worker, patterns in WORKERS.items():
-            enabled[worker] = any(matches(path, patterns) for path in files)
+        infrastructure_change = any(
+            path.startswith(".github/workflows/")
+            or path in {"scripts/plan_quality_gate.py", "scripts/audit_ci_storage_policy.py"}
+            for path in files
+        )
+        if infrastructure_change:
+            for worker in WORKERS:
+                enabled[worker] = True
+        else:
+            for worker, patterns in WORKERS.items():
+                enabled[worker] = any(matches(path, patterns) for path in files)
 
     for name in [*WORKERS, "owner"]:
         print(f"{name}={'true' if enabled[name] else 'false'}")
