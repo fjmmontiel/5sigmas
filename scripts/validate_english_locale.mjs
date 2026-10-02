@@ -133,7 +133,7 @@ for (const selector of ['.s5-reader-context', '.s5-reader-shell', '.s5-reader-di
 
 const contextText = await page.locator('.s5-reader-context').innerText().catch(() => '');
 const normalizedContext = normalizeVisible(contextText);
-if (!normalizedContext.includes('learn') || !normalizedContext.includes('03 of 06') || !normalizedContext.includes('ai agents')) {
+if (!normalizedContext.includes('learn') || !normalizedContext.includes('chapter 2 of 5') || !normalizedContext.includes('ai agents')) {
   failures.push(`${readerRoute}: localized reader context is incomplete: ${JSON.stringify(contextText)}`);
 }
 
