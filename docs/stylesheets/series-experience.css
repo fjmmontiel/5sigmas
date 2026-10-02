@@ -155,6 +155,7 @@
 
 .sx-feature-video{position:relative;top:auto;}
 .sx-player-follow-shell{width:100%;min-width:0;}
+.sx-player-follow-placeholder{height:0;width:100%;min-width:0;}
 .sx-player.is-following{
   position:fixed;
   right:18px;
