@@ -32,9 +32,18 @@ def select(manifest: dict, files: list[str], requested: str, draft: bool = False
         return [item["id"] for item in workflows if item.get("suite") in suites]
 
     selected: list[str] = []
+    workflow_files = [path for path in files if path.startswith(".github/workflows/")]
+    product_files = [path for path in files if not path.startswith(".github/workflows/")]
+    if workflow_files:
+        selected.append("ci-storage-policy")
     for item in workflows:
-        own_workflow = item["workflow"]
-        if own_workflow in files or any(matches(path, pattern) for path in files for pattern in item.get("paths", [])):
+        if item["id"] == "ci-storage-policy":
+            if item["id"] not in selected and any(
+                matches(path, pattern) for path in product_files for pattern in item.get("paths", [])
+            ):
+                selected.append(item["id"])
+            continue
+        if any(matches(path, pattern) for path in product_files for pattern in item.get("paths", [])):
             selected.append(item["id"])
     return selected
 
