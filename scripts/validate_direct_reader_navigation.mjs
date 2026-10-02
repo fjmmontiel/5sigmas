@@ -230,7 +230,7 @@ const assertCompactMobileReader = async (page) => {
     throw new Error('Mobile lesson navigator must remain sticky while reading.');
   }
   const courseText = (await topbar.locator('.s5-reader-course strong').innerText()).replace(/\s+/g, ' ').trim();
-  if (!/(?:Capítulo|Chapter) \d+ (?:de|of) \d+/.test(courseText)) {
+  if (!/(?:Capítulo|Chapter) \d+ (?:de|of) \d+|Intro · \d+ (?:capítulos|chapters)/.test(courseText)) {
     throw new Error(`Mobile series progress must use semantic chapter numbering: ${courseText}`);
   }
   if (await page.locator('[data-sx-reader-index]:visible, .sx-reader-context:visible').count()) {
