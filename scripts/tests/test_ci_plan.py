@@ -14,7 +14,8 @@ manifest={"workflows":[
 ]}
 assert module.select(manifest,["hooks/series_experience.py"],"auto")==["series"]
 assert module.select(manifest,["locales/en/index.md"],"auto")==["english"]
-assert module.select(manifest,[".github/workflows/core.yml"],"auto")==["core"]
+manifest["workflows"].insert(0,{"id":"ci-storage-policy","workflow":".github/workflows/ci-storage-policy.yml","suite":"core","paths":[".github/workflows/**"]})
+assert module.select(manifest,[".github/workflows/core.yml"],"auto")==["ci-storage-policy"]
 assert module.select(manifest,[],"series")==["core","series"]
 assert module.select(manifest,[],"english")==["core","english","locale"]
 assert module.select(manifest,[],"full")==["core","series","english","locale"]
