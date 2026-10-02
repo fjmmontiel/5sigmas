@@ -54,27 +54,41 @@
   function initializeCardPreview(card){
     if(!card || card.dataset.previewReady) return;
     card.dataset.previewReady='true';
-    const video=$(card,'[data-sx-card-video]');
+    const slot=$(card,'[data-sx-card-video]');
     const art=$(card,'.sx-card-art');
-    if(!video||!art||!finePointer.matches)return;
-    let loaded=false;
+    if(!slot||!art||!finePointer.matches)return;
+    let video=null;
+    const ensureVideo=()=>{
+      if(video)return video;
+      video=document.createElement('video');
+      video.className='sx-card-preview';
+      video.muted=true;
+      video.playsInline=true;
+      video.preload='none';
+      video.setAttribute('aria-hidden','true');
+      video.tabIndex=-1;
+      video.src=slot.dataset.src||'';
+      slot.replaceChildren(video);
+      return video;
+    };
     const start=()=>{
       if(reduced.matches)return;
-      if(!loaded){
-        video.src=video.dataset.src||'';
-        video.load();
-        loaded=true;
-      }
-      video.muted=true;
-      const promise=video.play();
+      const node=ensureVideo();
+      node.currentTime=0;
+      const promise=node.play();
       if(promise&&typeof promise.then==='function'){
         promise.then(()=>card.classList.add('is-previewing')).catch(()=>card.classList.remove('is-previewing'));
       }
     };
     const stop=()=>{
+      if(!video)return;
       video.pause();
       card.classList.remove('is-previewing');
-      if(video.readyState>=1){ try{video.currentTime=0}catch{} }
+      try{video.currentTime=0}catch{}
+      video.removeAttribute('src');
+      video.load();
+      video.remove();
+      video=null;
     };
     art.addEventListener('pointerenter',event=>{ if(event.pointerType!=='touch')start(); });
     art.addEventListener('pointerleave',stop);
