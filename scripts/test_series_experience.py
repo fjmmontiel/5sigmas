@@ -32,7 +32,7 @@ def check(site: Path, output: Path):
         originals=0; advanced=0
         for path in sorted((site/locale/'series').glob('*/*/index.html')):
             doc=BeautifulSoup(path.read_text(),'lxml')
-            if not doc.select_one('.sx-reader-context'): continue
+            if not doc.select_one('.s5-reader-context'): continue
             rel=path.relative_to(site/locale/'series')
             series_slug=rel.parts[0]
             if series_slug not in {'seguridad-ia','agentes-ia','agentes-voz-tiempo-real','coding-agents-agent-harnesses','context-engineering-memory-mcp','llm-inference-engineering-economics','evaluating-ai-systems-production'}:
@@ -40,7 +40,8 @@ def check(site: Path, output: Path):
             if rel.parts[1].startswith('00'): continue
             advanced+=1
             assert not doc.select('[data-sx-guide]'), str(path)
-            assert doc.select_one('.sx-reader-next'), str(path)
+            assert not doc.select('.sx-reader-context,.sx-reader-next,[data-sx-reader-index]'), str(path)
+            assert doc.select_one('.s5-reader-end'), str(path)
             if doc.select_one(VISUAL_SELECTOR): originals+=1
         assert advanced==40, advanced
         assert originals==39, originals
