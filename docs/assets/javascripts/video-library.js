@@ -32,6 +32,7 @@
     container.dataset.s5FollowReady = 'true';
 
     let placeholder = null;
+    let sentinel = null;
     let tools = null;
     let back = null;
     let close = null;
@@ -48,7 +49,11 @@
       placeholder = document.createElement('div');
       placeholder.className = 's5-follow-placeholder';
       placeholder.setAttribute('aria-hidden', 'true');
+      sentinel = document.createElement('div');
+      sentinel.className = 's5-follow-sentinel';
+      sentinel.setAttribute('aria-hidden', 'true');
       container.before(placeholder);
+      container.after(sentinel);
 
       tools = document.createElement('div');
       tools.className = 's5-follow-tools';
@@ -95,28 +100,25 @@
         ensureScaffold();
         captureHeight();
         placeholder.style.height = Math.max(1, normalHeight) + 'px';
-      } else if (placeholder) {
-        placeholder.style.height = '0px';
+        floating = true;
+        container.classList.add('is-following');
+      } else {
+        container.classList.remove('is-following');
+        floating = false;
+        if (placeholder) placeholder.style.height = '0px';
       }
-      floating = value;
-      container.classList.toggle('is-following', value);
       if (tools) tools.hidden = !value;
     };
 
     const evaluate = () => {
       raf = 0;
-      if (!interacted || !placeholder) return;
+      if (!interacted || !sentinel) return;
       captureHeight();
-      const anchor = floating ? placeholder : container;
-      const rect = anchor.getBoundingClientRect();
-      const height = Math.max(1, rect.height || normalHeight || 1);
-      const visible = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0));
-      const ratio = visible / Math.max(1, Math.min(height, innerHeight));
-      const passedTop = rect.top < 72;
-
-      if (!suppressed && !player.ended && passedTop && ratio < 0.18) {
+      const originBottom = sentinel.getBoundingClientRect().top;
+      const shouldFollow = !suppressed && !player.ended && !player.paused && originBottom < 72;
+      if (shouldFollow) {
         setFloating(true);
-      } else if (floating && ratio > 0.52) {
+      } else if (floating && originBottom >= 72) {
         setFloating(false);
       }
     };
@@ -128,7 +130,7 @@
     player.addEventListener('play', () => {
       ensureScaffold();
       interacted = true;
-      if (!floating) suppressed = false;
+      suppressed = false;
       captureHeight();
       schedule();
     });
