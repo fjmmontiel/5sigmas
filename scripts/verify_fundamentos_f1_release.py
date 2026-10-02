@@ -92,7 +92,7 @@ def main():
         for actual,expected in zip(clips,row["chapters"]):
             assert actual["startOffset"]==expected["start"] and actual["endOffset"]==expected["end"] and actual["name"]==expected["name"]
         assert "potentialAction" not in v
-        assert not re.search(r'<meta[^>]+name=["\\']robots["\\'][^>]+noindex',watch,re.I)
+        assert not re.search(r"<meta[^>]+name=.?robots.?[^>]+noindex",watch,re.I)
         results.append({"path":row["path"],"sha256":row["sha256"],"status":"PASS"})
         print("PASS exact Fundamentos F1 media + discovery",row["locale"],row["path"],flush=True)
     report={"scope":"Fundamentos F1 exact owner-approved release","revision":a.revision,"origin":a.origin,"media_count":10,"surface_count":20,"clips":60,"status":"PASS","results":results}
