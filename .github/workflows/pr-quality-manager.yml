@@ -1,0 +1,473 @@
+name: 5sigmas PR Quality Manager
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Quality suite to delegate
+        required: true
+        default: all
+        type: choice
+        options: [all, core, series, english, topics, tools, mcp]
+      base_ref:
+        description: Base ref for manual delegated reviews
+        required: true
+        default: main
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: pr-quality-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    name: Plan delegated quality
+    runs-on: ubuntu-latest
+    outputs:
+      selected: ${{ steps.plan.outputs.selected }}
+      selected_count: ${{ steps.plan.outputs.selected_count }}
+      head_sha: ${{ steps.refs.outputs.head_sha }}
+      base_sha: ${{ steps.refs.outputs.base_sha }}
+      pr_number: ${{ steps.refs.outputs.pr_number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            quality/ci-workflows.json
+            scripts/plan_pr_quality.py
+            scripts/tests/test_plan_pr_quality.py
+          sparse-checkout-cone-mode: false
+
+      - name: Verify planner
+        run: python scripts/tests/test_plan_pr_quality.py
+
+      - name: Resolve refs and changed files
+        id: refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          MANUAL_BASE_REF: ${{ inputs.base_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          : > /tmp/changed-files.txt
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files?per_page=100" --jq '.[].filename' > /tmp/changed-files.txt
+            head_sha="$PR_HEAD_SHA"
+            base_sha="$PR_BASE_SHA"
+            pr_number="$PR_NUMBER"
+          else
+            git fetch --no-tags --depth=1 origin "${MANUAL_BASE_REF:-main}"
+            head_sha="$GITHUB_SHA"
+            base_sha="$(git rev-parse FETCH_HEAD)"
+            pr_number="manual-$GITHUB_RUN_ID"
+          fi
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$base_sha" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
+
+      - name: Select delegated workflows
+        id: plan
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MANUAL_SUITE: ${{ inputs.suite }}
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
+        shell: bash
+        run: |
+          suite="changed"
+          draft="${IS_DRAFT:-false}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            suite="${MANUAL_SUITE:-all}"
+            draft="false"
+          fi
+          python scripts/plan_pr_quality.py             --manifest quality/ci-workflows.json             --changed-files /tmp/changed-files.txt             --suite "$suite"             --draft "$draft"             --github-output "$GITHUB_OUTPUT"
+
+      - name: Publish delegation plan
+        env:
+          SELECTED: ${{ steps.plan.outputs.selected }}
+          COUNT: ${{ steps.plan.outputs.selected_count }}
+        run: |
+          {
+            echo "## 5sigmas delegated quality"
+            echo
+            echo "**Selected:** $COUNT"
+            echo
+            echo '```json'
+            echo "$SELECTED"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  ci_storage_policy:
+    name: ci-storage-policy
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'ci-storage-policy') }}
+    uses: ./.github/workflows/ci-storage-policy.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  deploy_mcp_worker:
+    name: deploy-mcp-worker
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'deploy-mcp-worker') }}
+    uses: ./.github/workflows/deploy-mcp-worker.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_editorial_quality:
+    name: english-editorial-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-editorial-quality') }}
+    uses: ./.github/workflows/english-editorial-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_energy_ch2_bottlenecks_quality:
+    name: english-energy-ch2-bottlenecks-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-energy-ch2-bottlenecks-quality') }}
+    uses: ./.github/workflows/english-energy-ch2-bottlenecks-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_mirror_quality:
+    name: english-mirror-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-mirror-quality') }}
+    uses: ./.github/workflows/english-mirror-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_reasoning_ch1_quality:
+    name: english-reasoning-ch1-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-reasoning-ch1-quality') }}
+    uses: ./.github/workflows/english-reasoning-ch1-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_reasoning_ch2_quality:
+    name: english-reasoning-ch2-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-reasoning-ch2-quality') }}
+    uses: ./.github/workflows/english-reasoning-ch2-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_reasoning_ch3_quality:
+    name: english-reasoning-ch3-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-reasoning-ch3-quality') }}
+    uses: ./.github/workflows/english-reasoning-ch3-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_reasoning_ch4_quality:
+    name: english-reasoning-ch4-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-reasoning-ch4-quality') }}
+    uses: ./.github/workflows/english-reasoning-ch4-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  english_reasoning_ch5_quality:
+    name: english-reasoning-ch5-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'english-reasoning-ch5-quality') }}
+    uses: ./.github/workflows/english-reasoning-ch5-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  locale_switch_quality:
+    name: locale-switch-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'locale-switch-quality') }}
+    uses: ./.github/workflows/locale-switch-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  measurement_contract:
+    name: measurement-contract
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'measurement-contract') }}
+    uses: ./.github/workflows/measurement-contract.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  pr_visual_review:
+    name: pr-visual-review
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'pr-visual-review') }}
+    uses: ./.github/workflows/pr-visual-review.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  series_owner_workbench:
+    name: series-owner-workbench
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'series-owner-workbench') }}
+    uses: ./.github/workflows/series-owner-workbench.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  series_ui_review:
+    name: series-ui-review
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'series-ui-review') }}
+    uses: ./.github/workflows/series-ui-review.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  tool_shell_contract:
+    name: tool-shell-contract
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'tool-shell-contract') }}
+    uses: ./.github/workflows/tool-shell-contract.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  tools_quality:
+    name: tools-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'tools-quality') }}
+    uses: ./.github/workflows/tools-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_agent_autonomy_quality:
+    name: topic-agent-autonomy-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-agent-autonomy-quality') }}
+    uses: ./.github/workflows/topic-agent-autonomy-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_evaluation_benchmark_contamination_quality:
+    name: topic-evaluation-benchmark-contamination-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-evaluation-benchmark-contamination-quality') }}
+    uses: ./.github/workflows/topic-evaluation-benchmark-contamination-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_evaluation_human_protocol_quality:
+    name: topic-evaluation-human-protocol-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-evaluation-human-protocol-quality') }}
+    uses: ./.github/workflows/topic-evaluation-human-protocol-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_evaluation_offline_online_quality:
+    name: topic-evaluation-offline-online-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-evaluation-offline-online-quality') }}
+    uses: ./.github/workflows/topic-evaluation-offline-online-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_evaluation_uncertainty_quality:
+    name: topic-evaluation-uncertainty-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-evaluation-uncertainty-quality') }}
+    uses: ./.github/workflows/topic-evaluation-uncertainty-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_evaluation_verifier_quality:
+    name: topic-evaluation-verifier-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-evaluation-verifier-quality') }}
+    uses: ./.github/workflows/topic-evaluation-verifier-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_prompt_injection_taxonomy_quality:
+    name: topic-prompt-injection-taxonomy-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-prompt-injection-taxonomy-quality') }}
+    uses: ./.github/workflows/topic-prompt-injection-taxonomy-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_reasoning_evaluation_quality:
+    name: topic-reasoning-evaluation-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-reasoning-evaluation-quality') }}
+    uses: ./.github/workflows/topic-reasoning-evaluation-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_reasoning_evidence_surfaces_quality:
+    name: topic-reasoning-evidence-surfaces-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-reasoning-evidence-surfaces-quality') }}
+    uses: ./.github/workflows/topic-reasoning-evidence-surfaces-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_reasoning_latency_quality:
+    name: topic-reasoning-latency-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-reasoning-latency-quality') }}
+    uses: ./.github/workflows/topic-reasoning-latency-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_reasoning_verifier_quality:
+    name: topic-reasoning-verifier-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-reasoning-verifier-quality') }}
+    uses: ./.github/workflows/topic-reasoning-verifier-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_transformer_attention_cost_quality:
+    name: topic-transformer-attention-cost-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-transformer-attention-cost-quality') }}
+    uses: ./.github/workflows/topic-transformer-attention-cost-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  topic_transformer_rnn_attention_quality:
+    name: topic-transformer-rnn-attention-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'topic-transformer-rnn-attention-quality') }}
+    uses: ./.github/workflows/topic-transformer-rnn-attention-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  voice_architecture_article_quality:
+    name: voice-architecture-article-quality
+    needs: plan
+    if: ${{ contains(fromJSON(needs.plan.outputs.selected), 'voice-architecture-article-quality') }}
+    uses: ./.github/workflows/voice-architecture-article-quality.yml
+    with:
+      head_sha: ${{ needs.plan.outputs.head_sha }}
+      base_sha: ${{ needs.plan.outputs.base_sha }}
+      pr_number: ${{ needs.plan.outputs.pr_number }}
+    secrets: inherit
+
+  quality_gate:
+    name: Quality gate summary
+    if: always()
+    needs: [plan, ci_storage_policy, deploy_mcp_worker, english_editorial_quality, english_energy_ch2_bottlenecks_quality, english_mirror_quality, english_reasoning_ch1_quality, english_reasoning_ch2_quality, english_reasoning_ch3_quality, english_reasoning_ch4_quality, english_reasoning_ch5_quality, locale_switch_quality, measurement_contract, pr_visual_review, series_owner_workbench, series_ui_review, tool_shell_contract, tools_quality, topic_agent_autonomy_quality, topic_evaluation_benchmark_contamination_quality, topic_evaluation_human_protocol_quality, topic_evaluation_offline_online_quality, topic_evaluation_uncertainty_quality, topic_evaluation_verifier_quality, topic_prompt_injection_taxonomy_quality, topic_reasoning_evaluation_quality, topic_reasoning_evidence_surfaces_quality, topic_reasoning_latency_quality, topic_reasoning_verifier_quality, topic_transformer_attention_cost_quality, topic_transformer_rnn_attention_quality, voice_architecture_article_quality]
+    runs-on: ubuntu-latest
+    env:
+      RESULTS: ${{ toJSON(needs) }}
+    steps:
+      - name: Aggregate delegated results
+        shell: python
+        run: |
+          import json, os, sys
+          results=json.loads(os.environ["RESULTS"])
+          bad=[]
+          rows=[]
+          for name,data in results.items():
+              result=data.get("result")
+              rows.append((name,result))
+              if name != "plan" and result not in {"success","skipped"}:
+                  bad.append((name,result))
+          print("\n".join(f"{name}: {result}" for name,result in rows))
+          if bad:
+              raise SystemExit("Delegated quality failed: " + ", ".join(f"{n}={r}" for n,r in bad))
