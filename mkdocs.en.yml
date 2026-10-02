@@ -87,7 +87,7 @@ extra:
     context_aria: Reading context
     navigation_aria: "Navigation for {collection}"
     progress_of: of
-    all_library: Full library
+    all_library: Explore library
     search: Search
     direct_search_placeholder: "Series, chapter or note"
     direct_search_aria: "Search any series, chapter or technical note"
@@ -98,10 +98,14 @@ extra:
     reading_time_label: Reading time
     reading_estimated: Estimated reading
     reading_estimated_aria: Estimated reading time
+    chapter_label: Chapter
+    chapter_singular: chapter
+    chapter_plural: chapters
+    intro_label: Intro
 
 nav:
   - Home: index.md
-  - Watch: visuales/index.md
+  - Visuals: visuales/index.md
   - Videos: videos/index.md
   - Tools:
       - tools/index.md

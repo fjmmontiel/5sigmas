@@ -148,6 +148,11 @@ def on_page_content(html,page,config,files,**kwargs):
         return html
     match=PAGE_MAP.get(src)
     if not match or src in PROTECTED: return html
+    # Article pages already have the canonical reader context, chapter rail and
+    # continuation injected by reading_navigation/direct_reader_navigation.
+    # Keep this lightweight Series context only on generated watch pages so we
+    # never render two competing chapter navigators around the same article.
+    if not src.startswith('videos/'): return html
     s,entry=match
     index=next((i for i,c in enumerate(s['chapters']) if c['src']==entry['src']),None)
     count=len(s['chapters'])
