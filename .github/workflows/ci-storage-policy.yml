@@ -31,6 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate centralized PR workflow management
+        run: python scripts/validate_ci_manager.py
+
       - name: Reject wasteful Actions artifacts
         shell: bash
         run: |
