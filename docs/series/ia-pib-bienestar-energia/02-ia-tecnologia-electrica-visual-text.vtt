@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Fijamos un entrenamiento ilustrativo de cien kilovatios-hora.
+
+2
+00:00:07.350 --> 00:00:14.200
+Cada consulta posterior consume 0.01 kilovatios-hora; diez mil consultas igualan el entrenamiento.
+
+3
+00:00:14.200 --> 00:00:22.250
+Con veinte mil consultas, la inferencia suma doscientos y el total trescientos: depende del volumen.
+
+4
+00:00:22.750 --> 00:00:29.600
+Cien tareas de diez vatios-hora consumen mil en total.
+
+5
+00:00:29.600 --> 00:00:36.767
+La energía por tarea baja a cinco, pero la demanda del escenario aumenta a trescientas.
+
+6
+00:00:36.767 --> 00:00:44.433
+El total sube a mil quinientos: no es inevitable, depende de cómo cambie la demanda.
+
+7
+00:00:44.933 --> 00:00:51.783
+Los equipos informáticos consumen ocho kilovatios y el edificio completo diez.
+
+8
+00:00:51.783 --> 00:00:58.633
+Los dos restantes corresponden a la infraestructura auxiliar dentro de esta frontera.
+
+9
+00:00:58.633 --> 00:01:07.817
+PUE es diez entre ocho: 1.25. No mide por sí solo la calidad ni el trabajo útil del modelo.
+
+10
+00:01:08.317 --> 00:01:15.167
+Cada equipo requiere dos kilovatios; doce disponibles permiten como máximo seis.
+
+11
+00:01:15.167 --> 00:01:22.017
+Hay ocho huecos, pero la refrigeración solo admite diez kilovatios: cinco equipos.
+
+12
+00:01:22.017 --> 00:01:29.683
+La capacidad conjunta es el mínimo entre seis, ocho y cinco: cinco, bajo estos supuestos.
+
+13
+00:01:30.183 --> 00:01:37.033
+Asignamos 600 kilogramos de emisiones incorporadas a un equipo ficticio.
+
+14
+00:01:37.033 --> 00:01:44.200
+Un millón de tareas reparte 0.6 gramos por tarea; medio millón, 1.2.
+
+15
+00:01:44.200 --> 00:01:52.250
+Es una asignación por uso y vida útil, no una medición directa de cada consulta.
+
+16
+00:01:52.750 --> 00:01:59.600
+Mantenemos un consumo de veinte kilovatios-hora.
+
+17
+00:01:59.600 --> 00:02:06.767
+Con factores ilustrativos de 0.1 y 0.5 kilogramos por kilovatio-hora, obtenemos dos y diez kilogramos.
+
+18
+00:02:06.767 --> 00:02:14.817
+La frontera y el factor importan: esta cuenta no mide emisiones marginales ni toda la fabricación.
+
