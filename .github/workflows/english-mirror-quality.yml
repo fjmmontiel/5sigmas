@@ -1,58 +1,14 @@
 name: English mirror quality
 
 on:
-  pull_request:
-    paths:
-      - 'locales/en/**'
-      - 'discovery/**'
-      - 'mkdocs.en.yml'
-      - 'hooks/video_sitemap_en.py'
-      - 'hooks/locale_alternates.py'
-      - 'scripts/prepare_locale.py'
-      - 'scripts/prepare_modelos_r2_ci_media.sh'
-      - 'scripts/audit_english_full_parity.py'
-      - 'scripts/validate_english_series_mirror.mjs'
-      - 'scripts/validate_english_series_video_rollback.mjs'
-      - 'scripts/validate_english_reasoning_ttc.mjs'
-      - 'scripts/validate_english_energy_ch1.mjs'
-      - 'scripts/validate_english_energy_ch2.mjs'
-      - 'scripts/validate_english_energy_ch3.mjs'
-      - 'scripts/validate_english_energy_complete.mjs'
-      - 'scripts/validate_english_energy_media.mjs'
-      - 'scripts/validate_english_cave_ch1.mjs'
-      - 'scripts/validate_english_history_ch2.mjs'
-      - 'scripts/validate_english_history_ch3.mjs'
-      - 'scripts/validate_english_caves_ch3_nlp.mjs'
-      - 'scripts/validate_english_caves_ch4_alexnet.mjs'
-      - 'scripts/validate_english_caves_ch4_transformer.mjs'
-      - 'scripts/validate_english_caves_ch4_remaining.mjs'
-      - 'scripts/validate_english_caves_ch5_agents.mjs'
-      - 'scripts/validate_english_caves_ch5_search.mjs'
-      - 'scripts/validate_english_caves_ch5_memory.mjs'
-      - 'scripts/validate_english_caves_complete.mjs'
-      - 'scripts/validate_english_caves_media.mjs'
-      - 'scripts/validate_english_foundations_complete.mjs'
-      - 'scripts/validate_english_multimodality_complete.mjs'
-      - 'scripts/validate_english_multimodality_ch4_metrics.mjs'
-      - 'scripts/validate_english_datacenters_complete.mjs'
-      - 'scripts/validate_english_datacenters_media.mjs'
-      - 'scripts/validate_english_security_complete.mjs'
-      - 'scripts/validate_english_security_media.mjs'
-      - 'scripts/validate_english_agents_media.mjs'
-      - 'scripts/validate_english_technical_articles.mjs'
-      - 'scripts/validate_english_concepts.mjs'
-      - 'scripts/validate_english_visual_hub.mjs'
-      - 'scripts/validate_english_video_hub.mjs'
-      - 'docs/assets/javascripts/series_energy_ai_preview.js'
-      - 'docs/assets/javascripts/visual-hub.js'
-      - 'docs/assets/javascripts/video-library.js'
-      - '.github/workflows/english-mirror-quality.yml'
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
