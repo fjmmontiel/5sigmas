@@ -100,8 +100,9 @@ def cover(s, small=False):
 def card_visual(s, label):
     """Editorial series cover built from the already-published presentation poster/video."""
     intro=s.get('intro') or {}
-    poster=intro.get('poster')
-    video=intro.get('video')
+    source=intro if intro.get('poster') else next((entry for entry in s.get('entries',[]) if entry.get('poster')), {})
+    poster=source.get('poster')
+    video=source.get('video')
     if not poster:
         return cover(s)
     preview=(f'<video class="sx-card-preview" muted playsinline preload="none" data-sx-card-video data-src="{esc(video)}" aria-hidden="true" tabindex="-1"></video>' if video else '')
