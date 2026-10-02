@@ -8,16 +8,16 @@
 /* Restore a recognisable 5σ monogram instead of a generic app tile. */
 .md-header__button.md-logo {
   display: grid;
-  width: 2.55rem;
-  height: 2.25rem;
+  width: 44px;
+  height: 38px;
   margin: 0 .12rem 0 0 !important;
   padding: 0 !important;
   place-items: center;
 }
 
 .md-logo img {
-  width: 2.25rem !important;
-  height: 1.82rem !important;
+  width: 38px !important;
+  height: 31px !important;
   object-fit: contain;
   object-position: center;
 }
@@ -28,7 +28,7 @@
 
 .md-header__title {
   margin-left: 0 !important;
-  font-size: .86rem !important;
+  font-size: 16px !important;
   font-weight: 800 !important;
   letter-spacing: -.035em !important;
 }
@@ -175,7 +175,7 @@ article:has(.ctxmix) .s5-video-embed__watch {
 
   .md-header__button.md-logo {
     order: 1;
-    width: 2.45rem;
+    width: 42px;
     margin-left: .06rem !important;
     margin-right: 0 !important;
   }

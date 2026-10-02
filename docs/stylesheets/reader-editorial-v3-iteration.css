@@ -111,9 +111,9 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
      space. Keep the stable site identity only and reserve a bounded title
      slot before the reader navigation starts. */
   body:has(.s5-reader-shell) .md-header__title {
-    flex: 0 0 auto !important;
-    width: auto !important;
-    max-width: 6rem !important;
+    flex: 0 0 4.2rem !important;
+    width: 4.2rem !important;
+    max-width: 4.2rem !important;
   }
 
   body:has(.s5-reader-shell) .md-header__topic:first-child {
@@ -136,7 +136,7 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     position: absolute;
     top: 0;
     right: 330px;
-    left: 12rem;
+    left: 7.5rem;
     display: flex;
     gap: 1.05rem;
     align-items: center;
