@@ -137,10 +137,10 @@ const assertSeriesNumberingContract = async (page, { locale = 'es' } = {}) => {
   }
 
   const chapterPath = `${en ? '/en' : ''}/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/`;
-  const current = links.filter({ has: page.locator('span:text-is("02")') }).and(
-    currentCollection.locator(`a[href="${chapterPath}"]`)
-  );
-  if (await current.count() !== 1 || await current.getAttribute('aria-current') !== 'page') {
+  const current = currentCollection.locator(`a[data-s5-direct-entry][href="${chapterPath}"]`);
+  if (await current.count() !== 1
+      || await current.getAttribute('aria-current') !== 'page'
+      || (await current.locator(':scope > span').innerText()).trim() !== '02') {
     throw new Error('The URL/current chapter does not resolve to chapter 02 in the persistent rail.');
   }
 
