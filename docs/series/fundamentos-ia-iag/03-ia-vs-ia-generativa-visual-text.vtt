@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+Un clasificador devuelve una puntuación de riesgo para una transacción.
+
+2
+00:00:07.350 --> 00:00:14.200
+Un generador redacta una explicación con varias afirmaciones verificables.
+
+3
+00:00:14.200 --> 00:00:21.867
+El texto fluido no sustituye la validación del riesgo ni la comprobación de sus afirmaciones.
+
+4
+00:00:22.367 --> 00:00:29.533
+Con logits dos, uno y cero, temperatura uno concentra más masa en el primer token.
+
+5
+00:00:29.533 --> 00:00:36.383
+Temperatura dos aplana la distribución antes del muestreo.
+
+6
+00:00:36.383 --> 00:00:44.050
+Greedy elige un máximo sin muestrear; no implica que todo el sistema sea siempre reproducible.
+
+7
+00:00:44.550 --> 00:00:51.400
+El modelo atribuye un resultado a la variable A.
+
+8
+00:00:51.400 --> 00:00:58.250
+Una intervención controlada cambia A y mantiene lo demás constante.
+
+9
+00:00:58.250 --> 00:01:05.600
+Comparar ambos resultados aporta evidencia; el texto explicativo por sí solo no prueba causalidad.
+
+10
+00:01:06.100 --> 00:01:12.950
+El ejemplo tiene 6 verdaderos positivos, 2 falsos positivos y 3 falsos negativos.
+
+11
+00:01:12.950 --> 00:01:20.500
+Precisión: 6 de 8 alertas correctas. Recall: 6 de 9 casos detectados.
+
+12
+00:01:20.500 --> 00:01:27.850
+En texto, también hay que comprobar fidelidad y utilidad.
+
+13
+00:01:28.350 --> 00:01:35.200
+Un workflow ejecuta pasos y condiciones definidos por su diseñador.
+
+14
+00:01:35.200 --> 00:01:42.050
+Un agente puede seleccionar herramientas o pasos según el estado observado.
+
+15
+00:01:42.050 --> 00:01:49.400
+Ambos necesitan validación; más libertad de elección añade decisiones que comprobar.
+
+16
+00:01:49.900 --> 00:01:56.750
+Exigimos salida estructurada, latencia acotada y acceso a documentos privados.
+
+17
+00:01:56.750 --> 00:02:03.600
+Descarta configuraciones que incumplen requisitos antes de comparar resultados.
+
+18
+00:02:03.600 --> 00:02:10.950
+La solución puede combinar reglas, modelos y recuperación.
+

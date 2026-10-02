@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+An embedding represents an input using learned numbers.
+
+2
+00:00:07.350 --> 00:00:14.200
+In this illustrative plane, two vectors with nearby directions have high cosine similarity.
+
+3
+00:00:14.200 --> 00:00:21.867
+Closeness depends on the model and task; it does not guarantee two statements are equivalent.
+
+4
+00:00:22.367 --> 00:00:29.917
+In Spanish, banco can mean a bench or a financial bank. Nearby words help disambiguate it.
+
+5
+00:00:29.917 --> 00:00:36.767
+Attention combines other positions using context-dependent weights.
+
+6
+00:00:36.767 --> 00:00:44.117
+The displayed weights are illustrative, not a complete explanation of reasoning.
+
+7
+00:00:44.617 --> 00:00:51.783
+For an invented continuation, three tokens have probabilities of sixty, thirty and ten percent.
+
+8
+00:00:51.783 --> 00:00:58.633
+Sampling can select different tokens from that same distribution.
+
+9
+00:00:58.633 --> 00:01:05.983
+The selected token enters the context and changes the next step.
+
+10
+00:01:06.483 --> 00:01:13.333
+The prompt shows two examples of converting a name into a label.
+
+11
+00:01:13.333 --> 00:01:20.183
+The model applies the pattern to a third name during this call.
+
+12
+00:01:20.183 --> 00:01:27.533
+Here the context changed, not the weights: this is not a fine-tuning session.
+
+13
+00:01:28.033 --> 00:01:34.883
+The question selects a relevant passage from the returns document.
+
+14
+00:01:34.883 --> 00:01:41.733
+That passage enters the context alongside the question.
+
+15
+00:01:41.733 --> 00:01:49.400
+The answer must support its claim with the passage; retrieval does not prevent every error.
+
+16
+00:01:49.900 --> 00:01:56.750
+The model proposes checking the order status.
+
+17
+00:01:56.750 --> 00:02:03.600
+The system validates permission before executing the tool.
+
+18
+00:02:03.600 --> 00:02:10.950
+The observation returns to the model, but every new step retains limits and controls.
+

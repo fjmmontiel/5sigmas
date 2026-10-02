@@ -1,0 +1,585 @@
+{
+  "schema_version": 1,
+  "release_id": "fundamentos-f1-20261002",
+  "series": "fundamentos-ia-iag",
+  "round": "F1",
+  "owner_approval": "EXPLICIT_APPROVED_2026-09-28",
+  "exact_byte_policy": "NO_RERENDER_NO_TRANSCODE",
+  "web_horizontal_originals": 10,
+  "locales": [
+    "es",
+    "en"
+  ],
+  "objects": [
+    {
+      "path": "series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "62fc35e360620546f1b9adc753b1e22dbc75d267d68bcb36639add3d58e03b65",
+      "bytes": 12413230,
+      "duration": 129.616667,
+      "duration_iso": "PT129.616667S",
+      "frames": 7777,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/00_presentacion_serie/",
+      "watch": "videos/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "poster_path": "series/fundamentos-ia-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "5f820e884a6147da0046b0d9c39f1ba83ad918497653644b5a4698bd4661a396",
+      "chapters": [
+        {
+          "name": "¿Qué debe salir del sistema?",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Un modelo no es todo el producto",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Tres preguntas que no son sinónimos",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "Una consulta puede usar varias piezas",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Entrenar es un paso, no el cierre",
+          "start": 86.516667,
+          "end": 108.066667
+        },
+        {
+          "name": "Capacidad y autonomía son distintas",
+          "start": 108.066667,
+          "end": 129.616667
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "1f46b722d02914251d1353f47b4c158cdf3a532fff55fd7e45e6bf1a65b5c3e7",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "c5d4db05c7797fd12f11868896ad1b3d1e84677a9f8e25066330c1787c04799f"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/00_presentacion_serie.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "3163ccc2fc943016d1c160fc44d30e297f139c37431ade225215e6808368d386",
+      "bytes": 11781209,
+      "duration": 129.616667,
+      "duration_iso": "PT129.616667S",
+      "frames": 7777,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "watch": "en/videos/series/fundamentos-ia-iag/00_presentacion_serie/",
+      "poster_path": "en/series/fundamentos-ia-iag/00_presentacion_serie.jpg",
+      "poster_sha256": "74948a4f28a59863ee770f75db4e7e0e20443134442dc4c4a8eb9bfdae437404",
+      "chapters": [
+        {
+          "name": "What must the system produce?",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "A model is not the entire product",
+          "start": 21.55,
+          "end": 43.1
+        },
+        {
+          "name": "Three questions, not three synonyms",
+          "start": 43.1,
+          "end": 64.65
+        },
+        {
+          "name": "One request can use several components",
+          "start": 64.65,
+          "end": 86.516667
+        },
+        {
+          "name": "Training is one step, not completion",
+          "start": 86.516667,
+          "end": 108.066667
+        },
+        {
+          "name": "Capability and autonomy are different",
+          "start": 108.066667,
+          "end": 129.616667
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/00_presentacion_serie-visual-text.vtt",
+      "captions_sha256": "86c6bc6df198a4a1f480de56c8889697572113a1010a6a7ada9741adde82d74c",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/00_presentacion_serie-transcript.html",
+      "transcript_sha256": "11cb5279cb2092124f81bb9991c4532c86c068915ee4b5cded6a289b16fecad9"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "3a15988693d6f800630c35f0fc36d8bad6a116e4349b8982a3766f1ae8157c40",
+      "bytes": 12581918,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/01-que-es-ia/",
+      "watch": "videos/series/fundamentos-ia-iag/01-que-es-ia/",
+      "poster_path": "series/fundamentos-ia-iag/01-que-es-ia.jpg",
+      "poster_sha256": "1f3e7179ab26f7c8969c56a5f830aa1b3dd188878eac38af773c444b15c4dda6",
+      "chapters": [
+        {
+          "name": "Familia técnica y finalidad no son lo mismo",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "Un árbol aprende una pregunta concreta",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "Contar frecuencias no es demostrar una causa",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "El centro se mueve hacia sus ejemplos",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "Una neurona calcula, compara y se ajusta",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Los datos de mañana pueden cambiar",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/01-que-es-ia-visual-text.vtt",
+      "captions_sha256": "02cbc68119094d2099a203a1bfc86a259200091d01052f7e20a7f6e193013f15",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/01-que-es-ia-transcript.html",
+      "transcript_sha256": "11dc3fae6e18bd52f4b661c0e8d83a29e6e00938e2f70e1f7ecdf188dbc60aab"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/01-que-es-ia.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "a4ac9e7b21824f4e9d8dcbac9075d95b9ca277df09be5ce8352ad0b5ace4782b",
+      "bytes": 12223646,
+      "duration": 131.766667,
+      "duration_iso": "PT131.766667S",
+      "frames": 7906,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/01-que-es-ia/",
+      "watch": "en/videos/series/fundamentos-ia-iag/01-que-es-ia/",
+      "poster_path": "en/series/fundamentos-ia-iag/01-que-es-ia.jpg",
+      "poster_sha256": "4f36359f500df7206a974a37beaff1fda6d07d5825235ed3cbb4cc77bb4b203a",
+      "chapters": [
+        {
+          "name": "Technical family and purpose are different",
+          "start": 0,
+          "end": 21.55
+        },
+        {
+          "name": "A tree learns a concrete question",
+          "start": 21.55,
+          "end": 43.8
+        },
+        {
+          "name": "Counting frequencies does not prove causation",
+          "start": 43.8,
+          "end": 65.35
+        },
+        {
+          "name": "The center moves toward its examples",
+          "start": 65.35,
+          "end": 86.9
+        },
+        {
+          "name": "A neuron computes, compares and updates",
+          "start": 86.9,
+          "end": 109.516667
+        },
+        {
+          "name": "Tomorrow’s data can change",
+          "start": 109.516667,
+          "end": 131.766667
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/01-que-es-ia-visual-text.vtt",
+      "captions_sha256": "b4d82656d2a3c0bdc1e2fff0e1b573d5ff4dfb9db37869f50830c19734c5e53a",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/01-que-es-ia-transcript.html",
+      "transcript_sha256": "12e486b59744152a6caa22d92e6321f2aa949c3d143ae39af246a1bc00eda626"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "6283bab0f7871d3915e21989aa7eae7b396a49835f4b7eb39b4a9fb5458cbe94",
+      "bytes": 12852779,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "watch": "videos/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "poster_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa.jpg",
+      "poster_sha256": "0a853d3b532b8ef49744218a4ab38f36cccdfd6368ef0b02310ae2fbdeb566ef",
+      "chapters": [
+        {
+          "name": "La representación permite comparar",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "La misma palabra recibe otro contexto",
+          "start": 21.866667,
+          "end": 44.116667
+        },
+        {
+          "name": "Una distribución antes del siguiente token",
+          "start": 44.116667,
+          "end": 65.983333
+        },
+        {
+          "name": "Dar ejemplos no actualiza los pesos",
+          "start": 65.983333,
+          "end": 87.533333
+        },
+        {
+          "name": "Recuperar añade evidencia, no certeza",
+          "start": 87.533333,
+          "end": 109.4
+        },
+        {
+          "name": "Proponer una acción no es ejecutarla",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa-visual-text.vtt",
+      "captions_sha256": "2a5e7d82633ffad40121ce0e2d493bc3d75bf9e5564ec7286f71040b556e0f77",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/02-que-es-ia-generativa-transcript.html",
+      "transcript_sha256": "ffa82418833888d9b2cc5d4ead9dc5ba8940635be6ecef7d8119a0859e9751fd"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "9b5c386ecf98f24f1ed505fb61d2b1efa918a669ac1016c70c42c62c99d2e2f4",
+      "bytes": 12191615,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "watch": "en/videos/series/fundamentos-ia-iag/02-que-es-ia-generativa/",
+      "poster_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa.jpg",
+      "poster_sha256": "6550b360639bbc1460b896de9a18ad71ffa3d21455361c7e1286c27baf88be3f",
+      "chapters": [
+        {
+          "name": "Representation enables comparison",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "The same word receives different context",
+          "start": 21.866667,
+          "end": 44.116667
+        },
+        {
+          "name": "A distribution before the next token",
+          "start": 44.116667,
+          "end": 65.983333
+        },
+        {
+          "name": "Providing examples does not update weights",
+          "start": 65.983333,
+          "end": 87.533333
+        },
+        {
+          "name": "Retrieval adds evidence, not certainty",
+          "start": 87.533333,
+          "end": 109.4
+        },
+        {
+          "name": "Proposing an action is not executing it",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa-visual-text.vtt",
+      "captions_sha256": "33d2cedfd6d1f433cf1f80076e91e7644a91b41c6d7c33682199b0f601524703",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/02-que-es-ia-generativa-transcript.html",
+      "transcript_sha256": "8e3c13bb9a9f26f007f3319c964240bc8c44f9909d68891a027c20257e765c4e"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "77df3f67740fbfb93a76caf95fa3a6cd9eeaebbc0a9efb78b8cefb3f583c9c6e",
+      "bytes": 12781600,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "watch": "videos/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "poster_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg",
+      "poster_sha256": "c30efa7ebebd868c123e52d77b89913627105cf113ffb0b078da5d7b8b3ec522",
+      "chapters": [
+        {
+          "name": "Una puntuación y un texto se evalúan distinto",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Temperatura cambia el reparto de probabilidad",
+          "start": 21.866667,
+          "end": 44.05
+        },
+        {
+          "name": "Una explicación debe poder contrastarse",
+          "start": 44.05,
+          "end": 65.6
+        },
+        {
+          "name": "Una cifra depende de qué error cuenta",
+          "start": 65.6,
+          "end": 87.85
+        },
+        {
+          "name": "¿Quién elige el siguiente paso?",
+          "start": 87.85,
+          "end": 109.4
+        },
+        {
+          "name": "Primero fija requisitos verificables",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa-visual-text.vtt",
+      "captions_sha256": "22a8ca4a313bdd37c07afad7c91fdfca9d45fbfe9e61ddf35d187a648c674f96",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/03-ia-vs-ia-generativa-transcript.html",
+      "transcript_sha256": "89c8cdb3df342e9126865f9eaa7c9e82845ef881520f64dd501d1466206e046d"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "666419db979be49ad12b4c84cf1898979dd461c091af363d8ec53cb26f194fd5",
+      "bytes": 12331377,
+      "duration": 130.95,
+      "duration_iso": "PT130.95S",
+      "frames": 7857,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "watch": "en/videos/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/",
+      "poster_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg",
+      "poster_sha256": "20a8faff0f41e2d2d49a21cc39c35dc8968cc19b9822dbda78247f17323bc830",
+      "chapters": [
+        {
+          "name": "A score and a text need different evaluation",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Temperature changes the probability allocation",
+          "start": 21.866667,
+          "end": 44.05
+        },
+        {
+          "name": "An explanation must be testable",
+          "start": 44.05,
+          "end": 65.6
+        },
+        {
+          "name": "A metric depends on which error it counts",
+          "start": 65.6,
+          "end": 87.85
+        },
+        {
+          "name": "Who chooses the next step?",
+          "start": 87.85,
+          "end": 109.4
+        },
+        {
+          "name": "First define testable requirements",
+          "start": 109.4,
+          "end": 130.95
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa-visual-text.vtt",
+      "captions_sha256": "0b404394133857c782b5c3054e089d487a36a71feb384672a31375e0ab347f18",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa-transcript.html",
+      "transcript_sha256": "d0d34fd7526eee011504fe20e2a3f8e5da8daba3477058997de95842674d5f8a"
+    },
+    {
+      "path": "series/fundamentos-ia-iag/04-agi.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "751f422b58f37932f4484c9dbf6600804a71f0f2a785313587a14383fa6e84e6",
+      "bytes": 14059813,
+      "duration": 132.083333,
+      "duration_iso": "PT132.083333S",
+      "frames": 7925,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "es",
+      "article": "series/fundamentos-ia-iag/04-agi/",
+      "watch": "videos/series/fundamentos-ia-iag/04-agi/",
+      "poster_path": "series/fundamentos-ia-iag/04-agi.jpg",
+      "poster_sha256": "a3589063d73826b38ff71f7c7d2517dc82e1b03e8b939311945c378a4298b69e",
+      "chapters": [
+        {
+          "name": "Destacar en una tarea no mide toda la generalidad",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Generalizar exige una separación real",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "Un permiso no demuestra inteligencia",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Los fallos se acumulan en una cadena",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "La métrica puede separarse del objetivo",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "Una definición útil declara cómo comprobarla",
+          "start": 109.516667,
+          "end": 132.083333
+        }
+      ],
+      "captions_path": "series/fundamentos-ia-iag/04-agi-visual-text.vtt",
+      "captions_sha256": "a44c2fd5324ccb572f40f654243267db63139e7e96a507afb78e1678ee11e2bf",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "series/fundamentos-ia-iag/04-agi-transcript.html",
+      "transcript_sha256": "916ecf8e4340696b612526d266b3d168ab28001eb57317378013f9d4a0e6de72"
+    },
+    {
+      "path": "en/series/fundamentos-ia-iag/04-agi.mp4",
+      "kind": "video",
+      "series": "fundamentos-ia-iag",
+      "round": "F1",
+      "owner_approved_on": "2026-09-28",
+      "sha256": "925280a3fa22996ea629f0c5fd7eb1d2d0baaff2289cf542b6331333f47479ae",
+      "bytes": 13220365,
+      "duration": 132.083333,
+      "duration_iso": "PT132.083333S",
+      "frames": 7925,
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "locale": "en",
+      "article": "en/series/fundamentos-ia-iag/04-agi/",
+      "watch": "en/videos/series/fundamentos-ia-iag/04-agi/",
+      "poster_path": "en/series/fundamentos-ia-iag/04-agi.jpg",
+      "poster_sha256": "3196d70b43ac08ad10877730cef4d37617b99663648061cffd86437be9775071",
+      "chapters": [
+        {
+          "name": "Excelling at one task does not measure all generality",
+          "start": 0,
+          "end": 21.866667
+        },
+        {
+          "name": "Generalization requires real separation",
+          "start": 21.866667,
+          "end": 43.416667
+        },
+        {
+          "name": "A permission does not demonstrate intelligence",
+          "start": 43.416667,
+          "end": 64.966667
+        },
+        {
+          "name": "Failures accumulate along a chain",
+          "start": 64.966667,
+          "end": 87.966667
+        },
+        {
+          "name": "The metric can diverge from the goal",
+          "start": 87.966667,
+          "end": 109.516667
+        },
+        {
+          "name": "A useful definition says how to test it",
+          "start": 109.516667,
+          "end": 132.083333
+        }
+      ],
+      "captions_path": "en/series/fundamentos-ia-iag/04-agi-visual-text.vtt",
+      "captions_sha256": "57837eafd7c65c5ec51934cf76042b56c369e9e45ff2e8b715291a38b428188b",
+      "captions_scope": "Visual text, silent video; no invented narration",
+      "transcript_path": "en/series/fundamentos-ia-iag/04-agi-transcript.html",
+      "transcript_sha256": "303e62f1b7a37433b431bf2e89b539d56787c7b66eb41bcc3c52a50f70a5f88b"
+    }
+  ]
+}

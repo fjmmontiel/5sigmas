@@ -1,0 +1,76 @@
+WEBVTT
+
+NOTE On-screen visual text only; this approved video has no audio track.
+
+1
+00:00:00.500 --> 00:00:07.350
+IA es el conjunto amplio; incluye sistemas de reglas y sistemas que aprenden.
+
+2
+00:00:07.350 --> 00:00:14.200
+Machine learning aprende de datos. Deep learning utiliza redes neuronales de múltiples capas.
+
+3
+00:00:14.200 --> 00:00:21.550
+Generar contenido describe una finalidad: las redes profundas también pueden clasificar, no sólo generar.
+
+4
+00:00:22.050 --> 00:00:28.900
+Probamos si la lectura del sensor supera cuatro unidades.
+
+5
+00:00:28.900 --> 00:00:35.750
+El entrenamiento compara ese corte con otro en seis unidades.
+
+6
+00:00:35.750 --> 00:00:43.800
+El ejemplo elige seis porque separa estas etiquetas; no porque seis sea una ley física.
+
+7
+00:00:44.300 --> 00:00:51.150
+La palabra urgente aparece en ocho de diez mensajes spam del ejemplo.
+
+8
+00:00:51.150 --> 00:00:58.000
+También aparece en uno de diez mensajes legítimos.
+
+9
+00:00:58.000 --> 00:01:05.350
+Son frecuencias condicionadas a la clase; el posterior requiere además priors y otras evidencias.
+
+10
+00:01:05.850 --> 00:01:12.700
+Un grupo contiene tres puntos con coordenadas horizontales uno, tres y cinco.
+
+11
+00:01:12.700 --> 00:01:19.550
+Su centro actual está en dos; recalcular la media lo desplaza a tres.
+
+12
+00:01:19.550 --> 00:01:26.900
+El nuevo centro depende de la asignación del grupo, no de una etiqueta externa.
+
+13
+00:01:27.400 --> 00:01:35.317
+Dos entradas y dos pesos: 2 × 0,4 − 0,2 = 0,6.
+
+14
+00:01:35.317 --> 00:01:42.167
+ReLU conserva 0,6. Con objetivo 1, el error cuadrático es 0,16.
+
+15
+00:01:42.167 --> 00:01:49.517
+Entrenar ajusta pesos usando el error. Inferir utiliza los pesos fijados.
+
+16
+00:01:50.017 --> 00:01:56.867
+La evaluación inicial usa lecturas parecidas a las del entrenamiento.
+
+17
+00:01:56.867 --> 00:02:03.717
+Después cambia la distribución de entrada, aunque el modelo permanezca idéntico.
+
+18
+00:02:03.717 --> 00:02:11.767
+Detectar deriva pide investigar el rendimiento; la deriva sola no demuestra que todas las predicciones fallen.
+
