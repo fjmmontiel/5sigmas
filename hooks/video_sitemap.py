@@ -700,7 +700,7 @@ def _render_watch_page(
     if entry["captions_playback_url"]:
         track = (
             f'<track kind="captions" src="{entry["captions_playback_url"]}" '
-            'srclang="es" label="Español" default>'
+            'srclang="es" label="Español">'
         )
 
     snippet_cards = "\n".join(

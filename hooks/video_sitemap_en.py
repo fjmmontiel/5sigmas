@@ -582,7 +582,7 @@ def _render_watch_page(entry: dict[str, Any], related: list[dict[str, Any]], sit
     }
     track = ""
     if entry["captions_playback_url"]:
-        track = f'<track kind="captions" src="{entry["captions_playback_url"]}" srclang="en" label="English" default>'
+        track = f'<track kind="captions" src="{entry["captions_playback_url"]}" srclang="en" label="English">'
     snippet_cards = "\n".join(
         f'<article><span>{index:02d}</span><h2>{html_escape(snippet["title"])}</h2>'
         + (f'<p>{html_escape(snippet["excerpt"])}</p>' if snippet["excerpt"] else "")
