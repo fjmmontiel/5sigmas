@@ -63,6 +63,8 @@ jobs:
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           set -euo pipefail
+          # Allow late-created PR checks to register before evaluating the head.
+          sleep 30
           for attempt in {1..180}; do
             checks="$(gh api               -H 'Accept: application/vnd.github+json'               "/repos/$REPO/commits/$HEAD_SHA/check-runs?per_page=100")"
             statuses="$(gh api               -H 'Accept: application/vnd.github+json'               "/repos/$REPO/commits/$HEAD_SHA/status")"
