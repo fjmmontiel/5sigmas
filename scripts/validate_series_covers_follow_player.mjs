@@ -165,6 +165,14 @@ async function mobileFlow(){
   const box=await floating.boundingBox();
   assert.ok(box && box.x>=0 && box.x+box.width<=391 && box.width<=366,'mobile follow player must fit the viewport');
   await manipulateMobileFloating(page,floating,'mobile series player');
+
+  await page.setViewportSize({width:844,height:390});
+  await page.waitForTimeout(120);
+  const landscape=await floating.boundingBox();
+  assert.ok(landscape && landscape.x>=0 && landscape.y>=0 && landscape.x+landscape.width<=845 && landscape.y+landscape.height<=391,'floating player must stay inside the viewport after orientation change');
+  await page.setViewportSize({width:390,height:844});
+  await page.waitForTimeout(120);
+
   await floating.locator('.sx-follow-close').click();
 
   await page.goto(base+'/series/fundamentos-ia-iag/01-que-es-ia/',{waitUntil:'networkidle',timeout:60000});
