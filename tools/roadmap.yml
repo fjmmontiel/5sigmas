@@ -35,11 +35,11 @@ tools:
     en_parity: true
     tests: passing_full_ci_2026-09-25
     visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-09-25
-    provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-10-02
+    provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-10-03
     data_freshness: release_feed_daily_performance_daily_provider_pricing_weekly_and_on_release
     validated_head: 8a0f9cada9fa33563c06434915baf775dd618ca1
     release_commit: 8a0f9cada9fa33563c06434915baf775dd618ca1
-    last_reviewed: 2026-10-02
+    last_reviewed: 2026-10-03
   - id: inference-vram
     order: 3
     es_title: Calculadora de VRAM para inferencia
