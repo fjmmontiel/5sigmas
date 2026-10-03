@@ -308,6 +308,8 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/visual-hub.js
     defer: true
+  - path: assets/javascripts/floating-video.js
+    defer: true
   - path: assets/javascripts/video-library.js
     defer: true
   - path: assets/javascripts/reader-navigation.js
