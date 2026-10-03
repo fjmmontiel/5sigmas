@@ -50,7 +50,7 @@ async function manipulateMobileFloating(page,floating,label){
 }
 
 async function desktopFlow(){
-  const context=await browser.newContext({viewport:{width:1440,height:1000}});
+  const context=await browser.newContext({viewport:{width:1440,height:760}});
   const page=await context.newPage();
   const pageErrors=[];
   page.on('pageerror',error=>pageErrors.push(error.message));
