@@ -255,9 +255,13 @@
     };
 
     const onViewportChange = () => {
-      if (!active) return;
+      if (!container.classList.contains('is-following')) return;
       if (!mobile()) {
-        deactivate();
+        if (active) deactivate();
+        return;
+      }
+      if (!active) {
+        activate();
         return;
       }
       constrain({ persistState: true });
