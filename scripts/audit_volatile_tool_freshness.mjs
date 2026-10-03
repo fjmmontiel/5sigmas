@@ -63,8 +63,8 @@ const requireCopy=(file,snippets)=>{
 const modelPricePerformance=read('docs/assets/data/tools/model-price-performance.json');
 requireCopy('docs/herramientas/coste-latencia-llm.md',['01-10-2026','GPT-6.1 Sol','Claude Sonnet 5.5']);
 requireCopy('locales/en/tools/llm-cost-latency.md',['2026-10-01','GPT-6.1 Sol','Claude Sonnet 5.5']);
-requireCopy('docs/herramientas/precio-rendimiento-modelos.md',['2 de octubre de 2026',`${modelPricePerformance.models.length} configuraciones actuales`]);
-requireCopy('locales/en/tools/model-price-performance.md',['October 2, 2026',`${modelPricePerformance.models.length} current configurations`]);
+requireCopy('docs/herramientas/precio-rendimiento-modelos.md',['3 de octubre de 2026',`${modelPricePerformance.models.length} configuraciones actuales`]);
+requireCopy('locales/en/tools/model-price-performance.md',['October 3, 2026',`${modelPricePerformance.models.length} current configurations`]);
 requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',['01-10-2026']);
 requireCopy('locales/en/tools/voice-cost-capacity.md',['2026-10-01']);
 
