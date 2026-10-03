@@ -46,8 +46,8 @@
 
   .is-following.s5-floating-custom .s5-floating-resize {
     right: 7px;
-    bottom: 7px;
-    cursor: nwse-resize;
+    bottom: 48px;
+    cursor: ew-resize;
     font-size: 17px;
   }
 
