@@ -12,8 +12,45 @@ async function waitPlaying(page,selector){
   },selector,{timeout:12000});
 }
 
+async function manipulateMobileFloating(page,floating,label){
+  assert.equal(await floating.locator('.s5-floating-drag').count(),1,label+' needs a drag handle');
+  assert.equal(await floating.locator('.s5-floating-resize').count(),1,label+' needs a resize handle');
+
+  const before=await floating.boundingBox();
+  assert.ok(before,label+' must have measurable floating geometry');
+
+  const drag=floating.locator('.s5-floating-drag');
+  const dragBox=await drag.boundingBox();
+  assert.ok(dragBox,label+' drag handle must be visible');
+  await page.mouse.move(dragBox.x+dragBox.width/2,dragBox.y+dragBox.height/2);
+  await page.mouse.down();
+  await page.mouse.move(36,Math.max(90,before.y-100),{steps:8});
+  await page.mouse.up();
+  await page.waitForTimeout(80);
+
+  const moved=await floating.boundingBox();
+  assert.ok(moved,label+' must remain measurable after drag');
+  assert.ok(Math.abs(moved.x-before.x)>20 || Math.abs(moved.y-before.y)>20,label+' must move after dragging');
+  assert.ok(moved.x>=0 && moved.y>=0 && moved.x+moved.width<=391 && moved.y+moved.height<=845,label+' drag must stay inside viewport');
+
+  const resize=floating.locator('.s5-floating-resize');
+  const resizeBox=await resize.boundingBox();
+  assert.ok(resizeBox,label+' resize handle must be visible');
+  const widthBefore=moved.width;
+  await page.mouse.move(resizeBox.x+resizeBox.width/2,resizeBox.y+resizeBox.height/2);
+  await page.mouse.down();
+  await page.mouse.move(resizeBox.x+resizeBox.width/2+55,resizeBox.y+resizeBox.height/2+30,{steps:8});
+  await page.mouse.up();
+  await page.waitForTimeout(80);
+
+  const resized=await floating.boundingBox();
+  assert.ok(resized,label+' must remain measurable after resize');
+  assert.ok(resized.width>widthBefore+20,label+' must grow from the resize handle');
+  assert.ok(resized.x>=0 && resized.y>=0 && resized.x+resized.width<=391 && resized.y+resized.height<=845,label+' resize must stay inside viewport');
+}
+
 async function desktopFlow(){
-  const context=await browser.newContext({viewport:{width:1440,height:1000}});
+  const context=await browser.newContext({viewport:{width:1440,height:760}});
   const page=await context.newPage();
   const pageErrors=[];
   page.on('pageerror',error=>pageErrors.push(error.message));
@@ -127,7 +164,30 @@ async function mobileFlow(){
   assert.equal(await floating.count(),1,'mobile series player should follow');
   const box=await floating.boundingBox();
   assert.ok(box && box.x>=0 && box.x+box.width<=391 && box.width<=366,'mobile follow player must fit the viewport');
+  await manipulateMobileFloating(page,floating,'mobile series player');
+
+  await page.setViewportSize({width:844,height:390});
+  await page.waitForTimeout(120);
+  const landscape=await floating.boundingBox();
+  assert.ok(landscape && landscape.x>=0 && landscape.y>=0 && landscape.x+landscape.width<=845 && landscape.y+landscape.height<=391,'floating player must stay inside the viewport after orientation change');
+  await page.setViewportSize({width:390,height:844});
+  await page.waitForTimeout(120);
+
   await floating.locator('.sx-follow-close').click();
+
+  await page.goto(base+'/series/fundamentos-ia-iag/01-que-es-ia/',{waitUntil:'networkidle',timeout:60000});
+  await page.locator('[data-s5-inline-video-start]').first().click();
+  await waitPlaying(page,'[data-s5-inline-video-player]');
+  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
+  await page.waitForTimeout(350);
+  const articleFloating=page.locator('.s5-video-embed__frame.is-following');
+  assert.equal(await articleFloating.count(),1,'mobile article player should follow');
+  assert.equal(await articleFloating.locator('.s5-floating-drag').count(),1,'mobile article player must use shared drag control');
+  assert.equal(await articleFloating.locator('.s5-floating-resize').count(),1,'mobile article player must use shared resize control');
+  const articleBox=await articleFloating.boundingBox();
+  assert.ok(articleBox && articleBox.x>=0 && articleBox.x+articleBox.width<=391,'mobile article floating player must reuse safe persisted geometry');
+  await articleFloating.locator('.s5-follow-close').click();
+
   assert.deepEqual(pageErrors,[],'mobile flow must not emit runtime errors');
   await context.close();
 }
@@ -152,7 +212,7 @@ try{
   await desktopFlow();
   await mobileFlow();
   await reducedMotionFlow();
-  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, lazy previews, progress, desktop/mobile follow player, reduced motion');
+  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, lazy previews, progress, draggable/resizable mobile follow player, reduced motion');
 }finally{
   await browser.close();
 }

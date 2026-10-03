@@ -36,6 +36,7 @@
     let tools = null;
     let back = null;
     let close = null;
+    let floatingSurface = null;
     let interacted = false;
     let suppressed = false;
     let floating = false;
@@ -72,6 +73,7 @@
 
       tools.append(back, close);
       container.appendChild(tools);
+      floatingSurface = window.S5FloatingVideo?.attach(container) || null;
 
       back.addEventListener('click', () => {
         placeholder.scrollIntoView({
@@ -102,7 +104,9 @@
         placeholder.style.height = Math.max(1, normalHeight) + 'px';
         floating = true;
         container.classList.add('is-following');
+        floatingSurface?.activate();
       } else {
+        floatingSurface?.deactivate();
         container.classList.remove('is-following');
         floating = false;
         if (placeholder) placeholder.style.height = '0px';
