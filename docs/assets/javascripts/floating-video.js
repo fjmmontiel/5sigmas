@@ -74,6 +74,12 @@
         container.style.width = maxWidth + 'px';
         box = container.getBoundingClientRect();
       }
+      const maxHeight = Math.max(96, view.height - EDGE * 2);
+      if (box.height > maxHeight) {
+        const heightSafeWidth = Math.max(MIN_WIDTH, box.width * (maxHeight / box.height));
+        container.style.width = Math.min(maxWidth, heightSafeWidth) + 'px';
+        box = container.getBoundingClientRect();
+      }
 
       const maxX = view.width - box.width - EDGE;
       const maxY = view.height - box.height - EDGE;
@@ -172,7 +178,8 @@
 
       const requested = gesture.width + event.clientX - gesture.startX;
       const maxByRight = view.width - gesture.left - EDGE;
-      const maxWidth = Math.max(MIN_WIDTH, Math.min(view.width - EDGE * 2, maxByRight));
+      const maxByHeight = Math.max(MIN_WIDTH, (view.height - gesture.top - EDGE) * (16 / 9));
+      const maxWidth = Math.max(MIN_WIDTH, Math.min(view.width - EDGE * 2, maxByRight, maxByHeight));
       container.style.width = clamp(requested, MIN_WIDTH, maxWidth) + 'px';
       constrain();
     };
@@ -196,7 +203,8 @@
       const box = container.getBoundingClientRect();
       const grow = event.key === 'ArrowRight' || event.key === 'ArrowDown';
       const view = viewport();
-      const maxWidth = Math.max(MIN_WIDTH, view.width - box.left - EDGE);
+      const maxByHeight = Math.max(MIN_WIDTH, (view.height - box.top - EDGE) * (16 / 9));
+      const maxWidth = Math.max(MIN_WIDTH, Math.min(view.width - box.left - EDGE, maxByHeight));
       container.style.width = clamp(box.width + (grow ? step : -step), MIN_WIDTH, maxWidth) + 'px';
       constrain({ persistState: true });
     };
