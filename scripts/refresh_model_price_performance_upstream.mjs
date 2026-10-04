@@ -5,6 +5,56 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const releaseLinks = (html) => {
+  // Single-variant releases use /models/<slug>; grouped releases use
+  // /models/releases/<slug>. Navigation and embedded scripts are not feed rows.
+  const clean = String(html)
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style|nav|header|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+  const main = clean.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || clean;
+  const slugs = [];
+  const pattern = /href\s*=\s*["'](?:https:\/\/artificialanalysis\.ai)?\/models\/(?:releases\/)?([a-z0-9]+(?:-[a-z0-9]+)*)(?:\/)?(?:[?#][^"']*)?["']/gi;
+  for (const match of main.matchAll(pattern)) {
+    const slug = match[1];
+    if (['releases', 'comparisons', 'providers'].includes(slug) || slugs.includes(slug)) continue;
+    slugs.push(slug);
+  }
+  return slugs;
+};
+
+const assertReviewedLatest = (slugs, expected) => {
+  assert.ok(slugs.length > 0, 'release feed yielded no model release links');
+  if (slugs[0] !== expected) {
+    throw new Error(`NEW_RELEASE_DETECTED: expected latest ${expected}, found ${slugs[0]}. Review pricing/specs before charting it.`);
+  }
+};
+
+// Run deterministic parser regressions before every live audit. These fixtures
+// never supply live metrics or bypass the real upstream check below.
+{
+  const fixture = `<header><a href="/models/releases/gpt-6-1-sol">navigation</a></header>
+<main><nav><a href="/models/wrong-nav">navigation</a></nav>
+<script>const hidden = '<a href="/models/wrong-script">not a feed row</a>';</script>
+<a href="/models/releases">Index</a><a href="/models/comparisons">Compare</a>
+<a href="/models/ling-3-1-flash">Ling 3.1 Flash</a>
+<a href='https://artificialanalysis.ai/models/gemini-4-argon/?x=1'>Gemini 4 Argon</a>
+<a href="/models/releases/gpt-6-1-sol">GPT-6.1 Sol</a>
+<a href="/models/ling-3-1-flash#details">duplicate</a>
+<a href="https://other.example/models/false-model">external</a></main>`;
+  const slugs = releaseLinks(fixture);
+  assert.deepEqual(slugs, ['ling-3-1-flash', 'gemini-4-argon', 'gpt-6-1-sol']);
+  assert.doesNotThrow(() => assertReviewedLatest(slugs, 'ling-3-1-flash'));
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main><a href="/models/new-unreviewed">New</a></main>'), 'ling-3-1-flash'), /NEW_RELEASE_DETECTED/);
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main><a href="/models/releases/new-unreviewed">New</a></main>'), 'ling-3-1-flash'), /NEW_RELEASE_DETECTED/);
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main>No releases</main>'), 'ling-3-1-flash'), /no model release links/);
+  assert.deepEqual(releaseLinks('<a href="/models/releases/old-group/">Old</a>'), ['old-group']);
+  assert.throws(() => assertReviewedLatest(slugs, 'gpt-6-1-sol'), /NEW_RELEASE_DETECTED/);
+}
+if (process.argv.includes('--test-release-feed')) {
+  console.log('Release feed parser: 7 positive/negative regression groups passed; no network calls.');
+  process.exit(0);
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const dataPath = path.join(root, 'docs/assets/data/tools/model-price-performance.json');
@@ -53,16 +103,8 @@ const number = (match, label, url) => {
 };
 
 const releaseHtml = await fetchHtml(releaseUrl);
-const releaseSlugs = [];
-for (const match of releaseHtml.matchAll(/href=["'](?:https:\/\/artificialanalysis\.ai)?\/models\/releases\/([^"'?#/]+)(?:[?#][^"']*)?["']/gi)) {
-  const slug = match[1];
-  if (slug === 'comparisons' || releaseSlugs.includes(slug)) continue;
-  releaseSlugs.push(slug);
-}
-assert.ok(releaseSlugs.length > 0, 'release feed yielded no model release links');
-if (releaseSlugs[0] !== expectedLatestRelease) {
-  throw new Error(`NEW_RELEASE_DETECTED: expected latest ${expectedLatestRelease}, found ${releaseSlugs[0]}. Review pricing/specs before charting it.`);
-}
+const releaseSlugs = releaseLinks(releaseHtml);
+assertReviewedLatest(releaseSlugs, expectedLatestRelease);
 
 const updates = [];
 for (const model of data.models || []) {
