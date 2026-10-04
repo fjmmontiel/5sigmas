@@ -5,11 +5,36 @@ import { chromium } from 'playwright';
 const base=(process.env.S5_PREVIEW_BASE||'http://127.0.0.1:8000').replace(/\/$/,'');
 const browser=await chromium.launch({headless:true});
 
+function hasDecodedPlayback(selector){
+  const video=document.querySelector(selector);
+  // A play request can set paused=false before a frame is decoded. A previous
+  // seek can also leave currentTime>0 on a paused player. Neither proves playback.
+  return Boolean(video && !video.error && !video.paused && !video.ended &&
+    video.readyState>=2 && video.videoWidth>0 && video.currentTime>0);
+}
+
 async function waitPlaying(page,selector){
-  await page.waitForFunction((sel)=>{
-    const video=document.querySelector(sel);
-    return Boolean(video && (!video.paused || video.currentTime>0));
-  },selector,{timeout:12000});
+  try{
+    await page.waitForFunction(hasDecodedPlayback,selector,{timeout:12000});
+  }catch(error){
+    const diagnostic=await page.evaluate(sel=>{
+      const video=document.querySelector(sel);
+      return {
+        selector:sel,url:location.href,viewport:{width:innerWidth,height:innerHeight},
+        scrollY,scrollHeight:document.documentElement.scrollHeight,
+        media:video?{
+          src:video.currentSrc,declaredSrc:video.getAttribute('src'),
+          readyState:video.readyState,networkState:video.networkState,
+          paused:video.paused,ended:video.ended,currentTime:video.currentTime,
+          width:video.videoWidth,height:video.videoHeight,
+          error:video.error?{code:video.error.code,message:video.error.message}:null,
+          h264:video.canPlayType('video/mp4; codecs="avc1.64002a"')
+        }:null
+      };
+    },selector).catch(diagnosticError=>({unavailable:String(diagnosticError)}));
+    console.error('FOLLOW_PLAYER_PLAYBACK_NOT_VERIFIED',JSON.stringify(diagnostic));
+    throw error;
+  }
 }
 
 async function manipulateMobileFloating(page,floating,label){
