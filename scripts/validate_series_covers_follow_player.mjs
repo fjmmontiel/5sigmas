@@ -163,6 +163,9 @@ async function desktopFlow(){
 
   const first=cards.first();
   const firstArt=first.locator('.sx-card-art');
+  // Scroll first, then measure: hover may otherwise scroll a stale offscreen
+  // rectangle under the mouse without a deliberate pointer-enter movement.
+  await firstArt.scrollIntoViewIfNeeded();
   const firstBox=await firstArt.boundingBox();
   assert.ok(firstBox,'first series cover must have measurable geometry');
   await page.mouse.move(Math.max(1,firstBox.x-20),Math.max(1,firstBox.y+10));
@@ -285,6 +288,9 @@ async function reducedMotionFlow(){
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
   const first=page.locator('[data-sx-card]').first();
   const firstArt=first.locator('.sx-card-art');
+  // Scroll first, then measure: hover may otherwise scroll a stale offscreen
+  // rectangle under the mouse without a deliberate pointer-enter movement.
+  await firstArt.scrollIntoViewIfNeeded();
   const firstBox=await firstArt.boundingBox();
   assert.ok(firstBox,'reduced-motion cover must have measurable geometry');
   await page.mouse.move(Math.max(1,firstBox.x-20),Math.max(1,firstBox.y+10));
