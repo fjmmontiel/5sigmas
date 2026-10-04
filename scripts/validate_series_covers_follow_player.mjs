@@ -43,7 +43,7 @@ function hasDecodedPlayback(selector){
 async function waitPlaying(page,selector){
   try{
     await page.waitForFunction(hasDecodedPlayback,selector,{timeout:12000});
-  }catch(error){
+ }catch(error){
     const diagnostic=await page.evaluate(sel=>{
       const video=document.querySelector(sel);
       return {
@@ -62,6 +62,44 @@ async function waitPlaying(page,selector){
     console.error('FOLLOW_PLAYER_PLAYBACK_NOT_VERIFIED',JSON.stringify(diagnostic));
     throw error;
   }
+}
+
+async function scrollPastPlayerOrigin(page,selector){
+  const geometry=await page.evaluate(sel=>{
+    const player=document.querySelector(sel);
+    if(!player)throw new Error('Missing follow-player source: '+sel);
+    return {selector:sel,originBottom:player.getBoundingClientRect().bottom+scrollY,
+      maxScroll:document.documentElement.scrollHeight-innerHeight,viewportHeight:innerHeight};
+  },selector);
+  // The product follows only after the original source passes the header. A
+  // short page at a tall viewport may never reach that state, even at the end.
+  assert.ok(geometry.maxScroll>geometry.originBottom-72,
+    'Positive follow scenario must be scrollable past its real source: '+JSON.stringify(geometry));
+  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
+  await page.waitForFunction(({selector,originBottom})=>
+    originBottom-window.scrollY<72 && document.querySelector(selector)?.classList.contains('is-following'),
+    {selector,originBottom:geometry.originBottom},{timeout:5000});
+}
+
+async function visibleDesktopSourceFlow(){
+  const context=await browser.newContext({viewport:{width:1440,height:760}});
+  const page=await context.newPage();
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto(base+'/series/#serie-fundamentos-ia-iag',{waitUntil:'networkidle',timeout:60000});
+  const player=page.locator('#serie-fundamentos-ia-iag .sx-player');
+  await page.locator('#serie-fundamentos-ia-iag [data-sx-play]').click();
+  await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
+  const originBottom=await player.evaluate(node=>node.getBoundingClientRect().bottom+scrollY);
+  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const state=await followState(page);
+  assert.ok(Math.abs(state.scrollY-state.maxScroll)<=1,'negative scenario must reach the real page end');
+  assert.ok(originBottom-state.scrollY>=72,'negative scenario must leave the original source visible');
+  assert.equal(await page.locator('#serie-fundamentos-ia-iag .sx-player.is-following').count(),0,
+    'a still-visible source must not become a duplicate floating surface');
+  await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
+  assert.deepEqual(errors,[],'visible-source flow must not emit runtime errors');
+  await context.close();
 }
 
 async function manipulateMobileFloating(page,floating,label){
@@ -102,7 +140,8 @@ async function manipulateMobileFloating(page,floating,label){
 }
 
 async function desktopFlow(){
-  const context=await browser.newContext({viewport:{width:1440,height:760}});
+  // A real short laptop viewport can scroll this four-chapter source out.
+  const context=await browser.newContext({viewport:{width:1440,height:500}});
   const page=await context.newPage();
   const pageErrors=[];
   page.on('pageerror',error=>pageErrors.push(error.message));
@@ -150,8 +189,7 @@ async function desktopFlow(){
   await detail.locator('[data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
   console.log('FOLLOW_PLAYER_BEFORE_SCROLL',JSON.stringify(await followState(page)));
-  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-  await page.waitForTimeout(350);
+  await scrollPastPlayerOrigin(page,'#serie-fundamentos-ia-iag .sx-player');
   const floatingHub=detail.locator('.sx-player.is-following');
   assert.equal(await floatingHub.count(),1,'played series video should follow after leaving its source');
   assert.equal(await floatingHub.locator('.sx-follow-back').count(),1);
@@ -161,8 +199,7 @@ async function desktopFlow(){
   await page.waitForTimeout(450);
   assert.equal(await detail.locator('.sx-player.is-following').count(),0,'Back to video should restore the player');
 
-  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-  await page.waitForTimeout(350);
+  await scrollPastPlayerOrigin(page,'#serie-fundamentos-ia-iag .sx-player');
   assert.equal(await detail.locator('.sx-player.is-following').count(),1,'player should follow again while playback continues');
   await detail.locator('.sx-follow-close').click();
   assert.equal(await detail.locator('.sx-player.is-following').count(),0,'close must dismiss the mini player');
@@ -173,8 +210,7 @@ async function desktopFlow(){
   const inlineStart=page.locator('[data-s5-inline-video-start]').first();
   await inlineStart.click();
   await waitPlaying(page,'[data-s5-inline-video-player]');
-  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-  await page.waitForTimeout(350);
+  await scrollPastPlayerOrigin(page,'.s5-video-embed__frame');
   assert.equal(await page.locator('.s5-video-embed__frame.is-following').count(),1,'chapter video should become a follow player');
   await page.locator('.s5-video-embed__frame.is-following .s5-follow-close').click();
 
@@ -189,8 +225,7 @@ async function desktopFlow(){
   if(await seek.count()){
     await seek.click();
     await waitPlaying(page,'[data-s5-watch-player]');
-    await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-    await page.waitForTimeout(350);
+    await scrollPastPlayerOrigin(page,'.s5-video-watch__player');
     assert.equal(await page.locator('.s5-video-watch__player.is-following').count(),1,'watch page player should follow after user playback');
     await page.locator('.s5-video-watch__player.is-following .s5-follow-close').click();
   }
@@ -212,8 +247,7 @@ async function mobileFlow(){
   await page.locator('#serie-fundamentos-ia-iag [data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
   console.log('FOLLOW_PLAYER_BEFORE_SCROLL',JSON.stringify(await followState(page)));
-  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-  await page.waitForTimeout(350);
+  await scrollPastPlayerOrigin(page,'#serie-fundamentos-ia-iag .sx-player');
   const floating=page.locator('#serie-fundamentos-ia-iag .sx-player.is-following');
   assert.equal(await floating.count(),1,'mobile series player should follow');
   const box=await floating.boundingBox();
@@ -232,8 +266,7 @@ async function mobileFlow(){
   await page.goto(base+'/series/fundamentos-ia-iag/01-que-es-ia/',{waitUntil:'networkidle',timeout:60000});
   await page.locator('[data-s5-inline-video-start]').first().click();
   await waitPlaying(page,'[data-s5-inline-video-player]');
-  await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
-  await page.waitForTimeout(350);
+  await scrollPastPlayerOrigin(page,'.s5-video-embed__frame');
   const articleFloating=page.locator('.s5-video-embed__frame.is-following');
   assert.equal(await articleFloating.count(),1,'mobile article player should follow');
   assert.equal(await articleFloating.locator('.s5-floating-drag').count(),1,'mobile article player must use shared drag control');
@@ -263,11 +296,12 @@ async function reducedMotionFlow(){
 }
 
 try{
+  await visibleDesktopSourceFlow();
   await desktopFlow();
   await mobileFlow();
   await reducedMotionFlow();
-  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, lazy previews, progress, draggable/resizable mobile follow player, reduced motion');
- }catch(error){
+  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, visible-source negative case, real offscreen desktop/mobile playback, progress, draggable/resizable follow player, reduced motion');
+}catch(error){
   const evidence='artifacts/visual-review/follow-player';
   fs.mkdirSync(evidence,{recursive:true});
   const failure={status:'FAIL',message:String(error),stack:error.stack,pages:[]};
