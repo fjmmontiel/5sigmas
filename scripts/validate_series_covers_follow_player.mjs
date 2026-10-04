@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+import fs from 'node:fs';
 
 const base=(process.env.S5_PREVIEW_BASE||'http://127.0.0.1:8000').replace(/\/$/,'');
 let browser;
@@ -13,6 +14,22 @@ try{
   browser=await chromium.launch({channel:'chrome',headless:true});
 }catch(error){
   throw new Error(`H264-capable Google Chrome is required for the follow-player playback gate: ${error instanceof Error?error.message:String(error)}`);
+}
+
+async function followState(page){
+  return page.evaluate(()=>{
+    const rect=node=>node?Object.fromEntries(['x','y','width','height','top','bottom'].map(k=>[k,node.getBoundingClientRect()[k]])):null;
+    const describe=node=>node?{rect:rect(node),position:getComputedStyle(node).position,display:getComputedStyle(node).display,top:getComputedStyle(node).top}:null;
+    return {url:location.href,scrollY,viewport:{width:innerWidth,height:innerHeight},
+      scrollHeight:document.documentElement.scrollHeight,maxScroll:document.documentElement.scrollHeight-innerHeight,
+      details:[...document.querySelectorAll('[data-sx-detail]')].map(d=>({id:d.id,hidden:d.hidden,open:d.open,rect:rect(d)})),
+      players:[...document.querySelectorAll('.sx-player,.s5-video-embed__frame,.s5-video-watch__player')].filter(p=>p.getBoundingClientRect().height>0).map(p=>{
+        const v=p.querySelector('video');
+        return {class:p.className,player:describe(p),parent:describe(p.parentElement),placeholder:describe(p.previousElementSibling),
+          media:v?{src:v.currentSrc,paused:v.paused,ended:v.ended,currentTime:v.currentTime,readyState:v.readyState,width:v.videoWidth,
+            error:v.error?{code:v.error.code,message:v.error.message}:null}:null};
+      })};
+  });
 }
 
 function hasDecodedPlayback(selector){
@@ -132,6 +149,7 @@ async function desktopFlow(){
   const hubVideo=detail.locator('.sx-player video');
   await detail.locator('[data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
+  console.log('FOLLOW_PLAYER_BEFORE_SCROLL',JSON.stringify(await followState(page)));
   await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
   await page.waitForTimeout(350);
   const floatingHub=detail.locator('.sx-player.is-following');
@@ -193,6 +211,7 @@ async function mobileFlow(){
   await page.locator('[data-series-slug="fundamentos-ia-iag"] .sx-card-open').click();
   await page.locator('#serie-fundamentos-ia-iag [data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
+  console.log('FOLLOW_PLAYER_BEFORE_SCROLL',JSON.stringify(await followState(page)));
   await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
   await page.waitForTimeout(350);
   const floating=page.locator('#serie-fundamentos-ia-iag .sx-player.is-following');
@@ -248,6 +267,21 @@ try{
   await mobileFlow();
   await reducedMotionFlow();
   console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, lazy previews, progress, draggable/resizable mobile follow player, reduced motion');
+ }catch(error){
+  const evidence='artifacts/visual-review/follow-player';
+  fs.mkdirSync(evidence,{recursive:true});
+  const failure={status:'FAIL',message:String(error),stack:error.stack,pages:[]};
+  for(const context of browser.contexts()){
+    for(const page of context.pages()){
+      const index=failure.pages.length;
+      const state=await followState(page).catch(e=>({unavailable:String(e)}));
+      await page.screenshot({path:`${evidence}/failure-${index}.png`,timeout:5000}).catch(e=>{state.screenshotError=String(e)});
+      failure.pages.push(state);
+    }
+  }
+  fs.writeFileSync(`${evidence}/failure.json`,JSON.stringify(failure,null,2)+'\n');
+  console.error('FOLLOW_PLAYER_FAILURE',JSON.stringify(failure));
+  throw error;
 }finally{
-  await browser.close();
+  if(browser)await browser.close();
 }
