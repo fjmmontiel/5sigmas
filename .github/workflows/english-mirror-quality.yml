@@ -8,7 +8,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Reusable workflows inherit github.workflow from their caller. Keep this
+  # namespace distinct from the Core E2E suite called by the same dispatcher.
+  group: english-mirror-quality-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
