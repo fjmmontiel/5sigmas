@@ -3,7 +3,17 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
 const base=(process.env.S5_PREVIEW_BASE||'http://127.0.0.1:8000').replace(/\/$/,'');
-const browser=await chromium.launch({headless:true});
+let browser;
+try{
+  // The production series media is H.264 MP4. Playwright's bundled Chromium can
+  // lack proprietary codecs and report DEMUXER_ERROR_NO_SUPPORTED_STREAMS even
+  // for the exact release bytes. Use the same H.264-capable Chrome channel as
+  // the repository's native-video lifecycle gates so this test verifies real
+  // decoded playback instead of the codec support of the CI browser bundle.
+  browser=await chromium.launch({channel:'chrome',headless:true});
+}catch(error){
+  throw new Error(`H264-capable Google Chrome is required for the follow-player playback gate: ${error instanceof Error?error.message:String(error)}`);
+}
 
 function hasDecodedPlayback(selector){
   const video=document.querySelector(selector);
