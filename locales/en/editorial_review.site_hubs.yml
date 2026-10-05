@@ -11,11 +11,11 @@ certified_routes:
     review_scope: prose, learning flow, navigation, featured media, concept cards, series cards, engineering entry, responsive structure
     note: "Restored the canonical watch-manipulate-go-deeper learning flow, test-time-compute video entry with native English media metadata, visual-first navigation and the same three featured visual topics while using native English routes."
   - route: proximamente.md
-    reviewed_on: 2026-08-18
-    spanish_blob_sha: 73f84d062d7045bb0e3aefb238811ec591e513f7
-    english_blob_sha: 47587560e034efe88fe8f6fa54153a94493913b7
+    reviewed_on: 2026-10-05
+    spanish_blob_sha: a73cb9d2f6c38756e1fc24a5cff5fb966eb5f5a1
+    english_blob_sha: b5230e04e8aa06155e552069ec8c27a0169d4ed5
     review_scope: prose, labels, research ordering, navigation
-    note: "Native-English editorial review; tightened translated heading and research-status prose while preserving the canonical six-topic order and publication-status semantics."
+    note: "ES/EN parity review removed model evaluation and RAG after their dedicated surfaces shipped; the page now lists only still-unpublished dedicated topics."
   - route: visuales/index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 1fee9be2a4d37133e3cabcf50998ad5cb1c736de
