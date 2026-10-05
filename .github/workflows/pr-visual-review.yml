@@ -203,6 +203,10 @@ jobs:
           cat /tmp/5sigmas-preview.log
           exit 1
 
+      # Fail early on playback/interaction regressions before the long visual sweep.
+      - name: Validate series covers and follow-player UX
+        run: node scripts/validate_series_covers_follow_player.mjs
+
       - name: Validate direct series and article navigation
         run: node scripts/validate_direct_reader_navigation.mjs
 
@@ -368,9 +372,6 @@ jobs:
 
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
-
-      - name: Validate series covers and follow-player UX
-        run: node scripts/validate_series_covers_follow_player.mjs
 
       - name: Validate responsive interaction polish
         run: node scripts/validate_responsive_polish.mjs

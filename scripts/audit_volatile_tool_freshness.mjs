@@ -55,6 +55,22 @@ for(const source of eco.sources || []){
   if(source.retrieved !== eco.snapshot_date) failures.push(`global-ai-ecosystem: ${source.id} retrieved ${source.retrieved} != ${eco.snapshot_date}`);
 }
 
+// Product copy must not lag behind the volatile dataset it explains.
+const requireCopy=(file,snippets)=>{
+  const text=fs.readFileSync(path.join(root,file),'utf8');
+  for(const snippet of snippets) if(!text.includes(snippet)) failures.push(`${file}: missing current freshness copy "${snippet}"`);
+};
+const modelPricePerformance=read('docs/assets/data/tools/model-price-performance.json');
+const modelSnapshotDate=new Date(`${modelPricePerformance.updated_at}T00:00:00Z`);
+const modelSnapshotEs=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(modelSnapshotDate);
+const modelSnapshotEn=new Intl.DateTimeFormat('en-US',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(modelSnapshotDate);
+requireCopy('docs/herramientas/coste-latencia-llm.md',['01-10-2026','GPT-6.1 Sol','Claude Sonnet 5.5']);
+requireCopy('locales/en/tools/llm-cost-latency.md',['2026-10-01','GPT-6.1 Sol','Claude Sonnet 5.5']);
+requireCopy('docs/herramientas/precio-rendimiento-modelos.md',[modelSnapshotEs,`${modelPricePerformance.models.length} configuraciones actuales`]);
+requireCopy('locales/en/tools/model-price-performance.md',[modelSnapshotEn,`${modelPricePerformance.models.length} current configurations`]);
+requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',['01-10-2026']);
+requireCopy('locales/en/tools/voice-cost-capacity.md',['2026-10-01']);
+
 if(failures.length){
   console.error('Volatile tool freshness audit failed:');
   for(const failure of failures) console.error(` - ${failure}`);

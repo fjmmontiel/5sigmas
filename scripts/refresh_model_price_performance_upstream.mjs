@@ -5,6 +5,119 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const releaseLinks = (html) => {
+  // Single-variant releases use /models/<slug>; grouped releases use
+  // /models/releases/<slug>. Navigation and embedded scripts are not feed rows.
+  const clean = String(html)
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style|nav|header|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+  const main = clean.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || clean;
+  const slugs = [];
+  const pattern = /href\s*=\s*["'](?:https:\/\/artificialanalysis\.ai)?\/models\/(?:releases\/)?([a-z0-9]+(?:-[a-z0-9]+)*)(?:\/)?(?:[?#][^"']*)?["']/gi;
+  for (const match of main.matchAll(pattern)) {
+    const slug = match[1];
+    if (['releases', 'comparisons', 'providers'].includes(slug) || slugs.includes(slug)) continue;
+    slugs.push(slug);
+  }
+  return slugs;
+};
+
+const assertReviewedLatest = (slugs, expected) => {
+  assert.ok(slugs.length > 0, 'release feed yielded no model release links');
+  if (slugs[0] !== expected) {
+    throw new Error(`NEW_RELEASE_DETECTED: expected latest ${expected}, found ${slugs[0]}. Review pricing/specs before charting it.`);
+  }
+};
+
+// Run deterministic parser regressions before every live audit. These fixtures
+// never supply live metrics or bypass the real upstream check below.
+{
+  const fixture = `<header><a href="/models/releases/gpt-6-1-sol">navigation</a></header>
+<main><nav><a href="/models/wrong-nav">navigation</a></nav>
+<script>const hidden = '<a href="/models/wrong-script">not a feed row</a>';</script>
+<a href="/models/releases">Index</a><a href="/models/comparisons">Compare</a>
+<a href="/models/ling-3-1-flash">Ling 3.1 Flash</a>
+<a href='https://artificialanalysis.ai/models/gemini-4-argon/?x=1'>Gemini 4 Argon</a>
+<a href="/models/releases/gpt-6-1-sol">GPT-6.1 Sol</a>
+<a href="/models/ling-3-1-flash#details">duplicate</a>
+<a href="https://other.example/models/false-model">external</a></main>`;
+  const slugs = releaseLinks(fixture);
+  assert.deepEqual(slugs, ['ling-3-1-flash', 'gemini-4-argon', 'gpt-6-1-sol']);
+  assert.doesNotThrow(() => assertReviewedLatest(slugs, 'ling-3-1-flash'));
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main><a href="/models/new-unreviewed">New</a></main>'), 'ling-3-1-flash'), /NEW_RELEASE_DETECTED/);
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main><a href="/models/releases/new-unreviewed">New</a></main>'), 'ling-3-1-flash'), /NEW_RELEASE_DETECTED/);
+  assert.throws(() => assertReviewedLatest(releaseLinks('<main>No releases</main>'), 'ling-3-1-flash'), /no model release links/);
+  assert.deepEqual(releaseLinks('<a href="/models/releases/old-group/">Old</a>'), ['old-group']);
+  assert.throws(() => assertReviewedLatest(slugs, 'gpt-6-1-sol'), /NEW_RELEASE_DETECTED/);
+}
+if (process.argv.includes('--test-release-feed')) {
+  console.log('Release feed parser: 7 positive/negative regression groups passed; no network calls.');
+  process.exit(0);
+}
+
+// Performance is a dated daily snapshot, not an invariant against live sampling.
+// Release, price, deprecation, schema and methodology checks still run on every audit.
+const snapshotAge = (value, today) => {
+  assert.match(value || '', /^\d{4}-\d{2}-\d{2}$/, 'snapshot date missing or malformed');
+  assert.match(today || '', /^\d{4}-\d{2}-\d{2}$/, 'audit date missing or malformed');
+  const date = Date.parse(`${value}T00:00:00Z`);
+  const now = Date.parse(`${today}T00:00:00Z`);
+  assert.ok(Number.isFinite(date) && Number.isFinite(now), 'invalid snapshot/audit date');
+  assert.equal(new Date(date).toISOString().slice(0, 10), value, 'invalid calendar snapshot date');
+  assert.equal(new Date(now).toISOString().slice(0, 10), today, 'invalid calendar audit date');
+  assert.ok(date <= now, 'snapshot date must not be in the future');
+  return (now - date) / 86_400_000;
+};
+
+const refreshDecision = (data, updates, today) => {
+  const interval = Number(data.freshness_policy?.performance_review_interval_days ?? 1);
+  const reviewInterval = Number(data.freshness_policy?.review_interval_days ?? 7);
+  assert.ok(Number.isInteger(interval) && interval > 0, 'invalid performance review interval');
+  assert.ok(Number.isInteger(reviewInterval) && reviewInterval >= interval, 'invalid general review interval');
+  assert.ok(Array.isArray(data.models) && data.models.length > 0, 'no charted models to verify');
+  const checkpointDue = snapshotAge(data.updated_at, today) >= reviewInterval;
+  const performanceDue = data.models.some(model =>
+    snapshotAge(model.sources?.benchmark?.performance_snapshot_on, today) >= interval);
+  const byId = new Map(data.models.map(model => [model.id, model]));
+  const intelligenceChanged = updates.some(update => {
+    const stored = byId.get(update.id);
+    assert.ok(stored, `unknown model in upstream result: ${update.id}`);
+    return update.intelligence !== Number(stored.intelligence_index);
+  });
+  return { checkpointDue, performanceDue, intelligenceChanged,
+    required: checkpointDue || performanceDue || intelligenceChanged };
+};
+
+// Deterministic regression for the observed intraday speed/TTFT failure. These
+// tests cannot supply upstream responses or satisfy a real freshness audit.
+{
+  const fixture = { updated_at: '2026-10-04', freshness_policy: {
+    review_interval_days: 7, performance_review_interval_days: 1 }, models: [{
+    id: 'fixture', intelligence_index: 56, sources: { benchmark: {
+      performance_snapshot_on: '2026-10-04' } } }] };
+  const variation = [{ id: 'fixture', intelligence: 56, speed: 77.8, ttft: 128.38 }];
+  assert.equal(refreshDecision(fixture, variation, '2026-10-04').required, false);
+  assert.equal(refreshDecision(fixture, [], '2026-10-04').required, false);
+  assert.equal(refreshDecision(fixture, variation, '2026-10-05').performanceDue, true);
+  assert.equal(refreshDecision(fixture, [], '2026-10-05').required, true);
+  assert.equal(refreshDecision(fixture, [{ ...variation[0], intelligence: 57 }], '2026-10-04').required, true);
+  assert.equal(refreshDecision(fixture, [], '2026-10-11').checkpointDue, true);
+  assert.throws(() => refreshDecision(fixture, [], '2026-10-03'), /future/);
+  for (const invalid of ['', '2026-02-30', 'not-a-date']) {
+    const bad = structuredClone(fixture);
+    bad.models[0].sources.benchmark.performance_snapshot_on = invalid;
+    assert.throws(() => refreshDecision(bad, [], '2026-10-04'));
+  }
+  const badInterval = structuredClone(fixture);
+  badInterval.freshness_policy.performance_review_interval_days = 0;
+  assert.throws(() => refreshDecision(badInterval, [], '2026-10-04'), /interval/);
+  assert.throws(() => refreshDecision(fixture, [{ ...variation[0], id: 'other' }], '2026-10-04'), /unknown model/);
+}
+if (process.argv.includes('--test-refresh-policy')) {
+  console.log('Refresh policy: 12 freshness, drift and invalid-input assertions passed; no network calls.');
+  process.exit(0);
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const dataPath = path.join(root, 'docs/assets/data/tools/model-price-performance.json');
@@ -53,16 +166,8 @@ const number = (match, label, url) => {
 };
 
 const releaseHtml = await fetchHtml(releaseUrl);
-const releaseSlugs = [];
-for (const match of releaseHtml.matchAll(/href=["'](?:https:\/\/artificialanalysis\.ai)?\/models\/releases\/([^"'?#/]+)(?:[?#][^"']*)?["']/gi)) {
-  const slug = match[1];
-  if (slug === 'comparisons' || releaseSlugs.includes(slug)) continue;
-  releaseSlugs.push(slug);
-}
-assert.ok(releaseSlugs.length > 0, 'release feed yielded no model release links');
-if (releaseSlugs[0] !== expectedLatestRelease) {
-  throw new Error(`NEW_RELEASE_DETECTED: expected latest ${expectedLatestRelease}, found ${releaseSlugs[0]}. Review pricing/specs before charting it.`);
-}
+const releaseSlugs = releaseLinks(releaseHtml);
+assertReviewedLatest(releaseSlugs, expectedLatestRelease);
 
 const updates = [];
 for (const model of data.models || []) {
@@ -96,21 +201,24 @@ for (const model of data.models || []) {
   if (changed) updates.push({ id: model.id, intelligence, speed, ttft });
 }
 
-const ageDays = Math.floor((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${data.updated_at}T00:00:00Z`)) / 86_400_000);
-const checkpointDue = ageDays >= Number(data.freshness_policy?.review_interval_days || 7);
+const decision = refreshDecision(data, updates, today);
 
-if (!updates.length && !checkpointDue) {
-  console.log(`Model upstream check passed: ${data.models.length} model pages match the ${data.updated_at} snapshot; latest release remains ${expectedLatestRelease}.`);
+if (!write) {
+  for (const update of updates) {
+    const stored = data.models.find((model) => model.id === update.id);
+    console.log(`UPSTREAM_METRIC_OBSERVATION ${update.id}: intelligence ${stored.intelligence_index} -> ${update.intelligence}; speed ${stored.output_tokens_per_second} -> ${update.speed}; TTFT ${stored.ttft_seconds} -> ${update.ttft}`);
+  }
+  if (decision.required) {
+    console.error(`Model explorer refresh required: ${JSON.stringify(decision)}. Run the authorized daily refresh and commit the verified snapshot.`);
+    process.exit(2);
+  }
+  console.log(`Model upstream audit passed: releases, methodology and pricing verified across ${data.models.length} model pages. Retained dated ${data.updated_at} performance snapshot; ${updates.length} intraday metric variations observed, not claimed identical. Daily performance review remains mandatory.`);
   process.exit(0);
 }
 
-if (!write) {
-  console.error(`Model explorer refresh required: ${updates.length} model metric snapshots changed; checkpointDue=${checkpointDue}.`);
-  for (const update of updates) {
-    const stored = data.models.find((model) => model.id === update.id);
-    console.error(` - ${update.id}: intelligence ${stored.intelligence_index} -> ${update.intelligence}; speed ${stored.output_tokens_per_second} -> ${update.speed}; TTFT ${stored.ttft_seconds} -> ${update.ttft}`);
-  }
-  process.exit(2);
+if (!updates.length && !decision.required) {
+  console.log(`Model upstream check passed: ${data.models.length} model pages match the ${data.updated_at} snapshot; latest release remains ${expectedLatestRelease}.`);
+  process.exit(0);
 }
 
 const updateById = new Map(updates.map((entry) => [entry.id, entry]));

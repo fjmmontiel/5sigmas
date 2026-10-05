@@ -106,7 +106,7 @@
   function initializeFollowPlayer(player,video,en){
     if(!player||!video||player.dataset.followReady)return;
     player.dataset.followReady='true';
-    let placeholder=null,sentinel=null,tools=null,back=null,close=null;
+    let placeholder=null,sentinel=null,tools=null,back=null,close=null,floatingSurface=null;
     let interacted=false,suppressed=false,floating=false,raf=0,normalHeight=0;
     let originTop=0,originBottom=0;
 
@@ -126,6 +126,7 @@
       close=document.createElement('button');close.type='button';close.className='sx-follow-close';
       close.setAttribute('aria-label',en?'Close mini player':'Cerrar mini reproductor');close.textContent='×';
       tools.append(back,close);player.appendChild(tools);
+      floatingSurface=window.S5FloatingVideo?.attach(player)||null;
       back.addEventListener('click',()=>{
         window.scrollTo({
           top:Math.max(0,originTop-110),
@@ -149,7 +150,9 @@
         placeholder.style.height=Math.max(1,normalHeight)+'px';
         floating=true;
         player.classList.add('is-following');
+        floatingSurface?.activate();
       }else{
+        floatingSurface?.deactivate();
         player.classList.remove('is-following');
         floating=false;
         if(placeholder)placeholder.style.height='0px';
