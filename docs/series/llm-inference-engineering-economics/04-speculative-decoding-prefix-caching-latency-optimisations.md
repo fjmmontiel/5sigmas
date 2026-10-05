@@ -14,7 +14,7 @@ tags:
 - Latencia
 video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
 video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
-video_title: Evitar y adelantar trabajo
+video_title: Prefix caching vs speculative decoding
 video_summary: La continuación todavía debe generarse. Un hit de prefijo no recupera una respuesta completa.
 video_date: '2026-09-28'
 video_duration: PT135.55S

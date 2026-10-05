@@ -1631,7 +1631,7 @@ series/llm-inference-engineering-economics/03-quantization-parallelism-memory-qu
 series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md:
   video: 04-speculative-decoding-prefix-caching-latency-optimisations.mp4
   video_poster: 04-speculative-decoding-prefix-caching-latency-optimisations.jpg
-  video_title: Avoid and propose work
+  video_title: Prefix caching vs speculative decoding
   video_summary: The continuation must still be generated. A prefix hit does not retrieve a complete answer.
   video_date: '2026-09-28'
   video_duration: PT135.55S
