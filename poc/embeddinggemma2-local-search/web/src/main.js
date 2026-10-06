@@ -1,4 +1,4 @@
-import { EmbeddingEngine } from "@litert-lm/core";
+import { FilesetResolver, UniversalEmbedder } from "@mediapipe/tasks-retrieval";
 import "./style.css";
 
 const DEFAULT_MODEL_URL =
@@ -93,10 +93,19 @@ async function loadIndex() {
 async function getEngine() {
   if (!enginePromise) {
     runtimeState.textContent = "Loading 270M local query model…";
-    enginePromise = EmbeddingEngine.create({ model: MODEL_URL }).then(function (engine) {
-      runtimeState.textContent = "Ready · browser-local inference";
-      return engine;
-    });
+    enginePromise = FilesetResolver.forRetrievalTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0-rc.20260929/wasm"
+    )
+      .then(function (retrieval) {
+        return UniversalEmbedder.createFromOptions(retrieval, {
+          baseOptions: { modelAssetPath: MODEL_URL },
+          l2Normalize: true,
+        });
+      })
+      .then(function (engine) {
+        runtimeState.textContent = "Ready · browser-local inference";
+        return engine;
+      });
   }
   return enginePromise;
 }
@@ -248,8 +257,9 @@ async function search(query) {
   const started = performance.now();
   const engine = await getEngine();
   const prefixed = "task: search query | text: " + query.trim();
-  const response = await engine.computeEmbedding(prefixed, { normalize: true });
-  const queryVector = normalizePrefix(response.embedding, state.manifest.dimension);
+  const response = await engine.embedText(prefixed);
+  const embedding = response.embeddings[0].floatEmbedding;
+  const queryVector = normalizePrefix(embedding, state.manifest.dimension);
   const embeddedAt = performance.now();
   const matches = topMatches(queryVector, TOP_K);
   const finished = performance.now();
