@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>5sigmas local multimodal search</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <p class="eyebrow">5sigmas · local multimodal retrieval</p>
+        <h1>Ask the complete 5sigmas knowledge system</h1>
+        <p class="lede">
+          The query embedding runs locally in your browser. Results can be article passages,
+          images, live animations, or timestamped video moments.
+        </p>
+      </header>
+
+      <form id="search-form" class="search">
+        <label for="query">Question</label>
+        <div class="search-row">
+          <input
+            id="query"
+            name="query"
+            type="search"
+            autocomplete="off"
+            placeholder="How does continuous batching change inference throughput?"
+            required
+          />
+          <button type="submit">Search</button>
+        </div>
+      </form>
+
+      <section class="runtime" aria-live="polite">
+        <div><strong>Runtime</strong><span id="runtime-state">Loading index…</span></div>
+        <div><strong>Index</strong><span id="index-state">—</span></div>
+        <div><strong>Query model</strong><span>EmbeddingGemma 2 · 270M · local</span></div>
+      </section>
+
+      <section>
+        <div class="results-heading">
+          <h2>Results</h2>
+          <span id="search-meta"></span>
+        </div>
+        <div id="results" class="results"></div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
