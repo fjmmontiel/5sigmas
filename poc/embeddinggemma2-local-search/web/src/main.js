@@ -4,7 +4,10 @@ import "./style.css";
 const DEFAULT_MODEL_URL =
   "https://huggingface.co/litert-community/embeddinggemma-2-text-270m-litert-lm/resolve/main/embeddinggemma-2-text-270m.litertlm";
 const MODEL_URL = import.meta.env.VITE_EMBEDDING_MODEL_URL || DEFAULT_MODEL_URL;
-const INDEX_BASE = import.meta.env.VITE_INDEX_BASE || "/index";\nconst RETRIEVAL_WASM_BASE =\n  import.meta.env.VITE_RETRIEVAL_WASM_BASE ||\n  RETRIEVAL_WASM_BASE;
+const INDEX_BASE = import.meta.env.VITE_INDEX_BASE || "/index";
+const RETRIEVAL_WASM_BASE =
+  import.meta.env.VITE_RETRIEVAL_WASM_BASE ||
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0-rc.20260929/wasm";
 const TOP_K = 10;
 
 const form = document.querySelector("#search-form");
@@ -94,7 +97,7 @@ async function getEngine() {
   if (!enginePromise) {
     runtimeState.textContent = "Loading 270M local query model…";
     enginePromise = FilesetResolver.forRetrievalTasks(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0-rc.20260929/wasm"
+      RETRIEVAL_WASM_BASE
     )
       .then(function (retrieval) {
         return UniversalEmbedder.createFromOptions(retrieval, {
