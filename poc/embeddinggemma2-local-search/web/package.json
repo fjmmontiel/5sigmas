@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@litert-lm/core": "^0.17.1"
+    "@mediapipe/tasks-retrieval": "1.1.0-rc.20260929"
   },
   "devDependencies": {
     "vite": "^7.0.0"
