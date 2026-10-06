@@ -176,6 +176,9 @@ jobs:
           cat /tmp/5sigmas-tools-preview.log
           exit 1
 
+      - name: Validate tools hub discovery on desktop and mobile
+        run: node scripts/validate_tools_hub_discovery.mjs
+
       - name: Validate calculator in browser and capture visual evidence
         run: node scripts/validate_llm_cost_latency_tool.mjs
 
@@ -239,6 +242,7 @@ jobs:
         with:
           name: 5sigmas-tools-visual-review
           path: |
+            artifacts/visual-review/tools-hub-*.png
             artifacts/visual-review/llm-cost-latency-*.png
             artifacts/visual-review/model-price-performance-*.png
             artifacts/visual-review/inference-vram-*.png

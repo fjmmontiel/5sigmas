@@ -429,3 +429,91 @@
 @media (prefers-reduced-motion: reduce) {
   .s5-tool-action { transition: none; }
 }
+
+
+/* Tools hub discovery — search and goal filters keep 18 products scannable. */
+.s5-tool-discovery {
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  padding: 1rem 0 1.25rem;
+  border-top: 1px solid var(--s5-line-strong);
+  border-bottom: 1px solid var(--s5-line);
+}
+.s5-tool-discovery__controls {
+  display: grid;
+  grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr);
+  gap: 1rem clamp(1.5rem, 4vw, 3.5rem);
+  align-items: end;
+}
+.s5-tool-search {
+  display: grid;
+  gap: .45rem;
+  min-width: 0;
+  color: var(--s5-muted);
+  font-size: .68rem;
+  font-weight: 700;
+}
+.s5-tool-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: .55rem .65rem;
+  border: 1px solid var(--s5-line-strong);
+  border-radius: 0;
+  background: var(--s5-bg);
+  color: var(--s5-text);
+  font: inherit;
+  font-size: .82rem;
+}
+.s5-tool-search input:focus-visible,
+.s5-tool-filter:focus-visible {
+  outline: 2px solid var(--s5-text);
+  outline-offset: 2px;
+}
+.s5-tool-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+.s5-tool-filter {
+  min-height: 2.75rem;
+  padding: .55rem .75rem;
+  border: 1px solid var(--s5-line);
+  border-radius: 0;
+  background: var(--s5-bg);
+  color: var(--s5-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 700;
+}
+.s5-tool-filter:hover,
+.s5-tool-filter[aria-pressed="true"] {
+  border-color: var(--s5-text);
+  background: var(--s5-text);
+  color: var(--s5-bg);
+}
+.s5-tool-discovery__status {
+  margin-top: .9rem;
+  color: var(--s5-muted);
+  font-size: .7rem;
+}
+.s5-tool-discovery__status strong { color: var(--s5-text); }
+.s5-tool-discovery__empty {
+  margin: 1.25rem 0 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--s5-line);
+  color: var(--s5-muted);
+  font-size: .82rem;
+}
+.s5-tool-index-card[hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  .s5-tool-discovery__controls { grid-template-columns: 1fr; align-items: stretch; }
+  .s5-tool-filter-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .s5-tool-filter { width: 100%; min-height: 44px; }
+}
+
+@media (max-width: 420px) {
+  .s5-tool-filter-group { grid-template-columns: 1fr; }
+}
