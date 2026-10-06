@@ -84,6 +84,7 @@ nav:
           - Razonamiento en LLMs: temas/razonamiento.md
           - Evaluación de modelos de IA: temas/evaluacion-modelos.md
           - Qué es un agente de IA: temas/agentes-ia.md
+          - Agentes de voz en tiempo real: temas/agentes-voz-tiempo-real.md
           - Qué es prompt injection: temas/prompt-injection.md
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
