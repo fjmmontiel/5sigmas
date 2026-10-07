@@ -39,7 +39,7 @@
       telephonyUsdPerConnectedMinute: nonNegative(raw.telephonyUsdPerConnectedMinute, 0.0178),
       mediaStreamUsdPerConnectedMinute: nonNegative(raw.mediaStreamUsdPerConnectedMinute, 0.0044),
       sttUsdPerUserAudioMinute: nonNegative(raw.sttUsdPerUserAudioMinute, 0.017),
-      ttsUsdPer1000Characters: nonNegative(raw.ttsUsdPer1000Characters, 0.05),
+      ttsUsdPer1000Characters: nonNegative(raw.ttsUsdPer1000Characters, 0.04),
       charactersPerAgentMinute: nonNegative(raw.charactersPerAgentMinute, 1000),
       llmInputTokensPerCall: nonNegative(raw.llmInputTokensPerCall, 1400),
       llmOutputTokensPerCall: nonNegative(raw.llmOutputTokensPerCall, 220),

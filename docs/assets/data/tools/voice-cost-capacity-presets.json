@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-06",
   "currency": "USD",
   "freshness_policy": {
     "review_interval_days": 7,
@@ -36,7 +36,7 @@
         "telephony_usd_per_connected_minute": 0.0178,
         "media_stream_usd_per_connected_minute": 0.0044,
         "stt_usd_per_user_audio_minute": 0.017,
-        "tts_usd_per_1000_characters": 0.05,
+        "tts_usd_per_1000_characters": 0.04,
         "characters_per_agent_minute": 1000,
         "llm_input_tokens_per_call": 1400,
         "llm_output_tokens_per_call": 220,
@@ -50,7 +50,7 @@
           "organization": "Twilio",
           "title": "Programmable Voice Pricing in Spain",
           "url": "https://www.twilio.com/en-us/voice/pricing/es",
-          "verified_on": "2026-10-01",
+          "verified_on": "2026-10-06",
           "note_es": "Referencia de llamada saliente local a España: 0,0178 USD/min; Media Streams: 0,0044 USD/min. Móvil, entrante, SIP/BYOC y descuentos usan otras tarifas.",
           "note_en": "Spain local outbound reference: $0.0178/min; Media Streams: $0.0044/min. Mobile, inbound, SIP/BYOC and discounted pricing use different rates."
         },
@@ -59,7 +59,7 @@
           "organization": "Twilio",
           "title": "Media Streams Overview",
           "url": "https://www.twilio.com/docs/voice/media-streams",
-          "verified_on": "2026-10-01",
+          "verified_on": "2026-10-06",
           "note_es": "Twilio documenta un único Media Stream bidireccional por llamada y una conexión WebSocket por stream. El preset usa una sesión STT descendente por llamada como supuesto de arquitectura editable, no como límite universal de proveedor.",
           "note_en": "Twilio documents one bidirectional Media Stream per Call and one WebSocket connection per stream. The preset uses one downstream STT session per call as an editable architecture assumption, not as a universal provider limit."
         },
@@ -68,7 +68,7 @@
           "organization": "OpenAI",
           "title": "GPT Live Transcribe Model",
           "url": "https://developers.openai.com/api/docs/models/gpt-live-transcribe",
-          "verified_on": "2026-10-01",
+          "verified_on": "2026-10-06",
           "note_es": "GPT Live Transcribe se publica a 0,017 USD por minuto de audio. Los límites publicados dependen del tier; el planificador no inventa un límite concurrente y deja ese campo a la configuración real del usuario.",
           "note_en": "GPT Live Transcribe is listed at $0.017 per audio minute. Published rate limits depend on tier; the planner does not invent a concurrent-session cap and leaves that field to the user's actual configuration."
         },
@@ -77,16 +77,16 @@
           "organization": "ElevenLabs",
           "title": "ElevenAPI Pricing",
           "url": "https://elevenlabs.io/pricing/api",
-          "verified_on": "2026-10-01",
-          "note_es": "Flash/Turbo TTS: 0,05 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable.",
-          "note_en": "Flash/Turbo TTS: $0.05 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable."
+          "verified_on": "2026-10-06",
+          "note_es": "Flash/Turbo TTS: 0,04 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable. Las promociones temporales de v4/v4 Turbo no se usan como tarifa base.",
+          "note_en": "Flash/Turbo TTS: $0.04 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable. Time-limited v4/v4 Turbo promotions are not used as the base rate."
         },
         {
           "component": "tts_concurrency",
           "organization": "ElevenLabs",
           "title": "Models — concurrency and priority",
           "url": "https://elevenlabs.io/docs/overview/models",
-          "verified_on": "2026-10-01",
+          "verified_on": "2026-10-06",
           "note_es": "ElevenLabs indica que, con WebSocket, solo el tiempo de generación de audio cuenta para concurrencia y que un límite 5 puede soportar aproximadamente 100 conversaciones equilibradas. El 5% inicial es una heurística editable, no una garantía de capacidad.",
           "note_en": "ElevenLabs states that with WebSockets only time spent generating audio counts toward concurrency and that a limit of 5 can typically support about 100 balanced conversations. The initial 5% duty factor is an editable heuristic, not a capacity guarantee."
         },
@@ -95,7 +95,7 @@
           "organization": "OpenAI",
           "title": "GPT-6 Luna Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-          "verified_on": "2026-10-01",
+          "verified_on": "2026-10-06",
           "note_es": "Referencia de texto actual: 0,10 USD/MTok de entrada y 0,50 USD/MTok de salida. El ajuste de contexto largo de GPT-6 Luna no se activa con el escenario inicial.",
           "note_en": "Current text reference: $0.10/MTok input and $0.50/MTok output. GPT-6 Luna long-context pricing is not triggered by the initial scenario."
         }
@@ -103,7 +103,7 @@
     }
   ],
   "architecture_coverage": {
-    "reviewed_through": "2026-10-01",
+    "reviewed_through": "2026-10-06",
     "current_preset": "Cascade: Twilio Media Streams + GPT Live Transcribe + GPT-6 Luna + ElevenLabs TTS",
     "reviewed_not_modelled": [
       {
