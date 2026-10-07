@@ -106,4 +106,4 @@ jobs:
             echo "PR head moved from $HEAD_SHA to $current_sha; refusing stale merge."
             exit 1
           fi
-          gh pr merge "$PR_NUMBER" --repo "$REPO" --squash --delete-branch
+          gh pr merge "$PR_NUMBER" --repo "$REPO" --squash --delete-branch --auto
