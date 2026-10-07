@@ -129,6 +129,15 @@ nav:
       - Global AI Ecosystem: tools/global-ai-ecosystem.md
   - Learn:
       - Series: series/index.md
+      - Concepts:
+          - temas/index.md
+          - What is an LLM?: temas/llms.md
+          - How the Transformer works: temas/transformer.md
+          - Reasoning in LLMs: temas/razonamiento.md
+          - Evaluating AI models: temas/evaluacion-modelos.md
+          - What is an AI agent?: temas/agentes-ia.md
+          - Realtime voice agents: temas/agentes-voz-tiempo-real.md
+          - What is prompt injection?: temas/prompt-injection.md
       - AI and Generative AI Foundations:
           - Introduction: series/fundamentos-ia-iag/00_presentacion_serie.md
           - What is AI?: series/fundamentos-ia-iag/01-que-es-ia.md
@@ -217,14 +226,6 @@ nav:
           - "Evaluating agent and tool trajectories: success, efficiency, recovery, and policy compliance": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Online evaluation: shadow, canary, A/B, guardrails, and regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
           - "Observability, failure taxonomies, and production → eval → repair feedback loops": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
-  - Concepts:
-      - Concepts: temas/index.md
-      - What is an LLM?: temas/llms.md
-      - How the Transformer works: temas/transformer.md
-      - Reasoning in LLMs: temas/razonamiento.md
-      - Evaluating AI models: temas/evaluacion-modelos.md
-      - What is an AI agent?: temas/agentes-ia.md
-      - What is prompt injection?: temas/prompt-injection.md
   - Build:
       - articulos-tecnicos/index.md
       - Proactive and reactive agents and tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md

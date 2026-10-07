@@ -1,8 +1,8 @@
 ---
 title: "Conceptos de inteligencia artificial"
 seo_title: "Conceptos de inteligencia artificial explicados con rigor"
-description: "Guías answer-first sobre LLMs, Transformers, agentes, prompt injection, razonamiento y evaluación de IA, conectadas con series, visuales y notas de ingeniería."
-keywords: "conceptos inteligencia artificial, LLM, Transformer, agentes IA, prompt injection, razonamiento IA, evaluación modelos IA"
+description: "Guías answer-first sobre LLMs, Transformers, agentes, agentes de voz, prompt injection, razonamiento y evaluación de IA, conectadas con series, visuales y notas de ingeniería."
+keywords: "conceptos inteligencia artificial, LLM, Transformer, agentes IA, agentes de voz, prompt injection, razonamiento IA, evaluación modelos IA"
 hide:
   - toc
   - navigation
@@ -50,8 +50,14 @@ hide:
       <span class="s5-list-row__desc">Chatbot vs workflow vs agente, tools, memoria, estado, evaluación, permisos y criterios para usar agencia de verdad.</span>
       <span class="s5-list-row__meta">Sistemas</span>
     </a>
-    <a class="s5-list-row" href="/temas/prompt-injection/">
+    <a class="s5-list-row" href="/temas/agentes-voz-tiempo-real/">
       <span class="s5-list-row__n">06</span>
+      <span class="s5-list-row__title">Agentes de voz en tiempo real</span>
+      <span class="s5-list-row__desc">Arquitecturas de audio, turn-taking, latencia, tools, WebRTC/SIP, capacidad y evaluación por turno.</span>
+      <span class="s5-list-row__meta">Voz</span>
+    </a>
+    <a class="s5-list-row" href="/temas/prompt-injection/">
+      <span class="s5-list-row__n">07</span>
       <span class="s5-list-row__title">Qué es prompt injection</span>
       <span class="s5-list-row__desc">Por qué datos e instrucciones pueden competir dentro del contexto y qué arquitectura reduce el camino hasta una acción.</span>
       <span class="s5-list-row__meta">Seguridad</span>
