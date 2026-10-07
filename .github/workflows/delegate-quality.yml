@@ -39,7 +39,7 @@ jobs:
       locale: ${{ steps.plan.outputs.locale }}
       tools: ${{ steps.plan.outputs.tools }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - id: plan
