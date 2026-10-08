@@ -17,7 +17,9 @@ const MAX_RESULTS = 7;
 const root = document.querySelector('#s5-semantic-search');
 
 if (root) {
-  const lang = root.dataset.lang === 'en' ? 'en' : 'es';
+  // Browser route, not a user-entered query or editorial field, owns the language.
+  const lang = location.pathname === '/en' || location.pathname.startsWith('/en/')
+    ? 'en' : 'es';
   const en = lang === 'en';
   const text = en ? {
     question: 'Your question', search: 'Find sources', answer: 'Generate local answer (WebGPU)',

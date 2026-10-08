@@ -251,6 +251,15 @@ def _validate_agent_graph() -> None:
     visual_count = sum(counts.get(kind, 0) for kind in ("image", "svg", "animation", "video"))
     if page_count < 20:
         raise AssertionError(f"Agent graph indexes too few deployed pages: {page_count}")
+    section_examples = sum(
+        bool(heading.get("id") and heading.get("excerpt"))
+        for item in items for heading in (item.get("headings") or [])
+        if isinstance(heading, dict)
+    )
+    if section_examples < 12:
+        raise AssertionError(
+            f"Canonical knowledge graph contains too few searchable heading paragraphs: {section_examples}"
+        )
     if visual_count < 1:
         raise AssertionError("Agent graph contains no first-class visuals/videos")
     if counts.get("evidence", 0) < 1:

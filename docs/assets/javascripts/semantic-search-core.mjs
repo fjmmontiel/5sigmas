@@ -150,9 +150,9 @@ export function expandKnowledgeFragments(item, locale, origin) {
       url,
       heading: label,
       heading_id: id,
-      text: [label, clean(item.description)].filter(Boolean).join('. ').slice(0, 750),
-      search_text: [label, root.title, clean(item.description),
-        Array.isArray(item.keywords) ? item.keywords.join(' ') : clean(item.keywords)].join('. ').slice(0, 1200),
+      text: clean(heading.excerpt) || [label, clean(item.description)].filter(Boolean).join('. ').slice(0, 750),
+      search_text: [label, clean(heading.excerpt), root.title, clean(item.description),
+        Array.isArray(item.keywords) ? item.keywords.join(' ') : clean(item.keywords)].join('. ').slice(0, 1800),
     });
   }
   return [root, ...fragments];

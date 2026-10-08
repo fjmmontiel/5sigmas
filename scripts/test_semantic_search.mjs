@@ -89,3 +89,14 @@ test('a heading-specific match opens its own section and uses its own passage', 
   assert.match(section,/key-value tensors/);
   assert.doesNotMatch(section,/voice agents/);
 });
+
+test('section search uses its rendered paragraph and keeps the route locale', () => {
+  const source = { id:'article-section', kind:'engineering',
+    url:'https://5sigmas.com/en/series/llm-inference/', title:'Serving LLMs',
+    headings:[{id:'kv-pages', text:'KV cache', excerpt:'Paged key-value cache prevents fragmentation and improves inference throughput.'}] };
+  const [page, section] = expandKnowledgeFragments(source,'en',origin);
+  assert.ok(section.search_text.includes('prevents fragmentation'));
+  assert.match(rankLexical([page,section],'fragmentation')[0].record.url,/#kv-pages$/);
+  assert.equal(section.locale,'en');
+  assert.equal(sourceLanguageMatches(section,'es',origin),false);
+});
