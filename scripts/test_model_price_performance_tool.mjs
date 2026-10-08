@@ -12,6 +12,9 @@ const root = path.resolve(__dirname, '..');
 const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-performance-core.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
 
+// TEMPORARY upstream probe for exact PR408 data refresh; remove before merge.
+await import('./refresh_model_price_performance_upstream.mjs');
+
 const SNAPSHOT = data.updated_at;
 assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
 const wallAgeDays = (Date.now() - Date.parse(`${SNAPSHOT}T23:59:59Z`)) / 86_400_000;
