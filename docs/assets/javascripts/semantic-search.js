@@ -312,7 +312,8 @@ if (root) {
 
   async function retrieve(question) {
     const engine = await getEmbedder();
-    const queryVector = await embedding(engine, 'task: search query | text: ' + question, 256);
+    const dimension = localState.manifest?.dimension || 256;
+    const queryVector = await embedding(engine, 'task: search query | text: ' + question, dimension);
     status.textContent = text.searching;
     const matches = localState.manifest
       ? topVectorMatches(localState.records, localState.vectors, queryVector,
