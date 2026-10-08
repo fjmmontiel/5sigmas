@@ -37,7 +37,7 @@ Search the published engineering notes, articles, concepts, animations and video
 
 ## What is actually running
 
-The browser uses the **270M text-only EmbeddingGemma 2 encoder**. Until the offline-built 740M multimodal index has been validated and shipped, it derives candidates from the [public knowledge graph](/en/agent/knowledge.json) and then semantically reranks them locally. Once the validated binary multimodal index is served, the same interface uses it instead of metadata preselection.
+The browser uses the **270M text-only EmbeddingGemma 2 encoder**. Until the offline-built 740M multimodal index has been validated and shipped, it derives candidates from the public 5sigmas knowledge graph and then semantically reranks them locally. Once the validated binary multimodal index is served, the same interface uses it instead of metadata preselection.
 
 Optional answers come from the **Qwen3 0.6B** open-weight model running through WebGPU. It is prompted only with retrieved source passages, and must cite the sources. **Generated text can still be wrong**, and a high similarity score is not proof. Always verify the linked article or video.
 
