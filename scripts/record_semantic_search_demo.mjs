@@ -112,7 +112,6 @@ try {
     const exists = await page.evaluate((id) => Boolean(document.getElementById(id)), deepId);
     if (!exists) throw new Error('Linked heading missing in rendered source page: ' + matched);
     report.locales[report.locales.length - 1].rendered_heading_exists = true;
-    await page.locator('[id]').filter({ has: page.locator('non-existing-selector') }).count().catch(() => {});
     await page.waitForTimeout(1650);
     console.log('LIVE_SEARCH_PASS ' + JSON.stringify(report.locales[report.locales.length - 1]));
   }

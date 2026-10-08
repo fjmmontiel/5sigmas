@@ -313,6 +313,27 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
+      - name: Verify and record real ES/EN semantic source navigation
+        timeout-minutes: 10
+        env:
+          S5_SEARCH_ORIGIN: https://5sigmas.com
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          node scripts/record_semantic_search_demo.mjs
+
+      - name: Retain real production browser demonstration
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-search-es-en-production
+          path: |
+            artifacts/visual-review/5sigmas-search-es-en-production.mp4
+            artifacts/visual-review/5sigmas-search-es-en-production.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Verify exact live approved C3 media and discovery
         run: python3 scripts/verify_evaluation_c3_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
 
