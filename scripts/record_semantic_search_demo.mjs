@@ -61,7 +61,7 @@ try {
   // errors and every unrelated page error remain fatal.
   const expectedMaterialNavigationAbort = (error) =>
     phase === 'opening-source' && error.message === 'Error' &&
-    /at XMLHttpRequest\\.<anonymous> \\(https:\\/\\/5sigmas\\.com\\/(?:en\\/)?assets\\/javascripts\\/bundle\\.[a-z0-9]+\\.min\\.js:\\d+:\\d+\\)/i
+    /at XMLHttpRequest\.<anonymous> \(https:\/\/5sigmas\.com\/(?:en\/)?assets\/javascripts\/bundle\.[a-z0-9]+\.min\.js:\d+:\d+\)/i
       .test(error.stack || '');
   page.on('pageerror', e => {
     if (expectedMaterialNavigationAbort(e)) {
@@ -98,7 +98,7 @@ try {
     const search = page.locator('#s5-search-question');
     let matched = null, resultLinks = [];
     for (const target of sourceSections.slice(0, 9)) {
-      await search.fill(target.text.replace(/\\s*¶\\s*$/, '').trim());
+      await search.fill(target.text.replace(/\s*¶\s*$/, '').trim());
       await page.locator('[data-action=search]').click();
       await page.waitForFunction(() => document.querySelectorAll('.s5-search-card a.s5-search-link').length > 0,
         null, { timeout: 45000 });
