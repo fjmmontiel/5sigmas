@@ -471,6 +471,9 @@ def main() -> int:
     report = crawl(reader)
     write_report(report, args.output_dir, args.label)
     print(json.dumps(report["stats"], ensure_ascii=False, sort_keys=True))
+    for row in report["canonical_audit"]:
+        if row["classification"] == "INDEX" and not row["self_referencing"]:
+            print("SEO_CANONICAL_MISMATCH " + json.dumps(row, ensure_ascii=False, sort_keys=True), file=sys.stderr)
     blocking = sum(report["stats"][key] for key in ("sitemap_invalid", "broken_internal_links", "internal_redirect_links", "invalid_canonicals", "invalid_hreflang", "indexable_orphans"))
     return 0 if args.allow_findings or blocking == 0 else 1
 
