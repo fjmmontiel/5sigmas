@@ -71,6 +71,15 @@ try {
             u.pathname === (config.lang === 'en' ? '/en/videos/key-moments.json' : '/videos/key-moments.json')) {
           return route.fulfill({ status: 404, body: '{}' });
         }
+        // This page inherits MathJax globally. The E2E intentionally blocks
+        // third-party downloads, so emulate its lifecycle rather than causing
+        // an unrelated document$ callback error on MathJax.startup.output.
+        if (u.hostname === 'unpkg.com' && u.pathname.endsWith('/es5/tex-mml-chtml.js')) {
+          return route.fulfill({
+            status: 200, contentType: 'text/javascript', headers: { 'access-control-allow-origin': '*' },
+            body: 'window.MathJax={...window.MathJax,startup:{output:{clearCache(){}}},typesetClear(){},texReset(){},typesetPromise(){return Promise.resolve()}};',
+          });
+        }
         if (u.pathname.endsWith('retrieval_bundle.mjs')) {
           return route.fulfill(semanticWorks
             ? { status: 200, headers: { 'access-control-allow-origin': '*' }, contentType: 'text/javascript', body: fakeMediaPipe }
