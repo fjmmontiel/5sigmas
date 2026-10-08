@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated": "2026-10-01",
+  "updated": "2026-10-07",
   "scope": "OpenAI release-reported benchmark history selected for explicit provenance and configuration notes. No cross-vendor normalization is attempted in v1.",
   "freshness_policy": "Review on every relevant model release and at least every 30 days while the tool is active.",
   "sources": {
@@ -69,6 +69,12 @@
       "title": "Gemini 4 Argon: our next era of frontier intelligence",
       "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
       "published": "2026-09-30"
+    },
+    "mistrallarge4": {
+      "organization": "Mistral",
+      "title": "Mistral Large 4 | Mistral Docs",
+      "url": "https://docs.mistral.ai/models/mistral-large",
+      "published": "2026-10-06"
     }
   },
   "series": [
@@ -404,7 +410,7 @@
     }
   ],
   "release_coverage": {
-    "reviewed_through": "2026-10-01",
+    "reviewed_through": "2026-10-07",
     "releases": [
       {
         "model": "GPT-6 Astra",
@@ -444,6 +450,13 @@
         "status": "reviewed_not_added",
         "source": "gemini4argon",
         "reason": "Google announced Argon with a new benchmark set and phased pre-release access. Those results are not mixed into the existing OpenAI longitudinal series without a justified comparable protocol."
+      },
+      {
+        "model": "Mistral Large 4",
+        "date": "2026-10-06",
+        "status": "reviewed_not_added",
+        "source": "mistrallarge4",
+        "reason": "Mistral released a new multimodal reasoning model, but this timeline keeps longitudinal benchmark series only where release-reported protocols are directly comparable. No cross-vendor point is inserted from Artificial Analysis or from a different benchmark set."
       }
     ]
   }
