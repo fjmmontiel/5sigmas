@@ -318,6 +318,16 @@ if (root) {
   }
 
   async function retrieve(question) {
+    // Render grounded same-locale sources immediately. The large embedding
+    // model only reranks these results when available, never blocks opening
+    // canonical fragments during a first download or on an unsupported device.
+    const immediate = uniqueMatches(rankLexical(localState.records, question, MAX_RESULTS), MAX_RESULTS);
+    localState.matches = immediate;
+    renderMatches(immediate);
+    status.textContent = immediate.length
+      ? (en ? 'Source links ready · refining with EmbeddingGemma 2…'
+        : 'Enlaces listos · afinando con EmbeddingGemma 2…')
+      : text.embedding;
     let matches;
     let lexicalFallback = false;
     try {
