@@ -14,6 +14,7 @@ then removes the staged markers. Arbitrary missing internal links still fail nor
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -261,6 +262,29 @@ def _validate_agent_graph() -> None:
     )
 
 
+def _validate_local_semantic_search() -> None:
+    """Fail deploy when the bilingual search UI loses its source or JS contract."""
+    page = SITE / "buscar" / "index.html"
+    script = SITE / "assets" / "javascripts" / "semantic-search.js"
+    core = SITE / "assets" / "javascripts" / "semantic-search-core.mjs"
+    css = SITE / "assets" / "stylesheets" / "semantic-search.css"
+    if not all(path.is_file() for path in (page, script, core, css)):
+        raise AssertionError("Local semantic search route/runtime assets missing in Spanish build")
+    rendered = page.read_text(encoding="utf-8")
+    if 'id="s5-semantic-search"' not in rendered or "/assets/javascripts/semantic-search.js" not in rendered:
+        raise AssertionError("Local semantic search UI missing its runtime bootstrapping")
+    test = subprocess.run(
+        ["node", "--test", "scripts/test_semantic_search.mjs"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if test.returncode != 0:
+        raise AssertionError("EmbeddingGemma search behavioral regression:\\n" + test.stdout[-5000:] + test.stderr[-5000:])
+    print("Browser-local semantic search: route, assets and behavioral tests OK")
+
+
 def main() -> int:
     created_files = _stage_manifest_routes()
     try:
@@ -271,6 +295,7 @@ def main() -> int:
         if priority_result:
             return priority_result
         _validate_agent_graph()
+        _validate_local_semantic_search()
         return 0
     finally:
         _cleanup_staged_routes(created_files)
