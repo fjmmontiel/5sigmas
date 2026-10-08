@@ -311,19 +311,33 @@ if (root) {
   }
 
   async function retrieve(question) {
-    const engine = await getEmbedder();
-    const dimension = localState.manifest?.dimension || 256;
-    const queryVector = await embedding(engine, 'task: search result | query: ' + question, dimension);
-    status.textContent = text.searching;
-    const matches = localState.manifest
-      ? topVectorMatches(localState.records, localState.vectors, queryVector,
-        localState.manifest.dimension, MAX_RESULTS, lang)
-      : await rerankMetadata(question, engine, queryVector);
+    let matches;
+    let lexicalFallback = false;
+    try {
+      const engine = await getEmbedder();
+      const dimension = localState.manifest?.dimension || 256;
+      const queryVector = await embedding(engine, 'task: search result | query: ' + question, dimension);
+      status.textContent = text.searching;
+      matches = localState.manifest
+        ? topVectorMatches(localState.records, localState.vectors, queryVector,
+          localState.manifest.dimension, MAX_RESULTS, lang)
+        : await rerankMetadata(question, engine, queryVector);
+    } catch (error) {
+      // Retrieval must stay functional when a large device model/CDN is
+      // unavailable, including low-memory mobile and restricted networks.
+      console.warn('[5sigmas local search] embedding unavailable; using lexical sources', error);
+      matches = uniqueMatches(rankLexical(localState.records, question, MAX_RESULTS), MAX_RESULTS);
+      lexicalFallback = true;
+      mode.textContent = en ? 'Keyword source search (embedding model unavailable)'
+        : 'Búsqueda textual de fuentes (modelo de embeddings no disponible)';
+    }
     status.textContent = text.enriching;
     await enrichPassages(matches, question);
     localState.matches = matches;
     renderMatches(matches);
-    status.textContent = matches.length + ' · ' + text.local;
+    status.textContent = matches.length + ' · ' + (lexicalFallback
+      ? (en ? 'Keyword fallback · no inference' : 'Recuperación textual · sin inferencia')
+      : text.local);
     generate.disabled = !matches.length || !('gpu' in navigator);
     if (!('gpu' in navigator)) answerText.textContent = text.noGpu;
     return matches;
