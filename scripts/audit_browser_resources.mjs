@@ -732,6 +732,14 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
+// Run the focused source-click, language, and WebGPU-stub browser E2E after
+// the normal resource sweep. This reuses the existing Playwright installation
+// and local preview server without introducing a new workflow or scheduler.
+if (await fs.stat('site/buscar/index.html').then(s => s.isFile()).catch(() => false)) {
+  console.log('[local-search] executing full ES/EN browser interaction gate');
+  await import('./validate_semantic_search_browser.mjs');
+}
+
 console.log(
   `Browser resource audit passed for ${paths.length} pages across ${profileNames.length} profiles `
   + `(${auditedContexts} contexts), including lazy-resource exercise, ${mutationCount} classifier mutations, `
