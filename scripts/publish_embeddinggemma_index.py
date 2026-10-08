@@ -63,7 +63,7 @@ def verify(directory: Path, *, require_images: bool = True, require_video: bool 
         if (parsed.scheme != "https" or parsed.netloc != "5sigmas.com"
             or not parsed.path.startswith("/") or parsed.username or parsed.password):
             raise ValueError("Index contains a noncanonical or external source URL")
-        modes = record.get("embedding_modalities")
+        modes = record.get("embedding_modalities", ["text"] if record.get("kind") in {"text", "video_moment"} else None)
         if not isinstance(modes, list) or not modes or any(mode not in ALLOWED_MODALITIES for mode in modes):
             raise ValueError("Index record has invalid embedding modality metadata")
         for mode in set(modes):
