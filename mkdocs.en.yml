@@ -105,6 +105,7 @@ extra:
 
 nav:
   - Home: index.md
+  - Ask 5sigmas: buscar.md
   - Visuals: visuales/index.md
   - Videos: videos/index.md
   - Tools:
