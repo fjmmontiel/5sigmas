@@ -269,7 +269,7 @@ if (root) {
       results.append(node('p', 's5-search-empty', text.zero));
       return;
     }
-    for (const { record, score } of matches) {
+    for (const [index, { record, score }] of matches.entries()) {
       const valid = safeSourceUrl(record.url, ORIGIN);
       if (!valid) continue;
       const card = node('article', 's5-search-card');
@@ -277,7 +277,7 @@ if (root) {
       const kind = record.kind === 'video_moment' ? 'VIDEO' :
         record.kind === 'animation' ? 'ANIMATION' : record.kind === 'svg' ? 'DIAGRAM' :
         record.kind === 'image' ? 'IMAGE' : 'TEXT';
-      info.append(node('span', 's5-search-kind', kind + ' · ' + lang.toUpperCase() +
+      info.append(node('span', 's5-search-kind', '[' + (index + 1) + '] · ' + kind + ' · ' + lang.toUpperCase() +
         ' · ' + score.toFixed(3)));
       info.append(node('h3', '', record.title));
       if (record.heading) info.append(node('p', 's5-search-heading', record.heading));
