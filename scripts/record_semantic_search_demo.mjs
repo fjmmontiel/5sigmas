@@ -60,7 +60,7 @@ try {
   // that exact framework teardown error in that bounded transition; search
   // errors and every unrelated page error remain fatal.
   const expectedMaterialNavigationAbort = (error) =>
-    phase === 'opening-source' && error.message === 'Error' &&
+    ['opening-source', 'source-verified'].includes(phase) && error.message === 'Error' &&
     /at XMLHttpRequest\.<anonymous> \(https:\/\/5sigmas\.com\/(?:en\/)?assets\/javascripts\/bundle\.[a-z0-9]+\.min\.js:\d+:\d+\)/i
       .test(error.stack || '');
   page.on('pageerror', e => {
