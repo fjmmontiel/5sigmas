@@ -53,6 +53,7 @@ extra:
 
 nav:
   - Inicio: index.md
+  - Pregunta a 5sigmas: buscar.md
   - Visuales: visuales/index.md
   - Vídeos: videos/index.md
   - Herramientas:
@@ -241,6 +242,7 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 extra_css:
+  - assets/stylesheets/semantic-search.css
   - stylesheets/extra.css
   - stylesheets/tools-kv-context.css
   - assets/stylesheets/animations.css
