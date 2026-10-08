@@ -14,6 +14,7 @@ then removes the staged markers. Arbitrary missing internal links still fail nor
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -250,6 +251,15 @@ def _validate_agent_graph() -> None:
     visual_count = sum(counts.get(kind, 0) for kind in ("image", "svg", "animation", "video"))
     if page_count < 20:
         raise AssertionError(f"Agent graph indexes too few deployed pages: {page_count}")
+    section_examples = sum(
+        bool(heading.get("id") and heading.get("excerpt"))
+        for item in items for heading in (item.get("headings") or [])
+        if isinstance(heading, dict)
+    )
+    if section_examples < 12:
+        raise AssertionError(
+            f"Canonical knowledge graph contains too few searchable heading paragraphs: {section_examples}"
+        )
     if visual_count < 1:
         raise AssertionError("Agent graph contains no first-class visuals/videos")
     if counts.get("evidence", 0) < 1:
@@ -259,6 +269,29 @@ def _validate_agent_graph() -> None:
         f"({len(items)} items, {page_count} pages, {visual_count} visual/video items, "
         f"{counts.get('evidence', 0)} evidence items; repository exposure: 0)"
     )
+
+
+def _validate_local_semantic_search() -> None:
+    """Fail deploy when the bilingual search UI loses its source or JS contract."""
+    page = SITE / "buscar" / "index.html"
+    script = SITE / "assets" / "javascripts" / "semantic-search.js"
+    core = SITE / "assets" / "javascripts" / "semantic-search-core.mjs"
+    css = SITE / "assets" / "stylesheets" / "semantic-search.css"
+    if not all(path.is_file() for path in (page, script, core, css)):
+        raise AssertionError("Local semantic search route/runtime assets missing in Spanish build")
+    rendered = page.read_text(encoding="utf-8")
+    if 'id="s5-semantic-search"' not in rendered or "/assets/javascripts/semantic-search.js" not in rendered:
+        raise AssertionError("Local semantic search UI missing its runtime bootstrapping")
+    test = subprocess.run(
+        ["node", "--test", "scripts/test_semantic_search.mjs"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if test.returncode != 0:
+        raise AssertionError("EmbeddingGemma search behavioral regression:\\n" + test.stdout[-5000:] + test.stderr[-5000:])
+    print("Browser-local semantic search: route, assets and behavioral tests OK")
 
 
 def main() -> int:
@@ -271,6 +304,7 @@ def main() -> int:
         if priority_result:
             return priority_result
         _validate_agent_graph()
+        _validate_local_semantic_search()
         return 0
     finally:
         _cleanup_staged_routes(created_files)

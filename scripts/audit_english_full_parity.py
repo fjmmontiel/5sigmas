@@ -32,6 +32,7 @@ NON_PUBLIC_STATES = {"draft", "hidden", "wip", "private"}
 
 PUBLIC_ROOT_FILES = (
     "index.md",
+    "buscar.md",
     "proximamente.md",
     "meta/about.md",
     "series/index.md",

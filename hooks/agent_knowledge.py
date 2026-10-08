@@ -139,6 +139,9 @@ class _RenderedPageParser(HTMLParser):
         self.stack: list[dict[str, Any]] = []
         self.body_text: list[str] = []
         self.headings: list[dict[str, str]] = []
+        self._section_index: int | None = None
+        self._section_text: list[str] = []
+        self._section_chars = 0
         self.last_heading = ""
         self.links: list[dict[str, str]] = []
         self.visuals: list[dict[str, Any]] = []
@@ -147,6 +150,15 @@ class _RenderedPageParser(HTMLParser):
         self._animation: dict[str, Any] | None = None
         self._figure_caption: dict[str, Any] | None = None
         self._video_stack: list[dict[str, Any]] = []
+
+    def _finish_section(self) -> None:
+        if self._section_index is not None and self._section_text:
+            self.headings[self._section_index]["excerpt"] = _public_text(
+                " ".join(self._section_text)
+            )[:1000]
+        self._section_index = None
+        self._section_text = []
+        self._section_chars = 0
 
     def _in_content(self) -> bool:
         return bool(self.stack and self.stack[-1]["content"])
@@ -170,6 +182,7 @@ class _RenderedPageParser(HTMLParser):
 
         depth = len(self.stack)
         if tag in {"h1", "h2", "h3"}:
+            self._finish_section()
             self._heading = {"depth": depth, "level": tag, "id": attrs.get("id", ""), "text": []}
 
         if tag == "a" and attrs.get("href"):
@@ -254,6 +267,9 @@ class _RenderedPageParser(HTMLParser):
         if not value:
             return
         self.body_text.append(value)
+        if self._heading is None and self._section_index is not None and self._section_chars < 1600:
+            self._section_text.append(value)
+            self._section_chars += len(value)
         if self._heading is not None:
             self._heading["text"].append(value)
         if self._anchor is not None:
@@ -273,6 +289,7 @@ class _RenderedPageParser(HTMLParser):
             if value:
                 self.last_heading = value
                 self.headings.append({"level": self._heading["level"], "id": self._heading["id"], "text": value})
+                self._section_index = len(self.headings) - 1
             self._heading = None
 
         if self._anchor is not None and self._anchor["depth"] == depth and tag == "a":
@@ -342,6 +359,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     parser = _RenderedPageParser(canonical, host)
     parser.feed(output)
     parser.close()
+    parser._finish_section()
 
     meta = page.meta or {}
     keywords = meta.get("keywords") or []
