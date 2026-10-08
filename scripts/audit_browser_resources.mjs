@@ -740,3 +740,14 @@ console.log(
 );
 console.log(`Browser runtime: ${browserRuntime.actual_channel} ${browserRuntime.version}`);
 console.log(`Report: ${reportPath}`);
+
+// Run the dedicated bilingual semantic-search browser contract only on builds
+// which actually publish the new route. This reuses the existing Playwright
+// launch/preview infrastructure; no new workflow, scheduler or model download.
+const semanticPageExists = await fs.stat('site/buscar/index.html')
+  .then((entry) => entry.isFile()).catch(() => false);
+if (semanticPageExists) {
+  console.log('Semantic source search browser verification (mocked model boundary)…');
+  await import('./validate_semantic_search_browser.mjs');
+}
+
