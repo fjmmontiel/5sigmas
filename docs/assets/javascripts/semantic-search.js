@@ -1,5 +1,6 @@
 import {
-  clean, normalizePrefix, dotAt, expandKnowledgeFragments, sourceLanguageMatches, rankLexical,
+  clean, liteRtQuery, liteRtDocument, normalizePrefix, dotAt,
+  expandKnowledgeFragments, sourceLanguageMatches, rankLexical,
   topVectorMatches, uniqueMatches, safeSourceUrl, bestSectionPassage, groundedMessages,
 } from './semantic-search-core.mjs';
 
@@ -237,7 +238,7 @@ if (root) {
       let vector = localState.embedCache.get(cacheKey);
       if (!vector) {
         vector = await embedding(engine,
-          'title: ' + record.title + ' | text: ' + clean(record.search_text || record.text).slice(0, 1450),
+          liteRtDocument(record.title, clean(record.search_text || record.text).slice(0, 1450)),
           queryVector.length);
         localState.embedCache.set(cacheKey, vector);
       }
@@ -333,7 +334,7 @@ if (root) {
     try {
       const engine = await getEmbedder();
       const dimension = localState.manifest?.dimension || 256;
-      const queryVector = await embedding(engine, 'task: search result | query: ' + question, dimension);
+      const queryVector = await embedding(engine, liteRtQuery(question), dimension);
       status.textContent = text.searching;
       matches = localState.manifest
         ? topVectorMatches(localState.records, localState.vectors, queryVector,

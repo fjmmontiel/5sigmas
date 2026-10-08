@@ -3,6 +3,15 @@ export function clean(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
 }
 
+// Google's LiteRT-LM JavaScript runtime uses its own task prefixes; these
+// differ from the SentenceTransformers convenience prompt aliases.
+export function liteRtQuery(text) {
+  return 'task: search query | text: ' + clean(text);
+}
+export function liteRtDocument(title, text) {
+  return 'task: search result | text: ' + clean(title) + '. ' + clean(text);
+}
+
 export function words(text) {
   return clean(text).toLocaleLowerCase().normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')

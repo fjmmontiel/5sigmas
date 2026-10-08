@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { bestPassage, bestSectionPassage, expandKnowledgeFragments, groundedMessages,
-  normalizePrefix, projectKnowledge, rankLexical, safeSourceUrl, sourceLanguageMatches,
+  liteRtQuery, liteRtDocument, normalizePrefix, projectKnowledge, rankLexical, safeSourceUrl, sourceLanguageMatches,
   topVectorMatches, uniqueMatches } from '../docs/assets/javascripts/semantic-search-core.mjs';
 
 const origin = 'https://5sigmas.com';
@@ -99,4 +99,10 @@ test('section search uses its rendered paragraph and keeps the route locale', ()
   assert.match(rankLexical([page,section],'fragmentation')[0].record.url,/#kv-pages$/);
   assert.equal(section.locale,'en');
   assert.equal(sourceLanguageMatches(section,'es',origin),false);
+});
+
+test('LiteRT local text embeddings use Google official asymmetric retrieval prefixes', () => {
+  assert.equal(liteRtQuery('  KV   cache '),'task: search query | text: KV cache');
+  assert.equal(liteRtDocument('LLM serving','Paged  KV cache'),
+    'task: search result | text: LLM serving. Paged KV cache');
 });
