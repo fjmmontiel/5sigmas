@@ -9,7 +9,7 @@ import {
 const ORIGIN = 'https://5sigmas.com';
 const MEDIA_MODEL = 'https://huggingface.co/litert-community/embeddinggemma-2-text-270m-litert-lm/resolve/main/embeddinggemma-2-text-270m.litertlm';
 const MEDIA_WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0/wasm';
-const MEDIA_MODULE = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0/+esm';
+const MEDIA_MODULE = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-retrieval@1.1.0/retrieval_bundle.mjs';
 const LLM_MODULE = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.0/+esm';
 const LLM_ID = 'onnx-community/Qwen3-0.6B-ONNX';
 const MAX_CANDIDATES = 14;
