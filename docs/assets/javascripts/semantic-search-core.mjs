@@ -74,11 +74,13 @@ export function rankLexical(records, question, count = 16) {
   if (!query.length) return [];
   return records.map((record) => {
     const title = new Set(words(record.title));
+    const heading = new Set(words(record.heading));
     const desc = new Set(words(record.text));
     const all = new Set(words(record.search_text || record.text));
     let score = 0;
     for (const word of query) {
       if (title.has(word)) score += 12;
+      if (heading.has(word)) score += 16;
       if (desc.has(word)) score += 6;
       if (all.has(word)) score += 3;
       else if ([...all].some((x) => x.startsWith(word) || (word.length > 4 && word.startsWith(x)))) score += 1;
@@ -122,6 +124,77 @@ export function bestPassage(markdown, question, limit = 850) {
     chunk, score: words(chunk).reduce((n, w) => n + (terms.has(w) ? 1 : 0), 0),
   })).sort((a, b) => b.score - a.score || a.chunk.length - b.chunk.length);
   return clean(scored[0]?.chunk || '').slice(0, limit);
+}
+
+
+// Expand actual rendered heading IDs into navigable source fragments.
+// Never synthesize a slug: the public knowledge graph extracts IDs from HTML.
+export function expandKnowledgeFragments(item, locale, origin) {
+  const root = projectKnowledge(item, locale, origin);
+  if (!root) return [];
+  if (root.kind !== 'text' || !Array.isArray(item.headings)) return [root];
+  const fragments = [];
+  const seen = new Set();
+  for (const heading of item.headings.slice(0, 80)) {
+    const id = clean(heading?.id);
+    const label = clean(heading?.text);
+    if (!id || !label || id.length > 160 || /[\s#?&]/.test(id) || seen.has(id)) continue;
+    const target = new URL(root.url);
+    target.hash = id;
+    const url = safeSourceUrl(target.href, origin);
+    if (!url) continue;
+    seen.add(id);
+    fragments.push({
+      ...root,
+      id: root.id + ':heading:' + id,
+      url,
+      heading: label,
+      heading_id: id,
+      text: [label, clean(item.description)].filter(Boolean).join('. ').slice(0, 750),
+      search_text: [label, root.title, clean(item.description),
+        Array.isArray(item.keywords) ? item.keywords.join(' ') : clean(item.keywords)].join('. ').slice(0, 1200),
+    });
+  }
+  return [root, ...fragments];
+}
+
+// Prevent a bilingual index from linking to the wrong language's route.
+export function sourceLanguageMatches(record, locale, origin) {
+  const href = safeSourceUrl(record?.url, origin);
+  if (!href || !['en', 'es'].includes(locale)) return false;
+  if (record.locale && record.locale !== locale) return false;
+  const path = new URL(href).pathname;
+  return locale === 'en' ? (path === '/en/' || path.startsWith('/en/'))
+    : !(path === '/en' || path.startsWith('/en/'));
+}
+
+// Return text from the exact linked Markdown heading, not another section.
+export function bestSectionPassage(markdown, heading, question, limit = 850) {
+  const target = words(heading).join(' ');
+  if (!target) return bestPassage(markdown, question, limit);
+  const content = String(markdown || '');
+  const lines = content.split(/\r?\n/);
+  let inSection = false;
+  let depth = 0;
+  const body = [];
+  for (const line of lines) {
+    const match = line.match(/^(#{1,6})\s+(.+?)\s*$/);
+    if (match) {
+      const name = match[2].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/\s*\{#[^}]+\}\s*$/, '').replace(/[\\`*_~]/g, '');
+      const currentDepth = match[1].length;
+      if (inSection && currentDepth <= depth) break;
+      if (!inSection && words(name).join(' ') === target) {
+        inSection = true;
+        depth = currentDepth;
+      }
+      continue;
+    }
+    if (inSection) body.push(line);
+  }
+  const section = body.join('\n').trim();
+  return section ? bestPassage(section, question, limit)
+    : bestPassage(content, question, limit);
 }
 
 export function groundedMessages(question, matches, language, origin) {

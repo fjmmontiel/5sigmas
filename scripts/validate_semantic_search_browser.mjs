@@ -59,12 +59,13 @@ try {
               url: config.url,
               title: config.lang === 'en' ? 'Continuous batching inference' : 'Inferencia con continuous batching',
               description: 'Continuous batching improves GPU inference throughput by grouping active requests',
+              headings: [{level:'h2',id:'continuous-batching',text:'Continuous batching'}],
               markdown_url: config.lang === 'en' ? 'https://5sigmas.com/en/test-article.md' : 'https://5sigmas.com/test-article.md',
             }],
           }) });
         }
         if (u.pathname.endsWith('test-article.md')) {
-          return route.fulfill({ contentType: 'text/markdown', body: '# Batching\n\nContinuous batching increases throughput by scheduling active requests together, while latency can vary.' });
+          return route.fulfill({ contentType: 'text/markdown', body: '# Batching\n\n## Continuous batching\n\nContinuous batching increases throughput by scheduling active requests together, while latency can vary.' });
         }
         if (u.pathname === (config.lang === 'en' ? '/en/videos/catalog.json' : '/videos/catalog.json') ||
             u.pathname === (config.lang === 'en' ? '/en/videos/key-moments.json' : '/videos/key-moments.json')) {
@@ -100,9 +101,12 @@ try {
       await page.locator('[data-action=search]').click();
       await page.waitForFunction(() => document.querySelectorAll('.s5-search-card').length > 0,
         null, { timeout: 20000 });
-      assert.equal(await page.locator('.s5-search-card').count(), 1);
-      const url = await page.locator('.s5-search-card a').first().getAttribute('href');
-      assert.equal(url, config.url, 'Canonical source link lost');
+      const cards = page.locator('.s5-search-card');
+      assert.ok(await cards.count() >= 1);
+      const urls = await cards.locator('a').evaluateAll(nodes => nodes.map(n => n.href));
+      assert.ok(urls.includes(config.url + '#continuous-batching'), 'Missing exact section URL: '+JSON.stringify(urls));
+      assert.ok(urls.every(url => config.lang === 'en' ? new URL(url).pathname.startsWith('/en/') : !new URL(url).pathname.startsWith('/en/')),
+        'Cross-locale result leaked: ' + JSON.stringify(urls));
       const modeText = await page.locator('[data-role=mode]').textContent();
       if (!semanticWorks) assert.match(modeText, /unavailable|no disponible/i);
       else assert.match(modeText, /Metadata index|Índice de metadatos/);

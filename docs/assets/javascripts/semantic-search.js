@@ -1,6 +1,6 @@
 import {
-  clean, normalizePrefix, dotAt, projectKnowledge, rankLexical,
-  topVectorMatches, uniqueMatches, safeSourceUrl, bestPassage, groundedMessages,
+  clean, normalizePrefix, dotAt, expandKnowledgeFragments, sourceLanguageMatches, rankLexical,
+  topVectorMatches, uniqueMatches, safeSourceUrl, bestSectionPassage, groundedMessages,
 } from './semantic-search-core.mjs';
 
 // The full EmbeddingGemma 2 index is optional until its offline publisher
@@ -128,7 +128,9 @@ if (root) {
       throw new Error('Record/vector matrix size mismatch');
     }
     for (const record of records) {
-      if (!safeSourceUrl(record.url, ORIGIN)) throw new Error('Invalid source provenance');
+      if (!safeSourceUrl(record.url, ORIGIN) || !sourceLanguageMatches(record, record.locale, ORIGIN)) {
+        throw new Error('Invalid source provenance or mixed locale');
+      }
     }
     return { manifest, records, vectors: new Float32Array(vectorBuffer) };
   }
@@ -177,8 +179,11 @@ if (root) {
     if (graph.schema_version !== 2 || !Array.isArray(graph.items) || graph.locale !== lang) {
       throw new Error('Invalid 5sigmas knowledge graph');
     }
-    const records = graph.items.map((item) => projectKnowledge(item, lang, ORIGIN)).filter(Boolean);
+    const records = graph.items.flatMap((item) => expandKnowledgeFragments(item, lang, ORIGIN))
+      .filter((item) => sourceLanguageMatches(item, lang, ORIGIN));
     addVideoRecords(records, catalog, moments);
+    const wrongLanguage = records.filter((r) => !sourceLanguageMatches(r, lang, ORIGIN));
+    if (wrongLanguage.length) throw new Error('Knowledge records point to the wrong locale');
     if (!records.length) throw new Error('No eligible source records');
     return { records, vectors: null, manifest: null };
   }
@@ -248,7 +253,7 @@ if (root) {
         const response = await fetch(url, { credentials: 'same-origin' });
         if (!response.ok) return;
         const markdown = await response.text();
-        const excerpt = bestPassage(markdown.slice(0, 50000), question, 850);
+        const excerpt = bestSectionPassage(markdown.slice(0, 50000), match.record.heading, question, 850);
         if (excerpt) match.record = { ...match.record, text: excerpt };
       } catch {
         // Canonical metadata is still available if a Markdown mirror is offline.

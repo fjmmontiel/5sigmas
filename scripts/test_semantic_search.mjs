@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { bestPassage, groundedMessages, normalizePrefix, projectKnowledge,
-  rankLexical, safeSourceUrl, topVectorMatches, uniqueMatches } from '../docs/assets/javascripts/semantic-search-core.mjs';
+import { bestPassage, bestSectionPassage, expandKnowledgeFragments, groundedMessages,
+  normalizePrefix, projectKnowledge, rankLexical, safeSourceUrl, sourceLanguageMatches,
+  topVectorMatches, uniqueMatches } from '../docs/assets/javascripts/semantic-search-core.mjs';
 
 const origin = 'https://5sigmas.com';
 const entry = (id, title, text) => ({
@@ -59,4 +60,32 @@ test('answer prompts include only bounded, verifiable evidence', () => {
 test('passage selection favors specific query matches', () => {
   const markdown = '# Intro\n\nGeneral site introduction has many technical words.\n\n## Details\n\nContinuous batching increases inference throughput by sharing GPU compute.';
   assert.match(bestPassage(markdown, 'continuous batching inference'),/Continuous batching/);
+});
+
+test('rendered public heading IDs generate exact same-language deep links', () => {
+  const page = { id:'article-1', kind:'engineering', title:'Production engineering',
+    url:'https://5sigmas.com/en/series/inference/', description:'Inference serving',
+    headings:[{id:'continuous-batching',text:'Continuous batching'},
+      {id:'kv-cache',text:'KV cache management'},{id:'',text:'Invalid anchor'}] };
+  const fragments = expandKnowledgeFragments(page,'en',origin);
+  assert.equal(fragments.length,3);
+  assert.equal(fragments[1].url,'https://5sigmas.com/en/series/inference/#continuous-batching');
+  assert.equal(fragments[2].heading,'KV cache management');
+  assert.ok(fragments.every(f=>sourceLanguageMatches(f,'en',origin)));
+  assert.equal(sourceLanguageMatches(fragments[1],'es',origin),false);
+  const es = { ...fragments[1], locale:'es', url:'https://5sigmas.com/series/inference/#continuous-batching' };
+  assert.ok(sourceLanguageMatches(es,'es',origin));
+  assert.equal(sourceLanguageMatches(es,'en',origin),false);
+});
+
+test('a heading-specific match opens its own section and uses its own passage', () => {
+  const page={ id:'ai-2',kind:'concept',url:origin+'/temas/llms/',title:'AI systems',
+    headings:[{id:'cache-paging',text:'KV cache paging'}] };
+  const records=expandKnowledgeFragments(page,'es',origin);
+  const ranked=rankLexical(records,'cache paging',2);
+  assert.equal(ranked[0].record.url,origin+'/temas/llms/#cache-paging');
+  const md='# Introduction\n\nGlobal overview explains the foundation in detail.\n\n## KV cache paging\n\nPaged attention stores blocks of key-value tensors without contiguous allocations.\n\n## Other topic\n\nThis unrelated section describes voice agents and telephone networks.';
+  const section=bestSectionPassage(md,'KV cache paging','key-value tensors');
+  assert.match(section,/key-value tensors/);
+  assert.doesNotMatch(section,/voice agents/);
 });
