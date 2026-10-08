@@ -37,7 +37,7 @@ Busca directamente en las explicaciones técnicas, artículos, conceptos, animac
 
 ## Qué hace y qué no hace
 
-El buscador utiliza **EmbeddingGemma 2 textual de 270M parámetros** para codificar tu consulta en el navegador. Mientras se construye el índice multimodal offline de 740M, recupera contenido a partir del [grafo público de conocimiento](/agent/knowledge.json), selecciona candidatos y los reordena semánticamente en el dispositivo. Cuando esté disponible el índice binario multimodal validado, lo utilizará en lugar de la preselección por metadatos.
+El buscador utiliza **EmbeddingGemma 2 textual de 270M parámetros** para codificar tu consulta en el navegador. Mientras se construye el índice multimodal offline de 740M, recupera contenido a partir del grafo público de conocimiento de 5sigmas, selecciona candidatos y los reordena semánticamente en el dispositivo. Cuando esté disponible el índice binario multimodal validado, lo utilizará en lugar de la preselección por metadatos.
 
 La generación opcional se basa en **Qwen3 0.6B**, ejecutado con WebGPU. Solo recibe los fragmentos de las fuentes recuperadas y debe citar su procedencia. **Una respuesta generada puede contener errores** y el orden de similitud no demuestra que una afirmación sea cierta. Comprueba los artículos y vídeos enlazados.
 
