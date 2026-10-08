@@ -32,7 +32,7 @@ for (const requiredRelease of [
   'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
   'Gemini 3.8 Flash', 'DeepSeek V4.1 Flash', 'Qwen3.8 Max (0902)',
   'Qwen3.8-Flash-Next', 'Muse Spark 1.3', 'MiMo-V2.6-Pro', 'Step 5 Preview',
-  'GLM 5.3 Flash', 'Claude Fable 5.1'
+  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4 Preview', 'Claude Haiku 5.5'
 ]) {
   assert.ok(data.release_coverage.included_release_names.includes(requiredRelease), `${requiredRelease}: release coverage missing`);
 }
@@ -73,22 +73,31 @@ for (const retiredId of [
 const byId = new Map(data.models.map((model) => [model.id, model]));
 const opus = byId.get('anthropic-claude-opus-5-5-xhigh');
 const sonnet = byId.get('anthropic-claude-sonnet-5-5-max');
+const haiku = byId.get('anthropic-claude-haiku-5-5-max');
 const astra = byId.get('openai-gpt-6-astra-max');
 const sol = byId.get('openai-gpt-6-1-sol-max');
 const luna = byId.get('openai-gpt-6-luna-max');
 const gemini = byId.get('google-gemini-3-8-flash-high');
 const grok = byId.get('spacexai-grok-4-7-high');
 const deepseek = byId.get('deepseek-v4-1-flash-max');
-for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, deepseek]) assert.ok(model, 'required refreshed comparison model missing');
+const mistralLarge4 = byId.get('mistral-mistral-large-4-preview');
+for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, deepseek, mistralLarge4]) assert.ok(model, 'required refreshed comparison model missing');
 
 assert.deepEqual([opus.input_usd_per_million, opus.output_usd_per_million], [4, 20]);
 assert.deepEqual([sonnet.input_usd_per_million, sonnet.output_usd_per_million], [2, 10]);
+assert.deepEqual([haiku.input_usd_per_million, haiku.output_usd_per_million], [0.1, 0.5]);
+assert.deepEqual([haiku.long_context.threshold_input_tokens,haiku.long_context.input_multiplier,haiku.long_context.output_multiplier], [100000,5,5]);
 assert.deepEqual([astra.input_usd_per_million, astra.output_usd_per_million], [10, 50]);
 assert.deepEqual([sol.input_usd_per_million, sol.output_usd_per_million], [2, 10]);
 assert.deepEqual([luna.input_usd_per_million, luna.output_usd_per_million], [0.1, 0.5]);
 assert.deepEqual([gemini.input_usd_per_million, gemini.output_usd_per_million], [0.75, 3.75]);
 assert.deepEqual([grok.input_usd_per_million, grok.output_usd_per_million], [2, 6]);
 assert.deepEqual([deepseek.input_usd_per_million, deepseek.output_usd_per_million], [0.3, 1.2]);
+assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [1.36, 4.18]);
+assert.equal(mistralLarge4.context_tokens, 1000000);
+assert.equal(mistralLarge4.intelligence_index, 38);
+assert.equal(mistralLarge4.output_tokens_per_second, 116.1);
+assert.equal(mistralLarge4.ttft_seconds, 1.46);
 
 {
   const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');

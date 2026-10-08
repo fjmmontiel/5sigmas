@@ -6,7 +6,7 @@
   'use strict';
 
   const METHODOLOGY_VERSION = '1.0.0';
-  const SOURCE_REVIEW_DATE = '2026-10-01';
+  const SOURCE_REVIEW_DATE = '2026-10-07';
 
   function assertDataset(dataset) {
     if (!dataset || !Array.isArray(dataset.series) || !dataset.sources) throw new Error('Invalid capability timeline dataset');
