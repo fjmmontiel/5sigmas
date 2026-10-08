@@ -38,6 +38,11 @@
     ],
     "reviewed_not_charted": [
       {
+        "model": "Claude Haiku 5.5",
+        "status": "reviewed_not_charted",
+        "reason": "Released on 2026-10-07. Pending refreshed dated first-party and Artificial Analysis exact-variant metrics before chart admission."
+      },
+      {
         "model": "Ling 3.1 Flash",
         "status": "reviewed_not_charted",
         "reason": "Artificial Analysis lists Ling 3.1 Flash as an October 2026 release with complete benchmark metrics, but this run did not establish an independent first-party price/specification surface matching the benchmarked API row. The explorer therefore excludes it until that provenance contract is satisfied."
@@ -208,7 +213,7 @@
         "reason": "No priced comparable API entry in the AA release snapshot."
       }
     ],
-    "latest_release_slug": "mistral-large-4",
+    "latest_release_slug": "claude-haiku-5-5",
     "supersession_events": [
       {
         "model": "GPT-6 Sol",
