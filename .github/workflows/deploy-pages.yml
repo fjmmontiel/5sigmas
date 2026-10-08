@@ -325,6 +325,7 @@ jobs:
           node scripts/record_semantic_search_demo.mjs
 
       - name: Retain real production browser demonstration
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-search-es-en-production
@@ -332,7 +333,7 @@ jobs:
             artifacts/visual-review/5sigmas-search-es-en-production.mp4
             artifacts/visual-review/5sigmas-search-es-en-production.json
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
       - name: Verify exact live approved C3 media and discovery
         run: python3 scripts/verify_evaluation_c3_release.py --origin https://5sigmas.com --revision "$GITHUB_SHA"
