@@ -54,7 +54,22 @@ try {
   });
   const page = await context.newPage();
   const pageErrors = [];
-  page.on('pageerror', e => pageErrors.push(e.stack || e.message));
+  let phase = 'initializing';
+  // Material's instant-navigation XHR can reject while a verified
+  // source-link navigation tears down the previous document. Ignore only
+  // that exact framework teardown error in that bounded transition; search
+  // errors and every unrelated page error remain fatal.
+  const expectedMaterialNavigationAbort = (error) =>
+    ['opening-source', 'source-verified'].includes(phase) && error.message === 'Error' &&
+    /at XMLHttpRequest\.<anonymous> \(https:\/\/5sigmas\.com\/(?:en\/)?assets\/javascripts\/bundle\.[a-z0-9]+\.min\.js:\d+:\d+\)/i
+      .test(error.stack || '');
+  page.on('pageerror', e => {
+    if (expectedMaterialNavigationAbort(e)) {
+      report.ignored_navigation_teardown = (report.ignored_navigation_teardown || 0) + 1;
+    } else {
+      pageErrors.push(e.stack || e.message);
+    }
+  });
   for (const locale of ['es', 'en']) {
     const route = locale === 'en' ? '/en/buscar/' : '/buscar/';
     const graphPath = locale === 'en' ? '/en/agent/knowledge.json' : '/agent/knowledge.json';
@@ -67,6 +82,7 @@ try {
     const sourceSections = candidates(graph, locale);
     if (sourceSections.length < 3) throw new Error(locale + ' lacks sufficiently described source section fragments');
 
+    phase = 'loading-search';
     const pageResponse = await page.goto(origin + route, { waitUntil: 'domcontentloaded', timeout: 60000 });
     if (!pageResponse || pageResponse.status() !== 200) {
       throw new Error(route + ' is not HTTP 200 in production');
@@ -82,7 +98,7 @@ try {
     const search = page.locator('#s5-search-question');
     let matched = null, resultLinks = [];
     for (const target of sourceSections.slice(0, 9)) {
-      await search.fill(target.text);
+      await search.fill(target.text.replace(/\s*¶\s*$/, '').trim());
       await page.locator('[data-action=search]').click();
       await page.waitForFunction(() => document.querySelectorAll('.s5-search-card a.s5-search-link').length > 0,
         null, { timeout: 45000 });
@@ -106,6 +122,7 @@ try {
       result_count: resultLinks.length, selected_url: matched, query: await search.inputValue() });
 
     await page.waitForTimeout(1750);
+    phase = 'opening-source';
     const linked = await page.goto(matched, { waitUntil: 'domcontentloaded', timeout: 60000 });
     if (!linked || linked.status() !== 200) throw new Error('Source deep link not HTTP 200: ' + matched);
     const deepId = decodeURIComponent(relevant.hash.slice(1));
@@ -113,11 +130,12 @@ try {
     if (!exists) throw new Error('Linked heading missing in rendered source page: ' + matched);
     report.locales[report.locales.length - 1].rendered_heading_exists = true;
     await page.waitForTimeout(1650);
+    phase = 'source-verified';
     console.log('LIVE_SEARCH_PASS ' + JSON.stringify(report.locales[report.locales.length - 1]));
   }
 
   // The full UI is source-first and no arbitrary browser errors should arise.
-  if (pageErrors.length) throw new Error('Production page errors: ' + pageErrors.join(' | ').slice(0, 2000));
+  report.failures = pageErrors;
   pathToWebm = await page.video().path();
   await context.close();
 } finally {
@@ -137,4 +155,7 @@ if (stat.size < 150000 || stat.size > 195 * 1024 * 1024) throw new Error('MP4 si
 report.recording = { path: videoMp4, bytes: stat.size, format: 'MP4 H264', source: 'REAL_LIVE_BROWSER_NO_MOCKS' };
 await fs.writeFile(path.join(out, '5sigmas-search-es-en-production.json'),
   JSON.stringify(report, null, 2) + '\n');
+if (report.failures.length) {
+  throw new Error('Production page errors: ' + report.failures.join(' | ').slice(0, 2000));
+}
 console.log('REAL_PRODUCTION_DEMO_PASS ' + JSON.stringify(report));
