@@ -165,6 +165,40 @@ const number = (match, label, url) => {
   return value;
 };
 
+
+// Artificial Analysis presents output speed both in the model FAQ and the
+// server-rendered Model summary. The latter is an acceptable fallback only
+// with the labelled metric and exact section boundaries. Never reuse the
+// stored snapshot as purported new upstream evidence.
+const parseOutputSpeed = (text, url) => {
+  const faq = text.match(/\bgenerates output at\s+([0-9]+(?:\.[0-9]+)?)\s+tokens per second\b/i);
+  const section = text.match(/\bModel summary\b([\s\S]{0,4000}?)\bComparison Summary\b/i)?.[1];
+  const summary = section?.match(/\bSpeed\b[\s\S]{0,550}?\b([0-9]+(?:\.[0-9]+)?)\s+Output tokens per second\b/i);
+  if (faq && summary && Math.abs(Number(faq[1]) - Number(summary[1])) > 0.11) {
+    throw new Error(`${url}: conflicting output speed values on upstream source surfaces);
+  }
+  return number(faq || summary, 'output speed', url);
+};
+
+// Invariant tests run before every real upstream audit; fixtures never supply
+// production metrics or bypass missing current provider measurements.
+{
+  const url = 'https://artificialanalysis.ai/models/fixture';
+  const summary = 'Model summary Intelligence #64 / 226 38 Artificial Analysis Intelligence Index Speed #36 / 226 116.1 Output tokens per second 4 out of 4 units for Speed Cost #56 / 226 Comparison Summary';
+  const faq = 'How fast is Fixture? Fixture generates output at 116.1 tokens per second (based on the first-party API)';
+  assert.equal(parseOutputSpeed(summary, url), 116.1, 'must parse scoped labelled summary metric');
+  assert.equal(parseOutputSpeed(faq, url), 116.1, 'must preserve FAQ metric');
+  assert.equal(parseOutputSpeed(summary + ' ' + faq, url), 116.1, 'concordant source-owned values');
+  assert.throws(() => parseOutputSpeed(summary + ' Fixture generates output at 99 tokens per second', url), /conflicting output speed/);
+  assert.throws(() => parseOutputSpeed('Model summary Speed #36 / 226 116.1 tokens Comparison Summary', url), /could not parse output speed/);
+  assert.throws(() => parseOutputSpeed('Speed #36 / 226 116.1 Output tokens per second', url), /could not parse output speed/);
+  assert.throws(() => parseOutputSpeed('Model summary Speed #36 / 226 -116.1 Output tokens per second Comparison Summary', url), /could not parse output speed/);
+}
+if (process.argv.includes('--test-source-speed')) {
+  console.log('AA speed parsing: 7 deterministic positive/negative regressions passed; no network calls.');
+  process.exit(0);
+}
+
 const releaseHtml = await fetchHtml(releaseUrl);
 const releaseSlugs = releaseLinks(releaseHtml);
 assertReviewedLatest(releaseSlugs, expectedLatestRelease);
@@ -183,7 +217,7 @@ for (const model of data.models || []) {
   }
 
   const intelligence = number(text.match(/\bscores\s+([0-9]+(?:\.[0-9]+)?)\s+on the Artificial Analysis Intelligence Index\b/i), 'Intelligence Index', url);
-  const speed = number(text.match(/\bgenerates output at\s+([0-9]+(?:\.[0-9]+)?)\s+tokens per second\b/i), 'output speed', url);
+  const speed = parseOutputSpeed(text, url);
   const ttft = number(text.match(/\bhas a time to first token \(TTFT\) of\s+([0-9]+(?:\.[0-9]+)?)s\b/i), 'TTFT', url);
   const price = text.match(/\bcosts\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M input tokens[\s\S]{0,220}?\band\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M output tokens\b/i);
   if (!price) throw new Error(`${model.id}: could not parse AA input/output price for drift detection`);
