@@ -97,6 +97,7 @@ const base = {
 
 const presets = new Map(pricing.presets.map((preset) => [preset.id, preset]));
 const sonnet55 = presets.get('anthropic-claude-sonnet-5-5');
+const haiku55 = presets.get('anthropic-claude-haiku-5-5');
 const astra = presets.get('openai-gpt-6-astra');
 const sol61 = presets.get('openai-gpt-6-1-sol');
 const luna6 = presets.get('openai-gpt-6-luna');
@@ -104,16 +105,32 @@ const sol56 = presets.get('openai-gpt-5-6-sol');
 const gemini38 = presets.get('google-gemini-3-8-flash');
 
 for (const [label, preset] of [
-  ['Claude Sonnet 5.5', sonnet55], ['GPT-6 Astra', astra], ['GPT-6.1 Sol', sol61],
+  ['Claude Sonnet 5.5', sonnet55], ['Claude Haiku 5.5', haiku55], ['GPT-6 Astra', astra], ['GPT-6.1 Sol', sol61],
   ['GPT-6 Luna', luna6], ['GPT-5.6 Sol', sol56], ['Gemini 3.8 Flash', gemini38]
 ]) assert.ok(preset, `${label} preset required`);
 
-assert.deepEqual([sonnet55.input_usd_per_million, sonnet55.cached_input_usd_per_million, sonnet55.output_usd_per_million], [2, 0.2, 10]);
+assert.deepEqual([sonnet55.input_usd_per_million, sonnet55.cached_input_usd_per_million, sonnet55.output_usd_per_million], [2, 0.1, 10]);
 assert.equal(sonnet55.future_price, undefined, 'Sonnet 5.5 must use its current published standard pricing');
 assert.deepEqual([astra.input_usd_per_million, astra.cached_input_usd_per_million, astra.output_usd_per_million], [10, 1, 50]);
 assert.deepEqual([sol61.input_usd_per_million, sol61.cached_input_usd_per_million, sol61.output_usd_per_million], [2, 0.1, 10]);
 assert.deepEqual([luna6.input_usd_per_million, luna6.cached_input_usd_per_million, luna6.output_usd_per_million], [0.1, 0.01, 0.5]);
 assert.deepEqual([sol56.input_usd_per_million, sol56.cached_input_usd_per_million, sol56.output_usd_per_million], [4, 0.4, 20]);
+assert.deepEqual([haiku55.input_usd_per_million, haiku55.cached_input_usd_per_million, haiku55.output_usd_per_million], [0.1, 0.01, 0.5]);
+assert.deepEqual(haiku55.long_context, {threshold_input_tokens:100000,input_multiplier:5,output_multiplier:5});
+{
+  const haikuScenario = (inputTokens) => ({
+    ...base,inputTokens,outputTokens:1000,cacheHitRate:50,
+    inputPrice:undefined,cachedInputPrice:undefined,outputPrice:undefined,
+  });
+  const atBoundary=calculate(haikuScenario(100_000),haiku55);
+  close(atBoundary.cost.costPerRequest, 0.006, 1e-12, 'Haiku 5.5 <=100k standard price');
+  assert.equal(atBoundary.pricing.longContextActive,false);
+  const aboveBoundary=calculate(haikuScenario(150_000),haiku55);
+  close(aboveBoundary.cost.costPerRequest, 0.04375, 1e-12, 'Haiku 5.5 >100k tiered entire-request price');
+  assert.equal(aboveBoundary.pricing.longContextActive,true);
+  const sonnetCache=calculate({...haikuScenario(1_000_000),outputTokens:0,cacheHitRate:100},sonnet55);
+  close(sonnetCache.cost.costPerRequest, 0.1, 1e-12, 'Sonnet 5.5 reduced cache-read price');
+}
 
 {
   const current = resolvePricing(gemini38, '2026-09-25T12:00:00Z');
@@ -129,10 +146,11 @@ assert.deepEqual([sol56.input_usd_per_million, sol56.cached_input_usd_per_millio
 }
 
 assert.equal(pricing.schema_version, 3);
-assert.equal(pricing.updated_at, '2026-10-01');
+assert.equal(pricing.updated_at, '2026-10-09');
 assert.equal(pricing.freshness_policy?.review_interval_days, 7, 'pricing freshness policy must be explicit');
 assert.ok(pricing.release_coverage?.included?.includes('GPT-6.1 Sol'));
 assert.ok(pricing.release_coverage?.included?.includes('Claude Sonnet 5.5'));
+assert.ok(pricing.release_coverage?.included?.includes('Claude Haiku 5.5'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'GPT-6 Sol'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Claude Sonnet 5'));
 assert.ok(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'));

@@ -94,7 +94,7 @@
     return (Array.isArray(rows) ? rows : []).filter((row) => {
       if (provider !== 'all' && row.provider !== provider) return false;
       if (minIntelligence > 0 && (!Number.isFinite(Number(row.intelligence_index)) || Number(row.intelligence_index) < minIntelligence)) return false;
-      if (maxTtftSeconds > 0 && (!Number.isFinite(Number(row.ttft_seconds)) || Number(row.ttft_seconds) > maxTtftSeconds)) return false;
+      if (maxTtftSeconds > 0 && (row.ttft_seconds == null || !Number.isFinite(Number(row.ttft_seconds)) || Number(row.ttft_seconds) > maxTtftSeconds)) return false;
       if (minContextTokens > 0 && Number(row.context_tokens || 0) < minContextTokens) return false;
       if (maxCostPerRequest > 0 && Number(row.scenario?.costPerRequest || Infinity) > maxCostPerRequest) return false;
       return true;
@@ -120,8 +120,8 @@
   function summary(rows) {
     const candidates = Array.isArray(rows) ? rows : [];
     const withIntelligence = candidates.filter((row) => Number.isFinite(Number(row.intelligence_index)));
-    const withSpeed = candidates.filter((row) => Number.isFinite(Number(row.output_tokens_per_second)));
-    const withLatency = candidates.filter((row) => Number.isFinite(Number(row.ttft_seconds)));
+    const withSpeed = candidates.filter((row) => row.output_tokens_per_second != null && Number.isFinite(Number(row.output_tokens_per_second)));
+    const withLatency = candidates.filter((row) => row.ttft_seconds != null && Number.isFinite(Number(row.ttft_seconds)));
     const cheapest = [...candidates].sort((a, b) => Number(a.scenario?.costPerRequest ?? Infinity) - Number(b.scenario?.costPerRequest ?? Infinity))[0] || null;
     const smartest = [...withIntelligence].sort((a, b) => Number(b.intelligence_index) - Number(a.intelligence_index))[0] || null;
     const fastest = [...withSpeed].sort((a, b) => Number(b.output_tokens_per_second) - Number(a.output_tokens_per_second))[0] || null;

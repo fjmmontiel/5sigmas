@@ -39,6 +39,19 @@ for (const model of data.models || []) {
     assert.ok(source?.verified_on, `${model.id}: ${key} verified_on missing`);
     assert.ok(ageDays(source.verified_on) <= maxAgeDays, `${model.id}: ${key} verification is stale (${source.verified_on})`);
   }
+  for (const metric of ['output_tokens_per_second', 'ttft_seconds']) {
+    if (model[metric] !== null) {
+      assert.ok(typeof model[metric] === 'number' && Number.isFinite(model[metric]) && model[metric] > 0, `${model.id}: invalid ${metric}`);
+      continue;
+    }
+    const evidence = model.sources.benchmark.performance_availability;
+    assert.equal(evidence?.status, 'unavailable', `${model.id}: missing availability evidence`);
+    assert.equal(evidence.source_url, model.sources.benchmark.url);
+    assert.equal(evidence.confirmation_url, evidence.source_url.replace(/\/$/, '') + '/providers');
+    assert.equal(evidence.checked_on, model.sources.benchmark.performance_snapshot_on);
+    assert.ok(evidence.reason, `${model.id}: unavailable reason missing`);
+    assert.ok(ageDays(evidence.checked_on) >= -1 && ageDays(evidence.checked_on) <= maxAgeDays, `${model.id}: unavailable observation is stale or future`);
+  }
   const perf = model.sources?.benchmark?.performance_snapshot_on;
   assert.ok(perf, `${model.id}: performance snapshot date missing`);
   assert.ok(ageDays(perf) <= maxAgeDays, `${model.id}: performance snapshot is stale (${perf})`);

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
@@ -11,6 +12,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-performance-core.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
+
+const sourceSpeedAudit = execFileSync(
+  process.execPath,
+  [path.join(root, 'scripts/refresh_model_price_performance_upstream.mjs'), '--test-source-speed'],
+  { cwd: root, encoding: 'utf8', timeout: 15_000 }
+);
+assert.match(sourceSpeedAudit, /15 deterministic positive\/negative regressions passed/, 'source-owned output speed parser must pass without network');
+
+const refreshPolicyAudit = execFileSync(process.execPath,
+  [path.join(root, 'scripts/refresh_model_price_performance_upstream.mjs'), '--test-refresh-policy'],
+  {cwd:root, encoding:'utf8', timeout:15_000});
+assert.match(refreshPolicyAudit, /14 freshness/, 'availability loss and recovery must force refresh');
 
 const SNAPSHOT = data.updated_at;
 assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
@@ -47,8 +60,16 @@ for (const model of data.models) {
   assert.ok(Number(model.input_usd_per_million) >= 0, `${model.id}: input price required`);
   assert.ok(Number(model.output_usd_per_million) >= 0, `${model.id}: output price required`);
   assert.ok(Number(model.intelligence_index) > 0, `${model.id}: intelligence measurement required`);
-  assert.ok(Number(model.output_tokens_per_second) > 0, `${model.id}: output speed required`);
-  assert.ok(Number(model.ttft_seconds) > 0, `${model.id}: TTFT required`);
+  for (const metric of ['output_tokens_per_second', 'ttft_seconds']) {
+    if (model[metric] === null) {
+      const evidence = model.sources.benchmark.performance_availability;
+      assert.equal(evidence?.status, 'unavailable');
+      assert.equal(evidence.source_url, model.sources.benchmark.url);
+      assert.equal(evidence.confirmation_url, evidence.source_url.replace(/\/$/, '') + '/providers');
+      assert.equal(evidence.checked_on, model.sources.benchmark.performance_snapshot_on);
+      assert.ok(evidence.reason);
+    } else assert.ok(typeof model[metric] === 'number' && model[metric] > 0, `${model.id}: positive metric or evidenced null required`);
+  }
   for (const key of ['specs_pricing', 'benchmark']) {
     const source = model.sources?.[key];
     assert.match(source?.url || '', /^https:\/\//, `${model.id}: ${key} URL required`);
@@ -96,8 +117,8 @@ assert.deepEqual([deepseek.input_usd_per_million, deepseek.output_usd_per_millio
 assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [1.36, 4.18]);
 assert.equal(mistralLarge4.context_tokens, 1000000);
 assert.equal(mistralLarge4.intelligence_index, 38);
-assert.equal(mistralLarge4.output_tokens_per_second, 116.1);
-assert.equal(mistralLarge4.ttft_seconds, 1.46);
+// Availability is validated above from dated evidence, not pinned forever to null.
+// A later source-confirmed recovery must be allowed to restore numeric values.
 
 {
   const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');
@@ -152,7 +173,7 @@ const summary = api.summary(rows);
 assert.equal(summary.smartest.intelligence_index, Math.max(...rows.map((row) => Number(row.intelligence_index))));
 assert.equal(summary.cheapest.scenario.costPerRequest, Math.min(...rows.map((row) => Number(row.scenario.costPerRequest))));
 assert.equal(summary.fastest.output_tokens_per_second, Math.max(...rows.map((row) => Number(row.output_tokens_per_second))));
-assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.map((row) => Number(row.ttft_seconds))));
+assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.filter(row => row.ttft_seconds !== null).map((row) => Number(row.ttft_seconds))));
 
 const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map((row) => [row.model, row.reason]));
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
@@ -167,3 +188,11 @@ assert.match(supersession.get('Gemini 3.7 Flash')?.reason || '', /deprecated|sup
 assert.equal(supersession.get('GPT-6 Sol')?.replacement, 'GPT-6.1 Sol');
 
 console.log(`Model price/performance tests passed: ${data.models.length} current configurations; v4.3.2 provenance, release coverage, pricing rules, filters, sorting and Pareto frontier verified.`);
+
+
+const unavailableRow = {...rows[0], id: 'unavailable', output_tokens_per_second: null, ttft_seconds: null};
+assert.equal(api.summary([unavailableRow]).fastest, null);
+assert.equal(api.summary([unavailableRow]).lowestLatency, null);
+assert.equal(api.filterModels([unavailableRow], {maxTtftSeconds: 3}).length, 0);
+assert.equal(api.sortModels([unavailableRow, rows[0]], 'latency').at(-1).id, 'unavailable');
+assert.equal(api.sortModels([unavailableRow, rows[0]], 'speed').at(-1).id, 'unavailable');

@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-08",
+  "updated_at": "2026-10-09",
   "currency": "USD",
   "freshness_policy": {
     "review_interval_days": 7,
     "performance_review_interval_days": 1,
     "review_on_model_or_benchmark_release": true,
-    "rule": "Review the Artificial Analysis release feed daily and re-verify provider pricing/specifications at least weekly. Never publish a chart row unless input/output price, context, Intelligence Index, output speed and TTFT are all pinned to explicit sources."
+    "rule": "Review the Artificial Analysis release feed daily and re-verify provider pricing/specifications at least weekly. Price, context and Intelligence Index require explicit sources. Previously charted rows may retain price/intelligence comparisons when speed and TTFT become explicitly unavailable on both model and provider pages, recorded as null with dated provenance. Never infer absence from a parser failure, rank unavailable performance or reuse historical samples as current evidence."
   },
   "release_coverage": {
     "previous_snapshot": "2026-08-21",
-    "reviewed_through": "2026-10-08",
+    "reviewed_through": "2026-10-09",
     "source": {
       "title": "Language Model Releases | Artificial Analysis",
       "url": "https://artificialanalysis.ai/models/releases"
@@ -288,8 +288,8 @@
       "input_usd_per_million": 4,
       "output_usd_per_million": 20,
       "intelligence_index": 56,
-      "output_tokens_per_second": 79.9,
-      "ttft_seconds": 134.12,
+      "output_tokens_per_second": 81.4,
+      "ttft_seconds": 123.46,
       "sources": {
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
@@ -299,8 +299,8 @@
         "benchmark": {
           "title": "Claude Opus 5.5 (xhigh) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Anthropic API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -318,19 +318,19 @@
       "input_usd_per_million": 2,
       "output_usd_per_million": 10,
       "intelligence_index": 56,
-      "output_tokens_per_second": 136.2,
+      "output_tokens_per_second": 140.9,
       "ttft_seconds": 485.42,
       "sources": {
         "specs_pricing": {
           "title": "Claude Sonnet 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
-          "verified_on": "2026-10-01"
+          "verified_on": "2026-10-09"
         },
         "benchmark": {
           "title": "Claude Sonnet 5.5 (max with fallback) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-sonnet-5-5/",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Anthropic API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -353,8 +353,8 @@
         "output_multiplier": 5
       },
       "intelligence_index": 43,
-      "output_tokens_per_second": 243.4,
-      "ttft_seconds": 415.3,
+      "output_tokens_per_second": 240.5,
+      "ttft_seconds": 296.17,
       "sources": {
         "specs_pricing": {
           "title": "Claude Haiku 5.5 | Claude Platform Docs",
@@ -365,8 +365,8 @@
         "benchmark": {
           "title": "Claude Haiku 5.5 (max with fallback) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-haiku-5-5/",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page, first-party Anthropic API, max reasoning with default fallback",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -384,8 +384,8 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 67.8,
-      "ttft_seconds": 293.59,
+      "output_tokens_per_second": 70.3,
+      "ttft_seconds": 273.97,
       "sources": {
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
@@ -395,8 +395,8 @@
         "benchmark": {
           "title": "Claude Fable 5.1 (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-fable-5-1/",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Anthropic API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -414,8 +414,8 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 45.9,
-      "ttft_seconds": 376.98,
+      "output_tokens_per_second": 47.3,
+      "ttft_seconds": 410.56,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
@@ -425,8 +425,8 @@
         "benchmark": {
           "title": "GPT-6 Astra (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-astra",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -454,19 +454,19 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 52,
-      "output_tokens_per_second": 54.9,
-      "ttft_seconds": 331.97,
+      "output_tokens_per_second": 55.6,
+      "ttft_seconds": 314.47,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6.1 Sol Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-          "verified_on": "2026-10-01"
+          "verified_on": "2026-10-09"
         },
         "benchmark": {
           "title": "GPT-6.1 Sol (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-1-sol",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -489,8 +489,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 38,
-      "output_tokens_per_second": 126.9,
-      "ttft_seconds": 108.6,
+      "output_tokens_per_second": 127.5,
+      "ttft_seconds": 99.48,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
@@ -500,8 +500,8 @@
         "benchmark": {
           "title": "GPT-6 Luna (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-luna/",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -524,8 +524,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 42,
-      "output_tokens_per_second": 108.2,
-      "ttft_seconds": 132.62,
+      "output_tokens_per_second": 108.8,
+      "ttft_seconds": 125.36,
       "sources": {
         "specs_pricing": {
           "title": "GPT-5.6 Terra Model | OpenAI API",
@@ -535,8 +535,8 @@
         "benchmark": {
           "title": "GPT-5.6 Terra (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-5-6-terra",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party OpenAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -560,8 +560,8 @@
         "output_usd_per_million": 7.5
       },
       "intelligence_index": 41,
-      "output_tokens_per_second": 122.7,
-      "ttft_seconds": 28.53,
+      "output_tokens_per_second": 120.2,
+      "ttft_seconds": 27.18,
       "sources": {
         "specs_pricing": {
           "title": "What's new in Gemini 3.8 Flash | Google AI for Developers",
@@ -571,8 +571,8 @@
         "benchmark": {
           "title": "Gemini 3.8 Flash (high) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gemini-3-8-flash",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Google API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -595,7 +595,7 @@
       },
       "intelligence_index": 46,
       "output_tokens_per_second": 65.9,
-      "ttft_seconds": 66.86,
+      "ttft_seconds": 50.24,
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
@@ -605,8 +605,8 @@
         "benchmark": {
           "title": "Grok 4.7 (high) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/grok-4-7-high",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party SpaceXAI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -623,7 +623,7 @@
       "input_usd_per_million": 0.3,
       "output_usd_per_million": 1.2,
       "intelligence_index": 39,
-      "output_tokens_per_second": 223.1,
+      "output_tokens_per_second": 217.4,
       "ttft_seconds": 1.12,
       "sources": {
         "specs_pricing": {
@@ -635,8 +635,8 @@
         "benchmark": {
           "title": "DeepSeek V4.1 Flash (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party DeepSeek API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -654,8 +654,8 @@
       "input_usd_per_million": 2,
       "output_usd_per_million": 6,
       "intelligence_index": 45,
-      "output_tokens_per_second": 37,
-      "ttft_seconds": 2.89,
+      "output_tokens_per_second": 35.4,
+      "ttft_seconds": 2.92,
       "sources": {
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
@@ -666,8 +666,8 @@
         "benchmark": {
           "title": "Qwen3.8 Max (0902) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/qwen3-8-max",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Alibaba API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -684,8 +684,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.47,
       "intelligence_index": 40,
-      "output_tokens_per_second": 56.2,
-      "ttft_seconds": 2.41,
+      "output_tokens_per_second": 56.9,
+      "ttft_seconds": 2.49,
       "sources": {
         "specs_pricing": {
           "title": "Alibaba Cloud Model Studio pricing",
@@ -696,8 +696,8 @@
         "benchmark": {
           "title": "Qwen3.8-Flash-Next | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Alibaba API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -714,8 +714,8 @@
       "input_usd_per_million": 1.25,
       "output_usd_per_million": 4.25,
       "intelligence_index": 48,
-      "output_tokens_per_second": 187.8,
-      "ttft_seconds": 57.13,
+      "output_tokens_per_second": 154.2,
+      "ttft_seconds": 72.58,
       "sources": {
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
@@ -726,8 +726,8 @@
         "benchmark": {
           "title": "Muse Spark 1.3 (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/muse-spark-1-3",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Meta API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -744,8 +744,8 @@
       "input_usd_per_million": 0.435,
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
-      "output_tokens_per_second": 39.7,
-      "ttft_seconds": 4.49,
+      "output_tokens_per_second": 42.5,
+      "ttft_seconds": 4.11,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
@@ -756,8 +756,8 @@
         "benchmark": {
           "title": "MiMo-V2.6-Pro | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Xiaomi API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -774,8 +774,8 @@
       "input_usd_per_million": 1,
       "output_usd_per_million": 2.7,
       "intelligence_index": 44,
-      "output_tokens_per_second": 87.6,
-      "ttft_seconds": 2.87,
+      "output_tokens_per_second": 88,
+      "ttft_seconds": 2.82,
       "sources": {
         "specs_pricing": {
           "title": "StepFun Open Platform | Step 5 Preview",
@@ -786,8 +786,8 @@
         "benchmark": {
           "title": "Step 5 Preview | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/step-5",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party StepFun API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -804,8 +804,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.5,
       "intelligence_index": 42,
-      "output_tokens_per_second": 51.4,
-      "ttft_seconds": 3.23,
+      "output_tokens_per_second": 53.1,
+      "ttft_seconds": 3.05,
       "sources": {
         "specs_pricing": {
           "title": "Z.AI API pricing",
@@ -815,8 +815,8 @@
         "benchmark": {
           "title": "GLM 5.3 Flash | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/glm-5-3-flash/",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
           "performance_surface": "English model page; first-party Z AI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -833,8 +833,8 @@
       "input_usd_per_million": 1.36,
       "output_usd_per_million": 4.18,
       "intelligence_index": 38,
-      "output_tokens_per_second": 116.1,
-      "ttft_seconds": 1.46,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Mistral Large 4 | Mistral Docs",
@@ -845,18 +845,25 @@
         "benchmark": {
           "title": "Mistral Large 4 Preview | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mistral-large-4",
-          "verified_on": "2026-10-08",
-          "performance_snapshot_on": "2026-10-08",
-          "performance_surface": "English model page; first-party Mistral API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-10-09",
+          "performance_snapshot_on": "2026-10-09",
+          "performance_surface": "English model summary and model-specific provider overview; explicitly unavailable performance measurements",
+          "index_family": "Artificial Analysis Intelligence Index v4.3.2",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-10-09",
+            "source_url": "https://artificialanalysis.ai/models/mistral-large-4",
+            "confirmation_url": "https://artificialanalysis.ai/models/mistral-large-4/providers",
+            "reason": "Model summary explicitly reports Speed N/A and Unknown; provider benchmarks explicitly report no speed or latency data."
+          }
         }
       }
     }
   ],
   "performance_refresh": {
-    "refreshed_on": "2026-10-08",
-    "source": "Artificial Analysis first-party model pages verified in PR #408 run 37769737317, plus official Anthropic Haiku 5.5 pricing and variant model page",
-    "changed_model_count": 17,
-    "note": "CI read the actual current English Artificial Analysis model pages on 2026-10-08 and reported 16 changed rows. The unchanged Mistral Large 4 row was also checked; new Claude Haiku 5.5 max/default fallback added from primary Anthropic and independent AA source. Latency and speed are point-in-time samples."
+    "refreshed_on": "2026-10-09",
+    "source": "Live Artificial Analysis model pages and explicit model-specific provider availability confirmation",
+    "changed_model_count": 18,
+    "note": "Reverified all 18 model pages on 2026-10-09. Mistral Large 4 speed and TTFT are unavailable, independently confirmed on its provider page. Previous measurements are not reused as current evidence."
   }
 }

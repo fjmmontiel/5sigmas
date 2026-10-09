@@ -131,8 +131,12 @@
   }
 
   function formatNumber(value, digits = 1) {
-    if (!Number.isFinite(Number(value))) return strings.noScore;
+    if (value == null || !Number.isFinite(Number(value))) return strings.noScore;
     return new Intl.NumberFormat(lang, { maximumFractionDigits: digits }).format(Number(value));
+  }
+
+  function formatMetric(value, digits, unit) {
+    return value == null ? strings.noScore : `${formatNumber(value, digits)}${unit}`;
   }
 
   function formatTokens(value) {
@@ -192,7 +196,9 @@
 
   function metricValue(row, key) {
     const metric = axis[key] || axis.cost;
-    const value = Number(metric.value(row));
+    const raw = metric.value(row);
+    if (raw == null) return null;
+    const value = Number(raw);
     return Number.isFinite(value) ? value : null;
   }
 
@@ -422,7 +428,7 @@
         <td>${escapeHtml(formatCurrency(row.scenario.costPerRequest, row.scenario.costPerRequest < .01 ? 4 : 3))}${row.scenario.longContextActive ? `<small>${escapeHtml(strings.longContext)}</small>` : ''}</td>
         <td>${escapeHtml(formatNumber(row.intelligence_index, 0))}</td>
         <td>${escapeHtml(formatNumber(row.output_tokens_per_second, 1))}</td>
-        <td>${escapeHtml(formatNumber(row.ttft_seconds, 2))} s</td>
+        <td>${escapeHtml(formatMetric(row.ttft_seconds, 2, ' s'))}</td>
         <td>${escapeHtml(formatTokens(row.context_tokens))}</td>
         <td><span class="s5-model-signal">${escapeHtml(signal)}</span></td>`;
       tableBody.append(tr);
@@ -439,8 +445,8 @@
       <div class="s5-model-focus__title"><small>${escapeHtml(row.provider)}</small><strong>${escapeHtml(row.model)}</strong><span>${escapeHtml(row.variant)}</span></div>
       <div class="s5-model-focus__facts">
         <span>${escapeHtml(strings.intelligence)} <strong>${escapeHtml(formatNumber(row.intelligence_index, 0))}</strong></span>
-        <span>${escapeHtml(strings.speed)} <strong>${escapeHtml(formatNumber(row.output_tokens_per_second, 1))} tok/s</strong></span>
-        <span>${escapeHtml(strings.latency)} <strong>${escapeHtml(formatNumber(row.ttft_seconds, 2))} s</strong></span>
+        <span>${escapeHtml(strings.speed)} <strong>${escapeHtml(formatMetric(row.output_tokens_per_second, 1, ' tok/s'))}</strong></span>
+        <span>${escapeHtml(strings.latency)} <strong>${escapeHtml(formatMetric(row.ttft_seconds, 2, ' s'))}</strong></span>
         <span>${escapeHtml(strings.context)} <strong>${escapeHtml(formatTokens(row.context_tokens))}</strong></span>
       </div>
       <div class="s5-model-focus__sources">
@@ -508,11 +514,11 @@
 
   function exportCsv() {
     const { state, rows } = activeRows();
-    const header = ['id','provider','model','variant','input_tokens','output_tokens','cost_usd_per_request','intelligence_index','output_tokens_per_second','ttft_seconds','context_tokens','frontier','pricing_source','benchmark_source'];
+    const header = ['id','provider','model','variant','input_tokens','output_tokens','cost_usd_per_request','intelligence_index','output_tokens_per_second','ttft_seconds','context_tokens','frontier','pricing_source','benchmark_source','performance_availability','performance_checked_on'];
     const csvRows = rows.map((row) => [
       row.id, row.provider, row.model, row.variant, state.inputTokens, state.outputTokens,
       row.scenario.costPerRequest, row.intelligence_index ?? '', row.output_tokens_per_second ?? '', row.ttft_seconds ?? '',
-      row.context_tokens ?? '', row.on_frontier, row.sources.specs_pricing.url, row.sources.benchmark.url
+      row.context_tokens ?? '', row.on_frontier, row.sources.specs_pricing.url, row.sources.benchmark.url, row.sources.benchmark.performance_availability?.status || 'available', row.sources.benchmark.performance_availability?.checked_on || row.sources.benchmark.performance_snapshot_on
     ]);
     const csv = [header, ...csvRows].map((cells) => cells.map(csvCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
