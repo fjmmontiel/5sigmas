@@ -39,7 +39,7 @@ for (const spec of cases) {
     });
     const expectedCount = data.models.length;
     const expectedOpenAi = data.models.filter((model) => model.provider === 'OpenAI').length;
-    const expectedLowLatency = data.models.filter((model) => Number(model.ttft_seconds) <= 30).length;
+    const expectedLowLatency = data.models.filter((model) => model.ttft_seconds != null && Number(model.ttft_seconds) <= 30).length;
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflow > 1) failures.push(`${spec.route} ${viewport.name}: page horizontal overflow ${overflow}px`);
@@ -58,6 +58,22 @@ for (const spec of cases) {
     for (const sentinel of ['Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'DeepSeek V4.1 Flash']) {
       if (!tableText.includes(sentinel)) failures.push(`${spec.route} ${viewport.name}: refreshed model missing from table: ${sentinel}`);
     }
+
+    const missing = data.models.filter(model => model.output_tokens_per_second === null);
+    for (const model of missing) {
+      const row = page.locator('[data-model-table-body] tr').filter({hasText:model.model});
+      const speed = (await row.locator('td').nth(3).innerText()).trim();
+      const latency = (await row.locator('td').nth(4).innerText()).trim();
+      const unavailable = spec.locale === 'es' ? 'sin dato' : 'no data';
+      if (speed !== unavailable || latency !== unavailable) failures.push(`${spec.route}: missing metrics rendered numerically: ${speed}/${latency}`);
+    }
+    await page.locator('[data-field="xAxis"]').selectOption('speed');
+    for (const model of missing) {
+      if (await page.locator(`.s5-model-point[data-model-id="${model.id}"]`).count()) failures.push(`${spec.route}: unavailable model plotted on speed axis`);
+    }
+    const speedPoints = await page.locator('.s5-model-point').count();
+    if (speedPoints !== expectedCount - missing.length) failures.push(`${spec.route}: unexpected available speed point count`);
+    await page.locator('[data-action="reset"]').click();
 
     const points = await page.locator('.s5-model-point').count();
     if (points !== expectedCount) failures.push(`${spec.route} ${viewport.name}: expected ${expectedCount} chart points, got ${points}`);

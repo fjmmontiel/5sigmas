@@ -85,7 +85,11 @@ const refreshDecision = (data, updates, today) => {
     return update.intelligence !== Number(stored.intelligence_index);
   });
   return { checkpointDue, performanceDue, intelligenceChanged,
-    required: checkpointDue || performanceDue || intelligenceChanged };
+    required: checkpointDue || performanceDue || intelligenceChanged || updates.some(update => {
+      const stored = byId.get(update.id);
+      return (update.speed === null) !== (stored.output_tokens_per_second === null)
+        || (update.ttft === null) !== (stored.ttft_seconds === null);
+    }) };
 };
 
 // Deterministic regression for the observed intraday speed/TTFT failure. These
@@ -97,6 +101,11 @@ const refreshDecision = (data, updates, today) => {
       performance_snapshot_on: '2026-10-04' } } }] };
   const variation = [{ id: 'fixture', intelligence: 56, speed: 77.8, ttft: 128.38 }];
   assert.equal(refreshDecision(fixture, variation, '2026-10-04').required, false);
+  const missing = structuredClone(fixture);
+  missing.models[0].output_tokens_per_second = null;
+  missing.models[0].ttft_seconds = null;
+  assert.equal(refreshDecision(fixture, [{...variation[0], speed:null, ttft:null}], '2026-10-04').required, true, 'availability loss forces refresh');
+  assert.equal(refreshDecision(missing, variation, '2026-10-04').required, true, 'availability recovery forces refresh');
   assert.equal(refreshDecision(fixture, [], '2026-10-04').required, false);
   assert.equal(refreshDecision(fixture, variation, '2026-10-05').performanceDue, true);
   assert.equal(refreshDecision(fixture, [], '2026-10-05').required, true);
@@ -114,7 +123,7 @@ const refreshDecision = (data, updates, today) => {
   assert.throws(() => refreshDecision(fixture, [{ ...variation[0], id: 'other' }], '2026-10-04'), /unknown model/);
 }
 if (process.argv.includes('--test-refresh-policy')) {
-  console.log('Refresh policy: 12 freshness, drift and invalid-input assertions passed; no network calls.');
+  console.log('Refresh policy: 14 freshness, drift and invalid-input assertions passed; no network calls.');
   process.exit(0);
 }
 
@@ -174,6 +183,9 @@ const parseOutputSpeed = (text, url) => {
   const faq = text.match(/\bgenerates output at\s+([0-9]+(?:\.[0-9]+)?)\s+tokens per second\b/i);
   const section = text.match(/\bModel summary\b([\s\S]{0,4000}?)\bComparison Summary\b/i)?.[1];
   const summary = section?.match(/\bSpeed\b[\s\S]{0,550}?\s([0-9]+(?:\.[0-9]+)?)\s+Output tokens per second\b/i);
+  const unavailable = /\bSpeed\s+N\/A\s+Output tokens per second\s+Unknown out of 4 units for Speed\b/i.test(section || '');
+  if (unavailable && (faq || summary)) throw new Error(`${url}: conflicting output speed availability on upstream source surfaces`);
+  if (unavailable) return null;
   if (faq && summary && Math.abs(Number(faq[1]) - Number(summary[1])) > 0.11) {
     throw new Error(`${url}: conflicting output speed values on upstream source surfaces`);
   }
@@ -186,9 +198,17 @@ const parseOutputSpeed = (text, url) => {
       const at = text.toLowerCase().indexOf(label.toLowerCase());
       return {label, present:at >= 0, sample:at < 0 ? '' : text.slice(Math.max(0, at - 55), at + label.length + 110).slice(0, 220)};
     });
-    throw new Error(`${url}: could not parse output speed; public upstream labels=${JSON.stringify(clues)}`);
+    throw new Error(`${url}: HTML_STRUCTURE_CHANGED: could not parse output speed; public upstream labels=${JSON.stringify(clues)}`);
   }
   return number(faq || summary, 'output speed', url);
+};
+
+// Confirm missing metrics in adjacent model-specific provider overview cards.
+const confirmUnavailablePerformance = (text, url) => {
+  if (!/\bSpeed Output tokens per second [^]{0,60}?No data available Latency Seconds to first answer token received [^]{0,60}?No data available\b/i.test(text)
+      || !text.includes('Benchmarks of providers are not available for this model.')) {
+    throw new Error(`${url}: HTML_STRUCTURE_CHANGED or inconsistent provider availability`);
+  }
 };
 
 // Invariant tests run before every real upstream audit; fixtures never supply
@@ -205,8 +225,21 @@ const parseOutputSpeed = (text, url) => {
   assert.throws(() => parseOutputSpeed('Speed #36 / 226 116.1 Output tokens per second', url), /could not parse output speed/);
   assert.throws(() => parseOutputSpeed('Model summary Speed #36 / 226 -116.1 Output tokens per second Comparison Summary', url), /could not parse output speed/);
 }
+{
+  const url = 'https://artificialanalysis.ai/models/fixture';
+  const absent = 'Model summary Speed N/A Output tokens per second Unknown out of 4 units for Speed. Comparison Summary';
+  assert.equal(parseOutputSpeed(absent, url), null);
+  const providerAbsent = 'Benchmarks of providers are not available for this model. Speed Output tokens per second · Higher is better No data available Latency Seconds to first answer token received · Lower is better No data available Price';
+  assert.doesNotThrow(() => confirmUnavailablePerformance(providerAbsent, url));
+  assert.throws(() => confirmUnavailablePerformance(providerAbsent.replace('Speed Output tokens per second', 'Changed heading'), url), /HTML_STRUCTURE_CHANGED/);
+  assert.throws(() => confirmUnavailablePerformance(providerAbsent.replace('No data available Latency', '116.1 Latency'), url), /inconsistent provider availability/);
+  assert.throws(() => confirmUnavailablePerformance('No data available', url), /HTML_STRUCTURE_CHANGED/);
+  assert.throws(() => parseOutputSpeed(absent + ' generates output at 116.1 tokens per second', url), /conflicting output speed availability/);
+  assert.throws(() => parseOutputSpeed('Model summary Speed N/A Comparison Summary', url), /HTML_STRUCTURE_CHANGED/);
+  assert.throws(() => parseOutputSpeed('Speed N/A Output tokens per second Unknown out of 4 units for Speed', url), /HTML_STRUCTURE_CHANGED/);
+}
 if (process.argv.includes('--test-source-speed')) {
-  console.log('AA speed parsing: 7 deterministic positive/negative regressions passed; no network calls.');
+  console.log('AA speed parsing: 15 deterministic positive/negative regressions passed; no network calls.');
   process.exit(0);
 }
 
@@ -229,7 +262,22 @@ for (const model of data.models || []) {
 
   const intelligence = number(text.match(/\bscores\s+([0-9]+(?:\.[0-9]+)?)\s+on the Artificial Analysis Intelligence Index\b/i), 'Intelligence Index', url);
   const speed = parseOutputSpeed(text, url);
-  const ttft = number(text.match(/\bhas a time to first token \(TTFT\) of\s+([0-9]+(?:\.[0-9]+)?)s\b/i), 'TTFT', url);
+  const ttftMatch = text.match(/\bhas a time to first token \(TTFT\) of\s+([0-9]+(?:\.[0-9]+)?)s\b/i);
+  let ttft;
+  let availability;
+  if (speed === null) {
+    // Confirm missing performance on a second source-owned, model-specific
+    // surface. Neither a missing FAQ nor arbitrary 'No data' text is evidence.
+    const providersUrl = url.replace(/\/$/, '') + '/providers';
+    const providers = decode(await fetchHtml(providersUrl));
+    confirmUnavailablePerformance(providers, providersUrl);
+    assert.ok(!ttftMatch, `${model.id}: conflicting TTFT availability`);
+    ttft = null;
+    availability = {status: 'unavailable', checked_on: today, source_url: url,
+      confirmation_url: providersUrl, reason: 'Model summary explicitly reports Speed N/A and Unknown; provider benchmarks explicitly report no speed or latency data.'};
+  } else {
+    ttft = number(ttftMatch, 'TTFT', url);
+  }
   const price = text.match(/\bcosts\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M input tokens[\s\S]{0,220}?\band\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M output tokens\b/i);
   if (!price) throw new Error(`${model.id}: could not parse AA input/output price for drift detection`);
   const observedInput = Number(price[1]);
@@ -241,9 +289,11 @@ for (const model of data.models || []) {
   }
 
   const changed = intelligence !== Number(model.intelligence_index)
-    || speed !== Number(model.output_tokens_per_second)
-    || ttft !== Number(model.ttft_seconds);
-  if (changed) updates.push({ id: model.id, intelligence, speed, ttft });
+    || speed !== model.output_tokens_per_second
+    || ttft !== model.ttft_seconds
+    || Boolean(availability) !== Boolean(model.sources.benchmark.performance_availability)
+    || (availability && model.sources.benchmark.performance_availability?.checked_on !== today);
+  if (changed) updates.push({ id: model.id, intelligence, speed, ttft, availability });
 }
 
 const decision = refreshDecision(data, updates, today);
@@ -273,10 +323,18 @@ for (const model of data.models) {
     model.intelligence_index = update.intelligence;
     model.output_tokens_per_second = update.speed;
     model.ttft_seconds = update.ttft;
+    if (update.availability) model.sources.benchmark.performance_availability = update.availability;
+    else delete model.sources.benchmark.performance_availability;
   }
   model.sources.benchmark.verified_on = today;
   model.sources.benchmark.performance_snapshot_on = today;
 }
+data.performance_refresh = {
+  refreshed_on: today,
+  source: 'Live Artificial Analysis model pages and explicit model-specific provider availability confirmation',
+  changed_model_count: updates.length,
+  note: 'Reverified every model page. Unavailable performance metrics are null with dated model/provider evidence; previous measurements are not reused as current evidence.'
+};
 data.updated_at = today;
 data.release_coverage.reviewed_through = today;
 fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
