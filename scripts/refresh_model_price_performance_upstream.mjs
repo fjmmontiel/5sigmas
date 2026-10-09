@@ -177,6 +177,17 @@ const parseOutputSpeed = (text, url) => {
   if (faq && summary && Math.abs(Number(faq[1]) - Number(summary[1])) > 0.11) {
     throw new Error(`${url}: conflicting output speed values on upstream source surfaces`);
   }
+  if (!faq && !summary) {
+    // Bounded diagnostics of decoded *public* upstream HTML only. This prints
+    // no raw HTML, scripts, cookies, headers or private data and never supplies
+    // an alternate numerical value to the output pipeline.
+    const labels = ['Model summary', 'Output tokens per second', 'tokens per second', 'generates output at', 'Speed', 'Comparison Summary'];
+    const clues = labels.map((label) => {
+      const at = text.toLowerCase().indexOf(label.toLowerCase());
+      return {label, present:at >= 0, sample:at < 0 ? '' : text.slice(Math.max(0, at - 55), at + label.length + 110).slice(0, 220)};
+    });
+    throw new Error(`${url}: could not parse output speed; public upstream labels=${JSON.stringify(clues)}`);
+  }
   return number(faq || summary, 'output speed', url);
 };
 
