@@ -20,6 +20,11 @@ const sourceSpeedAudit = execFileSync(
 );
 assert.match(sourceSpeedAudit, /15 deterministic positive\/negative regressions passed/, 'source-owned output speed parser must pass without network');
 
+const refreshPolicyAudit = execFileSync(process.execPath,
+  [path.join(root, 'scripts/refresh_model_price_performance_upstream.mjs'), '--test-refresh-policy'],
+  {cwd:root, encoding:'utf8', timeout:15_000});
+assert.match(refreshPolicyAudit, /14 freshness/, 'availability loss and recovery must force refresh');
+
 const SNAPSHOT = data.updated_at;
 assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
 const wallAgeDays = (Date.now() - Date.parse(`${SNAPSHOT}T23:59:59Z`)) / 86_400_000;
@@ -112,8 +117,8 @@ assert.deepEqual([deepseek.input_usd_per_million, deepseek.output_usd_per_millio
 assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [1.36, 4.18]);
 assert.equal(mistralLarge4.context_tokens, 1000000);
 assert.equal(mistralLarge4.intelligence_index, 38);
-assert.equal(mistralLarge4.output_tokens_per_second, null);
-assert.equal(mistralLarge4.ttft_seconds, null);
+// Availability is validated above from dated evidence, not pinned forever to null.
+// A later source-confirmed recovery must be allowed to restore numeric values.
 
 {
   const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');

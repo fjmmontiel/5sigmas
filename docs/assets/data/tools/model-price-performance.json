@@ -6,7 +6,7 @@
     "review_interval_days": 7,
     "performance_review_interval_days": 1,
     "review_on_model_or_benchmark_release": true,
-    "rule": "Review the Artificial Analysis release feed daily and re-verify provider pricing/specifications at least weekly. Never publish a chart row unless input/output price, context, Intelligence Index, output speed and TTFT are all pinned to explicit sources."
+    "rule": "Review the Artificial Analysis release feed daily and re-verify provider pricing/specifications at least weekly. Price, context and Intelligence Index require explicit sources. Previously charted rows may retain price/intelligence comparisons when speed and TTFT become explicitly unavailable on both model and provider pages, recorded as null with dated provenance. Never infer absence from a parser failure, rank unavailable performance or reuse historical samples as current evidence."
   },
   "release_coverage": {
     "previous_snapshot": "2026-08-21",
