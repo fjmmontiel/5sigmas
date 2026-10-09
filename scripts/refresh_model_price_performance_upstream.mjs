@@ -173,9 +173,9 @@ const number = (match, label, url) => {
 const parseOutputSpeed = (text, url) => {
   const faq = text.match(/\bgenerates output at\s+([0-9]+(?:\.[0-9]+)?)\s+tokens per second\b/i);
   const section = text.match(/\bModel summary\b([\s\S]{0,4000}?)\bComparison Summary\b/i)?.[1];
-  const summary = section?.match(/\bSpeed\b[\s\S]{0,550}?\b([0-9]+(?:\.[0-9]+)?)\s+Output tokens per second\b/i);
+  const summary = section?.match(/\bSpeed\b[\s\S]{0,550}?\s([0-9]+(?:\.[0-9]+)?)\s+Output tokens per second\b/i);
   if (faq && summary && Math.abs(Number(faq[1]) - Number(summary[1])) > 0.11) {
-    throw new Error(`${url}: conflicting output speed values on upstream source surfaces);
+    throw new Error(`${url}: conflicting output speed values on upstream source surfaces`);
   }
   return number(faq || summary, 'output speed', url);
 };
