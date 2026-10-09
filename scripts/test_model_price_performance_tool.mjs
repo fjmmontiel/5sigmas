@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
@@ -11,6 +12,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const api = require(path.join(root, 'docs/assets/javascripts/tools/model-price-performance-core.js'));
 const data = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/model-price-performance.json'), 'utf8'));
+
+const sourceSpeedAudit = execFileSync(
+  process.execPath,
+  [path.join(root, 'scripts/refresh_model_price_performance_upstream.mjs'), '--test-source-speed'],
+  { cwd: root, encoding: 'utf8', timeout: 15_000 }
+);
+assert.match(sourceSpeedAudit, /7 deterministic positive\/negative regressions passed/, 'source-owned output speed parser must pass without network');
 
 const SNAPSHOT = data.updated_at;
 assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
