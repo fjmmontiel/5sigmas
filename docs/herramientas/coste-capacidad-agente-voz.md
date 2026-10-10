@@ -132,7 +132,7 @@ hide:
     </div>
 
     <aside class="s5-tool-source" aria-label="Procedencia del escenario">
-      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verificado 01-10-2026</span></div>
+      <div class="s5-tool-source__head"><a href="https://www.twilio.com/en-us/voice/pricing/es" target="_blank" rel="noopener noreferrer">Twilio · Voice pricing Spain</a><span>Verificado 06-10-2026</span></div>
       <p>El preset usa 0,0178 USD/min para una llamada saliente local a España y 0,0044 USD/min para Media Streams. Móvil, entrante, SIP/BYOC, impuestos, números mensuales y descuentos pueden cambiar la factura.</p>
     </aside>
   </section>
