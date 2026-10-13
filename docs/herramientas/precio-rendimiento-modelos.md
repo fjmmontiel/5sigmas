@@ -34,7 +34,7 @@ hide:
 }
 </script>
 
-<div class="s5-landing s5-tool-page" data-s5-model-explorer data-locale="es">
+<div class="s5-landing s5-tool-page" data-s5-model-explorer data-s5-tool="model-price-performance" data-locale="es">
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas · Modelos · 02</div>
@@ -196,14 +196,14 @@ hide:
   </div>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-sources-title">
+<section class="s5-section" data-s5-source aria-labelledby="s5-model-sources-title">
   <details class="s5-model-sources-details">
     <summary id="s5-model-sources-title">Fuentes y fecha de verificación</summary>
     <div class="s5-model-sources" data-model-sources></div>
   </details>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-related">
+<section class="s5-section" data-s5-related-content aria-labelledby="s5-model-related">
   <div class="s5-section-head"><h2 id="s5-model-related">Para decidir con más contexto</h2></div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/temas/evaluacion-modelos/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">Evaluación de modelos</span><span class="s5-list-row__desc">Por qué un benchmark no es el objetivo y cómo construir evals representativas.</span><span class="s5-list-row__meta">Concepto</span></a>
