@@ -34,7 +34,7 @@ hide:
 }
 </script>
 
-<div class="s5-landing s5-tool-page" data-s5-model-explorer data-locale="en">
+<div class="s5-landing s5-tool-page" data-s5-model-explorer data-s5-tool="model-price-performance" data-locale="en">
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Tools · Models · 02</div>
@@ -192,18 +192,18 @@ hide:
     <p><strong>Intelligence Index.</strong> This is Artificial Analysis's composite index for the named configuration. It aggregates multiple evaluations covering reasoning, knowledge, coding and tool use. It is a useful comparison signal, not a universal measure of "intelligence" and not a substitute for your own evals.</p>
     <p><strong>Output speed and TTFT.</strong> Artificial Analysis measures them against live APIs. <em>tokens/s</em> describes generation speed after output starts; TTFT measures time to the first token. For reasoning models, latency can be dominated by deliberation and vary substantially with the selected reasoning effort.</p>
     <p><strong>Frontier.</strong> There is no hidden composite score and no arbitrary weighting. The Pareto frontier only identifies configurations that are not simultaneously dominated on both cost and Intelligence Index.</p>
-    <p class="s5-tool-method__notes">Data verified October 9, 2026 against Artificial Analysis Intelligence Index v4.3.2. The release ledger reviews every new entry since the previous snapshot; the chart contains 18 current configurations with sourced price, context and Intelligence Index. Output speed and TTFT are shown only when available. Mistral Large 4 currently has no public performance measurements on Artificial Analysis: it remains in price/intelligence comparisons, shows “no data” for speed/TTFT and is excluded from those axes, rankings and latency filters. Reviewed releases that cannot yet meet that comparison contract remain recorded in the dataset with an explicit exclusion reason. Benchmark surfaces that Artificial Analysis marks deprecated or historical are removed from the current set: this audit removes Gemini 3.6 Flash and also records Gemini 3.7 Flash in the supersession chain leading to Gemini 3.8 Flash.</p>
+    <p class="s5-tool-method__notes">Data verified October 13, 2026 against Artificial Analysis Intelligence Index v4.3.2. The release ledger reviews every new entry since the previous snapshot; the chart contains 18 current configurations with sourced price, context and Intelligence Index. Output speed and TTFT are shown only when available. Mistral Large 4 currently has no public performance measurements on Artificial Analysis: it remains in price/intelligence comparisons, shows “no data” for speed/TTFT and is excluded from those axes, rankings and latency filters. Reviewed releases that cannot yet meet that comparison contract remain recorded in the dataset with an explicit exclusion reason. Benchmark surfaces that Artificial Analysis marks deprecated or historical are removed from the current set: this audit removes Gemini 3.6 Flash and also records Gemini 3.7 Flash in the supersession chain leading to Gemini 3.8 Flash.</p>
   </div>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-sources-title">
+<section class="s5-section" data-s5-source aria-labelledby="s5-model-sources-title">
   <details class="s5-model-sources-details">
     <summary id="s5-model-sources-title">Sources and verification date</summary>
     <div class="s5-model-sources" data-model-sources></div>
   </details>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-related">
+<section class="s5-section" data-s5-related-content aria-labelledby="s5-model-related">
   <div class="s5-section-head"><h2 id="s5-model-related">For a better model decision</h2></div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/en/temas/evaluacion-modelos/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">Model evaluation</span><span class="s5-list-row__desc">Why a benchmark is not the objective and how to build representative evals.</span><span class="s5-list-row__meta">Concept</span></a>
