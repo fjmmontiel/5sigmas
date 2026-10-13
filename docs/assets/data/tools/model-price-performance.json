@@ -294,7 +294,8 @@
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/opus-5-5/overview",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary Anthropic Opus 5.5 model page: standard API $4 input/$20 output per MTok; 1M-token context; verified 2026-10-13."
         },
         "benchmark": {
           "title": "Claude Opus 5.5 (xhigh) | Artificial Analysis",
@@ -390,7 +391,8 @@
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary Anthropic Fable 5.1 model page: standard API $10 input/$50 output per MTok; 1M-token context; verified 2026-10-13."
         },
         "benchmark": {
           "title": "Claude Fable 5.1 (max) | Artificial Analysis",
@@ -420,7 +422,8 @@
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary OpenAI GPT-6 Astra model page: standard text $10 input/$50 output per MTok; 1,050,000 context; verified 2026-10-13."
         },
         "benchmark": {
           "title": "GPT-6 Astra (max) | Artificial Analysis",
@@ -495,7 +498,8 @@
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary OpenAI GPT-6 Luna model page: standard text $0.10 input/$0.50 output per MTok; 1,050,000 context; verified 2026-10-13."
         },
         "benchmark": {
           "title": "GPT-6 Luna (max) | Artificial Analysis",
@@ -530,7 +534,8 @@
         "specs_pricing": {
           "title": "GPT-5.6 Terra Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary OpenAI GPT-5.6 Terra model page: standard text $2 input/$12 output per MTok; 1,050,000 context; verified 2026-10-13."
         },
         "benchmark": {
           "title": "GPT-5.6 Terra (max) | Artificial Analysis",
@@ -566,7 +571,8 @@
         "specs_pricing": {
           "title": "What's new in Gemini 3.8 Flash | Google AI for Developers",
           "url": "https://ai.google.dev/gemini-api/docs/latest-model?hl=en",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Google Gemini 3.8 Flash primary latest-model/pricing pages: introductory standard API $0.75 input/$3.75 output per MTok through 2026-12-31; standard rates increase 2027-01-01. Official model specification: 1,048,576-token input limit; verified 2026-10-13."
         },
         "benchmark": {
           "title": "Gemini 3.8 Flash (high) | Artificial Analysis",
@@ -599,8 +605,9 @@
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
-          "url": "https://docs.x.ai/docs/models/grok-4.7",
-          "verified_on": "2026-10-02"
+          "url": "https://docs.x.ai/developers/models/grok-4.7",
+          "verified_on": "2026-10-13",
+          "note": "Primary xAI Grok 4.7 model page: standard <=200K input-token tier $2 input/$6 output per MTok; 500K total context; higher rates may apply for >200K prompts. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "Grok 4.7 (high) | Artificial Analysis",
@@ -629,8 +636,8 @@
         "specs_pricing": {
           "title": "DeepSeek API pricing",
           "url": "https://api-docs.deepseek.com/quick_start/pricing/",
-          "verified_on": "2026-10-02",
-          "note": "Peak first-party API rate; DeepSeek's off-peak rate can be lower."
+          "verified_on": "2026-10-13",
+          "note": "Primary DeepSeek pricing: DeepSeek-V4.1-Flash model ID deepseek-flash, 1M context. Stored $0.30 input/$1.20 output per MTok are PEAK uncached rates; OFF-PEAK prices are $0.15/$0.60. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "DeepSeek V4.1 Flash (max) | Artificial Analysis",
@@ -659,9 +666,9 @@
       "sources": {
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
-          "url": "https://help.aliyun.com/en/model-studio/qwen3-8-max",
-          "verified_on": "2026-10-02",
-          "note": "USD rates use Artificial Analysis's observed first-party Alibaba API pricing; Alibaba's public regional table is denominated in CNY."
+          "url": "https://modelstudio.console.alibabacloud.com/?tab=doc",
+          "verified_on": "2026-10-13",
+          "note": "Primary Alibaba Model Studio catalog: qwen3.8-max-0902 $2 input/$6 output USD per MTok, 1M context; region-specific Model Studio documentation may denominate rates in CNY. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "Qwen3.8 Max (0902) | Artificial Analysis",
@@ -689,9 +696,9 @@
       "sources": {
         "specs_pricing": {
           "title": "Alibaba Cloud Model Studio pricing",
-          "url": "https://help.aliyun.com/en/model-studio/model-pricing",
-          "verified_on": "2026-10-02",
-          "note": "USD rates use Artificial Analysis's observed first-party Alibaba API pricing where the public regional table is denominated in CNY."
+          "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next",
+          "verified_on": "2026-10-13",
+          "note": "Artificial Analysis observed Alibaba's API for the EXACT open-weight Qwen3.8-Flash-Next: $0.15 input/$0.47 output per MTok, 256K native context. Distinct from the Alibaba-hosted qwen3.8-flash with a 1M default context; do not silently merge model IDs. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "Qwen3.8-Flash-Next | Artificial Analysis",
@@ -719,9 +726,9 @@
       "sources": {
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
-          "url": "https://ai.meta.com/llama/",
-          "verified_on": "2026-10-02",
-          "note": "Token rates are the USD first-party Meta API rates observed and reported by Artificial Analysis."
+          "url": "https://dev.meta.ai/products/meta-model-api",
+          "verified_on": "2026-10-13",
+          "note": "Primary Meta Model API price list: muse-spark-1.3 non-contributor (data not used for product improvement) $1.25 input/$4.25 output per MTok, 1M context; differs from contributor pricing. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "Muse Spark 1.3 (max) | Artificial Analysis",
@@ -749,9 +756,9 @@
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
-          "url": "https://mimo.xiaomi.com/",
-          "verified_on": "2026-10-02",
-          "note": "Token rates are the USD first-party Xiaomi API rates observed and reported by Artificial Analysis."
+          "url": "https://mimo.mi.com/models/en-US/mimo-v2.6-pro",
+          "verified_on": "2026-10-13",
+          "note": "Primary Xiaomi MiMo-V2.6-Pro pricing/specifications: standard real-time API cache MISS $0.435 input/$0.87 output per MTok and 1M context; cache-hit/batch/ultraspeed are separate. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "MiMo-V2.6-Pro | Artificial Analysis",
@@ -779,9 +786,9 @@
       "sources": {
         "specs_pricing": {
           "title": "StepFun Open Platform | Step 5 Preview",
-          "url": "https://platform.stepfun.com/",
-          "verified_on": "2026-10-02",
-          "note": "Token rates are the USD first-party StepFun API rates observed and reported by Artificial Analysis."
+          "url": "https://artificialanalysis.ai/models/step-5",
+          "verified_on": "2026-10-13",
+          "note": "Artificial Analysis directly reports observed StepFun API $1 input/$2.70 output per MTok for Step 5 Preview; StepFun's own https://www.stepfun.com/step-5-preview confirms 1M context and live API availability but does not publicly display USD rates. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "Step 5 Preview | Artificial Analysis",
@@ -810,7 +817,8 @@
         "specs_pricing": {
           "title": "Z.AI API pricing",
           "url": "https://docs.z.ai/guides/overview/pricing",
-          "verified_on": "2026-10-02"
+          "verified_on": "2026-10-13",
+          "note": "Primary Z.AI GLM-5.3-Flash pricing: $0.15 input/$0.50 output per MTok; context specification remains benchmark-sourced where not published by this pricing page. Verified 2026-10-13."
         },
         "benchmark": {
           "title": "GLM 5.3 Flash | Artificial Analysis",
