@@ -27,11 +27,11 @@ assert.match(runtime, /'\btool_open\b'/);
 assert.match(runtime, /'\bmeaningful_input_change\b'/);
 assert.match(runtime, /'\bsource_click\b'/);
 assert.match(runtime, /'\brelated_content_click\b'/);
-assert.match(controller, /addEventListener\('input', onScenarioEdited\)/);
-assert.match(controller, /addEventListener\('change', onScenarioEdited\)/);
-assert.match(controller, /emitScenarioMeasurement\(state, rows\)/);
+assert.match(controller, /addEventListener\('input', \(\) => render\(\{ trackResult: false \}\)\)/);
+assert.match(controller, /addEventListener\('change', \(\) => render\(\{ trackCompletion: true \}\)\)/);
+assert.match(controller, /emitScenarioMeasurement\(state, rows, \{ trackResult, trackCompletion \}\)/);
 
-const begin = controller.indexOf('  function emitScenarioMeasurement(state, rows) {');
+const begin = controller.indexOf('  function emitScenarioMeasurement(state, rows, { trackResult = true, trackCompletion = false } = {}) {');
 const finish = controller.indexOf('\n  function scenarioUrl()', begin);
 assert.ok(begin > 0 && finish > begin, 'measurement code is missing from real controller');
 const helper = controller.slice(begin, finish);
@@ -41,11 +41,10 @@ const context = {
 };
 vm.runInNewContext([
   'let lastMeasuredScenario = null;',
-  'let userEditedScenario = false;',
+  'let lastCompletedScenario = null;',
   helper,
   'globalThis.subject = {',
-  '  render: (state, rows) => emitScenarioMeasurement(state, rows),',
-  '  markEdited: () => { userEditedScenario = true; }',
+  '  render: (state, rows, options) => emitScenarioMeasurement(state, rows, options),',
   '};',
 ].join('\n'), context);
 
@@ -56,15 +55,19 @@ context.subject.render(first, [{ model: 'test' }]);
 context.subject.render(first, [{ model: 'test' }]); // same scenario -> deduplicated
 assert.deepEqual(events.map(e => e.name), ['result_rendered']);
 
-context.subject.markEdited();
 const changed = { ...first, inputTokens: 6000 };
-context.subject.render(changed, [{ model: 'test' }]);
-context.subject.render(changed, [{ model: 'test' }]); // input + change -> once
+context.subject.render(changed, [{ model: 'test' }], { trackResult: false }); // typing
+assert.equal(events.length, 1, 'keystrokes must not emit completion or result events');
+context.subject.render(changed, [{ model: 'test' }], { trackCompletion: true }); // change/blur
+context.subject.render(changed, [{ model: 'test' }], { trackCompletion: true });
 assert.deepEqual(events.map(e => e.name),
   ['result_rendered', 'result_rendered', 'scenario_completed']);
-context.subject.render({ ...changed, provider: 'nobody' }, []); // empty model selection
+context.subject.render({ ...changed, provider: 'nobody' }, [], { trackCompletion: true }); // empty
 assert.equal(events.length, 3, 'empty results cannot count as a completed scenario');
-context.subject.render({ ...changed, provider: 'OpenAI' }, [{ model: 'test' }]);
+const next = { ...changed, provider: 'OpenAI' };
+context.subject.render(next, [{ model: 'test' }], { trackResult: false });
+assert.equal(events.length, 3, 'only final changed value may count');
+context.subject.render(next, [{ model: 'test' }], { trackCompletion: true });
 assert.equal(events.length, 5);
 
 for (const event of events) {
