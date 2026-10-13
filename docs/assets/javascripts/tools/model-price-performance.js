@@ -94,7 +94,7 @@
   let data = null;
   let selectedModelId = null;
   let lastMeasuredScenario = null;
-  let userEditedScenario = false;
+  let lastCompletedScenario = null;
 
   const defaults = {
     inputTokens: 4000,
@@ -473,7 +473,7 @@
     }
   }
 
-  function render() {
+  function render({ trackResult = true, trackCompletion = false } = {}) {
     if (!data) return;
     const { state, rows } = activeRows();
     renderSummary(rows);
@@ -484,21 +484,23 @@
     if (selected) renderFocus(selected);
     else if (focus) focus.innerHTML = '';
 
-    emitScenarioMeasurement(state, rows);
+    emitScenarioMeasurement(state, rows, { trackResult, trackCompletion });
   }
 
-  function emitScenarioMeasurement(state, rows) {
-    // Count only valid nonempty renderings, once for each distinct scenario.
-    // Values are compared in memory but NEVER included in the event payload.
+  function emitScenarioMeasurement(state, rows, { trackResult = true, trackCompletion = false } = {}) {
+    // A final change/blur or reset is a completed comparison, not each
+    // intermediate keystroke. No inputs or model choices leave this module.
     if (!rows.length) return;
     const signature = JSON.stringify(state);
-    if (signature === lastMeasuredScenario) return;
-    lastMeasuredScenario = signature;
-    window.s5Measurement?.track('result_rendered', {
-      tool_id: 'model-price-performance',
-      result_kind: 'comparison'
-    });
-    if (userEditedScenario) {
+    if (trackResult && signature !== lastMeasuredScenario) {
+      lastMeasuredScenario = signature;
+      window.s5Measurement?.track('result_rendered', {
+        tool_id: 'model-price-performance',
+        result_kind: 'comparison'
+      });
+    }
+    if (trackCompletion && signature !== lastCompletedScenario) {
+      lastCompletedScenario = signature;
       window.s5Measurement?.track('scenario_completed', {
         tool_id: 'model-price-performance',
         result_kind: 'comparison'
@@ -560,7 +562,7 @@
     history.replaceState({}, '', window.location.pathname);
     selectedModelId = null;
     setFeedback('');
-    render();
+    render({ trackCompletion: true });
   }
 
   function csvCell(value) {
@@ -600,13 +602,10 @@
     }
   }
 
-  function onScenarioEdited() {
-    userEditedScenario = true;
-    render();
-  }
-
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', onScenarioEdited);
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', onScenarioEdited);
+  // Render on input for instant visual feedback, but measure completion only
+  // on the final change event (avoids inflating events per keystroke).
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', () => render({ trackResult: false }));
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', () => render({ trackCompletion: true }));
   root.querySelector('[data-action="share"]')?.addEventListener('click', share);
   root.querySelector('[data-action="export"]')?.addEventListener('click', exportCsv);
   root.querySelector('[data-action="reset"]')?.addEventListener('click', reset);
