@@ -120,7 +120,34 @@ for (const spec of cases) {
     const sourceLinks = await page.locator('[data-model-focus] a[href^="https://"]').count();
     if (sourceLinks < 2) failures.push(`${spec.route} ${viewport.name}: focused model does not expose both provenance links`);
 
+    // Runtime instrumentation must work in a real rendered bilingual page.
+    // Replace only the local tab's inert client API with a memory-only sink;
+    // no collector, third party or credentials are configured.
+    const measurementReady = await page.evaluate(() => {
+      if (typeof window.s5Measurement?.track !== 'function') return false;
+      window.__s5ModelMeasurementProbe = [];
+      window.s5Measurement = Object.freeze({
+        track(event, context) {
+          window.__s5ModelMeasurementProbe.push({ event, context });
+          return false;
+        }
+      });
+      return true;
+    });
+    if (!measurementReady) failures.push(`${spec.route} ${viewport.name}: measurement runtime is not loaded`);
+
     await page.locator('[data-field="provider"]').selectOption('OpenAI');
+    if (measurementReady) {
+      const events = await page.evaluate(() => window.__s5ModelMeasurementProbe || []);
+      const expectedEvents = ['result_rendered', 'scenario_completed'];
+      if (JSON.stringify(events.map(e => e.event)) !== JSON.stringify(expectedEvents)) {
+        failures.push(`${spec.route} ${viewport.name}: edited explorer scenario emitted unexpected events: ${events.map(e=>e.event).join(',')}`);
+      }
+      for (const event of events) {
+        const expectedContext = JSON.stringify({tool_id:'model-price-performance',result_kind:'comparison'});
+        if (JSON.stringify(event.context) !== expectedContext) failures.push(`${spec.route} ${viewport.name}: analytics event context contains unexpected values`);
+      }
+    }
     const openAiRows = await page.locator('[data-model-table-body] tr').count();
     if (openAiRows !== expectedOpenAi) failures.push(`${spec.route} ${viewport.name}: provider filter expected ${expectedOpenAi} OpenAI rows, got ${openAiRows}`);
 
