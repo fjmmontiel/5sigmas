@@ -484,24 +484,25 @@
     if (selected) renderFocus(selected);
     else if (focus) focus.innerHTML = '';
 
-    // Count only actual, nonempty results after a successful data fetch.
-    // The scenario signature is local-only; no user inputs, model selections,
-    // query parameters or numerical values are sent to analytics.
-    if (rows.length) {
-      const signature = JSON.stringify(state);
-      if (signature !== lastMeasuredScenario) {
-        lastMeasuredScenario = signature;
-        window.s5Measurement?.track('result_rendered', {
-          tool_id: 'model-price-performance',
-          result_kind: 'comparison'
-        });
-        if (userEditedScenario) {
-          window.s5Measurement?.track('scenario_completed', {
-            tool_id: 'model-price-performance',
-            result_kind: 'comparison'
-          });
-        }
-      }
+    emitScenarioMeasurement(state, rows);
+  }
+
+  function emitScenarioMeasurement(state, rows) {
+    // Count only valid nonempty renderings, once for each distinct scenario.
+    // Values are compared in memory but NEVER included in the event payload.
+    if (!rows.length) return;
+    const signature = JSON.stringify(state);
+    if (signature === lastMeasuredScenario) return;
+    lastMeasuredScenario = signature;
+    window.s5Measurement?.track('result_rendered', {
+      tool_id: 'model-price-performance',
+      result_kind: 'comparison'
+    });
+    if (userEditedScenario) {
+      window.s5Measurement?.track('scenario_completed', {
+        tool_id: 'model-price-performance',
+        result_kind: 'comparison'
+      });
     }
   }
 
