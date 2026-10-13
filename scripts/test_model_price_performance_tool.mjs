@@ -73,7 +73,7 @@ for (const model of data.models) {
   for (const key of ['specs_pricing', 'benchmark']) {
     const source = model.sources?.[key];
     assert.match(source?.url || '', /^https:\/\//, `${model.id}: ${key} URL required`);
-    assert.match(source?.verified_on || '', /^\\d{4}-\\d{2}-\\d{2}$/, `${model.id}: ${key} verified_on required`);
+    assert.match(source?.verified_on || '', /^\d{4}-\d{2}-\d{2}$/, `${model.id}: ${key} verified_on required`);
     // Provider price checks and Artificial Analysis benchmark snapshots have
     // independent clocks. A later primary pricing verification does not imply
     // a new benchmark measurement, nor is a newer provider check invalid.
