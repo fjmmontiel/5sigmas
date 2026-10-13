@@ -73,8 +73,16 @@ for (const model of data.models) {
   for (const key of ['specs_pricing', 'benchmark']) {
     const source = model.sources?.[key];
     assert.match(source?.url || '', /^https:\/\//, `${model.id}: ${key} URL required`);
-    const ageDays = (Date.parse(`${SNAPSHOT}T00:00:00Z`) - Date.parse(`${source.verified_on}T00:00:00Z`)) / 86_400_000;
-    assert.ok(ageDays >= 0 && ageDays <= data.freshness_policy.review_interval_days, `${model.id}: ${key} verification is stale`);
+    assert.match(source?.verified_on || '', /^\\d{4}-\\d{2}-\\d{2}$/, `${model.id}: ${key} verified_on required`);
+    // Provider price checks and Artificial Analysis benchmark snapshots have
+    // independent clocks. A later primary pricing verification does not imply
+    // a new benchmark measurement, nor is a newer provider check invalid.
+    const baseline = key === 'specs_pricing' ? Date.now() : Date.parse(`${SNAPSHOT}T00:00:00Z`);
+    const verifiedAt = Date.parse(`${source.verified_on}${key === 'specs_pricing' ? 'T23:59:59Z' : 'T00:00:00Z'}`);
+    const ageDays = (baseline - verifiedAt) / 86_400_000;
+    const lowerBound = key === 'specs_pricing' ? -1 : 0;
+    assert.ok(ageDays >= lowerBound && ageDays <= data.freshness_policy.review_interval_days,
+      `${model.id}: ${key} verification is stale or future-dated`);
   }
   const performanceAgeDays = (Date.parse(`${SNAPSHOT}T00:00:00Z`) - Date.parse(`${model.sources.benchmark.performance_snapshot_on}T00:00:00Z`)) / 86_400_000;
   assert.ok(performanceAgeDays >= 0 && performanceAgeDays <= data.freshness_policy.performance_review_interval_days, `${model.id}: performance snapshot is stale`);
