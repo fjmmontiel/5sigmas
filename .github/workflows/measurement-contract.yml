@@ -6,6 +6,10 @@ on:
       - 'docs/assets/javascripts/measurement.js'
       - 'docs/javascripts/external-links.js'
       - 'scripts/test_measurement_contract.mjs'
+      - 'scripts/test_model_price_performance_measurement.mjs'
+      - 'docs/assets/javascripts/tools/model-price-performance.js'
+      - 'docs/herramientas/precio-rendimiento-modelos.md'
+      - 'locales/en/tools/model-price-performance.md'
       - 'MEASUREMENT.md'
       - '.github/workflows/measurement-contract.yml'
   push:
@@ -14,6 +18,10 @@ on:
       - 'docs/assets/javascripts/measurement.js'
       - 'docs/javascripts/external-links.js'
       - 'scripts/test_measurement_contract.mjs'
+      - 'scripts/test_model_price_performance_measurement.mjs'
+      - 'docs/assets/javascripts/tools/model-price-performance.js'
+      - 'docs/herramientas/precio-rendimiento-modelos.md'
+      - 'locales/en/tools/model-price-performance.md'
       - 'MEASUREMENT.md'
       - '.github/workflows/measurement-contract.yml'
 
@@ -31,5 +39,9 @@ jobs:
           node-version: '22'
       - name: Validate privacy and event semantics
         run: node scripts/test_measurement_contract.mjs
+      - name: Verify model explorer attribution and privacy
+        run: node scripts/test_model_price_performance_measurement.mjs
       - name: Verify runtime syntax
-        run: node --check docs/assets/javascripts/measurement.js
+        run: |
+          node --check docs/assets/javascripts/measurement.js
+          node --check docs/assets/javascripts/tools/model-price-performance.js
