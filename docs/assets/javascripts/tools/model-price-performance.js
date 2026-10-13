@@ -93,6 +93,8 @@
   const focus = root.querySelector('[data-model-focus]');
   let data = null;
   let selectedModelId = null;
+  let lastMeasuredScenario = null;
+  let userEditedScenario = false;
 
   const defaults = {
     inputTokens: 4000,
@@ -449,7 +451,7 @@
         <span>${escapeHtml(strings.latency)} <strong>${escapeHtml(formatMetric(row.ttft_seconds, 2, ' s'))}</strong></span>
         <span>${escapeHtml(strings.context)} <strong>${escapeHtml(formatTokens(row.context_tokens))}</strong></span>
       </div>
-      <div class="s5-model-focus__sources">
+      <div class="s5-model-focus__sources" data-s5-source>
         <span>${escapeHtml(strings.currentPrice)}: ${escapeHtml(formatCurrency(price.input, 2))}/${escapeHtml(formatCurrency(price.output, 2))} MTok</span>
         ${future}
         <a href="${escapeAttribute(row.sources.specs_pricing.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(strings.priceSource)} · ${escapeHtml(strings.verified)} ${escapeHtml(row.sources.specs_pricing.verified_on)}</a>
@@ -481,6 +483,26 @@
     const selected = rows.find((row) => row.id === selectedModelId) || rows[0];
     if (selected) renderFocus(selected);
     else if (focus) focus.innerHTML = '';
+
+    // Count only actual, nonempty results after a successful data fetch.
+    // The scenario signature is local-only; no user inputs, model selections,
+    // query parameters or numerical values are sent to analytics.
+    if (rows.length) {
+      const signature = JSON.stringify(state);
+      if (signature !== lastMeasuredScenario) {
+        lastMeasuredScenario = signature;
+        window.s5Measurement?.track('result_rendered', {
+          tool_id: 'model-price-performance',
+          result_kind: 'comparison'
+        });
+        if (userEditedScenario) {
+          window.s5Measurement?.track('scenario_completed', {
+            tool_id: 'model-price-performance',
+            result_kind: 'comparison'
+          });
+        }
+      }
+    }
   }
 
   function scenarioUrl() {
@@ -577,8 +599,13 @@
     }
   }
 
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', render);
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', render);
+  function onScenarioEdited() {
+    userEditedScenario = true;
+    render();
+  }
+
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', onScenarioEdited);
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', onScenarioEdited);
   root.querySelector('[data-action="share"]')?.addEventListener('click', share);
   root.querySelector('[data-action="export"]')?.addEventListener('click', exportCsv);
   root.querySelector('[data-action="reset"]')?.addEventListener('click', reset);
