@@ -39,6 +39,16 @@
     ],
     "reviewed_not_charted": [
       {
+        "model": "Muse Wonder Full",
+        "status": "reviewed_not_charted",
+        "reason": "Meta released Muse Wonder Full on 2026-10-12 for Muse Code Power/Maximum subscription only: NOT available through the per-token Model API, so cost per API request is not comparable. Artificial Analysis scores it 56 but reports no public API provider or token prices. Sources: https://dev.meta.ai/docs/models ; https://dev.meta.ai/resources/blog/build-with-muse-wonder ; https://artificialanalysis.ai/models/muse-wonder-full ."
+      },
+      {
+        "model": "Muse Wonder",
+        "status": "reviewed_not_charted",
+        "reason": "Meta released Muse Wonder on 2026-10-12 with official Model API pricing $4 input/$20 output per MTok, 1,048,576 context and Artificial Analysis Intelligence Index 52. Held out of the comparable current chart until source-matched output speed and TTFT for the first-party API are both verified (new release and provider performance observations are still changing). Exact model is muse-wonder-1.0; do not substitute Muse Wonder Full. Sources: https://dev.meta.ai/models/muse-wonder ; https://dev.meta.ai/docs/pricing-rate-limits ; https://artificialanalysis.ai/models/muse-wonder ."
+      },
+      {
         "model": "Ling 3.1 Flash",
         "status": "reviewed_not_charted",
         "reason": "Artificial Analysis lists Ling 3.1 Flash as an October 2026 release with complete benchmark metrics, but this run did not establish an independent first-party price/specification surface matching the benchmarked API row. The explorer therefore excludes it until that provenance contract is satisfied."
@@ -209,7 +219,7 @@
         "reason": "No priced comparable API entry in the AA release snapshot."
       }
     ],
-    "latest_release_slug": "claude-haiku-5-5",
+    "latest_release_slug": "muse-wonder",
     "supersession_events": [
       {
         "model": "GPT-6 Sol",
