@@ -69,6 +69,11 @@ context.subject.render(next, [{ model: 'test' }], { trackResult: false });
 assert.equal(events.length, 3, 'only final changed value may count');
 context.subject.render(next, [{ model: 'test' }], { trackCompletion: true });
 assert.equal(events.length, 5);
+// A reset may display a valid default comparison, but must NOT record a
+// second scenario completion: no user-defined scenario was completed.
+context.subject.render(first, [{ model: 'test' }]);
+assert.deepEqual(events.map(e => e.name).slice(-1), ['result_rendered']);
+assert.equal(events.filter(e => e.name === 'scenario_completed').length, 2);
 
 for (const event of events) {
   assert.deepEqual(JSON.parse(JSON.stringify(event.context)), {

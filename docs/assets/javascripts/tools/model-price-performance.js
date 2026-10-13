@@ -562,7 +562,8 @@
     history.replaceState({}, '', window.location.pathname);
     selectedModelId = null;
     setFeedback('');
-    render({ trackCompletion: true });
+    // Reset returns to defaults; it is not a user-completed scenario.
+    render();
   }
 
   function csvCell(value) {
