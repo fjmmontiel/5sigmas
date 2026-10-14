@@ -93,6 +93,8 @@
   const focus = root.querySelector('[data-model-focus]');
   let data = null;
   let selectedModelId = null;
+  let lastMeasuredScenario = null;
+  let lastCompletedScenario = null;
 
   const defaults = {
     inputTokens: 4000,
@@ -131,8 +133,12 @@
   }
 
   function formatNumber(value, digits = 1) {
-    if (!Number.isFinite(Number(value))) return strings.noScore;
+    if (value == null || !Number.isFinite(Number(value))) return strings.noScore;
     return new Intl.NumberFormat(lang, { maximumFractionDigits: digits }).format(Number(value));
+  }
+
+  function formatMetric(value, digits, unit) {
+    return value == null ? strings.noScore : `${formatNumber(value, digits)}${unit}`;
   }
 
   function formatTokens(value) {
@@ -192,7 +198,9 @@
 
   function metricValue(row, key) {
     const metric = axis[key] || axis.cost;
-    const value = Number(metric.value(row));
+    const raw = metric.value(row);
+    if (raw == null) return null;
+    const value = Number(raw);
     return Number.isFinite(value) ? value : null;
   }
 
@@ -422,7 +430,7 @@
         <td>${escapeHtml(formatCurrency(row.scenario.costPerRequest, row.scenario.costPerRequest < .01 ? 4 : 3))}${row.scenario.longContextActive ? `<small>${escapeHtml(strings.longContext)}</small>` : ''}</td>
         <td>${escapeHtml(formatNumber(row.intelligence_index, 0))}</td>
         <td>${escapeHtml(formatNumber(row.output_tokens_per_second, 1))}</td>
-        <td>${escapeHtml(formatNumber(row.ttft_seconds, 2))} s</td>
+        <td>${escapeHtml(formatMetric(row.ttft_seconds, 2, ' s'))}</td>
         <td>${escapeHtml(formatTokens(row.context_tokens))}</td>
         <td><span class="s5-model-signal">${escapeHtml(signal)}</span></td>`;
       tableBody.append(tr);
@@ -439,11 +447,11 @@
       <div class="s5-model-focus__title"><small>${escapeHtml(row.provider)}</small><strong>${escapeHtml(row.model)}</strong><span>${escapeHtml(row.variant)}</span></div>
       <div class="s5-model-focus__facts">
         <span>${escapeHtml(strings.intelligence)} <strong>${escapeHtml(formatNumber(row.intelligence_index, 0))}</strong></span>
-        <span>${escapeHtml(strings.speed)} <strong>${escapeHtml(formatNumber(row.output_tokens_per_second, 1))} tok/s</strong></span>
-        <span>${escapeHtml(strings.latency)} <strong>${escapeHtml(formatNumber(row.ttft_seconds, 2))} s</strong></span>
+        <span>${escapeHtml(strings.speed)} <strong>${escapeHtml(formatMetric(row.output_tokens_per_second, 1, ' tok/s'))}</strong></span>
+        <span>${escapeHtml(strings.latency)} <strong>${escapeHtml(formatMetric(row.ttft_seconds, 2, ' s'))}</strong></span>
         <span>${escapeHtml(strings.context)} <strong>${escapeHtml(formatTokens(row.context_tokens))}</strong></span>
       </div>
-      <div class="s5-model-focus__sources">
+      <div class="s5-model-focus__sources" data-s5-source>
         <span>${escapeHtml(strings.currentPrice)}: ${escapeHtml(formatCurrency(price.input, 2))}/${escapeHtml(formatCurrency(price.output, 2))} MTok</span>
         ${future}
         <a href="${escapeAttribute(row.sources.specs_pricing.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(strings.priceSource)} · ${escapeHtml(strings.verified)} ${escapeHtml(row.sources.specs_pricing.verified_on)}</a>
@@ -465,7 +473,7 @@
     }
   }
 
-  function render() {
+  function render({ trackResult = true, trackCompletion = false } = {}) {
     if (!data) return;
     const { state, rows } = activeRows();
     renderSummary(rows);
@@ -475,6 +483,29 @@
     const selected = rows.find((row) => row.id === selectedModelId) || rows[0];
     if (selected) renderFocus(selected);
     else if (focus) focus.innerHTML = '';
+
+    emitScenarioMeasurement(state, rows, { trackResult, trackCompletion });
+  }
+
+  function emitScenarioMeasurement(state, rows, { trackResult = true, trackCompletion = false } = {}) {
+    // A final change/blur or reset is a completed comparison, not each
+    // intermediate keystroke. No inputs or model choices leave this module.
+    if (!rows.length) return;
+    const signature = JSON.stringify(state);
+    if (trackResult && signature !== lastMeasuredScenario) {
+      lastMeasuredScenario = signature;
+      window.s5Measurement?.track('result_rendered', {
+        tool_id: 'model-price-performance',
+        result_kind: 'comparison'
+      });
+    }
+    if (trackCompletion && signature !== lastCompletedScenario) {
+      lastCompletedScenario = signature;
+      window.s5Measurement?.track('scenario_completed', {
+        tool_id: 'model-price-performance',
+        result_kind: 'comparison'
+      });
+    }
   }
 
   function scenarioUrl() {
@@ -508,11 +539,11 @@
 
   function exportCsv() {
     const { state, rows } = activeRows();
-    const header = ['id','provider','model','variant','input_tokens','output_tokens','cost_usd_per_request','intelligence_index','output_tokens_per_second','ttft_seconds','context_tokens','frontier','pricing_source','benchmark_source'];
+    const header = ['id','provider','model','variant','input_tokens','output_tokens','cost_usd_per_request','intelligence_index','output_tokens_per_second','ttft_seconds','context_tokens','frontier','pricing_source','benchmark_source','performance_availability','performance_checked_on'];
     const csvRows = rows.map((row) => [
       row.id, row.provider, row.model, row.variant, state.inputTokens, state.outputTokens,
       row.scenario.costPerRequest, row.intelligence_index ?? '', row.output_tokens_per_second ?? '', row.ttft_seconds ?? '',
-      row.context_tokens ?? '', row.on_frontier, row.sources.specs_pricing.url, row.sources.benchmark.url
+      row.context_tokens ?? '', row.on_frontier, row.sources.specs_pricing.url, row.sources.benchmark.url, row.sources.benchmark.performance_availability?.status || 'available', row.sources.benchmark.performance_availability?.checked_on || row.sources.benchmark.performance_snapshot_on
     ]);
     const csv = [header, ...csvRows].map((cells) => cells.map(csvCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -531,6 +562,7 @@
     history.replaceState({}, '', window.location.pathname);
     selectedModelId = null;
     setFeedback('');
+    // Reset returns to defaults; it is not a user-completed scenario.
     render();
   }
 
@@ -571,8 +603,10 @@
     }
   }
 
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', render);
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', render);
+  // Render on input for instant visual feedback, but measure completion only
+  // on the final change event (avoids inflating events per keystroke).
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', () => render({ trackResult: false }));
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('change', () => render({ trackCompletion: true }));
   root.querySelector('[data-action="share"]')?.addEventListener('click', share);
   root.querySelector('[data-action="export"]')?.addEventListener('click', exportCsv);
   root.querySelector('[data-action="reset"]')?.addEventListener('click', reset);

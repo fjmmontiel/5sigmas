@@ -116,6 +116,17 @@ try {
       assert.ok(urls.includes(config.url + '#continuous-batching'), 'Missing exact section URL: '+JSON.stringify(urls));
       assert.ok(urls.every(url => config.lang === 'en' ? new URL(url).pathname.startsWith('/en/') : !new URL(url).pathname.startsWith('/en/')),
         'Cross-locale result leaked: ' + JSON.stringify(urls));
+      // Search renders useful lexical citations *before* embedding/reranking
+      // completes. Finding a card is not evidence that generation is ready:
+      // wait for both the completed retrieval and the WebGPU action, instead
+      // of racing against the still-disabled button on slower locales/devices.
+      await page.waitForFunction(() => {
+        const form = document.querySelector('#s5-semantic-search');
+        const submit = form?.querySelector('[data-action=search]');
+        const generate = form?.querySelector('[data-action=generate]');
+        return Boolean(submit && generate && !submit.disabled && !generate.disabled
+          && document.querySelectorAll('.s5-search-card').length > 0);
+      }, null, { timeout: 20000 });
       const modeText = await page.locator('[data-role=mode]').textContent();
       if (!semanticWorks) assert.match(modeText, /unavailable|no disponible/i);
       else assert.match(modeText, /Metadata index|Índice de metadatos/);

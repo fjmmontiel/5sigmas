@@ -34,7 +34,7 @@ hide:
 }
 </script>
 
-<div class="s5-landing s5-tool-page" data-s5-model-explorer data-locale="es">
+<div class="s5-landing s5-tool-page" data-s5-model-explorer data-s5-tool="model-price-performance" data-locale="es">
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas · Modelos · 02</div>
@@ -192,18 +192,18 @@ hide:
     <p><strong>Intelligence Index.</strong> Es el índice compuesto de Artificial Analysis para la configuración indicada. Resume varias evaluaciones de razonamiento, conocimiento, código y trabajo con herramientas. Es una señal útil para comparar, no una medida universal de «inteligencia» ni un sustituto de tus evals.</p>
     <p><strong>Velocidad y TTFT.</strong> Artificial Analysis los mide contra APIs reales. <em>tokens/s</em> describe la velocidad una vez iniciada la salida; TTFT mide el tiempo hasta el primer token. En modelos razonadores, la latencia puede estar dominada por el tiempo de deliberación y cambiar mucho con el esfuerzo elegido.</p>
     <p><strong>Frontera.</strong> No se calcula una puntuación secreta ni se asignan pesos arbitrarios. La frontera de Pareto solo identifica configuraciones que no están dominadas simultáneamente en coste e Intelligence Index.</p>
-    <p class="s5-tool-method__notes">Datos verificados el 8 de octubre de 2026 contra Artificial Analysis Intelligence Index v4.3.2. El registro de releases revisa todas las entradas nuevas desde el snapshot anterior; el gráfico contiene 18 configuraciones actuales con procedencia completa de precio, contexto, Intelligence Index, velocidad y TTFT. Las releases revisadas que todavía no cumplen ese contrato quedan registradas en el dataset con un motivo explícito de exclusión. Las superficies que Artificial Analysis marca como obsoletas o históricas se retiran del conjunto actual: este audit elimina Gemini 3.6 Flash y registra también Gemini 3.7 Flash como parte de la cadena de supersesión hacia Gemini 3.8 Flash.</p>
+    <p class="s5-tool-method__notes">Datos verificados el 13 de octubre de 2026 contra Artificial Analysis Intelligence Index v4.3.2. El registro de releases revisa todas las entradas nuevas desde el snapshot anterior; el gráfico contiene 18 configuraciones actuales con procedencia de precio, contexto e Intelligence Index. La velocidad y TTFT se muestran solo cuando están disponibles. Mistral Large 4 no dispone actualmente de mediciones públicas de rendimiento en Artificial Analysis: permanece en las comparaciones de precio/inteligencia, muestra «sin dato» en velocidad/TTFT y queda fuera de esos ejes, rankings y filtros de latencia. Las releases revisadas que todavía no cumplen ese contrato quedan registradas en el dataset con un motivo explícito de exclusión. Las superficies que Artificial Analysis marca como obsoletas o históricas se retiran del conjunto actual: este audit elimina Gemini 3.6 Flash y registra también Gemini 3.7 Flash como parte de la cadena de supersesión hacia Gemini 3.8 Flash.</p>
   </div>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-sources-title">
+<section class="s5-section" data-s5-source aria-labelledby="s5-model-sources-title">
   <details class="s5-model-sources-details">
     <summary id="s5-model-sources-title">Fuentes y fecha de verificación</summary>
     <div class="s5-model-sources" data-model-sources></div>
   </details>
 </section>
 
-<section class="s5-section" aria-labelledby="s5-model-related">
+<section class="s5-section" data-s5-related-content aria-labelledby="s5-model-related">
   <div class="s5-section-head"><h2 id="s5-model-related">Para decidir con más contexto</h2></div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/temas/evaluacion-modelos/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">Evaluación de modelos</span><span class="s5-list-row__desc">Por qué un benchmark no es el objetivo y cómo construir evals representativas.</span><span class="s5-list-row__meta">Concepto</span></a>
