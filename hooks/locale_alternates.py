@@ -297,6 +297,22 @@ def _source_route_from_sitemap_url(url: str, language: str) -> str:
     return route
 
 
+def _spanish_source_is_published(source: str) -> bool:
+    """A public noindex page remains a valid language-switch destination.
+
+    This is intentionally separate from _spanish_public_routes(), which only
+    lists indexable pages for sitemap hreflang.
+    """
+    path = ROOT / "docs" / source
+    if not path.is_file():
+        return False
+    meta = _source_frontmatter(path)
+    status = str(meta.get("publication_status") or "").strip().lower()
+    return status not in {"draft", "hidden", "wip", "private"} and not any(
+        slug in _src_route(source) for slug in _wip_series()
+    )
+
+
 def on_post_page(output: str, page, config, **kwargs) -> str:
     src_path = page.file.src_path.lstrip("/")
     current_language = _current_language(config)
@@ -316,8 +332,11 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     english_source_route = _src_route(english_source)
     translated_to_english = english_source in published_english
 
+    spanish_selector_exists = spanish_route in spanish_routes or (
+        translated_to_english and _spanish_source_is_published(spanish_source)
+    )
     selector_targets = {
-        "es": spanish_route if spanish_route in spanish_routes else "/",
+        "es": spanish_route if spanish_selector_exists else "/",
         "en": _english_route(english_source_route) if translated_to_english else "/en/",
     }
 
