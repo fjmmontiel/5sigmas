@@ -62,8 +62,9 @@ def frontmatter(path: Path) -> dict[str, Any]:
 def hidden(path: Path) -> bool:
     meta = frontmatter(path)
     status = str(meta.get("publication_status") or "").strip().lower()
-    robots = str(meta.get("robots") or "").strip().lower()
-    return status in NON_PUBLIC_STATES or "noindex" in robots
+    # A noindex directive controls search indexing, not public reachability.
+    # Publicly accessible noindex concepts still require an equivalent EN route.
+    return status in NON_PUBLIC_STATES
 
 
 def expected_editorial_routes() -> set[str]:
