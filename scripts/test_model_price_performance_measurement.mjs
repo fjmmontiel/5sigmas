@@ -27,21 +27,29 @@ assert.match(runtime, /'\btool_open\b'/);
 assert.match(runtime, /'\bmeaningful_input_change\b'/);
 assert.match(runtime, /'\bsource_click\b'/);
 assert.match(runtime, /'\brelated_content_click\b'/);
-assert.match(controller, /addEventListener\('input', \(\) => render\(\{ trackResult: false \}\)\)/);
+assert.match(controller, /addEventListener\('input', \(\) => render\(\)\)/);
 assert.match(controller, /addEventListener\('change', \(\) => render\(\{ trackCompletion: true \}\)\)/);
-assert.match(controller, /emitScenarioMeasurement\(state, rows, \{ trackResult, trackCompletion \}\)/);
+assert.match(controller, /emitScenarioMeasurement\(state, rows, \{ trackCompletion \}\)/);
 
-const begin = controller.indexOf('  function emitScenarioMeasurement(state, rows, { trackResult = true, trackCompletion = false } = {}) {');
+const begin = controller.indexOf('  function emitScenarioMeasurement(state, rows, { trackCompletion = false } = {}) {');
 const finish = controller.indexOf('\n  function scenarioUrl()', begin);
 assert.ok(begin > 0 && finish > begin, 'measurement code is missing from real controller');
 const helper = controller.slice(begin, finish);
 const events = [];
+let consentGranted = true;
+const testFields = { inputTokens: { validity: { valid: true } } };
 const context = {
-  window: { s5Measurement: { track(name, context) { events.push({ name, context }); } } },
+  testFields,
+  window: { s5Measurement: { track(name, context) {
+    if (!consentGranted) return false;
+    events.push({ name, context });
+    return true;
+  } } },
 };
 vm.runInNewContext([
   'let lastMeasuredScenario = null;',
   'let lastCompletedScenario = null;',
+  'const fields = globalThis.testFields;',
   helper,
   'globalThis.subject = {',
   '  render: (state, rows, options) => emitScenarioMeasurement(state, rows, options),',
@@ -51,29 +59,44 @@ vm.runInNewContext([
 const first = { inputTokens: 4000, outputTokens: 500, provider: 'all' };
 context.subject.render(first, []); // no valid comparison -> no result
 assert.equal(events.length, 0);
+context.subject.render(first, [{ model: 'test' }]); // initial/default render
 context.subject.render(first, [{ model: 'test' }]);
-context.subject.render(first, [{ model: 'test' }]); // same scenario -> deduplicated
-assert.deepEqual(events.map(e => e.name), ['result_rendered']);
+assert.equal(events.length, 0, 'landing on a default result is not a conversion');
 
 const changed = { ...first, inputTokens: 6000 };
-context.subject.render(changed, [{ model: 'test' }], { trackResult: false }); // typing
-assert.equal(events.length, 1, 'keystrokes must not emit completion or result events');
+context.subject.render(changed, [{ model: 'test' }]); // typing
+assert.equal(events.length, 0, 'keystrokes must not emit completion or result events');
 context.subject.render(changed, [{ model: 'test' }], { trackCompletion: true }); // change/blur
 context.subject.render(changed, [{ model: 'test' }], { trackCompletion: true });
 assert.deepEqual(events.map(e => e.name),
-  ['result_rendered', 'result_rendered', 'scenario_completed']);
+  ['result_rendered', 'scenario_completed']);
 context.subject.render({ ...changed, provider: 'nobody' }, [], { trackCompletion: true }); // empty
-assert.equal(events.length, 3, 'empty results cannot count as a completed scenario');
+assert.equal(events.length, 2, 'empty results cannot count as a completed scenario');
 const next = { ...changed, provider: 'OpenAI' };
-context.subject.render(next, [{ model: 'test' }], { trackResult: false });
-assert.equal(events.length, 3, 'only final changed value may count');
+context.subject.render(next, [{ model: 'test' }]);
+assert.equal(events.length, 2, 'only final changed value may count');
+testFields.inputTokens.validity.valid = false;
 context.subject.render(next, [{ model: 'test' }], { trackCompletion: true });
-assert.equal(events.length, 5);
-// A reset may display a valid default comparison, but must NOT record a
-// second scenario completion: no user-defined scenario was completed.
+assert.equal(events.length, 2, 'invalid native form fields cannot count as completion even if a clamped result renders');
+testFields.inputTokens.validity.valid = true;
+context.subject.render(next, [{ model: 'test' }], { trackCompletion: true });
+assert.equal(events.length, 4);
+// A reset displays defaults; neither conversion-related event may be emitted.
 context.subject.render(first, [{ model: 'test' }]);
-assert.deepEqual(events.map(e => e.name).slice(-1), ['result_rendered']);
+assert.equal(events.length, 4, 'reset/default rendering cannot count as useful conversion');
 assert.equal(events.filter(e => e.name === 'scenario_completed').length, 2);
+
+// An event declined by the consent-gated runtime is not buffered or marked as
+// transmitted. Only a fresh, explicit interaction after consent may emit it.
+const later = { ...next, inputTokens: 8000 };
+consentGranted = false;
+context.subject.render(later, [{ model: 'test' }], { trackCompletion: true });
+assert.equal(events.length, 4);
+consentGranted = true;
+context.subject.render(later, [{ model: 'test' }]);
+assert.equal(events.length, 4, 'consent does not replay past conversions');
+context.subject.render(later, [{ model: 'test' }], { trackCompletion: true });
+assert.equal(events.length, 6, 'a fresh valid completion is measured after consent');
 
 for (const event of events) {
   assert.deepEqual(JSON.parse(JSON.stringify(event.context)), {

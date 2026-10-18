@@ -20,6 +20,8 @@ ENV/
 tmp/
 drafts/
 node_modules/*
+**/node_modules/
+mcp-worker/.wrangler/
 .node*
 .exports/*
 *playwright*

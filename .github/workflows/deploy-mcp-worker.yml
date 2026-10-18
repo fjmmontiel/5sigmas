@@ -1,16 +1,14 @@
 name: Validate and deploy 5sigmas remote MCP
 
 on:
+  workflow_call:
   pull_request:
     paths:
       - 'mcp-worker/**'
       - 'docs/robots.txt'
-      - '.github/workflows/deploy-mcp-worker.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'mcp-worker/**'
-      - 'docs/robots.txt'
+      - 'measurement-deployment.json'
+      - 'scripts/build_measurement_catalog.py'
+      - 'scripts/configure_measurement.py'
       - '.github/workflows/deploy-mcp-worker.yml'
   workflow_dispatch:
 
@@ -33,7 +31,17 @@ jobs:
         with:
           sparse-checkout: |
             mcp-worker
+            measurement-deployment.json
+            docs/**/*.md
+            docs/**/*.html
+            docs/agent-tools.json
             docs/robots.txt
+            docs/assets/javascripts/measurement.js
+            locales/en/**/*.md
+            locales/en/**/*.html
+            scripts/build_measurement_catalog.py
+            scripts/configure_measurement.py
+            scripts/measurement_test_harness.mjs
             scripts/verify_ai_discovery_live.py
           sparse-checkout-cone-mode: false
 
@@ -42,13 +50,21 @@ jobs:
           node-version: '22'
 
       - name: Install pinned MCP and Workers dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Build finite public measurement vocabulary
+        run: |
+          python3 ../scripts/build_measurement_catalog.py
+          python3 ../scripts/configure_measurement.py --validate-only
 
       - name: Unit-test search, fetch and AI crawler policy
         run: npm test
 
       - name: Build Worker without publishing
         run: npm run deploy:dry
+
+      - name: Verify measurement in native Workers SQLite
+        run: node scripts/verify-measurement-local.mjs
 
       - name: Verify MCP protocol end-to-end with official client
         shell: bash
@@ -82,7 +98,7 @@ jobs:
         run: python3 ../scripts/verify_ai_discovery_live.py --origin https://5sigmas.com
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -97,7 +113,17 @@ jobs:
         with:
           sparse-checkout: |
             mcp-worker
+            measurement-deployment.json
+            docs/**/*.md
+            docs/**/*.html
+            docs/agent-tools.json
             docs/robots.txt
+            docs/assets/javascripts/measurement.js
+            locales/en/**/*.md
+            locales/en/**/*.html
+            scripts/build_measurement_catalog.py
+            scripts/configure_measurement.py
+            scripts/measurement_test_harness.mjs
             scripts/verify_ai_discovery_live.py
           sparse-checkout-cone-mode: false
 
@@ -106,7 +132,12 @@ jobs:
           node-version: '22'
 
       - name: Install pinned MCP and Workers dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Build finite public measurement vocabulary
+        run: |
+          python3 ../scripts/build_measurement_catalog.py
+          python3 ../scripts/configure_measurement.py --validate-only
 
       - name: Verify Cloudflare deployment credentials
         shell: bash
@@ -133,3 +164,6 @@ jobs:
             sleep 5
           done
           exit 1
+
+      - name: Verify measurement storage before frontend activation
+        run: python3 ../scripts/configure_measurement.py

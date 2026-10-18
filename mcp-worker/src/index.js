@@ -2,6 +2,9 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { createMcpHandler } from "agents/mcp/server";
 import { z } from "zod";
 import { fetchDocument, loadGraphs, searchGraphs } from "./search.js";
+import { handleMeasurement } from "./measurement-collector.js";
+import measurementCatalog from "./measurement-catalog.json" with { type: "json" };
+export { MeasurementStore } from "./measurement-store.js";
 
 const SearchResult = z.object({
   id: z.string(),
@@ -112,6 +115,8 @@ function withCors(response) {
 
 export default {
   async fetch(request, env, ctx) {
+    const measurement = await handleMeasurement(request, { ...env, MEASUREMENT_CATALOG: measurementCatalog });
+    if (measurement) return measurement;
     const url = new URL(request.url);
 
     if (url.pathname === "/mcp/health") {

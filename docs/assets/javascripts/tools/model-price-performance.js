@@ -473,7 +473,7 @@
     }
   }
 
-  function render({ trackResult = true, trackCompletion = false } = {}) {
+  function render({ trackCompletion = false } = {}) {
     if (!data) return;
     const { state, rows } = activeRows();
     renderSummary(rows);
@@ -484,27 +484,29 @@
     if (selected) renderFocus(selected);
     else if (focus) focus.innerHTML = '';
 
-    emitScenarioMeasurement(state, rows, { trackResult, trackCompletion });
+    emitScenarioMeasurement(state, rows, { trackCompletion });
   }
 
-  function emitScenarioMeasurement(state, rows, { trackResult = true, trackCompletion = false } = {}) {
-    // A final change/blur or reset is a completed comparison, not each
-    // intermediate keystroke. No inputs or model choices leave this module.
-    if (!rows.length) return;
+  function emitScenarioMeasurement(state, rows, { trackCompletion = false } = {}) {
+    // Only a completed, valid user change can produce conversion events.
+    // Initial/default/reset renders and keystrokes do not prove useful usage.
+    // Input values and model choices remain local to this controller.
+    if (!trackCompletion || !rows.length
+      || Object.values(fields).some((field) => field.validity?.valid === false)) return;
     const signature = JSON.stringify(state);
-    if (trackResult && signature !== lastMeasuredScenario) {
-      lastMeasuredScenario = signature;
-      window.s5Measurement?.track('result_rendered', {
+    if (signature !== lastMeasuredScenario) {
+      const queued = window.s5Measurement?.track('result_rendered', {
         tool_id: 'model-price-performance',
         result_kind: 'comparison'
       });
+      if (queued) lastMeasuredScenario = signature;
     }
-    if (trackCompletion && signature !== lastCompletedScenario) {
-      lastCompletedScenario = signature;
-      window.s5Measurement?.track('scenario_completed', {
+    if (signature !== lastCompletedScenario) {
+      const queued = window.s5Measurement?.track('scenario_completed', {
         tool_id: 'model-price-performance',
         result_kind: 'comparison'
       });
+      if (queued) lastCompletedScenario = signature;
     }
   }
 
@@ -605,7 +607,7 @@
 
   // Render on input for instant visual feedback, but measure completion only
   // on the final change event (avoids inflating events per keystroke).
-  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', () => render({ trackResult: false }));
+  root.querySelector('[data-s5-tool-form]')?.addEventListener('input', () => render());
   root.querySelector('[data-s5-tool-form]')?.addEventListener('change', () => render({ trackCompletion: true }));
   root.querySelector('[data-action="share"]')?.addEventListener('click', share);
   root.querySelector('[data-action="export"]')?.addEventListener('click', exportCsv);
