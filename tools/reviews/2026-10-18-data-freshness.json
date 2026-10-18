@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-18",
+  "base_commit": "6de232c43dbbd088735156fe9c8417cc9257785d",
+  "reason": "The existing publication gates rejected expired LLM/voice price reviews and a model release not yet reviewed. This maintenance verifies the sources and updates dated snapshots without changing freshness thresholds or upstream checks.",
+  "voice": {
+    "changes": "Only review dates and their existing ES/EN/test/roadmap counterparts. All rates, editable scenario assumptions, architecture, source URLs and the seven-day freshness policy are unchanged.",
+    "claims_checked": [
+      {
+        "source_index": 1,
+        "components": [
+          "telephony_and_media"
+        ],
+        "findings": {
+          "currency": "USD",
+          "spain_local_outbound_per_minute": 0.0178,
+          "media_streams_per_minute": 0.0044
+        }
+      },
+      {
+        "source_index": 2,
+        "components": [
+          "media_stream_concurrency"
+        ],
+        "findings": {
+          "bidirectional_streams_per_call": 1,
+          "websocket_connections_per_stream": 1,
+          "downstream_stt_sessions": "Editable architecture assumption; not a universal provider quota."
+        }
+      },
+      {
+        "source_index": 3,
+        "components": [
+          "stt"
+        ],
+        "findings": {
+          "gpt_live_transcribe_usd_per_audio_minute": 0.017,
+          "quotas": "Published usage-tier limits do not establish a universal concurrent-session cap."
+        }
+      },
+      {
+        "source_index": 4,
+        "components": [
+          "tts"
+        ],
+        "findings": {
+          "flash_turbo_usd_per_1000_characters": 0.04,
+          "characters_per_minute": "1000 is an editable approximation consistent with the provider table."
+        }
+      },
+      {
+        "source_index": 5,
+        "components": [
+          "tts_concurrency"
+        ],
+        "findings": {
+          "tts_websocket_concurrency": "Generation-time metering; do not substitute audio playback duty or dialogue-session metering.",
+          "heuristic": "The provider gives roughly 100 balanced conversations at concurrency 5; the preset keeps 5% as an editable estimate."
+        }
+      },
+      {
+        "source_index": 6,
+        "components": [
+          "llm"
+        ],
+        "findings": {
+          "gpt_6_luna_standard_input_usd_per_million": 0.1,
+          "gpt_6_luna_standard_output_usd_per_million": 0.5,
+          "long_context": "The higher rates above272K input tokens do not apply to the initial1400-token assumption."
+        }
+      },
+      {
+        "source_index": 7,
+        "components": [
+          "architecture_coverage"
+        ],
+        "findings": {
+          "gpt_live_1_usd_per_session_minute": 0.05,
+          "backend_billing": "Separate model/tool charges; existing exclusion from the cascade decomposition remains justified."
+        }
+      }
+    ],
+    "sources": [
+      {
+        "source_url": "https://www.twilio.com/en-us/voice/pricing/es",
+        "retrieved_at": "2026-10-18T17:42:40.023410+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://www.twilio.com/en-us/voice/pricing/es",
+        "bytes": 790111,
+        "body_sha256": "8ef4cf787238c9d6ca064e1a2100c3174d9cd42d42c5f2082482666a31d8bba6"
+      },
+      {
+        "source_url": "https://www.twilio.com/docs/voice/media-streams",
+        "retrieved_at": "2026-10-18T17:42:40.025372+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://www.twilio.com/docs/voice/media-streams",
+        "bytes": 442964,
+        "body_sha256": "8076a45969b6d2285419262ace93076d46cb969f2d8684810da8970947456c8d"
+      },
+      {
+        "source_url": "https://developers.openai.com/api/docs/models/gpt-live-transcribe",
+        "retrieved_at": "2026-10-18T17:42:40.026878+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://developers.openai.com/api/docs/models/gpt-live-transcribe",
+        "bytes": 431553,
+        "body_sha256": "d26c477c0f3ee3d783e932f6e088685078093669e3569979733806f0f001f7ce"
+      },
+      {
+        "source_url": "https://elevenlabs.io/pricing/api",
+        "retrieved_at": "2026-10-18T17:42:40.029617+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://elevenlabs.io/pricing/api",
+        "bytes": 847852,
+        "body_sha256": "89c8cc2d1ab3c458c01d479c2c4968813a73f1bea334a8654ee50de3df759d21"
+      },
+      {
+        "source_url": "https://elevenlabs.io/docs/overview/models",
+        "retrieved_at": "2026-10-18T17:42:40.384969+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://elevenlabs.io/docs/overview/models",
+        "bytes": 707700,
+        "body_sha256": "7f75acfb836ffc4cb3797cd531e76d8ea137a164bfd3d189131091a85a962f34"
+      },
+      {
+        "source_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "retrieved_at": "2026-10-18T17:42:40.573216+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "bytes": 452380,
+        "body_sha256": "17a34992de5328d59a3904949ebeb3c4629ef4e4153fbe2ee89be137c994886e"
+      },
+      {
+        "source_url": "https://developers.openai.com/api/docs/models/gpt-live-1",
+        "retrieved_at": "2026-10-18T17:42:40.588594+00:00",
+        "retrieval_method": "https_get_public_no_credentials",
+        "status": 200,
+        "final_url": "https://developers.openai.com/api/docs/models/gpt-live-1",
+        "bytes": 429293,
+        "body_sha256": "f3ed80dbb3f2d2a5c53a6cdaab2f3b2a03225eb47ab897b5f03b4c8e2f829dcb"
+      }
+    ]
+  },
+  "llm": {
+    "scope": "Revalidation of all current LLM pricing presets and the explicitly tracked Gemini lifecycle changes; no claim of an exhaustive all-provider model catalogue.",
+    "findings": [
+      "Gemini 3.7 Flash routes to 3.8; no endpoint shutdown claim.",
+      "Gemini 4 Argon paid API available since2026-10-13; scheduled prices verified.",
+      "Gemini 2.5 Flash remains served for existing users; no shutdown claim."
+    ],
+    "unchanged_rates_for_existing_presets": [
+      "anthropic-claude-haiku-5-5",
+      "anthropic-claude-sonnet-5-5",
+      "google-gemini-2-5-flash",
+      "google-gemini-3-5-flash-lite",
+      "google-gemini-3-8-flash",
+      "openai-gpt-5-6-luna",
+      "openai-gpt-5-6-sol",
+      "openai-gpt-5-6-terra",
+      "openai-gpt-6-1-sol",
+      "openai-gpt-6-astra",
+      "openai-gpt-6-luna"
+    ],
+    "added_preset": "google-gemini-4-argon",
+    "removed_duplicate_alias": "google-gemini-3-7-flash",
+    "sources": [
+      {
+        "source": "openai-gpt-6.1-sol",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:32.753985+00:00",
+        "bytes": 454270,
+        "sha256": "9c43eeb7cc81f9b2bc1e992f1cdf5ba2a724a02171bf52ef1a6d052fcd30ae31"
+      },
+      {
+        "source": "openai-gpt-6-astra",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:32.279134+00:00",
+        "bytes": 453373,
+        "sha256": "ee4933450a8a8bbc9aedb4a703fe6f8a3fa56ac54a116c9982dfd73431d33731"
+      },
+      {
+        "source": "openai-gpt-6-luna",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:32.757291+00:00",
+        "bytes": 452380,
+        "sha256": "17a34992de5328d59a3904949ebeb3c4629ef4e4153fbe2ee89be137c994886e"
+      },
+      {
+        "source": "openai-gpt-5.6-sol",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:32.768769+00:00",
+        "bytes": 454672,
+        "sha256": "87d183387c6603020d5fc099c360e066b5c5df05e78f31c27ffc14ed6700f94e"
+      },
+      {
+        "source": "openai-gpt-5.6-terra",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.626298+00:00",
+        "bytes": 453708,
+        "sha256": "a47d857b2012116ec69b6c6e59f39a9d28a9e2282e267d7a80f286d24c24aec8"
+      },
+      {
+        "source": "openai-gpt-5.6-luna",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.460864+00:00",
+        "bytes": 452988,
+        "sha256": "189aefcbd663eaae84632a86d75bf1fe72799d9742efadc8fed781e97c837339"
+      },
+      {
+        "source": "claude-sonnet-5.5",
+        "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "resolved_url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.490304+00:00",
+        "bytes": 430812,
+        "sha256": "3b4b2aab059ae65ca5e0622f2fbc240c0a1d309a048b7962f1c14f95f9efdffb"
+      },
+      {
+        "source": "claude-haiku-5.5",
+        "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "resolved_url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.694896+00:00",
+        "bytes": 436361,
+        "sha256": "56f00f3727072c0fdfa0768935a627680ca120049ad85fd05db028c0e1257b82"
+      },
+      {
+        "source": "google-pricing",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "resolved_url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:34.390807+00:00",
+        "bytes": 257375,
+        "sha256": "69eb059d5331073840af2a16314aaecedcfdefabec82685a61d3bfef655e731e"
+      },
+      {
+        "source": "google-deprecations",
+        "url": "https://ai.google.dev/gemini-api/docs/deprecations",
+        "resolved_url": "https://ai.google.dev/gemini-api/docs/deprecations",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:34.213400+00:00",
+        "bytes": 121029,
+        "sha256": "aa4514e91df2c73000b49f7f8da6855cd3993398dbfc30112f2b9ed3a868d68e"
+      },
+      {
+        "source": "google-argon-availability",
+        "url": "https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/",
+        "resolved_url": "https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:34.340329+00:00",
+        "bytes": 389242,
+        "sha256": "6b01b5eb880fc7ed0c0cbe9c16181069f0df942fe895e3dda2491857f137b5d8"
+      }
+    ]
+  },
+  "model_price_performance": {
+    "changes": "Retains 18 configurations and all their prices, context limits and intelligence scores. The unmodified existing helper refreshed 18 performance snapshots. Four releases have explicit reviewed exclusions. Only four expired provider price/specification review dates were renewed after primary verification. Mistral performance availability recovered; DeepSeek performance is now explicitly labelled as the AA median across providers, separate from first-party scenario prices.",
+    "sources": [
+      {
+        "source": "openai-gpt-6.1-sol",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "resolved_url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:32.753985+00:00",
+        "bytes": 454270,
+        "sha256": "9c43eeb7cc81f9b2bc1e992f1cdf5ba2a724a02171bf52ef1a6d052fcd30ae31"
+      },
+      {
+        "source": "claude-sonnet-5.5",
+        "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "resolved_url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.490304+00:00",
+        "bytes": 430812,
+        "sha256": "3b4b2aab059ae65ca5e0622f2fbc240c0a1d309a048b7962f1c14f95f9efdffb"
+      },
+      {
+        "source": "claude-haiku-5.5",
+        "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "resolved_url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "http_status": 200,
+        "retrieved_at": "2026-10-18T17:45:33.694896+00:00",
+        "bytes": 436361,
+        "sha256": "56f00f3727072c0fdfa0768935a627680ca120049ad85fd05db028c0e1257b82"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/reflection-beam",
+        "resolved_url": "https://artificialanalysis.ai/models/reflection-beam",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:23.219Z",
+        "sha256": "afaf32a04857b36a520cc46f58aeca5de289443ebaf00142c15597b0f93858e7"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/reflection-beam/providers",
+        "resolved_url": "https://artificialanalysis.ai/models/reflection-beam/providers",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:23.287Z",
+        "sha256": "e14d4062183b2cfc7be848919a2fc972e95ef60fb3b4798cdffc6d992620036f"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/muse-spark-open",
+        "resolved_url": "https://artificialanalysis.ai/models/muse-spark-open",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:23.684Z",
+        "sha256": "6e2f7705a8c398ffc1ea27668984962448967ae0ac6a7af5b74565f48d5ccf57"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b",
+        "resolved_url": "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:24.089Z",
+        "sha256": "93b42b8b5e9fefdb3b747ec9f1ad06f7122a9ce238e7ae1c0fcb3f242962c46b"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/nemotron-3-5-super-vl",
+        "resolved_url": "https://artificialanalysis.ai/models/nemotron-3-5-super-vl",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:24.115Z",
+        "sha256": "f3e8a2b78487a622f433068340827f955b39a8e30925752eda959773756e00a5"
+      },
+      {
+        "url": "https://developers.reflection.ai/llms.txt",
+        "resolved_url": "https://developers.reflection.ai/llms.txt",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:23.167Z",
+        "sha256": "75482fb7150c71984d9262384720349aa820af1ff802b5e000f22b28d4ca17fa"
+      },
+      {
+        "url": "https://docs.mistral.ai/models/mistral-large",
+        "resolved_url": "https://docs.mistral.ai/models/mistral-large",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:47:23.328Z",
+        "sha256": "2cc1609f02af8c067578dc309f5e34a1255e324fb75d3e0538574df66d0064a7"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/claude-sonnet-5-5/",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.076Z",
+        "sha256": "676a8e58266ef1ace98d42d0669a04399c44f7b4eaa176c64132fa628d9d0ca8"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/claude-haiku-5-5/",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.336Z",
+        "sha256": "8213867b1f290dd1d11b888d12127f75471163c3f4cddc4f28922068a2eaeabf"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.465Z",
+        "sha256": "048a0298f31a037745b6bc6db4c36c1da891361fcd99cb159254041e78046c7f"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/claude-fable-5-1/",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.566Z",
+        "sha256": "dcbbacaaf6368f70486f683a12770a8a47464a6da5642b0711cc0cb3b58de7e9"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gpt-6-astra",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.665Z",
+        "sha256": "5aaa03ba45048d858d66e7719e27bd30e4ca83c1dd18d2be62db7c732681b70e"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gpt-6-1-sol",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.695Z",
+        "sha256": "c09536162d1d42f2245842f1716cc83c4da08275a9b9c68b0d33675a16b1cfba"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gpt-6-luna/",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.811Z",
+        "sha256": "420a484136aabf2d5e657ddffc8ff6aed3b12eeeeb928bfc3bff62884e99d857"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gpt-5-6-terra",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.846Z",
+        "sha256": "b4be63be6b640fd4d35e535c6ecc2abf81206c52762fc9323f82c6d366d41f9e"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gemini-3-8-flash",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:12.902Z",
+        "sha256": "c60635ed7234297b56ce1936964233fd046309a5082baffec616803746302a1d"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/grok-4-7-high",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:13.228Z",
+        "sha256": "3e065212b294ae9d65d3bf0142dcaafcf3b6e9d13cb9afdf76e15510f013b63f"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:13.477Z",
+        "sha256": "c1ae415368bae39a7a2e239bb5f889333b1810f3a15b7f59819010f693271cc0"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/qwen3-8-max",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:14.433Z",
+        "sha256": "6833fdba14e3e0c0bf7869c9da17032b251ae4d82a26866955d352f8c12d16f6"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/muse-spark-1-3",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:14.469Z",
+        "sha256": "8418406b7813c2261e073ddce7d15c7cb3a5bb44315652f0bb4897eab72fe705"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:14.863Z",
+        "sha256": "57b22455798cbe6254fed5864cf2657e242839cff14083a7513d731b7a29a87d"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/step-5",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:16.190Z",
+        "sha256": "8cfc6d2f10b75aee57bdc6b69e8c937084857de1af3539232dcc6e545ccfa419"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:16.361Z",
+        "sha256": "8565fdb9b585f94b5304e49f0fef936b22bcdc724f82dd84593d787c7edf11e7"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/glm-5-3-flash/",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:16.875Z",
+        "sha256": "7f6cd59f3f66a126cd5617063d07ae88e41ac9b14fa966859546559557ec7abf"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/mistral-large-4",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:16.992Z",
+        "sha256": "026cbfe13d5a8bd64a53a11e41529d80908d67b2e6e386a6cf2838606d95cd15"
+      },
+      {
+        "url": "https://huggingface.co/meta-models/Muse-Spark-Open-816B-A42B",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:17.256Z",
+        "sha256": "8b97fdb56bd57c9d50d56476a6b45641e762ba1048cc658c269aa733a0ece606"
+      },
+      {
+        "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:17.657Z",
+        "sha256": "60d8f4b1da823cb320175ca28bf9b13f193bbed38419a09bf879b60e537ea363"
+      },
+      {
+        "url": "https://artificialanalysis.ai/models/gemini-4-argon",
+        "status": 200,
+        "retrieved_at": "2026-10-18T17:53:18.038Z",
+        "sha256": "25cd4255cccd4bec34f3331208393b32b9845c09d12dcc15f3678869c17494bf"
+      },
+      {
+        "url": "https://developers.reflection.ai/models.md",
+        "status": 200,
+        "reviewed_on": "2026-10-18",
+        "sha256": "f65a6f41dc2fa0f4566ba71063ae5825a98c826edce161892844dbe293e531ba"
+      },
+      {
+        "url": "https://developers.reflection.ai/api-overview.md",
+        "status": 200,
+        "reviewed_on": "2026-10-18",
+        "sha256": "4504939fea7b34750c2bdc7bc75a50768e472f03360537565f82e4eede434ca7"
+      },
+      {
+        "url": "https://developers.reflection.ai/third-party-providers.md",
+        "status": 200,
+        "reviewed_on": "2026-10-18",
+        "sha256": "28678aff6f74ed07321e667359037df5b8a0c218e7947f64a7a840c0a5f3f66e"
+      }
+    ]
+  },
+  "validation": {
+    "llm_cost_latency_math": "PASS, including the Gemini 4 Argon scheduled-price boundary",
+    "voice_cost_capacity_math_and_provenance": "PASS",
+    "model_price_performance_math_and_provenance": "PASS",
+    "cross_tool_freshness": "PASS, nine surfaces",
+    "model_freshness": "PASS, 18 configurations and 40 reviewed exclusions",
+    "model_upstream": "PASS, unmodified existing helper after its real-source refresh",
+    "negative_stale_copy_and_older_than_seven_days": "PASS, both rejected"
+  },
+  "evidence_scope": "Source receipts record the public response bytes reviewed on this date. They are evidence of this review, not a promise that a volatile source remains unchanged. No raw source documents or credentials are included."
+}

@@ -145,15 +145,31 @@ assert.deepEqual(haiku55.long_context, {threshold_input_tokens:100000,input_mult
   assert.equal(future.active_price_effective_from, '2027-01-01');
 }
 
+{
+  const argon = presets.get('google-gemini-4-argon');
+  assert.ok(argon, 'Gemini 4 Argon paid-API preset required');
+  assert.match(argon.notes.en, /Implicit caching only/);
+  assert.equal(argon.valid_through, '2026-11-30');
+  const before = resolvePricing(argon, '2026-11-30T23:59:59Z');
+  assert.deepEqual([before.input_usd_per_million, before.cached_input_usd_per_million, before.output_usd_per_million], [2, 0.1, 10]);
+  const after = resolvePricing(argon, '2026-12-01T00:00:00Z');
+  assert.deepEqual([after.input_usd_per_million, after.cached_input_usd_per_million, after.output_usd_per_million], [4, 0.2, 20]);
+  assert.equal(after.active_price_effective_from, '2026-12-01');
+}
+
 assert.equal(pricing.schema_version, 3);
-assert.equal(pricing.updated_at, '2026-10-09');
+assert.equal(pricing.updated_at, '2026-10-18');
 assert.equal(pricing.freshness_policy?.review_interval_days, 7, 'pricing freshness policy must be explicit');
 assert.ok(pricing.release_coverage?.included?.includes('GPT-6.1 Sol'));
 assert.ok(pricing.release_coverage?.included?.includes('Claude Sonnet 5.5'));
 assert.ok(pricing.release_coverage?.included?.includes('Claude Haiku 5.5'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'GPT-6 Sol'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Claude Sonnet 5'));
-assert.ok(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'));
+assert.ok(pricing.release_coverage?.included?.includes('Gemini 4 Argon'));
+assert.equal(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'), false);
+assert.equal(presets.has('google-gemini-3-7-flash'), false, 'Gemini 3.7 alias must not duplicate the current 3.8 pricing preset');
+assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.7 Flash' && row.source === 'https://ai.google.dev/gemini-api/docs/deprecations'));
+assert.match(presets.get('google-gemini-2-5-flash').notes.en, /existing Gemini 2.5 users/);
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.6 Flash'));
 assert.equal(presets.has('google-gemini-3-6-flash'), false, 'Previous-generation Gemini 3.6 preset must be retired');
 assert.equal(presets.has('openai-gpt-6-sol'), false, 'GPT-6 Sol must be retired after GPT-6.1 Sol');
