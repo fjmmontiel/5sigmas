@@ -91,6 +91,31 @@ for (const spec of cases) {
       path: `${artifactDir}/llm-cost-latency-${spec.locale}-${viewport.name}.png`,
       fullPage: true
     });
+
+    // Shared Gemini 3.7 scenarios must follow Google's documented 3.8
+    // successor, including scenarios with explicitly overridden prices.
+    for (const manual of [false, true]) {
+      const query = new URLSearchParams({ m: 'google-gemini-3-7-flash', in: '7000', out: '900', cache: '25' });
+      if (manual) {
+        query.set('pin', '0.9');
+        query.set('pcache', '0.09');
+        query.set('pout', '4.5');
+      }
+      await page.goto(`${base}${spec.route}?${query}`, { waitUntil: 'networkidle' });
+      await page.waitForFunction(() => document.querySelector('[data-field="model"]')?.options.length >= 5);
+      const selectedModel = await page.locator('[data-field="model"]').inputValue();
+      if (selectedModel !== 'google-gemini-3-8-flash') failures.push(`${spec.route} ${viewport.name}: legacy Gemini scenario lost its successor`);
+      for (const [field, value] of [['inputTokens', '7000'], ['outputTokens', '900'], ['cacheHitRate', '25']]) {
+        if (await page.locator(`[data-field="${field}"]`).inputValue() !== value) failures.push(`${spec.route} ${viewport.name}: legacy scenario lost ${field}`);
+      }
+      if (manual) {
+        for (const [field, value] of [['inputPrice', '0.9'], ['cachedInputPrice', '0.09'], ['outputPrice', '4.5']]) {
+          if (Number(await page.locator(`[data-field="${field}"]`).inputValue()) !== Number(value)) failures.push(`${spec.route} ${viewport.name}: legacy scenario overwrote manual ${field}`);
+        }
+      }
+      await page.locator('[data-action="share"]').click();
+      if (new URL(page.url()).searchParams.get('m') !== 'google-gemini-3-8-flash') failures.push(`${spec.route} ${viewport.name}: sharing did not canonicalize the retired Gemini preset`);
+    }
     await page.close();
   }
 }

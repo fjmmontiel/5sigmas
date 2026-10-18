@@ -103,10 +103,11 @@ const sol61 = presets.get('openai-gpt-6-1-sol');
 const luna6 = presets.get('openai-gpt-6-luna');
 const sol56 = presets.get('openai-gpt-5-6-sol');
 const gemini38 = presets.get('google-gemini-3-8-flash');
+const argon = presets.get('google-gemini-4-argon');
 
 for (const [label, preset] of [
   ['Claude Sonnet 5.5', sonnet55], ['Claude Haiku 5.5', haiku55], ['GPT-6 Astra', astra], ['GPT-6.1 Sol', sol61],
-  ['GPT-6 Luna', luna6], ['GPT-5.6 Sol', sol56], ['Gemini 3.8 Flash', gemini38]
+  ['GPT-6 Luna', luna6], ['GPT-5.6 Sol', sol56], ['Gemini 3.8 Flash', gemini38], ['Gemini 4 Argon', argon]
 ]) assert.ok(preset, `${label} preset required`);
 
 assert.deepEqual([sonnet55.input_usd_per_million, sonnet55.cached_input_usd_per_million, sonnet55.output_usd_per_million], [2, 0.1, 10]);
@@ -146,19 +147,43 @@ assert.deepEqual(haiku55.long_context, {threshold_input_tokens:100000,input_mult
 }
 
 {
-  const argon = presets.get('google-gemini-4-argon');
-  assert.ok(argon, 'Gemini 4 Argon paid-API preset required');
-  assert.match(argon.notes.en, /Implicit caching only/);
+  // Argon uses one published Standard tier, including prompts above the
+  // OpenAI/Haiku thresholds, and only its stated calendar transition.
+  const lastIntroductorySecond = '2026-11-30T23:59:59Z';
+  const firstStandardSecond = '2026-12-01T00:00:00Z';
+  const introductory = resolvePricing(argon, lastIntroductorySecond);
+  const standard = resolvePricing(argon, firstStandardSecond);
+  assert.deepEqual([
+    introductory.input_usd_per_million,
+    introductory.cached_input_usd_per_million,
+    introductory.output_usd_per_million
+  ], [2, 0.1, 10]);
+  assert.deepEqual([
+    standard.input_usd_per_million,
+    standard.cached_input_usd_per_million,
+    standard.output_usd_per_million
+  ], [4, 0.2, 20]);
   assert.equal(argon.valid_through, '2026-11-30');
-  const before = resolvePricing(argon, '2026-11-30T23:59:59Z');
-  assert.deepEqual([before.input_usd_per_million, before.cached_input_usd_per_million, before.output_usd_per_million], [2, 0.1, 10]);
-  const after = resolvePricing(argon, '2026-12-01T00:00:00Z');
-  assert.deepEqual([after.input_usd_per_million, after.cached_input_usd_per_million, after.output_usd_per_million], [4, 0.2, 20]);
-  assert.equal(after.active_price_effective_from, '2026-12-01');
+  assert.equal(standard.active_price_effective_from, '2026-12-01');
+  for (const [cacheHitRate, introductoryCost, standardCost] of [
+    [0, 0.61, 1.22], [50, 0.325, 0.65], [100, 0.04, 0.08]
+  ]) {
+    const scenario = {
+      ...base, inputTokens: 300_000, outputTokens: 1_000, cacheHitRate,
+      inputPrice: undefined, cachedInputPrice: undefined, outputPrice: undefined
+    };
+    const before = calculate({...scenario, asOfDate: lastIntroductorySecond}, argon);
+    const after = calculate({...scenario, asOfDate: firstStandardSecond}, argon);
+    close(before.cost.costPerRequest, introductoryCost, 1e-12, `Argon introductory cost at ${cacheHitRate}% cache`);
+    close(after.cost.costPerRequest, standardCost, 1e-12, `Argon December cost at ${cacheHitRate}% cache`);
+    assert.equal(before.pricing.longContextActive, false, 'Argon has no published long-context surcharge');
+    assert.equal(after.pricing.longContextActive, false, 'Argon December pricing has no published long-context surcharge');
+  }
 }
 
 assert.equal(pricing.schema_version, 3);
-assert.equal(pricing.updated_at, '2026-10-18');
+assert.match(pricing.updated_at, /^20\d{2}-\d{2}-\d{2}$/);
+assert.equal(pricing.release_coverage?.reviewed_through, pricing.updated_at);
 assert.equal(pricing.freshness_policy?.review_interval_days, 7, 'pricing freshness policy must be explicit');
 assert.ok(pricing.release_coverage?.included?.includes('GPT-6.1 Sol'));
 assert.ok(pricing.release_coverage?.included?.includes('Claude Sonnet 5.5'));
@@ -166,15 +191,15 @@ assert.ok(pricing.release_coverage?.included?.includes('Claude Haiku 5.5'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'GPT-6 Sol'));
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Claude Sonnet 5'));
 assert.ok(pricing.release_coverage?.included?.includes('Gemini 4 Argon'));
-assert.equal(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'), false);
-assert.equal(presets.has('google-gemini-3-7-flash'), false, 'Gemini 3.7 alias must not duplicate the current 3.8 pricing preset');
-assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.7 Flash' && row.source === 'https://ai.google.dev/gemini-api/docs/deprecations'));
-assert.match(presets.get('google-gemini-2-5-flash').notes.en, /existing Gemini 2.5 users/);
+assert.equal(pricing.release_coverage?.reviewed_not_included?.some((row) => row.model === 'Gemini 4 Argon'), false, 'Argon is now available through the Gemini API');
 assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.6 Flash'));
+assert.ok(pricing.release_coverage?.removed?.some((row) => row.model === 'Gemini 3.7 Flash'));
+assert.equal(presets.has('google-gemini-3-7-flash'), false, 'Gemini 3.7 requests now route to Gemini 3.8');
 assert.equal(presets.has('google-gemini-3-6-flash'), false, 'Previous-generation Gemini 3.6 preset must be retired');
 assert.equal(presets.has('openai-gpt-6-sol'), false, 'GPT-6 Sol must be retired after GPT-6.1 Sol');
 assert.equal(presets.has('anthropic-claude-sonnet-5'), false, 'Claude Sonnet 5 must be retired after Sonnet 5.5');
 assert.ok(pricing.presets.length >= 10, 'expected a current, sourced pricing preset set');
+assert.deepEqual([...pricing.release_coverage.included].sort(), pricing.presets.map((preset) => preset.model).sort(), 'release coverage must describe the selectable presets');
 
 for (const preset of pricing.presets) {
   assert.match(preset.id, /^[a-z0-9-]+$/);

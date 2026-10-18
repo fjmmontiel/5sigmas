@@ -250,7 +250,13 @@
       if (!query.has(key) || !fields[name]) continue;
       fields[name].value = query.get(key);
     }
-    if (query.has(params.model) && modelSelect) modelSelect.value = query.get(params.model);
+    if (query.has(params.model) && modelSelect) {
+      const requestedModel = query.get(params.model);
+      // Google routes the retired Gemini 3.7 API model to 3.8. Keep shared
+      // scenarios on that same successor while preserving any manual rates.
+      modelSelect.value = requestedModel === 'google-gemini-3-7-flash'
+        ? 'google-gemini-3-8-flash' : requestedModel;
+    }
   }
 
   function reset() {
