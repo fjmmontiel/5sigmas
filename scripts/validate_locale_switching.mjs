@@ -317,13 +317,27 @@ await assertTranslatedPair({ es: '/herramientas/', en: '/en/tools/' });
 await assertTranslatedPair({ es: '/herramientas/coste-latencia-llm/', en: '/en/tools/llm-cost-latency/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
-const untranslated = '/temas/agi/';
-await gotoWithRetry(`${base}${untranslated}`);
-await assertNoPageAlternates(untranslated);
-const untranslatedTargets = await languageTargets();
-const untranslatedEnglish = untranslatedTargets.find((item) => item.hreflang === 'en' || item.text === 'English');
-if (normalizeTarget(untranslatedEnglish?.href) !== '/en/') failures.push(`${untranslated}: until translated, English selector should safely fall back to /en/; got ${JSON.stringify(untranslatedEnglish?.href)}`);
-if (esSitemap.includes(`hreflang="en" href="${absolute(`/en${untranslated}`)}"`)) failures.push(`${untranslated}: Spanish sitemap must not advertise an English equivalent before it exists`);
+// Noindex is not unpublished: concept pages must switch languages, but stay out
+// of the indexable sitemap/hreflang set.
+for (const slug of ['agi', 'ia-generativa', 'multimodalidad']) {
+  const es = `/temas/${slug}/`;
+  const en = `/en/temas/${slug}/`;
+  for (const route of [es, en]) {
+    const response = await gotoWithRetry(`${base}${route}`);
+    if (!response?.ok()) {
+      failures.push(`${route}: expected published concept route, got HTTP ${response?.status() ?? 'no response'}`);
+      continue;
+    }
+    await assertNoPageAlternates(route);
+    const targets = await languageTargets();
+    const spanish = targets.find((item) => item.hreflang === 'es' || item.text === 'Español');
+    const english = targets.find((item) => item.hreflang === 'en' || item.text === 'English');
+    if (normalizeTarget(spanish?.href) !== es) failures.push(`${route}: Spanish selector should preserve concept route ${es}; got ${JSON.stringify(spanish?.href)}`);
+    if (normalizeTarget(english?.href) !== en) failures.push(`${route}: English selector should preserve concept route ${en}; got ${JSON.stringify(english?.href)}`);
+  }
+  if (esSitemap.includes(`<loc>${absolute(es)}</loc>`)) failures.push(`${es}: noindex concept unexpectedly present in ES sitemap`);
+  if (enSitemap.includes(`<loc>${absolute(en)}</loc>`)) failures.push(`${en}: noindex concept unexpectedly present in EN sitemap`);
+}
 
 await browser.close();
 

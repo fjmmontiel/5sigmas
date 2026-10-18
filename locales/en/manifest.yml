@@ -94,6 +94,9 @@ published_routes:
   - temas/agentes-ia.md
   - temas/agentes-voz-tiempo-real.md
   - temas/prompt-injection.md
+  - temas/agi.md
+  - temas/ia-generativa.md
+  - temas/multimodalidad.md
   - articulos-tecnicos/index.md
   - articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - articulos-tecnicos/reactive-proactive-voice-agents.md
