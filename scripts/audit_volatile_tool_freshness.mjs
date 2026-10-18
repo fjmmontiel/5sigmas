@@ -68,8 +68,21 @@ requireCopy('docs/herramientas/coste-latencia-llm.md',['09-10-2026','GPT-6.1 Sol
 requireCopy('locales/en/tools/llm-cost-latency.md',['2026-10-09','GPT-6.1 Sol','Claude Sonnet 5.5','Claude Haiku 5.5']);
 requireCopy('docs/herramientas/precio-rendimiento-modelos.md',[modelSnapshotEs,`${modelPricePerformance.models.length} configuraciones actuales`]);
 requireCopy('locales/en/tools/model-price-performance.md',[modelSnapshotEn,`${modelPricePerformance.models.length} current configurations`]);
-requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',['01-10-2026']);
-requireCopy('locales/en/tools/voice-cost-capacity.md',['2026-10-01']);
+const voiceSnapshotEs=voice.updated_at.split('-').reverse().join('-');
+requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',[
+  `verificados el ${voiceSnapshotEs}`,
+  `data-output="sourceUpdated">${voice.updated_at}</span>`,
+  `<span>Verificado ${voiceSnapshotEs}</span>`,
+  `A ${voiceSnapshotEs}:`,
+  `Revisadas el ${voiceSnapshotEs}.</p>`
+]);
+requireCopy('locales/en/tools/voice-cost-capacity.md',[
+  `verified on ${voice.updated_at}`,
+  `data-output="sourceUpdated">${voice.updated_at}</span>`,
+  `<span>Verified ${voice.updated_at}</span>`,
+  `On ${voice.updated_at}:`,
+  `Verified ${voice.updated_at}.</p>`
+]);
 
 if(failures.length){
   console.error('Volatile tool freshness audit failed:');

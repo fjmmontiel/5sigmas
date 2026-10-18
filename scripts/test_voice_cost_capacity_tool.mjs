@@ -78,7 +78,7 @@ assert.equal(bounded.input.targetWorkerUtilizationPercent, 1);
 
 const data = JSON.parse(fs.readFileSync(new URL('../docs/assets/data/tools/voice-cost-capacity-presets.json', import.meta.url), 'utf8'));
 assert.equal(data.schema_version, 3);
-assert.equal(data.updated_at, '2026-10-06');
+assert.equal(data.updated_at, '2026-10-18');
 assert.equal(data.freshness_policy.review_interval_days, 7);
 const preset = data.presets[0];
 assert.equal(preset.capacity.stt_sessions_per_call, 1);
@@ -95,7 +95,7 @@ for (const required of [
 const ttsSource = preset.sources.find((source) => source.component === 'tts');
 assert.ok(ttsSource, 'missing ElevenLabs TTS provenance');
 assert.equal(ttsSource.url, 'https://elevenlabs.io/pricing/api');
-assert.equal(ttsSource.verified_on, '2026-10-06');
+assert.equal(ttsSource.verified_on, '2026-10-18');
 for (const source of preset.sources) assert.equal(source.verified_on, data.updated_at);
 assert.equal(data.architecture_coverage.reviewed_through, data.updated_at);
 assert.equal(preset.rates.tts_usd_per_1000_characters, 0.04);
