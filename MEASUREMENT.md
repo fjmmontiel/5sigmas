@@ -24,7 +24,7 @@ The existing `/mcp` interface remains available. A private SQLite Durable Object
 
 A build fails if the enabled collector is unavailable or has a different policy. Merely adding JavaScript to a repository never establishes a live connection. Health proves storage readiness; **only a first accepted event starts collection coverage**. Before that, authenticated export returns a controlled `409` response instead of invented zero traffic.
 
-The runtime loader fetches configuration, generated vocabulary and measurement code in that order. Activation requires the exact HTTPS same-origin endpoint, `approved: true`, policy revision `2026-10-18`, a valid vocabulary and explicit visitor consent. The equivalent metadata configuration must satisfy the same checks.
+The runtime loader fetches configuration, generated vocabulary and measurement code in that order, using versioned asset URLs so a cached runtime from before this consent contract cannot consume newly approved configuration. Activation requires the exact HTTPS same-origin endpoint, `approved: true`, policy revision `2026-10-18`, a valid vocabulary and explicit visitor consent. The equivalent metadata configuration must satisfy the same checks.
 
 ## Consent and visitor controls
 
@@ -150,6 +150,15 @@ node mcp-worker/scripts/verify-measurement-local.mjs
 ```
 
 The tests exercise the actual browser runtime and real SQLite, including no traffic before consent, privacy gates, withdrawal, tool changes, valid conversions, duplicates, concurrency, midnight attribution, retention and authenticated export rejection. The local native Worker smoke uses an isolated SQLite store; it never adds synthetic visits to production. Local workerd does not implement geographic jurisdiction restrictions, so an explicit test adapter requires the requested `eu` jurisdiction and maps it to isolated local storage; EU placement itself must be verified by deployment on Cloudflare. The private repository separately tests the received aggregate through its FULL, report projection, verified archive and DELTA reuse.
+
+After building both MkDocs locales, an installed Playwright/Chromium environment can also verify actual browser headers and the rendered consent controls:
+
+```bash
+node scripts/verify_measurement_browser.mjs --site ./site \
+  --chromium /path/to/installed/chrome --output /tmp/5sigmas-measurement-browser
+```
+
+This gate checks ES/EN desktop and mobile pages, omits a deliberately installed synthetic cookie from measurement requests, verifies the browser's real `Origin`, rejects input/query leakage, exercises useful model results and withdrawal, and captures the consent panel with its details expanded. Every request is intercepted locally. It does not install dependencies or contact the production collector.
 
 After deployment, a health response, approved published browser configuration and successful receipt are distinct evidence. An authenticated production snapshot is established only when a new owning FULL reads and validates it. Do not label a source `CONNECTED` from a green test or health response alone.
 

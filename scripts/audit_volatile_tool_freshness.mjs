@@ -64,12 +64,13 @@ const modelPricePerformance=read('docs/assets/data/tools/model-price-performance
 const modelSnapshotDate=new Date(`${modelPricePerformance.updated_at}T00:00:00Z`);
 const modelSnapshotEs=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(modelSnapshotDate);
 const modelSnapshotEn=new Intl.DateTimeFormat('en-US',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(modelSnapshotDate);
-requireCopy('docs/herramientas/coste-latencia-llm.md',['09-10-2026','GPT-6.1 Sol','Claude Sonnet 5.5','Claude Haiku 5.5']);
-requireCopy('locales/en/tools/llm-cost-latency.md',['2026-10-09','GPT-6.1 Sol','Claude Sonnet 5.5','Claude Haiku 5.5']);
+const displayDateEs=(value)=>value.split('-').reverse().join('-');
+requireCopy('docs/herramientas/coste-latencia-llm.md',[`Snapshot verificado el ${displayDateEs(pricing.updated_at)}`,'GPT-6.1 Sol','Claude Sonnet 5.5','Claude Haiku 5.5']);
+requireCopy('locales/en/tools/llm-cost-latency.md',[`Snapshot verified ${pricing.updated_at}`,'GPT-6.1 Sol','Claude Sonnet 5.5','Claude Haiku 5.5']);
 requireCopy('docs/herramientas/precio-rendimiento-modelos.md',[modelSnapshotEs,`${modelPricePerformance.models.length} configuraciones actuales`]);
 requireCopy('locales/en/tools/model-price-performance.md',[modelSnapshotEn,`${modelPricePerformance.models.length} current configurations`]);
-requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',['01-10-2026']);
-requireCopy('locales/en/tools/voice-cost-capacity.md',['2026-10-01']);
+requireCopy('docs/herramientas/coste-capacidad-agente-voz.md',[`verificados el ${displayDateEs(voice.updated_at)}`,`sourceUpdated">${voice.updated_at}</span>`,`Verificado ${displayDateEs(voice.updated_at)}`]);
+requireCopy('locales/en/tools/voice-cost-capacity.md',[`verified on ${voice.updated_at}`,`sourceUpdated">${voice.updated_at}</span>`,`Verified ${voice.updated_at}`]);
 
 if(failures.length){
   console.error('Volatile tool freshness audit failed:');

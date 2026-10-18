@@ -39,7 +39,7 @@ try {
   assert.equal(workerOptions.durableObjects?.MEASUREMENT_STORE?.className, 'MeasurementStore');
   assert.equal(workerOptions.durableObjects?.MEASUREMENT_STORE?.useSQLite, true,
     'The production binding and migration must enable native SQLite');
-  assert.equal(workerOptions.bindings?.MEASUREMENT_ENABLED, 'true');
+  assert.ok(['true', 'false'].includes(workerOptions.bindings?.MEASUREMENT_ENABLED));
   const bundleArgument = process.argv.indexOf('--bundle');
   let bundlePath;
   if (bundleArgument !== -1) {
@@ -81,6 +81,9 @@ try {
   `;
   const options = convertV4MiniflareOptions({
     ...workerOptions,
+    // Exercise collection in this isolated test even when a reviewed rollback
+    // disables production. The build-policy gate separately checks real flags.
+    bindings: { ...workerOptions.bindings, MEASUREMENT_ENABLED: 'true' },
     name: 'five-sigmas-measurement-local-smoke',
     // Wrangler already resolved/bundled source rules. Mount its emitted module
     // explicitly; v5's converter intentionally refuses unbundled module rules.

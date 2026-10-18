@@ -18,11 +18,11 @@ tools:
     en_parity: true
     tests: required_full_pr_ci_2026-09-25
     visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
-    provenance: openai_anthropic_google_primary_pricing_verified_2026-10-01
+    provenance: openai_anthropic_google_primary_pricing_verified_2026-10-18
     data_freshness: provider_pricing_review_every_7_days_and_on_release
     validated_head: f780b156b879ff7357b3b9613c5a6bd3915c2250
     release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
-    last_reviewed: 2026-10-01
+    last_reviewed: 2026-10-18
   - id: model-price-performance
     order: 2
     es_title: Explorador precio/rendimiento de modelos
@@ -172,11 +172,11 @@ tools:
     en_parity: true
     tests: required_full_pr_ci_2026-09-25
     visual_review: required_es_en_mobile_390_desktop_1440_2026-09-25
-    provenance: twilio_spain_openai_live_transcribe_gpt_6_luna_elevenlabs_revalidated_2026-10-06
+    provenance: twilio_spain_openai_live_transcribe_gpt_6_luna_elevenlabs_revalidated_2026-10-18
     data_freshness: provider_pricing_review_every_7_days_and_on_release
     validated_head: bdaca00b8dbc9006250207cfe8d9c0caf7925bb3
     release_commit: 252e139933eca56d1a21c08174e30a63eda076f0
-    last_reviewed: 2026-10-06
+    last_reviewed: 2026-10-18
   - id: agent-reliability
     order: 11
     es_title: Entorno interactivo de fiabilidad y evaluación de agentes
