@@ -42,43 +42,83 @@
         "model": "Beam 1.0",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-10-18",
-        "reason": "Reflection documents its own Beam API and a 1M-token open-weights model. Artificial Analysis reports price, output speed and TTFT as medians across providers; its provider comparison lists Baseten, CoreWeave, Together and Nebius, without a Reflection API row. This review did not establish a public first-party USD price or a sufficiently delimited priced API configuration for the explorer. Keep the release in the ledger without treating those provider medians as Reflection API pricing or performance.",
+        "reason": "Reflection documents a public-beta API, but no standard first-party USD-per-token tariff was established in the reviewed launch and API documentation. Artificial Analysis lists four measured third-party providers and no Reflection provider row. Retain outside the chart until first-party pricing and matching provider performance are verified; free-to-start access is not a standard paid API quote.",
         "sources": [
-          "https://developers.reflection.ai/models.md",
-          "https://developers.reflection.ai/api-overview.md",
-          "https://developers.reflection.ai/third-party-providers.md",
-          "https://artificialanalysis.ai/models/reflection-beam",
-          "https://artificialanalysis.ai/models/reflection-beam/providers"
+          {
+            "url": "https://reflection.ai/blog/beam-is-available"
+          },
+          {
+            "url": "https://developers.reflection.ai/models"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/reflection-beam"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/reflection-beam/providers"
+          }
         ]
       },
       {
         "model": "Muse Spark Open",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-10-18",
-        "reason": "Meta identifies this as a distinct open-weights release with API access through third-party inference providers. Artificial Analysis headline prices and performance are medians across providers. This review did not establish a first-party USD price or select and verify a specific priced third-party deployment, so it does not add a new chart configuration. The existing Muse Spark 1.3 API row is a different model and is not substituted for this release.",
+        "reason": "Meta explicitly states that Muse Spark Open is not called over Meta Model API; users self-host its weights or use hosted inference providers. Artificial Analysis lists five third-party providers and no Meta provider row. Official Model API tariffs for Muse Spark 1.3/1.2/1.1 must not be reused for Open. Retain outside the first-party API chart until a comparable source-matched API row exists.",
         "sources": [
-          "https://huggingface.co/meta-models/Muse-Spark-Open-816B-A42B",
-          "https://artificialanalysis.ai/models/muse-spark-open"
+          {
+            "url": "https://research.meta.ai/blog/muse-spark-open"
+          },
+          {
+            "url": "https://dev.meta.ai/docs/models"
+          },
+          {
+            "url": "https://dev.meta.ai/docs/pricing-rate-limits"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/muse-spark-open"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/muse-spark-open/providers"
+          }
         ]
       },
       {
         "model": "Nemotron 3.5 Bolt 74B-A9B",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-10-18",
-        "reason": "NVIDIA publishes the model and its specifications, but Artificial Analysis explicitly reports no publicly available API, no input/output token prices and unavailable speed. A priced API configuration with current performance evidence could not be established in this review; local serving examples are not an API tariff.",
+        "reason": "NVIDIA documents open weights and local deployment. Artificial Analysis explicitly lists zero API providers, with hosted API pricing, output speed and latency unavailable. A sourced per-request API comparison cannot be constructed; local hardware throughput does not supply the missing hosted API metrics.",
         "sources": [
-          "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
-          "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b"
+          {
+            "url": "https://blogs.nvidia.com/blog/nemotron-3-5-super-vl/"
+          },
+          {
+            "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b/providers"
+          }
         ]
       },
       {
         "model": "Nemotron 3.5 Super VL",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-10-18",
-        "reason": "NVIDIA publishes the open-weights model and up-to-1M context specification. Artificial Analysis headline prices and performance are medians across providers. This review did not establish a first-party USD tariff or select and verify a specific priced third-party deployment, so the release remains reviewed without adding a chart configuration or presenting provider medians as a NVIDIA API quote.",
+        "reason": "NVIDIA documents open weights, NIM and self-hosted deployment. Artificial Analysis supplies pricing and performance through seven external providers but no NVIDIA first-party provider row. No NVIDIA standard USD-per-token tariff paired with a measured NVIDIA API endpoint was established in the reviewed primary sources. Retain outside the first-party API chart rather than relabel third-party prices or performance.",
         "sources": [
-          "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
-          "https://artificialanalysis.ai/models/nemotron-3-5-super-vl"
+          {
+            "url": "https://blogs.nvidia.com/blog/nemotron-3-5-super-vl/"
+          },
+          {
+            "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/nemotron-3-5-super-vl"
+          },
+          {
+            "url": "https://artificialanalysis.ai/models/nemotron-3-5-super-vl/providers"
+          }
         ]
       },
       {
@@ -378,7 +418,8 @@
         "specs_pricing": {
           "title": "Claude Sonnet 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
-          "verified_on": "2026-10-18"
+          "verified_on": "2026-10-18",
+          "note": "Primary Anthropic model page reverified 2026-10-18: standard API $2 input/$10 output per MTok and 1M context; existing price and context values unchanged."
         },
         "benchmark": {
           "title": "Claude Sonnet 5.5 (max with fallback) | Artificial Analysis",
@@ -414,7 +455,7 @@
           "title": "Claude Haiku 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
           "verified_on": "2026-10-18",
-          "note": "Standard API prices for <=100K prompt tokens. Above 100K, prices rise to $0.50 input and $2.50 output per MTok; cache and batch pricing are separate."
+          "note": "Primary Anthropic model page reverified 2026-10-18: $0.10 input/$0.50 output per MTok through 100,000 input tokens, $0.50/$2.50 above that threshold, and 1M context; existing values unchanged."
         },
         "benchmark": {
           "title": "Claude Haiku 5.5 (max with fallback) | Artificial Analysis",
@@ -516,7 +557,8 @@
         "specs_pricing": {
           "title": "GPT-6.1 Sol Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-          "verified_on": "2026-10-18"
+          "verified_on": "2026-10-18",
+          "note": "Primary OpenAI model page reverified 2026-10-18: standard text $2 input/$10 output per MTok, 1,050,000 context; above 272,000 input tokens, 2x input and 1.5x output for the full request. Existing values unchanged."
         },
         "benchmark": {
           "title": "GPT-6.1 Sol (max) | Artificial Analysis",
@@ -697,7 +739,7 @@
           "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash",
           "verified_on": "2026-10-18",
           "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; Artificial Analysis median across providers serving this model. These performance observations do not measure the first-party DeepSeek API whose official price is used for scenario cost.",
+          "performance_surface": "English model page; first-party DeepSeek API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
       }
@@ -901,14 +943,14 @@
           "title": "Mistral Large 4 | Mistral Docs",
           "url": "https://docs.mistral.ai/models/mistral-large",
           "verified_on": "2026-10-18",
-          "note": "Uses the original standard API list price ($1.36 input / $4.18 output per MTok), not the temporary 50% launch sale. Mistral documents a 1M context window."
+          "note": "Primary Mistral model page reverified 2026-10-18: original standard list price $1.36 input/$4.18 output per MTok and 1M context. Uses that explicitly labelled original price, not the temporary 50% launch sale ($0.68/$2.09). Maximum output remains unreported."
         },
         "benchmark": {
           "title": "Mistral Large 4 Preview | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mistral-large-4",
           "verified_on": "2026-10-18",
           "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Mistral API measurement. Output speed and TTFT availability recovered on 2026-10-18.",
+          "performance_surface": "English model page; first-party Mistral API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
       }

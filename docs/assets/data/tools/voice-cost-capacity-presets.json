@@ -78,8 +78,8 @@
           "title": "ElevenAPI Pricing",
           "url": "https://elevenlabs.io/pricing/api",
           "verified_on": "2026-10-18",
-          "note_es": "Flash/Turbo TTS: 0,04 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable. Las promociones temporales de v4/v4 Turbo no se usan como tarifa base.",
-          "note_en": "Flash/Turbo TTS: $0.04 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable. Time-limited v4/v4 Turbo promotions are not used as the base rate."
+          "note_es": "Flash/Turbo TTS: 0,04 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable.",
+          "note_en": "Flash/Turbo TTS: $0.04 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable."
         },
         {
           "component": "tts_concurrency",
@@ -87,8 +87,8 @@
           "title": "Models — concurrency and priority",
           "url": "https://elevenlabs.io/docs/overview/models",
           "verified_on": "2026-10-18",
-          "note_es": "ElevenLabs indica que, con WebSocket, solo el tiempo de generación de audio cuenta para concurrencia y que un límite 5 puede soportar aproximadamente 100 conversaciones equilibradas. El 5% inicial es una heurística editable, no una garantía de capacidad.",
-          "note_en": "ElevenLabs states that with WebSockets only time spent generating audio counts toward concurrency and that a limit of 5 can typically support about 100 balanced conversations. The initial 5% duty factor is an editable heuristic, not a capacity guarantee."
+          "note_es": "ElevenLabs indica que, con el WebSocket Text to Speech, solo el tiempo de generación de audio cuenta para concurrencia y que un límite 5 puede soportar aproximadamente 100 conversaciones equilibradas. El 5% inicial es una heurística editable, no una garantía de capacidad.",
+          "note_en": "ElevenLabs states that with the Text to Speech WebSocket only time spent generating audio counts toward concurrency and that a limit of 5 can typically support about 100 balanced conversations. The initial 5% duty factor is an editable heuristic, not a capacity guarantee."
         },
         {
           "component": "llm",
