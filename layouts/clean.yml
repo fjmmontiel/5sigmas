@@ -63,7 +63,7 @@ layers:
   # Background
   - background:
       image: *background_image
-      color: transparent
+      color: "{{ layout.background_color or '#ffffff' }}"
 
   # Slogan ("Más señal, menos ruido") - Top Header
   - size: { width: 1072, height: 40 }
