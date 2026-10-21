@@ -440,7 +440,7 @@
       "output_usd_per_million": 20,
       "intelligence_index": 56,
       "output_tokens_per_second": 84.7,
-      "ttft_seconds": 115.96,
+      "ttft_seconds": 115.1,
       "sources": {
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
@@ -470,8 +470,8 @@
       "input_usd_per_million": 2,
       "output_usd_per_million": 10,
       "intelligence_index": 56,
-      "output_tokens_per_second": 136.5,
-      "ttft_seconds": 417.93,
+      "output_tokens_per_second": 136.6,
+      "ttft_seconds": 406.46,
       "sources": {
         "specs_pricing": {
           "title": "Claude Sonnet 5.5 | Claude Platform Docs",
@@ -507,7 +507,7 @@
       },
       "intelligence_index": 43,
       "output_tokens_per_second": 236,
-      "ttft_seconds": 268.68,
+      "ttft_seconds": 263.04,
       "sources": {
         "specs_pricing": {
           "title": "Claude Haiku 5.5 | Claude Platform Docs",
@@ -537,8 +537,8 @@
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
       "intelligence_index": 53,
-      "output_tokens_per_second": 68.6,
-      "ttft_seconds": 231.72,
+      "output_tokens_per_second": 68.7,
+      "ttft_seconds": 230.99,
       "sources": {
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
@@ -569,7 +569,7 @@
       "output_usd_per_million": 50,
       "intelligence_index": 53,
       "output_tokens_per_second": 61.7,
-      "ttft_seconds": 268.25,
+      "ttft_seconds": 228.2,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
@@ -609,8 +609,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 52,
-      "output_tokens_per_second": 54.3,
-      "ttft_seconds": 248.29,
+      "output_tokens_per_second": 54.2,
+      "ttft_seconds": 245.34,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6.1 Sol Model | OpenAI API",
@@ -645,8 +645,8 @@
         "output_multiplier": 1.5
       },
       "intelligence_index": 38,
-      "output_tokens_per_second": 124.2,
-      "ttft_seconds": 95.73,
+      "output_tokens_per_second": 118.8,
+      "ttft_seconds": 89.5,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
@@ -682,7 +682,7 @@
       },
       "intelligence_index": 42,
       "output_tokens_per_second": 127.8,
-      "ttft_seconds": 100.94,
+      "ttft_seconds": 97.16,
       "sources": {
         "specs_pricing": {
           "title": "GPT-5.6 Terra Model | OpenAI API",
@@ -755,7 +755,7 @@
       },
       "intelligence_index": 46,
       "output_tokens_per_second": 86.7,
-      "ttft_seconds": 27.22,
+      "ttft_seconds": 26.12,
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
@@ -786,7 +786,7 @@
       "output_usd_per_million": 1.2,
       "intelligence_index": 45,
       "output_tokens_per_second": 208.7,
-      "ttft_seconds": 1.07,
+      "ttft_seconds": 1.03,
       "sources": {
         "specs_pricing": {
           "title": "DeepSeek API pricing",
@@ -818,8 +818,8 @@
       "input_usd_per_million": 2,
       "output_usd_per_million": 6,
       "intelligence_index": 45,
-      "output_tokens_per_second": 39.6,
-      "ttft_seconds": 3.06,
+      "output_tokens_per_second": 40.4,
+      "ttft_seconds": 2.91,
       "sources": {
         "specs_pricing": {
           "title": "Qwen3.8 Max and regional pricing | Alibaba Cloud Model Studio",
@@ -849,8 +849,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.47,
       "intelligence_index": 40,
-      "output_tokens_per_second": 55.2,
-      "ttft_seconds": 2.1,
+      "output_tokens_per_second": 52.4,
+      "ttft_seconds": 2.13,
       "sources": {
         "specs_pricing": {
           "title": "Qwen3.8-Flash-Next model card and observed Alibaba API pricing",
@@ -882,7 +882,7 @@
       "output_usd_per_million": 4.25,
       "intelligence_index": 48,
       "output_tokens_per_second": 114.5,
-      "ttft_seconds": 64.73,
+      "ttft_seconds": 67.66,
       "sources": {
         "specs_pricing": {
           "title": "Muse Spark 1.3 | Meta AI",
@@ -912,7 +912,7 @@
       "output_usd_per_million": 0.87,
       "intelligence_index": 46,
       "output_tokens_per_second": 49.6,
-      "ttft_seconds": 3.46,
+      "ttft_seconds": 3.47,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
@@ -923,8 +923,8 @@
         "benchmark": {
           "title": "MiMo-V2.6-Pro | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
-          "verified_on": "2026-10-20",
-          "performance_snapshot_on": "2026-10-20",
+          "verified_on": "2026-10-21",
+          "performance_snapshot_on": "2026-10-21",
           "performance_surface": "English model page; first-party Xiaomi API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -941,8 +941,8 @@
       "input_usd_per_million": 1,
       "output_usd_per_million": 2.7,
       "intelligence_index": 44,
-      "output_tokens_per_second": 92,
-      "ttft_seconds": 2.22,
+      "output_tokens_per_second": 91.8,
+      "ttft_seconds": 2.2,
       "sources": {
         "specs_pricing": {
           "title": "StepFun Open Platform | Step 5 Preview",
@@ -971,8 +971,8 @@
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.5,
       "intelligence_index": 42,
-      "output_tokens_per_second": 78,
-      "ttft_seconds": 2.57,
+      "output_tokens_per_second": 76,
+      "ttft_seconds": 2.67,
       "sources": {
         "specs_pricing": {
           "title": "Z.AI API pricing",
@@ -984,8 +984,8 @@
         "benchmark": {
           "title": "GLM 5.3 Flash | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/glm-5-3-flash/",
-          "verified_on": "2026-10-20",
-          "performance_snapshot_on": "2026-10-20",
+          "verified_on": "2026-10-21",
+          "performance_snapshot_on": "2026-10-21",
           "performance_surface": "English model page; first-party Z AI API measurement",
           "index_family": "Artificial Analysis Intelligence Index v4.3.2"
         }
@@ -1002,8 +1002,8 @@
       "input_usd_per_million": 1.36,
       "output_usd_per_million": 4.18,
       "intelligence_index": 38,
-      "output_tokens_per_second": 67.5,
-      "ttft_seconds": 1.65,
+      "output_tokens_per_second": 68.1,
+      "ttft_seconds": 1.68,
       "sources": {
         "specs_pricing": {
           "title": "Mistral Large 4 | Mistral Docs",
@@ -1056,9 +1056,9 @@
     }
   ],
   "performance_refresh": {
-    "refreshed_on": "2026-10-18",
-    "source": "Live Artificial Analysis model pages and explicit model-specific provider availability confirmation",
-    "changed_model_count": 18,
-    "note": "The last completed full performance refresh remains 2026-10-18. The 2026-10-21 dataset and release review now contains 17 current-day model-page observations; MiMo-V2.6-Pro and GLM 5.3 Flash retain explicitly dated 2026-10-20 observations. The full daily refresh is incomplete pending current observations for those two rows; the unchanged upstream freshness gate must complete before publication. Provider pricing/specification verification dates remain independent. No successful raw upstream audit is claimed."
+    "refreshed_on": "2026-10-21",
+    "source": "Live Artificial Analysis model pages verified by the unchanged upstream checker in GitHub Actions run 39588519306, job 119183634600",
+    "changed_model_count": 17,
+    "note": "Full source observation completed 2026-10-21 at 11:00:35 UTC: all 19 model pages passed release, methodology, metric parsing and price-drift checks; 17 performance tuples changed and two matched the stored tuples. The check then returned refresh-required because two stored snapshot dates were October 20. This dataset applies those observed tuples and dates. Provider pricing/specification verification dates remain independent. Final-commit CI validates this completed snapshot separately; this source observation is not a deployment or publication receipt."
   }
 }
