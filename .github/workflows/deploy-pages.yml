@@ -16,7 +16,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  runtime:
+    uses: ./.github/workflows/deploy-mcp-worker.yml
+    secrets: inherit
+
   build:
+    needs: runtime
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -102,6 +107,11 @@ jobs:
 
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
+
+      - name: Configure measurement after verified Worker deployment
+        run: |
+          python3 scripts/build_measurement_catalog.py
+          python3 scripts/configure_measurement.py
 
       - name: Build Spanish site
         env:

@@ -4,6 +4,12 @@ on:
   pull_request:
     paths:
       - 'docs/assets/javascripts/measurement.js'
+      - 'docs/assets/javascripts/measurement-*.js'
+      - 'scripts/measurement_test_harness.mjs'
+      - 'scripts/build_measurement_catalog.py'
+      - 'scripts/configure_measurement.py'
+      - 'scripts/tests/test_measurement_setup.py'
+      - 'measurement-deployment.json'
       - 'docs/javascripts/external-links.js'
       - 'scripts/test_measurement_contract.mjs'
       - 'scripts/test_model_price_performance_measurement.mjs'
@@ -16,6 +22,12 @@ on:
     branches: [main]
     paths:
       - 'docs/assets/javascripts/measurement.js'
+      - 'docs/assets/javascripts/measurement-*.js'
+      - 'scripts/measurement_test_harness.mjs'
+      - 'scripts/build_measurement_catalog.py'
+      - 'scripts/configure_measurement.py'
+      - 'scripts/tests/test_measurement_setup.py'
+      - 'measurement-deployment.json'
       - 'docs/javascripts/external-links.js'
       - 'scripts/test_measurement_contract.mjs'
       - 'scripts/test_model_price_performance_measurement.mjs'
@@ -41,6 +53,8 @@ jobs:
         run: node scripts/test_measurement_contract.mjs
       - name: Verify model explorer attribution and privacy
         run: node scripts/test_model_price_performance_measurement.mjs
+      - name: Verify vocabulary and safe build activation
+        run: python3 -m unittest scripts.tests.test_measurement_setup
       - name: Verify runtime syntax
         run: |
           node --check docs/assets/javascripts/measurement.js
