@@ -15,6 +15,7 @@ SUITES = ("core", "series", "owner", "english", "locale", "tools")
 PATTERNS = {
     "core": [
         "docs/**", "locales/**", "discovery/**", "overrides/**", "overrides_locale/**",
+        "layouts/**",
         "hooks/**", "scripts/**", "mkdocs.yml", "mkdocs.en.yml", "main.py", "locale_main.py",
         "requirements.txt", "Makefile", "VIDEO_DELIVERY.md",
         ".github/workflows/deploy-pages.yml", ".github/workflows/publish-video-media.yml",

@@ -4,13 +4,26 @@
   "main": "src/index.js",
   "compatibility_date": "2026-09-30",
   "workers_dev": false,
+  "preview_urls": false,
   "routes": [
     {
       "pattern": "5sigmas.com/mcp*",
       "zone_name": "5sigmas.com"
+    },
+    {
+      "pattern": "5sigmas.com/_s5/measurement/*",
+      "zone_name": "5sigmas.com"
     }
   ],
+  "vars": {
+    "MEASUREMENT_ENABLED": "true",
+    "MEASUREMENT_POLICY_REVISION": "2026-10-18"
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "MEASUREMENT_STORE", "class_name": "MeasurementStore" }]
+  },
+  "migrations": [{ "tag": "measurement-v1", "new_sqlite_classes": ["MeasurementStore"] }],
   "observability": {
-    "enabled": true
+    "enabled": false
   }
 }
