@@ -60,6 +60,14 @@ Deployment reuses repository secrets:
 
 The token must be authorized to deploy this Worker and update its routes in the `5sigmas.com` zone. The account must support the SQLite Durable Object migration. The deployment attempts these operations through the existing credentials; if Cloudflare rejects a capability, preserve that exact error as the infrastructure dependency. A dry run is not proof that the account permits the migration.
 
+Before deployment, `scripts/ensure-workers-subdomain.mjs` checks the existing account's Workers subdomain using the same deployment token. It preserves any existing name without writing. Only the exact missing-subdomain response (HTTP 404, Cloudflare code 10007) permits a single initialization request for `5sigmas-fjmmontiel`; no rename, random fallback, new token or account is attempted. This resolves the account prerequisite reported by Cloudflare error 10063 when adding the SQLite Durable Object.
+
+Account subdomains are shared by all Workers. Before creating one, the preflight requires a complete script inventory and explicitly disabled production and preview URLs on every existing Worker, including `five-sigmas-mcp`. Unknown or enabled flags stop the deployment without changing another Worker. It checks again after initialization. Our custom routes remain authoritative, with both `workers_dev` and `preview_urls` explicitly false; the latter is a route policy, not a substitute for account initialization.
+
+Authorization errors, incomplete inventories and unconfirmed writes stop the deployment. A lost PUT acknowledgement is reconciled by one GET, never a repeated PUT. The API has no documented conditional create: the preflight re-reads immediately before writing under the existing workflow concurrency lock, but another account administrator could still race that boundary. Do not run concurrent account setup. Credentials, account IDs, headers and raw API bodies are never logged.
+
+The documented [account GET](https://developers.cloudflare.com/api/resources/workers/subresources/subdomains/methods/get/) accepts Workers Scripts Read or Write; [account PUT](https://developers.cloudflare.com/api/resources/workers/subresources/subdomains/methods/update/) requires Workers Scripts Write. Token scope is never expanded. The original Worker deploy, storage-health, consent and frontend-activation gates still run after a successful preflight.
+
 The private export uses GitHub's OIDC signing keys and exact private repository/workflow claims, so it needs no new shared secret. A public health check never grants export access or proves that a production report has consumed data.
 
 For a reversible collection shutdown, disable both checked-in policy flags and deploy; keep the binding/migration so expiry cleanup can continue. See the contract for the independent private read switch.

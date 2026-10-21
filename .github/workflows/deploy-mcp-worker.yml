@@ -152,6 +152,9 @@ jobs:
             exit 1
           }
 
+      - name: Ensure existing Workers account prerequisites
+        run: node scripts/ensure-workers-subdomain.mjs
+
       - name: Deploy Streamable HTTP MCP Worker
         run: npm run deploy
 
