@@ -259,11 +259,12 @@
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "availability_url": "https://ai.google.dev/gemini-api/docs/deprecations",
         "verified_on": "2026-10-18"
       },
       "notes": {
-        "es": "Tarifa estándar para entrada de texto, imagen o vídeo. El audio usa otra tarifa. El almacenamiento de caché por hora y grounding se facturan aparte.",
-        "en": "Standard text/image/video input rate. Audio uses a different rate. Hourly cache storage and grounding are billed separately."
+        "es": "Acceso limitado a usuarios que ya han utilizado activamente Gemini 2.5. La API no tiene una fecha de cierre anunciada. Tarifa estándar para entrada de texto, imagen o vídeo. El audio usa otra tarifa. El almacenamiento de caché por hora y grounding se facturan aparte.",
+        "en": "Access is limited to users who have actively used Gemini 2.5 models before. The API has no announced shutdown date. Standard text/image/video input rate. Audio uses a different rate. Hourly cache storage and grounding are billed separately."
       }
     }
   ],
