@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: candidate
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -25,7 +25,7 @@ jobs:
         run: |
           git -C candidate fetch --no-tags --depth=1 origin "$BASE_REF"
           git -C candidate worktree add --detach ../baseline FETCH_HEAD
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
       - name: Install exact build and browser dependencies
