@@ -38,6 +38,8 @@ def media(meta, src, files, docs_dir):
             'video':f'{PREFIX}/{parent.as_posix()}/{video}'}
     vtt=str(meta.get('video_captions') or Path(video).with_suffix('.vtt').as_posix())
     if (Path(docs_dir)/parent/vtt).is_file(): result['track']=f'{PREFIX}/{parent.as_posix()}/{vtt}'
+    transcript=str(meta.get('video_transcript') or '')
+    if transcript and (Path(docs_dir)/parent/transcript).is_file(): result['has_transcript']=True
     return result
 
 def on_files(files, config, **kwargs):
@@ -118,7 +120,9 @@ def card_visual(s, label):
 def video_panel(entry, identifier):
     if not entry or not entry.get('video'): return ''
     track=f'<track kind="captions" src="{esc(entry["track"])}" srclang="{t("es","en")}" label="{t("Español","English")}">' if entry.get('track') else ''
-    return f'''<div class="sx-player" data-sx-player data-sx-follow-player><video id="{identifier}" controls playsinline preload="none" poster="{esc(entry['poster'])}" data-src="{esc(entry['video'])}" aria-label="{esc(entry['title'])}">{track}</video><button type="button" class="sx-player-start" data-sx-play aria-controls="{identifier}"><span aria-hidden="true">▶</span>{t('Reproducir aquí','Play here')}</button><a class="sx-player-fallback" href="{esc(entry['watch'])}">{t('Abrir página del vídeo y transcripción','Open video page and transcript')} ↗</a></div>'''
+    fallback_label=(t('Abrir página del vídeo y transcripción','Open video page and transcript')
+                    if entry.get('has_transcript') else t('Abrir página del vídeo','Open video page'))
+    return f'''<div class="sx-player" data-sx-player data-sx-follow-player><video id="{identifier}" controls playsinline preload="none" poster="{esc(entry['poster'])}" data-src="{esc(entry['video'])}" aria-label="{esc(entry['title'])}">{track}</video><button type="button" class="sx-player-start" data-sx-play aria-controls="{identifier}"><span aria-hidden="true">▶</span>{t('Reproducir aquí','Play here')}</button><a class="sx-player-fallback" href="{esc(entry['watch'])}">{fallback_label} ↗</a></div>'''
 
 def gallery():
     by_slug={s['slug']:s for s in SERIES}
