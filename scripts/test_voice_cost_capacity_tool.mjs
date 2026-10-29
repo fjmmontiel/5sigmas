@@ -78,7 +78,7 @@ assert.equal(bounded.input.targetWorkerUtilizationPercent, 1);
 
 const data = JSON.parse(fs.readFileSync(new URL('../docs/assets/data/tools/voice-cost-capacity-presets.json', import.meta.url), 'utf8'));
 assert.equal(data.schema_version, 3);
-assert.equal(data.updated_at, '2026-10-18');
+assert.match(data.updated_at, /^\d{4}-\d{2}-\d{2}$/);
 assert.equal(data.freshness_policy.review_interval_days, 7);
 const preset = data.presets[0];
 assert.equal(preset.capacity.stt_sessions_per_call, 1);
@@ -95,12 +95,13 @@ for (const required of [
 const ttsSource = preset.sources.find((source) => source.component === 'tts');
 assert.ok(ttsSource, 'missing ElevenLabs TTS provenance');
 assert.equal(ttsSource.url, 'https://elevenlabs.io/pricing/api');
-assert.equal(ttsSource.verified_on, '2026-10-18');
+assert.equal(ttsSource.verified_on, data.updated_at);
 for (const source of preset.sources) assert.equal(source.verified_on, data.updated_at);
 assert.equal(data.architecture_coverage.reviewed_through, data.updated_at);
 assert.equal(preset.rates.tts_usd_per_1000_characters, 0.04);
 assert.equal(core.normalize({}).ttsUsdPer1000Characters, 0.04);
 assert.deepEqual([preset.rates.llm_input_usd_per_million_tokens, preset.rates.llm_output_usd_per_million_tokens], [0.1, 0.5]);
 assert.ok(data.architecture_coverage.reviewed_not_modelled.some((row) => row.architecture.includes('GPT-Live 1')));
+assert.ok(data.architecture_coverage.reviewed_not_modelled.some((row) => row.architecture.includes('Eleven v4 Turbo')));
 
 console.log('voice cost/capacity tool: numerical, provider-concurrency and provenance gates passed');
