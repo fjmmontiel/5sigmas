@@ -37,15 +37,26 @@ assert.equal(data.schema_version, 2);
 assert.ok(data.freshness_policy?.review_interval_days <= 7);
 assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
+if (data.methodology?.benchmark?.includes('v4.3.2')) {
+  // Do not present a historical index as comparable to the upstream v5.0 methodology.
+  for (const [locale, file, warning] of [
+    ['es', 'docs/herramientas/precio-rendimiento-modelos.md', 'no compares directamente'],
+    ['en', 'locales/en/tools/model-price-performance.md', 'do not directly compare'],
+  ]) {
+    const page = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.ok(page.includes('v4.3.2') && page.includes('v5.0') && page.includes(warning),
+      `${locale}: historical Intelligence Index requires a visible benchmark-version caveat`);
+  }
+}
 assert.equal(data.release_coverage?.reviewed_through, SNAPSHOT);
 assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialanalysis\.ai\/models\/releases/);
 assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
 
 for (const requiredRelease of [
   'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
-  'Gemini 3.8 Flash', 'DeepSeek V4.1 Flash', 'Qwen3.8 Max (0902)',
+  'Gemini 3.8 Flash', 'DeepSeek V4.1 Flash 1017', 'Qwen3.8 Max (0902)',
   'Qwen3.8-Flash-Next', 'Muse Spark 1.3', 'MiMo-V2.6-Pro', 'Step 5 Preview',
-  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4 Preview', 'Claude Haiku 5.5'
+  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4 Preview', 'Claude Haiku 5.5', 'MiniMax-M3.1-Flash'
 ]) {
   assert.ok(data.release_coverage.included_release_names.includes(requiredRelease), `${requiredRelease}: release coverage missing`);
 }
@@ -94,7 +105,8 @@ for (const retiredId of [
   'openai-gpt-5-6-sol-max',
   'openai-gpt-6-sol-max',
   'openai-gpt-5-6-luna-max',
-  'google-gemini-3-6-flash-high'
+  'google-gemini-3-6-flash-high',
+  'deepseek-v4-1-flash-max'
 ]) {
   assert.ok(!ids.has(retiredId), `${retiredId}: superseded row must not remain in current chart`);
 }
@@ -108,7 +120,7 @@ const sol = byId.get('openai-gpt-6-1-sol-max');
 const luna = byId.get('openai-gpt-6-luna-max');
 const gemini = byId.get('google-gemini-3-8-flash-high');
 const grok = byId.get('spacexai-grok-4-7-high');
-const deepseek = byId.get('deepseek-v4-1-flash-max');
+const deepseek = byId.get('deepseek-v4-1-flash-1017-max');
 const mistralLarge4 = byId.get('mistral-mistral-large-4-preview');
 for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, deepseek, mistralLarge4]) assert.ok(model, 'required refreshed comparison model missing');
 
