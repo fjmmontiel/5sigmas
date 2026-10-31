@@ -37,6 +37,17 @@ assert.equal(data.schema_version, 2);
 assert.ok(data.freshness_policy?.review_interval_days <= 7);
 assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
+if (data.methodology?.benchmark?.includes('v4.3.2')) {
+  // Do not present a historical index as comparable to the upstream v5.0 methodology.
+  for (const [locale, file, warning] of [
+    ['es', 'docs/herramientas/precio-rendimiento-modelos.md', 'no compares directamente'],
+    ['en', 'locales/en/tools/model-price-performance.md', 'do not directly compare'],
+  ]) {
+    const page = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.ok(page.includes('v4.3.2') && page.includes('v5.0') && page.includes(warning),
+      `${locale}: historical Intelligence Index requires a visible benchmark-version caveat`);
+  }
+}
 assert.equal(data.release_coverage?.reviewed_through, SNAPSHOT);
 assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialanalysis\.ai\/models\/releases/);
 assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
