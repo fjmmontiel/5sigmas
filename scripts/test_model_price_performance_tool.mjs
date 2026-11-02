@@ -46,6 +46,8 @@ if (data.methodology?.benchmark?.includes('v4.3.2')) {
     const page = fs.readFileSync(path.join(root, file), 'utf8');
     assert.ok(page.includes('v4.3.2') && page.includes('v5.0') && page.includes(warning),
       `${locale}: historical Intelligence Index requires a visible benchmark-version caveat`);
+    assert.ok(page.includes('Gemini 4 Carbon') && page.includes(locale === 'es' ? 'no se presenta como una API pública disponible' : 'not presented as a publicly available API'),
+      `${locale}: restricted Carbon launch must not imply a public API or mix v5.0 benchmark into v4.3.2`);
   }
 }
 assert.equal(data.release_coverage?.reviewed_through, SNAPSHOT);
