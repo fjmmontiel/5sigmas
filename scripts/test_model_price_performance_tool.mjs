@@ -25,6 +25,16 @@ const refreshPolicyAudit = execFileSync(process.execPath,
   {cwd:root, encoding:'utf8', timeout:15_000});
 assert.match(refreshPolicyAudit, /14 freshness/, 'availability loss and recovery must force refresh');
 
+// A dated, potentially stale dataset must never be advertised as live tariffs.
+for (const [file, required, forbidden] of [
+  ['docs/herramientas/precio-rendimiento-modelos.md', 'no presupone que sigan vigentes hoy', 'tarifas estándar vigentes'],
+  ['locales/en/tools/model-price-performance.md', 'they may no longer be current', 'and current standard rates'],
+]) {
+  const copy = fs.readFileSync(path.join(root, file), 'utf8');
+  assert.ok(copy.includes(required), `${file}: dated-source warning missing near the controls`);
+  assert.ok(!copy.includes(forbidden), `${file}: misleading live-tariff assertion`);
+}
+
 const SNAPSHOT = data.updated_at;
 assert.match(SNAPSHOT, /^\d{4}-\d{2}-\d{2}$/, 'dataset snapshot must be YYYY-MM-DD');
 const wallAgeDays = (Date.now() - Date.parse(`${SNAPSHOT}T23:59:59Z`)) / 86_400_000;
