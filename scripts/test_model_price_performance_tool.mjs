@@ -48,13 +48,13 @@ assert.ok(data.freshness_policy?.review_interval_days <= 7);
 assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
 assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
 if (data.methodology?.benchmark?.includes('v4.3.2')) {
-  // Do not present a historical index as comparable to the upstream v5.0 methodology.
+  // Do not present a historical index as comparable to the upstream v5.0.1 methodology.
   for (const [locale, file, warning] of [
     ['es', 'docs/herramientas/precio-rendimiento-modelos.md', 'no compares directamente'],
     ['en', 'locales/en/tools/model-price-performance.md', 'do not directly compare'],
   ]) {
     const page = fs.readFileSync(path.join(root, file), 'utf8');
-    assert.ok(page.includes('v4.3.2') && page.includes('v5.0') && page.includes(warning),
+    assert.ok(page.includes('v4.3.2') && page.includes('v5.0.1') && page.includes(warning),
       `${locale}: historical Intelligence Index requires a visible benchmark-version caveat`);
     assert.ok(page.includes('Gemini 4 Carbon') && page.includes('https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/') && page.includes(locale === 'es' ? 'no se presenta como una API pública disponible' : 'not presented as a publicly available API'),
       `${locale}: restricted Carbon launch must not imply a public API or mix v5.0 benchmark into v4.3.2`);
