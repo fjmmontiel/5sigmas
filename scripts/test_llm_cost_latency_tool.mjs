@@ -12,6 +12,16 @@ const root = path.resolve(__dirname, '..');
 const { calculate, resolvePricing } = require(path.join(root, 'docs/assets/javascripts/tools/llm-cost-latency-core.js'));
 const pricing = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/llm-pricing.json'), 'utf8'));
 
+// The visible preset guidance must disclose the historical snapshot beside
+// the selector, not merely in a distant sources paragraph.
+for (const [file, expected] of [
+  ['docs/herramientas/coste-latencia-llm.md', `Tarifas del corte verificado el ${pricing.updated_at.split('-').reverse().join('-')} (no necesariamente vigentes hoy)`],
+  ['locales/en/tools/llm-cost-latency.md', `Rates are from the ${pricing.updated_at} verified snapshot (not necessarily current)`],
+]) {
+  assert.ok(fs.readFileSync(path.join(root, file), 'utf8').includes(expected),
+    `${file}: missing dated, near-selector pricing warning`);
+}
+
 const close = (actual, expected, epsilon = 1e-9, label = '') => {
   assert.ok(Math.abs(actual - expected) <= epsilon, `${label}: expected ${expected}, got ${actual}`);
 };

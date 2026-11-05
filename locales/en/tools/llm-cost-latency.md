@@ -55,7 +55,7 @@ hide:
         <div class="s5-tool-field">
           <label for="s5-en-model">Model or preset</label>
           <select id="s5-en-model" data-field="model" aria-describedby="s5-en-model-note"></select>
-          <small id="s5-en-model-note">Presets use verified public pricing; every rate remains editable.</small>
+          <small id="s5-en-model-note">Rates are from the 2026-10-18 verified snapshot (not necessarily current). Check the provider before budgeting; every rate remains editable.</small>
         </div>
       </div>
       <div class="s5-tool-field-grid">

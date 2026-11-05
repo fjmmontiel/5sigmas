@@ -55,7 +55,7 @@ hide:
         <div class="s5-tool-field">
           <label for="s5-es-model">Modelo o configuración</label>
           <select id="s5-es-model" data-field="model" aria-describedby="s5-es-model-note"></select>
-          <small id="s5-es-model-note">Las configuraciones usan precios públicos verificados; todas las tarifas siguen siendo editables.</small>
+          <small id="s5-es-model-note">Tarifas del corte verificado el 18-10-2026 (no necesariamente vigentes hoy). Comprueba el proveedor antes de presupuestar; puedes editar cualquier tarifa.</small>
         </div>
       </div>
       <div class="s5-tool-field-grid">
