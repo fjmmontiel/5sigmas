@@ -26,7 +26,7 @@ assert.ok(data.updated_at, 'updated_at missing');
 assert.ok(ageDays(data.updated_at) <= maxAgeDays, `model explorer snapshot is stale: ${data.updated_at} is older than ${maxAgeDays} days`);
 assert.equal(data.release_coverage?.reviewed_through, data.updated_at, 'release coverage must be reviewed through the dataset snapshot');
 assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialanalysis\.ai\/models\/releases/);
-assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'), 'benchmark version must be pinned');
+assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v5.0.1'), 'benchmark version must be pinned');
 assert.ok(Array.isArray(data.release_coverage?.included_release_names) && data.release_coverage.included_release_names.length > 0);
 assert.ok(Array.isArray(data.release_coverage?.reviewed_not_charted));
 assert.ok(data.release_coverage.reviewed_not_charted.every((entry) => entry.model && entry.reason), 'every non-charted release needs a reason');

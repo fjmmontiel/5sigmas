@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18",
+  "updated_at": "2026-11-06",
   "currency": "USD",
   "freshness_policy": {
     "review_interval_days": 7,
@@ -9,34 +9,30 @@
     "rule": "Review the Artificial Analysis release feed daily and re-verify provider pricing/specifications at least weekly. Price, context and Intelligence Index require explicit sources. Previously charted rows may retain price/intelligence comparisons when speed and TTFT become explicitly unavailable on both model and provider pages, recorded as null with dated provenance. Never infer absence from a parser failure, rank unavailable performance or reuse historical samples as current evidence."
   },
   "release_coverage": {
-    "previous_snapshot": "2026-08-21",
-    "reviewed_through": "2026-10-18",
+    "previous_snapshot": "2026-10-18",
+    "reviewed_through": "2026-11-06",
     "source": {
       "title": "Language Model Releases | Artificial Analysis",
       "url": "https://artificialanalysis.ai/models/releases"
     },
     "included_release_names": [
-      "Claude Haiku 5.5",
-      "Mistral Large 4 Preview",
-      "Claude Sonnet 5.5",
-      "GPT-6.1 Sol",
       "Claude Opus 5.5",
+      "Claude Sonnet 5.5",
+      "Claude Haiku 5.5",
+      "Claude Fable 5.1",
+      "GPT-6 Astra",
+      "GPT-6.1 Sol",
+      "GPT-6.1 Terra",
       "GPT-6 Luna",
+      "Gemini 3.8 Flash",
       "Grok 4.7",
+      "Qwen3.8 Max (0902)",
       "MiMo-V2.6-Pro",
       "Step 5 Preview",
-      "DeepSeek V4.1 Flash",
-      "GPT-6 Astra",
-      "Gemini 3.8 Flash",
-      "Muse Spark 1.3",
-      "Qwen3.8 Max (0902)",
-      "Claude Fable 5.1",
       "GLM 5.3 Flash",
-      "Qwen3.8-Flash-Next"
+      "Mistral Large 4"
     ],
-    "retained_active_baselines": [
-      "GPT-5.6 Terra"
-    ],
+    "retained_active_baselines": [],
     "reviewed_not_charted": [
       {
         "model": "Beam 1.0",
@@ -300,9 +296,152 @@
         "model": "Ling 3.0 Flash",
         "status": "reviewed_not_charted",
         "reason": "No priced comparable API entry in the AA release snapshot."
+      },
+      {
+        "model": "GPT-5.6 Terra",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "AA marks this benchmark page deprecated; excluded until a replacement with independently verified comparable sources is evaluated.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/gpt-5-6-terra"
+          }
+        ]
+      },
+      {
+        "model": "DeepSeek V4.1 Flash",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "AA marks this benchmark page deprecated; excluded until a replacement with independently verified comparable sources is evaluated.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash"
+          }
+        ]
+      },
+      {
+        "model": "Qwen3.8-Flash-Next",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "The model page does not provide an Intelligence Index v5.0.1 score for this configuration; v4 scores cannot be mixed with v5.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next"
+          }
+        ]
+      },
+      {
+        "model": "Muse Spark 1.3",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "AA marks this benchmark page deprecated; excluded until a replacement with independently verified comparable sources is evaluated.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/muse-spark-1-3"
+          }
+        ]
+      },
+      {
+        "model": "Inkling 2 Small",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/inkling-2-small"
+          }
+        ]
+      },
+      {
+        "model": "Tencent Hy4",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/tencent-hy4"
+          }
+        ]
+      },
+      {
+        "model": "Gemini 4 Carbon",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Google announced prices but restricts initial access to selected defenders and partners; broader developer availability remains forthcoming and the Developer API price page has no Carbon entry.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/gemini-4-carbon"
+          }
+        ]
+      },
+      {
+        "model": "Nanbeige4.3-33B",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/nanbeige4-3-33b"
+          }
+        ]
+      },
+      {
+        "model": "Kimi K3.1 Pro",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/kimi-k3-1-pro"
+          }
+        ]
+      },
+      {
+        "model": "Nemotron 3.5 Bolt E4B 4GB",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/nemotron-3-5-bolt-e4b-4gb"
+          }
+        ]
+      },
+      {
+        "model": "Ling 3.1 Flash 1019",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/ling-3-1-flash-1019"
+          }
+        ]
+      },
+      {
+        "model": "MiniMax-M3.1-Flash",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/minimax-m3-1-flash"
+          }
+        ]
+      },
+      {
+        "model": "DeepSeek V4.1 Flash 1017",
+        "status": "reviewed_not_charted",
+        "reviewed_on": "2026-11-06",
+        "reason": "Reviewed on the release feed; a matching first-party standard API price, specification and comparable benchmark configuration have not all been established in this review, so it is not charted.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017"
+          }
+        ]
       }
     ],
-    "latest_release_slug": "reflection-beam",
+    "latest_release_slug": "inkling-2-small",
     "supersession_events": [
       {
         "model": "GPT-6 Sol",
@@ -358,45 +497,88 @@
             "url": "https://ai.google.dev/gemini-api/docs/latest-model?hl=en"
           }
         ]
+      },
+      {
+        "model": "GPT-5.6 Terra",
+        "replacement": "GPT-6.1 Terra",
+        "status": "removed_deprecated",
+        "detected_on": "2026-11-06",
+        "reason": "Artificial Analysis marks this model deprecated and identifies the newer release.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/gpt-5-6-terra"
+          }
+        ]
+      },
+      {
+        "model": "DeepSeek V4.1 Flash",
+        "replacement": "DeepSeek V4.1 Flash 1017",
+        "status": "removed_deprecated",
+        "detected_on": "2026-11-06",
+        "reason": "Artificial Analysis marks this model deprecated and identifies the newer release.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash"
+          }
+        ]
+      },
+      {
+        "model": "Muse Spark 1.3",
+        "replacement": "Muse Wonder",
+        "status": "removed_deprecated",
+        "detected_on": "2026-11-06",
+        "reason": "Artificial Analysis marks this model deprecated and identifies the newer release.",
+        "sources": [
+          {
+            "url": "https://artificialanalysis.ai/models/muse-spark-1-3"
+          }
+        ]
       }
     ]
   },
   "methodology": {
-    "benchmark": "Artificial Analysis Intelligence Index v4.3.2 plus current English model-page snapshots of output speed and TTFT. The Intelligence Index is a broad composite benchmark, not a universal definition of model quality; reasoning-effort variants are distinct configurations.",
+    "benchmark": "Artificial Analysis Intelligence Index v5.0.1. Performance v3 reports end-to-end speed and first-answer latency, which are incompatible with the legacy speed and TTFT fields; these remain unavailable rather than relabelled.",
     "pricing": "Use first-party standard API list prices in USD when the provider publishes them directly. Where a provider's public documentation does not expose a stable USD table, use Artificial Analysis's explicitly reported price for that model's first-party API and label that fallback in the source note. Tool/search/grounding charges, cache writes, volume discounts, batch pricing and premium service tiers are excluded. Announced future prices are encoded when available.",
     "workload": "Scenario cost uses editable input and output token counts: cost = input_tokens × input_rate / 1e6 + output_tokens × output_rate / 1e6. It does not estimate hidden reasoning-token usage unless the provider bills those tokens as output and they are present in the supplied output-token count.",
     "frontier": "A model is on the displayed price/intelligence frontier when no other scored model has both an equal-or-higher Intelligence Index and an equal-or-lower scenario cost, with at least one strict improvement.",
-    "comparability": "Speed and TTFT are volatile point-in-time observations. The dataset uses the English Artificial Analysis model page as the consistent performance surface and records a snapshot date. Release coverage is broader than the chart: every newly reviewed release is either included or recorded with an explicit exclusion reason."
+    "comparability": "Performance v3 reports different quantities; legacy post-start output speed and first-token latency are unavailable unless the exact original quantities are independently established on the model and provider pages. Release coverage is broader than the chart."
   },
   "models": [
     {
       "id": "anthropic-claude-opus-5-5-xhigh",
       "provider": "Anthropic",
       "model": "Claude Opus 5.5",
-      "variant": "Adaptive reasoning · xhigh",
+      "variant": "Reasoning effort · xhigh, default fallback",
       "reasoning": true,
       "release_date": "2026-09-22",
       "context_tokens": 1000000,
       "max_output_tokens": 128000,
       "input_usd_per_million": 4,
       "output_usd_per_million": 20,
-      "intelligence_index": 56,
-      "output_tokens_per_second": 85.5,
-      "ttft_seconds": 121.99,
+      "intelligence_index": 57,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Claude Opus 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/opus-5-5/overview",
-          "verified_on": "2026-10-13",
-          "note": "Primary Anthropic Opus 5.5 model page: standard API $4 input/$20 output per MTok; 1M-token context; verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary Anthropic Opus 5.5 model page: standard API $4 input/$20 output per MTok; 1M-token context; checked 2026-11-06."
         },
         "benchmark": {
           "title": "Claude Opus 5.5 (xhigh) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Anthropic API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh",
+            "confirmation_url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -411,23 +593,30 @@
       "max_output_tokens": 128000,
       "input_usd_per_million": 2,
       "output_usd_per_million": 10,
-      "intelligence_index": 56,
-      "output_tokens_per_second": 139.8,
-      "ttft_seconds": 380.34,
+      "intelligence_index": 55,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Claude Sonnet 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
-          "verified_on": "2026-10-18",
-          "note": "Primary Anthropic model page reverified 2026-10-18: standard API $2 input/$10 output per MTok and 1M context; existing price and context values unchanged."
+          "verified_on": "2026-11-06",
+          "note": "Primary Anthropic model page checked 2026-11-06: standard API $2 input/$10 output per MTok and 1M context; existing price and context values unchanged."
         },
         "benchmark": {
           "title": "Claude Sonnet 5.5 (max with fallback) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-sonnet-5-5/",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Anthropic API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/claude-sonnet-5-5/",
+            "confirmation_url": "https://artificialanalysis.ai/models/claude-sonnet-5-5/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -447,23 +636,30 @@
         "input_multiplier": 5,
         "output_multiplier": 5
       },
-      "intelligence_index": 43,
-      "output_tokens_per_second": 234.9,
-      "ttft_seconds": 313.57,
+      "intelligence_index": 36,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Claude Haiku 5.5 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
-          "verified_on": "2026-10-18",
-          "note": "Primary Anthropic model page reverified 2026-10-18: $0.10 input/$0.50 output per MTok through 100,000 input tokens, $0.50/$2.50 above that threshold, and 1M context; existing values unchanged."
+          "verified_on": "2026-11-06",
+          "note": "Primary Anthropic model page checked 2026-11-06: $0.10 input/$0.50 output per MTok through 100,000 input tokens, $0.50/$2.50 above that threshold, and 1M context; existing values unchanged."
         },
         "benchmark": {
           "title": "Claude Haiku 5.5 (max with fallback) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-haiku-5-5/",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page, first-party Anthropic API, max reasoning with default fallback",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/claude-haiku-5-5/",
+            "confirmation_url": "https://artificialanalysis.ai/models/claude-haiku-5-5/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -478,23 +674,30 @@
       "max_output_tokens": 128000,
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
-      "intelligence_index": 53,
-      "output_tokens_per_second": 70.6,
-      "ttft_seconds": 173.57,
+      "intelligence_index": 49,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Claude Fable 5.1 | Claude Platform Docs",
           "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
-          "verified_on": "2026-10-13",
-          "note": "Primary Anthropic Fable 5.1 model page: standard API $10 input/$50 output per MTok; 1M-token context; verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary Anthropic Fable 5.1 model page: standard API $10 input/$50 output per MTok; 1M-token context; checked 2026-11-06."
         },
         "benchmark": {
           "title": "Claude Fable 5.1 (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/claude-fable-5-1/",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Anthropic API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/claude-fable-5-1/",
+            "confirmation_url": "https://artificialanalysis.ai/models/claude-fable-5-1/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -509,23 +712,30 @@
       "max_output_tokens": 128000,
       "input_usd_per_million": 10,
       "output_usd_per_million": 50,
-      "intelligence_index": 53,
-      "output_tokens_per_second": 65,
-      "ttft_seconds": 285.18,
+      "intelligence_index": 57,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Astra Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
-          "verified_on": "2026-10-13",
-          "note": "Primary OpenAI GPT-6 Astra model page: standard text $10 input/$50 output per MTok; 1,050,000 context; verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary OpenAI GPT-6 Astra model page: standard text $10 input/$50 output per MTok; 1,050,000 context; checked 2026-11-06."
         },
         "benchmark": {
           "title": "GPT-6 Astra (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-astra",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party OpenAI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/gpt-6-astra",
+            "confirmation_url": "https://artificialanalysis.ai/models/gpt-6-astra/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       },
       "long_context": {
@@ -550,23 +760,73 @@
         "input_multiplier": 2,
         "output_multiplier": 1.5
       },
-      "intelligence_index": 52,
-      "output_tokens_per_second": 64.2,
-      "ttft_seconds": 241.6,
+      "intelligence_index": 55,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6.1 Sol Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-          "verified_on": "2026-10-18",
-          "note": "Primary OpenAI model page reverified 2026-10-18: standard text $2 input/$10 output per MTok, 1,050,000 context; above 272,000 input tokens, 2x input and 1.5x output for the full request. Existing values unchanged."
+          "verified_on": "2026-11-06",
+          "note": "Primary OpenAI model page checked 2026-11-06: standard text $2 input/$10 output per MTok, 1,050,000 context; above 272,000 input tokens, 2x input and 1.5x output for the full request. Existing values unchanged."
         },
         "benchmark": {
           "title": "GPT-6.1 Sol (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-1-sol",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party OpenAI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/gpt-6-1-sol",
+            "confirmation_url": "https://artificialanalysis.ai/models/gpt-6-1-sol/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
+        }
+      }
+    },
+    {
+      "id": "openai-gpt-6-1-terra-max",
+      "provider": "OpenAI",
+      "model": "GPT-6.1 Terra",
+      "variant": "Reasoning effort · max",
+      "reasoning": true,
+      "release_date": "2026-10-26",
+      "context_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "input_usd_per_million": 1,
+      "output_usd_per_million": 5,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2,
+        "output_multiplier": 1.5
+      },
+      "intelligence_index": 51,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
+      "sources": {
+        "specs_pricing": {
+          "title": "GPT-6.1 Terra Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
+          "verified_on": "2026-11-06",
+          "note": "OpenAI lists $1/$5 per MTok, 1,050,000 context and 128,000 output; above 272,000 input tokens 2x input and 1.5x output. Checked 2026-11-06."
+        },
+        "benchmark": {
+          "title": "GPT-6.1 Terra (max) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/gpt-6-1-terra",
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/gpt-6-1-terra",
+            "confirmation_url": "https://artificialanalysis.ai/models/gpt-6-1-terra/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -586,59 +846,30 @@
         "input_multiplier": 2,
         "output_multiplier": 1.5
       },
-      "intelligence_index": 38,
-      "output_tokens_per_second": 124,
-      "ttft_seconds": 98.84,
+      "intelligence_index": 28,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "GPT-6 Luna Model | OpenAI API",
           "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-          "verified_on": "2026-10-13",
-          "note": "Primary OpenAI GPT-6 Luna model page: standard text $0.10 input/$0.50 output per MTok; 1,050,000 context; verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary OpenAI GPT-6 Luna model page: standard text $0.10 input/$0.50 output per MTok; 1,050,000 context; checked 2026-11-06."
         },
         "benchmark": {
           "title": "GPT-6 Luna (max) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gpt-6-luna/",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party OpenAI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
-        }
-      }
-    },
-    {
-      "id": "openai-gpt-5-6-terra-max",
-      "provider": "OpenAI",
-      "model": "GPT-5.6 Terra",
-      "variant": "Reasoning effort · max",
-      "reasoning": true,
-      "release_date": "2026-07-09",
-      "context_tokens": 1050000,
-      "max_output_tokens": 128000,
-      "input_usd_per_million": 2,
-      "output_usd_per_million": 12,
-      "long_context": {
-        "threshold_input_tokens": 272000,
-        "input_multiplier": 2,
-        "output_multiplier": 1.5
-      },
-      "intelligence_index": 42,
-      "output_tokens_per_second": 137.5,
-      "ttft_seconds": 120.79,
-      "sources": {
-        "specs_pricing": {
-          "title": "GPT-5.6 Terra Model | OpenAI API",
-          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
-          "verified_on": "2026-10-13",
-          "note": "Primary OpenAI GPT-5.6 Terra model page: standard text $2 input/$12 output per MTok; 1,050,000 context; verified 2026-10-13."
-        },
-        "benchmark": {
-          "title": "GPT-5.6 Terra (max) | Artificial Analysis",
-          "url": "https://artificialanalysis.ai/models/gpt-5-6-terra",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party OpenAI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/gpt-6-luna/",
+            "confirmation_url": "https://artificialanalysis.ai/models/gpt-6-luna/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -659,23 +890,30 @@
         "input_usd_per_million": 1.5,
         "output_usd_per_million": 7.5
       },
-      "intelligence_index": 41,
-      "output_tokens_per_second": 150.2,
-      "ttft_seconds": 24.41,
+      "intelligence_index": 31,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "What's new in Gemini 3.8 Flash | Google AI for Developers",
           "url": "https://ai.google.dev/gemini-api/docs/latest-model?hl=en",
-          "verified_on": "2026-10-13",
-          "note": "Google Gemini 3.8 Flash primary latest-model/pricing pages: introductory standard API $0.75 input/$3.75 output per MTok through 2026-12-31; standard rates increase 2027-01-01. Official model specification: 1,048,576-token input limit; verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Google Gemini 3.8 Flash primary latest-model/pricing pages: introductory standard API $0.75 input/$3.75 output per MTok through 2026-12-31; standard rates increase 2027-01-01. Official model specification: 1,048,576-token input limit; checked 2026-11-06."
         },
         "benchmark": {
           "title": "Gemini 3.8 Flash (high) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/gemini-3-8-flash",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Google API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/gemini-3-8-flash",
+            "confirmation_url": "https://artificialanalysis.ai/models/gemini-3-8-flash/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -694,53 +932,30 @@
         "input_multiplier": 2,
         "output_multiplier": 2
       },
-      "intelligence_index": 46,
-      "output_tokens_per_second": 98.2,
-      "ttft_seconds": 50.89,
+      "intelligence_index": 35,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Grok 4.7 | xAI Docs",
           "url": "https://docs.x.ai/developers/models/grok-4.7",
-          "verified_on": "2026-10-13",
-          "note": "Primary xAI Grok 4.7 model page: standard <=200K input-token tier $2 input/$6 output per MTok; 500K total context; higher rates may apply for >200K prompts. Verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary xAI Grok 4.7 model page: standard <=200K input-token tier $2 input/$6 output per MTok; 500K total context; higher rates may apply for >200K prompts. checked 2026-11-06."
         },
         "benchmark": {
           "title": "Grok 4.7 (high) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/grok-4-7-high",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party SpaceXAI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
-        }
-      }
-    },
-    {
-      "id": "deepseek-v4-1-flash-max",
-      "provider": "DeepSeek",
-      "model": "DeepSeek V4.1 Flash",
-      "variant": "Reasoning · max",
-      "reasoning": true,
-      "release_date": "2026-09-10",
-      "context_tokens": 1000000,
-      "input_usd_per_million": 0.3,
-      "output_usd_per_million": 1.2,
-      "intelligence_index": 39,
-      "output_tokens_per_second": 226.7,
-      "ttft_seconds": 0.91,
-      "sources": {
-        "specs_pricing": {
-          "title": "DeepSeek API pricing",
-          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
-          "verified_on": "2026-10-13",
-          "note": "Primary DeepSeek pricing: DeepSeek-V4.1-Flash model ID deepseek-flash, 1M context. Stored $0.30 input/$1.20 output per MTok are PEAK uncached rates; OFF-PEAK prices are $0.15/$0.60. Verified 2026-10-13."
-        },
-        "benchmark": {
-          "title": "DeepSeek V4.1 Flash (max) | Artificial Analysis",
-          "url": "https://artificialanalysis.ai/models/deepseek-v4-1-flash",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party DeepSeek API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/grok-4-7-high",
+            "confirmation_url": "https://artificialanalysis.ai/models/grok-4-7-high/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -755,83 +970,30 @@
       "max_output_tokens": 131072,
       "input_usd_per_million": 2,
       "output_usd_per_million": 6,
-      "intelligence_index": 45,
-      "output_tokens_per_second": 37,
-      "ttft_seconds": 3.12,
+      "intelligence_index": 34,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "qwen3.8-max model info | Alibaba Cloud Model Studio",
-          "url": "https://modelstudio.console.alibabacloud.com/?tab=doc",
-          "verified_on": "2026-10-13",
-          "note": "Primary Alibaba Model Studio catalog: qwen3.8-max-0902 $2 input/$6 output USD per MTok, 1M context; region-specific Model Studio documentation may denominate rates in CNY. Verified 2026-10-13."
+          "url": "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max",
+          "verified_on": "2026-11-06",
+          "note": "Alibaba model page documents 0902 snapshot, 1M context and US $2/$6 rates; AA identifies the Alibaba API measurement. Checked 2026-11-06."
         },
         "benchmark": {
           "title": "Qwen3.8 Max (0902) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/qwen3-8-max",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Alibaba API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
-        }
-      }
-    },
-    {
-      "id": "alibaba-qwen-3-8-flash-next",
-      "provider": "Alibaba",
-      "model": "Qwen3.8-Flash-Next",
-      "variant": "Reasoning",
-      "reasoning": true,
-      "release_date": "2026-08-26",
-      "context_tokens": 256000,
-      "input_usd_per_million": 0.15,
-      "output_usd_per_million": 0.47,
-      "intelligence_index": 40,
-      "output_tokens_per_second": 52.8,
-      "ttft_seconds": 2.03,
-      "sources": {
-        "specs_pricing": {
-          "title": "Alibaba Cloud Model Studio pricing",
-          "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next",
-          "verified_on": "2026-10-13",
-          "note": "Artificial Analysis observed Alibaba's API for the EXACT open-weight Qwen3.8-Flash-Next: $0.15 input/$0.47 output per MTok, 256K native context. Distinct from the Alibaba-hosted qwen3.8-flash with a 1M default context; do not silently merge model IDs. Verified 2026-10-13."
-        },
-        "benchmark": {
-          "title": "Qwen3.8-Flash-Next | Artificial Analysis",
-          "url": "https://artificialanalysis.ai/models/qwen3-8-flash-next",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Alibaba API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
-        }
-      }
-    },
-    {
-      "id": "meta-muse-spark-1-3-max",
-      "provider": "Meta",
-      "model": "Muse Spark 1.3",
-      "variant": "Reasoning effort · max",
-      "reasoning": true,
-      "release_date": "2026-09-02",
-      "context_tokens": 1000000,
-      "input_usd_per_million": 1.25,
-      "output_usd_per_million": 4.25,
-      "intelligence_index": 48,
-      "output_tokens_per_second": 139.2,
-      "ttft_seconds": 53.35,
-      "sources": {
-        "specs_pricing": {
-          "title": "Muse Spark 1.3 | Meta AI",
-          "url": "https://dev.meta.ai/products/meta-model-api",
-          "verified_on": "2026-10-13",
-          "note": "Primary Meta Model API price list: muse-spark-1.3 non-contributor (data not used for product improvement) $1.25 input/$4.25 output per MTok, 1M context; differs from contributor pricing. Verified 2026-10-13."
-        },
-        "benchmark": {
-          "title": "Muse Spark 1.3 (max) | Artificial Analysis",
-          "url": "https://artificialanalysis.ai/models/muse-spark-1-3",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Meta API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/qwen3-8-max",
+            "confirmation_url": "https://artificialanalysis.ai/models/qwen3-8-max/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -845,23 +1007,30 @@
       "context_tokens": 1000000,
       "input_usd_per_million": 0.435,
       "output_usd_per_million": 0.87,
-      "intelligence_index": 46,
-      "output_tokens_per_second": 48,
-      "ttft_seconds": 4.15,
+      "intelligence_index": 30,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Xiaomi MiMo",
           "url": "https://mimo.mi.com/models/en-US/mimo-v2.6-pro",
-          "verified_on": "2026-10-13",
-          "note": "Primary Xiaomi MiMo-V2.6-Pro pricing/specifications: standard real-time API cache MISS $0.435 input/$0.87 output per MTok and 1M context; cache-hit/batch/ultraspeed are separate. Verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary Xiaomi MiMo-V2.6-Pro pricing/specifications: standard real-time API cache MISS $0.435 input/$0.87 output per MTok and 1M context; cache-hit/batch/ultraspeed are separate. checked 2026-11-06."
         },
         "benchmark": {
           "title": "MiMo-V2.6-Pro | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Xiaomi API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
+            "confirmation_url": "https://artificialanalysis.ai/models/mimo-v2-6-pro/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -875,23 +1044,30 @@
       "context_tokens": 1000000,
       "input_usd_per_million": 1,
       "output_usd_per_million": 2.7,
-      "intelligence_index": 44,
-      "output_tokens_per_second": 92.7,
-      "ttft_seconds": 2.21,
+      "intelligence_index": 29,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "StepFun Open Platform | Step 5 Preview",
           "url": "https://artificialanalysis.ai/models/step-5",
-          "verified_on": "2026-10-13",
-          "note": "Artificial Analysis directly reports observed StepFun API $1 input/$2.70 output per MTok for Step 5 Preview; StepFun's own https://www.stepfun.com/step-5-preview confirms 1M context and live API availability but does not publicly display USD rates. Verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Artificial Analysis reports the exact Step 5 Preview first-party API price $1/$2.70 per MTok and 1M context. The current StepFun landing page did not expose readable specifications or USD rates on this check; the benchmark is the explicitly labelled fallback. Checked 2026-11-06."
         },
         "benchmark": {
           "title": "Step 5 Preview | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/step-5",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party StepFun API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/step-5",
+            "confirmation_url": "https://artificialanalysis.ai/models/step-5/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
@@ -905,61 +1081,75 @@
       "context_tokens": 1000000,
       "input_usd_per_million": 0.15,
       "output_usd_per_million": 0.5,
-      "intelligence_index": 42,
-      "output_tokens_per_second": 77,
-      "ttft_seconds": 2.71,
+      "intelligence_index": 28,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Z.AI API pricing",
           "url": "https://docs.z.ai/guides/overview/pricing",
-          "verified_on": "2026-10-13",
-          "note": "Primary Z.AI GLM-5.3-Flash pricing: $0.15 input/$0.50 output per MTok; context specification remains benchmark-sourced where not published by this pricing page. Verified 2026-10-13."
+          "verified_on": "2026-11-06",
+          "note": "Primary Z.AI GLM-5.3-Flash pricing: $0.15 input/$0.50 output per MTok; context specification remains benchmark-sourced where not published by this pricing page. checked 2026-11-06."
         },
         "benchmark": {
           "title": "GLM 5.3 Flash | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/glm-5-3-flash/",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Z AI API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/glm-5-3-flash/",
+            "confirmation_url": "https://artificialanalysis.ai/models/glm-5-3-flash/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     },
     {
-      "id": "mistral-mistral-large-4-preview",
+      "id": "mistral-mistral-large-4-high",
       "provider": "Mistral",
-      "model": "Mistral Large 4 Preview",
-      "variant": "Public preview · reasoning",
+      "model": "Mistral Large 4",
+      "variant": "Reasoning effort · high",
       "reasoning": true,
       "release_date": "2026-10-06",
       "context_tokens": 1000000,
-      "input_usd_per_million": 1.36,
-      "output_usd_per_million": 4.18,
-      "intelligence_index": 38,
-      "output_tokens_per_second": 74.7,
-      "ttft_seconds": 1.66,
+      "input_usd_per_million": 0.7,
+      "output_usd_per_million": 2.1,
+      "intelligence_index": 26,
+      "output_tokens_per_second": null,
+      "ttft_seconds": null,
       "sources": {
         "specs_pricing": {
           "title": "Mistral Large 4 | Mistral Docs",
           "url": "https://docs.mistral.ai/models/mistral-large",
-          "verified_on": "2026-10-18",
-          "note": "Primary Mistral model page reverified 2026-10-18: original standard list price $1.36 input/$4.18 output per MTok and 1M context. Uses that explicitly labelled original price, not the temporary 50% launch sale ($0.68/$2.09). Maximum output remains unreported."
+          "verified_on": "2026-11-06",
+          "note": "Mistral GA model page lists $0.70 input/$2.10 output per MTok and 1M context; AA identifies the high-effort GA configuration. Checked 2026-11-06."
         },
         "benchmark": {
-          "title": "Mistral Large 4 Preview | Artificial Analysis",
+          "title": "Mistral Large 4 (high) | Artificial Analysis",
           "url": "https://artificialanalysis.ai/models/mistral-large-4",
-          "verified_on": "2026-10-18",
-          "performance_snapshot_on": "2026-10-18",
-          "performance_surface": "English model page; first-party Mistral API measurement",
-          "index_family": "Artificial Analysis Intelligence Index v4.3.2"
+          "verified_on": "2026-11-06",
+          "performance_snapshot_on": "2026-11-06",
+          "performance_surface": "English model and provider pages; Performance v3 reports incompatible quantities",
+          "index_family": "Artificial Analysis Intelligence Index v5.0.1",
+          "performance_availability": {
+            "status": "unavailable",
+            "checked_on": "2026-11-06",
+            "source_url": "https://artificialanalysis.ai/models/mistral-large-4",
+            "confirmation_url": "https://artificialanalysis.ai/models/mistral-large-4/providers",
+            "reason": "Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages."
+          }
         }
       }
     }
   ],
   "performance_refresh": {
-    "refreshed_on": "2026-10-18",
-    "source": "Live Artificial Analysis model pages and explicit model-specific provider availability confirmation",
-    "changed_model_count": 18,
-    "note": "Reverified every model page. Unavailable performance metrics are null with dated model/provider evidence; previous measurements are not reused as current evidence."
+    "refreshed_on": "2026-11-06",
+    "source": "Live Artificial Analysis model and provider pages, Performance v3",
+    "changed_model_count": 15,
+    "note": "Legacy speed and TTFT fields remain null because Performance v3 publishes end-to-end speed and first-answer latency rather than verified equivalent legacy metrics."
   }
 }

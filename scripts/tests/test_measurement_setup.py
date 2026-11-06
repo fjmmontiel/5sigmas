@@ -3,9 +3,10 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import MagicMock, patch
 
 from scripts.build_measurement_catalog import build
-from scripts.configure_measurement import browser_config, validate_worker_policy
+from scripts.configure_measurement import browser_config, main, validate_worker_policy
 
 
 POLICY = {
@@ -29,6 +30,25 @@ class MeasurementSetupTests(unittest.TestCase):
         for health in [None, {}, {**HEALTH, "storage": "missing"}, {**HEALTH, "policy_revision": "old"}, {**HEALTH, "ok": False}]:
             with self.assertRaises(ValueError):
                 browser_config(POLICY, health)
+
+    def test_health_request_identifies_verifier_and_still_requires_ready_storage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "measurement-deployment.json").write_text(json.dumps(POLICY))
+            (root / "mcp-worker").mkdir()
+            (root / "mcp-worker/wrangler.jsonc").write_text(json.dumps({"vars": {"MEASUREMENT_ENABLED": "true", "MEASUREMENT_POLICY_REVISION": "2026-10-18"}}))
+            response = MagicMock(status=200)
+            response.headers.get_content_type.return_value = "application/json"
+            response.read.return_value = json.dumps({**HEALTH, "storage": "missing"}).encode()
+            opener = MagicMock()
+            opener.open.return_value.__enter__.return_value = response
+            with patch("sys.argv", ["configure_measurement.py", "--root", str(root)]), patch("scripts.configure_measurement.build_opener", return_value=opener):
+                with self.assertRaises(ValueError):
+                    main()
+            request = opener.open.call_args.args[0]
+            self.assertEqual(request.get_header("Accept"), "application/json")
+            self.assertEqual(request.get_header("User-agent"), "5sigmas-publication-verifier/1.0 (+https://5sigmas.com)")
+            self.assertFalse((root / "docs/assets/javascripts/measurement-config.js").exists())
 
     def test_cross_origin_or_changed_retention_never_activates(self):
         for change in [{"endpoint": "https://other.invalid/events"}, {"retention_days": 365}, {"storage_jurisdiction": "us"}]:

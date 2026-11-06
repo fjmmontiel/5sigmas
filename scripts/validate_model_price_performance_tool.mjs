@@ -55,7 +55,7 @@ for (const spec of cases) {
     if (visible !== expectedCount) failures.push(`${spec.route} ${viewport.name}: expected ${expectedCount} visible models, got ${visible}`);
 
     const tableText = await page.locator('[data-model-table-body]').innerText();
-    for (const sentinel of ['Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'DeepSeek V4.1 Flash']) {
+    for (const sentinel of ['Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'Gemini 3.8 Flash', 'Grok 4.7', 'GPT-6.1 Terra']) {
       if (!tableText.includes(sentinel)) failures.push(`${spec.route} ${viewport.name}: refreshed model missing from table: ${sentinel}`);
     }
 
@@ -154,8 +154,17 @@ for (const spec of cases) {
     await page.locator('[data-field="provider"]').selectOption('all');
     await page.locator('[data-field="maxTtftSeconds"]').fill('30');
     await page.locator('[data-field="maxTtftSeconds"]').dispatchEvent('input');
-    const lowLatencyRows = await page.locator('[data-model-table-body] tr').count();
+    const lowLatencyRows = await page.locator('[data-model-table-body] tr:has(td strong)').count();
     if (lowLatencyRows !== expectedLowLatency) failures.push(`${spec.route} ${viewport.name}: TTFT filter expected ${expectedLowLatency} rows, got ${lowLatencyRows}`);
+    if (expectedLowLatency === 0) {
+      const expectedMessage = spec.locale === 'es' ? 'Ningún modelo cumple estos filtros.' : 'No models match these filters.';
+      const emptyMessage = (await page.locator('[data-model-table-body] .s5-model-table__empty').textContent() || '').trim();
+      if (emptyMessage !== expectedMessage) failures.push(`${spec.route} ${viewport.name}: unexpected empty-table message: ${emptyMessage}`);
+      const visibleCount = (await page.locator('[data-output="visibleCount"]').textContent() || '').trim();
+      if (visibleCount !== '0') failures.push(`${spec.route} ${viewport.name}: expected zero visible models, got ${visibleCount}`);
+      const filteredPoints = await page.locator('.s5-model-point').count();
+      if (filteredPoints !== 0) failures.push(`${spec.route} ${viewport.name}: empty TTFT filter plotted ${filteredPoints} points`);
+    }
 
     await page.locator('[data-action="reset"]').click();
     const costBefore = (await page.locator('[data-model-table-body] tr').first().locator('td').nth(1).textContent() || '').trim();

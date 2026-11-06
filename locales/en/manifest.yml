@@ -6,6 +6,8 @@ route_strategy: preserve-source-slugs
 fallback_to_spanish: false
 shared_media: []
 published_routes:
+  - analisis-de-empresas/index.md
+  - analisis-de-empresas/01_inditex.md
   - index.md
   - buscar.md
   - proximamente.md
@@ -103,6 +105,11 @@ published_routes:
   - articulos-tecnicos/voice-agent-architectures.md
   - meta/about.md
 required_snippets:
+  - snippets/analisis-de-empresas/inditex/escala.html
+  - snippets/analisis-de-empresas/inditex/inversion.html
+  - snippets/analisis-de-empresas/inditex/evidencia.html
+  - snippets/analisis-de-empresas/inditex/cronologia.html
+  - snippets/analisis-de-empresas/inditex/privacidad.html
   - snippets/series_meta.html
   - snippets/articulos-tecnicos/voice-turn-taking-signals.html
   - snippets/articulos-tecnicos/voice-latency-critical-path.html
