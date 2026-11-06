@@ -237,7 +237,7 @@ jobs:
 
   live-qa:
     needs: deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Full production QA includes 240 browser playback cases plus locale/EN gates.
     # Two verified runs exhausted 25 minutes before the locale suite could finish.
     timeout-minutes: 45

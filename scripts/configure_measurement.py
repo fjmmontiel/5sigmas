@@ -55,7 +55,7 @@ def main() -> None:
         return
     health = None
     if policy.get("enabled") is True:
-        request = Request("https://5sigmas.com/_s5/measurement/health", headers={"Accept": "application/json"})
+        request = Request("https://5sigmas.com/_s5/measurement/health", headers={"Accept": "application/json", "User-Agent": "5sigmas-publication-verifier/1.0 (+https://5sigmas.com)"})
         with build_opener(NoRedirect).open(request, timeout=15) as response:
             if response.status != 200 or response.headers.get_content_type() != "application/json":
                 raise ValueError("Collector health response is invalid")

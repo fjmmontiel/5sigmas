@@ -29,9 +29,9 @@
     stanford_ai_index_2026_investment: 'Inversión privada en IA y nuevas empresas financiadas en 2025 según Quid. Las figuras publicadas muestran las 15 áreas principales de cada señal; un país que no aparece se conserva como dato ausente, nunca como cero.',
     stanford_ai_index_2026_datacenters: 'Recuento de instalaciones Cloudscene de 2025 para las 15 áreas mostradas por el informe. El número de centros no mide su tamaño, aceleradores de IA ni utilización.',
     stanford_ai_index_2026_models: 'Snapshot de Epoch AI del 22-04-2026. La figura solo publica geografías seleccionadas; una ausencia se conserva como dato ausente y no como cero modelos.',
-    stanford_ai_index_2025_linkedin_skills: 'Penetración relativa de habilidades de IA basada en perfiles de LinkedIn para los países mostrados en la figura. La cobertura y representatividad de la plataforma varían entre países; no se infieren valores ausentes.',
-    oxford_gair_2025: 'Policy Capacity es un pilar de la metodología 2025 de Oxford Insights, no una medida completa del rendimiento gubernamental. Solo se incorporan valores verificados en la tabla publicada.',
-    stanford_global_vibrancy_reference: 'Se muestra únicamente como referencia externa cuando ya existe un valor verificado. Nunca entra en la puntuación de 5sigmas porque reutilizar un índice compuesto produciría doble conteo.',
+    stanford_ai_index_2026_linkedin_skills: 'Penetración relativa de habilidades de IA basada en perfiles de LinkedIn para los países mostrados en la figura. La cobertura y representatividad de la plataforma varían entre países; no se infieren valores ausentes.',
+    oxford_gair_2025: 'Policy Capacity es un pilar de la metodología 2025 de Oxford Insights, no una medida completa del rendimiento gubernamental. La tabla requiere un formulario de datos personales y sus valores no están disponibles en este snapshot.',
+    stanford_global_vibrancy_reference: 'No se pudieron verificar las puntuaciones numéricas en la fuente primaria accesible; las referencias de 2024 figuran como ausentes y nunca entran en la puntuación de 5sigmas.',
   };
 
   const q = (selector) => root.querySelector(selector);
@@ -73,7 +73,7 @@
     return ({
       private_investment_2025: 'miles de millones de USD', new_ai_companies_2025: 'empresas',
       data_centers_2025: 'instalaciones', notable_models_2025: 'modelos',
-      ai_skill_penetration_2024: '× referencia ocupacional global', policy_capacity_2025: 'puntos Oxford Insights (0–100)',
+      ai_skill_penetration_2025: '× referencia ocupacional global', policy_capacity_2025: 'puntos Oxford Insights (0–100)',
     })[metric.id] || metric.unit;
   }
 
@@ -81,7 +81,7 @@
     if (!hasNumber(value)) return '—';
     const v = Number(value);
     if (metric.id === 'private_investment_2025') return `${fmt(v, 2)} B USD`;
-    if (metric.id === 'ai_skill_penetration_2024') return `${fmt(v, 2)}×`;
+    if (metric.id === 'ai_skill_penetration_2025') return `${fmt(v, 2)}×`;
     if (metric.id === 'policy_capacity_2025') return `${fmt(v, 1)}/100`;
     return fmt(v, Number.isInteger(v) ? 0 : 2);
   }

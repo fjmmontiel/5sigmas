@@ -36,16 +36,15 @@ const close = (actual, expected, epsilon = 1e-10, label = '') => {
 assert.equal(data.schema_version, 2);
 assert.ok(data.freshness_policy?.review_interval_days <= 7);
 assert.equal(data.freshness_policy?.performance_review_interval_days, 1);
-assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v4.3.2'));
+assert.ok(data.methodology?.benchmark?.includes('Artificial Analysis Intelligence Index v5.0.1'));
 assert.equal(data.release_coverage?.reviewed_through, SNAPSHOT);
 assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialanalysis\.ai\/models\/releases/);
 assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
 
 for (const requiredRelease of [
   'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
-  'Gemini 3.8 Flash', 'DeepSeek V4.1 Flash', 'Qwen3.8 Max (0902)',
-  'Qwen3.8-Flash-Next', 'Muse Spark 1.3', 'MiMo-V2.6-Pro', 'Step 5 Preview',
-  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4 Preview', 'Claude Haiku 5.5'
+  'Gemini 3.8 Flash', 'Qwen3.8 Max (0902)', 'MiMo-V2.6-Pro', 'Step 5 Preview',
+  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4', 'Claude Haiku 5.5', 'GPT-6.1 Terra'
 ]) {
   assert.ok(data.release_coverage.included_release_names.includes(requiredRelease), `${requiredRelease}: release coverage missing`);
 }
@@ -86,7 +85,7 @@ for (const model of data.models) {
   }
   const performanceAgeDays = (Date.parse(`${SNAPSHOT}T00:00:00Z`) - Date.parse(`${model.sources.benchmark.performance_snapshot_on}T00:00:00Z`)) / 86_400_000;
   assert.ok(performanceAgeDays >= 0 && performanceAgeDays <= data.freshness_policy.performance_review_interval_days, `${model.id}: performance snapshot is stale`);
-  assert.equal(model.sources.benchmark.index_family, 'Artificial Analysis Intelligence Index v4.3.2');
+  assert.equal(model.sources.benchmark.index_family, 'Artificial Analysis Intelligence Index v5.0.1');
 }
 
 for (const retiredId of [
@@ -108,9 +107,8 @@ const sol = byId.get('openai-gpt-6-1-sol-max');
 const luna = byId.get('openai-gpt-6-luna-max');
 const gemini = byId.get('google-gemini-3-8-flash-high');
 const grok = byId.get('spacexai-grok-4-7-high');
-const deepseek = byId.get('deepseek-v4-1-flash-max');
-const mistralLarge4 = byId.get('mistral-mistral-large-4-preview');
-for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, deepseek, mistralLarge4]) assert.ok(model, 'required refreshed comparison model missing');
+const mistralLarge4 = byId.get('mistral-mistral-large-4-high');
+for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, mistralLarge4]) assert.ok(model, 'required refreshed comparison model missing');
 
 assert.deepEqual([opus.input_usd_per_million, opus.output_usd_per_million], [4, 20]);
 assert.deepEqual([sonnet.input_usd_per_million, sonnet.output_usd_per_million], [2, 10]);
@@ -121,10 +119,9 @@ assert.deepEqual([sol.input_usd_per_million, sol.output_usd_per_million], [2, 10
 assert.deepEqual([luna.input_usd_per_million, luna.output_usd_per_million], [0.1, 0.5]);
 assert.deepEqual([gemini.input_usd_per_million, gemini.output_usd_per_million], [0.75, 3.75]);
 assert.deepEqual([grok.input_usd_per_million, grok.output_usd_per_million], [2, 6]);
-assert.deepEqual([deepseek.input_usd_per_million, deepseek.output_usd_per_million], [0.3, 1.2]);
-assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [1.36, 4.18]);
+assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [0.7, 2.1]);
 assert.equal(mistralLarge4.context_tokens, 1000000);
-assert.equal(mistralLarge4.intelligence_index, 38);
+assert.equal(mistralLarge4.intelligence_index, 26);
 // Availability is validated above from dated evidence, not pinned forever to null.
 // A later source-confirmed recovery must be allowed to restore numeric values.
 
@@ -156,7 +153,6 @@ assert.equal(mistralLarge4.intelligence_index, 38);
 const rows = api.enrichModels(data.models, { inputTokens: 4_000, outputTokens: 500 }, '2026-09-24T12:00:00Z');
 assert.equal(rows.length, data.models.length);
 close(rows.find((row) => row.id === luna.id).scenario.costPerRequest, 0.00065, 1e-12, 'Luna default cost');
-close(rows.find((row) => row.id === deepseek.id).scenario.costPerRequest, 0.0018, 1e-12, 'DeepSeek default cost');
 
 const frontier = rows.filter((item) => item.on_frontier);
 assert.ok(frontier.length >= 2, 'expected a non-trivial Pareto frontier');
@@ -174,14 +170,14 @@ assert.ok(highQuality.length >= 3);
 assert.ok(highQuality.every((row) => row.intelligence_index >= 50));
 
 const lowTtft = api.filterModels(rows, { maxTtftSeconds: 3 });
-assert.ok(lowTtft.length >= 3);
+assert.equal(lowTtft.length, 0);
 assert.ok(lowTtft.every((row) => row.ttft_seconds <= 3));
 
 const summary = api.summary(rows);
 assert.equal(summary.smartest.intelligence_index, Math.max(...rows.map((row) => Number(row.intelligence_index))));
 assert.equal(summary.cheapest.scenario.costPerRequest, Math.min(...rows.map((row) => Number(row.scenario.costPerRequest))));
-assert.equal(summary.fastest.output_tokens_per_second, Math.max(...rows.map((row) => Number(row.output_tokens_per_second))));
-assert.equal(summary.lowestLatency.ttft_seconds, Math.min(...rows.filter(row => row.ttft_seconds !== null).map((row) => Number(row.ttft_seconds))));
+assert.equal(summary.fastest, null);
+assert.equal(summary.lowestLatency, null);
 
 const excluded = new Map((data.release_coverage.reviewed_not_charted || []).map((row) => [row.model, row.reason]));
 assert.match(excluded.get('DeepSeek V4 Flash Vision') || '', /Superseded/i);
@@ -195,12 +191,13 @@ assert.equal(supersession.get('Gemini 3.6 Flash')?.replacement, 'Gemini 3.8 Flas
 assert.match(supersession.get('Gemini 3.7 Flash')?.reason || '', /deprecated|supersession/i);
 assert.equal(supersession.get('GPT-6 Sol')?.replacement, 'GPT-6.1 Sol');
 
-console.log(`Model price/performance tests passed: ${data.models.length} current configurations; v4.3.2 provenance, release coverage, pricing rules, filters, sorting and Pareto frontier verified.`);
+console.log(`Model price/performance tests passed: ${data.models.length} current configurations; v5.0.1 provenance, release coverage, pricing rules, filters, sorting and Pareto frontier verified.`);
 
 
 const unavailableRow = {...rows[0], id: 'unavailable', output_tokens_per_second: null, ttft_seconds: null};
 assert.equal(api.summary([unavailableRow]).fastest, null);
 assert.equal(api.summary([unavailableRow]).lowestLatency, null);
 assert.equal(api.filterModels([unavailableRow], {maxTtftSeconds: 3}).length, 0);
-assert.equal(api.sortModels([unavailableRow, rows[0]], 'latency').at(-1).id, 'unavailable');
-assert.equal(api.sortModels([unavailableRow, rows[0]], 'speed').at(-1).id, 'unavailable');
+const availableRow = {...rows[0], id: 'available', output_tokens_per_second: 10, ttft_seconds: 1};
+assert.equal(api.sortModels([unavailableRow, availableRow], 'latency').at(-1).id, 'unavailable');
+assert.equal(api.sortModels([unavailableRow, availableRow], 'speed').at(-1).id, 'unavailable');

@@ -211,6 +211,29 @@ const confirmUnavailablePerformance = (text, url) => {
   }
 };
 
+// Performance v3 publishes end-to-end speed and first-answer latency, neither
+// equivalent to the legacy post-start speed and first-token fields. Confirm
+// the new definitions on both source-owned surfaces; parser failure alone is
+// never evidence of unavailability.
+const confirmV3Incompatible = (modelText, providerText, url) => {
+  for (const [surface, text] of [['model', modelText], ['provider', providerText]]) {
+    if (!/Performance v3/i.test(text) || !/including time to first token/i.test(text)
+        || !/Time to First Answer Token/i.test(text)) {
+      throw new Error(`${url}: ${surface} Performance v3 semantics not confirmed`);
+    }
+    if (/generates output at\s+[0-9.]+\s+tokens per second/i.test(text)
+        || /has a time to first token \(TTFT\) of\s+[0-9.]+s/i.test(text)) {
+      throw new Error(`${url}: legacy metric returned; review its source and restore it`);
+    }
+  }
+};
+{
+  const v3 = 'Performance v3 Output speed including time to first token Time to First Answer Token';
+  assert.doesNotThrow(() => confirmV3Incompatible(v3, v3, 'fixture'));
+  assert.throws(() => confirmV3Incompatible(v3, v3.replace('Performance v3', ''), 'fixture'), /not confirmed/);
+  assert.throws(() => confirmV3Incompatible(v3 + ' generates output at 12 tokens per second', v3, 'fixture'), /legacy metric returned/);
+}
+
 // Invariant tests run before every real upstream audit; fixtures never supply
 // production metrics or bypass missing current provider measurements.
 {
@@ -261,23 +284,13 @@ for (const model of data.models || []) {
   }
 
   const intelligence = number(text.match(/\bscores\s+([0-9]+(?:\.[0-9]+)?)\s+on the Artificial Analysis Intelligence Index\b/i), 'Intelligence Index', url);
-  const speed = parseOutputSpeed(text, url);
-  const ttftMatch = text.match(/\bhas a time to first token \(TTFT\) of\s+([0-9]+(?:\.[0-9]+)?)s\b/i);
-  let ttft;
-  let availability;
-  if (speed === null) {
-    // Confirm missing performance on a second source-owned, model-specific
-    // surface. Neither a missing FAQ nor arbitrary 'No data' text is evidence.
-    const providersUrl = url.replace(/\/$/, '') + '/providers';
-    const providers = decode(await fetchHtml(providersUrl));
-    confirmUnavailablePerformance(providers, providersUrl);
-    assert.ok(!ttftMatch, `${model.id}: conflicting TTFT availability`);
-    ttft = null;
-    availability = {status: 'unavailable', checked_on: today, source_url: url,
-      confirmation_url: providersUrl, reason: 'Model summary explicitly reports Speed N/A and Unknown; provider benchmarks explicitly report no speed or latency data.'};
-  } else {
-    ttft = number(ttftMatch, 'TTFT', url);
-  }
+  const providersUrl = url.replace(/\/$/, '') + '/providers';
+  const providers = decode(await fetchHtml(providersUrl));
+  confirmV3Incompatible(text, providers, url);
+  const speed = null;
+  const ttft = null;
+  const availability = {status: 'unavailable', checked_on: today, source_url: url,
+    confirmation_url: providersUrl, reason: 'Performance v3 reports end-to-end output speed including first-token time and time to first answer token. These are not the legacy post-start speed and first-token latency; neither legacy value is established by the reviewed model and provider pages.'};
   const price = text.match(/\bcosts\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M input tokens[\s\S]{0,220}?\band\s+\$([0-9]+(?:\.[0-9]+)?)\s+per 1M output tokens\b/i);
   if (!price) throw new Error(`${model.id}: could not parse AA input/output price for drift detection`);
   const observedInput = Number(price[1]);
