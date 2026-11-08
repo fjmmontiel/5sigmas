@@ -32,7 +32,6 @@ date_modified: 2026-11-08
 
 **Hecho documentado.** Para H1 comunicó 1.307 millones de capex, mientras que el informe semestral registró 1.541 millones de altas de activos, principalmente en tiendas, logística y activos corporativos. Son medidas distintas: las altas contables no equivalen automáticamente al capex de caja. [Inditex, resultados H1 2026, tabla de caja y «Outlook»](https://www.inditex.com/itxcomweb/km/en/press/news-detail/a2c9b82b-1e27-4582-a7c9-746bc88b744e/interim-half-year-2026-results) · [CNMV, informe financiero H1 2026, nota 5, p. 11](https://www.cnmv.es/webservices/verdocumento/ver?e=x2nr8h8c2xhhP723fHLUSFzWKkWgDybUdOsLCgb8yTD1xVx9TYwe6nqlQTLZolJy).
 
-{{ include_html("snippets/analisis-de-empresas/inditex/inversion.html") }}
 
 **Interpretación propia.** Estas decisiones muestran recursos comprometidos con la infraestructura general, pero no cuánto compra Inditex en cómputo, licencias, personal o servicios de IA. Tampoco conocemos gasto recurrente, inversión ejecutada exclusivamente en IA ni ahorro neto después de integrar, supervisar y mantener los sistemas. Una gran cifra de inversión tecnológica no es un presupuesto de IA. Una mejora de ventas o margen tampoco es su retorno. Para medirlo harían falta una línea base, un grupo de comparación y costes completos, además de identificar qué intervención cambió cada resultado.
 
@@ -99,6 +98,8 @@ date_modified: 2026-11-08
 ## Dos explicaciones y tres escenarios observables
 
 **Interpretación propia.** La hipótesis de coordinación y distribución tiene una lógica de recursos: la infraestructura comercial y logística, los equipos técnicos declarados y las aplicaciones visuales ofrecen lugares concretos donde una mejora puede multiplicarse. Pero una explicación alternativa merece el mismo examen: Inditex podría estar difundiendo herramientas de IA internamente para defender eficiencia y calidad de servicio, sin que exista todavía una estrategia unificada de coordinación que pueda demostrarse desde fuera. La escasez de detalles puede reflejar tanto adopción amplia no divulgada como experimentos limitados. Ninguna lectura autoriza a ordenar competidores por «liderazgo en IA».
+
+{{ include_html("snippets/analisis-de-empresas/inditex/estrategia.html") }}
 
 **Escenario propio, próximos 12–24 meses: integración demostrada.** Si la compañía publica un caso operativo con proceso anterior, alcance, intervención humana y comparación consistente de disponibilidad, error y coste, la tesis de coordinación ganaría apoyo. El supuesto es que el sistema afecte decisiones reales a escala suficiente y no solo una prueba aislada. Debilitaría la tesis de creación de valor en ese caso una mejora que desaparezca frente a un grupo comparable o cuyos costes completos superen el beneficio. La publicación de un caso exitoso tampoco probaría que todos los procesos funcionen igual.
 
