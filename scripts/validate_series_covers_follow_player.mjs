@@ -81,17 +81,26 @@ async function scrollPastPlayerOrigin(page,selector){
     {selector,originBottom:geometry.originBottom},{timeout:5000});
 }
 
+async function declineOptionalMeasurement(page){
+  const decline=page.locator('[data-s5-consent="denied"]');
+  if(await decline.isVisible())await decline.click();
+}
+
 async function visibleDesktopSourceFlow(){
   const context=await browser.newContext({viewport:{width:1440,height:760}});
   const page=await context.newPage();
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(base+'/series/#serie-fundamentos-ia-iag',{waitUntil:'networkidle',timeout:60000});
+  await declineOptionalMeasurement(page);
   const player=page.locator('#serie-fundamentos-ia-iag .sx-player');
+  // This fixture needs the real page end, independent of the site's smooth scroll.
+  await page.evaluate(()=>{document.documentElement.style.scrollBehavior='auto'});
   await page.locator('#serie-fundamentos-ia-iag [data-sx-play]').click();
   await waitPlaying(page,'#serie-fundamentos-ia-iag .sx-player video');
   const originBottom=await player.evaluate(node=>node.getBoundingClientRect().bottom+scrollY);
   await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
-  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.waitForFunction(()=>Math.abs(window.scrollY-(document.documentElement.scrollHeight-innerHeight))<=1,
+    null,{timeout:5000});
   const state=await followState(page);
   assert.ok(Math.abs(state.scrollY-state.maxScroll)<=1,'negative scenario must reach the real page end');
   assert.ok(originBottom-state.scrollY>=72,'negative scenario must leave the original source visible');
@@ -146,6 +155,7 @@ async function desktopFlow(){
   const pageErrors=[];
   page.on('pageerror',error=>pageErrors.push(error.message));
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
+  await declineOptionalMeasurement(page);
   const hub=page.locator('[data-sx-hub]');
   assert.equal(await hub.getAttribute('data-ready'),'true','series hub must enhance successfully');
   assert.equal(await hub.locator('[data-sx-detail]:visible').count(),0,'fallback series details must be hidden after enhancement');
@@ -165,6 +175,7 @@ async function desktopFlow(){
   const firstArt=first.locator('.sx-card-art');
   // Scroll first, then measure: hover may otherwise scroll a stale offscreen
   // rectangle under the mouse without a deliberate pointer-enter movement.
+  await page.evaluate(()=>{document.documentElement.style.scrollBehavior='auto'});
   await firstArt.scrollIntoViewIfNeeded();
   const firstBox=await firstArt.boundingBox();
   assert.ok(firstBox,'first series cover must have measurable geometry');
@@ -243,6 +254,7 @@ async function mobileFlow(){
   const pageErrors=[];
   page.on('pageerror',error=>pageErrors.push(error.message));
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
+  await declineOptionalMeasurement(page);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'series catalogue must not overflow at 390px');
   assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),13);
 
@@ -286,6 +298,7 @@ async function reducedMotionFlow(){
   const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
   const page=await context.newPage();
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
+  await declineOptionalMeasurement(page);
   const first=page.locator('[data-sx-card]').first();
   const firstArt=first.locator('.sx-card-art');
   // Scroll first, then measure: hover may otherwise scroll a stale offscreen

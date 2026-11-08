@@ -140,8 +140,9 @@
     const closeBtn = document.createElement("button");
     closeBtn.type = "button";
     closeBtn.className = "anim-shell-modal__close";
-    closeBtn.textContent = "Cerrar";
-    closeBtn.setAttribute("aria-label", "Cerrar vista ampliada");
+    const en = document.documentElement.lang?.startsWith("en");
+    closeBtn.textContent = en ? "Close" : "Cerrar";
+    closeBtn.setAttribute("aria-label", en ? "Close expanded view" : "Cerrar vista ampliada");
     closeBtn.addEventListener("click", closeModal);
 
     const body = document.createElement("div");

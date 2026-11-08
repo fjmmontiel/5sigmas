@@ -16,7 +16,7 @@ date_modified: 2026-11-08
 
 **Documented fact.** Inditex ended FY2025, which closed on 31 January 2026, with €39,864 million in sales, approximately €10,700 million of which came from online, and 5,460 stores. Online sales form part of the total. They are not additional. Sales reached €19,755 million in the first half of the following financial year. These are consolidated business figures, not results attributable to a particular technology. [Inditex, FY2025 results, “Strong sales growth” and “Very strong execution”](https://www.inditex.com/itxcomweb/se/en/press/news-detail/b870d5ec-6b7e-491d-b38e-340cd69036df/fy2025-results) · [CNMV, H1 2026 financial report, income statement, p. 3](https://www.cnmv.es/webservices/verdocumento/ver?e=x2nr8h8c2xhhP723fHLUSFzWKkWgDybUdOsLCgb8yTD1xVx9TYwe6nqlQTLZolJy).
 
-{{ include_html("snippets/analisis-de-empresas/inditex/escala.html") }}
+{{ include_html("snippets/analisis-de-empresas/inditex/escala.html", anim_shell="on") }}
 
 **Our interpretation.** Size can magnify a small improvement, but it also multiplies the cost of a mistake. A commercial decision connects the choice, production, availability and presentation of a garment with customer responses across different places and channels. A poor forecast can leave products unsold, and a late replenishment can lose a sale that store traffic had already brought within reach. Economic value depends on the whole chain, not just on whether a screen looks smarter.
 
@@ -32,7 +32,7 @@ date_modified: 2026-11-08
 
 **Documented fact.** For H1, Inditex reported €1,307 million in capex, while its half-year report recorded €1,541 million in asset additions, principally in stores, logistics and corporate assets. These are different measures: accounting additions do not automatically equal cash capex. [Inditex, H1 2026 results, cash table and “Outlook”](https://www.inditex.com/itxcomweb/km/en/press/news-detail/a2c9b82b-1e27-4582-a7c9-746bc88b744e/interim-half-year-2026-results) · [CNMV, H1 2026 financial report, note 5, p. 11](https://www.cnmv.es/webservices/verdocumento/ver?e=x2nr8h8c2xhhP723fHLUSFzWKkWgDybUdOsLCgb8yTD1xVx9TYwe6nqlQTLZolJy).
 
-{{ include_html("snippets/analisis-de-empresas/inditex/inversion.html") }}
+{{ include_html("snippets/analisis-de-empresas/inditex/inversion.html", anim_shell="on") }}
 
 **Our interpretation.** These decisions show resources committed to general infrastructure, but not how much Inditex buys in AI computing, licences, staff or services. Nor do we know recurring expenditure, investment executed exclusively for AI, or net savings after integrating, supervising and maintaining systems. A large technology investment figure is not an AI budget. An improvement in sales or margin is not its return. Measuring that return would require a baseline, a comparison group and full costs, as well as identifying which intervention changed each outcome.
 
@@ -68,7 +68,7 @@ date_modified: 2026-11-08
 
 **Our interpretation.** Rotation illustrates a decision different from sales forecasting: allocating tasks directly affects people's working days. The stated ergonomic objective may be valuable, but assessing it would require knowing the variables, coverage, outcomes and whether an allocation can actually be corrected or challenged. The absence of those details in the passages consulted does not prove that controls are missing, although it prevents us from judging how they work. Nor do we know what employment changes the system caused.
 
-{{ include_html("snippets/analisis-de-empresas/inditex/evidencia.html") }}
+{{ include_html("snippets/analisis-de-empresas/inditex/evidencia.html", anim_shell="on") }}
 
 ## Building, buying and learning beyond the core business
 
@@ -90,11 +90,11 @@ date_modified: 2026-11-08
 
 **Company statement.** Zara Ireland's policy says photos are deleted after the avatar is created. The avatar is retained for up to a year for account holders, extendable with consent, or 24 hours without an account. This is a statement for Ireland, not an audit of implementation or a universal rule. [Zara Ireland, privacy policy, §§2, 4 and 5, pp. 6 and 10–11](https://static.zara.net/static/pdfs/IE/privacy-policy/privacy-policy-en_IE-20251202.pdf).
 
-{{ include_html("snippets/analisis-de-empresas/inditex/privacidad.html") }}
+{{ include_html("snippets/analisis-de-empresas/inditex/privacidad.html", anim_shell="on") }}
 
 **Our interpretation.** Deleting the photograph and retaining the avatar are separate decisions, as are consent, security and rights of access. Convincing governance would show how these commitments are checked, what happens after an error or misuse, and who can stop an application. For systems that affect workers, explanations and practical review of decisions matter too. We have not identified enough public evidence to assess those mechanisms in each case. That gap is neither an incident nor proof of non-compliance.
 
-{{ include_html("snippets/analisis-de-empresas/inditex/cronologia.html") }}
+{{ include_html("snippets/analisis-de-empresas/inditex/cronologia.html", anim_shell="on") }}
 
 ## Two explanations and three observable scenarios
 
