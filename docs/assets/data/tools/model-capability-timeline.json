@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated": "2026-10-07",
+  "updated": "2026-11-08",
   "scope": "OpenAI release-reported benchmark history selected for explicit provenance and configuration notes. No cross-vendor normalization is attempted in v1.",
   "freshness_policy": "Review on every relevant model release and at least every 30 days while the tool is active.",
   "sources": {
@@ -75,6 +75,18 @@
       "title": "Mistral Large 4 | Mistral Docs",
       "url": "https://docs.mistral.ai/models/mistral-large",
       "published": "2026-10-06"
+    },
+    "gpt61terra": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-6.1 Terra",
+      "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+      "published": "2026-10-26"
+    },
+    "gpt6cyber": {
+      "organization": "OpenAI",
+      "title": "GPT-6 Cyber: Advancing the frontier of aligned cybersecurity agents",
+      "url": "https://openai.com/index/introducing-gpt-6-cyber/",
+      "published": "2026-11-05"
     }
   },
   "series": [
@@ -159,25 +171,9 @@
       "higher_is_better": true,
       "definition_es": "Razonamiento multimodal sobre disciplinas académicas. Solo se incluyen valores MMMU-Pro sin herramientas; MMMU y MMMU-Pro se mantienen como benchmarks distintos.",
       "definition_en": "Multimodal reasoning across academic disciplines. Only no-tools MMMU-Pro values are included; MMMU and MMMU-Pro remain distinct benchmarks.",
-      "caveat_es": "El esfuerzo de razonamiento y el tratamiento de imagen pueden variar entre lanzamientos. La herramienta no mezcla resultados con Python/herramientas con los de sin herramientas.",
-      "caveat_en": "Reasoning effort and image handling can vary across releases. The tool does not mix Python/tool-assisted results with no-tools results.",
+      "caveat_es": "El esfuerzo de razonamiento y el tratamiento de imagen pueden variar entre lanzamientos. La herramienta no mezcla resultados con Python/herramientas con los de sin herramientas. Se excluyen los valores de GPT-4.1 y GPT-5 de la tabla de GPT-5 porque no declara si se usaron herramientas.",
+      "caveat_en": "Reasoning effort and image handling can vary across releases. The tool does not mix Python/tool-assisted results with no-tools results. GPT-4.1 and GPT-5 values from the GPT-5 table are excluded because it does not state whether tools were used.",
       "points": [
-        {
-          "date": "2025-04-14",
-          "model": "GPT-4.1",
-          "score": 60.3,
-          "source": "gpt5",
-          "conditions": "MMMU-Pro; average across standard and vision sets; no tools in comparison context",
-          "protocol": "no-tools"
-        },
-        {
-          "date": "2025-08-07",
-          "model": "GPT-5",
-          "score": 78.4,
-          "source": "gpt5",
-          "conditions": "high reasoning; no tools",
-          "protocol": "no-tools"
-        },
         {
           "date": "2025-12-11",
           "model": "GPT-5.2 Thinking",
@@ -214,8 +210,8 @@
       "higher_is_better": true,
       "definition_es": "Resolución de issues reales en repositorios. La serie expone explícitamente un cambio de protocolo: el informe de GPT-5 omitía 23 de 500 problemas, mientras GPT-5.1 reportó los 500 con un harness JSON apply_patch.",
       "definition_en": "Real repository issue resolution. The series explicitly exposes a protocol break: the GPT-5 report omitted 23 of 500 problems, while GPT-5.1 reported all 500 using a JSON apply_patch harness.",
-      "caveat_es": "No existe una única curva homogénea. Una misma generación (GPT-5) aparece con 74,9% en el protocolo de 477 problemas y 72,8% en la comparación posterior de 500 problemas: ocultar esa diferencia sería engañoso.",
-      "caveat_en": "There is no single homogeneous curve. The same GPT-5 generation appears at 74.9% under the 477-problem protocol and 72.8% in the later 500-problem comparison; hiding that difference would be misleading.",
+      "caveat_es": "No existe una única curva homogénea. Una misma generación (GPT-5) aparece con 74,9% en el protocolo de 477 problemas y 72,8% en la comparación posterior de 500 problemas: ocultar esa diferencia sería engañoso. La tabla de GPT-5.2 compara con 76,3%, pero no especifica su harness ni el número de problemas.",
+      "caveat_en": "There is no single homogeneous curve. The same GPT-5 generation appears at 74.9% under the 477-problem protocol and 72.8% in the later 500-problem comparison; hiding that difference would be misleading. The GPT-5.2 table compares against 76.3%, but does not specify its harness or problem count.",
       "points": [
         {
           "date": "2025-04-14",
@@ -254,8 +250,8 @@
           "model": "GPT-5.2 Thinking",
           "score": 80,
           "source": "gpt52",
-          "conditions": "release table directly compared with GPT-5.1 76.3; all-problem protocol inherited in comparison",
-          "protocol": "500-problem-apply-patch"
+          "conditions": "release table compares GPT-5.1 76.3; harness and problem count not specified for GPT-5.2",
+          "protocol": "release-table-unspecified"
         }
       ]
     },
@@ -269,8 +265,8 @@
       "higher_is_better": true,
       "definition_es": "Benchmark de ingeniería de software más reciente y multilenguaje. Se mantiene separado de SWE-bench Verified porque no son intercambiables.",
       "definition_en": "Newer multi-language software-engineering benchmark. It remains separate from SWE-bench Verified because the two are not interchangeable.",
-      "caveat_es": "Las fuentes son tablas de lanzamiento. La etiqueta cambia de “Public” a “SWE-Bench Pro” en informes posteriores; no se asume que un cambio de nombre implique una nueva versión sin evidencia adicional.",
-      "caveat_en": "Sources are release tables. The label shifts from “Public” to “SWE-Bench Pro” in later reports; a naming change is not treated as a new benchmark version without additional evidence.",
+      "caveat_es": "La tabla de GPT-5.6 dice SWE-Bench Pro sin especificar Public; se señala como protocolo no especificado, no como el mismo conjunto.",
+      "caveat_en": "The GPT-5.6 table says SWE-Bench Pro without specifying Public; it is marked as an unspecified protocol, not assumed to be the same set.",
       "points": [
         {
           "date": "2025-11-13",
@@ -309,8 +305,8 @@
           "model": "GPT-5.6 Sol",
           "score": 64.6,
           "source": "gpt56",
-          "conditions": "SWE-Bench Pro release evaluation",
-          "protocol": "public"
+          "conditions": "SWE-Bench Pro release evaluation; Public set not specified",
+          "protocol": "release-table-unspecified"
         }
       ]
     },
@@ -410,7 +406,7 @@
     }
   ],
   "release_coverage": {
-    "reviewed_through": "2026-10-07",
+    "reviewed_through": "2026-11-08",
     "releases": [
       {
         "model": "GPT-6 Astra",
@@ -457,6 +453,20 @@
         "status": "reviewed_not_added",
         "source": "mistrallarge4",
         "reason": "Mistral released a new multimodal reasoning model, but this timeline keeps longitudinal benchmark series only where release-reported protocols are directly comparable. No cross-vendor point is inserted from Artificial Analysis or from a different benchmark set."
+      },
+      {
+        "model": "GPT-6.1 Terra",
+        "date": "2026-10-26",
+        "status": "reviewed_not_added",
+        "source": "gpt61terra",
+        "reason": "The launch page discusses MMMU-Pro but the accessible text does not provide a numeric score with a no-tools condition; its Terminal-Bench and OSWorld results are different benchmarks."
+      },
+      {
+        "model": "GPT-6 Cyber",
+        "date": "2026-11-05",
+        "status": "reviewed_not_added",
+        "source": "gpt6cyber",
+        "reason": "The launch reports cybersecurity evaluations including ExploitGym, not a comparable result in the six existing series."
       }
     ]
   }

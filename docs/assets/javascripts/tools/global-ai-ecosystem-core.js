@@ -126,10 +126,14 @@
   function decodeState(search, data) {
     const params = new URLSearchParams(String(search || '').replace(/^\?/, ''));
     const valid = new Set(data.metrics.map((metric) => metric.id));
-    const rawMetrics = (params.get('m') || '').split(',').filter((id) => valid.has(id));
+    const legacyTalent = valid.has('ai_skill_penetration_2025');
+    const rawMetrics = [...new Set((params.get('m') || '').split(',')
+      .map((id) => legacyTalent && id === 'ai_skill_penetration_2024' ? 'ai_skill_penetration_2025' : id)
+      .filter((id) => valid.has(id)))];
     const weights = {};
     valid.forEach((id) => {
-      const value = params.get(`w_${id}`);
+      let value = params.get(`w_${id}`);
+      if (id === 'ai_skill_penetration_2025' && value === null) value = params.get('w_ai_skill_penetration_2024');
       if (finite(value)) weights[id] = Number(value);
     });
     const focus = params.get('focus');

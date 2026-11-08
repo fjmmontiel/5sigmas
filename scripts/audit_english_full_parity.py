@@ -38,7 +38,7 @@ PUBLIC_ROOT_FILES = (
     "series/index.md",
     "visuales/index.md",
 )
-PUBLIC_DIRS = ("series", "temas", "articulos-tecnicos", "herramientas")
+PUBLIC_DIRS = ("series", "temas", "articulos-tecnicos", "herramientas", "analisis-de-empresas")
 GENERATED_NAV_ROUTES = {"videos/index.md"}
 
 INCLUDE_HTML_RE = re.compile(

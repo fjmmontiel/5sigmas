@@ -92,6 +92,16 @@ try {
 
       const metricControls = page.locator('[data-metric-active]');
       if (await metricControls.count() !== 6) failures.push(`${spec.route} ${viewport.name}: expected six selectable signals`);
+      const policyToggle = page.locator('[data-metric-active="policy_capacity_2025"]');
+      await policyToggle.check();
+      const policyCoverage = (await page.locator('[data-output="coverage"]').textContent() || '').trim();
+      if (!policyCoverage.includes('0/28')) failures.push(`${spec.route} ${viewport.name}: unavailable policy must show zero comparable countries`);
+      if (await page.locator('.s5-ecosystem-rank-row').count() !== 0) failures.push(`${spec.route} ${viewport.name}: unavailable policy must not render ranked rows`);
+      const emptyText = (await page.locator('[data-output="ranking"] .s5-tool-empty').textContent() || '').trim();
+      const expectedEmpty = spec.locale === 'en' ? 'No countries have complete data for this combination.' : 'No hay países con datos completos para esta combinación.';
+      if (emptyText !== expectedEmpty) failures.push(`${spec.route} ${viewport.name}: missing clear empty-state message`);
+      await policyToggle.uncheck();
+      if (!(await page.locator('[data-output="coverage"]').textContent() || '').includes('12/28')) failures.push(`${spec.route} ${viewport.name}: disabling policy must restore the default scenario`);
       const datacenterToggle = page.locator('[data-metric-active="data_centers_2025"]');
       if (await datacenterToggle.isChecked()) failures.push(`${spec.route} ${viewport.name}: infrastructure should not be active by default`);
       await datacenterToggle.check();

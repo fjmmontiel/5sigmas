@@ -175,6 +175,9 @@ nav:
           - "Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Evaluación online: shadow, canary, A/B, guardrails y regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
           - "Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
+  - Análisis de empresas:
+      - analisis-de-empresas/index.md
+      - Inditex: analisis-de-empresas/01_inditex.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
