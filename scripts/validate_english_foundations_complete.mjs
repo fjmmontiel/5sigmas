@@ -631,6 +631,9 @@ try {
 
       const response = await page.goto(`${base}${entry.route}`, { waitUntil: 'networkidle' });
       if (!response?.ok()) failures.push(`${entry.route}: HTTP ${response?.status() ?? 'no response'}`);
+      // Fresh production pages expose optional consent before the article controls.
+      const decline = page.locator('[data-s5-consent="denied"]');
+      if (await decline.isVisible()) await decline.click();
 
       const body = await page.locator('body').innerText();
       const lowerBody = body.toLowerCase();

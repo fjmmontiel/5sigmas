@@ -106,7 +106,7 @@ published_routes:
   - meta/about.md
 required_snippets:
   - snippets/analisis-de-empresas/inditex/escala.html
-  - snippets/analisis-de-empresas/inditex/inversion.html
+  - snippets/analisis-de-empresas/inditex/estrategia.html
   - snippets/analisis-de-empresas/inditex/evidencia.html
   - snippets/analisis-de-empresas/inditex/cronologia.html
   - snippets/analisis-de-empresas/inditex/privacidad.html

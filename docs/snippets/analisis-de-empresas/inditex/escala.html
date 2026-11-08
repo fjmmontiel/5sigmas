@@ -1,12 +1,39 @@
 <div class="itx-escala" data-demo="inditex-escala" data-anim-fullscreen="on" data-anim-contrast="force">
-<style>.itx-escala,.itx-escala *{box-sizing:border-box} .itx-escala{--fg:var(--md-default-fg-color,#0f172a);--bg:var(--md-default-bg-color,#f7f9fc);--line:color-mix(in srgb,var(--fg) 20%,transparent);--teal:#26A69A;--blue:#324AB2;--amber:#FFB343;color:var(--fg);background:var(--bg);font-family:"Inter","Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;padding:clamp(18px,3vw,30px);margin:1.8rem 0;border-top:4px solid var(--teal)} .itx-escala h3{font-size:clamp(22px,3vw,30px);line-height:1.14;letter-spacing:-.025em;margin:0 0 12px} .itx-escala p{margin:8px 0} .itx-escala a{color:inherit;text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px} .itx-escala .kicker{font-size:14px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px} .itx-escala .note{font-size:14px;line-height:1.5;margin-top:16px} .itx-escala details{border-top:1px solid var(--line);margin-top:16px;padding-top:10px} .itx-escala summary{cursor:pointer;font-weight:700} .itx-escala summary:focus-visible,.itx-escala a:focus-visible{outline:3px solid var(--teal);outline-offset:3px} .itx-escala table{border-collapse:collapse;width:100%;font-size:16px} .itx-escala th,.itx-escala td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)} .itx-escala th{font-weight:750} .itx-escala .muted{opacity:.8} .itx-escala .bar-label,.itx-escala .under{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap} .itx-escala .bar{height:32px;background:color-mix(in srgb,var(--blue) 28%,var(--bg));margin:9px 0;border:1px solid var(--line)} .itx-escala .part{width:26.8%;height:100%;background:var(--teal)} .itx-escala .calculation{max-width:70ch} .itx-escala .stores{border-top:1px solid var(--line);margin-top:18px;padding-top:12px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap} .itx-escala .stores strong{font-size:30px;line-height:1}</style>
+<style>.itx-escala,.itx-escala *{box-sizing:border-box} .itx-escala{--fg:#0f172a;--bg:#f7f9fc;--line:color-mix(in srgb,var(--fg) 20%,transparent);--teal:#26A69A;--blue:#324AB2;--amber:#FFB343;--ph:color-mix(in srgb,var(--blue) 60%,var(--fg));--tx:color-mix(in srgb,var(--teal) 62%,var(--fg));color:var(--fg);background:var(--bg);font-family:"Inter","Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;padding:clamp(18px,3vw,30px);margin:1.8rem 0}
+[data-md-color-scheme="slate"] .itx-escala{--fg:#e2e8f0;--bg:#0b1220}
+.itx-escala h3{font-size:clamp(22px,3vw,30px);line-height:1.14;letter-spacing:-.025em;margin:0 0 12px} .itx-escala p{margin:8px 0} .itx-escala a{color:inherit;text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px} .itx-escala a:focus-visible,.itx-escala summary:focus-visible{outline:3px solid var(--teal);outline-offset:3px} .itx-escala .kicker{font-size:14px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px} .itx-escala .note{font-size:14px;line-height:1.5;margin-top:16px}
+.itx-escala .defs{position:absolute;width:0;height:0}
+.itx-escala .ic{width:30px;height:30px;flex:none;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;color:var(--ph)}
+.itx-escala .plot{margin-top:22px}
+.itx-escala .top{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 12px}
+.itx-escala .top b{font-size:clamp(32px,6vw,46px);line-height:1.1;letter-spacing:-.03em}
+.itx-escala .top span{font-size:17px;font-weight:700}
+.itx-escala .brk{height:12px;margin-top:6px;border:3px solid var(--fg);border-bottom:0}
+.itx-escala .strip{display:flex;height:60px;border:3px solid var(--fg);border-top-width:0}
+.itx-escala .on{flex:0 0 26.8%;min-width:0;background:color-mix(in srgb,var(--teal) 55%,var(--bg));border-right:3px solid var(--fg);padding:6px 8px;display:flex;align-items:flex-end}
+.itx-escala .on span{font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.itx-escala .rs{flex:1;background:color-mix(in srgb,var(--blue) 16%,var(--bg))}
+.itx-escala .ann{margin-left:calc(13.4% - 1.5px);border-left:3px solid var(--tx);padding:10px 0 4px 14px}
+.itx-escala .ann p{margin:0 0 6px;font-size:16px}
+.itx-escala .ann b{font-size:22px;letter-spacing:-.015em;margin-right:6px}
+.itx-escala .un{margin-top:18px;border-top:2px dashed color-mix(in srgb,var(--fg) 45%,transparent);padding-top:10px}
+.itx-escala .kk{display:block;font-size:14px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.itx-escala .un p{display:flex;align-items:center;gap:12px;margin:8px 0 0;flex-wrap:wrap}
+.itx-escala .un b{font-size:28px;line-height:1.1;letter-spacing:-.02em}
+.itx-escala .cav{border-left:4px solid var(--amber);padding-left:12px;margin:20px 0 0}
+.itx-escala details{border-top:1px solid var(--line);margin-top:16px;padding-top:10px} .itx-escala summary{cursor:pointer;font-weight:700}
+.itx-escala table{border-collapse:collapse;width:100%;font-size:16px;margin-top:8px} .itx-escala th,.itx-escala td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)} .itx-escala th{font-weight:750}</style>
 <div class="kicker">Hecho documentado</div><h3>Online forma parte de las ventas, no se suma a ellas</h3>
 <p>Ejercicio 2025, terminado el 31 de enero de 2026</p>
-<div class="bar-label"><strong>Ventas totales</strong><strong>39.864 M€</strong></div>
-<div class="bar" role="img" aria-label="Ventas totales 39.864 millones de euros, con unos 10.700 millones online incluidos"><div class="part"></div></div>
-<div class="under"><strong>≈10.700 M€ online, incluidos</strong><span>≈26,8 % del total</span></div>
-<p class="calculation">Cálculo propio aproximado: 10.700 ÷ 39.864 × 100 ≈ 26,8 %. No mide un efecto de la IA.</p>
-<div class="stores"><strong>5.460</strong> <span>tiendas al cierre del ejercicio</span></div>
-<p class="note"><a href="https://www.inditex.com/itxcomweb/se/en/press/news-detail/b870d5ec-6b7e-491d-b38e-340cd69036df/fy2025-results">Inditex, FY2025, «Strong sales growth» / «Very strong execution» (11 marzo 2026)</a> · Consulta y corte: 6 noviembre 2026</p>
-<details><summary>Ver datos y cálculo</summary><table><thead><tr><th>Medida</th><th>FY2025</th></tr></thead><tbody><tr><td>Ventas totales</td><td>39.864 M€</td></tr><tr><td>Online, incluido</td><td>≈10.700 M€</td></tr><tr><td>Tiendas</td><td>5.460</td></tr></tbody></table><p><a href="https://www.inditex.com/itxcomweb/se/en/press/news-detail/b870d5ec-6b7e-491d-b38e-340cd69036df/fy2025-results">Inditex, FY2025, «Strong sales growth» / «Very strong execution» (11 marzo 2026)</a></p></details>
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><symbol id="itxe-store" viewBox="0 0 48 48"><path d="M6 18l4-10h28l4 10"/><path d="M6 18c0 3 3 4 6 4s6-1 6-4c0 3 3 4 6 4s6-1 6-4c0 3 3 4 6 4s6-1 6-4"/><path d="M9 25v15h30V25"/><path d="M20 40V30h8v10"/></symbol></defs></svg>
+<div class="plot" role="group" aria-label="Ventas totales de 39.864 millones de euros en el ejercicio 2025. Dentro de ese total están unos 10.700 millones del canal online, aproximadamente el 26,8 % según un cálculo propio. Las 5.460 tiendas son otra unidad y no forman parte de la barra en euros.">
+<div class="top"><b>39.864 M€</b><span>ventas totales</span></div>
+<div class="brk" aria-hidden="true"></div>
+<div class="strip" aria-hidden="true"><div class="on"><span>Online</span></div><div class="rs"></div></div>
+<div class="ann"><p><b>≈10.700 M€</b><span>online, ya incluido en el total</span></p><p><b>≈26,8 %</b><span>del total · cálculo propio aproximado</span></p></div>
+<div class="un"><span class="kk">Otra unidad, no incluida en la barra</span><p><svg class="ic" aria-hidden="true"><use href="#itxe-store"/></svg><b>5.460</b><span>tiendas al cierre del ejercicio</span></p></div>
+</div>
+<p class="cav">Magnitudes de un negocio consolidado. No miden un efecto de la IA.</p>
+<p class="note"><a href="https://www.inditex.com/itxcomweb/se/en/press/news-detail/b870d5ec-6b7e-491d-b38e-340cd69036df/fy2025-results">Inditex, FY2025, «Strong sales growth» / «Very strong execution» (11 marzo 2026)</a> · <span>Consulta y corte: 6 noviembre 2026</span></p>
+<details><summary>Ver datos y cálculo</summary><p>Cálculo propio aproximado: 10.700 ÷ 39.864 × 100 ≈ 26,8 %. No mide un efecto de la IA.</p><table><thead><tr><th>Medida</th><th>FY2025</th></tr></thead><tbody><tr><td>Ventas totales</td><td>39.864 M€</td></tr><tr><td>Online, incluido</td><td>≈10.700 M€</td></tr><tr><td>Tiendas</td><td>5.460</td></tr></tbody></table></details>
 </div>

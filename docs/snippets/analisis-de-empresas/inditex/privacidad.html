@@ -1,5 +1,72 @@
 <div class="itx-privacidad" data-demo="inditex-privacidad" data-anim-fullscreen="on" data-anim-contrast="force">
-<style>.itx-privacidad,.itx-privacidad *{box-sizing:border-box} .itx-privacidad{--fg:var(--md-default-fg-color,#0f172a);--bg:var(--md-default-bg-color,#f7f9fc);--line:color-mix(in srgb,var(--fg) 20%,transparent);--teal:#26A69A;--blue:#324AB2;--amber:#FFB343;color:var(--fg);background:var(--bg);font-family:"Inter","Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;padding:clamp(18px,3vw,30px);margin:1.8rem 0;border-top:4px solid var(--teal)} .itx-privacidad h3{font-size:clamp(22px,3vw,30px);line-height:1.14;letter-spacing:-.025em;margin:0 0 12px} .itx-privacidad p{margin:8px 0} .itx-privacidad a{color:inherit;text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px} .itx-privacidad .kicker{font-size:14px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px} .itx-privacidad .note{font-size:14px;line-height:1.5;margin-top:16px} .itx-privacidad details{border-top:1px solid var(--line);margin-top:16px;padding-top:10px} .itx-privacidad summary{cursor:pointer;font-weight:700} .itx-privacidad summary:focus-visible,.itx-privacidad a:focus-visible{outline:3px solid var(--teal);outline-offset:3px} .itx-privacidad table{border-collapse:collapse;width:100%;font-size:16px} .itx-privacidad th,.itx-privacidad td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)} .itx-privacidad th{font-weight:750} .itx-privacidad .muted{opacity:.8} .itx-privacidad .common{border-top:3px solid var(--teal);border-bottom:1px solid var(--line);padding:15px 0;display:flex;gap:10px 24px;justify-content:space-between;flex-wrap:wrap} .itx-privacidad .common span,.itx-privacidad .branch-label{font-size:14px;font-weight:750;letter-spacing:.08em} .itx-privacidad .branch-label{margin:19px 0 10px} .itx-privacidad .branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px} .itx-privacidad .branches>div{border-top:3px solid var(--blue);padding-top:10px} .itx-privacidad .branches h4{font-size:16px;margin:0 0 8px} .itx-privacidad .branches strong{font-size:clamp(23px,4vw,31px);line-height:1.2} @media(max-width:540px){.itx-privacidad .branches{grid-template-columns:1fr;gap:18px}}</style>
+<style>.itx-privacidad,.itx-privacidad *{box-sizing:border-box} .itx-privacidad{--fg:var(--md-default-fg-color,#0f172a);--bg:var(--md-default-bg-color,#f7f9fc);--line:color-mix(in srgb,var(--fg) 20%,transparent);--teal:#26A69A;--blue:#324AB2;--amber:#FFB343;color:var(--fg);background:var(--bg);font-family:"Inter","Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;padding:clamp(18px,3vw,30px);margin:1.8rem 0;border-top:4px solid var(--teal)} .itx-privacidad h3{font-size:clamp(22px,3vw,30px);line-height:1.14;letter-spacing:-.025em;margin:0 0 12px} .itx-privacidad p{margin:8px 0} .itx-privacidad a{color:inherit;text-decoration:underline;text-decoration-color:var(--teal);text-underline-offset:3px} .itx-privacidad .kicker{font-size:14px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px} .itx-privacidad .note{font-size:14px;line-height:1.5;margin-top:16px} .itx-privacidad details{border-top:1px solid var(--line);margin-top:16px;padding-top:10px} .itx-privacidad summary{cursor:pointer;font-weight:700} .itx-privacidad summary:focus-visible,.itx-privacidad a:focus-visible{outline:3px solid var(--teal);outline-offset:3px} .itx-privacidad{--fg:#0f172a;--bg:#f7f9fc;--cut:var(--fg);--ph:color-mix(in srgb,var(--blue) 60%,var(--fg));--tx:color-mix(in srgb,var(--teal) 62%,var(--fg));border-top:0;padding-top:clamp(6px,1.5vw,14px)}
+[data-md-color-scheme="slate"] .itx-privacidad{--fg:#e2e8f0;--bg:#0b1220}
+.itx-privacidad .gone .ic{width:14px;height:14px;stroke:var(--bg)}
+.itx-privacidad .defs{position:absolute;width:0;height:0}
+.itx-privacidad .ic{width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.itx-privacidad .canvas{border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,28px);background-color:color-mix(in srgb,var(--fg) 3.5%,var(--bg));background-image:radial-gradient(color-mix(in srgb,var(--fg) 15%,transparent) 1px,transparent 1.5px);background-size:18px 18px;margin-top:6px}
+.itx-privacidad .band{display:flex;align-items:stretch;justify-content:center;gap:10px}
+.itx-privacidad .obj{flex:none;width:100px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:15px;font-weight:750;line-height:1.25;text-align:center}
+.itx-privacidad .tile{flex:none;position:relative;width:56px;height:56px;border-radius:14px;display:grid;place-items:center;border:2px solid currentColor}
+.itx-privacidad .tile.ph{color:var(--ph);background:color-mix(in srgb,var(--blue) 12%,var(--bg))}
+.itx-privacidad .tile.av{color:var(--tx);background:color-mix(in srgb,var(--teal) 16%,var(--bg))}
+.itx-privacidad .gone{position:absolute;right:-9px;bottom:-9px;width:24px;height:24px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:17px;font-weight:800;line-height:1}
+.itx-privacidad .arr{flex:none;align-self:flex-start;width:34px;height:3px;margin-top:27px;background:var(--cut);position:relative}
+.itx-privacidad .arr::after{content:"";position:absolute;right:-1px;top:-6px;border:7.5px solid transparent;border-left:10px solid var(--cut);border-right:0}
+.itx-privacidad .lm{flex:none;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 22px;border-radius:18px;background:var(--teal);color:#0b1220;font-size:17px;font-weight:800;line-height:1.2;box-shadow:0 0 0 6px color-mix(in srgb,var(--teal) 24%,transparent)}
+.itx-privacidad .fork{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px;padding-top:46px;align-items:start}
+.itx-privacidad .fork>*{min-width:0}
+.itx-privacidad .fork::before,.itx-privacidad .outs::before{content:"";position:absolute;left:50%;top:0;height:23px;margin-left:-1.5px;border-left:3px solid var(--cut)}
+.itx-privacidad .fork::after{content:"";position:absolute;top:23px;margin-top:-1.5px;left:calc((100% - 16px) / 6);right:calc((100% - 16px) / 3);border-top:3px solid var(--cut)}
+.itx-privacidad .bA,.itx-privacidad .bB{position:relative}
+.itx-privacidad .bA::before,.itx-privacidad .bB::before{content:"";position:absolute;left:50%;top:-23px;height:23px;margin-left:-1.5px;border-left:3px solid var(--cut)}
+.itx-privacidad .bA::after,.itx-privacidad .bB::after,.itx-privacidad .out::after{content:"";position:absolute;left:50%;top:-11px;margin-left:-7.5px;border:7.5px solid transparent;border-top:10px solid var(--cut);border-bottom:0}
+.itx-privacidad .card{position:relative;background:var(--bg);border:2px solid var(--ph);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px}
+.itx-privacidad .card.avc{border-color:var(--tx)}
+.itx-privacidad .kk{display:block;font-size:14px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.itx-privacidad .ttl{display:block;font-size:17px;font-weight:800;line-height:1.3}
+.itx-privacidad .outs{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding-top:38px}
+.itx-privacidad .outs::before{height:19px}
+.itx-privacidad .outs::after{content:"";position:absolute;top:19px;margin-top:-1.5px;left:calc((100% - 12px) / 4);right:calc((100% - 12px) / 4);border-top:3px solid var(--cut)}
+.itx-privacidad .out{position:relative;background:var(--bg);border:2px solid var(--tx);border-radius:14px;padding:14px}
+.itx-privacidad .out::before{content:"";position:absolute;left:50%;top:-19px;height:19px;margin-left:-1.5px;border-left:3px solid var(--cut)}
+.itx-privacidad .pill{display:inline-block;font-size:14px;font-weight:800;line-height:1.3;padding:3px 12px;border-radius:999px}
+.itx-privacidad .pill.on{background:var(--teal);color:#0b1220}
+.itx-privacidad .pill.off{border:2px solid var(--tx)}
+.itx-privacidad .upto{display:block;font-size:14px;font-weight:700;opacity:.85;margin-top:12px}
+.itx-privacidad .out strong{display:block;font-size:clamp(27px,4vw,38px);line-height:1.1;letter-spacing:-.025em}
+.itx-privacidad .renew{grid-column:1/-1;display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:15px;font-weight:650;line-height:1.35}
+.itx-privacidad .renew .ic{flex:none;width:24px;height:24px;color:var(--tx)}
+.itx-privacidad .card>div,.itx-privacidad .renew>span{min-width:0}.itx-privacidad .read{font-size:15px;margin:16px 0 0}
+@media(max-width:700px){
+.itx-privacidad .canvas{padding:16px 14px}
+.itx-privacidad .band{display:block}.itx-privacidad .band .obj,.itx-privacidad .band .arr{display:none}.itx-privacidad .lm{min-height:76px}
+.itx-privacidad .obj{width:88px;font-size:14px}
+.itx-privacidad .arr{width:18px}
+.itx-privacidad .lm{padding:0 10px;font-size:15px}
+.itx-privacidad .fork{display:block;padding:46px 0 0 24px}
+.itx-privacidad .fork::after{left:4px;right:50%}
+.itx-privacidad .bA{margin-bottom:22px}
+.itx-privacidad .bA::before{left:-20px;top:-23px;height:calc(100% + 87px)}
+.itx-privacidad .bB::before{display:none}
+.itx-privacidad .bA::after,.itx-privacidad .bB::after{left:-20px;top:34px;margin:0;border-style:solid;border-width:7.5px 0 7.5px 20px;border-color:transparent transparent transparent var(--cut)}
+.itx-privacidad .out{padding:12px 10px}
+.itx-privacidad .out strong{font-size:27px}
+}</style>
 <div class="kicker">Política declarada · Irlanda</div><h3>Borrar la foto y conservar el avatar son decisiones distintas</h3>
-<div class="common"><span>FOTOGRAFÍAS</span><strong>Se eliminan tras crear el avatar</strong></div><p class="branch-label">CONSERVACIÓN DEL AVATAR</p><div class="branches"><div><h4>Con cuenta</h4><strong>Hasta 1 año</strong><p>Prorrogable con consentimiento</p></div><div><h4>Sin cuenta</h4><strong>Hasta 24 horas</strong></div></div><p class="note">Política declarada para Irlanda. No es una auditoría de su ejecución ni una regla universal. Las duraciones no se representan a escala. <a href="https://static.zara.net/static/pdfs/IE/privacy-policy/privacy-policy-en_IE-20251202.pdf">Zara Irlanda, política de privacidad, §§2, 4 y 5, pp. 6 y 10–11</a> · Consulta y corte: 6 noviembre 2026</p>
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><symbol id="itxp-photo" viewBox="0 0 48 48"><rect x="6" y="9" width="36" height="30" rx="5"/><circle cx="17" cy="20" r="3.5"/><path d="M8 35l11-10 8 7 6-5 9 8"/></symbol><symbol id="itxp-avatar" viewBox="0 0 48 48"><circle cx="24" cy="16" r="8"/><path d="M8 42c0-9 7-15 16-15s16 6 16 15"/></symbol><symbol id="itxp-renew" viewBox="0 0 48 48"><path d="M10 22a15 15 0 0 1 27-7"/><path d="M38 6v10H28"/><path d="M38 26a15 15 0 0 1-27 7"/><path d="M10 42V32h10"/></symbol></defs></svg>
+<div class="canvas" role="group" aria-label="Política declarada de Zara Irlanda. La creación del avatar es el hito común. Consecuencias: las fotografías se eliminan tras crear el avatar. El avatar se conserva hasta 1 año con cuenta, prorrogable con consentimiento, o hasta 24 horas sin cuenta.">
+<div class="band"><div class="obj"><span class="tile ph"><svg class="ic" aria-hidden="true"><use href="#itxp-photo"/></svg></span>Fotografías</div><span class="arr" aria-hidden="true"></span><div class="lm">Creación del avatar</div><span class="arr" aria-hidden="true"></span><div class="obj"><span class="tile av"><svg class="ic" aria-hidden="true"><use href="#itxp-avatar"/></svg></span>Avatar</div></div>
+<div class="fork">
+<div class="bA"><div class="card"><span class="tile ph"><svg class="ic" aria-hidden="true"><use href="#itxp-photo"/></svg><span class="gone" aria-hidden="true"><svg class="ic" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></span></span><div><span class="kk">Fotografías</span><span class="ttl">Se eliminan tras crear el avatar</span></div></div></div>
+<div class="bB"><div class="card avc"><span class="tile av"><svg class="ic" aria-hidden="true"><use href="#itxp-avatar"/></svg></span><div><span class="kk">Avatar</span><span class="ttl">Su conservación depende de si tienes cuenta</span></div></div>
+<div class="outs">
+<div class="out"><b class="pill on">Con cuenta</b><span class="upto">Hasta</span><strong>1 año</strong></div>
+<div class="out"><span class="pill off">Sin cuenta</span><span class="upto">Hasta</span><strong>24 horas</strong></div>
+<div class="renew"><svg class="ic" aria-hidden="true"><use href="#itxp-renew"/></svg><span><b>Con cuenta:</b> prorrogable con consentimiento</span></div>
+</div></div>
+</div>
+</div>
+<p class="read"><b>Lectura propia.</b> Que la foto se elimine no determina cuánto se conserva el avatar. Son dos consecuencias distintas de la creación.</p>
+<p class="note">Política declarada para Irlanda. No es una auditoría de su ejecución ni una regla universal. Las duraciones no se representan a escala. <a href="https://static.zara.net/static/pdfs/IE/privacy-policy/privacy-policy-en_IE-20251202.pdf">Zara Irlanda, política de privacidad, §§2, 4 y 5, pp. 6 y 10–11</a> · Consulta y corte: 6 noviembre 2026</p>
 </div>

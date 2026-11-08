@@ -32,7 +32,6 @@ date_modified: 2026-11-08
 
 **Documented fact.** For H1, Inditex reported €1,307 million in capex, while its half-year report recorded €1,541 million in asset additions, principally in stores, logistics and corporate assets. These are different measures: accounting additions do not automatically equal cash capex. [Inditex, H1 2026 results, cash table and “Outlook”](https://www.inditex.com/itxcomweb/km/en/press/news-detail/a2c9b82b-1e27-4582-a7c9-746bc88b744e/interim-half-year-2026-results) · [CNMV, H1 2026 financial report, note 5, p. 11](https://www.cnmv.es/webservices/verdocumento/ver?e=x2nr8h8c2xhhP723fHLUSFzWKkWgDybUdOsLCgb8yTD1xVx9TYwe6nqlQTLZolJy).
 
-{{ include_html("snippets/analisis-de-empresas/inditex/inversion.html", anim_shell="on") }}
 
 **Our interpretation.** These decisions show resources committed to general infrastructure, but not how much Inditex buys in AI computing, licences, staff or services. Nor do we know recurring expenditure, investment executed exclusively for AI, or net savings after integrating, supervising and maintaining systems. A large technology investment figure is not an AI budget. An improvement in sales or margin is not its return. Measuring that return would require a baseline, a comparison group and full costs, as well as identifying which intervention changed each outcome.
 
@@ -99,6 +98,8 @@ date_modified: 2026-11-08
 ## Two explanations and three observable scenarios
 
 **Our interpretation.** The coordination and distribution hypothesis has a resource-allocation logic: commercial and logistics infrastructure, the declared technical teams and visual applications offer concrete places where an improvement could be amplified. But an alternative deserves equal scrutiny. Inditex may be spreading AI tools internally to protect efficiency and service quality without there yet being a unified coordination strategy that can be demonstrated from outside. The lack of detail could reflect either broad undisclosed adoption or limited experiments. Neither reading permits a ranking of competitors by “AI leadership”.
+
+{{ include_html("snippets/analisis-de-empresas/inditex/estrategia.html", anim_shell="on") }}
 
 **Our scenario, next 12–24 months: demonstrated integration.** If the company publishes an operational case with the previous process, scope, human intervention and a consistent comparison of availability, errors and cost, the coordination thesis would gain support. This assumes that the system affects real decisions at sufficient scale rather than being an isolated test. The value-creation case would weaken if an improvement disappeared against a comparable group or its full costs exceeded its benefits. Publication of one successful case would not prove that every process works the same way.
 
