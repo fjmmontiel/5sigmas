@@ -2,8 +2,8 @@
 title: "Inditex y la IA: coordinar el negocio, transformar la experiencia"
 description: "Dossier de estrategia de IA de Inditex: decisiones, capacidades, aplicaciones, riesgos y escenarios, con fuentes públicas y análisis propio identificado."
 lang: es
-date: 2026-11-06
-date_modified: 2026-11-06
+date: 2026-11-08
+date_modified: 2026-11-08
 ---
 
 # Inditex y la IA: coordinar el negocio, transformar la experiencia

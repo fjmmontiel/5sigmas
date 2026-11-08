@@ -2,8 +2,8 @@
 title: Company Analysis — examining AI strategy
 description: "In-depth analysis of corporate AI strategies, with charts, public sources, clearly identified interpretations and evidence of how they evolve."
 lang: en
-date: 2026-11-06
-date_modified: 2026-11-06
+date: 2026-11-08
+date_modified: 2026-11-08
 ---
 
 # Company Analysis

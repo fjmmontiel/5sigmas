@@ -2,8 +2,8 @@
 title: "Inditex and AI: coordinating the business, reshaping the experience"
 description: "A dossier on Inditex's AI strategy: decisions, capabilities, applications, risks and scenarios, with public sources and clearly identified independent analysis."
 lang: en
-date: 2026-11-06
-date_modified: 2026-11-06
+date: 2026-11-08
+date_modified: 2026-11-08
 ---
 
 # Inditex and AI: coordinating the business, reshaping the experience

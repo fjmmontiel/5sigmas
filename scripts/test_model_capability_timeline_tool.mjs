@@ -7,7 +7,7 @@ const dataset = JSON.parse(fs.readFileSync(new URL('../docs/assets/data/tools/mo
 
 Core.assertDataset(dataset);
 assert.equal(dataset.series.length, 6, 'Expected six distinct benchmark series in v1');
-assert.equal(dataset.updated, '2026-10-07');
+assert.equal(dataset.updated, '2026-11-08');
 
 const gpqa = Core.seriesById(dataset, 'gpqa-diamond');
 const gpqaStats = Core.stats(gpqa);
@@ -21,14 +21,17 @@ assert.ok(Math.abs(gpqaStats.headroom - 4.0) < 1e-9);
 
 const swe = Core.seriesById(dataset, 'swe-bench-verified');
 const sweStats = Core.stats(swe);
-assert.equal(sweStats.protocolCount, 2, 'SWE-bench Verified must expose the 477/500 protocol split');
-assert.equal(sweStats.protocolBreaks, 1);
+assert.equal(sweStats.protocolCount, 3, 'SWE-bench Verified must distinguish 477, 500 and unspecified protocols');
+assert.equal(sweStats.protocolBreaks, 2);
 assert.equal(sweStats.duplicateModelCount, 1, 'GPT-5 should appear twice under different protocols');
 assert.equal(sweStats.duplicateReports[0].model, 'GPT-5');
 assert.ok(Math.abs(sweStats.duplicateReports[0].spread - 2.1) < 1e-9);
 
 const mmmu = Core.seriesById(dataset, 'mmmu-pro-no-tools');
 assert.ok(mmmu.points.every((point) => !/python|with tools/i.test(point.conditions)), 'MMMU-Pro series must stay no-tools');
+assert.ok(mmmu.points.every((point) => point.source !== 'gpt5'), 'Undeclared tool conditions cannot be classified as no-tools');
+assert.equal(swe.points.at(-1).protocol, 'release-table-unspecified');
+assert.equal(Core.seriesById(dataset, 'swe-bench-pro').points.at(-1).protocol, 'release-table-unspecified');
 const arc = Core.seriesById(dataset, 'arc-agi-2');
 assert.equal(arc.points.at(-1).model, 'GPT-5.4', 'ARC-AGI-2 must stop before GPT-5.6 rather than mixing ARC-AGI-3');
 
@@ -59,6 +62,8 @@ assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6.1
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'Claude Sonnet 5.5' && row.status === 'reviewed_not_added'));
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'Gemini 4 Argon' && row.status === 'reviewed_not_added'));
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'Mistral Large 4' && row.status === 'reviewed_not_added'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6.1 Terra' && row.status === 'reviewed_not_added' && row.source === 'gpt61terra'));
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.status === 'reviewed_not_added' && row.source === 'gpt6cyber'));
 assert.ok(dataset.sources.gpt61sol?.url.includes('/gpt-6.1-sol'));
 assert.ok(dataset.sources.sonnet55?.url.includes('/sonnet-5-5/'));
 assert.ok(dataset.sources.gemini4argon?.url.includes('/gemini-4-argon/'));

@@ -2,8 +2,8 @@
 title: Análisis de empresas — la estrategia de IA bajo examen
 description: "Análisis profundos de estrategias empresariales de IA, con gráficas, fuentes públicas, interpretaciones identificadas y seguimiento de su evolución."
 lang: es
-date: 2026-11-06
-date_modified: 2026-11-06
+date: 2026-11-08
+date_modified: 2026-11-08
 ---
 
 # Análisis de empresas

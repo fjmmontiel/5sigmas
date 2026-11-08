@@ -47,8 +47,8 @@ try {
 
       await page.locator('[data-field="series"]').selectOption('swe-bench-verified');
       const breakText = (await page.locator('[data-output="breaks"]').textContent() || '').toLowerCase();
-      if (spec.locale === 'es' && !breakText.includes('1 cambio')) failures.push(`${spec.route} ${viewport.name}: Spanish protocol break not surfaced`);
-      if (spec.locale === 'en' && !breakText.includes('1 explicit')) failures.push(`${spec.route} ${viewport.name}: English protocol break not surfaced`);
+      if (spec.locale === 'es' && !breakText.includes('2 cambios')) failures.push(`${spec.route} ${viewport.name}: Spanish protocol break not surfaced`);
+      if (spec.locale === 'en' && !breakText.includes('2 explicit')) failures.push(`${spec.route} ${viewport.name}: English protocol break not surfaced`);
       const duplicateNote = (await page.locator('[data-output="duplicate-note"]').textContent() || '').toLowerCase();
       if (spec.locale === 'es' && !duplicateNote.includes('misma generación')) failures.push(`${spec.route} ${viewport.name}: Spanish duplicate-protocol warning missing`);
       if (spec.locale === 'en' && !duplicateNote.includes('same model generation')) failures.push(`${spec.route} ${viewport.name}: English duplicate-protocol warning missing`);
