@@ -69,4 +69,13 @@ assert.ok(dataset.sources.sonnet55?.url.includes('/sonnet-5-5/'));
 assert.ok(dataset.sources.gemini4argon?.url.includes('/gemini-4-argon/'));
 assert.ok(dataset.sources.mistrallarge4?.url.includes('/mistral-large'));
 
+for (const [name, sourceId] of [['Claude Haiku 5.5', 'haiku55'], ['Gemini 4 Carbon', 'gemini4carbon']]) {
+  const row = dataset.release_coverage.releases.find((entry) => entry.model === name);
+  assert.equal(row?.status, 'reviewed_not_added', name + ' must not gain synthetic benchmark scores');
+  assert.equal(row?.source, sourceId, name + ' must preserve its primary-source provenance');
+  assert.ok(dataset.sources[sourceId]?.url.startsWith('https://'), name + ' requires a primary source');
+}
+assert.equal(dataset.release_coverage.reviewed_through, dataset.updated);
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.source === 'gpt6cyber'));
+
 console.log('model capability timeline: numerical, protocol, export and provenance gates passed');
