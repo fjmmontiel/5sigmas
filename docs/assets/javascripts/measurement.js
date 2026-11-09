@@ -408,30 +408,38 @@
     }
     let withdrawal;
     let expected;
-    try {
-      withdrawal = choice === 'denied' ? randomId() : localStorage.getItem(WITHDRAWAL_KEY);
-      if (choice === 'denied') {
+    if (choice === 'denied') {
+      try { expected = localStorage.getItem(PRIVACY_KEY); } catch { expected = undefined; }
+      try {
+        withdrawal = randomId();
         if (!withdrawal) throw new Error('Withdrawal marker unavailable');
         localStorage.setItem(WITHDRAWAL_KEY, withdrawal);
         if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) throw new Error('Withdrawal marker unavailable');
+      } catch {
+        state.pendingDenials -= 1;
+        state.localDeny = true;
+        state.storageError = true;
+        clearSession();
+        renderConsentUI(true);
+        return false;
       }
-      expected = localStorage.getItem(PRIVACY_KEY);
-    } catch {
-      if (choice === 'denied') state.pendingDenials -= 1;
-      state.localDeny = true;
-      state.storageError = true;
-      clearSession();
-      renderConsentUI(true);
-      return false;
+    } else {
+      try {
+        withdrawal = localStorage.getItem(WITHDRAWAL_KEY);
+        expected = localStorage.getItem(PRIVACY_KEY);
+      } catch {
+        state.localDeny = true;
+        state.storageError = true;
+        clearSession();
+        renderConsentUI(true);
+        return false;
+      }
     }
     if (expected === undefined || !navigator.locks || typeof navigator.locks.request !== 'function') {
-      if (choice === 'denied') state.pendingDenials -= 1;
       state.localDeny = true;
       state.storageError = true;
       clearSession();
-      if (choice === 'denied') {
-        try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Local denial remains in force. */ }
-      }
+      if (choice === 'denied') state.pendingDenials -= 1;
       renderConsentUI(true);
       return false;
     }
@@ -447,7 +455,7 @@
         const current = localStorage.getItem(PRIVACY_KEY);
         if (current !== expected || intent !== state.intent) { superseded = true; return false; }
         if (choice === 'granted' && privacySignal()) return false;
-        if (choice === 'denied' && localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        if (choice === 'denied' && localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) { superseded = true; return false; }
         let seq = 0;
         try {
           const previous = JSON.parse(current);
