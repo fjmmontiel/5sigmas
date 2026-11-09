@@ -3,11 +3,15 @@ import vm from 'node:vm';
 
 export const SESSION_KEY = 's5:measurement-session:v1';
 export const CONSENT_KEY = 's5:measurement-consent:v1';
-export const POLICY_REVISION = '2026-10-18';
+export const PRIVACY_KEY = 's5:privacy-choice:v1';
+export const WITHDRAWAL_KEY = 's5:privacy-withdrawal:v1';
+export const POLICY_REVISION = '2026-11-09';
 export const approvedConfig = {
   endpoint: '/_s5/measurement/events', approved: true, policyRevision: POLICY_REVISION,
 };
 export const publicCatalog = JSON.parse(fs.readFileSync(new URL('../mcp-worker/src/measurement-catalog.json', import.meta.url), 'utf8'));
+
+let bootSequence = 0;
 
 class Element {
   constructor(tag = 'div') {
@@ -78,6 +82,7 @@ export function bootMeasurement(options = {}) {
   const source = fs.readFileSync(runtimePath, 'utf8');
   const sent = [];
   const storage = options.storage || new Map();
+  const preferenceStorage = options.preferenceStorage || new Map();
   const storageOperations = [];
   const document = new Element('document');
   document.head = document.appendChild(new Element('head'));
@@ -121,13 +126,13 @@ export function bootMeasurement(options = {}) {
   window.innerHeight = 800;
   window.scrollY = 0;
   window.doNotTrack = options.windowDnt;
-  const navigator = { ...options.navigator };
+  const navigator = { locks: options.locks || { request: (_name, _options, fn) => Promise.resolve().then(fn) }, ...options.navigator };
   let now = options.now ?? Date.parse('2026-10-18T12:00:00.000Z');
   class Clock extends Date {
     constructor(...args) { super(...(args.length ? args : [now])); }
     static now() { return now; }
   }
-  let uuidCounter = options.uuidStart || 0;
+  let uuidCounter = options.uuidStart ?? (++bootSequence * 1000);
   const crypto = Object.hasOwn(options, 'crypto') ? options.crypto : {
     randomUUID: () => `00000000-0000-4000-8000-${(++uuidCounter).toString(16).padStart(12, '0')}`,
   };
@@ -138,20 +143,28 @@ export function bootMeasurement(options = {}) {
     if (method === 'removeItem') return storage.delete(key);
     storage.set(key, content);
   }]));
+  const localStorage = Object.fromEntries(['getItem', 'setItem', 'removeItem'].map((method) => [method, (key, content) => {
+    storageOperations.push({ method, key, area: 'local' });
+    if (options.preferenceThrows) throw new Error('Preference storage denied');
+    if (method === 'getItem') return preferenceStorage.get(key) || null;
+    if (method === 'removeItem') return preferenceStorage.delete(key);
+    preferenceStorage.set(key, content);
+  }]));
   let initialize;
   const context = {
-    window, document, location, navigator, sessionStorage, crypto,
+    window, document, location, navigator, sessionStorage, localStorage, crypto,
     fetch: options.noFetch ? undefined : (url, request) => {
       const requestHeaders = new Headers(request.headers);
       // Fetch appends Origin for POST. With no-referrer, non-CORS modes send
       // "null"; the real-browser QA independently verifies this distinction.
       requestHeaders.set('Origin', request.mode === 'cors' || request.referrerPolicy !== 'no-referrer' ? location.origin : 'null');
       sent.push({ url, options: request, requestHeaders: Object.fromEntries(requestHeaders), payload: JSON.parse(request.body) });
+      if (options.fetchPending) return new Promise(() => {});
       if (options.fetchThrows) throw new Error('Network unavailable');
       if (options.fetchRejects) return Promise.reject(new Error('Network unavailable'));
       return Promise.resolve({ ok: options.httpOk !== false });
     },
-    URL, Uint8Array, Date: Clock, Math, JSON, Set, Object, String, Number, Promise,
+    URL, Uint8Array, Date: Clock, Math, JSON, Set, Object, String, Number, Promise, setTimeout, clearTimeout,
     Element, HTMLVideoElement: VideoElement, AbortController,
     requestAnimationFrame: (callback) => callback(),
     document$: { subscribe(callback) { initialize = callback; callback(); } },
@@ -161,9 +174,10 @@ export function bootMeasurement(options = {}) {
   vm.runInContext(source, context, { filename: String(runtimePath) });
   return {
     context, window, document, location, navigator, root, article, fields, add, sent,
-    storage, storageOperations, api: window.s5Measurement,
-    grant: () => document.querySelector('[data-s5-consent="granted"]')?.click(),
-    deny: () => document.querySelector('[data-s5-consent="denied"]')?.click(),
+    storage, preferenceStorage, storageOperations, api: window.s5Measurement,
+    dispatchStorage: (key) => { for (const listener of window.listeners.get('storage') || []) listener({ key }); },
+    grant: async () => { document.querySelector('[data-s5-consent="granted"]')?.click(); await new Promise((resolve) => setImmediate(resolve)); },
+    deny: async () => { document.querySelector('[data-s5-consent="denied"]')?.click(); await new Promise((resolve) => setImmediate(resolve)); },
     advance: (milliseconds) => { now += milliseconds; },
     navigate: (path) => { location.pathname = path; initialize(); },
     replayPage: () => initialize(),

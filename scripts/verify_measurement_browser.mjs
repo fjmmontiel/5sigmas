@@ -44,7 +44,9 @@ const ORIGIN = 'https://5sigmas.com';
 const ENDPOINT = `${ORIGIN}/_s5/measurement/events`;
 const SESSION_KEY = 's5:measurement-session:v1';
 const CONSENT_KEY = 's5:measurement-consent:v1';
-const policyRevision = '2026-10-18';
+const PRIVACY_KEY = 's5:privacy-choice:v1';
+const assetVersion = '2026-11-09';
+const policyRevision = '2026-11-09';
 const configFixture = `window.__S5_MEASUREMENT__=Object.freeze(${JSON.stringify({
   endpoint: '/_s5/measurement/events', approved: true, policyRevision,
 })});`;
@@ -67,10 +69,10 @@ async function fileBytes(path) {
   return cachedFiles.get(path);
 }
 async function storageState(page) {
-  return page.evaluate(({ sessionKey, consentKey }) => ({
-    session: sessionStorage.getItem(sessionKey), consent: sessionStorage.getItem(consentKey),
+  return page.evaluate(({ sessionKey, consentKey, privacyKey }) => ({
+    session: sessionStorage.getItem(sessionKey), legacyConsent: sessionStorage.getItem(consentKey), consent: localStorage.getItem(privacyKey),
     status: window.s5Measurement.status(),
-  }), { sessionKey: SESSION_KEY, consentKey: CONSENT_KEY });
+  }), { sessionKey: SESSION_KEY, consentKey: CONSENT_KEY, privacyKey: PRIVACY_KEY });
 }
 async function settle(page) {
   // Two actual animation frames allow synchronous input/change handlers and
@@ -86,12 +88,13 @@ async function panelGeometry(page, testCase) {
   `${testCase.name}: the consent panel must fit the viewport: ${JSON.stringify(bounds)}`);
   return bounds;
 }
-const cases = [
+const baseCases = [
   { name: 'es-desktop', locale: 'es', path: '/herramientas/precio-rendimiento-modelos/', viewport: { width: 1440, height: 1000 } },
   { name: 'en-desktop', locale: 'en', path: '/en/tools/model-price-performance/', viewport: { width: 1440, height: 1000 } },
   { name: 'es-mobile', locale: 'es', path: '/herramientas/precio-rendimiento-modelos/', viewport: { width: 390, height: 844 }, isMobile: true },
   { name: 'en-mobile', locale: 'en', path: '/en/tools/model-price-performance/', viewport: { width: 390, height: 844 }, isMobile: true },
 ];
+const cases = baseCases.flatMap((item) => ['default', 'slate'].map((scheme) => ({ ...item, name: `${item.name}-${scheme}`, scheme })));
 const browser = await chromium.launch({
   executablePath, headless: true, args: ['--no-sandbox', '--disable-gpu', '--disable-background-networking'],
 });
@@ -172,11 +175,12 @@ try {
       await page.waitForFunction(() => window.s5Measurement
         && document.querySelector('[data-model-table-body] tr')
         && document.querySelectorAll('[data-field="provider"] option').length > 1);
+      await page.evaluate((scheme) => document.body.setAttribute('data-md-color-scheme', scheme), testCase.scheme);
       const measurementAssets = await page.locator('script[data-s5-agent-runtime^="measurement"]').evaluateAll(
         (scripts) => scripts.map((script) => script.src));
       assert.equal(measurementAssets.length, 3);
       for (const asset of measurementAssets) {
-        assert.equal(new URL(asset).searchParams.get('v'), policyRevision,
+        assert.equal(new URL(asset).searchParams.get('v'), assetVersion,
           'Versioned requests must isolate the consent runtime from older browser caches');
       }
       await settle(page);
@@ -190,7 +194,7 @@ try {
       assert.equal(staticCookieObserved, true, 'The synthetic ambient cookie must be present on ordinary local static requests');
       assert.equal(await page.locator('#s5-measurement-privacy').getAttribute('lang'), testCase.locale);
       assert.equal(await page.locator('[data-s5-consent="granted"]').innerText(),
-        testCase.locale === 'es' ? 'Permitir medición' : 'Allow measurement');
+        testCase.locale === 'es' ? 'Aceptar medición' : 'Allow measurement');
       // Override smooth scrolling for this test action so screenshots show a
       // stationary viewport, not a compositor frame from an ongoing scroll.
       await page.evaluate(() => document.querySelector('[data-s5-model-explorer]').scrollIntoView({ block: 'start', behavior: 'instant' }));
@@ -213,6 +217,7 @@ try {
       assert.equal(captured.length, 0, 'Reading the detailed policy cannot imply consent');
 
       await page.locator('[data-s5-consent="granted"]').click();
+      await page.waitForFunction(() => window.s5Measurement.status().consent === 'granted');
       await settle(page);
       assert.equal(captured.filter((event) => event.payload.event_name === 'page_view').length, 1);
       assert.equal(captured.filter((event) => event.payload.event_name === 'tool_open').length, 1);
@@ -220,7 +225,9 @@ try {
         'Consent and initial default rendering must not inflate conversions');
       const granted = await storageState(page);
       assert.match(JSON.parse(granted.session).session_id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
-      assert.equal(granted.consent, `${policyRevision}:granted`);
+      assert.equal(JSON.parse(granted.consent).choice, 'granted');
+      assert.equal(JSON.parse(granted.consent).revision, policyRevision);
+      assert.equal(granted.legacyConsent, null);
 
       const input = page.locator('[data-field="inputTokens"]');
       await input.fill('23500');
@@ -258,8 +265,28 @@ try {
       }
       assert.equal((await storageState(page)).status.lastDelivery, 'accepted');
 
+      // A new page without an opener shares the choice but starts its own session.
+      const secondTab = await context.newPage();
+      await secondTab.goto(`${ORIGIN}${testCase.path}`, { waitUntil: 'networkidle' });
+      await secondTab.waitForFunction(() => window.s5Measurement?.status().consent === 'granted');
+      const secondSession = await secondTab.evaluate((key) => JSON.parse(sessionStorage.getItem(key)).session_id, SESSION_KEY);
+      assert.notEqual(secondSession, JSON.parse(granted.session).session_id);
+      assert.equal(await secondTab.locator('#s5-measurement-privacy').isVisible(), false);
+      // Keep the coordination lock occupied so rejection is tested while queued.
+      await secondTab.evaluate((key) => {
+        window.__privacyLockReady = false;
+        window.__privacyLock = navigator.locks.request(key, { mode: 'exclusive' }, () => {
+          window.__privacyLockReady = true;
+          return new Promise((resolve) => { window.__releasePrivacyLock = resolve; });
+        });
+      }, PRIVACY_KEY);
+      await secondTab.waitForFunction(() => window.__privacyLockReady === true);
       await page.locator('#s5-measurement-preferences').click();
       await page.locator('[data-s5-consent="denied"]').click();
+      assert.equal(await page.evaluate(() => window.s5Measurement.track('result_rendered', { tool_id: 'model-price-performance', result_kind: 'comparison' })), false, 'A pending rejection immediately stops this tab');
+      assert.equal(await secondTab.evaluate(() => window.s5Measurement.track('result_rendered', { tool_id: 'model-price-performance', result_kind: 'comparison' })), false, 'A pending rejection also stops a peer while its lock is still held');
+      await secondTab.evaluate(() => window.__releasePrivacyLock());
+      await page.waitForFunction(() => window.s5Measurement.status().consent === 'denied' && !document.querySelector('#s5-measurement-privacy').offsetParent);
       await settle(page);
       const beforeWithdrawalChange = captured.length;
       await input.fill('24000');
@@ -268,7 +295,12 @@ try {
       assert.equal(captured.length, beforeWithdrawalChange, 'A real subsequent change must not send after withdrawal');
       const denied = await storageState(page);
       assert.equal(denied.session, null);
-      assert.equal(denied.consent, `${policyRevision}:denied`);
+      assert.equal(JSON.parse(denied.consent).choice, 'denied');
+      assert.equal(denied.legacyConsent, null);
+      await secondTab.waitForFunction(() => window.s5Measurement.status().consent === 'denied');
+      assert.equal(await secondTab.evaluate((key) => sessionStorage.getItem(key), SESSION_KEY), null);
+      assert.equal(await secondTab.evaluate(() => window.s5Measurement.track('result_rendered', { tool_id: 'model-price-performance', result_kind: 'comparison' })), false);
+      await secondTab.close();
       assert.equal(denied.status.consent, 'denied');
       assert.equal(await page.evaluate(() => window.s5Measurement.track('result_rendered', {
         tool_id: 'model-price-performance', result_kind: 'comparison',

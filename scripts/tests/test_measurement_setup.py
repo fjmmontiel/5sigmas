@@ -11,12 +11,12 @@ from scripts.configure_measurement import browser_config, main, validate_worker_
 
 POLICY = {
     "enabled": True, "site_origin": "https://5sigmas.com",
-    "endpoint": "/_s5/measurement/events", "policy_revision": "2026-10-18",
+    "endpoint": "/_s5/measurement/events", "policy_revision": "2026-11-09",
     "consent_mode": "explicit_opt_in", "retention_days": 90,
     "session_metadata_retention_hours": 48, "storage_jurisdiction": "eu",
 }
 HEALTH = {"ok": True, "service": "5sigmas-measurement", "schema_version": 1,
-          "policy_revision": "2026-10-18", "consent_mode": "explicit_opt_in", "retention_days": 90, "storage": "ready"}
+          "policy_revision": "2026-11-09", "consent_mode": "explicit_opt_in", "retention_days": 90, "storage": "ready"}
 
 
 class MeasurementSetupTests(unittest.TestCase):
@@ -36,7 +36,7 @@ class MeasurementSetupTests(unittest.TestCase):
             root = Path(directory)
             (root / "measurement-deployment.json").write_text(json.dumps(POLICY))
             (root / "mcp-worker").mkdir()
-            (root / "mcp-worker/wrangler.jsonc").write_text(json.dumps({"vars": {"MEASUREMENT_ENABLED": "true", "MEASUREMENT_POLICY_REVISION": "2026-10-18"}}))
+            (root / "mcp-worker/wrangler.jsonc").write_text(json.dumps({"vars": {"MEASUREMENT_ENABLED": "true", "MEASUREMENT_POLICY_REVISION": "2026-11-09"}}))
             response = MagicMock(status=200)
             response.headers.get_content_type.return_value = "application/json"
             response.read.return_value = json.dumps({**HEALTH, "storage": "missing"}).encode()
@@ -60,7 +60,7 @@ class MeasurementSetupTests(unittest.TestCase):
             root = Path(directory)
             (root / "mcp-worker").mkdir()
             path = root / "mcp-worker/wrangler.jsonc"
-            path.write_text(json.dumps({"vars": {"MEASUREMENT_ENABLED": "true", "MEASUREMENT_POLICY_REVISION": "2026-10-18"}}))
+            path.write_text(json.dumps({"vars": {"MEASUREMENT_ENABLED": "true", "MEASUREMENT_POLICY_REVISION": "2026-11-09"}}))
             validate_worker_policy(root, POLICY)
             with self.assertRaises(ValueError):
                 validate_worker_policy(root, {**POLICY, "enabled": False})

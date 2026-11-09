@@ -2,7 +2,7 @@
   "enabled": true,
   "site_origin": "https://5sigmas.com",
   "endpoint": "/_s5/measurement/events",
-  "policy_revision": "2026-10-18",
+  "policy_revision": "2026-11-09",
   "consent_mode": "explicit_opt_in",
   "retention_days": 90,
   "session_metadata_retention_hours": 48,

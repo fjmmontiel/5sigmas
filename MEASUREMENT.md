@@ -24,20 +24,22 @@ The existing `/mcp` interface remains available. A private SQLite Durable Object
 
 A build fails if the enabled collector is unavailable or has a different policy. Merely adding JavaScript to a repository never establishes a live connection. Health proves storage readiness; **only a first accepted event starts collection coverage**. Before that, authenticated export returns a controlled `409` response instead of invented zero traffic.
 
-The runtime loader fetches configuration, generated vocabulary and measurement code in that order, using versioned asset URLs so a cached runtime from before this consent contract cannot consume newly approved configuration. Activation requires the exact HTTPS same-origin endpoint, `approved: true`, policy revision `2026-10-18`, a valid vocabulary and explicit visitor consent. The equivalent metadata configuration must satisfy the same checks.
+The runtime loader fetches configuration, generated vocabulary and measurement code in that order, using versioned asset URLs so a cached runtime from before this consent contract cannot consume newly approved configuration. Activation requires the exact HTTPS same-origin endpoint, `approved: true`, policy revision `2026-11-09`, a valid vocabulary and explicit visitor consent. The equivalent metadata configuration must satisfy the same checks.
 
 ## Consent and visitor controls
 
 A bilingual, keyboard-accessible preferences panel presents equally styled accept and decline actions. Before acceptance, the runtime creates no measurement session identifier, sends no event and keeps no event backlog. Global Privacy Control and Do Not Track override a previous grant.
 
-The preference and random session identifier live in `sessionStorage` for the current tab, with an in-memory fallback if session storage is unavailable. No persistent browser identifier or cookie is created. A session expires after 30 minutes without measured activity and has a 24-hour maximum. A visitor may reopen “Privacidad de la medición” / “Measurement privacy” and withdraw permission. Withdrawal clears local measurement state and aborts pending sends where possible; already accepted anonymous aggregate counts cannot be attributed back to a person or removed by identity.
+The privacy choice is valid for up to 180 days and shared across tabs using `localStorage`. Each choice also creates a random local coordination marker, which remains until changed or site data is cleared and is never transmitted to the collector. It is not a measurement identifier. A random temporary session identifier lives in `sessionStorage`, with an in-memory fallback. A tab opened with an opener may initially receive a copy of its opener’s session storage, so session counts do not imply unique tabs or people. A session expires after 30 minutes without measured activity and has a 24-hour maximum. No measurement cookie or persistent measurement identifier is created.
+
+Visitors can reopen “Privacidad y almacenamiento” / “Privacy and storage” and withdraw permission, including when the collector is unavailable. Withdrawal immediately stops this tab and synchronously changes the local coordination marker before requesting a Web Lock. Other tabs check the marker before sending and react to its change. A request already starting or in flight can still arrive despite an attempted abort. A conflicting stale grant cannot overwrite a committed rejection. If coordination or storage fails, this tab fails closed and explains that other tabs may need attention. A legacy tab-only grant is not migrated into a shared grant, and browsers without Web Locks do not collect. Already accepted anonymous aggregate counts cannot be attributed back to a person or removed by identity.
 
 Requests use `fetch` with `credentials: "omit"`, `mode: "cors"`, `referrerPolicy: "no-referrer"`, `redirect: "error"` and `cache: "no-store"`. The endpoint is independently restricted to the exact same origin. The Fetch mode preserves the browser's real `Origin` header while omitting the `Referer` header; `same-origin` mode combined with `no-referrer` would instead send `Origin: null`. Required headers are:
 
 ```http
 Content-Type: application/json
 X-S5-Consent: granted
-X-S5-Policy-Revision: 2026-10-18
+X-S5-Policy-Revision: 2026-11-09
 ```
 
 The server independently checks these headers, origin, method, content type, policy and schema. There is no permissive CORS endpoint or `sendBeacon` fallback carrying ambient credentials.
@@ -90,7 +92,7 @@ window.s5Measurement?.track('result_rendered', {
 });
 ```
 
-This returns whether the runtime queued an eligible event, not a guarantee of server receipt. `window.s5Measurement.status()` exposes configuration, consent and the latest delivery state for local debugging, without payload data.
+This returns whether the runtime queued an eligible event, not a guarantee of server receipt. `window.s5Measurement.status()` exposes configuration, consent and the latest delivery state for local debugging, without payload data. `revokeConsent()` reports whether the locally effective withdrawal was queued for synchronization, not that every tab has finished updating.
 
 ## Reception, security and storage
 
@@ -165,5 +167,7 @@ After deployment, a health response, approved published browser configuration an
 ## Disable or roll back
 
 Set `measurement-deployment.json.enabled` to `false` and `MEASUREMENT_ENABLED` in `mcp-worker/wrangler.jsonc` to `"false"` in the same reviewed change, then use the existing deployment workflow. The backend refuses new collection, cleanup continues and the Pages build emits disabled browser configuration. Do not remove the SQLite binding or migration as a routine rollback; doing so would interfere with retention cleanup.
+
+During the policy revision rollout, update the private export reader first to accept both revisions, then deploy the Worker before publishing the matching Pages assets. Old browser runtimes are rejected by the Worker and cannot bypass a newer withdrawal. This can temporarily interrupt measurement until the new pages are deployed.
 
 The private workflow also has an independent read switch: `S5_MEASUREMENT_EXPORT_ENABLED=false`. It stops aggregate reads and reports the source as disconnected; it does not disable browser collection. Re-enabling does not recover events intentionally uncollected while disabled.

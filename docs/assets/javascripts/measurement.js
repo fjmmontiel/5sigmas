@@ -2,10 +2,13 @@
   'use strict';
 
   const SCHEMA_VERSION = 1;
-  const POLICY_REVISION = '2026-10-18';
+  const POLICY_REVISION = '2026-11-09';
   const COLLECTOR_PATH = '/_s5/measurement/events';
   const SESSION_KEY = 's5:measurement-session:v1';
-  const CONSENT_KEY = 's5:measurement-consent:v1';
+  const CONSENT_KEY = 's5:measurement-consent:v1'; // legacy tab-only choice
+  const PRIVACY_KEY = 's5:privacy-choice:v1';
+  const WITHDRAWAL_KEY = 's5:privacy-withdrawal:v1';
+  const CHOICE_MAX_MS = 180 * 24 * 60 * 60 * 1000;
   const IDLE_MS = 30 * 60 * 1000;
   const MAX_SESSION_MS = 24 * 60 * 60 * 1000;
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -35,7 +38,8 @@
     listenersReady: false, pagePath: '', choice: null, memorySession: null,
     initialAttributionAvailable: true, changedFields: new Set(),
     articleMilestones: new Set(), scrollQueued: false, pending: new Set(), ui: null,
-    lastDelivery: 'not_sent',
+    lastDelivery: 'not_sent', localDeny: false, storageError: false, legacyNeedsChoice: false,
+    pendingChoices: 0, pendingDenials: 0, intent: 0,
   };
 
   const locale = () => (location.pathname.startsWith('/en/') || location.pathname === '/en' ? 'en' : 'es');
@@ -76,22 +80,44 @@
     for (const controller of state.pending) controller.abort();
     state.pending.clear();
   };
+  // The choice and local generation marker persist; the random measurement ID stays in session storage.
+  const savedChoice = () => {
+    try {
+      const withdrawal = localStorage.getItem(WITHDRAWAL_KEY);
+      const raw = localStorage.getItem(PRIVACY_KEY);
+      if (!raw) return withdrawal ? 'denied' : 'unknown';
+      const saved = JSON.parse(raw);
+      const age = Date.now() - saved.at;
+      if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return 'denied';
+      if ((saved.withdrawal ?? null) !== (withdrawal ?? null)) return 'denied';
+      if (saved.choice === 'granted' && (typeof saved.withdrawal !== 'string' || !saved.withdrawal)) return 'unknown';
+      return saved.revision === POLICY_REVISION && ['granted', 'denied'].includes(saved.choice)
+        && Number.isSafeInteger(saved.seq) && saved.seq > 0 && Number.isSafeInteger(saved.at) && age >= 0 && age < CHOICE_MAX_MS
+        ? saved.choice : 'unknown';
+    } catch { state.storageError = true; return 'unknown'; }
+  };
   const consent = () => {
     if (privacySignal()) {
+      state.localDeny = true;
       state.choice = 'denied';
-      try { sessionStorage.removeItem(CONSENT_KEY); } catch { /* Keep refusal in memory. */ }
+      try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Remain denied in this tab. */ }
       clearSession();
       return 'denied';
     }
-    if (state.choice !== null) return state.choice;
-    try {
-      const saved = sessionStorage.getItem(CONSENT_KEY);
-      state.choice = saved === `${POLICY_REVISION}:granted` ? 'granted'
-        : saved === `${POLICY_REVISION}:denied` ? 'denied' : 'unknown';
-    } catch { state.choice = 'unknown'; }
-    if (state.choice !== 'granted') clearSession();
-    return state.choice;
+    const choice = state.localDeny || state.pendingChoices ? 'denied' : state.legacyNeedsChoice ? 'unknown' : savedChoice();
+    if (!navigator.locks || typeof navigator.locks.request !== 'function') { clearSession(); state.storageError = true; state.choice = 'denied'; return 'denied'; }
+    if (choice !== 'granted') clearSession();
+    state.choice = choice;
+    return choice;
   };
+  // A tab-scoped grant is not silently promoted to browser-wide consent.
+  try {
+    if (sessionStorage.getItem(CONSENT_KEY) !== null) {
+      sessionStorage.removeItem(CONSENT_KEY);
+      state.legacyNeedsChoice = true;
+      clearSession();
+    }
+  } catch { clearSession(); }
   const randomId = () => {
     try {
       if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
@@ -234,10 +260,13 @@
       traffic_channel: session.traffic_channel, referrer_host: session.referrer_host,
       context: cleaned,
     };
+    if (consent() !== 'granted') return false;
     const controller = typeof AbortController === 'function' ? new AbortController() : null;
     if (controller) state.pending.add(controller);
     try {
       state.lastDelivery = 'queued';
+      // Recheck immediately before fetch. A different tab can still withdraw
+      // after this synchronous check; the storage event aborts any started request.
       // Only keepalive fetch: beacons can send ambient cookies.
       Promise.resolve(fetch(collector.href, {
         method: 'POST', headers: {
@@ -328,22 +357,28 @@
 
   const COPY = {
     es: {
-      title: 'Medición opcional de uso', allow: 'Permitir medición', deny: 'Rechazar medición',
-      settings: 'Privacidad de la medición', details: 'Qué medimos y durante cuánto tiempo',
-      description: 'Con tu permiso contamos visitas e interacciones con herramientas y vídeos para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, direcciones de correo ni parámetros de URL.',
-      retention: 'Guardamos tu elección en esta pestaña y usamos una sesión aleatoria que caduca tras 30 minutos sin actividad, con un máximo de 24 horas. El almacenamiento de Cloudflare está en la UE: registros temporales hasta 48 horas, recuentos consultables durante 90 días y copias de recuperación hasta 30 días más tras el borrado; los informes históricos conservan solo totales agrupados sin identificadores de sesión. Puedes retirar tu permiso aquí en cualquier momento.',
+      title: 'Privacidad y almacenamiento', allow: 'Aceptar medición', deny: 'Rechazar medición',
+      settings: 'Privacidad y almacenamiento', details: 'Qué usamos y durante cuánto tiempo',
+      description: 'El sitio guarda opciones de navegación y tu elección de privacidad. Con tu permiso, medimos visitas e interacciones para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, correos ni parámetros de URL.',
+      retention: 'Guardamos tu elección de medición durante un máximo de 180 días en este navegador. Para sincronizarla entre pestañas, guardamos una marca técnica aleatoria en el navegador hasta que borres los datos del sitio; no se envía al colector. Usamos un identificador de sesión aleatorio que caduca tras 30 minutos sin actividad, con un máximo de 24 horas. El almacenamiento de Cloudflare está en la UE: registros temporales hasta 48 horas, recuentos consultables durante 90 días y copias de recuperación hasta 30 días más tras el borrado. Los informes históricos conservan solo totales agrupados sin identificadores de sesión. Puedes retirar tu permiso aquí en cualquier momento. Los totales ya agregados no se pueden retirar por identidad.',
       granted: 'Medición activada con tu permiso.', denied: 'Medición desactivada.',
       unknown: 'La medición permanece desactivada hasta que la permitas.',
       signal: 'La preferencia de privacidad de tu navegador mantiene la medición desactivada.',
+      storageError: 'No se ha podido sincronizar tu elección. La medición está desactivada en esta pestaña. Cierra las demás pestañas o cambia su configuración.',
+      pendingChoice: 'Guardando tu elección…',
+      unavailable: 'La medición no está disponible. Puedes rechazarla o cambiar tu elección.',
     },
     en: {
-      title: 'Optional usage measurement', allow: 'Allow measurement', deny: 'Decline measurement',
-      settings: 'Measurement privacy', details: 'What we measure and how long we keep it',
-      description: 'With your permission we count visits and interactions with tools and videos to improve 5sigmas. We do not send what you enter in tools, email addresses or URL parameters.',
-      retention: 'Your choice stays in this tab, and the random session identifier expires after 30 minutes of inactivity, with a 24-hour maximum. We use Cloudflare storage in the EU: temporary records last up to 48 hours, counts remain queryable for 90 days, and recovery backups may keep deleted data for up to 30 additional days; historical reports keep only grouped totals without session identifiers. You can withdraw permission here at any time.',
+      title: 'Privacy and storage', allow: 'Allow measurement', deny: 'Decline measurement',
+      settings: 'Privacy and storage', details: 'What we use and for how long',
+      description: 'The site stores navigation settings and your privacy choice. With your permission, we measure visits and interactions to improve 5sigmas. We do not send tool inputs, email addresses or URL parameters.',
+      retention: 'Your measurement choice is stored for up to 180 days in this browser. To synchronize it across tabs, a random technical marker stays in this browser until you clear the site data; it is not sent to the collector. The random session identifier expires after 30 minutes of inactivity, with a 24-hour maximum. We use Cloudflare storage in the EU: temporary records last up to 48 hours, counts remain queryable for 90 days, and recovery backups may keep deleted data for up to 30 additional days. Historical reports keep only grouped totals without session identifiers. You can withdraw permission here at any time. Already aggregated totals cannot be removed by identity.',
       granted: 'Measurement is enabled with your permission.', denied: 'Measurement is disabled.',
       unknown: 'Measurement remains disabled until you allow it.',
       signal: 'Your browser privacy preference keeps measurement disabled.',
+      storageError: 'Your choice could not be synchronized. Measurement is disabled in this tab. Close your other tabs or change their settings.',
+      pendingChoice: 'Saving your choice…',
+      unavailable: 'Measurement is unavailable. You can decline it or change your choice.',
     },
   };
   const renderConsentUI = (open = false) => {
@@ -354,29 +389,141 @@
     ui.panel.lang = locale();
     for (const key of ['title', 'description', 'retention', 'allow', 'deny']) ui[key].textContent = copy[key];
     ui.summary.textContent = copy.details;
-    ui.allow.disabled = privacySignal();
-    ui.status.textContent = privacySignal() ? copy.signal : copy[choice];
+    const available = Boolean(endpoint());
+    ui.allow.disabled = !available || privacySignal() || state.pendingChoices > 0 || !navigator.locks || typeof navigator.locks.request !== 'function';
+    ui.status.textContent = state.pendingChoices ? copy.pendingChoice : state.storageError ? copy.storageError : privacySignal() ? copy.signal : !available ? copy.unavailable : copy[choice];
     ui.trigger.textContent = copy.settings;
-    ui.panel.hidden = !(open || choice === 'unknown');
+    ui.panel.hidden = !(open || (available && choice === 'unknown') || state.storageError || state.pendingChoices);
     ui.trigger.hidden = !ui.panel.hidden;
     ui.trigger.setAttribute('aria-expanded', String(!ui.panel.hidden));
   };
+  // A granted decision is committed only if no other tab changed the choice
+  // since the click. Every write is serialized across tabs by the browser.
   const chooseConsent = (choice) => {
-    const previous = consent();
     if (choice === 'granted' && (!endpoint() || privacySignal())) return false;
-    state.choice = choice;
-    try { sessionStorage.setItem(CONSENT_KEY, `${POLICY_REVISION}:${choice}`); } catch { /* Choice remains in memory. */ }
-    if (choice !== 'granted' || previous !== 'granted') {
+    const intent = ++state.intent;
+    if (choice === 'denied') {
+      state.localDeny = true;
+      state.pendingDenials += 1;
+      clearSession();
+    }
+    let withdrawal;
+    try {
+      withdrawal = randomId();
+      if (!withdrawal) throw new Error('Choice marker unavailable');
+      localStorage.setItem(WITHDRAWAL_KEY, withdrawal);
+      if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) throw new Error('Choice marker unavailable');
+    } catch {
+      if (choice === 'denied') state.pendingDenials -= 1;
+      state.localDeny = true;
+      state.storageError = true;
+      clearSession();
+      renderConsentUI(true);
+      return false;
+    }
+    let expected;
+    try { expected = localStorage.getItem(PRIVACY_KEY); } catch { expected = undefined; }
+    if (expected === undefined || !navigator.locks || typeof navigator.locks.request !== 'function') {
+      if (choice === 'denied') state.pendingDenials -= 1;
+      state.localDeny = true;
+      state.storageError = true;
+      clearSession();
+      if (choice === 'denied') {
+        try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Local denial remains in force. */ }
+      }
+      renderConsentUI(true);
+      return false;
+    }
+    state.pendingChoices += 1;
+    renderConsentUI(true);
+    const lockAbort = new AbortController();
+    const timer = setTimeout(() => lockAbort.abort(), 5000);
+    let request;
+    try {
+      request = navigator.locks.request(PRIVACY_KEY, { mode: 'exclusive', signal: lockAbort.signal }, () => {
+        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        const current = localStorage.getItem(PRIVACY_KEY);
+        if (choice === 'granted' && (current !== expected || intent !== state.intent || privacySignal())) return false;
+        if (choice === 'denied' && localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        let seq = 0;
+        try {
+          const previous = JSON.parse(current);
+          if (previous?.revision === POLICY_REVISION && Number.isSafeInteger(previous.seq) && previous.seq > 0) seq = previous.seq;
+        } catch { /* A malformed choice is treated as unknown. */ }
+        if (seq >= Number.MAX_SAFE_INTEGER) return false;
+        const record = JSON.stringify({ revision: POLICY_REVISION, choice, at: Date.now(), seq: seq + 1, withdrawal: withdrawal || null });
+        localStorage.setItem(PRIVACY_KEY, record);
+        if (localStorage.getItem(PRIVACY_KEY) !== record) throw new Error('Preference unavailable');
+        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        return true;
+      });
+    } catch { request = Promise.reject(new Error('Coordination unavailable')); }
+    Promise.resolve(request).then((saved) => {
+      state.pendingChoices -= 1;
+      if (choice === 'denied') state.pendingDenials -= 1;
+      if (!saved) {
+        let superseded = false;
+        try { superseded = localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal; } catch { /* Keep the fail-closed state below. */ }
+        if (superseded) {
+          state.localDeny = false;
+          state.storageError = false;
+          const current = consent();
+          renderConsentUI();
+          if (current === 'granted') initializePage();
+          return;
+        }
+        state.localDeny = true;
+        state.storageError = true;
+        clearSession();
+        renderConsentUI(true);
+        return;
+      }
+      if (intent === state.intent) {
+        state.localDeny = false;
+        state.legacyNeedsChoice = false;
+        state.storageError = false;
+        state.choice = choice;
+        clearSession();
+        state.pagePath = '';
+        state.changedFields.clear();
+        state.articleMilestones.clear();
+      }
+      renderConsentUI();
+      if (intent === state.intent && choice === 'granted') initializePage();
+      state.ui?.trigger.focus();
+    }, () => {
+      state.pendingChoices -= 1;
+      if (choice === 'denied') state.pendingDenials -= 1;
+      state.localDeny = true;
+      state.storageError = true;
+      clearSession();
+      if (choice === 'granted') {
+        try {
+          const failedGrant = randomId();
+          if (!failedGrant) throw new Error('Withdrawal marker unavailable');
+          localStorage.setItem(WITHDRAWAL_KEY, failedGrant);
+          if (localStorage.getItem(WITHDRAWAL_KEY) !== failedGrant) throw new Error('Withdrawal marker unavailable');
+        } catch { try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Storage failure remains fail-closed in this tab. */ } }
+      }
+      renderConsentUI(true);
+    }).finally(() => clearTimeout(timer));
+    // True means locally accepted for processing, not that every tab has synced.
+    return true;
+  };
+  window.addEventListener('storage', (event) => {
+    if (event.key !== PRIVACY_KEY && event.key !== WITHDRAWAL_KEY && event.key !== null) return;
+    const previous = state.choice;
+    if (!state.pendingDenials && !state.storageError) state.localDeny = false;
+    const choice = consent();
+    if (choice !== 'granted') {
       clearSession();
       state.pagePath = '';
       state.changedFields.clear();
       state.articleMilestones.clear();
     }
     renderConsentUI();
-    if (choice === 'granted') initializePage();
-    state.ui?.trigger.focus();
-    return true;
-  };
+    if (choice === 'granted' && previous !== 'granted') initializePage();
+  });
   const ensureConsentUI = () => {
     if (state.ui || !document.body) return;
     const create = (tag, parent) => {
@@ -428,7 +575,7 @@
     renderConsentUI();
   };
   const initializePage = () => {
-    if (!endpoint() || !publicPath(location.pathname)) {
+    if (!publicPath(location.pathname)) {
       clearSession();
       state.pagePath = '';
       if (state.ui) { state.ui.panel.hidden = true; state.ui.trigger.hidden = true; }
@@ -437,6 +584,11 @@
     installListeners();
     ensureConsentUI();
     renderConsentUI();
+    if (!endpoint()) {
+      clearSession();
+      state.pagePath = '';
+      return;
+    }
     if (consent() !== 'granted') return;
     const currentPath = publicPath(location.pathname);
     if (state.pagePath === currentPath) return;
@@ -458,7 +610,7 @@
     version: SCHEMA_VERSION, track: transmit,
     revokeConsent: () => chooseConsent('denied'),
     openPreferences: () => {
-      if (!endpoint() || !publicPath(location.pathname)) return false;
+      if (!publicPath(location.pathname)) return false;
       ensureConsentUI();
       renderConsentUI(true);
       if (state.ui) (state.ui.allow.disabled ? state.ui.deny : state.ui.allow).focus();
