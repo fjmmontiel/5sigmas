@@ -76,11 +76,23 @@
       "url": "https://docs.mistral.ai/models/mistral-large",
       "published": "2026-10-06"
     },
+    "haiku55": {
+      "organization": "Anthropic",
+      "title": "Claude Haiku 5.5",
+      "url": "https://www.anthropic.com/claude-haiku-5-5",
+      "published": "2026-10-07"
+    },
     "gpt61terra": {
       "organization": "OpenAI",
       "title": "Introducing GPT-6.1 Terra",
       "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
       "published": "2026-10-26"
+    },
+    "gemini4carbon": {
+      "organization": "Google",
+      "title": "Gemini 4 Carbon: our next frontier model",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/",
+      "published": "2026-10-28"
     },
     "gpt6cyber": {
       "organization": "OpenAI",
@@ -455,11 +467,25 @@
         "reason": "Mistral released a new multimodal reasoning model, but this timeline keeps longitudinal benchmark series only where release-reported protocols are directly comparable. No cross-vendor point is inserted from Artificial Analysis or from a different benchmark set."
       },
       {
+        "model": "Claude Haiku 5.5",
+        "date": "2026-10-07",
+        "status": "reviewed_not_added",
+        "source": "haiku55",
+        "reason": "Anthropic publishes its own evaluation suite and conditions (including OSWorld 2.1 and Terminal-Bench 4.0); these are not the existing OpenAI longitudinal benchmark/protocol series. Do not synthesize a cross-vendor trend."
+      },
+      {
         "model": "GPT-6.1 Terra",
         "date": "2026-10-26",
         "status": "reviewed_not_added",
         "source": "gpt61terra",
         "reason": "The launch page discusses MMMU-Pro but the accessible text does not provide a numeric score with a no-tools condition; its Terminal-Bench and OSWorld results are different benchmarks."
+      },
+      {
+        "model": "Gemini 4 Carbon",
+        "date": "2026-10-28",
+        "status": "reviewed_not_added",
+        "source": "gemini4carbon",
+        "reason": "Google reports benchmarks including Artificial Analysis Intelligence Index v5.0 and security evaluations; those metrics/protocols are not the existing longitudinal OpenAI series. Initial release access is restricted, so no public API availability or synthetic score is implied."
       },
       {
         "model": "GPT-6 Cyber",
