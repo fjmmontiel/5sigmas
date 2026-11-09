@@ -310,6 +310,10 @@ await check('storage denial falls back only to memory and cryptography fails clo
   assert.equal(insecure.sent.length, 0);
   assert.equal(insecure.storage.has(SESSION_KEY), false);
   assert.equal(insecure.preferenceStorage.has(WITHDRAWAL_KEY), false);
+  const noCSPRNG = boot({ crypto: undefined });
+  await noCSPRNG.deny();
+  assert.equal(noCSPRNG.preferenceStorage.has(WITHDRAWAL_KEY), false);
+  assert.equal(noCSPRNG.api.status().consent, 'denied');
   const secureFallback = await consented({ crypto: { getRandomValues: (bytes) => webcrypto.getRandomValues(bytes) } });
   assert.equal(secureFallback.sent.length, 2);
   assert.match(secureFallback.sent[0].payload.session_id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
@@ -320,6 +324,7 @@ await check('cross-tab revocation fails closed before the storage event and clea
   assert.equal(b.sent.length, 2);
   assert.notEqual(a.sent[0].payload.session_id, b.sent[0].payload.session_id);
   assert.deepEqual(Object.keys(JSON.parse(a.preferenceStorage.get(PRIVACY_KEY))).sort(), ['at', 'choice', 'revision', 'seq', 'withdrawal']);
+  assert.equal(a.preferenceStorage.has(WITHDRAWAL_KEY), false);
   await a.deny();
   assert.ok(a.preferenceStorage.get(WITHDRAWAL_KEY));
   assert.equal(b.api.track('result_rendered', context), false);
@@ -364,6 +369,9 @@ await check('withdrawal between consent reads prevents a send without a storage 
 });
 await check('removing a generation invalidates a previously granted record', async () => {
   const a = await consented();
+  assert.equal(a.preferenceStorage.has(WITHDRAWAL_KEY), false);
+  await a.deny();
+  await a.grant();
   const sentBefore = a.sent.length;
   a.preferenceStorage.delete(WITHDRAWAL_KEY);
   assert.equal(a.api.track('result_rendered', context), false);
@@ -392,6 +400,7 @@ await check('a stale queued grant cannot overwrite a later committed rejection',
   const a = boot({ preferenceStorage: shared, locks });
   const b = boot({ preferenceStorage: shared, locks });
   const grant = a.grant();
+  assert.equal(shared.has(WITHDRAWAL_KEY), false);
   const deny = b.deny();
   assert.equal(queue.length, 2);
   assert.equal(b.api.track('result_rendered', context), false);
@@ -454,7 +463,7 @@ await check('a later explicit grant supersedes an earlier queued withdrawal', as
   const grant = b.grant();
   await grant;
   const acceptance = shared.get(WITHDRAWAL_KEY);
-  assert.notEqual(acceptance, withdrawal);
+  assert.equal(acceptance, withdrawal);
   queue[1].resolve(queue[1].fn());
   await b.flush();
   queue[0].resolve(queue[0].fn());

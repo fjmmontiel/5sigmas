@@ -90,7 +90,6 @@
       const age = Date.now() - saved.at;
       if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return 'denied';
       if ((saved.withdrawal ?? null) !== (withdrawal ?? null)) return 'denied';
-      if (saved.choice === 'granted' && (typeof saved.withdrawal !== 'string' || !saved.withdrawal)) return 'unknown';
       return saved.revision === POLICY_REVISION && ['granted', 'denied'].includes(saved.choice)
         && Number.isSafeInteger(saved.seq) && saved.seq > 0 && Number.isSafeInteger(saved.at) && age >= 0 && age < CHOICE_MAX_MS
         ? saved.choice : 'unknown';
@@ -360,7 +359,7 @@
       title: 'Privacidad y almacenamiento', allow: 'Aceptar medición', deny: 'Rechazar medición',
       settings: 'Privacidad y almacenamiento', details: 'Qué usamos y durante cuánto tiempo',
       description: 'El sitio guarda opciones de navegación y tu elección de privacidad. Con tu permiso, medimos visitas e interacciones para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, correos ni parámetros de URL.',
-      retention: 'Guardamos tu elección de medición durante un máximo de 180 días en este navegador. Para sincronizarla entre pestañas, guardamos una marca técnica aleatoria en el navegador hasta que borres los datos del sitio; no se envía al colector. Usamos un identificador de sesión aleatorio que caduca tras 30 minutos sin actividad, con un máximo de 24 horas. El almacenamiento de Cloudflare está en la UE: registros temporales hasta 48 horas, recuentos consultables durante 90 días y copias de recuperación hasta 30 días más tras el borrado. Los informes históricos conservan solo totales agrupados sin identificadores de sesión. Puedes retirar tu permiso aquí en cualquier momento. Los totales ya agregados no se pueden retirar por identidad.',
+      retention: 'Guardamos tu elección de medición durante un máximo de 180 días en este navegador. Al retirar el permiso, guardamos una marca técnica aleatoria para sincronizar las pestañas; permanece hasta que borres los datos del sitio y no se envía al colector. Usamos un identificador de sesión aleatorio que caduca tras 30 minutos sin actividad, con un máximo de 24 horas. El almacenamiento de Cloudflare está en la UE: registros temporales hasta 48 horas, recuentos consultables durante 90 días y copias de recuperación hasta 30 días más tras el borrado. Los informes históricos conservan solo totales agrupados sin identificadores de sesión. Puedes retirar tu permiso aquí en cualquier momento. Los totales ya agregados no se pueden retirar por identidad.',
       granted: 'Medición activada con tu permiso.', denied: 'Medición desactivada.',
       unknown: 'La medición permanece desactivada hasta que la permitas.',
       signal: 'La preferencia de privacidad de tu navegador mantiene la medición desactivada.',
@@ -372,7 +371,7 @@
       title: 'Privacy and storage', allow: 'Allow measurement', deny: 'Decline measurement',
       settings: 'Privacy and storage', details: 'What we use and for how long',
       description: 'The site stores navigation settings and your privacy choice. With your permission, we measure visits and interactions to improve 5sigmas. We do not send tool inputs, email addresses or URL parameters.',
-      retention: 'Your measurement choice is stored for up to 180 days in this browser. To synchronize it across tabs, a random technical marker stays in this browser until you clear the site data; it is not sent to the collector. The random session identifier expires after 30 minutes of inactivity, with a 24-hour maximum. We use Cloudflare storage in the EU: temporary records last up to 48 hours, counts remain queryable for 90 days, and recovery backups may keep deleted data for up to 30 additional days. Historical reports keep only grouped totals without session identifiers. You can withdraw permission here at any time. Already aggregated totals cannot be removed by identity.',
+      retention: 'Your measurement choice is stored for up to 180 days in this browser. When you withdraw permission, a random technical marker synchronizes the tabs; it stays until you clear the site data and is not sent to the collector. The random session identifier expires after 30 minutes of inactivity, with a 24-hour maximum. We use Cloudflare storage in the EU: temporary records last up to 48 hours, counts remain queryable for 90 days, and recovery backups may keep deleted data for up to 30 additional days. Historical reports keep only grouped totals without session identifiers. You can withdraw permission here at any time. Already aggregated totals cannot be removed by identity.',
       granted: 'Measurement is enabled with your permission.', denied: 'Measurement is disabled.',
       unknown: 'Measurement remains disabled until you allow it.',
       signal: 'Your browser privacy preference keeps measurement disabled.',
@@ -408,11 +407,15 @@
       clearSession();
     }
     let withdrawal;
+    let expected;
     try {
-      withdrawal = randomId();
-      if (!withdrawal) throw new Error('Choice marker unavailable');
-      localStorage.setItem(WITHDRAWAL_KEY, withdrawal);
-      if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) throw new Error('Choice marker unavailable');
+      withdrawal = choice === 'denied' ? randomId() : localStorage.getItem(WITHDRAWAL_KEY);
+      if (choice === 'denied') {
+        if (!withdrawal) throw new Error('Withdrawal marker unavailable');
+        localStorage.setItem(WITHDRAWAL_KEY, withdrawal);
+        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) throw new Error('Withdrawal marker unavailable');
+      }
+      expected = localStorage.getItem(PRIVACY_KEY);
     } catch {
       if (choice === 'denied') state.pendingDenials -= 1;
       state.localDeny = true;
@@ -421,8 +424,6 @@
       renderConsentUI(true);
       return false;
     }
-    let expected;
-    try { expected = localStorage.getItem(PRIVACY_KEY); } catch { expected = undefined; }
     if (expected === undefined || !navigator.locks || typeof navigator.locks.request !== 'function') {
       if (choice === 'denied') state.pendingDenials -= 1;
       state.localDeny = true;
@@ -439,11 +440,13 @@
     const lockAbort = new AbortController();
     const timer = setTimeout(() => lockAbort.abort(), 5000);
     let request;
+    let superseded = false;
     try {
       request = navigator.locks.request(PRIVACY_KEY, { mode: 'exclusive', signal: lockAbort.signal }, () => {
-        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) { superseded = true; return false; }
         const current = localStorage.getItem(PRIVACY_KEY);
-        if (choice === 'granted' && (current !== expected || intent !== state.intent || privacySignal())) return false;
+        if (current !== expected || intent !== state.intent) { superseded = true; return false; }
+        if (choice === 'granted' && privacySignal()) return false;
         if (choice === 'denied' && localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
         let seq = 0;
         try {
@@ -454,7 +457,7 @@
         const record = JSON.stringify({ revision: POLICY_REVISION, choice, at: Date.now(), seq: seq + 1, withdrawal: withdrawal || null });
         localStorage.setItem(PRIVACY_KEY, record);
         if (localStorage.getItem(PRIVACY_KEY) !== record) throw new Error('Preference unavailable');
-        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) return false;
+        if (localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal) { superseded = true; return false; }
         return true;
       });
     } catch { request = Promise.reject(new Error('Coordination unavailable')); }
@@ -462,8 +465,6 @@
       state.pendingChoices -= 1;
       if (choice === 'denied') state.pendingDenials -= 1;
       if (!saved) {
-        let superseded = false;
-        try { superseded = localStorage.getItem(WITHDRAWAL_KEY) !== withdrawal; } catch { /* Keep the fail-closed state below. */ }
         if (superseded) {
           state.localDeny = false;
           state.storageError = false;
@@ -497,14 +498,7 @@
       state.localDeny = true;
       state.storageError = true;
       clearSession();
-      if (choice === 'granted') {
-        try {
-          const failedGrant = randomId();
-          if (!failedGrant) throw new Error('Withdrawal marker unavailable');
-          localStorage.setItem(WITHDRAWAL_KEY, failedGrant);
-          if (localStorage.getItem(WITHDRAWAL_KEY) !== failedGrant) throw new Error('Withdrawal marker unavailable');
-        } catch { try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Storage failure remains fail-closed in this tab. */ } }
-      }
+      if (choice === 'granted') { try { localStorage.removeItem(PRIVACY_KEY); } catch { /* Storage failure remains fail-closed in this tab. */ } }
       renderConsentUI(true);
     }).finally(() => clearTimeout(timer));
     // True means locally accepted for processing, not that every tab has synced.
