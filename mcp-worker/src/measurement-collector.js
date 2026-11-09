@@ -1,7 +1,7 @@
 import { verifyExportAuthorization } from "./measurement-auth.js";
 
 export const SITE_ORIGIN = "https://5sigmas.com";
-export const POLICY_REVISION = "2026-10-18";
+export const POLICY_REVISION = "2026-11-09";
 export const MEASUREMENT_PREFIX = "/_s5/measurement/";
 export const MAX_BODY_BYTES = 8 * 1024;
 export const MAX_EVENT_SKEW_MS = 5 * 60 * 1000;

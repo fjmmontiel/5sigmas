@@ -40,7 +40,7 @@
     // configuration or vocabulary leaves measurement inert. Version all three
     // requests so approved configuration cannot activate a pre-consent runtime
     // left in the browser cache by an earlier release.
-    var measurementVersion = '?v=2026-10-18';
+    var measurementVersion = '?v=2026-11-09';
     load('/assets/javascripts/measurement-config.js' + measurementVersion, 'measurement-config', function () {
         load('/assets/javascripts/measurement-catalog.js' + measurementVersion, 'measurement-catalog', function () {
             load('/assets/javascripts/measurement.js' + measurementVersion, 'measurement');

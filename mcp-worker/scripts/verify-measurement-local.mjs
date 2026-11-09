@@ -133,7 +133,7 @@ try {
   const { bootMeasurement } = await import('../../scripts/measurement_test_harness.mjs');
   const browser = bootMeasurement({ now: Date.now(), crypto: webcrypto });
   assert.equal(browser.sent.length, 0);
-  browser.grant();
+  await browser.grant();
   browser.dispatch('change', browser.fields.inputTokens);
   browser.api.track('result_rendered', { tool_id: 'model-price-performance', result_kind: 'comparison' });
   browser.api.track('scenario_completed', { tool_id: 'model-price-performance', result_kind: 'comparison' });

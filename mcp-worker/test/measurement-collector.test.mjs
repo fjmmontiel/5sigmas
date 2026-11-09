@@ -123,7 +123,7 @@ test("transport and consent failures never reach storage", async (t) => {
   for (const [name, init, expected] of [
     ["external origin", { headers: { Origin: "https://attacker.invalid" } }, 403],
     ["missing consent", { headers: { "X-S5-Consent": "" } }, 403],
-    ["outdated policy", { headers: { "X-S5-Policy-Revision": "2026-01-01" } }, 403],
+    ["outdated policy", { headers: { "X-S5-Policy-Revision": "2026-10-18" } }, 403],
     ["cross-site fetch", { headers: { "Sec-Fetch-Site": "cross-site" } }, 403],
     ["same-site different origin", { headers: { "Sec-Fetch-Site": "same-site" } }, 403],
     ["cookies", { headers: { Cookie: "user=email@example.invalid" } }, 403],
@@ -145,6 +145,19 @@ test("transport and consent failures never reach storage", async (t) => {
   assert.equal((await route(h, noOrigin)).status, 403);
   assert.equal(h.calls.length, 0);
   assert.equal(countRows(h, "landing_rows"), 0);
+});
+
+test("consent policy rollover rejects the previous revision and accepts the current revision", async (t) => {
+  const h = harness(); t.after(h.close);
+  const oldPolicy = await route(h, request(event(), { headers: { "X-S5-Policy-Revision": "2026-10-18" } }));
+  assert.equal(oldPolicy.status, 403);
+  assert.equal(h.calls.length, 0);
+  assert.equal(countRows(h, "landing_rows"), 0);
+
+  const currentPolicy = await route(h, request());
+  assert.equal(currentPolicy.status, 202);
+  assert.equal(h.calls.length, 1);
+  assert.equal(countRows(h, "landing_rows"), 1);
 });
 
 test("streaming byte limit rejects oversized unknown-length bodies and malformed UTF8", async (t) => {
@@ -431,7 +444,7 @@ test("actual browser runtime sends consented visits, interactions and conversion
   const { default: catalog } = await import("../src/measurement-catalog.json", { with: { type: "json" } });
   const browser = bootMeasurement();
   assert.equal(browser.sent.length, 0);
-  browser.grant();
+  await browser.grant();
   assert.ok(browser.sent.some((item) => item.payload.event_name === "page_view"));
   assert.ok(browser.sent.some((item) => item.payload.event_name === "tool_open"));
   assert.equal(browser.api.track("scenario_completed", { tool_id: "model-price-performance", result_kind: "comparison" }), true);

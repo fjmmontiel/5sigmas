@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+POLICY_REVISION = "2026-11-09"
+
 
 class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -15,10 +17,10 @@ class NoRedirect(HTTPRedirectHandler):
 
 def browser_config(policy: dict, health: dict | None) -> dict:
     if policy.get("enabled") is not True:
-        return {"endpoint": "", "approved": False, "policyRevision": "2026-10-18"}
+        return {"endpoint": "", "approved": False, "policyRevision": POLICY_REVISION}
     expected = {
         "site_origin": "https://5sigmas.com", "endpoint": "/_s5/measurement/events",
-        "policy_revision": "2026-10-18", "consent_mode": "explicit_opt_in",
+        "policy_revision": POLICY_REVISION, "consent_mode": "explicit_opt_in",
         "retention_days": 90, "session_metadata_retention_hours": 48, "storage_jurisdiction": "eu",
     }
     if any(policy.get(key) != value for key, value in expected.items()):
@@ -39,7 +41,7 @@ def validate_worker_policy(root: Path, policy: dict) -> None:
     if variables.get("MEASUREMENT_POLICY_REVISION") != policy.get("policy_revision"):
         raise ValueError("Worker/browser policy revisions disagree")
     expected = {"ok": True, "service": "5sigmas-measurement", "schema_version": 1,
-                "policy_revision": "2026-10-18", "consent_mode": "explicit_opt_in", "retention_days": 90, "storage": "ready"}
+                "policy_revision": POLICY_REVISION, "consent_mode": "explicit_opt_in", "retention_days": 90, "storage": "ready"}
     browser_config(policy, expected)
 
 

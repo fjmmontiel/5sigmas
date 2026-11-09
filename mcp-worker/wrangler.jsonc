@@ -17,7 +17,7 @@
   ],
   "vars": {
     "MEASUREMENT_ENABLED": "true",
-    "MEASUREMENT_POLICY_REVISION": "2026-10-18"
+    "MEASUREMENT_POLICY_REVISION": "2026-11-09"
   },
   "durable_objects": {
     "bindings": [{ "name": "MEASUREMENT_STORE", "class_name": "MeasurementStore" }]
