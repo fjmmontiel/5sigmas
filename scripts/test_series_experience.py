@@ -22,6 +22,12 @@ def check(site: Path, output: Path):
         assert not hub.select('a[href*="#mecanismo"]'), 'Series cards must not point to discarded guided mechanisms'
         players=hub.select('[data-sx-player] video')
         assert players
+        # The watch-page CTA must not promise transcripts for series lacking them.
+        for slug in ('seguridad-ia', 'modelos-razonadores'):
+            fallback=hub.select_one(f'#serie-{slug} .sx-player-fallback')
+            assert fallback and 'transcrip' not in fallback.get_text().lower(), (locale, slug)
+        agent_fallback=hub.select_one('#serie-agentes-ia .sx-player-fallback')
+        assert agent_fallback and 'transcrip' in agent_fallback.get_text().lower(), locale
         for element in hub.select('[data-sx-hub] a[href], [data-sx-hub] video[poster], [data-sx-hub] track[src]'):
             raw=element.get('href') or element.get('poster') or element.get('src')
             if raw.startswith('#'):
