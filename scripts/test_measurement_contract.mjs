@@ -383,7 +383,7 @@ await check('a failed generation read after grant fails closed', async () => {
   assert.equal(a.api.track('result_rendered', context), false);
   assert.equal(a.sent.length, sentBefore);
   assert.equal(a.storage.has(SESSION_KEY), false);
-  assert.equal(a.api.status().consent, 'denied');
+  assert.equal(a.api.status().consent, 'unknown');
 });
 await check('a stale queued grant cannot overwrite a later committed rejection', async () => {
   const shared = new Map();
