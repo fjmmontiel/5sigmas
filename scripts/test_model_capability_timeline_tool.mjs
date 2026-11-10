@@ -75,6 +75,13 @@ for (const [name, sourceId] of [['Claude Haiku 5.5', 'haiku55'], ['Gemini 4 Carb
   assert.equal(row?.source, sourceId, name + ' must preserve its primary-source provenance');
   assert.ok(dataset.sources[sourceId]?.url.startsWith('https://'), name + ' requires a primary source');
 }
+const fable52 = dataset.release_coverage.releases.find((row) => row.model === 'Claude Fable 5.2');
+assert.equal(fable52?.date, '2026-11-09');
+assert.equal(fable52?.status, 'reviewed_not_added');
+assert.equal(fable52?.reviewed_on, '2026-11-10');
+assert.equal(fable52?.source, 'fable52');
+assert.equal(dataset.sources.fable52?.url, 'https://platform.claude.com/docs/en/models/fable-5-2/overview');
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Claude Fable 5.2')), 'Fable 5.2 must not inherit an incompatible benchmark score');
 assert.equal(dataset.release_coverage.reviewed_through, dataset.updated);
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.source === 'gpt6cyber'));
 
