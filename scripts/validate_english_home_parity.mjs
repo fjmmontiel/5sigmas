@@ -29,13 +29,12 @@ const measure = async (page, route, viewport) => {
       media: rect('.s5-start-card__media'),
       cta: rect('.s5-start-card__cta'),
       loops: document.querySelectorAll('.s5-learning-loop__item').length,
-      entries: document.querySelectorAll('.s5-entry').length,
+      goals: [...document.querySelectorAll('.s5-goal-nav a')].map((a) => a.getAttribute('href')),
       mediaCards: document.querySelectorAll('.s5-media-card').length,
       paths: document.querySelectorAll('.s5-simple-list .s5-list-row').length,
       imageLoaded: Boolean(image?.complete && image.naturalWidth > 0 && image.naturalHeight > 0),
       imageSource: image?.getAttribute('src') || null,
       localImages: [...document.querySelectorAll('img[src^="/"]')].map((img) => img.getAttribute('src')),
-      localLinks: [...document.querySelectorAll('a[href^="/"]')].map((a) => a.getAttribute('href')),
       body: document.body.innerText,
       viewport: document.documentElement.clientWidth,
       scrollWidth: document.documentElement.scrollWidth,
@@ -61,12 +60,16 @@ if (!en.card || !es.card) {
 }
 if (!en.media || !en.cta || Math.abs(en.cta.y - (en.media.bottom - en.cta.height)) > 18) failures.push('/en/: English CTA no longer overlays the visual like the Spanish learning card');
 if (en.loops !== 3 || es.loops !== 3) failures.push(`Homepage parity: expected three-step learning loops, got ES=${es.loops} EN=${en.loops}`);
-if (en.entries !== 3) failures.push(`/en/: expected three canonical entry surfaces, got ${en.entries}`);
+const goalPairs = [
+  ['/videos/series/fundamentos-ia-iag/01-que-es-ia/', '/en/videos/series/fundamentos-ia-iag/01-que-es-ia/'],
+  ['/herramientas/coste-latencia-llm/', '/en/tools/llm-cost-latency/'],
+  ['/temas/evaluacion-modelos/', '/en/temas/evaluacion-modelos/'],
+];
+if (es.goals.length !== 3 || en.goals.length !== 3 || goalPairs.some(([spanish, english], i) => es.goals[i] !== spanish || en.goals[i] !== english)) {
+  failures.push(`Homepage parity: expected three matching goal routes, got ES=${JSON.stringify(es.goals)} EN=${JSON.stringify(en.goals)}`);
+}
 if (en.mediaCards !== 3) failures.push(`/en/: expected three native-English visual cards, got ${en.mediaCards}`);
 if (en.paths < 4) failures.push(`/en/: expected at least four learning-path rows, got ${en.paths}`);
-for (const required of ['/en/temas/', '/en/series/', '/en/articulos-tecnicos/']) {
-  if (!en.localLinks.includes(required)) failures.push(`/en/: missing canonical library entry ${required}`);
-}
 for (const src of en.localImages) {
   if (!src.startsWith('/en/')) failures.push(`/en/: local image bypasses English media namespace: ${src}`);
 }
@@ -93,4 +96,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('English homepage parity QA passed: canonical library breadth, native-English media, hero weight, CTA overlap and desktop/mobile layout are protected.');
+console.log('English homepage parity QA passed: goal-route parity, native-English media, hero weight, CTA overlap and desktop/mobile layout are protected.');

@@ -15,6 +15,12 @@ hide:
     <h1>Ver la IA.<br />Entenderla de verdad.</h1>
     <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después manipulas el mecanismo, compruebas sus límites y profundizas en la evidencia.</p>
 
+    <nav class="s5-goal-nav" aria-label="Elige tu objetivo">
+      <a href="/videos/series/fundamentos-ia-iag/01-que-es-ia/">Empezar desde cero →</a>
+      <a href="/herramientas/coste-latencia-llm/">Calcular coste y latencia →</a>
+      <a href="/temas/evaluacion-modelos/">Evaluar modelos →</a>
+    </nav>
+
     <div class="s5-learning-loop" role="list" aria-label="Método de aprendizaje de 5sigmas">
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">01</span>
@@ -57,48 +63,6 @@ hide:
       </a>
     </div>
   </article></section>
-
-<section class="s5-why" aria-labelledby="s5-why-title">
-  <div class="s5-why__copy">
-    <div class="s5-eyebrow">El criterio detrás del nombre</div>
-    <h2 id="s5-why-title">¿Por qué 5sigmas?</h2>
-    <p>En física de partículas, un resultado solo se considera descubrimiento cuando alcanza una significancia de <strong>cinco sigmas</strong>: un umbral tan exigente que la probabilidad de confundir una fluctuación extrema con una señal real es aproximadamente de una entre 3,5 millones.</p>
-    <p>5sigmas aplica ese mismo principio a la inteligencia artificial: separar conocimiento fundamental de ruido diario, exigir evidencia y construir criterio antes de aceptar una narrativa, una herramienta o una promesa.</p>
-    <div class="s5-why__metrics" aria-label="Significado de cinco sigmas">
-      <span><strong>5σ</strong><small>umbral de descubrimiento</small></span>
-      <span><strong>≈ 1 entre 3,5 M</strong><small>probabilidad de ruido extremo</small></span>
-      <span><strong>Señal &gt; ruido</strong><small>principio editorial</small></span>
-    </div>
-  </div>
-  <figure class="s5-why__visual">
-    <img src="/assets/images/design/five-sigma-threshold.svg" alt="Curva normal con el umbral de cinco sigmas separado del ruido esperado" />
-    <figcaption>No publicar por novedad. Publicar cuando la explicación resiste evidencia, contexto y límites.</figcaption>
-  </figure>
-</section>
-
-<section class="s5-entry-section" aria-labelledby="s5-entry-title">
-  <div class="s5-section-head s5-section-head--compact">
-    <h2 id="s5-entry-title">Elige cómo continuar</h2>
-    <a href="/herramientas/">Experimentar con herramientas →</a>
-  </div>
-  <nav class="s5-entry-grid" aria-label="Formas de entrar en 5sigmas">
-    <a class="s5-entry" href="/visuales/">
-      <div class="s5-entry__index">01</div>
-      <div class="s5-entry__title">Ver</div>
-      <div class="s5-entry__text">Vídeos y animaciones para entender una idea antes de entrar en detalle.</div>
-    </a>
-    <a class="s5-entry" href="/series/">
-      <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Series</div>
-      <div class="s5-entry__text">13 series conectadas para empezar desde cero o profundizar por objetivo.</div>
-    </a>
-    <a class="s5-entry" href="/articulos-tecnicos/">
-      <div class="s5-entry__index">03</div>
-      <div class="s5-entry__title">Construir</div>
-      <div class="s5-entry__text">Arquitectura, decisiones y límites de sistemas reales de IA.</div>
-    </a>
-  </nav>
-</section>
 
 <section class="s5-section" aria-labelledby="s5-concepts-title">
   <div class="s5-section-head">
@@ -216,6 +180,24 @@ hide:
     </div>
     <div class="s5-note-feature__meta">Runtime conversacional<br />Estado interno<br />Ejecución asíncrona</div>
   </div>
+</section>
+
+<section class="s5-why" aria-labelledby="s5-why-title">
+  <div class="s5-why__copy">
+    <div class="s5-eyebrow">El criterio detrás del nombre</div>
+    <h2 id="s5-why-title">¿Por qué 5sigmas?</h2>
+    <p>En física de partículas, un resultado solo se considera descubrimiento cuando alcanza una significancia de <strong>cinco sigmas</strong>: un umbral tan exigente que la probabilidad de confundir una fluctuación extrema con una señal real es aproximadamente de una entre 3,5 millones.</p>
+    <p>5sigmas aplica ese mismo principio a la inteligencia artificial: separar conocimiento fundamental de ruido diario, exigir evidencia y construir criterio antes de aceptar una narrativa, una herramienta o una promesa.</p>
+    <div class="s5-why__metrics" aria-label="Significado de cinco sigmas">
+      <span><strong>5σ</strong><small>umbral de descubrimiento</small></span>
+      <span><strong>≈ 1 entre 3,5 M</strong><small>probabilidad de ruido extremo</small></span>
+      <span><strong>Señal &gt; ruido</strong><small>principio editorial</small></span>
+    </div>
+  </div>
+  <figure class="s5-why__visual">
+    <img src="/assets/images/design/five-sigma-threshold.svg" alt="Curva normal con el umbral de cinco sigmas separado del ruido esperado" />
+    <figcaption>No publicar por novedad. Publicar cuando la explicación resiste evidencia, contexto y límites.</figcaption>
+  </figure>
 </section>
 
 </div>
