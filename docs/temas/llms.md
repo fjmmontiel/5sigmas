@@ -4,7 +4,7 @@ seo_title: "Qué es un LLM: cómo funciona un modelo de lenguaje grande"
 description: "Qué es un LLM, cómo tokeniza, aprende y genera texto, qué cambia con el ajuste por instrucciones y cuáles son sus límites técnicos."
 keywords: "LLM, large language model, modelo de lenguaje grande, tokens, preentrenamiento, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-23
+date_modified: 2026-11-11
 ---
 
 # Qué es un LLM y cómo funciona
@@ -157,6 +157,7 @@ La guía de [evaluación de modelos de IA](/temas/evaluacion-modelos/) propone u
 
 ## Dónde profundizar en 5sigmas
 
+- [TTFT vs TPOT: prefill, decode y presupuesto de latencia](/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/) para distinguir la espera hasta el primer token del tiempo necesario para completar una respuesta
 - [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) para separar software, aprendizaje y generación
 - [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) para entender cómo representación, aprendizaje y escala convergen en los modelos fundacionales
 - [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) para estudiar inferencia, verificación, latencia y fallos

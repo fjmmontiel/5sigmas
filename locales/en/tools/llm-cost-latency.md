@@ -215,7 +215,8 @@ hide:
   <div class="s5-tool-method__body">
     <p><strong>Cost.</strong> Uncached input, cached input and output tokens are priced separately. Preset rates are a starting point: replace them with your contract, batch pricing or effective rate whenever that better represents your workload.</p>
     <div class="s5-tool-method__formula">cost = (T<sub>in,uncached</sub> × P<sub>in</sub> + T<sub>in,cached</sub> × P<sub>cache</sub> + T<sub>out</sub> × P<sub>out</sub>) / 1,000,000</div>
-    <p><strong>Latency.</strong> TTFT covers everything up to the first generated token. The remaining generation is approximated as <code>(output_tokens − 1) / tokens_per_second</code>. This estimates completion time, not perceived streaming latency.</p>
+    <p><strong>TTFT vs TPOT.</strong> TTFT (<em>time to first token</em>) measures the wait until the first token is received, including networking, queueing and prompt processing. TPOT (<em>time per output token</em>) measures the average time per output token after the first. Here it is approximated as the inverse of the generation rate. For a long answer, that wait accumulates across the remaining tokens.</p>
+    <p>The remaining generation is approximated as <code>(output_tokens − 1) / tokens_per_second</code>. This estimates completion time, not perceived streaming latency. When comparing tools, check the formula and measurement boundary: ITL (<em>inter-token latency</em>) and TPOT can use different definitions.</p>
     <div class="s5-tool-method__formula">response_time ≈ TTFT + (T<sub>out</sub> − 1) / generation_rate</div>
     <p><strong>Capacity.</strong> For a stable workload the calculator applies Little's law: average concurrency ≈ arrival rate × service time. This is useful for average capacity planning; it is not a queueing model for bursts, p95/p99 latency, provider rate limits, retries or batching.</p>
     <div class="s5-tool-method__formula">average_concurrency ≈ requests/second × seconds/request</div>
@@ -231,6 +232,7 @@ hide:
     <a class="s5-list-row" href="/en/temas/llms/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">What is an LLM?</span><span class="s5-list-row__desc">Tokens, generation and context before converting them into cost.</span><span class="s5-list-row__meta">Concept</span></a>
     <a class="s5-list-row" href="/en/series/modelos-razonadores/04-latencia-streaming/"><span class="s5-list-row__n">02</span><span class="s5-list-row__title">Latency, streaming and human interaction</span><span class="s5-list-row__desc">Why TTFT, generation rate and completion time describe different user experiences.</span><span class="s5-list-row__meta">Chapter</span></a>
     <a class="s5-list-row" href="/en/articulos-tecnicos/voice-agent-architectures/"><span class="s5-list-row__n">03</span><span class="s5-list-row__title">Voice-agent architectures</span><span class="s5-list-row__desc">How latency budgets compound when the LLM is only one stage in a realtime system.</span><span class="s5-list-row__meta">Engineering</span></a>
+    <a class="s5-list-row" href="/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/"><span class="s5-list-row__n">04</span><span class="s5-list-row__title">TTFT vs TPOT: prefill, decode and total latency</span><span class="s5-list-row__desc">Separate the initial wait from time per token, with formulas, examples and measurement limits.</span><span class="s5-list-row__meta">Chapter</span></a>
   </div>
 </section>
 
