@@ -29,11 +29,18 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Test CI package DNS recovery
+        run: python3 tests/test_ci_package_dns.py
+
+      - name: Prepare package DNS
+        run: python3 scripts/ci_package_dns.py prepare
+
       - name: Install FFmpeg for exact video validation
+        timeout-minutes: 5
         run: |
-          if ! command -v ffprobe >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq ffmpeg
+          if ! command -v ffprobe >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update --error-on=any -qq -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=0
+            sudo apt-get install -y -qq -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=0 ffmpeg
           fi
 
       - name: Prepare exact Modelos R2 media for discovery checks
@@ -175,6 +182,7 @@ jobs:
           node-version: '22'
 
       - name: Install Playwright
+        timeout-minutes: 5
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
@@ -394,6 +402,10 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
+      - name: Restore package DNS
+        if: always()
+        run: python3 scripts/ci_package_dns.py restore
+
   english-locale:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -412,8 +424,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Prepare package DNS
+        run: python3 scripts/ci_package_dns.py prepare
+
       - name: Prepare exact Modelos R2 media for discovery checks
-        run: bash scripts/prepare_modelos_r2_ci_media.sh
+        timeout-minutes: 5
+        run: |
+          if ! command -v ffprobe >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update --error-on=any -qq -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=0
+            sudo apt-get install -y -qq -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=0 ffmpeg
+          fi
+          bash scripts/prepare_modelos_r2_ci_media.sh
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en
@@ -432,6 +453,7 @@ jobs:
           node-version: '22'
 
       - name: Install Playwright
+        timeout-minutes: 5
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
@@ -461,3 +483,7 @@ jobs:
           path: artifacts/visual-review/english-*.png
           if-no-files-found: warn
           retention-days: 1
+
+      - name: Restore package DNS
+        if: always()
+        run: python3 scripts/ci_package_dns.py restore
