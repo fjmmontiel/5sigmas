@@ -180,6 +180,7 @@ nav:
       - Inditex: analisis-de-empresas/01_inditex.md
   - Construir:
       - articulos-tecnicos/index.md
+      - Definir un piloto de IA: guia-piloto-ia.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
       - Agentes reactivos y proactivos en voz: articulos-tecnicos/reactive-proactive-voice-agents.md
       - Tres arquitecturas para agentes de voz: articulos-tecnicos/voice-agent-architectures.md

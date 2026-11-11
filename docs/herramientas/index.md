@@ -50,6 +50,7 @@ hide:
   <div class="s5-eyebrow">Herramientas</div>
   <h1>Experimenta con las variables de un sistema de IA.</h1>
   <p>18 calculadoras, visualizadores, evaluadores y exploradores para responder preguntas técnicas con supuestos visibles. Cada herramienta documenta el método, conserva las fuentes y permite reproducir el escenario.</p>
+  <p>Si estás definiendo un caso de uso en tu equipo, empieza por la <a href="/guia-piloto-ia/">ficha gratuita para evaluar un piloto de IA</a> y conserva los resultados de las herramientas junto a tus criterios de decisión.</p>
 </section>
 
 <section class="s5-section s5-tool-discovery" aria-labelledby="s5-tools-find">
