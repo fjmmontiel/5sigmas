@@ -38,7 +38,7 @@
         "model": "Muse Ember",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-11-11",
-        "reason": "Artificial Analysis lists the release and benchmark configuration but explicitly marks the model page as having no publicly available API. A matching first-party API tariff and endpoint have not been established in this review. The benchmark page prices must not be presented as a verified first-party API offering.",
+        "reason": "Artificial Analysis lists the release and benchmark configuration, but its model page contains contradictory availability signals: a \"No publicly available API\" panel and an FAQ claiming one API provider. A matching first-party endpoint and tariff have not been established in this review. Retain outside the first-party API chart until that source conflict and the configuration are resolved; do not treat the displayed benchmark price as a verified first-party API offering.",
         "sources": [
           {
             "url": "https://artificialanalysis.ai/models/muse-ember"
@@ -49,7 +49,7 @@
         "model": "Agnes 2.5 Pro Theta",
         "status": "reviewed_not_charted",
         "reviewed_on": "2026-11-11",
-        "reason": "Artificial Analysis lists the release and benchmark configuration but explicitly marks the model page as having no publicly available API. A matching first-party API tariff and endpoint have not been established in this review. Retain outside the first-party API chart rather than invent a provider configuration.",
+        "reason": "Artificial Analysis lists the release and benchmark configuration, but its model page contains contradictory availability signals: a \"No publicly available API\" panel and an FAQ claiming one API provider. A matching first-party endpoint and tariff have not been established in this review. Retain outside the first-party API chart until that source conflict and the configuration are resolved; do not treat the displayed benchmark price as a verified first-party API offering.",
         "sources": [
           {
             "url": "https://artificialanalysis.ai/models/agnes-2-5-pro-theta"
