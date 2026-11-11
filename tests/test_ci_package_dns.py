@@ -1,15 +1,10 @@
-"""Regression coverage for bounded CI package DNS recovery (no real hosts edits)."""
+"""Regression coverage for temporary CI DNS recovery; never edits real hosts."""
 import copy
 import importlib.util
 import io
-import json
-import os
 from pathlib import Path
-import signal
 import subprocess
-import sys
 import tempfile
-import time
 import unittest
 from unittest import mock
 
@@ -37,86 +32,61 @@ class PackageDNS(unittest.TestCase):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 dns.addresses(host, data)
 
-    def test_restore_and_config_on_success_failure_signal_and_partial_write(self):
-        for mode in ("success", "failure", "signal", "partial"):
-            with self.subTest(mode=mode):
+    def test_prepare_and_restore(self):
+        for mode in ("native", "mixed", "recovered", "partial", "restore_failure", "snapshot_failure"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
                 original = b"127.0.0.1 localhost\n# exact bytes"
-                state = {"hosts": original, "writes": 0, "config": False}
-                class Child:
-                    pid = 999
-                    def wait(self, timeout=None):
-                        if mode == "signal" and not getattr(self, "interrupted", False):
-                            self.interrupted = True
-                            raise InterruptedError()
-                        return 17 if mode == "failure" else 0
-                    def poll(self): return 0
-                def run(args, **kwargs):
-                    if args[0] == "getent": return subprocess.CompletedProcess(args, 1)
-                    if args[0] == "cp":
-                        Path(args[2]).write_bytes(state["hosts"])
-                    elif args[:2] == ["sudo", "tee"]:
-                        state["writes"] += 1
-                        state["hosts"] = kwargs["input"] if "input" in kwargs else kwargs["stdin"].read()
-                        if mode == "partial" and state["writes"] == 1:
-                            state["hosts"] = b"partial"
-                            raise subprocess.CalledProcessError(1, args)
-                    else: raise AssertionError(args)
-                    return subprocess.CompletedProcess(args, 0)
-                def popen(args, **kwargs):
-                    config = Path(kwargs["env"]["APT_CONFIG"])
-                    state["config"] = config.is_file() and 'APT::Update::Error-Mode "any"' in config.read_text()
-                    return Child()
+                state = {"hosts": original, "writes": 0, "lookups": 0}
+                backup = str(Path(directory) / "backup")
                 real_open = open
                 def fake_open(path, *args, **kwargs):
                     if path == "/etc/hosts": return io.BytesIO(state["hosts"])
                     return real_open(path, *args, **kwargs)
-                with mock.patch.object(dns.sys, "platform", "linux"), mock.patch.object(dns.sys, "argv", ["wrapper", "command"]), \
-                     mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "RUNNER_ENVIRONMENT": "github-hosted"}), \
-                     mock.patch("builtins.open", side_effect=fake_open), mock.patch.object(dns.subprocess, "run", side_effect=run), \
-                     mock.patch.object(dns.subprocess, "Popen", side_effect=popen), mock.patch.object(dns, "recover", return_value=["1.1.1.1"]), \
-                     mock.patch.object(dns, "stop_group"):
-                    status = dns.main()
-                self.assertEqual(status, {"success": 0, "failure": 17, "signal": 1, "partial": 1}[mode])
-                self.assertEqual(state["hosts"], original)
-                self.assertEqual(state["writes"], 2)
-                self.assertEqual(state["config"], mode != "partial")
-
-    @unittest.skipUnless(sys.platform == "linux", "requires Linux process groups and /proc")
-    def test_cleanup_kills_descendant_after_timeout_or_leader_exit(self):
-        for leader_exits in (False, True):
-            with self.subTest(leader_exits=leader_exits), tempfile.TemporaryDirectory() as directory:
-                ready = Path(directory, "pid")
-                code = '''import os, signal, sys, time
-pid = os.fork()
-if pid == 0:
-    signal.signal(signal.SIGTERM, signal.SIG_IGN)
-    open(sys.argv[1], "w").write(str(os.getpid()))
-    while True: time.sleep(1)
-while not os.path.exists(sys.argv[1]): time.sleep(0.01)
-if sys.argv[2] == "exit": sys.exit(0)
-while True: time.sleep(1)
-'''
-                child = subprocess.Popen([sys.executable, "-c", code, str(ready), "exit" if leader_exits else "wait"], start_new_session=True)
-                try:
-                    deadline = time.monotonic() + 5
-                    while not ready.exists() and time.monotonic() < deadline: time.sleep(0.01)
-                    self.assertTrue(ready.exists())
-                    descendant = int(ready.read_text())
-                    if leader_exits:
-                        self.assertEqual(child.wait(timeout=5), 0)
+                def run(args, **kwargs):
+                    if args[0] == "getent":
+                        state["lookups"] += 1
+                        return subprocess.CompletedProcess(args, 0 if mode == "native" or (mode == "mixed" and state["lookups"] == 1) else 1)
+                    self.assertEqual(args, ["sudo", "-n", "tee", "/etc/hosts"])
+                    self.assertEqual(kwargs["timeout"], 15)
+                    state["writes"] += 1
+                    if mode in ("partial", "restore_failure") and state["writes"] == 1:
+                        state["hosts"] = b"partial"
+                        raise subprocess.CalledProcessError(1, args)
+                    if mode == "restore_failure" and state["writes"] == 2:
+                        raise subprocess.CalledProcessError(1, args)
+                    state["hosts"] = kwargs["input"]
+                    return subprocess.CompletedProcess(args, 0)
+                real_fsync = dns.os.fsync
+                def fsync(fd):
+                    if mode == "snapshot_failure": raise OSError("injected failure")
+                    real_fsync(fd)
+                with mock.patch.object(dns.os, "fsync", side_effect=fsync), \
+                     mock.patch("builtins.open", side_effect=fake_open), \
+                     mock.patch.object(dns.subprocess, "run", side_effect=run), \
+                     mock.patch.object(dns, "recover", return_value=["1.1.1.1"]):
+                    if mode in ("partial", "restore_failure"):
+                        with self.assertRaises(subprocess.CalledProcessError): dns.prepare(backup)
+                    elif mode == "snapshot_failure":
+                        with self.assertRaises(OSError): dns.prepare(backup)
+                        self.assertFalse(Path(backup).exists())
+                        self.assertEqual(state["writes"], 0)
                     else:
-                        with self.assertRaises(subprocess.TimeoutExpired): child.wait(timeout=0.05)
-                    dns.stop_group(child)
-                    # A killed child can remain a zombie until its new parent reaps it.
-                    try:
-                        state = Path(f"/proc/{descendant}/stat").read_text().rsplit(")", 1)[1].split()[0]
-                    except FileNotFoundError:
-                        state = "Z"
-                    self.assertEqual(state, "Z", "descendant still running after group cleanup")
-                finally:
-                    try: os.killpg(child.pid, signal.SIGKILL)
-                    except ProcessLookupError: pass
-                    child.wait()
+                        dns.prepare(backup)
+                    if mode == "native":
+                        self.assertFalse(Path(backup).exists())
+                        self.assertEqual(state["writes"], 0)
+                    elif mode in ("mixed", "recovered"):
+                        self.assertEqual(Path(backup).read_bytes(), original)
+                        self.assertIn(b"1.1.1.1 archive.ubuntu.com", state["hosts"])
+                        if mode == "mixed": self.assertNotIn(b"1.1.1.1 azure.archive.ubuntu.com", state["hosts"])
+                        with self.assertRaises(OSError): dns.prepare(backup)
+                        dns.restore(backup)
+                    elif mode == "restore_failure":
+                        self.assertEqual(Path(backup).read_bytes(), original)
+                        dns.restore(backup)  # always() cleanup's second chance
+                    self.assertEqual(state["hosts"], original)
+                    self.assertFalse(Path(backup).exists())
+                    dns.restore(backup)  # no-op after successful restoration
 
 
 if __name__ == "__main__":

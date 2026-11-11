@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Run CI package preparation with temporary recovery for Ubuntu mirror DNS."""
+"""Prepare and restore temporary Ubuntu mirror DNS on hosted CI runners."""
 import ipaddress
 import json
 import os
 import re
-import signal
 import subprocess
 import sys
 import tempfile
-import time
 
 HOSTS = ("azure.archive.ubuntu.com", "archive.ubuntu.com", "security.ubuntu.com")
 DNS_NAME = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
@@ -72,128 +70,84 @@ def recover(host):
     return addresses(host, json.loads(result.stdout))
 
 
-def stop_group(child):
-    """Stop all processes in our session before restoring temporary hosts."""
-    def send(sig):
-        try:
-            os.killpg(child.pid, sig)
-            return True
-        except ProcessLookupError:
-            return False
 
-    if send(signal.SIGTERM):
-        deadline = time.monotonic() + 1
-        while time.monotonic() < deadline:
-            child.poll()  # Reap the leader, even if descendants outlive it.
-            if not send(0):
-                break
-            time.sleep(0.05)
+def restore(backup):
+    if not os.path.exists(backup):
+        return
+    with open(backup, "rb") as saved:
+        original = saved.read()
+    subprocess.run(["sudo", "-n", "tee", "/etc/hosts"], input=original,
+                   stdout=subprocess.DEVNULL, check=True, timeout=15)
+    with open("/etc/hosts", "rb") as current:
+        if current.read() != original:
+            raise OSError("hosts restore mismatch")
+    os.unlink(backup)
+    print("package DNS: hosts restored", flush=True)
+
+
+def prepare(backup):
+    if os.path.lexists(backup):
+        raise OSError("hosts backup already exists")
+    additions = []
+    for host in HOSTS:
+        try:
+            result = subprocess.run(["getent", "ahostsv4", host], stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.DEVNULL, timeout=5)
+            healthy = result.returncode == 0
+        except subprocess.TimeoutExpired:
+            healthy = False
+        if healthy:
+            print(f"package DNS: {host} native ok", flush=True)
         else:
-            send(signal.SIGKILL)
-    child.wait(timeout=5)
-    # SIGKILL delivery is asynchronous. Zombies cannot use the hosts file and
-    # may remain until their new parent reaps them, so check live group members.
-    deadline = time.monotonic() + 5
-    while True:
-        live = False
-        for entry in os.listdir("/proc"):
-            if not entry.isdigit():
-                continue
+            print(f"package DNS: {host} native failed; recovering", flush=True)
             try:
-                with open(f"/proc/{entry}/stat", encoding="ascii") as stat:
-                    fields = stat.read().rsplit(")", 1)[1].split()
-                if int(fields[2]) == child.pid and fields[0] != "Z":
-                    live = True
-                    break
-            except FileNotFoundError:
-                continue
-        if not live:
-            return
-        if time.monotonic() >= deadline:
-            raise OSError("process group still running")
-        time.sleep(0.05)
+                resolved = recover(host)
+            except (ValueError, TypeError, KeyError, subprocess.SubprocessError, OSError):
+                print(f"package DNS: {host} recovery failed", file=sys.stderr)
+                raise
+            additions.extend(f"{address} {host}\n" for address in resolved)
+            print(f"package DNS: {host} recovery ok", flush=True)
+    if not additions:
+        return
+    with open("/etc/hosts", "rb") as current:
+        original = current.read()
+    # Publish a fully written snapshot atomically, without overwriting a prior one.
+    fd, temporary = tempfile.mkstemp(prefix=".package-dns-", dir=os.path.dirname(backup))
+    try:
+        with os.fdopen(fd, "wb") as saved:
+            saved.write(original)
+            saved.flush()
+            os.fsync(saved.fileno())
+        os.link(temporary, backup)
+    finally:
+        os.unlink(temporary)
+    content = original + (b"\n" if original and not original.endswith(b"\n") else b"") + "".join(additions).encode("ascii")
+    try:
+        subprocess.run(["sudo", "-n", "tee", "/etc/hosts"], input=content,
+                       stdout=subprocess.DEVNULL, check=True, timeout=15)
+    except (OSError, subprocess.SubprocessError):
+        try:
+            restore(backup)
+        except (OSError, subprocess.SubprocessError):
+            print("package DNS: hosts restore failed", file=sys.stderr)
+        raise
 
 
 def main():
-    if sys.platform != "linux" or os.getenv("GITHUB_ACTIONS") != "true" or os.getenv("RUNNER_ENVIRONMENT") != "github-hosted" or len(sys.argv) < 2:
-        print("package DNS: unsupported environment or missing command", file=sys.stderr)
+    runner_temp = os.getenv("RUNNER_TEMP", "")
+    if (sys.platform != "linux" or os.getenv("GITHUB_ACTIONS") != "true"
+            or os.getenv("RUNNER_ENVIRONMENT") != "github-hosted"
+            or not os.path.isabs(runner_temp) or not os.path.isdir(runner_temp)
+            or len(sys.argv) != 2 or sys.argv[1] not in ("prepare", "restore")):
+        print("package DNS: unsupported environment or operation", file=sys.stderr)
         return 1
-    additions = []
+    backup = os.path.join(runner_temp, "5sigmas-package-dns-hosts.backup")
     try:
-        for host in HOSTS:
-            try:
-                result = subprocess.run(["getent", "ahostsv4", host], stdout=subprocess.DEVNULL,
-                                        stderr=subprocess.DEVNULL, timeout=5)
-                healthy = result.returncode == 0
-            except subprocess.TimeoutExpired:
-                healthy = False
-            if healthy:
-                print(f"package DNS: {host} native ok", flush=True)
-            else:
-                print(f"package DNS: {host} native failed; recovering", flush=True)
-                additions.extend(f"{address} {host}\n" for address in recover(host))
-                print(f"package DNS: {host} recovery ok", flush=True)
-    except (ValueError, TypeError, KeyError, json.JSONDecodeError, subprocess.SubprocessError, OSError):
-        print("package DNS: recovery failed", file=sys.stderr)
+        (prepare if sys.argv[1] == "prepare" else restore)(backup)
+    except (ValueError, TypeError, KeyError, subprocess.SubprocessError, OSError):
+        print(f"package DNS: {sys.argv[1]} failed", file=sys.stderr)
         return 1
-
-    child = None
-    modified = False
-    status = 1
-    with tempfile.TemporaryDirectory(prefix="package-dns-") as directory:
-        backup = os.path.join(directory, "hosts")
-        apt_config = os.path.join(directory, "apt.conf")
-        with open(apt_config, "w", encoding="ascii") as config:
-            config.write('Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "0";\nAPT::Update::Error-Mode "any";\n')
-        def interrupted(signum, _frame):
-            raise InterruptedError(signum)
-        for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
-            signal.signal(sig, interrupted)
-        try:
-            if additions:
-                subprocess.run(["cp", "/etc/hosts", backup], check=True)
-                # Mark before writing so a partial write is also restored.
-                modified = True
-                with open(backup, "rb") as saved:
-                    original = saved.read()
-                content = original + (b"\n" if original and not original.endswith(b"\n") else b"") + "".join(additions).encode("ascii")
-                subprocess.run(["sudo", "tee", "/etc/hosts"], input=content, stdout=subprocess.DEVNULL, check=True)
-            env = os.environ.copy()
-            env["APT_CONFIG"] = apt_config
-            child = subprocess.Popen(sys.argv[1:], env=env, start_new_session=True)
-            try:
-                # Bound the complete dependency preparation, including Playwright downloads.
-                status = child.wait(timeout=300)
-            except subprocess.TimeoutExpired:
-                print("package DNS: command timeout", file=sys.stderr)
-                status = 124
-        except (OSError, subprocess.SubprocessError, InterruptedError):
-            status = 1
-        finally:
-            # Do not let a second signal interrupt group cleanup or restoration.
-            for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
-                signal.signal(sig, signal.SIG_IGN)
-            if child:
-                try:
-                    stop_group(child)
-                except (OSError, subprocess.SubprocessError):
-                    print("package DNS: command cleanup failed", file=sys.stderr)
-                    status = 1
-            if modified:
-                # Ignore further catchable termination until restoration completes.
-                for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
-                    signal.signal(sig, signal.SIG_IGN)
-                try:
-                    with open(backup, "rb") as saved:
-                        subprocess.run(["sudo", "tee", "/etc/hosts"], stdin=saved, stdout=subprocess.DEVNULL, check=True)
-                    with open(backup, "rb") as saved, open("/etc/hosts", "rb") as current:
-                        if saved.read() != current.read():
-                            raise OSError("hosts restore mismatch")
-                    print("package DNS: hosts restored", flush=True)
-                except (OSError, subprocess.SubprocessError):
-                    print("package DNS: hosts restore failed", file=sys.stderr)
-                    status = 1
-    return status if status >= 0 else 128 - status
+    return 0
 
 
 if __name__ == "__main__":
