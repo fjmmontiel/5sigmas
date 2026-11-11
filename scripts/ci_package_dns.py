@@ -65,7 +65,7 @@ def addresses(host, response):
 def recover(host):
     result = subprocess.run(
         ["curl", "--silent", "--show-error", "--fail", "--connect-timeout", "5", "--max-time", "10",
-         "--noproxy", "*", "--resolve", "cloudflare-dns.com:443:1.1.1.1", "-H", "accept: application/dns-json",
+         "--resolve", "cloudflare-dns.com:443:1.1.1.1", "-H", "accept: application/dns-json",
          f"https://cloudflare-dns.com/dns-query?name={host}&type=A"],
         check=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=12)
     return addresses(host, json.loads(result.stdout))
@@ -101,7 +101,7 @@ def main():
         backup = os.path.join(directory, "hosts")
         apt_config = os.path.join(directory, "apt.conf")
         with open(apt_config, "w", encoding="ascii") as config:
-            config.write('Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "0";\n')
+            config.write('Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "0";\nAPT::Update::Error-Mode "any";\n')
         def interrupted(signum, _frame):
             raise InterruptedError(signum)
         for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
