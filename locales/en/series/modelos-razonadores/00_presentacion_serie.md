@@ -1,5 +1,6 @@
 ---
 title: Reasoning Models — test-time compute, chains of thought and systematic failures
+seo_title: "Reasoning Models: Test-Time Compute and Failure Modes"
 description: "Five chapters on how LLMs reason: test-time compute, failure modes, latency, cost and risks when models use tools."
 keywords: reasoning models, test-time compute, chain of thought, LLM reasoning, OpenAI o1, DeepSeek R1, RLVR, GRPO, sycophancy, PRM, ORM, AI latency, TTFT, AI overthinking, specification gaming, budget forcing, extended reasoning, LLM failures
 date: 2026-04-08

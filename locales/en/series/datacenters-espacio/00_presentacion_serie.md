@@ -1,5 +1,6 @@
 ---
 title: Data Centers in Space
+seo_title: "Data Centers in Space: Energy, Cooling and Viability"
 description: "Technical analysis of orbital data centers: heat dissipation, latency, launch cost and real viability compared with terrestrial infrastructure."
 date: 2026-06-14
 keywords: data centers in space, orbital computing, AI infrastructure, compute energy, satellite computing
