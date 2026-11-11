@@ -44,7 +44,7 @@ assert.ok(data.models.length >= 15, 'expected the refreshed current comparison s
 for (const requiredRelease of [
   'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
   'Gemini 3.8 Flash', 'Qwen3.8 Max (0902)', 'MiMo-V2.6-Pro', 'Step 5 Preview',
-  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4', 'Claude Haiku 5.5', 'GPT-6.1 Terra'
+  'GLM 5.3 Flash', 'Claude Fable 5.2', 'Mistral Large 4', 'Claude Haiku 5.5', 'GPT-6.1 Terra'
 ]) {
   assert.ok(data.release_coverage.included_release_names.includes(requiredRelease), `${requiredRelease}: release coverage missing`);
 }

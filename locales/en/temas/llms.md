@@ -4,7 +4,7 @@ seo_title: "What is an LLM: how a large language model works"
 description: "What an LLM is, how it tokenizes, learns and generates text, what instruction tuning changes, and the main technical limits."
 keywords: "LLM, large language model, tokens, pretraining, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-23
+date_modified: 2026-11-11
 ---
 
 # What is an LLM and how does it work?
@@ -157,6 +157,7 @@ The guide to [evaluating AI models](/en/temas/evaluacion-modelos/) proposes a co
 
 ## Where to go deeper in 5sigmas
 
+- [TTFT vs TPOT: prefill, decode and the latency budget](/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/) to separate the wait for the first token from the time needed to complete an answer.
 - [AI and Generative AI Foundations](/en/series/fundamentos-ia-iag/00_presentacion_serie/) to separate software, learning and generation.
 - [From the Caves to AGI](/en/series/from-cave-to-agi/00_presentacion_serie/) to understand how representation, learning and scale converge in foundation models.
 - [Reasoning Models](/en/series/modelos-razonadores/00_presentacion_serie/) to study inference, verification, latency and failures.
