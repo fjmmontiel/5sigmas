@@ -29,6 +29,9 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Test CI package DNS recovery
+        run: python3 tests/test_ci_package_dns.py
+
       - name: Install FFmpeg for exact video validation
         run: |
           if ! command -v ffprobe >/dev/null 2>&1 || ! command -v ffmpeg >/dev/null 2>&1; then

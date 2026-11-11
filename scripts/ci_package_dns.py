@@ -8,6 +8,7 @@ import signal
 import subprocess
 import sys
 import tempfile
+import time
 
 HOSTS = ("azure.archive.ubuntu.com", "archive.ubuntu.com", "security.ubuntu.com")
 DNS_NAME = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
@@ -71,6 +72,48 @@ def recover(host):
     return addresses(host, json.loads(result.stdout))
 
 
+def stop_group(child):
+    """Stop all processes in our session before restoring temporary hosts."""
+    def send(sig):
+        try:
+            os.killpg(child.pid, sig)
+            return True
+        except ProcessLookupError:
+            return False
+
+    if send(signal.SIGTERM):
+        deadline = time.monotonic() + 1
+        while time.monotonic() < deadline:
+            child.poll()  # Reap the leader, even if descendants outlive it.
+            if not send(0):
+                break
+            time.sleep(0.05)
+        else:
+            send(signal.SIGKILL)
+    child.wait(timeout=5)
+    # SIGKILL delivery is asynchronous. Zombies cannot use the hosts file and
+    # may remain until their new parent reaps them, so check live group members.
+    deadline = time.monotonic() + 5
+    while True:
+        live = False
+        for entry in os.listdir("/proc"):
+            if not entry.isdigit():
+                continue
+            try:
+                with open(f"/proc/{entry}/stat", encoding="ascii") as stat:
+                    fields = stat.read().rsplit(")", 1)[1].split()
+                if int(fields[2]) == child.pid and fields[0] != "Z":
+                    live = True
+                    break
+            except FileNotFoundError:
+                continue
+        if not live:
+            return
+        if time.monotonic() >= deadline:
+            raise OSError("process group still running")
+        time.sleep(0.05)
+
+
 def main():
     if sys.platform != "linux" or os.getenv("GITHUB_ACTIONS") != "true" or os.getenv("RUNNER_ENVIRONMENT") != "github-hosted" or len(sys.argv) < 2:
         print("package DNS: unsupported environment or missing command", file=sys.stderr)
@@ -123,19 +166,19 @@ def main():
                 status = child.wait(timeout=300)
             except subprocess.TimeoutExpired:
                 print("package DNS: command timeout", file=sys.stderr)
-                os.killpg(child.pid, signal.SIGTERM)
-                child.wait(timeout=10)
                 status = 124
         except (OSError, subprocess.SubprocessError, InterruptedError):
-            if child and child.poll() is None:
-                os.killpg(child.pid, signal.SIGTERM)
-                try:
-                    child.wait(timeout=10)
-                except subprocess.TimeoutExpired:
-                    os.killpg(child.pid, signal.SIGKILL)
-                    child.wait()
             status = 1
         finally:
+            # Do not let a second signal interrupt group cleanup or restoration.
+            for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
+                signal.signal(sig, signal.SIG_IGN)
+            if child:
+                try:
+                    stop_group(child)
+                except (OSError, subprocess.SubprocessError):
+                    print("package DNS: command cleanup failed", file=sys.stderr)
+                    status = 1
             if modified:
                 # Ignore further catchable termination until restoration completes.
                 for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
