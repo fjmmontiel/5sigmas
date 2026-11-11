@@ -358,7 +358,8 @@
     es: {
       title: 'Privacidad y almacenamiento', allow: 'Aceptar medición', deny: 'Rechazar medición',
       settings: 'Privacidad y almacenamiento', details: 'Qué usamos y durante cuánto tiempo',
-      description: 'El sitio guarda opciones de navegación y tu elección de privacidad. Con tu permiso, medimos visitas e interacciones para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, correos ni parámetros de URL.',
+      description: 'Con tu permiso, medimos visitas e interacciones para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, correos ni parámetros de URL.',
+      fullDescription: 'El sitio guarda opciones de navegación y tu elección de privacidad. Con tu permiso, medimos visitas e interacciones para mejorar 5sigmas. No enviamos lo que escribes en las herramientas, correos ni parámetros de URL.',
       retention: 'Guardamos tu elección de medición durante un máximo de 180 días en este navegador. Al retirar el permiso, guardamos una marca técnica aleatoria para sincronizar las pestañas; permanece hasta que borres los datos del sitio y no se envía al colector. Usamos un identificador de sesión aleatorio que caduca tras 30 minutos sin actividad, con un máximo de 24 horas. El almacenamiento de Cloudflare está en la UE: registros temporales hasta 48 horas, recuentos consultables durante 90 días y copias de recuperación hasta 30 días más tras el borrado. Los informes históricos conservan solo totales agrupados sin identificadores de sesión. Puedes retirar tu permiso aquí en cualquier momento. Los totales ya agregados no se pueden retirar por identidad.',
       granted: 'Medición activada con tu permiso.', denied: 'Medición desactivada.',
       unknown: 'La medición permanece desactivada hasta que la permitas.',
@@ -370,7 +371,8 @@
     en: {
       title: 'Privacy and storage', allow: 'Allow measurement', deny: 'Decline measurement',
       settings: 'Privacy and storage', details: 'What we use and for how long',
-      description: 'The site stores navigation settings and your privacy choice. With your permission, we measure visits and interactions to improve 5sigmas. We do not send tool inputs, email addresses or URL parameters.',
+      description: 'With your permission, we measure visits and interactions to improve 5sigmas. We do not send tool inputs, email addresses or URL parameters.',
+      fullDescription: 'The site stores navigation settings and your privacy choice. With your permission, we measure visits and interactions to improve 5sigmas. We do not send tool inputs, email addresses or URL parameters.',
       retention: 'Your measurement choice is stored for up to 180 days in this browser. When you withdraw permission, a random technical marker synchronizes the tabs; it stays until you clear the site data and is not sent to the collector. The random session identifier expires after 30 minutes of inactivity, with a 24-hour maximum. We use Cloudflare storage in the EU: temporary records last up to 48 hours, counts remain queryable for 90 days, and recovery backups may keep deleted data for up to 30 additional days. Historical reports keep only grouped totals without session identifiers. You can withdraw permission here at any time. Already aggregated totals cannot be removed by identity.',
       granted: 'Measurement is enabled with your permission.', denied: 'Measurement is disabled.',
       unknown: 'Measurement remains disabled until you allow it.',
@@ -386,7 +388,7 @@
     const copy = COPY[locale()];
     const choice = consent();
     ui.panel.lang = locale();
-    for (const key of ['title', 'description', 'retention', 'allow', 'deny']) ui[key].textContent = copy[key];
+    for (const key of ['title', 'description', 'fullDescription', 'retention', 'allow', 'deny']) ui[key].textContent = copy[key];
     ui.summary.textContent = copy.details;
     const available = Boolean(endpoint());
     ui.allow.disabled = !available || privacySignal() || state.pendingChoices > 0 || !navigator.locks || typeof navigator.locks.request !== 'function';
@@ -540,12 +542,18 @@
       #s5-measurement-privacy h2{margin:0 0 .5rem;font-size:1rem}
       #s5-measurement-privacy p{margin:.5rem 0;line-height:1.5}
       #s5-measurement-privacy summary{cursor:pointer;text-decoration:underline}
-      #s5-measurement-privacy .s5-measurement-choices{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.75rem}
+      #s5-measurement-privacy .s5-measurement-choices{display:flex;gap:.5rem;margin-top:.75rem}
       #s5-measurement-privacy button,#s5-measurement-preferences{font:inherit;border:1px solid currentColor;border-radius:.3rem;padding:.6rem .8rem;cursor:pointer;background:var(--md-default-bg-color,#fff);color:var(--md-default-fg-color,#222)}
-      #s5-measurement-privacy button{flex:1;min-width:9rem}
+      #s5-measurement-privacy button{flex:1;min-width:0;min-height:44px;padding:.5rem .35rem}
       #s5-measurement-privacy button:disabled{opacity:.6;cursor:default}
       #s5-measurement-privacy button:focus-visible,#s5-measurement-preferences:focus-visible,#s5-measurement-privacy summary:focus-visible{outline:3px solid #3367d6;outline-offset:3px}
       #s5-measurement-preferences{position:fixed;bottom:.5rem;left:.5rem;z-index:999;font-size:.65rem}
+      @media (max-width:600px){
+        #s5-measurement-privacy{inset:auto .6rem .6rem;padding:.7rem;font-size:.7rem}
+        #s5-measurement-privacy h2{font-size:.85rem}
+        #s5-measurement-privacy p{margin:.35rem 0;line-height:1.4}
+        #s5-measurement-privacy .s5-measurement-choices{margin-top:.5rem}
+      }
     `;
     const panel = create('section', document.body);
     panel.id = 's5-measurement-privacy';
@@ -556,6 +564,7 @@
     const description = create('p', panel);
     const details = create('details', panel);
     const summary = create('summary', details);
+    const fullDescription = create('p', details);
     const retention = create('p', details);
     const status = create('p', panel);
     status.setAttribute('aria-live', 'polite');
@@ -573,7 +582,7 @@
     trigger.id = 's5-measurement-preferences';
     trigger.setAttribute('aria-controls', panel.id);
     trigger.addEventListener('click', () => { renderConsentUI(true); (allow.disabled ? deny : allow).focus(); });
-    state.ui = { panel, title, description, summary, retention, status, allow, deny, trigger, style };
+    state.ui = { panel, title, description, summary, fullDescription, retention, status, allow, deny, trigger, style };
     renderConsentUI();
   };
   const initializePage = () => {

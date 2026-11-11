@@ -112,6 +112,22 @@ body:has(.s5-landing) .md-path {
   line-height: 1.58;
 }
 
+.s5-goal-nav {
+  display: grid;
+  gap: .15rem;
+  margin-top: 1.2rem;
+}
+
+.s5-goal-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 1px solid var(--s5-line);
+  color: var(--s5-text) !important;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
 .s5-learning-loop {
   margin-top: 1.4rem !important;
 }

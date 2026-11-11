@@ -15,6 +15,12 @@ hide:
     <h1>See AI.<br />Understand how it actually works.</h1>
     <p>Each topic connects a short video, an interactive animation, a technical chapter and the original sources. Build intuition first. Then manipulate the mechanism, test its limits and go deeper into the evidence.</p>
 
+    <nav class="s5-goal-nav" aria-label="Choose your goal">
+      <a href="/en/videos/series/fundamentos-ia-iag/01-que-es-ia/">Start from scratch →</a>
+      <a href="/en/tools/llm-cost-latency/">Calculate cost and latency →</a>
+      <a href="/en/temas/evaluacion-modelos/">Evaluate models →</a>
+    </nav>
+
     <div class="s5-learning-loop" role="list" aria-label="5sigmas learning method">
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">01</span>
@@ -57,48 +63,6 @@ hide:
       </a>
     </div>
   </article></section>
-
-<section class="s5-why" aria-labelledby="s5-why-title">
-  <div class="s5-why__copy">
-    <div class="s5-eyebrow">The standard behind the name</div>
-    <h2 id="s5-why-title">Why 5sigmas?</h2>
-    <p>In particle physics, a result is conventionally treated as a discovery only when it reaches <strong>five-sigma significance</strong>: a threshold stringent enough that the probability of mistaking an extreme fluctuation for a real signal is roughly one in 3.5 million.</p>
-    <p>5sigmas applies the same editorial principle to artificial intelligence: separate durable knowledge from daily noise, demand evidence, and build judgment before accepting a narrative, tool or promise.</p>
-    <div class="s5-why__metrics" aria-label="Meaning of five sigma">
-      <span><strong>5σ</strong><small>discovery threshold</small></span>
-      <span><strong>≈ 1 in 3.5M</strong><small>extreme-noise probability</small></span>
-      <span><strong>Signal &gt; noise</strong><small>editorial principle</small></span>
-    </div>
-  </div>
-  <figure class="s5-why__visual">
-    <img src="/en/assets/images/design/five-sigma-threshold.svg" alt="Normal distribution with the five-sigma threshold separated from expected noise" />
-    <figcaption>Do not publish because something is new. Publish when the explanation survives evidence, context and its own limitations.</figcaption>
-  </figure>
-</section>
-
-<section class="s5-entry-section" aria-labelledby="s5-entry-title">
-  <div class="s5-section-head s5-section-head--compact">
-    <h2 id="s5-entry-title">Choose how to continue</h2>
-    <a href="/en/tools/">Experiment with tools →</a>
-  </div>
-  <nav class="s5-entry-grid" aria-label="Ways to enter the English 5sigmas library">
-    <a class="s5-entry" href="/en/visuales/">
-      <div class="s5-entry__index">01</div>
-      <div class="s5-entry__title">Watch</div>
-      <div class="s5-entry__text">Videos and interactive visuals for understanding an idea before going into detail.</div>
-    </a>
-    <a class="s5-entry" href="/en/series/">
-      <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Series</div>
-      <div class="s5-entry__text">13 connected series for starting from scratch or going deeper by goal.</div>
-    </a>
-    <a class="s5-entry" href="/en/articulos-tecnicos/">
-      <div class="s5-entry__index">03</div>
-      <div class="s5-entry__title">Build</div>
-      <div class="s5-entry__text">Architecture, decisions and limits from real AI systems.</div>
-    </a>
-  </nav>
-</section>
 
 <section class="s5-section" aria-labelledby="s5-concepts-title-en">
   <div class="s5-section-head">
@@ -216,6 +180,24 @@ hide:
     </div>
     <div class="s5-note-feature__meta">Conversational runtime<br />Internal state<br />Asynchronous execution</div>
   </div>
+</section>
+
+<section class="s5-why" aria-labelledby="s5-why-title">
+  <div class="s5-why__copy">
+    <div class="s5-eyebrow">The standard behind the name</div>
+    <h2 id="s5-why-title">Why 5sigmas?</h2>
+    <p>In particle physics, a result is conventionally treated as a discovery only when it reaches <strong>five-sigma significance</strong>: a threshold stringent enough that the probability of mistaking an extreme fluctuation for a real signal is roughly one in 3.5 million.</p>
+    <p>5sigmas applies the same editorial principle to artificial intelligence: separate durable knowledge from daily noise, demand evidence, and build judgment before accepting a narrative, tool or promise.</p>
+    <div class="s5-why__metrics" aria-label="Meaning of five sigma">
+      <span><strong>5σ</strong><small>discovery threshold</small></span>
+      <span><strong>≈ 1 in 3.5M</strong><small>extreme-noise probability</small></span>
+      <span><strong>Signal &gt; noise</strong><small>editorial principle</small></span>
+    </div>
+  </div>
+  <figure class="s5-why__visual">
+    <img src="/en/assets/images/design/five-sigma-threshold.svg" alt="Normal distribution with the five-sigma threshold separated from expected noise" />
+    <figcaption>Do not publish because something is new. Publish when the explanation survives evidence, context and its own limitations.</figcaption>
+  </figure>
 </section>
 
 </div>
