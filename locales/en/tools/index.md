@@ -50,6 +50,7 @@ hide:
   <div class="s5-eyebrow">Tools</div>
   <h1>Explore an AI system by changing its variables.</h1>
   <p>18 calculators, visualizers, evaluators and explorers for answering technical questions with explicit assumptions. Each tool documents its method, preserves source provenance and makes the scenario reproducible.</p>
+  <p>If you are defining a use case for your team, start with the <a href="/en/guia-piloto-ia/">free AI pilot brief</a> and keep tool results alongside your decision criteria.</p>
 </section>
 
 <section class="s5-section s5-tool-discovery" aria-labelledby="s5-tools-find">
