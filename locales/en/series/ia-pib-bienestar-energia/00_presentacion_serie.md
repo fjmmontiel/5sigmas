@@ -1,6 +1,5 @@
 ---
 title: AI, GDP, Well-being and Energy
-seo_title: "AI, Energy and Productivity: GDP and Well-being"
 description: Quantitative analysis of AI's impact on energy, productivity and well-being using real World Bank, IEA and Penn World Table data rather than speculative projections.
 keywords: AI energy, artificial intelligence GDP, AI productivity, technology well-being, AI electricity
 date: 2026-04-07

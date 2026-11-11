@@ -1,6 +1,5 @@
 ---
 title: AI and Generative AI Foundations
-seo_title: "AI and Generative AI: Foundations and Key Differences"
 description: "Introductory series on AI and generative AI: what they are, how they work, how they differ and what AGI means. For technical professionals and decision-makers."
 keywords: artificial intelligence, generative AI, LLMs, AGI, machine learning, AI foundations
 date: 2026-03-15

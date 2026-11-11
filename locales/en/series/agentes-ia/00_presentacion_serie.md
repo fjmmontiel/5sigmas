@@ -1,6 +1,5 @@
 ---
 title: "AI Agents — from answering to acting"
-seo_title: "AI Agents: Architecture, Evaluation and Production"
 description: "Five chapters to understand what an AI agent is, how it uses tools, how to evaluate it, which risks it introduces, and what it takes to operate one in production."
 date: 2026-07-14
 keywords: "AI agents, agentic AI, tool calling, workflows, agent evaluation, prompt injection, agent identity, production AI"

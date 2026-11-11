@@ -1,6 +1,5 @@
 ---
 title: Multimodality in Generative AI
-seo_title: "Multimodal AI: Text, Images, Audio and Video"
 description: "What it means to build systems that can perceive, align, reason, generate and act across text, image, audio, video, documents and other signals from the world."
 keywords: multimodal AI, multimodal models, CLIP, Flamingo, Gemini, vision language, audio text
 date: 2026-04-01

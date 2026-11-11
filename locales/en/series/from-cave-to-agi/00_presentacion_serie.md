@@ -1,6 +1,5 @@
 ---
 title: From the Caves to AGI
-seo_title: "History of AI: From Symbols to Foundation Models"
 description: "An intellectual history of AI: from the first mathematical abstractions to foundation models. Mathematics, philosophy and computing in context."
 keywords: artificial intelligence history, AI history, Transformer, foundation models, AGI, deep learning
 date: 2026-03-26

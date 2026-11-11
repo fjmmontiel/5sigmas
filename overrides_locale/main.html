@@ -12,7 +12,10 @@
   {% elif page %}
     {% set title_path = page.url.rstrip('/') %}
     {% set title_parts = title_path.split('/') if title_path else [] %}
-    {% if title_parts and title_parts[0] == "series" and title_parts|length >= 3 and title_parts[2] != "00_presentacion_serie" %}
+    {% if title_parts and title_parts[0] == "series" and title_parts|length >= 3 and title_parts[2] == "00_presentacion_serie" %}
+      {% set title_series = page.parent.title if page.parent else page.meta.title | default(page.title) %}
+  <title>{{ title_series | e }} | {{ config.site_name | e }}</title>
+    {% elif title_parts and title_parts[0] == "series" and title_parts|length >= 3 and title_parts[2] != "00_presentacion_serie" %}
       {% set title_series = page.parent.title if page.parent else title_parts[1].replace('-', ' ') %}
   <title>{{ page.title | e }} — {{ title_series | e }} | {{ config.site_name | e }}</title>
     {% else %}
