@@ -105,6 +105,12 @@
       "title": "Claude Fable 5.2 | Claude Platform Docs",
       "url": "https://platform.claude.com/docs/en/models/fable-5-2/overview",
       "published": "2026-11-09"
+    },
+    "gemini4hydrogen": {
+      "organization": "Google",
+      "title": "Introducing Gemini 4 Hydrogen for Agentic Workflows",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+      "published": "2026-11-12"
     }
   },
   "series": [
@@ -507,6 +513,14 @@
         "source": "fable52",
         "reviewed_on": "2026-11-10",
         "reason": "Anthropic confirms the Claude API model, 1M-token context and $8/$40 per MTok. Its newly published evaluations are not documented as identical-condition points in this timeline's six existing historical benchmark series, so no cross-protocol score is synthesized. Claude Mythos 5.2 has separate verified-program access and is not treated as public API."
+      },
+      {
+        "model": "Gemini 4 Hydrogen",
+        "date": "2026-11-12",
+        "status": "reviewed_not_added",
+        "source": "gemini4hydrogen",
+        "reviewed_on": "2026-11-12",
+        "reason": "Google confirms Gemini 4 Hydrogen availability for the Gemini API with a 1M-token context and $1.50/$7.50 per million input/output tokens. Google also cites Artificial Analysis Intelligence Index results at specific thinking settings; that cross-vendor composite index is not any of this timeline's six longitudinal benchmarks. No score is transferred across different protocols."
       }
     ]
   }

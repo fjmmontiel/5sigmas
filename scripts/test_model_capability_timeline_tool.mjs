@@ -82,6 +82,18 @@ assert.equal(fable52?.reviewed_on, '2026-11-10');
 assert.equal(fable52?.source, 'fable52');
 assert.equal(dataset.sources.fable52?.url, 'https://platform.claude.com/docs/en/models/fable-5-2/overview');
 assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Claude Fable 5.2')), 'Fable 5.2 must not inherit an incompatible benchmark score');
+const hydrogen = dataset.release_coverage.releases.find((row) => row.model === 'Gemini 4 Hydrogen');
+assert.equal(hydrogen?.date, '2026-11-12');
+assert.equal(hydrogen?.status, 'reviewed_not_added');
+assert.equal(hydrogen?.reviewed_on, '2026-11-12');
+assert.equal(hydrogen?.source, 'gemini4hydrogen');
+assert.equal(dataset.sources.gemini4hydrogen?.url, 'https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/');
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Gemini 4 Hydrogen')), 'Do not mix Google's Intelligence Index with OpenAI historical benchmarks');
+for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', 'locales/en/tools/model-capability-timeline.md']) {
+  const copy = fs.readFileSync(new URL('../' + page, import.meta.url), 'utf8');
+  assert.ok(copy.includes('Gemini 4 Hydrogen'), page + ' must disclose reviewed launch');
+  assert.ok(copy.includes(dataset.sources.gemini4hydrogen.url), page + ' must link the source');
+}
 assert.equal(dataset.release_coverage.reviewed_through, dataset.updated);
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.source === 'gpt6cyber'));
 
