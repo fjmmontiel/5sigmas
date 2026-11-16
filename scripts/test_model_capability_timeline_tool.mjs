@@ -94,6 +94,20 @@ for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', '
   assert.ok(copy.includes('Gemini 4 Hydrogen'), page + ' must disclose reviewed launch');
   assert.ok(copy.includes(dataset.sources.gemini4hydrogen.url), page + ' must link the source');
 }
+const qwen4max = dataset.release_coverage.releases.find((row) => row.model === 'Qwen4-Max');
+assert.equal(qwen4max?.date, '2026-11-16');
+assert.equal(qwen4max?.reviewed_on, '2026-11-16');
+assert.equal(qwen4max?.status, 'reviewed_not_added');
+assert.equal(qwen4max?.source, 'qwen4max');
+assert.equal(dataset.sources.qwen4max?.published, '2026-11-16');
+assert.equal(dataset.sources.qwen4max?.organization, 'Alibaba Group');
+assert.ok(dataset.sources.qwen4max?.url.startsWith('https://www.hpcwire.com/aiwire/2026/11/16/'));
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Qwen4-Max')), 'Qwen4-Max vendor benchmarks cannot be mixed into historical series');
+for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', 'locales/en/tools/model-capability-timeline.md']) {
+  const copy = fs.readFileSync(new URL('../' + page, import.meta.url), 'utf8');
+  assert.ok(copy.includes('Qwen4-Max'), page + ' must disclose new launch');
+  assert.ok(copy.includes(dataset.sources.qwen4max.url), page + ' must link original Alibaba release');
+}
 assert.equal(dataset.release_coverage.reviewed_through, dataset.updated);
 assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.source === 'gpt6cyber'));
 

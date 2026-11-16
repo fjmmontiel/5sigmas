@@ -111,6 +111,12 @@
       "title": "Introducing Gemini 4 Hydrogen for Agentic Workflows",
       "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
       "published": "2026-11-12"
+    },
+    "qwen4max": {
+      "organization": "Alibaba Group",
+      "title": "Alibaba Releases Qwen4-Max with 2.4 Trillion Parameters (company press release syndicated by AIwire)",
+      "url": "https://www.hpcwire.com/aiwire/2026/11/16/alibaba-releases-qwen4-max-with-2-4-trillion-parameters/",
+      "published": "2026-11-16"
     }
   },
   "series": [
@@ -521,6 +527,14 @@
         "source": "gemini4hydrogen",
         "reviewed_on": "2026-11-12",
         "reason": "Google confirms Gemini 4 Hydrogen availability for the Gemini API with a 1M-token context and $1.50/$7.50 per million input/output tokens. Google also cites Artificial Analysis Intelligence Index results at specific thinking settings; that cross-vendor composite index is not any of this timeline's six longitudinal benchmarks. No score is transferred across different protocols."
+      },
+      {
+        "model": "Qwen4-Max",
+        "date": "2026-11-16",
+        "status": "reviewed_not_added",
+        "source": "qwen4max",
+        "reviewed_on": "2026-11-16",
+        "reason": "Alibaba Group's November 16 press release documents Qwen4-Max as a hosted API model with a 2.4T-parameter MoE architecture and 1M-token context. Its Work360 and other vendor-reported benchmark results are not identical-condition observations in this timeline's six historical OpenAI benchmark series; Artificial Analysis reports a different composite index. No cross-protocol score, broader price review, or revised historical snapshot is inferred."
       }
     ]
   }
