@@ -69,4 +69,62 @@ assert.ok(dataset.sources.sonnet55?.url.includes('/sonnet-5-5/'));
 assert.ok(dataset.sources.gemini4argon?.url.includes('/gemini-4-argon/'));
 assert.ok(dataset.sources.mistrallarge4?.url.includes('/mistral-large'));
 
+for (const [name, sourceId] of [['Claude Haiku 5.5', 'haiku55'], ['Gemini 4 Carbon', 'gemini4carbon']]) {
+  const row = dataset.release_coverage.releases.find((entry) => entry.model === name);
+  assert.equal(row?.status, 'reviewed_not_added', name + ' must not gain synthetic benchmark scores');
+  assert.equal(row?.source, sourceId, name + ' must preserve its primary-source provenance');
+  assert.ok(dataset.sources[sourceId]?.url.startsWith('https://'), name + ' requires a primary source');
+}
+const fable52 = dataset.release_coverage.releases.find((row) => row.model === 'Claude Fable 5.2');
+assert.equal(fable52?.date, '2026-11-09');
+assert.equal(fable52?.status, 'reviewed_not_added');
+assert.equal(fable52?.reviewed_on, '2026-11-10');
+assert.equal(fable52?.source, 'fable52');
+assert.equal(dataset.sources.fable52?.url, 'https://platform.claude.com/docs/en/models/fable-5-2/overview');
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Claude Fable 5.2')), 'Fable 5.2 must not inherit an incompatible benchmark score');
+const hydrogen = dataset.release_coverage.releases.find((row) => row.model === 'Gemini 4 Hydrogen');
+assert.equal(hydrogen?.date, '2026-11-12');
+assert.equal(hydrogen?.status, 'reviewed_not_added');
+assert.equal(hydrogen?.reviewed_on, '2026-11-12');
+assert.equal(hydrogen?.source, 'gemini4hydrogen');
+assert.equal(dataset.sources.gemini4hydrogen?.url, 'https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/');
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Gemini 4 Hydrogen')), 'Do not mix Google's Intelligence Index with OpenAI historical benchmarks');
+for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', 'locales/en/tools/model-capability-timeline.md']) {
+  const copy = fs.readFileSync(new URL('../' + page, import.meta.url), 'utf8');
+  assert.ok(copy.includes('Gemini 4 Hydrogen'), page + ' must disclose reviewed launch');
+  assert.ok(copy.includes(dataset.sources.gemini4hydrogen.url), page + ' must link the source');
+}
+const qwen4max = dataset.release_coverage.releases.find((row) => row.model === 'Qwen4-Max');
+assert.equal(qwen4max?.date, '2026-11-16');
+assert.equal(qwen4max?.reviewed_on, '2026-11-16');
+assert.equal(qwen4max?.status, 'reviewed_not_added');
+assert.equal(qwen4max?.source, 'qwen4max');
+assert.equal(dataset.sources.qwen4max?.published, '2026-11-16');
+assert.equal(dataset.sources.qwen4max?.organization, 'Alibaba Group');
+assert.ok(dataset.sources.qwen4max?.url.startsWith('https://www.hpcwire.com/aiwire/2026/11/16/'));
+assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === 'Qwen4-Max')), 'Qwen4-Max vendor benchmarks cannot be mixed into historical series');
+for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', 'locales/en/tools/model-capability-timeline.md']) {
+  const copy = fs.readFileSync(new URL('../' + page, import.meta.url), 'utf8');
+  assert.ok(copy.includes('Qwen4-Max'), page + ' must disclose new launch');
+  assert.ok(copy.includes(dataset.sources.qwen4max.url), page + ' must link original Alibaba release');
+}
+for (const [model, sourceId] of [['GPT-6.2 Astra', 'gpt62astra'], ['GPT-6.2 Sol', 'gpt62sol']]) {
+  const row = dataset.release_coverage.releases.find((entry) => entry.model === model);
+  assert.equal(row?.date, '2026-11-17');
+  assert.equal(row?.reviewed_on, '2026-11-17');
+  assert.equal(row?.status, 'reviewed_not_added');
+  assert.equal(row?.source, sourceId);
+  assert.equal(dataset.sources[sourceId]?.organization, 'OpenAI');
+  assert.equal(dataset.sources[sourceId]?.published, '2026-11-17');
+  assert.equal(dataset.sources[sourceId]?.url, 'https://openai.com/index/introducing-gpt-6-2-astra-sol/');
+  assert.ok(!dataset.series.some((series) => (series.points || []).some((point) => point.model === model)), model + ' must not inherit an incompatible benchmark score');
+  for (const page of ['docs/herramientas/linea-temporal-capacidades-modelos.md', 'locales/en/tools/model-capability-timeline.md']) {
+    const copy = fs.readFileSync(new URL('../' + page, import.meta.url), 'utf8');
+    assert.ok(copy.includes(model.slice(0, 7)), page + ' must disclose GPT-6.2 review');
+    assert.ok(copy.includes(dataset.sources[sourceId].url), page + ' must link the OpenAI primary release');
+  }
+}
+assert.equal(dataset.release_coverage.reviewed_through, dataset.updated);
+assert.ok(dataset.release_coverage.releases.some((row) => row.model === 'GPT-6 Cyber' && row.source === 'gpt6cyber'));
+
 console.log('model capability timeline: numerical, protocol, export and provenance gates passed');
