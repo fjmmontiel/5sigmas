@@ -117,6 +117,18 @@
       "title": "Alibaba Releases Qwen4-Max with 2.4 Trillion Parameters (company press release syndicated by AIwire)",
       "url": "https://www.hpcwire.com/aiwire/2026/11/16/alibaba-releases-qwen4-max-with-2-4-trillion-parameters/",
       "published": "2026-11-16"
+    },
+    "gpt62astra": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-6.2 Astra and Sol",
+      "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      "published": "2026-11-17"
+    },
+    "gpt62sol": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-6.2 Astra and Sol",
+      "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      "published": "2026-11-17"
     }
   },
   "series": [
@@ -535,6 +547,22 @@
         "source": "qwen4max",
         "reviewed_on": "2026-11-16",
         "reason": "Alibaba Group's November 16 press release documents Qwen4-Max as a hosted API model with a 2.4T-parameter MoE architecture and 1M-token context. Its Work360 and other vendor-reported benchmark results are not identical-condition observations in this timeline's six historical OpenAI benchmark series; Artificial Analysis reports a different composite index. No cross-protocol score, broader price review, or revised historical snapshot is inferred."
+      },
+      {
+        "model": "GPT-6.2 Astra",
+        "date": "2026-11-17",
+        "status": "reviewed_not_added",
+        "source": "gpt62astra",
+        "reviewed_on": "2026-11-17",
+        "reason": "OpenAI confirms gpt-6.2-astra API availability and $8/$0.40/$40 per 1M input/cached-input/output tokens. Its launch compares Agents' Last Exam, FrontierCode 2.0, Intelligence Index v5 and other newer protocols, not directly comparable results in this timeline's six historical benchmark series. No cross-protocol score or full pricing snapshot revalidation is inferred."
+      },
+      {
+        "model": "GPT-6.2 Sol",
+        "date": "2026-11-17",
+        "status": "reviewed_not_added",
+        "source": "gpt62sol",
+        "reviewed_on": "2026-11-17",
+        "reason": "OpenAI confirms gpt-6.2-sol API availability and $2/$0.10/$10 per 1M input/cached-input/output tokens. Its launch evaluations use newer protocols, not directly comparable points in this timeline's six historical benchmark series. No synthetic benchmark score, provider-wide price audit or revised historical snapshot is inferred."
       }
     ]
   }
