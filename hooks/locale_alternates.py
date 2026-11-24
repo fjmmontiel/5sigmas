@@ -177,8 +177,10 @@ def _spanish_nav_sources() -> frozenset[str]:
 
 @lru_cache(maxsize=1)
 def _spanish_public_routes() -> frozenset[str]:
-    """Derive Spanish indexable routes from nav/front matter plus explicit tool routes."""
+    """Derive Spanish indexable routes from navigation and explicit public routes."""
     sources = set(_spanish_nav_sources())
+    # The series links to the atlas from its pages, outside the chapter navigation.
+    sources.add("series/ai-accelerator-supply-chain/atlas.md")
     sources.update(_tool_route_pairs("en").keys())
     routes: set[str] = set()
 
