@@ -88,7 +88,9 @@ for (const spec of cases) {
     }
     if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
-    await page.locator('[data-action="reset"]').click();
+    const reset = page.locator('[data-action="reset"]');
+    await reset.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await reset.click();
     await page.screenshot({ path: `${artifactDir}/inference-vram-${spec.locale}-${viewport.name}.png`, fullPage: true });
     await page.close();
   }
