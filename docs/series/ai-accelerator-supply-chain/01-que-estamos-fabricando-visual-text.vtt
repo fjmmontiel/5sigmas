@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00:00.350 --> 00:00:05.250
+La GPU hace muchos cálculos al mismo tiempo.
+
+00:00:05.250 --> 00:00:10.150
+Una placa la conecta con el resto del ordenador.
+
+00:00:10.150 --> 00:00:16.000
+El servidor añade el procesador principal, la memoria y la refrigeración.
+
+00:00:16.350 --> 00:00:21.250
+En este ejemplo, cada servidor tiene ocho GPU.
+
+00:00:21.250 --> 00:00:26.150
+Cuatro servidores reúnen 32 GPU.
+
+00:00:26.150 --> 00:00:32.000
+La red permite que esos servidores trabajen juntos como clúster.

@@ -110,6 +110,12 @@ hide:
       <a class="s5-text-link" href="/visuales/">Empezar con vídeos y animaciones →</a>
     </div>
     <div class="s5-note-feature__meta">Concepto<br />Mecanismo<br />Evidencia<br />Producción</div>
+    <a class="s5-list-row" href="/series/ai-accelerator-supply-chain/00_presentacion_serie/">
+      <span class="s5-list-row__n">14</span>
+      <span class="s5-list-row__title">De la mina al clúster</span>
+      <span class="s5-list-row__desc">Del mineral al servidor, con las fábricas, el transporte y la energía que necesita una GPU.</span>
+      <span class="s5-list-row__meta">14 capítulos</span>
+    </a>
   </div>
 </section>
 

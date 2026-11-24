@@ -227,6 +227,22 @@ nav:
           - "Evaluating agent and tool trajectories: success, efficiency, recovery, and policy compliance": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Online evaluation: shadow, canary, A/B, guardrails, and regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
           - "Observability, failure taxonomies, and production → eval → repair feedback loops": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
+      - From Mine to Cluster:
+          - Introduction: series/ai-accelerator-supply-chain/00_presentacion_serie.md
+          - What a GPU does: series/ai-accelerator-supply-chain/01-que-estamos-fabricando.md
+          - From quartz to wafer: series/ai-accelerator-supply-chain/02-mina-material-electronico.md
+          - Cleaning each layer: series/ai-accelerator-supply-chain/03-consumos-fab.md
+          - Preparing the design: series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.md
+          - Making chips on a wafer: series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.md
+          - Stacked memory: series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.md
+          - Connecting compute and memory: series/ai-accelerator-supply-chain/07-chiplets-encapsulado.md
+          - Testing a GPU: series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.md
+          - Assembly and shipping: series/ai-accelerator-supply-chain/09-paquete-sistema.md
+          - How data travels: series/ai-accelerator-supply-chain/10-red-cluster.md
+          - Power and cooling: series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.md
+          - Testing the cluster: series/ai-accelerator-supply-chain/12-instalado-utilizable.md
+          - What limits assembly: series/ai-accelerator-supply-chain/13-geografia-capacidad.md
+          - Reuse and recycling: series/ai-accelerator-supply-chain/14-segunda-vida.md
   - Company Analysis:
       - analisis-de-empresas/index.md
       - Inditex: analisis-de-empresas/01_inditex.md

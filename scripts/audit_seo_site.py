@@ -13,6 +13,7 @@ import argparse
 import csv
 import http.client
 import json
+import mimetypes
 import re
 import sys
 import time
@@ -30,7 +31,6 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 
 ORIGIN = "https://5sigmas.com"
 DEFAULT_USER_AGENT = "5sigmas-seo-audit/1.0 (+build verification)"
-CLASSIFICATIONS = ("INDEX", "NOINDEX", "REDIRECT", "GONE/404")
 SITEMAP_NAMES = ("sitemap.xml", "en/sitemap.xml", "video-sitemap.xml")
 
 
@@ -135,6 +135,10 @@ class PageParser(HTMLParser):
         return self.page
 
 
+def is_media(content_type: str | None) -> bool:
+    return bool(content_type and content_type.startswith(("audio/", "image/", "video/")))
+
+
 def classify(page: ParsedPage) -> str:
     if page.status >= 400 or page.status == 0:
         return "GONE/404"
@@ -162,6 +166,8 @@ class SiteReader:
             path = next((item for item in candidates if item.is_file()), None)
             if path is None:
                 return ParsedPage(url=url, status=404, final_url=url, classification="GONE/404")
+            if is_media(mimetypes.guess_type(path.name)[0]):
+                return ParsedPage(url=url, status=200, final_url=url, classification="ASSET")
             try:
                 body = path.read_text(encoding="utf-8", errors="replace")
             except OSError as exc:
@@ -182,9 +188,12 @@ class SiteReader:
         for attempt in range(3):
             try:
                 with urllib.request.urlopen(request, timeout=self.timeout) as response:
-                    body = response.read()
                     final_url = normalize_url(response.geturl())
                     status = response.status
+                    if 200 <= status < 300 and is_media(response.headers.get_content_type()):
+                        classification = "ASSET" if final_url == url else "REDIRECT"
+                        return ParsedPage(url=url, status=status, final_url=final_url, classification=classification)
+                    body = response.read()
                 if status < 500:
                     break
             except urllib.error.HTTPError as exc:
@@ -394,6 +403,7 @@ def crawl(reader: SiteReader) -> dict[str, object]:
         "pages_examined": len(pages),
         "indexable": sum(page.classification == "INDEX" for page in pages.values()),
         "noindex": sum(page.classification == "NOINDEX" for page in pages.values()),
+        "linked_media": sum(page.classification == "ASSET" for page in pages.values()),
         "redirect": sum(page.classification == "REDIRECT" for page in pages.values()),
         "gone_or_404": sum(page.classification == "GONE/404" for page in pages.values()),
         "sitemap_urls": len(sitemap_set),

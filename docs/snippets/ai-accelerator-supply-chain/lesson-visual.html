@@ -1,0 +1,30 @@
+<div class="ac-lesson-visual">
+  <style>
+    .ac-lesson-visual {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.15rem;
+      margin: 1.5rem 0;
+    }
+    .ac-lesson-visual figure { min-width: 0; width: auto; margin: 0; }
+    .ac-lesson-visual img { display: block; width: 100%; height: auto; border-radius: .45rem; }
+    .ac-lesson-visual figcaption {
+      margin: .5rem 0 0;
+      padding-inline: .1rem;
+      color: var(--md-default-fg-color);
+      text-align: start;
+      font-size: .75rem;
+    }
+    @media (max-width: 760px) {
+      .ac-lesson-visual { grid-template-columns: minmax(0, 1fr); gap: .9rem; }
+    }
+  </style>
+  <figure>
+    <a href="{{ lesson_a }}" aria-label="{{ enlarge_a }}"><img src="{{ lesson_a }}" alt="{{ alt_a }}" width="1080" height="660" loading="lazy" decoding="async"></a>
+    <figcaption>{{ caption_a }}</figcaption>
+  </figure>
+  <figure>
+    <a href="{{ lesson_b }}" aria-label="{{ enlarge_b }}"><img src="{{ lesson_b }}" alt="{{ alt_b }}" width="1080" height="660" loading="lazy" decoding="async"></a>
+    <figcaption>{{ caption_b }}</figcaption>
+  </figure>
+</div>

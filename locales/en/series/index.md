@@ -110,6 +110,12 @@ hide:
       <a class="s5-text-link" href="/en/visuales/">Start with videos and interactive visuals →</a>
     </div>
     <div class="s5-note-feature__meta">Concept<br />Mechanism<br />Evidence<br />Production</div>
+    <a class="s5-list-row" href="/en/series/ai-accelerator-supply-chain/00_presentacion_serie/">
+      <span class="s5-list-row__n">14</span>
+      <span class="s5-list-row__title">From Mine to Cluster</span>
+      <span class="s5-list-row__desc">From minerals to servers, through the factories, transport and power a GPU needs.</span>
+      <span class="s5-list-row__meta">14 chapters</span>
+    </a>
   </div>
 </section>
 

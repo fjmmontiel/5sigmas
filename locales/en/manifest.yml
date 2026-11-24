@@ -6,6 +6,22 @@ route_strategy: preserve-source-slugs
 fallback_to_spanish: false
 shared_media: []
 published_routes:
+  - series/ai-accelerator-supply-chain/00_presentacion_serie.md
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando.md
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico.md
+  - series/ai-accelerator-supply-chain/03-consumos-fab.md
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.md
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.md
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.md
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado.md
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.md
+  - series/ai-accelerator-supply-chain/09-paquete-sistema.md
+  - series/ai-accelerator-supply-chain/10-red-cluster.md
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.md
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable.md
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad.md
+  - series/ai-accelerator-supply-chain/14-segunda-vida.md
+  - series/ai-accelerator-supply-chain/atlas.md
   - analisis-de-empresas/index.md
   - analisis-de-empresas/01_inditex.md
   - index.md
@@ -178,11 +194,91 @@ required_snippets:
   - snippets/ia-pib-bienestar-energia/02-agua-golf-datacenters.html
   - snippets/ia-pib-bienestar-energia/02-geografia-ia.html
   - snippets/datacenters-espacio/dc_space_pressure_anim.html
+  - snippets/ai-accelerator-supply-chain/atlas.html
+  - snippets/ai-accelerator-supply-chain/bottleneck-demo.html
+  - snippets/ai-accelerator-supply-chain/lesson-visual.html
+  - snippets/ai-accelerator-supply-chain/lifecycle.html
+  - snippets/ai-accelerator-supply-chain/story-plate.html
   - snippets/seguridad-ia/00-series-mapa.html
   - snippets/agentes-ia/01-bucle-agente.html
   - snippets/agentes-ia/03-evaluacion.html
   - snippets/agentes-ia/04-seguridad.html
 published_files:
+  - series/ai-accelerator-supply-chain/00_presentacion_serie.mp4
+  - series/ai-accelerator-supply-chain/00_presentacion_serie-vertical.mp4
+  - series/ai-accelerator-supply-chain/00_presentacion_serie.jpg
+  - series/ai-accelerator-supply-chain/00_presentacion_serie-transcript.html
+  - series/ai-accelerator-supply-chain/00_presentacion_serie-visual-text.vtt
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando.mp4
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando-vertical.mp4
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando.jpg
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando-transcript.html
+  - series/ai-accelerator-supply-chain/01-que-estamos-fabricando-visual-text.vtt
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico.mp4
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico-vertical.mp4
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico.jpg
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico-transcript.html
+  - series/ai-accelerator-supply-chain/02-mina-material-electronico-visual-text.vtt
+  - series/ai-accelerator-supply-chain/03-consumos-fab.mp4
+  - series/ai-accelerator-supply-chain/03-consumos-fab-vertical.mp4
+  - series/ai-accelerator-supply-chain/03-consumos-fab.jpg
+  - series/ai-accelerator-supply-chain/03-consumos-fab-transcript.html
+  - series/ai-accelerator-supply-chain/03-consumos-fab-visual-text.vtt
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.mp4
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras-vertical.mp4
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.jpg
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras-transcript.html
+  - series/ai-accelerator-supply-chain/04-diseno-ip-mascaras-visual-text.vtt
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.mp4
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab-vertical.mp4
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.jpg
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab-transcript.html
+  - series/ai-accelerator-supply-chain/05-oblea-maquinas-fab-visual-text.vtt
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.mp4
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm-vertical.mp4
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.jpg
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm-transcript.html
+  - series/ai-accelerator-supply-chain/06-cadena-memoria-hbm-visual-text.vtt
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado.mp4
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado-vertical.mp4
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado.jpg
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado-transcript.html
+  - series/ai-accelerator-supply-chain/07-chiplets-encapsulado-visual-text.vtt
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.mp4
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas-vertical.mp4
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.jpg
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas-transcript.html
+  - series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas-visual-text.vtt
+  - series/ai-accelerator-supply-chain/09-paquete-sistema.mp4
+  - series/ai-accelerator-supply-chain/09-paquete-sistema-vertical.mp4
+  - series/ai-accelerator-supply-chain/09-paquete-sistema.jpg
+  - series/ai-accelerator-supply-chain/09-paquete-sistema-transcript.html
+  - series/ai-accelerator-supply-chain/09-paquete-sistema-visual-text.vtt
+  - series/ai-accelerator-supply-chain/10-red-cluster.mp4
+  - series/ai-accelerator-supply-chain/10-red-cluster-vertical.mp4
+  - series/ai-accelerator-supply-chain/10-red-cluster.jpg
+  - series/ai-accelerator-supply-chain/10-red-cluster-transcript.html
+  - series/ai-accelerator-supply-chain/10-red-cluster-visual-text.vtt
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.mp4
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra-vertical.mp4
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.jpg
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra-transcript.html
+  - series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra-visual-text.vtt
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable.mp4
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable-vertical.mp4
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable.jpg
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable-transcript.html
+  - series/ai-accelerator-supply-chain/12-instalado-utilizable-visual-text.vtt
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad.mp4
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad-vertical.mp4
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad.jpg
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad-transcript.html
+  - series/ai-accelerator-supply-chain/13-geografia-capacidad-visual-text.vtt
+  - series/ai-accelerator-supply-chain/14-segunda-vida.mp4
+  - series/ai-accelerator-supply-chain/14-segunda-vida-vertical.mp4
+  - series/ai-accelerator-supply-chain/14-segunda-vida.jpg
+  - series/ai-accelerator-supply-chain/14-segunda-vida-transcript.html
+  - series/ai-accelerator-supply-chain/14-segunda-vida-visual-text.vtt
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.mp4
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.jpg
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness-transcript.html

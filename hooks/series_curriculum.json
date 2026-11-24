@@ -2402,6 +2402,19 @@
         "es": "Continúa con una serie conectada con lo que acabas de aprender.",
         "en": "Continue with a series connected to what you just learned."
       }
+    },
+    "ai-accelerator-supply-chain": {
+      "promise": {
+        "es": "Del mineral al servidor, con las fábricas, el transporte y la energía que necesita una GPU.",
+        "en": "From minerals to servers, through the factories, transport and power a GPU needs."
+      },
+      "prerequisites": [],
+      "next": "llm-inference-engineering-economics",
+      "why": {
+        "es": "Con la infraestructura situada, sigue el trabajo que hace un modelo al responder.",
+        "en": "With the infrastructure in view, follow the work a model does to produce a response."
+      },
+      "lessons": []
     }
   },
   "paths": [
@@ -2468,7 +2481,8 @@
       },
       "series": [
         "ia-pib-bienestar-energia",
-        "datacenters-espacio"
+        "datacenters-espacio",
+        "ai-accelerator-supply-chain"
       ]
     }
   ]

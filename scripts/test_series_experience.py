@@ -13,11 +13,12 @@ def check(site: Path, output: Path):
         prefix='/'+locale
         hub=BeautifulSoup((site/locale/'series/index.html').read_text(),'lxml')
         cards=hub.select('[data-sx-card]');details=hub.select('[data-sx-detail]');chapters=hub.select('[data-sx-chapter-url]')
-        assert len(cards)==13 and len(details)==13 and len(chapters)==67
-        assert len(hub.select('[data-sx-card] .sx-card-poster'))==13
-        assert len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))==13
+        assert len(cards)==14 and len(details)==14 and len(chapters)==81
+        assert len(hub.select('[data-sx-card] .sx-card-poster'))==14
+        assert len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))==14
         assert not hub.select('[data-sx-card] [data-sx-card-video] video'), 'Series previews must not create video elements before user intent'
-        assert sum(len(d.select('[data-sx-chapter-url]')) for d in details[6:])==40
+        assert sum(len(d.select('[data-sx-chapter-url]')) for d in details[6:13])==40
+        assert len(hub.select('#serie-ai-accelerator-supply-chain [data-sx-chapter-url]'))==14
         assert len(hub.select('.sx-path'))==4
         assert not hub.select('a[href*="#mecanismo"]'), 'Series cards must not point to discarded guided mechanisms'
         players=hub.select('[data-sx-player] video')
@@ -47,10 +48,10 @@ def check(site: Path, output: Path):
             if doc.select_one(VISUAL_SELECTOR): originals+=1
         assert advanced==40, advanced
         assert originals==39, originals
-        results.append({'locale':locale or 'es','series':13,'chapters':67,'advanced_chapters':advanced,'golden_visuals_direct':originals,'guided_replacements':0,'inline_players':len(players),'editorial_covers':len(hub.select('[data-sx-card] .sx-card-poster')),'lazy_motion_previews':len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))})
+        results.append({'locale':locale or 'es','series':14,'chapters':81,'advanced_chapters':advanced,'golden_visuals_direct':originals,'guided_replacements':0,'inline_players':len(players),'editorial_covers':len(hub.select('[data-sx-card] .sx-card-poster')),'lazy_motion_previews':len(hub.select('[data-sx-card] [data-sx-card-video][data-src]'))})
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps({'status':'PASS','checks':results},ensure_ascii=False,indent=2)+'\n')
-    print(json.dumps({'status':'PASS','series_per_locale':13,'chapters_per_locale':67,'advanced_chapters_per_locale':40,'golden_visuals_direct':[x['golden_visuals_direct'] for x in results],'guided_replacements':0}))
+    print(json.dumps({'status':'PASS','series_per_locale':14,'chapters_per_locale':81,'advanced_chapters_per_locale':40,'golden_visuals_direct':[x['golden_visuals_direct'] for x in results],'guided_replacements':0}))
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--site',type=Path,default=Path('site'));p.add_argument('--output',type=Path,default=Path('artifacts/series-ui-review/source-tests.json'));a=p.parse_args();check(a.site,a.output)

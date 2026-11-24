@@ -1,0 +1,1951 @@
+{
+  "asOf": "2026-11-23",
+  "families": {
+    "wafer": {
+      "es": "Silicio y obleas",
+      "en": "Silicon and wafers"
+    },
+    "masks": {
+      "es": "Máscaras y litografía",
+      "en": "Masks and lithography"
+    },
+    "fab": {
+      "es": "Gases, química y servicios de fab",
+      "en": "Fab gases, chemicals and utilities"
+    },
+    "films": {
+      "es": "Dopantes, películas e interconexiones",
+      "en": "Dopants, films and interconnects"
+    },
+    "memory": {
+      "es": "HBM y apilado",
+      "en": "HBM and stacking"
+    },
+    "package": {
+      "es": "Encapsulado, sustrato y prueba",
+      "en": "Packaging, substrate and test"
+    },
+    "board": {
+      "es": "Placas y electrónica de potencia",
+      "en": "Boards and power electronics"
+    },
+    "network": {
+      "es": "Interconexión y óptica",
+      "en": "Interconnect and optics"
+    },
+    "thermal": {
+      "es": "Estructura y refrigeración",
+      "en": "Structure and cooling"
+    },
+    "facility": {
+      "es": "Emplazamiento y red eléctrica",
+      "en": "Site and power grid"
+    },
+    "recovery": {
+      "es": "Recuperación y segunda vida",
+      "en": "Recovery and second life"
+    }
+  },
+  "roles": {
+    "feedstock": {
+      "es": "Materia prima o producto que pasa a otra planta",
+      "en": "Raw material or intermediate product"
+    },
+    "retained": {
+      "es": "Permanece en el hardware",
+      "en": "Retained in hardware"
+    },
+    "consumed": {
+      "es": "Consumible de fabricación",
+      "en": "Manufacturing consumable"
+    },
+    "equipment": {
+      "es": "Equipo, útil o instalación",
+      "en": "Tool, equipment or facility"
+    },
+    "recovery": {
+      "es": "Flujo de recuperación",
+      "en": "Recovery stream"
+    }
+  },
+  "sources": {
+    "oecd": {
+      "title": "OECD · Mapping the semiconductor value chain",
+      "date": "2025",
+      "locator": "Segmentation, inputs and vulnerabilities",
+      "url": "https://www.oecd.org/en/publications/mapping-the-semiconductor-value-chain_4154cdbf-en.html"
+    },
+    "doe": {
+      "title": "U.S. DOE · Semiconductor Supply Chain Deep Dive",
+      "date": "2022",
+      "locator": "Materials and manufacturing equipment",
+      "url": "https://www.energy.gov/sites/default/files/2024-12/Semiconductor%2520Supply%2520Chain%2520Report%2520-%2520Final%5B1%5D.pdf"
+    },
+    "usgs": {
+      "title": "USGS · Mineral Commodity Summaries 2026",
+      "date": "2026",
+      "locator": "Individual mineral commodity chapters",
+      "url": "https://pubs.usgs.gov/publication/mcs2026"
+    },
+    "sumco": {
+      "title": "SUMCO · Wafer Production Processes",
+      "date": null,
+      "locator": "Ingot / Wafer manufacturing",
+      "url": "https://www.sumcosi.com/english/products/process/"
+    },
+    "sibelco": {
+      "title": "Sibelco · Spruce Pine",
+      "date": null,
+      "locator": "High purity quartz operation",
+      "url": "https://www.sibelco.com/en/locations/spruce-pine"
+    },
+    "tokuyama": {
+      "title": "Tokuyama · High-purity Polycrystalline Silicon",
+      "date": null,
+      "locator": "Product overview",
+      "url": "https://www.tokuyama.co.jp/eng/products/electronic_materials/polysilicon.html/"
+    },
+    "gas": {
+      "title": "Air Liquide · Electronics Specialty Materials",
+      "date": null,
+      "locator": "Deposition, etch and cleaning materials",
+      "url": "https://electronics.airliquide.com/offer-brands/our-offer/electronics-specialty-materials"
+    },
+    "linde": {
+      "title": "Linde · Electronics",
+      "date": null,
+      "locator": "Bulk and specialty gases",
+      "url": "https://assets.linde.com/-/media/celum-connect/2023/12/21/15/11/linde20electronics20brochure185963.pdf"
+    },
+    "epa": {
+      "title": "U.S. EPA · Electronics Manufacturing Technical Support Document",
+      "date": "2024",
+      "locator": "Etch and chamber cleaning emissions",
+      "url": "https://www.epa.gov/system/files/documents/2024-01/subpart-i_techsupportdoc.pdf"
+    },
+    "cmp": {
+      "title": "Entegris · Chemical Mechanical Planarization",
+      "date": null,
+      "locator": "Slurries, pads and contamination control",
+      "url": "https://www.entegris.com/en/home/our-science/by-industry/microelectronics/semiconductor/cmp.html"
+    },
+    "tsmc-oip": {
+      "title": "TSMC · Open Innovation Platform",
+      "date": "2019",
+      "locator": "5 nm design infrastructure and partners",
+      "url": "https://pr.tsmc.com/english/news/1987"
+    },
+    "asml-process": {
+      "title": "ASML · How microchips are made",
+      "date": null,
+      "locator": "Deposition, lithography, etch, implantation and packaging",
+      "url": "https://www.asml.com/en/technology/all-about-microchips/how-microchips-are-made"
+    },
+    "asml-euv": {
+      "title": "ASML · Light and lasers",
+      "date": null,
+      "locator": "Creating EUV light / DUV sources",
+      "url": "https://www.asml.com/en/technology/lithography-principles/light-and-lasers"
+    },
+    "zeiss": {
+      "title": "ZEISS · EUV lithography",
+      "date": null,
+      "locator": "Projection optics and mirror technology",
+      "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/inspiring-technology/euv-lithography.html"
+    },
+    "applied": {
+      "title": "Applied Materials · Interconnect",
+      "date": null,
+      "locator": "Metals, liners, dielectrics and wiring",
+      "url": "https://www.appliedmaterials.com/sg/en/semiconductor/markets-and-inflections/advanced-logic/interconnect.html"
+    },
+    "jsr": {
+      "title": "JSR · Inpria and Lam patterning agreement",
+      "date": "2025-09-16",
+      "locator": "Metal oxide resist and patterning",
+      "url": "https://jsr.co.jp/jsr_e/news/2025/20250916.html"
+    },
+    "skhynix": {
+      "title": "SK hynix · 12-layer HBM3E volume production",
+      "date": "2024-09-26",
+      "locator": "Stacking and MR-MUF",
+      "url": "https://news.skhynix.com/en/sk-hynix-begins-volume-production-of-the-world-first-12-layer-hbm3e/"
+    },
+    "micron": {
+      "title": "Micron · HBM3E",
+      "date": null,
+      "locator": "Product specifications and H200 design-in",
+      "url": "https://www.micron.com/products/memory/hbm/hbm3e"
+    },
+    "cowos": {
+      "title": "TSMC · CoWoS",
+      "date": null,
+      "locator": "CoWoS-S, CoWoS-R and CoWoS-L",
+      "url": "https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/cowos.htm"
+    },
+    "intel-packaging": {
+      "title": "Intel Foundry · Advanced Packaging",
+      "date": null,
+      "locator": "EMIB and Foveros portfolio",
+      "url": "https://www.intel.com/content/www/us/en/foundry/packaging.html"
+    },
+    "abf": {
+      "title": "Ajinomoto · Ajinomoto Build-up Film",
+      "date": null,
+      "locator": "Dielectric film and substrate structure",
+      "url": "https://www.ajinomoto.com/innovation/our_innovation/buildupfilm"
+    },
+    "amkor": {
+      "title": "Amkor · Semiconductor Test Services",
+      "date": null,
+      "locator": "Wafer probe and final test",
+      "url": "https://amkor.com/test-services/"
+    },
+    "teradyne": {
+      "title": "Teradyne · Magnum 7H",
+      "date": null,
+      "locator": "HBM test platform",
+      "url": "https://www.teradyne.com/products/magnum-7h/"
+    },
+    "conflict": {
+      "title": "NVIDIA · Conflict Minerals Report",
+      "date": "2025 reporting period",
+      "locator": "Scope, due diligence, Exhibit A",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000043/a2026conflictmineralsrepor.htm"
+    },
+    "nvidia-system": {
+      "title": "NVIDIA · DGX GB Rack Scale Systems",
+      "date": null,
+      "locator": "Hardware and rack components",
+      "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html"
+    },
+    "ocp-rack": {
+      "title": "NVIDIA · GB200 designs contributed to OCP",
+      "date": "2024-10-15",
+      "locator": "Rack, busbar, copper cables and manifolds",
+      "url": "https://developer.nvidia.com/blog/nvidia-contributes-nvidia-gb200-nvl72-designs-to-open-compute-project/"
+    },
+    "iea-minerals": {
+      "title": "IEA · Energy and AI",
+      "date": "2025",
+      "locator": "AI and energy security, material demand",
+      "url": "https://www.iea.org/reports/energy-and-ai/ai-and-energy-security"
+    },
+    "iea": {
+      "title": "IEA · Key Questions on Energy and AI",
+      "date": "2026",
+      "locator": "Electricity, equipment and infrastructure constraints",
+      "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+    },
+    "vertiv": {
+      "title": "Vertiv · GB200 power and cooling blueprint",
+      "date": null,
+      "locator": "Reference design scope and infrastructure systems",
+      "url": "https://www.vertiv.com/en-emea/about/news-and-events/news-releases/vertiv-codevelops-with-nvidia-complete-power-and-cooling-blueprint-for--nvidia-gb200-nvl72-platform/"
+    },
+    "nvidia-tech": {
+      "title": "NVIDIA · Inside the Vera Rubin Platform",
+      "date": "2026",
+      "locator": "Rubin GPU / HBM and memory bandwidth",
+      "url": "https://developer.nvidia.com/blog/inside-the-NVIDIA-rubin-platform-six-new-chips-one-ai-supercomputer/"
+    },
+    "nvidia-supply": {
+      "title": "NVIDIA · Supply chain commitments",
+      "date": "2026-11-17",
+      "locator": "TSMC and Foxconn, substrates, advanced packaging and historical test commitments",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Expands-Commitments-With-Supply-Chain-Partners-to-Support-AI-Infrastructure-Buildout/default.aspx"
+    },
+    "nvidia-q3": {
+      "title": "NVIDIA · Q3 FY2027 financial results",
+      "date": "2026-11-17",
+      "locator": "Vera Rubin production and shipments",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2027/default.aspx"
+    },
+    "amd-spec": {
+      "title": "AMD · Instinct MI455X specifications",
+      "date": null,
+      "locator": "GPU and memory specifications",
+      "url": "https://www.amd.com/en/products/accelerators/instinct/mi400/mi455x.html"
+    },
+    "amd-cdna": {
+      "title": "AMD · CDNA architecture",
+      "date": null,
+      "locator": "CDNA 5 architecture and chiplets",
+      "url": "https://www.amd.com/en/technologies/cdna.html"
+    },
+    "amd-q3": {
+      "title": "AMD · Q3 2026 financial results",
+      "date": "2026-11-03",
+      "locator": "Recent PR Highlights, initial Helios systems",
+      "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
+    },
+    "google-tpu": {
+      "title": "Google Cloud · TPU 8t and TPU 8i technical deep dive",
+      "date": "2026-04-22",
+      "locator": "Figures 4–5 and per-chip spec table",
+      "url": "https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive"
+    },
+    "google-max": {
+      "title": "Google Cloud · Introducing TPU 8tx and TPU 8i Max",
+      "date": "2026-11-09",
+      "locator": "TPU 8tx and TPU 8i Max specifications and availability",
+      "url": "https://cloud.google.com/blog/topics/ai-infrastructure/tpu-8tx-and-tpu-8i-max"
+    },
+    "aws-spec": {
+      "title": "AWS · Amazon EC2 Trn3 UltraServers",
+      "date": null,
+      "locator": "Trainium3 chip and UltraServer specifications",
+      "url": "https://aws.amazon.com/ec2/instance-types/trn3/"
+    },
+    "aws-launch": {
+      "title": "AWS · Announcing EC2 Trn3 UltraServers",
+      "date": "2025-12-02",
+      "locator": "Availability and supported regions at launch",
+      "url": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/"
+    },
+    "ualink": {
+      "title": "UALink Consortium · Specification",
+      "date": null,
+      "locator": "Scale-up interconnect protocols",
+      "url": "https://ualinkconsortium.org/specification/"
+    },
+    "uec": {
+      "title": "Ultra Ethernet Consortium · Specification History",
+      "date": null,
+      "locator": "Versions and release dates",
+      "url": "https://ultraethernet.org/specification-history/"
+    },
+    "mlcommons": {
+      "title": "MLCommons · Training v6.1 results",
+      "date": "2026-11",
+      "locator": "Training results and divisions",
+      "url": "https://mlcommons.org/2026/11/mlperf-training-v6-1-results/"
+    },
+    "h100-pcf": {
+      "title": "NVIDIA · HGX H100 Product Carbon Footprint",
+      "date": null,
+      "locator": "Scope and contribution breakdown",
+      "url": "https://images.nvidia.com/aem-dam/Solutions/documents/HGX-H100-PCF-Summary.pdf"
+    },
+    "basel": {
+      "title": "Basel Convention · E-waste amendments",
+      "date": null,
+      "locator": "Transboundary movement and effective date",
+      "url": "https://www.basel.int/Implementation/Ewaste/EwasteAmendments/EwasteAmendmentsFAQs/tabid/10107/Default.aspx"
+    },
+    "micron-rubin": {
+      "title": "Micron · High-volume HBM4 for Vera Rubin",
+      "date": "2026-03-16",
+      "locator": "HBM4 36 GB 12H volume shipment statement",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-in-High-Volume-Production-of-HBM4-Designed-for-NVIDIA-Vera-Rubin-PCIe-Gen6-SSD-and-SOCAMM2-03-16-2026/default.aspx"
+    },
+    "samsung-amd": {
+      "title": "AMD and Samsung · MI455X memory MoU",
+      "date": "2026-03-18",
+      "locator": "MoU on primary HBM4 supply for MI455X",
+      "url": "https://newsroom.amd.com/news/samsung-and-amd-expand-strategic-collaboratio.html"
+    }
+  },
+  "materials": [
+    {
+      "id": "silica-feed",
+      "family": "wafer",
+      "role": "feedstock",
+      "name": {
+        "es": "Cuarzo o cuarcita para obtener silicio",
+        "en": "Quartz or quartzite for making silicon"
+      },
+      "use": {
+        "es": "De estas rocas sale la sílice que se transforma en silicio metalúrgico. La pureza necesaria depende de lo que se quiera fabricar después.",
+        "en": "These rocks supply the silica used to make metallurgical-grade silicon. The required purity depends on what will be made next."
+      },
+      "sources": [
+        "usgs",
+        "doe"
+      ]
+    },
+    {
+      "id": "reductants",
+      "family": "wafer",
+      "role": "consumed",
+      "name": {
+        "es": "Carbono para separar el oxígeno de la sílice",
+        "en": "Carbon for removing oxygen from silica"
+      },
+      "use": {
+        "es": "Aporta el carbono que quita el oxígeno a la sílice para formar silicio metalúrgico.",
+        "en": "Supplies the carbon that strips oxygen from silica to form metallurgical silicon."
+      },
+      "sources": [
+        "usgs",
+        "doe"
+      ]
+    },
+    {
+      "id": "met-silicon",
+      "family": "wafer",
+      "role": "feedstock",
+      "name": {
+        "es": "Silicio metalúrgico",
+        "en": "Metallurgical silicon"
+      },
+      "use": {
+        "es": "Es el silicio que sale de la primera transformación. Una parte se purifica más para electrónica. El total que se fabrica incluye otros usos.",
+        "en": "This is the silicon produced at the first processing step. Some of it is further purified for electronics. Total production also serves other markets."
+      },
+      "sources": [
+        "usgs",
+        "doe"
+      ]
+    },
+    {
+      "id": "polysilicon",
+      "family": "wafer",
+      "role": "feedstock",
+      "name": {
+        "es": "Silicio purificado para electrónica",
+        "en": "Purified silicon for electronics"
+      },
+      "use": {
+        "es": "Se funde para hacer crecer un monocristal de silicio. Se compra con límites de impurezas especificados.",
+        "en": "Is melted to grow a single crystal of silicon. It is bought against specified impurity limits."
+      },
+      "sources": [
+        "sumco",
+        "tokuyama"
+      ]
+    },
+    {
+      "id": "crucible-quartz",
+      "family": "wafer",
+      "role": "feedstock",
+      "name": {
+        "es": "Cuarzo puro para fabricar el recipiente",
+        "en": "High-purity quartz for making the crucible"
+      },
+      "use": {
+        "es": "Con este cuarzo se fabrica el recipiente que contiene el silicio fundido. La mina suministra el cuarzo y otra empresa puede fabricar el recipiente.",
+        "en": "This quartz goes into the vessel that holds molten silicon. The mine supplies the quartz, and a different company can make the vessel."
+      },
+      "sources": [
+        "sibelco",
+        "sumco"
+      ]
+    },
+    {
+      "id": "quartz-crucible",
+      "family": "wafer",
+      "role": "consumed",
+      "name": {
+        "es": "Crisol, el recipiente de cuarzo fundido",
+        "en": "Fused-quartz crucible"
+      },
+      "use": {
+        "es": "Contiene el silicio fundido mientras se tira de un cristal hacia arriba muy despacio. Así crece el cristal en el método Czochralski.",
+        "en": "It holds molten silicon while a crystal is slowly pulled upward. This is how the crystal grows in the Czochralski method."
+      },
+      "sources": [
+        "sumco"
+      ]
+    },
+    {
+      "id": "monocrystal",
+      "family": "wafer",
+      "role": "feedstock",
+      "name": {
+        "es": "Lingote de un solo cristal y oblea pulida",
+        "en": "Single-crystal ingot and polished wafer"
+      },
+      "use": {
+        "es": "Es el lingote de cristal único y la oblea pulida sobre la que se fabrican los chips. Antes de fabricar dispositivos se controlan su orientación, espesor, defectos y limpieza.",
+        "en": "Is the single-crystal ingot and polished wafer on which chips are built. Its orientation, thickness, defects and cleanliness are controlled before device fabrication."
+      },
+      "sources": [
+        "sumco"
+      ]
+    },
+    {
+      "id": "duv-gases",
+      "family": "masks",
+      "role": "consumed",
+      "name": {
+        "es": "Gases para la luz ultravioleta profunda (DUV)",
+        "en": "Gases for deep ultraviolet (DUV) light"
+      },
+      "use": {
+        "es": "Alimentan la fuente de luz láser ultravioleta profunda (DUV) del equipo de litografía. Son gases nobles y halógenos mezclados según la especificación.",
+        "en": "Feed the deep ultraviolet (DUV) laser light source of the lithography tool. They are noble gases and halogens blended to specification."
+      },
+      "sources": [
+        "linde",
+        "asml-euv"
+      ]
+    },
+    {
+      "id": "tin-euv",
+      "family": "masks",
+      "role": "consumed",
+      "name": {
+        "es": "Estaño para generar luz ultravioleta extrema (EUV)",
+        "en": "Tin for generating extreme ultraviolet (EUV) light"
+      },
+      "use": {
+        "es": "El equipo vaporiza diminutas gotas de estaño fundido. El plasma que se forma emite la luz ultravioleta extrema con la que se dibujan algunos patrones.",
+        "en": "The equipment vaporizes tiny droplets of molten tin. The resulting plasma emits the extreme ultraviolet light used to print some patterns."
+      },
+      "sources": [
+        "asml-euv",
+        "usgs"
+      ]
+    },
+    {
+      "id": "mirror-materials",
+      "family": "masks",
+      "role": "equipment",
+      "name": {
+        "es": "Capas de silicio y molibdeno para los espejos",
+        "en": "Silicon and molybdenum layers for the mirrors"
+      },
+      "use": {
+        "es": "Forman espejos de pares de capas de silicio y molibdeno que reflejan la luz EUV dentro del equipo de litografía.",
+        "en": "Form mirrors from silicon and molybdenum layer pairs that reflect EUV light inside the lithography tool."
+      },
+      "sources": [
+        "zeiss",
+        "asml-euv"
+      ]
+    },
+    {
+      "id": "mask-blanks",
+      "family": "masks",
+      "role": "equipment",
+      "name": {
+        "es": "Placas base y capas para las máscaras",
+        "en": "Mask blanks and coating materials"
+      },
+      "use": {
+        "es": "Forman la máscara, que lleva el patrón del circuito que se proyecta sobre la oblea, a partir de placas base sin patrón (blanks). Las capas y los materiales dependen de la tecnología de exposición.",
+        "en": "Form the mask, which holds the circuit pattern projected onto the wafer, starting from unpatterned base plates (blanks). Film stacks and materials depend on exposure technology."
+      },
+      "sources": [
+        "asml-process",
+        "zeiss",
+        "doe"
+      ]
+    },
+    {
+      "id": "pellicles",
+      "family": "masks",
+      "role": "equipment",
+      "name": {
+        "es": "Membranas que protegen las máscaras",
+        "en": "Protective membranes for masks"
+      },
+      "use": {
+        "es": "Cubren la máscara con una membrana fina que frena las partículas. Solo se usan donde la plataforma y el proceso las emplean.",
+        "en": "Cover the mask with a thin membrane that blocks particles. They are used only where the platform and process call for one."
+      },
+      "sources": [
+        "doe",
+        "asml-process"
+      ]
+    },
+    {
+      "id": "resist",
+      "family": "masks",
+      "role": "consumed",
+      "name": {
+        "es": "Capas sensibles a la luz, o fotorresistencias",
+        "en": "Light-sensitive coatings, or photoresists"
+      },
+      "use": {
+        "es": "La luz cambia qué parte de este recubrimiento se puede disolver. Al retirar esa parte, queda el dibujo sobre la oblea. Hay fórmulas orgánicas y de óxido metálico.",
+        "en": "Light changes which part of this coating can dissolve. Removing that part leaves the pattern on the wafer. Formulations include organic and metal-oxide materials."
+      },
+      "sources": [
+        "asml-process",
+        "jsr"
+      ]
+    },
+    {
+      "id": "developers",
+      "family": "masks",
+      "role": "consumed",
+      "name": {
+        "es": "Líquidos para revelar el patrón y limpiar",
+        "en": "Liquids for developing the pattern and cleaning"
+      },
+      "use": {
+        "es": "Estos líquidos disuelven parte de la capa sensible a la luz y dejan visible el patrón. El líquido y la limpieza se eligen según el recubrimiento y el proceso.",
+        "en": "These liquids dissolve part of the light-sensitive coating, leaving the pattern behind. The coating and process determine which developers and cleaning liquids to use."
+      },
+      "sources": [
+        "asml-process",
+        "doe"
+      ]
+    },
+    {
+      "id": "bulk-gas",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Nitrógeno, oxígeno y argón de proceso",
+        "en": "Nitrogen, oxygen, and argon for processing"
+      },
+      "use": {
+        "es": "Un gas puede desplazar el aire del equipo, formar la atmósfera de trabajo o ayudar a tratar o depositar material. El nitrógeno, el oxígeno y el argón cumplen funciones distintas.",
+        "en": "A gas can displace air inside the equipment, provide the working atmosphere, or help treat or deposit material. Nitrogen, oxygen, and argon do different jobs."
+      },
+      "sources": [
+        "linde",
+        "gas"
+      ]
+    },
+    {
+      "id": "helium",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Helio de grado electrónico",
+        "en": "Electronic-grade helium"
+      },
+      "use": {
+        "es": "Se usa como gas especial, según el equipo y el proceso. Su suministro incluye extracción, purificación y entrega.",
+        "en": "Is used as a specialty gas, depending on equipment and process. Supply includes extraction, purification and delivery."
+      },
+      "sources": [
+        "linde",
+        "usgs"
+      ]
+    },
+    {
+      "id": "hydrogen",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Hidrógeno muy puro",
+        "en": "High-purity hydrogen"
+      },
+      "use": {
+        "es": "Actúa como gas reductor o de proceso en aplicaciones que exigen pureza y suministro controlados.",
+        "en": "Acts as a reducing or process gas in applications that require controlled purity and delivery."
+      },
+      "sources": [
+        "linde",
+        "gas"
+      ]
+    },
+    {
+      "id": "silane",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Silano y otros compuestos para depositar silicio",
+        "en": "Silane and other compounds for depositing silicon"
+      },
+      "use": {
+        "es": "Aporta el silicio para depositar películas de silicio o de compuestos, según la receta del proceso.",
+        "en": "Supplies the silicon for depositing silicon or compound films, depending on the process recipe."
+      },
+      "sources": [
+        "gas",
+        "doe"
+      ]
+    },
+    {
+      "id": "ammonia",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Amoniaco y otros precursores de nitrógeno",
+        "en": "Ammonia and other nitrogen precursors"
+      },
+      "use": {
+        "es": "Aporta el nitrógeno para formar películas como los nitruros, en los pasos que lo requieren.",
+        "en": "Supplies the nitrogen to form films such as nitrides in the steps that require it."
+      },
+      "sources": [
+        "gas",
+        "doe"
+      ]
+    },
+    {
+      "id": "fluorinated",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Gases con flúor para grabar y limpiar",
+        "en": "Fluorinated gases for etching and cleaning"
+      },
+      "use": {
+        "es": "Algunos de estos gases retiran material de la oblea y otros limpian el equipo. Entre ellos están NF₃, SF₆ y varios fluorocarbonos. La fábrica debe contabilizar y tratar sus emisiones.",
+        "en": "Some of these gases remove material from the wafer, and others clean the equipment. Examples include NF₃, SF₆, and fluorocarbons. The factory needs to track and treat the emissions."
+      },
+      "sources": [
+        "epa",
+        "gas"
+      ]
+    },
+    {
+      "id": "halogen-etch",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Compuestos con halógenos para grabar capas",
+        "en": "Halogen compounds for etching layers"
+      },
+      "use": {
+        "es": "Estos compuestos retiran material de una capa. La fábrica elige el reactivo según qué material debe desaparecer, qué partes deben quedar y qué forma necesita el corte.",
+        "en": "These compounds remove material from a layer. The factory picks the reagent based on what must be removed, what must stay, and the shape the cut needs."
+      },
+      "sources": [
+        "gas",
+        "doe"
+      ]
+    },
+    {
+      "id": "wet-acids",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Ácidos, bases y oxidantes con muy pocas impurezas",
+        "en": "Acids, bases, and oxidizers with very low impurity levels"
+      },
+      "use": {
+        "es": "Limpian y graban obleas con familias de químicos que incluyen HF (ácido fluorhídrico), ácidos de limpieza, bases y peróxidos, según el paso y el material.",
+        "en": "Clean and etch wafers with chemical families that include HF (hydrofluoric acid), cleaning acids, bases and peroxides, as required by the step and material."
+      },
+      "sources": [
+        "doe",
+        "asml-process"
+      ]
+    },
+    {
+      "id": "solvents",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Disolventes para limpiar y quitar residuos",
+        "en": "Solvents for cleaning and removing residue"
+      },
+      "use": {
+        "es": "Limpian la oblea o arrastran residuos. La fábrica limita las impurezas que pueden traer y trata el líquido después de usarlo.",
+        "en": "They clean the wafer or remove residue. The factory limits the impurities they can introduce and manages the used liquid."
+      },
+      "sources": [
+        "doe",
+        "asml-process"
+      ]
+    },
+    {
+      "id": "water",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Agua ultrapura",
+        "en": "Ultrapure water"
+      },
+      "use": {
+        "es": "Sirve para enjuagar las obleas sin dejar impurezas. Para seguir el consumo conviene distinguir el agua que entra, la que se trata, la que se vuelve a usar y la que se descarga.",
+        "en": "The factory uses it to rinse wafers without leaving impurities. Tracking water use means distinguishing water drawn in, treated, reused, and discharged."
+      },
+      "sources": [
+        "doe",
+        "oecd"
+      ]
+    },
+    {
+      "id": "cmp-slurry",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Líquidos abrasivos para aplanar capas (CMP)",
+        "en": "Abrasive slurries for flattening layers (CMP)"
+      },
+      "use": {
+        "es": "Pule y aplana una capa con partículas como sílice o ceria y una química elegida para ella. CMP significa planarización químico-mecánica.",
+        "en": "Polishes and flattens a layer using particles such as silica or ceria and chemistry chosen for that layer. CMP stands for chemical-mechanical planarization."
+      },
+      "sources": [
+        "cmp"
+      ]
+    },
+    {
+      "id": "cmp-pad",
+      "family": "fab",
+      "role": "consumed",
+      "name": {
+        "es": "Superficies de pulido y útiles para mantenerlas",
+        "en": "Polishing pads and pad conditioners"
+      },
+      "use": {
+        "es": "Hacen el contacto de pulido contra la oblea y mantienen controlada la superficie de la almohadilla durante el uso.",
+        "en": "Make the polishing contact against the wafer and keep the pad surface controlled during use."
+      },
+      "sources": [
+        "cmp"
+      ]
+    },
+    {
+      "id": "filtration",
+      "family": "fab",
+      "role": "equipment",
+      "name": {
+        "es": "Filtros y tuberías para mantener limpios los líquidos",
+        "en": "Filters and clean piping for process liquids"
+      },
+      "use": {
+        "es": "Retiene partículas y trazas de contaminantes cuando se genera, transporta y usa agua o químicos.",
+        "en": "Removes particles and trace contaminants as water or chemicals are generated, delivered and used."
+      },
+      "sources": [
+        "cmp",
+        "doe"
+      ]
+    },
+    {
+      "id": "abatement",
+      "family": "fab",
+      "role": "equipment",
+      "name": {
+        "es": "Equipos y productos para tratar residuos",
+        "en": "Equipment and chemicals for treating waste"
+      },
+      "use": {
+        "es": "Tratan emisiones y efluentes. La eficacia depende del gas, el equipo y las condiciones.",
+        "en": "Treat emissions and effluent. Effectiveness depends on the gas, tool and conditions."
+      },
+      "sources": [
+        "epa",
+        "doe"
+      ]
+    },
+    {
+      "id": "dopants",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Boro, fósforo y arsénico para cambiar cómo conduce el silicio",
+        "en": "Boron, phosphorus, and arsenic for changing how silicon conducts"
+      },
+      "use": {
+        "es": "Cambian las propiedades eléctricas del silicio. Se pueden comprar como precursor o como fuente de iones.",
+        "en": "Change the electrical properties of silicon. They can be purchased as a precursor or an ion source."
+      },
+      "sources": [
+        "sumco",
+        "asml-process",
+        "doe"
+      ]
+    },
+    {
+      "id": "dielectric",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Óxidos, nitruros y aislantes de baja k",
+        "en": "Oxides, nitrides, and low-k insulators"
+      },
+      "use": {
+        "es": "Aíslan eléctricamente y cumplen otras funciones como películas. La composición depende de la capa.",
+        "en": "Insulate electrically and serve other functions as films. Composition depends on the layer."
+      },
+      "sources": [
+        "applied",
+        "asml-process"
+      ]
+    },
+    {
+      "id": "high-k",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Aislantes de alta k y compuestos para depositarlos",
+        "en": "High-k insulators and their deposition precursors"
+      },
+      "use": {
+        "es": "Forman el aislante de la puerta del transistor con compuestos como óxidos de hafnio, en los procesos que los usan.",
+        "en": "Form the transistor gate insulator with compounds such as hafnium-based oxides in the processes that use them."
+      },
+      "sources": [
+        "doe",
+        "usgs"
+      ]
+    },
+    {
+      "id": "copper-chip",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Cobre para conectar circuitos del chip",
+        "en": "Copper for connections inside the chip"
+      },
+      "use": {
+        "es": "Forma las líneas y las vías (conexiones verticales) metálicas del chip. Entra mediante blancos de deposición, capas semilla o química de electrodeposición, según el flujo.",
+        "en": "Forms the metal lines and vias (vertical connections) of the chip. It enters through deposition targets, seed layers or electroplating chemistry, depending on the flow."
+      },
+      "sources": [
+        "applied",
+        "usgs"
+      ]
+    },
+    {
+      "id": "tungsten",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Tungsteno para contactos y conexiones",
+        "en": "Tungsten for contacts and connections"
+      },
+      "use": {
+        "es": "Forma el metal de contactos o vías en los procesos que lo usan. La integración determina su ubicación.",
+        "en": "Forms contact or via metal in the processes that use it. Integration determines its placement."
+      },
+      "sources": [
+        "applied",
+        "usgs",
+        "conflict"
+      ]
+    },
+    {
+      "id": "barriers",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Tantalio, titanio y nitruros para capas protectoras",
+        "en": "Tantalum, titanium, and nitride barrier layers"
+      },
+      "use": {
+        "es": "Algunas capas impiden que un metal pase al material de al lado. Estos compuestos también pueden recubrir el interior de una conexión o formar un contacto, según el diseño.",
+        "en": "Some layers prevent a metal from spreading into the material next to it. These compounds can also line a connection or form a contact, depending on the process."
+      },
+      "sources": [
+        "applied",
+        "usgs"
+      ]
+    },
+    {
+      "id": "emerging-metals",
+      "family": "films",
+      "role": "retained",
+      "name": {
+        "es": "Cobalto y rutenio",
+        "en": "Cobalt and ruthenium"
+      },
+      "use": {
+        "es": "El cobalto y el rutenio se usan o se estudian para ciertos contactos, revestimientos y otras capas. Su papel depende de cómo se fabrique el chip.",
+        "en": "Cobalt and ruthenium are used or being considered for some contacts, linings, and other layers. Their role depends on how the chip is made."
+      },
+      "sources": [
+        "applied",
+        "usgs"
+      ]
+    },
+    {
+      "id": "dram-silicon",
+      "family": "memory",
+      "role": "retained",
+      "name": {
+        "es": "Chips de memoria y pieza de base de HBM",
+        "en": "Memory dies and the HBM base die"
+      },
+      "use": {
+        "es": "Reúnen dados (pastillas) de memoria DRAM con un dado base de interfaz en la pila de memoria de alto ancho de banda (HBM). La implementación del dado base depende de la generación y del proveedor.",
+        "en": "Combine DRAM memory dies with a base interface die in the high-bandwidth memory (HBM) stack. How the base die is implemented depends on generation and supplier."
+      },
+      "sources": [
+        "skhynix",
+        "micron"
+      ]
+    },
+    {
+      "id": "tsv",
+      "family": "memory",
+      "role": "retained",
+      "name": {
+        "es": "Conexiones metálicas que atraviesan el silicio (TSV)",
+        "en": "Metal connections through silicon (TSVs)"
+      },
+      "use": {
+        "es": "Conecta verticalmente los dados de la pila con metal dentro de vías a través del silicio (TSV). La geometría y los materiales de proceso varían.",
+        "en": "Connects the dies of the stack vertically with metal inside through-silicon vias (TSVs). Geometry and process materials vary."
+      },
+      "sources": [
+        "skhynix",
+        "cowos"
+      ]
+    },
+    {
+      "id": "stack-bonds",
+      "family": "memory",
+      "role": "retained",
+      "name": {
+        "es": "Contactos diminutos para unir los chips de la pila",
+        "en": "Tiny contacts for joining the stacked dies"
+      },
+      "use": {
+        "es": "Unen los dados entre sí con microbumps (bolitas metálicas diminutas) y materiales de unión. Los materiales y técnicas dependen del tipo de pila.",
+        "en": "Join the dies to each other with microbumps (tiny metal balls) and bonding materials. Materials and techniques depend on the stack type."
+      },
+      "sources": [
+        "skhynix",
+        "intel-packaging"
+      ]
+    },
+    {
+      "id": "stack-mold",
+      "family": "memory",
+      "role": "retained",
+      "name": {
+        "es": "Resinas que rellenan y protegen la pila de memoria",
+        "en": "Resins that fill and protect the memory stack"
+      },
+      "use": {
+        "es": "Rellenan y protegen la pila HBM en las técnicas que los usan. Cada proveedor de HBM especifica su propio proceso.",
+        "en": "Fill and protect the HBM stack in the techniques that use them. Each HBM supplier specifies its own process."
+      },
+      "sources": [
+        "skhynix"
+      ]
+    },
+    {
+      "id": "interposer",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Base intermedia de silicio y puentes entre chips",
+        "en": "Silicon interposers and bridges between dies"
+      },
+      "use": {
+        "es": "Conecta los dados con alta densidad mediante un interposer (base de silicio) o puentes locales, según la topología del encapsulado.",
+        "en": "Connects dies at high density through an interposer (a silicon base) or local bridges, depending on package topology."
+      },
+      "sources": [
+        "cowos",
+        "intel-packaging"
+      ]
+    },
+    {
+      "id": "rdl",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Cobre y aislantes para llevar señales a otros contactos",
+        "en": "Copper and insulators for rerouting chip connections"
+      },
+      "use": {
+        "es": "Las capas de redistribución, llamadas RDL, llevan las conexiones de los chips a otros puntos del soporte. El cobre conduce y los aislantes mantienen las pistas separadas.",
+        "en": "Redistribution layers, or RDLs, route chip connections to different points on the package. Copper carries the signal and insulators keep the traces apart."
+      },
+      "sources": [
+        "cowos",
+        "applied"
+      ]
+    },
+    {
+      "id": "abf",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Película aislante para añadir capas, como ABF",
+        "en": "Build-up insulation film such as ABF"
+      },
+      "use": {
+        "es": "Aísla las capas de un sustrato. La película (ABF, Ajinomoto Build-up Film) y el sustrato terminado son productos distintos.",
+        "en": "Insulates the layers of a substrate. The film (ABF, Ajinomoto Build-up Film) and the finished substrate are different products."
+      },
+      "sources": [
+        "abf"
+      ]
+    },
+    {
+      "id": "substrate-laminate",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Base, aislantes y refuerzo del soporte",
+        "en": "Substrate core, insulation, and reinforcement"
+      },
+      "use": {
+        "es": "Forman el sustrato orgánico multicapa. El diseño determina la combinación de resina, refuerzo y cobre.",
+        "en": "Form the multilayer organic substrate. Design determines the combination of resin, reinforcement and copper."
+      },
+      "sources": [
+        "abf",
+        "doe"
+      ]
+    },
+    {
+      "id": "solder-package",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Soldaduras y bolas que conectan el encapsulado (BGA)",
+        "en": "Solder and package contact balls (BGA)"
+      },
+      "use": {
+        "es": "Unen piezas con aleaciones a base de estaño en las uniones que las usan, incluidas las bolas BGA (matriz de bolas de soldadura). La plata y el cobre dependen de la aleación elegida.",
+        "en": "Join parts with tin-based alloys in the joints that use them, including BGA balls (ball grid array solder balls). Silver and copper depend on the alloy selected."
+      },
+      "sources": [
+        "conflict",
+        "usgs",
+        "doe"
+      ]
+    },
+    {
+      "id": "package-underfill",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Resinas que rellenan huecos y protegen los chips",
+        "en": "Resins that fill gaps and protect the chips"
+      },
+      "use": {
+        "es": "Protegen mecánicamente el encapsulado y ajustan sus propiedades térmicas o de expansión, según lo que pida el proceso.",
+        "en": "Protect the package mechanically and adjust its thermal or expansion properties, as the process requires."
+      },
+      "sources": [
+        "cowos",
+        "abf",
+        "skhynix"
+      ]
+    },
+    {
+      "id": "substrate-contacts",
+      "family": "package",
+      "role": "retained",
+      "name": {
+        "es": "Níquel, oro y otros acabados para los contactos",
+        "en": "Nickel, gold, and other contact finishes"
+      },
+      "use": {
+        "es": "Recubren los contactos para facilitar la unión y el contacto eléctrico. Su presencia y espesor cambian con el sustrato y el uso.",
+        "en": "Coat contacts to enable bonding and electrical contact. Their presence and thickness vary with substrate and use."
+      },
+      "sources": [
+        "conflict",
+        "usgs",
+        "doe"
+      ]
+    },
+    {
+      "id": "probe-hardware",
+      "family": "package",
+      "role": "equipment",
+      "name": {
+        "es": "Sondas, conectores y placas para las pruebas",
+        "en": "Probes, sockets, and boards for testing"
+      },
+      "use": {
+        "es": "Las sondas tocan los contactos de una oblea. Los conectores y las placas de prueba permiten conectar pilas de memoria o aceleradores al equipo que los comprueba.",
+        "en": "Probes touch contacts on a wafer. Sockets and test boards connect memory stacks or assembled accelerators to the equipment that checks them."
+      },
+      "sources": [
+        "amkor",
+        "teradyne"
+      ]
+    },
+    {
+      "id": "pcb-laminate",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Vidrio y resina para fabricar placas de circuito",
+        "en": "Glass and resin for making circuit boards"
+      },
+      "use": {
+        "es": "Aísla y da estructura a la placa de circuito (PCB). Los requisitos de pérdida de señal y temperatura guían la elección del laminado.",
+        "en": "Insulates and gives structure to the printed circuit board (PCB). Signal-loss and temperature requirements guide laminate selection."
+      },
+      "sources": [
+        "doe",
+        "nvidia-system"
+      ]
+    },
+    {
+      "id": "copper-board",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Láminas y capas de cobre para las placas",
+        "en": "Copper foil and plating for circuit boards"
+      },
+      "use": {
+        "es": "Forma las pistas, los planos y las vías de las placas de alimentación, cómputo o red.",
+        "en": "Forms the traces, planes and vias in power, compute or network boards."
+      },
+      "sources": [
+        "doe",
+        "nvidia-system",
+        "usgs"
+      ]
+    },
+    {
+      "id": "board-solder",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Soldadura, pasta y fundente para montar la placa",
+        "en": "Solder, paste, and flux for assembling the board"
+      },
+      "use": {
+        "es": "La soldadura une los componentes a la placa. El fundente ayuda a formar esas juntas y su tratamiento depende de cómo se haga el montaje.",
+        "en": "Solder joins the components to the board. Flux helps those joints form and is handled according to the assembly process."
+      },
+      "sources": [
+        "conflict",
+        "doe"
+      ]
+    },
+    {
+      "id": "passives",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Cerámicas, ferritas y metales de condensadores y bobinas",
+        "en": "Ceramics, ferrites, and metals for capacitors and inductors"
+      },
+      "use": {
+        "es": "Aportan dieléctricos de condensador, núcleos magnéticos y electrodos, según el tipo de componente pasivo.",
+        "en": "Supply capacitor dielectrics, magnetic cores and electrodes, according to the type of passive component."
+      },
+      "sources": [
+        "doe",
+        "usgs"
+      ]
+    },
+    {
+      "id": "tantalum-cap",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Tantalio de algunos condensadores",
+        "en": "Tantalum in some capacitors"
+      },
+      "use": {
+        "es": "Forma el electrodo de los condensadores que usan tantalio. Es una ruta distinta del tantalio de película fina, y su presencia se verifica en cada componente.",
+        "en": "Forms the electrode of capacitors that use tantalum. It is a separate route from thin-film tantalum, and its presence should be verified for each component."
+      },
+      "sources": [
+        "conflict",
+        "usgs"
+      ]
+    },
+    {
+      "id": "power-semi",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Silicio, carburo de silicio y nitruro de galio para convertir corriente",
+        "en": "Silicon, silicon carbide, and gallium nitride for power conversion"
+      },
+      "use": {
+        "es": "Ayudan a convertir la corriente en la forma que necesita el equipo. Según el convertidor se puede usar silicio, carburo de silicio (SiC) o nitruro de galio (GaN).",
+        "en": "These semiconductors help convert electricity into the form the equipment needs. The converter may use silicon, silicon carbide (SiC), or gallium nitride (GaN)."
+      },
+      "sources": [
+        "iea",
+        "iea-minerals",
+        "doe"
+      ]
+    },
+    {
+      "id": "connectors",
+      "family": "board",
+      "role": "retained",
+      "name": {
+        "es": "Aleaciones de cobre y acabados de conector",
+        "en": "Copper alloys and connector finishes"
+      },
+      "use": {
+        "es": "Forman contactos y terminales con acabados y tolerancias que dependen de la aplicación.",
+        "en": "Form contacts and terminals with finishes and tolerances that depend on the application."
+      },
+      "sources": [
+        "conflict",
+        "usgs",
+        "nvidia-system"
+      ]
+    },
+    {
+      "id": "copper-cables",
+      "family": "network",
+      "role": "retained",
+      "name": {
+        "es": "Cobre, aislamiento y blindaje de los cables",
+        "en": "Copper, insulation, and shielding for cables"
+      },
+      "use": {
+        "es": "Transportan señales de alta velocidad en las topologías que los usan. El diseño publicado de GB200 documenta conjuntos de cables dentro del rack.",
+        "en": "Carry high-speed signals in the topologies that use them. The published GB200 design documents in-rack cable assemblies."
+      },
+      "sources": [
+        "ocp-rack",
+        "usgs"
+      ]
+    },
+    {
+      "id": "fiber",
+      "family": "network",
+      "role": "retained",
+      "name": {
+        "es": "Vidrio, aditivos y recubrimiento de la fibra óptica",
+        "en": "Glass, additives, and coatings for optical fiber"
+      },
+      "use": {
+        "es": "Guía la luz con vidrio de sílice, perfiles de índice de refracción definidos y un recubrimiento. El germanio puede entrar como dopante en las fibras que lo usan.",
+        "en": "Guides light using silica glass, defined refractive-index profiles and a coating. Germanium may be used as a dopant in the fibers that use it."
+      },
+      "sources": [
+        "usgs",
+        "iea-minerals"
+      ]
+    },
+    {
+      "id": "optical-semiconductors",
+      "family": "network",
+      "role": "retained",
+      "name": {
+        "es": "Compuestos de galio e indio para óptica",
+        "en": "Gallium and indium compounds for optics"
+      },
+      "use": {
+        "es": "Forman ciertas fuentes de luz y detectores ópticos. La asignación depende del módulo y del diseño.",
+        "en": "Form certain optical light sources and detectors. Assignment depends on module and design."
+      },
+      "sources": [
+        "usgs",
+        "iea-minerals"
+      ]
+    },
+    {
+      "id": "optical-integration",
+      "family": "network",
+      "role": "retained",
+      "name": {
+        "es": "Silicio para guiar luz y materiales para montar el módulo",
+        "en": "Silicon for guiding light and materials for assembling the module"
+      },
+      "use": {
+        "es": "Guían la luz, la acoplan y encapsulan los componentes ópticos en soluciones que adoptan fotónica integrada.",
+        "en": "Guide light, couple it and package the optical components in solutions that use integrated photonics."
+      },
+      "sources": [
+        "doe",
+        "iea-minerals"
+      ]
+    },
+    {
+      "id": "rack-steel",
+      "family": "thermal",
+      "role": "retained",
+      "name": {
+        "es": "Acero estructural y tornillería",
+        "en": "Structural steel and fasteners"
+      },
+      "use": {
+        "es": "Forma el chasis, los refuerzos y los soportes. NVIDIA documenta refuerzos en su diseño GB200 aportado a OCP (Open Compute Project).",
+        "en": "Forms the chassis, reinforcement and mounting. NVIDIA documents reinforcement in its GB200 contribution to OCP (Open Compute Project)."
+      },
+      "sources": [
+        "ocp-rack",
+        "usgs"
+      ]
+    },
+    {
+      "id": "cold-plates",
+      "family": "thermal",
+      "role": "retained",
+      "name": {
+        "es": "Cobre o aluminio para sacar calor",
+        "en": "Copper or aluminum for carrying heat away"
+      },
+      "use": {
+        "es": "Transfieren calor en placas frías, disipadores o intercambiadores, según el diseño y la compatibilidad con el fluido.",
+        "en": "Transfer heat in cold plates, heat sinks or heat exchangers, depending on design and fluid compatibility."
+      },
+      "sources": [
+        "vertiv",
+        "iea-minerals",
+        "usgs"
+      ]
+    },
+    {
+      "id": "tim",
+      "family": "thermal",
+      "role": "retained",
+      "name": {
+        "es": "Materiales para pasar calor del chip al disipador",
+        "en": "Materials that transfer heat from the chip to a cooler"
+      },
+      "use": {
+        "es": "Rellenan el contacto entre el encapsulado y el disipador o la placa fría para reducir la resistencia al paso del calor.",
+        "en": "Fill the contact between the package and the heat sink or cold plate to reduce resistance to heat flow."
+      },
+      "sources": [
+        "nvidia-system",
+        "vertiv"
+      ]
+    },
+    {
+      "id": "liquid-loop",
+      "family": "thermal",
+      "role": "equipment",
+      "name": {
+        "es": "Distribuidores, mangueras y juntas del circuito líquido",
+        "en": "Manifolds, hoses, and seals for the liquid cooling loop"
+      },
+      "use": {
+        "es": "Reparten el fluido, acoplan los tramos y sellan las uniones en diseños con refrigeración líquida.",
+        "en": "Distribute the fluid, couple the sections and seal the joints in liquid-cooling designs."
+      },
+      "sources": [
+        "ocp-rack",
+        "vertiv"
+      ]
+    },
+    {
+      "id": "coolant",
+      "family": "thermal",
+      "role": "consumed",
+      "name": {
+        "es": "Agua tratada y otros líquidos refrigerantes",
+        "en": "Treated water and other coolants"
+      },
+      "use": {
+        "es": "El líquido recoge calor en el servidor y lo lleva hasta otro punto del circuito. El diseño determina la mezcla, los aditivos para proteger el equipo y cuándo hay que cambiarla.",
+        "en": "The liquid picks up heat at the server and takes it elsewhere in the loop. The design determines the mixture, protective additives, and replacement schedule."
+      },
+      "sources": [
+        "vertiv",
+        "iea"
+      ]
+    },
+    {
+      "id": "busbars",
+      "family": "facility",
+      "role": "retained",
+      "name": {
+        "es": "Cobre y aluminio para repartir la corriente",
+        "en": "Copper and aluminum for distributing power"
+      },
+      "use": {
+        "es": "Las barras y cables llevan corriente dentro del rack, por el edificio o desde la red hasta la entrada. Son tres tramos distintos de la instalación.",
+        "en": "Bars and cables carry power within the rack, through the building, or from the grid to the service entrance. They are separate parts of the installation."
+      },
+      "sources": [
+        "ocp-rack",
+        "iea-minerals",
+        "usgs"
+      ]
+    },
+    {
+      "id": "transformers",
+      "family": "facility",
+      "role": "equipment",
+      "name": {
+        "es": "Acero eléctrico, conductores y aislantes de transformadores",
+        "en": "Electrical steel, conductors, and insulation for transformers"
+      },
+      "use": {
+        "es": "El acero, los conductores y los aislantes forman parte de los equipos que cambian el voltaje o distribuyen la corriente. El diseño fija qué aislante necesita y si lleva un líquido.",
+        "en": "Steel, conductors, and insulation go into equipment that changes voltage or distributes power. The design determines the insulation and whether it uses a liquid."
+      },
+      "sources": [
+        "iea",
+        "usgs"
+      ]
+    },
+    {
+      "id": "battery",
+      "family": "facility",
+      "role": "equipment",
+      "name": {
+        "es": "Materiales de las baterías de respaldo",
+        "en": "Materials for backup batteries"
+      },
+      "use": {
+        "es": "Almacenan energía de respaldo con litio, grafito, fósforo, níquel, cobalto o plomo, según la química y la arquitectura elegidas.",
+        "en": "Store backup energy using lithium, graphite, phosphorus, nickel, cobalt or lead, depending on chemistry and architecture."
+      },
+      "sources": [
+        "iea-minerals",
+        "usgs"
+      ]
+    },
+    {
+      "id": "motors",
+      "family": "facility",
+      "role": "equipment",
+      "name": {
+        "es": "Metales e imanes para bombas y ventiladores",
+        "en": "Metals and magnets for pumps and fans"
+      },
+      "use": {
+        "es": "Forman los motores de bombas o ventiladores con cobre, acero y materiales magnéticos. Las tierras raras dependen del tipo de motor.",
+        "en": "Form the motors of pumps or fans from copper, steel and magnetic materials. Rare-earth content depends on motor type."
+      },
+      "sources": [
+        "iea-minerals",
+        "usgs"
+      ]
+    },
+    {
+      "id": "construction",
+      "family": "facility",
+      "role": "equipment",
+      "name": {
+        "es": "Hormigón, acero y áridos",
+        "en": "Concrete, steel and aggregates"
+      },
+      "use": {
+        "es": "Forman el edificio y su cimentación en el sitio. Las cantidades dependen de la obra, los cimientos y el alcance contabilizado.",
+        "en": "Form the building and its foundations on site. Quantities depend on construction, foundations and reporting boundary."
+      },
+      "sources": [
+        "iea-minerals",
+        "usgs"
+      ]
+    },
+    {
+      "id": "reusable-hardware",
+      "family": "recovery",
+      "role": "recovery",
+      "name": {
+        "es": "Módulos, placas y repuestos reutilizables",
+        "en": "Reusable modules, boards and spares"
+      },
+      "use": {
+        "es": "Una placa o un módulo que pasa las pruebas puede volver a trabajar o servir de repuesto. Antes hay que poder identificar la pieza y comprobar su estado.",
+        "en": "A board or module that passes testing can return to service or become a spare. The part needs to be identified and its condition checked first."
+      },
+      "sources": [
+        "h100-pcf",
+        "basel"
+      ]
+    },
+    {
+      "id": "secondary-metals",
+      "family": "recovery",
+      "role": "recovery",
+      "name": {
+        "es": "Cobre, aluminio, acero y fracciones de metales preciosos",
+        "en": "Copper, aluminum, steel and precious-metal fractions"
+      },
+      "use": {
+        "es": "Se separan y recuperan al final de la vida útil del equipo. La masa recuperable depende del diseño y del tratamiento.",
+        "en": "Are separated and recovered at end of life. Recoverable mass depends on design and treatment."
+      },
+      "sources": [
+        "basel",
+        "conflict",
+        "usgs"
+      ]
+    }
+  ],
+  "platforms": [
+    {
+      "id": "rubin",
+      "name": "NVIDIA Rubin GPU",
+      "kind": "GPU",
+      "maturity": {
+        "status": "documented",
+        "text": {
+          "es": "NVIDIA dice que ya ha hecho los primeros envíos en volumen del sistema completo Vera Rubin NVL72.",
+          "en": "NVIDIA says it has begun shipping the full Vera Rubin NVL72 system in volume."
+        },
+        "sources": [
+          "nvidia-q3",
+          "nvidia-supply"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "NVIDIA cita procesos de 3 y 5 nm de TSMC para la plataforma y el procesador Vera en conjunto. La fuente habla del programa completo y deja sin asignar el proceso de cada pieza de silicio.",
+          "en": "NVIDIA cites TSMC's 3 nm and 5 nm processes for the platform and Vera processor together. The disclosure covers the program and leaves the process for each piece of silicon unspecified."
+        },
+        "sources": [
+          "nvidia-tech",
+          "nvidia-supply"
+        ]
+      },
+      "hbm": {
+        "status": "documented",
+        "text": {
+          "es": "NVIDIA indica hasta 288 GB de memoria HBM4 y hasta 22 TB/s para mover datos por GPU. Micron dice que envía en volumen pilas de 36 GB diseñadas para Vera Rubin.",
+          "en": "NVIDIA lists up to 288 GB of HBM4 memory and up to 22 TB/s of data transfer per GPU. Micron says it is shipping 36 GB stacks designed for Vera Rubin in volume."
+        },
+        "sources": [
+          "nvidia-tech",
+          "micron-rubin"
+        ]
+      },
+      "packaging": {
+        "status": "disclosed",
+        "text": {
+          "es": "NVIDIA cita CoWoS, una familia de técnicas para montar y conectar chips, para el programa Vera Rubin. La fuente deja abierta la variante exacta.",
+          "en": "NVIDIA names CoWoS, a family of techniques for mounting and connecting chips, for the Vera Rubin program. The exact variant is unspecified in the disclosure."
+        },
+        "sources": [
+          "nvidia-supply"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "NVIDIA menciona a KYEC como socio de pruebas y a Amkor y SPIL para ensamblar chips. Para esta GPU, las fuentes dejan sin identificar quién hace la prueba, dónde se realiza y qué proporción la supera.",
+          "en": "NVIDIA names KYEC as a testing partner and Amkor and SPIL for chip assembly. For this GPU, the sources leave the test provider, location, and pass rate unspecified."
+        },
+        "sources": [
+          "nvidia-supply",
+          "nvidia-tech"
+        ]
+      },
+      "memoryCapacityGb": 288
+    },
+    {
+      "id": "mi455x",
+      "name": "AMD Instinct MI455X",
+      "kind": "GPU",
+      "maturity": {
+        "status": "documented",
+        "text": {
+          "es": "AMD informa de las primeras cargas de trabajo en sistemas Helios con MI450 Series. Ese dato cubre la familia de productos.",
+          "en": "AMD reports the first workloads on Helios systems using the MI450 Series. That update covers the product family."
+        },
+        "sources": [
+          "amd-q3"
+        ]
+      },
+      "logic": {
+        "status": "documented",
+        "text": {
+          "es": "La MI455X usa el diseño CDNA 5 de AMD. La ficha de esta GPU enumera procesos de TSMC de 2 y 3 nm.",
+          "en": "The MI455X uses AMD's CDNA 5 design. The spec sheet lists TSMC's 2 nm and 3 nm processes for this GPU."
+        },
+        "sources": [
+          "amd-spec",
+          "amd-cdna"
+        ]
+      },
+      "hbm": {
+        "status": "documented",
+        "text": {
+          "es": "AMD declara 432 GB de memoria HBM4 repartidos en 12 pilas y hasta 23,3 TB/s por GPU. AMD y Samsung anunciaron un memorando sobre el suministro principal de esa memoria para la MI455X.",
+          "en": "AMD lists 432 GB of HBM4 across 12 stacks and up to 23.3 TB/s per GPU. AMD and Samsung announced a memorandum about primary supply of that memory for the MI455X."
+        },
+        "sources": [
+          "amd-spec",
+          "amd-cdna",
+          "samsung-amd"
+        ]
+      },
+      "packaging": {
+        "status": "documented",
+        "text": {
+          "es": "AMD describe CoWoS-L para conectar piezas y unión híbrida 3D para apilar los chips de cálculo de CDNA 5. El conjunto va dentro de un módulo llamado EAM.",
+          "en": "AMD describes CoWoS-L for connecting parts and 3D hybrid bonding for stacking CDNA 5 compute dies. The package sits inside a module called an EAM."
+        },
+        "sources": [
+          "amd-cdna",
+          "amd-spec"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "La ficha pública deja sin identificar quién prueba esta GPU y en qué instalación.",
+          "en": "The public spec leaves the test provider and facility for this GPU unspecified."
+        },
+        "sources": [
+          "amd-spec",
+          "amd-cdna"
+        ]
+      },
+      "memoryCapacityGb": 432
+    },
+    {
+      "id": "tpu8t",
+      "name": "Google TPU 8t",
+      "kind": "ASIC",
+      "maturity": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google ha publicado las especificaciones de esta generación. La página recibe solicitudes de interés y explica por separado qué software admite.",
+          "en": "Google has published this generation's specs. The page takes expressions of interest and describes software support separately."
+        },
+        "sources": [
+          "google-tpu",
+          "google-max"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google diseñó este chip para entrenar modelos. Incluye una unidad llamada SparseCore. La publicación deja sin indicar qué proceso o fábrica hizo el chip.",
+          "en": "Google designed this custom chip to train models. It includes a unit called SparseCore. The publication leaves the manufacturing process and foundry unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "hbm": {
+        "status": "documented",
+        "text": {
+          "es": "Cada chip tiene 216 GB de memoria HBM y tiene un ancho de banda de 6.528 GB/s. La tabla deja sin indicar la generación de HBM.",
+          "en": "Each chip has 216 GB of HBM and a published memory bandwidth of 6,528 GB/s. The table leaves the HBM generation unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "packaging": {
+        "status": "undisclosed",
+        "text": {
+          "es": "Google explica cómo funciona el chip y cómo se agrupan muchos en un superpod. El documento deja sin indicar cómo se ensamblan las piezas del chip y quién lo hace.",
+          "en": "Google explains how the chip works and how many chips are grouped in a superpod. The document leaves the packaging method and provider unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "La ficha deja sin indicar quién comprueba los chips antes del envío y en qué instalación.",
+          "en": "The spec leaves the test provider and facility unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "memoryCapacityGb": 216
+    },
+    {
+      "id": "tpu8i",
+      "name": "Google TPU 8i",
+      "kind": "ASIC",
+      "maturity": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google publicó las características del TPU 8i y posteriormente presentó la variante 8i Max. Aquí se muestran las cifras del 8i.",
+          "en": "Google published the TPU 8i specs and later introduced the 8i Max variant. The figures here are for the 8i."
+        },
+        "sources": [
+          "google-tpu",
+          "google-max"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "Es un chip diseñado para ejecutar modelos ya entrenados. Reúne dos piezas de cálculo Tensor Core y una tercera, llamada CAE, para combinar datos entre chips. La fuente deja sin especificar el proceso y la fábrica.",
+          "en": "This custom chip runs trained models. It combines two Tensor Core compute dies with a third die, called CAE, for collective operations between chips. The source leaves the manufacturing process and foundry unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "hbm": {
+        "status": "documented",
+        "text": {
+          "es": "Cada chip lleva 288 GB de memoria HBM. Google indica 8.601 GB/s de ancho de banda y deja sin indicar la generación de la memoria.",
+          "en": "Each chip has 288 GB of HBM. Google lists 8,601 GB/s of memory bandwidth and leaves the generation unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "packaging": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google muestra las piezas de silicio que reúne el chip. En esa publicación quedan sin especificar la técnica que las une y la empresa encargada de hacerlo.",
+          "en": "Google shows the silicon pieces inside the chip. The same publication leaves the joining technology and packaging company unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "La publicación deja sin indicar qué empresa o instalación prueba este modelo.",
+          "en": "The publication leaves the test provider and facility for this model unspecified."
+        },
+        "sources": [
+          "google-tpu"
+        ]
+      },
+      "memoryCapacityGb": 288
+    },
+    {
+      "id": "trainium3",
+      "name": "AWS Trainium3",
+      "kind": "ASIC",
+      "maturity": {
+        "status": "documented",
+        "text": {
+          "es": "AWS anunció que ya se podían usar las instancias EC2 Trn3 UltraServers y publicó las cifras de cada chip.",
+          "en": "AWS announced that EC2 Trn3 UltraServer instances were available and published the specs for each chip."
+        },
+        "sources": [
+          "aws-launch",
+          "aws-spec"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "AWS diseñó un chip específico para esta tarea y cita un proceso de 3 nm. La ficha de EC2 deja sin nombrar a la fábrica.",
+          "en": "AWS designed a custom chip for the task and lists a 3 nm process. The EC2 spec leaves the foundry unnamed."
+        },
+        "sources": [
+          "aws-spec"
+        ]
+      },
+      "hbm": {
+        "status": "documented",
+        "text": {
+          "es": "AWS indica 144 GB de HBM3e por chip. Esa memoria mueve datos a 4,9 TB/s.",
+          "en": "AWS lists 144 GB of HBM3e per chip with 4.9 TB/s of memory bandwidth."
+        },
+        "sources": [
+          "aws-spec"
+        ]
+      },
+      "packaging": {
+        "status": "undisclosed",
+        "text": {
+          "es": "La ficha explica qué chip, qué memoria y qué servidor usa. La técnica que conecta las piezas del chip y quién la fabrica quedan sin detallar.",
+          "en": "The spec describes the chip, memory, and server. It leaves the method used to connect the chip's parts and its packaging provider unspecified."
+        },
+        "sources": [
+          "aws-spec"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "En la ficha consultada quedan sin identificar la empresa y la instalación que prueban el chip.",
+          "en": "The spec leaves the testing company and facility for the chip unspecified."
+        },
+        "sources": [
+          "aws-spec"
+        ]
+      },
+      "memoryCapacityGb": 144
+    },
+    {
+      "id": "tpu8tx",
+      "name": "Google TPU 8tx",
+      "kind": "ASIC",
+      "maturity": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google Cloud presentó el 8tx el 9 de noviembre de 2026 como un sistema para proteger datos mientras se procesan.",
+          "en": "Google Cloud introduced the 8tx on November 9, 2026 as a system for confidential computing, which protects data while it is being processed."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google dice que el 8tx usa el mismo chip del TPU 8t, con un AMD EPYC de quinta generación como procesador principal del servidor.",
+          "en": "Google says the 8tx uses the same silicon as the TPU 8t, with a fifth-generation AMD EPYC as the host processor."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "hbm": {
+        "status": "undisclosed",
+        "text": {
+          "es": "En el anuncio del 8tx quedan por conocer la capacidad de memoria, el ancho de banda y la generación de HBM de cada chip.",
+          "en": "The 8tx announcement leaves the memory capacity, bandwidth, and HBM generation per chip unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "packaging": {
+        "status": "undisclosed",
+        "text": {
+          "es": "Google explica cómo organiza el sistema. El anuncio deja sin detallar cómo se unen físicamente las piezas del chip y quién las monta.",
+          "en": "Google describes how the system is laid out. The announcement leaves the chip's physical assembly method and packaging provider unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "El anuncio deja sin nombrar la empresa o el lugar donde se prueba la variante 8tx.",
+          "en": "The announcement leaves the test provider and site for the 8tx variant unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      }
+    },
+    {
+      "id": "tpu8i-max",
+      "name": "Google TPU 8i Max",
+      "kind": "ASIC",
+      "maturity": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google Cloud presentó el 8i Max el 9 de noviembre de 2026. La comparación que publicó corresponde a esa configuración.",
+          "en": "Google Cloud introduced the 8i Max on November 9, 2026. Its published comparison is for that configuration."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "logic": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google dice que el 8i Max reúne el doble de silicio que el 8i en el mismo espacio de rack. El anuncio deja sin indicar el proceso de fabricación.",
+          "en": "Google says the 8i Max packs twice the silicon of the 8i into the same rack footprint. The announcement leaves the manufacturing process unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "hbm": {
+        "status": "disclosed",
+        "text": {
+          "es": "Google indica el doble de ancho de banda de memoria que en el 8i para la configuración completa. La nota deja sin decir cuánta HBM lleva cada pieza de silicio o de qué generación es.",
+          "en": "Google reports twice the memory bandwidth of the 8i for the full configuration. The note leaves the HBM capacity per die and the HBM generation unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "packaging": {
+        "status": "undisclosed",
+        "text": {
+          "es": "Google detalla cómo se organiza el sistema. La técnica para montar y conectar el silicio y la empresa que lo hace siguen sin detallarse en el anuncio.",
+          "en": "Google details how the system is laid out. The announcement leaves the technique for assembling and connecting the silicon and the packaging provider unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      },
+      "test": {
+        "status": "undisclosed",
+        "text": {
+          "es": "El anuncio deja sin indicar la empresa o la instalación que prueba la variante 8i Max.",
+          "en": "The announcement leaves the test provider and facility for the 8i Max variant unspecified."
+        },
+        "sources": [
+          "google-max"
+        ]
+      }
+    }
+  ]
+}

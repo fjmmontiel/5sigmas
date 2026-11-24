@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00:00.350 --> 00:00:05.250
+Dentro de una GPU, pistas cortas conectan el cálculo y la memoria.
+
+00:00:05.250 --> 00:00:10.150
+En el servidor, unas GPU pueden hablar con otras por enlaces directos.
+
+00:00:10.150 --> 00:00:16.000
+Entre servidores, los conmutadores dirigen los datos por la red.
+
+00:00:16.350 --> 00:00:21.250
+La latencia indica cuánto tarda en llegar el primer dato.
+
+00:00:21.250 --> 00:00:26.150
+El ancho de banda indica cuánto pasa en el mismo tiempo.
+
+00:00:26.150 --> 00:00:32.000
+Una tarea que comparte resultados necesita las dos cosas.

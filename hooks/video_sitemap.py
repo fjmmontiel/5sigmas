@@ -61,6 +61,7 @@ TOPICS = {
     "multimodalidad-iag": ("multimodalidad", "Multimodalidad"),
     "modelos-razonadores": ("razonamiento", "Razonamiento"),
     "ia-pib-bienestar-energia": ("impacto", "Economía, energía y bienestar"),
+    "ai-accelerator-supply-chain": ("infraestructura", "Infraestructura"),
     "datacenters-espacio": ("infraestructura", "Infraestructura"),
     "seguridad-ia": ("seguridad", "Seguridad en IA"),
     "agentes-ia": ("agentes", "Agentes de IA"),

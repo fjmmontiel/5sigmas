@@ -109,6 +109,12 @@ hide:
       <span class="s5-list-row__desc">Por qué los datos pueden influir en las instrucciones y cómo reducir ese riesgo.</span>
       <span class="s5-list-row__meta">Seguridad</span>
     </a>
+    <a class="s5-list-row" href="/series/ai-accelerator-supply-chain/00_presentacion_serie/">
+      <span class="s5-list-row__n">05</span>
+      <span class="s5-list-row__title">De la mina al clúster</span>
+      <span class="s5-list-row__desc">Del mineral al servidor, con las fábricas, el transporte y la energía que necesita una GPU.</span>
+      <span class="s5-list-row__meta">14 capítulos</span>
+    </a>
   </div>
 </section>
 

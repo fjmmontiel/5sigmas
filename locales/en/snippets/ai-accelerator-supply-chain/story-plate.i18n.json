@@ -1,0 +1,7 @@
+{
+  "source": "snippets/ai-accelerator-supply-chain/story-plate.html",
+  "source_blob_sha": "b1c8389bdf63e09eeb94778604de3b2291b7089a",
+  "replacements": {
+    "ac-story-plate\"": "ac-story-plate ac-story-plate-en\""
+  }
+}

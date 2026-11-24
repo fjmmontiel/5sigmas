@@ -89,10 +89,10 @@ const hubLinks = await page.locator(isGallery ? '[data-sx-detail] a[href]' : '.s
 if (isGallery) {
   const detailIds = await page.locator('[data-sx-detail]').evaluateAll(nodes => nodes.map(n => '#' + n.id));
   const destinations = await page.locator('[data-sx-card] .sx-card-art').evaluateAll(nodes => nodes.map(n => n.getAttribute('href')));
-  if (new Set(destinations).size !== 13 || destinations.some(href => !detailIds.includes(href))) failures.push('/en/series/: every card must reach a unique real series presentation');
+  if (new Set(destinations).size !== 14 || destinations.some(href => !detailIds.includes(href))) failures.push('/en/series/: every card must reach a unique real series presentation');
 }
 
-if (hubCardCount !== 13) failures.push(`/en/series/: expected 13 canonical series cards, got ${hubCardCount}`);
+if (hubCardCount !== 14) failures.push(`/en/series/: expected 14 canonical series cards, got ${hubCardCount}`);
 for (const [slug, title] of presentations) {
   const expected = `/en/series/${slug}/00_presentacion_serie/`;
   if (!hubLinks.includes(expected)) failures.push(`/en/series/: missing ${expected}`);

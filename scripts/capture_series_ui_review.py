@@ -141,7 +141,7 @@ def run(args):
                 page.goto(base+'/series/',wait_until='networkidle')
                 shot(page,f'{label}-{variant}-catalog',full=True,meta={'surface':'catalog','state':variant})
                 if variant=='after':
-                    check(f'{label}-13-series',page.locator('[data-sx-card]:visible').count()==13)
+                    check(f'{label}-14-series',page.locator('[data-sx-card]:visible').count()==14)
                     check(f'{label}-catalog-fit',page.evaluate('document.documentElement.scrollWidth<=innerWidth+2'))
                 for item in series:
                     page.goto(base+'/series/#serie-'+item['slug'],wait_until='networkidle')

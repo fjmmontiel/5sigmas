@@ -120,13 +120,13 @@ const assertSeriesHub = async ({ route, entries }) => {
   const cards = page.locator(isGallery ? '[data-sx-card]' : '.s5-simple-list a.s5-list-row');
   const count = await cards.count();
   const body = await page.locator('body').innerText();
-  if (count !== 13) failures.push(`${route}: expected 13 canonical series cards, got ${count}`);
+  if (count !== 14) failures.push(`${route}: expected 14 canonical series cards, got ${count}`);
   if (isGallery) {
     // Follow a reader-realistic path once per series, then verify every relevant
     // chapter while the series detail is visible. The old validator reopened the
     // same card for every chapter and could exhaust the job before later series.
     const destinations = await cards.locator('.sx-card-art').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
-    if (new Set(destinations).size !== 13) failures.push(`${route}: series cards do not have 13 distinct destinations`);
+    if (new Set(destinations).size !== 14) failures.push(`${route}: series cards do not have 14 distinct destinations`);
     const grouped = new Map();
     for (const entry of entries) {
       const slug = entry.targetRoute.match(/\/series\/([^/]+)\//)?.[1];

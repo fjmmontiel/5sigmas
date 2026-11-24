@@ -1,0 +1,7 @@
+{
+  "source": "snippets/ai-accelerator-supply-chain/lifecycle.html",
+  "source_blob_sha": "d4c9be382a1eaf7da2e113c5a46d63ba6998dfee",
+  "replacements": {
+    "data-ac-language=\"{{ life_lang }}\"": "data-ac-language=\"en\""
+  }
+}
