@@ -1,0 +1,67 @@
+<form class="ac-bottleneck">
+  <style>
+    .ac-bottleneck { margin: 1.5rem 0; max-width: 31rem; }
+    .ac-bottleneck fieldset {
+      display: grid;
+      gap: .6rem;
+      border: 1px solid var(--md-default-fg-color--lightest);
+      border-radius: .45rem;
+      padding: .8rem 1rem 1rem;
+    }
+    .ac-bottleneck legend { font-weight: 700; padding-inline: .3rem; }
+    .ac-bottleneck label, .ac-bottleneck .ac-bottleneck-result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 3ch;
+      align-items: baseline;
+      column-gap: .6rem;
+    }
+    .ac-bottleneck input, .ac-bottleneck meter { width: 100%; grid-column: 1 / -1; }
+    .ac-bottleneck output { text-align: end; font-variant-numeric: tabular-nums; }
+    .ac-bottleneck [role="status"] { margin-top: .2rem; font-size: .76rem; }
+    .ac-bottleneck button { justify-self: start; font-size: .7rem; }
+  </style>
+  <fieldset>
+    <legend>{{ demo_title }}</legend>
+    <label>
+      <span>{{ chips_label }}</span><output for="ac-chips" data-count="chips">100</output>
+      <input id="ac-chips" type="range" min="0" max="120" value="100" step="1">
+    </label>
+    <label>
+      <span>{{ memory_label }}</span><output for="ac-memory" data-count="memory">60</output>
+      <input id="ac-memory" type="range" min="0" max="120" value="60" step="1">
+    </label>
+    <div class="ac-bottleneck-result">
+      <strong id="ac-assembled-label">{{ assembled_label }}</strong>
+      <output for="ac-chips ac-memory" data-count="assembled">60</output>
+      <meter min="0" max="120" value="60" aria-labelledby="ac-assembled-label"></meter>
+    </div>
+    <div role="status">
+      {{ chips_left_label }} <span data-count="chips-left">40</span> · {{ memory_left_label }} <span data-count="memory-left">0</span>
+    </div>
+    <button class="md-button" type="reset">{{ reset_label }}</button>
+  </fieldset>
+</form>
+<script>
+  (() => {
+    const form = document.currentScript.previousElementSibling;
+    const chipsInput = form.querySelector("#ac-chips");
+    const memoryInput = form.querySelector("#ac-memory");
+    const meter = form.querySelector("meter");
+    const counters = Object.fromEntries([...form.querySelectorAll("[data-count]")]
+      .map(node => [node.dataset.count, node]));
+    function update() {
+      const chips = chipsInput.valueAsNumber;
+      const memory = memoryInput.valueAsNumber;
+      const assembled = Math.min(chips, memory);
+      counters.chips.textContent = chips;
+      counters.memory.textContent = memory;
+      counters.assembled.textContent = assembled;
+      counters["chips-left"].textContent = chips - assembled;
+      counters["memory-left"].textContent = memory - assembled;
+      meter.value = assembled;
+    }
+    form.addEventListener("input", update);
+    form.addEventListener("reset", () => requestAnimationFrame(update));
+    update();
+  })();
+</script>

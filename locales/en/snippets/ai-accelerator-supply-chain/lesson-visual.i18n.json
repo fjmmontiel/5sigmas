@@ -1,0 +1,7 @@
+{
+  "source": "snippets/ai-accelerator-supply-chain/lesson-visual.html",
+  "source_blob_sha": "25021389753d965bcefa0b15c67c539c57e9563c",
+  "replacements": {
+    "ac-lesson-visual\"": "ac-lesson-visual ac-lesson-visual-en\""
+  }
+}

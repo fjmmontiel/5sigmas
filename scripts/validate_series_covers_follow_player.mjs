@@ -161,9 +161,9 @@ async function desktopFlow(){
   assert.equal(await hub.locator('[data-sx-detail]:visible').count(),0,'fallback series details must be hidden after enhancement');
 
   const cards=page.locator('[data-sx-card]');
-  assert.equal(await cards.count(),13,'series catalogue must expose 13 cards');
-  assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),13,'every series needs a real poster cover');
-  assert.equal(await page.locator('[data-sx-card] [data-sx-card-video][data-src]').count(),13,'every series needs a lazy motion preview');
+  assert.equal(await cards.count(),14,'series catalogue must expose 14 cards');
+  assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),14,'every series needs a real poster cover');
+  assert.equal(await page.locator('[data-sx-card] [data-sx-card-video][data-src]').count(),14,'every series needs a lazy motion preview');
 
   const previews=page.locator('[data-sx-card] [data-sx-card-video]');
   for(let i=0;i<await previews.count();i++){
@@ -256,7 +256,7 @@ async function mobileFlow(){
   await page.goto(base+'/series/',{waitUntil:'networkidle',timeout:60000});
   await declineOptionalMeasurement(page);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'series catalogue must not overflow at 390px');
-  assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),13);
+  assert.equal(await page.locator('[data-sx-card] .sx-card-poster').count(),14);
 
   await page.locator('[data-series-slug="fundamentos-ia-iag"] .sx-card-open').click();
   await page.locator('#serie-fundamentos-ia-iag [data-sx-play]').click();
@@ -319,7 +319,7 @@ try{
   await desktopFlow();
   await mobileFlow();
   await reducedMotionFlow();
-  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 13 covers, visible-source negative case, real offscreen desktop/mobile playback, progress, draggable/resizable follow player, reduced motion');
+  console.log('SERIES_COVERS_FOLLOW_PLAYER_PASS 14 covers, visible-source negative case, real offscreen desktop/mobile playback, progress, draggable/resizable follow player, reduced motion');
 }catch(error){
   const evidence='artifacts/visual-review/follow-player';
   fs.mkdirSync(evidence,{recursive:true});

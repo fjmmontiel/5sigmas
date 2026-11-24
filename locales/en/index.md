@@ -109,6 +109,12 @@ hide:
       <span class="s5-list-row__desc">Why data can influence instructions and how to reduce that risk.</span>
       <span class="s5-list-row__meta">Security</span>
     </a>
+    <a class="s5-list-row" href="/en/series/ai-accelerator-supply-chain/00_presentacion_serie/">
+      <span class="s5-list-row__n">05</span>
+      <span class="s5-list-row__title">From Mine to Cluster</span>
+      <span class="s5-list-row__desc">From minerals to servers, through the factories, transport and power a GPU needs.</span>
+      <span class="s5-list-row__meta">14 chapters</span>
+    </a>
   </div>
 </section>
 

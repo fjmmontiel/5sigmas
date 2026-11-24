@@ -35,6 +35,12 @@ for (const spec of cases) {
       continue;
     }
 
+    async function clickAction(action) {
+      const control = page.locator(`[data-action="${action}"]`);
+      await control.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await control.click();
+    }
+
     const root = page.locator('[data-s5-inference-vram]');
     if (await root.count() !== 1) failures.push(`${spec.route} ${viewport.name}: calculator root missing`);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -69,11 +75,11 @@ for (const spec of cases) {
     const architectureState = await page.locator('[data-output="architectureStatus"]').getAttribute('data-state');
     if (architectureState !== 'warn') failures.push(`${spec.route} ${viewport.name}: invalid GQA geometry was not surfaced`);
 
-    await page.locator('[data-action="reset"]').click();
+    await clickAction('reset');
     const sourceHref = await page.locator('[data-output="sourceLink"]').getAttribute('href');
     if (!sourceHref?.startsWith('https://github.com/meta-llama/')) failures.push(`${spec.route} ${viewport.name}: primary preset source not exposed`);
 
-    await page.locator('[data-action="share"]').click();
+    await clickAction('share');
     if (!page.url().includes('?') || !page.url().includes('ctx=')) failures.push(`${spec.route} ${viewport.name}: share action did not encode the scenario`);
 
     const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
@@ -88,7 +94,7 @@ for (const spec of cases) {
     }
     if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
-    await page.locator('[data-action="reset"]').click();
+    await clickAction('reset');
     await page.screenshot({ path: `${artifactDir}/inference-vram-${spec.locale}-${viewport.name}.png`, fullPage: true });
     await page.close();
   }

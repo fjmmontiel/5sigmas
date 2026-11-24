@@ -1890,3 +1890,255 @@ series/evaluating-ai-systems-production/06-observability-failure-taxonomies-prod
     start: 112
     end: 134
 
+series/ai-accelerator-supply-chain/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: From Mine to Cluster
+  video_summary: "Follow two minerals into a chip, a server and a working cluster. The trip ends with inspection of the parts taken out of service."
+  video_date: '2026-11-24'
+  video_duration: PT96S
+  video_captions: 00_presentacion_serie-visual-text.vtt
+  video_transcript: 00_presentacion_serie-transcript.html
+  video_chapters:
+  - name: From quartz to silicon.
+    start: 0
+    end: 16
+  - name: Many chips on one wafer.
+    start: 16
+    end: 32
+  - name: The chip connects to its memory.
+    start: 32
+    end: 48
+  - name: The GPU goes into a server.
+    start: 48
+    end: 64
+  - name: GPUs work across servers.
+    start: 64
+    end: 80
+  - name: Reuse parts, recover metals.
+    start: 80
+    end: 96
+series/ai-accelerator-supply-chain/01-que-estamos-fabricando.md:
+  video: 01-que-estamos-fabricando.mp4
+  video_poster: 01-que-estamos-fabricando.jpg
+  video_title: What a GPU does inside a server
+  video_summary: "Put a GPU on a board and into a server. Count the GPUs in four servers as the network links them."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 01-que-estamos-fabricando-visual-text.vtt
+  video_transcript: 01-que-estamos-fabricando-transcript.html
+  video_chapters:
+  - name: In a server
+    start: 0
+    end: 16
+  - name: Count the right thing
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/02-mina-material-electronico.md:
+  video: 02-mina-material-electronico.mp4
+  video_poster: 02-mina-material-electronico.jpg
+  video_title: From quartz to a silicon disk
+  video_summary: "Quartz follows two paths that meet when silicon grows into a crystal. Watch the crystal become a wafer."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 02-mina-material-electronico-visual-text.vtt
+  video_transcript: 02-mina-material-electronico-transcript.html
+  video_chapters:
+  - name: Quartz takes two paths
+    start: 0
+    end: 16
+  - name: One crystal, many disks
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/03-consumos-fab.md:
+  video: 03-consumos-fab.mp4
+  video_poster: 03-consumos-fab.jpg
+  video_title: Why each chip layer needs to be clean
+  video_summary: "A rinse removes a particle from a wafer. Then follow the inputs and waste streams of the process equipment."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 03-consumos-fab-visual-text.vtt
+  video_transcript: 03-consumos-fab-transcript.html
+  video_chapters:
+  - name: One particle matters
+    start: 0
+    end: 16
+  - name: What comes in and out
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.md:
+  video: 04-diseno-ip-mascaras.mp4
+  video_poster: 04-diseno-ip-mascaras.jpg
+  video_title: How a chip design is prepared for manufacturing
+  video_summary: "Move two tracks until they meet the spacing rule. Follow their pattern from the layout to the mask."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 04-diseno-ip-mascaras-visual-text.vtt
+  video_transcript: 04-diseno-ip-mascaras-transcript.html
+  video_chapters:
+  - name: Leave room between traces
+    start: 0
+    end: 16
+  - name: From drawing to mask
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.md:
+  video: 05-oblea-maquinas-fab.mp4
+  video_poster: 05-oblea-maquinas-fab.jpg
+  video_title: How multiple chips are made on one disk
+  video_summary: "Light patterns a protective coating. See what it protects and count how many chips pass an electrical test."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 05-oblea-maquinas-fab-visual-text.vtt
+  video_transcript: 05-oblea-maquinas-fab-transcript.html
+  video_chapters:
+  - name: Light makes a pattern
+    start: 0
+    end: 16
+  - name: One pattern, many chips
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.md:
+  video: 06-cadena-memoria-hbm.mp4
+  video_poster: 06-cadena-memoria-hbm.jpg
+  video_title: How a GPU’s memory is stacked
+  video_summary: "Compare memory capacity with data transferred per second. Watch metal links connect the stacked layers."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 06-cadena-memoria-hbm-visual-text.vtt
+  video_transcript: 06-cadena-memoria-hbm-transcript.html
+  video_chapters:
+  - name: Space and speed
+    start: 0
+    end: 16
+  - name: Memory goes up
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/07-chiplets-encapsulado.md:
+  video: 07-chiplets-encapsulado.mp4
+  video_poster: 07-chiplets-encapsulado.jpg
+  video_title: How the compute chip connects to memory
+  video_summary: "Follow a signal across a shared base, then compare how a bridge and a vertical stack connect the parts."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 07-chiplets-encapsulado-visual-text.vtt
+  video_transcript: 07-chiplets-encapsulado-transcript.html
+  video_chapters:
+  - name: A base under both chips
+    start: 0
+    end: 16
+  - name: Follow each connection
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.md:
+  video: 08-sustratos-ensamblaje-pruebas.mp4
+  video_poster: 08-sustratos-ensamblaje-pruebas.jpg
+  video_title: How a GPU is tested before it ships
+  video_summary: "A probe touches the chip contacts. After assembly, the signal reaches an open contact and stops."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 08-sustratos-ensamblaje-pruebas-visual-text.vtt
+  video_transcript: 08-sustratos-ensamblaje-pruebas-transcript.html
+  video_chapters:
+  - name: Test before cutting
+    start: 0
+    end: 16
+  - name: Test the connection
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/09-paquete-sistema.md:
+  video: 09-paquete-sistema.mp4
+  video_poster: 09-paquete-sistema.jpg
+  video_title: How a GPU goes into a server
+  video_summary: "Fit a GPU board inside a chassis, then follow a shipment from packing to inspection at receiving."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 09-paquete-sistema-visual-text.vtt
+  video_transcript: 09-paquete-sistema-transcript.html
+  video_chapters:
+  - name: Build the server
+    start: 0
+    end: 16
+  - name: Follow one shipment
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/10-red-cluster.md:
+  video: 10-red-cluster.mp4
+  video_poster: 10-red-cluster.jpg
+  video_title: How GPUs exchange data
+  video_summary: "Follow a signal across three scales. Two timelines show which data arrives first and which link carries more."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 10-red-cluster-visual-text.vtt
+  video_transcript: 10-red-cluster-transcript.html
+  video_chapters:
+  - name: Distance changes the path
+    start: 0
+    end: 16
+  - name: Arrival and throughput
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.md:
+  video: 11-electricidad-refrigeracion-obra.mp4
+  video_poster: 11-electricidad-refrigeracion-obra.jpg
+  video_title: How servers get power and stay cool
+  video_summary: "Watch power reach the rack and follow heat from a chip through cooling equipment and out of the building."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 11-electricidad-refrigeracion-obra-visual-text.vtt
+  video_transcript: 11-electricidad-refrigeracion-obra-transcript.html
+  video_chapters:
+  - name: Power comes in
+    start: 0
+    end: 16
+  - name: Heat goes out
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/12-instalado-utilizable.md:
+  video: 12-instalado-utilizable.mp4
+  video_poster: 12-instalado-utilizable.jpg
+  video_title: The first test with servers working together
+  video_summary: "Start a server and check that its GPUs appear. Follow a test split across three servers to the final result."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 12-instalado-utilizable-visual-text.vtt
+  video_transcript: 12-instalado-utilizable-transcript.html
+  video_chapters:
+  - name: Power on and detect
+    start: 0
+    end: 16
+  - name: One job across servers
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/13-geografia-capacidad.md:
+  video: 13-geografia-capacidad.mp4
+  video_poster: 13-geografia-capacidad.jpg
+  video_title: How one missing part can slow the supply chain
+  video_summary: "Watch the bottleneck move from memory to chips. The bars show what can be assembled and what is left over."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 13-geografia-capacidad-visual-text.vtt
+  video_transcript: 13-geografia-capacidad-transcript.html
+  video_chapters:
+  - name: Memory sets the limit
+    start: 0
+    end: 16
+  - name: The limit moves
+    start: 16
+    end: 32
+series/ai-accelerator-supply-chain/14-segunda-vida.md:
+  video: 14-segunda-vida.mp4
+  video_poster: 14-segunda-vida.jpg
+  video_title: What can be reused or recycled from a server
+  video_summary: "A tested board can go back into a server. Follow a separate path from a damaged cable to recovered copper."
+  video_date: '2026-11-24'
+  video_duration: PT32S
+  video_captions: 14-segunda-vida-visual-text.vtt
+  video_transcript: 14-segunda-vida-transcript.html
+  video_chapters:
+  - name: A board can work again
+    start: 0
+    end: 16
+  - name: Recover the material
+    start: 16
+    end: 32

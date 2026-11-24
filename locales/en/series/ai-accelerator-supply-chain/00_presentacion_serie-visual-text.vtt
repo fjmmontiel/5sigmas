@@ -1,0 +1,55 @@
+WEBVTT
+
+00:00:00.350 --> 00:00:05.250
+The silicon in a chip starts with quartz from a mine.
+
+00:00:05.250 --> 00:00:10.150
+Slice the silicon into thin disks. Each disk is a wafer.
+
+00:00:10.150 --> 00:00:16.000
+Copper from another mine will carry the current.
+
+00:00:16.350 --> 00:00:21.250
+The wafer lets us make many chips at once.
+
+00:00:21.250 --> 00:00:26.150
+A probe touches each chip's contacts to test it.
+
+00:00:26.150 --> 00:00:32.000
+Cut the wafer and watch one chip come free.
+
+00:00:32.350 --> 00:00:37.250
+The chip we just cut from the wafer does the calculations.
+
+00:00:37.250 --> 00:00:42.150
+A stack of memory sits next to it to feed it data fast. That is HBM.
+
+00:00:42.150 --> 00:00:48.000
+Short links join the chip to its memory. Now we test the GPU.
+
+00:00:48.350 --> 00:00:53.250
+The GPU goes on a circuit board that connects it to the server.
+
+00:00:53.250 --> 00:00:58.150
+The board goes inside the server. The whole computer goes in a crate.
+
+00:00:58.150 --> 00:01:04.000
+On arrival, the server slides into a cabinet called a rack.
+
+00:01:04.350 --> 00:01:09.250
+Follow the line from the power grid to the servers.
+
+00:01:09.250 --> 00:01:14.150
+Chips get hot as they work. Cooling carries that heat away.
+
+00:01:14.150 --> 00:01:20.000
+Servers that share the work over a network form a cluster.
+
+00:01:20.350 --> 00:01:25.250
+When a server comes out of service, its parts are checked.
+
+00:01:25.250 --> 00:01:30.150
+A working board can move into another server.
+
+00:01:30.150 --> 00:01:36.000
+A recycler can recover metals from discarded parts.

@@ -59,6 +59,7 @@
 - [Context engineering, memoria y MCP](https://5sigmas.com/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/index.html.md): ensamblado de contexto, presupuestos, memoria, retrieval, MCP, extensiones y aislamiento.
 - [Ingeniería y economía de inferencia de LLMs](https://5sigmas.com/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/index.html.md): prefill, decode, KV cache, cuantización, optimizaciones, routing y benchmarking de serving.
 - [Evaluar sistemas de IA en producción](https://5sigmas.com/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/index.html.md): fronteras de evaluación, eval sets, jueces, trayectorias, experimentación online y feedback loops de producción.
+- [De la mina al clúster](https://5sigmas.com/series/ai-accelerator-supply-chain/00_presentacion_serie/index.html.md): materiales, fabricación, transporte, energía y recuperación de una GPU.
 
 ## Ingeniería de sistemas de IA
 

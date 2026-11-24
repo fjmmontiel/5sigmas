@@ -44,6 +44,7 @@ TOPICS = {
     "multimodalidad-iag": ("multimodality", "Multimodality"),
     "modelos-razonadores": ("reasoning", "Reasoning"),
     "ia-pib-bienestar-energia": ("impact", "Economics, energy and well-being"),
+    "ai-accelerator-supply-chain": ("infrastructure", "Infrastructure"),
     "datacenters-espacio": ("infrastructure", "Infrastructure"),
     "seguridad-ia": ("security", "AI security"),
     "agentes-ia": ("agents", "AI agents"),

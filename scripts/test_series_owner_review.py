@@ -26,7 +26,7 @@ def run(args):
    return page.frames[1]
   def shot(n):
    page.screenshot(path=str(out/(n+'.png')));report['captures'].append(n+'.png')
-  f=ready();check('13-visible-catalog-cards',f.locator('[data-sx-card]:visible').count()==13)
+  f=ready();check('14-visible-catalog-cards',f.locator('[data-sx-card]:visible').count()==14)
   check('catalog-before-path-map',not f.locator('#mapa').evaluate('e=>e.open'))
   check('4-learning-paths',f.locator('.sx-path').count()==4,f.locator('.sx-path').count())
   search=f.locator('[data-sx-search]');search.fill('prefill');page.wait_for_timeout(100)

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-24",
   "currency": "USD",
   "unit": "per_1m_tokens",
   "freshness_policy": {
@@ -13,6 +13,101 @@
     "en": "Public API prices verified against primary documentation. Every rate remains editable. Cache represents reads of already-cached tokens; cache writes and storage are not modelled. Tool calls, search, priority processing and other add-ons are also excluded unless explicitly stated."
   },
   "presets": [
+    {
+      "id": "openai-gpt-6-2-astra",
+      "provider": "OpenAI",
+      "model": "GPT-6.2 Astra",
+      "input_usd_per_million": 8,
+      "cached_input_usd_per_million": 0.4,
+      "output_usd_per_million": 40,
+      "source": {
+        "title": "GPT-6.2 Astra · API model pricing",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6.2-astra",
+        "verified_on": "2026-11-24"
+      },
+      "notes": {
+        "es": "Tarifa de texto estándar. Por encima de 272.000 tokens de entrada, entrada y caché se cobran al doble y salida a 1,5 veces.",
+        "en": "Standard text API rates. Above 272,000 input tokens, input and cache rates double and output is multiplied by 1.5."
+      },
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2,
+        "output_multiplier": 1.5
+      }
+    },
+    {
+      "id": "openai-gpt-6-2-sol",
+      "provider": "OpenAI",
+      "model": "GPT-6.2 Sol",
+      "input_usd_per_million": 2,
+      "cached_input_usd_per_million": 0.1,
+      "output_usd_per_million": 10,
+      "source": {
+        "title": "GPT-6.2 Sol · API model pricing",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6.2-sol",
+        "verified_on": "2026-11-24"
+      },
+      "notes": {
+        "es": "Tarifa de texto estándar. Por encima de 272.000 tokens de entrada, entrada y caché se cobran al doble y salida a 1,5 veces.",
+        "en": "Standard text API rates. Above 272,000 input tokens, input and cache rates double and output is multiplied by 1.5."
+      },
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2,
+        "output_multiplier": 1.5
+      }
+    },
+    {
+      "id": "anthropic-claude-fable-5-2",
+      "provider": "Anthropic",
+      "model": "Claude Fable 5.2",
+      "input_usd_per_million": 8,
+      "cached_input_usd_per_million": 0.2,
+      "output_usd_per_million": 40,
+      "source": {
+        "title": "Claude Fable 5.2 · API model pricing",
+        "url": "https://platform.claude.com/docs/en/models/fable-5-2/overview",
+        "verified_on": "2026-11-24"
+      },
+      "notes": {
+        "es": "Tarifas estándar de Claude API. Las lecturas de caché cuestan el 2,5 % de la tarifa base de entrada.",
+        "en": "Standard Claude API rates. Cache reads cost 2.5% of the base input rate."
+      }
+    },
+    {
+      "id": "google-gemini-4-neon",
+      "provider": "Google",
+      "model": "Gemini 4 Neon",
+      "input_usd_per_million": 3,
+      "cached_input_usd_per_million": 0.15,
+      "output_usd_per_million": 15,
+      "source": {
+        "title": "Gemini 4 Neon · API model pricing",
+        "url": "https://aistudio.google.com/docs/models/gemini-4-neon",
+        "verified_on": "2026-11-24"
+      },
+      "notes": {
+        "es": "Tarifa síncrona estándar de Gemini API. El almacenamiento de caché se factura aparte.",
+        "en": "Standard synchronous Gemini API pricing. Cache storage is billed separately."
+      }
+    },
+    {
+      "id": "google-gemini-4-hydrogen",
+      "provider": "Google",
+      "model": "Gemini 4 Hydrogen",
+      "input_usd_per_million": 1.5,
+      "cached_input_usd_per_million": 0.075,
+      "output_usd_per_million": 7.5,
+      "source": {
+        "title": "Gemini 4 Hydrogen · API model pricing",
+        "url": "https://aistudio.google.com/docs/models/gemini-4-hydrogen",
+        "verified_on": "2026-11-24"
+      },
+      "notes": {
+        "es": "Tarifa síncrona estándar de Gemini API. El almacenamiento de caché se factura aparte.",
+        "en": "Standard synchronous Gemini API pricing. Cache storage is billed separately."
+      }
+    },
     {
       "id": "openai-gpt-6-1-sol",
       "provider": "OpenAI",
@@ -28,7 +123,7 @@
       "source": {
         "title": "GPT-6.1 Sol Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Modelo actual para trabajo complejo con rendimiento cercano a Astra. Contexto de 1,05M; por encima de 272k tokens de entrada, OpenAI aplica 2× a entrada/caché y 1,5× a salida para toda la solicitud.",
@@ -50,7 +145,7 @@
       "source": {
         "title": "GPT-6.1 Terra Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Modelo para razonamiento visual y uso de ordenador; contexto de 1,05M. Por encima de 272k tokens de entrada se aplican 2× a entrada/caché y 1,5× a salida.",
@@ -72,7 +167,7 @@
       "source": {
         "title": "GPT-6 Astra Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Modelo insignia actual. Por encima de 272k tokens de entrada, OpenAI aplica 2× a entrada/caché y 1,5× a salida para toda la solicitud.",
@@ -89,7 +184,7 @@
       "source": {
         "title": "Claude Sonnet 5.5 | Claude Platform Docs",
         "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Claude Sonnet 5.5: 1M de contexto y hasta 128K de salida. Tarifas estándar 2 USD/MTok de entrada, 0,10 de lectura de caché (reducida el 07-10-2026) y 10 de salida.",
@@ -111,7 +206,7 @@
       "source": {
         "title": "Claude Haiku 5.5 | Claude Platform Docs",
         "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Claude Haiku 5.5: 1M de contexto, hasta 128K de salida. Con prompts de hasta 100k tokens: 0,10/0,01/0,50 USD por MTok de entrada/lectura de caché/salida. Por encima de 100k tokens de entrada: 0,50/0,05/2,50 para toda la solicitud; el ajuste se aplica automáticamente.",
@@ -133,7 +228,7 @@
       "source": {
         "title": "GPT-6 Luna Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Modelo actual de alta eficiencia. La regla de contexto largo >272k se aplica automáticamente.",
@@ -155,7 +250,7 @@
       "source": {
         "title": "GPT-5.6 Sol Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Precio promocional publicado hasta el 30-11-2026; contexto largo >272k: 2× entrada y 1,5× salida.",
@@ -177,7 +272,7 @@
       "source": {
         "title": "GPT-5.6 Terra Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Baseline GPT-5.6 todavía publicado; contexto largo >272k se aplica automáticamente.",
@@ -199,7 +294,7 @@
       "source": {
         "title": "GPT-5.6 Luna Model | OpenAI API",
         "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Baseline GPT-5.6 de bajo coste todavía publicado; contexto largo >272k se aplica automáticamente.",
@@ -223,7 +318,7 @@
       "source": {
         "title": "Gemini 4 Argon pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en#gemini-4-argon",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Disponible en Gemini API y Google AI Studio, sin nivel gratuito. Tarifa introductoria de 2/0,10/10 USD por MTok de entrada/lectura de caché/salida hasta el 30-11-2026; desde el 01-12-2026, 4/0,20/20. Solo admite caché implícita; grounding se factura aparte. Entrada, razonamiento y salida comparten una ventana de 1.048.576 tokens.",
@@ -247,7 +342,7 @@
       "source": {
         "title": "Gemini 3.8 Flash pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Tarifa introductoria hasta el 31-12-2026; desde el 01-01-2027 Google publica 1,50/0,15/7,50 USD por MTok. El almacenamiento de caché y grounding se facturan aparte.",
@@ -264,7 +359,7 @@
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
         "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-        "verified_on": "2026-11-06"
+        "verified_on": "2026-11-24"
       },
       "notes": {
         "es": "Tarifa estándar de Gemini 3.5 Flash-Lite para entrada de texto, imagen, vídeo y audio. El almacenamiento de caché por hora y grounding se facturan aparte.",
@@ -273,8 +368,13 @@
     }
   ],
   "release_coverage": {
-    "reviewed_through": "2026-11-06",
+    "reviewed_through": "2026-11-24",
     "included": [
+      "GPT-6.2 Astra",
+      "GPT-6.2 Sol",
+      "Claude Fable 5.2",
+      "Gemini 4 Neon",
+      "Gemini 4 Hydrogen",
       "GPT-6.1 Sol",
       "GPT-6.1 Terra",
       "GPT-6 Astra",

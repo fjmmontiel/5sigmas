@@ -1,0 +1,7 @@
+{
+  "source": "snippets/ai-accelerator-supply-chain/bottleneck-demo.html",
+  "source_blob_sha": "7adab55437a3b05a56fc7ecdc6658a84b1b37e8b",
+  "replacements": {
+    "ac-bottleneck\"": "ac-bottleneck ac-bottleneck-en\""
+  }
+}

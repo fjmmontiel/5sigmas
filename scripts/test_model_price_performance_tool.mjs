@@ -42,9 +42,9 @@ assert.match(data.release_coverage?.source?.url || '', /^https:\/\/artificialana
 assert.ok(data.models.length >= 15, 'expected the refreshed current comparison set');
 
 for (const requiredRelease of [
-  'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'GPT-6 Luna', 'GPT-6 Astra', 'Grok 4.7',
-  'Gemini 3.8 Flash', 'Qwen3.8 Max (0902)', 'MiMo-V2.6-Pro', 'Step 5 Preview',
-  'GLM 5.3 Flash', 'Claude Fable 5.1', 'Mistral Large 4', 'Claude Haiku 5.5', 'GPT-6.1 Terra'
+  'Claude Opus 5.5', 'Claude Sonnet 5.5', 'GPT-6.2 Sol', 'GPT-6 Luna', 'GPT-6.2 Astra', 'Grok 4.7',
+  'Gemini 4 Neon', 'Gemini 4 Hydrogen', 'Qwen4 Max', 'MiMo-V2.6-Pro', 'Step 5 Preview',
+  'GLM 5.3 Flash', 'Claude Fable 5.2', 'Mistral Large 4', 'Claude Haiku 5.5', 'GPT-6.1 Terra'
 ]) {
   assert.ok(data.release_coverage.included_release_names.includes(requiredRelease), `${requiredRelease}: release coverage missing`);
 }
@@ -90,6 +90,11 @@ for (const model of data.models) {
 
 for (const retiredId of [
   'anthropic-claude-opus-5-max',
+  'anthropic-claude-fable-5-1-max',
+  'openai-gpt-6-astra-max',
+  'openai-gpt-6-1-sol-max',
+  'google-gemini-3-8-flash-high',
+  'alibaba-qwen-3-8-max-0902',
   'openai-gpt-5-6-sol-max',
   'openai-gpt-6-sol-max',
   'openai-gpt-5-6-luna-max',
@@ -102,10 +107,10 @@ const byId = new Map(data.models.map((model) => [model.id, model]));
 const opus = byId.get('anthropic-claude-opus-5-5-xhigh');
 const sonnet = byId.get('anthropic-claude-sonnet-5-5-max');
 const haiku = byId.get('anthropic-claude-haiku-5-5-max');
-const astra = byId.get('openai-gpt-6-astra-max');
-const sol = byId.get('openai-gpt-6-1-sol-max');
+const astra = byId.get('openai-gpt-6-2-astra-max');
+const sol = byId.get('openai-gpt-6-2-sol-max');
 const luna = byId.get('openai-gpt-6-luna-max');
-const gemini = byId.get('google-gemini-3-8-flash-high');
+const gemini = byId.get('google-gemini-4-hydrogen-high');
 const grok = byId.get('spacexai-grok-4-7-high');
 const mistralLarge4 = byId.get('mistral-mistral-large-4-high');
 for (const model of [opus, sonnet, astra, sol, luna, gemini, grok, mistralLarge4]) assert.ok(model, 'required refreshed comparison model missing');
@@ -114,10 +119,10 @@ assert.deepEqual([opus.input_usd_per_million, opus.output_usd_per_million], [4, 
 assert.deepEqual([sonnet.input_usd_per_million, sonnet.output_usd_per_million], [2, 10]);
 assert.deepEqual([haiku.input_usd_per_million, haiku.output_usd_per_million], [0.1, 0.5]);
 assert.deepEqual([haiku.long_context.threshold_input_tokens,haiku.long_context.input_multiplier,haiku.long_context.output_multiplier], [100000,5,5]);
-assert.deepEqual([astra.input_usd_per_million, astra.output_usd_per_million], [10, 50]);
+assert.deepEqual([astra.input_usd_per_million, astra.output_usd_per_million], [8, 40]);
 assert.deepEqual([sol.input_usd_per_million, sol.output_usd_per_million], [2, 10]);
 assert.deepEqual([luna.input_usd_per_million, luna.output_usd_per_million], [0.1, 0.5]);
-assert.deepEqual([gemini.input_usd_per_million, gemini.output_usd_per_million], [0.75, 3.75]);
+assert.deepEqual([gemini.input_usd_per_million, gemini.output_usd_per_million], [1.50, 7.50]);
 assert.deepEqual([grok.input_usd_per_million, grok.output_usd_per_million], [2, 6]);
 assert.deepEqual([mistralLarge4.input_usd_per_million, mistralLarge4.output_usd_per_million], [0.7, 2.1]);
 assert.equal(mistralLarge4.context_tokens, 1000000);
@@ -126,11 +131,13 @@ assert.equal(mistralLarge4.intelligence_index, 26);
 // A later source-confirmed recovery must be allowed to restore numeric values.
 
 {
-  const current = api.resolvePricing(gemini, '2026-09-24T12:00:00Z');
+  const scheduled = { input_usd_per_million: 0.75, output_usd_per_million: 3.75,
+    future_price: { effective_from: '2027-01-01', input_usd_per_million: 1.5, output_usd_per_million: 7.5 } };
+  const current = api.resolvePricing(scheduled, '2026-09-24T12:00:00Z');
   close(current.input, 0.75, 1e-12, 'Gemini current input');
   close(current.output, 3.75, 1e-12, 'Gemini current output');
   assert.equal(current.effectiveFrom, null);
-  const future = api.resolvePricing(gemini, '2027-01-01T00:00:00Z');
+  const future = api.resolvePricing(scheduled, '2027-01-01T00:00:00Z');
   close(future.input, 1.5, 1e-12, 'Gemini future input');
   close(future.output, 7.5, 1e-12, 'Gemini future output');
   assert.equal(future.effectiveFrom, '2027-01-01');

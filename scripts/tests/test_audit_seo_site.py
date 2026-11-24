@@ -38,5 +38,22 @@ class SeoAuditTest(unittest.TestCase):
             self.assertEqual(report["stats"]["sitemap_invalid"], 1)
 
 
+    def test_linked_media_is_checked_but_has_no_html_canonical(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "index.html").write_text(
+                '<link rel="canonical" href="https://5sigmas.com/">'
+                '<a href="/portrait.mp4">Portrait video</a>'
+                '<a href="/missing.webp">Diagram</a>',
+                encoding="utf-8",
+            )
+            (root / "portrait.mp4").write_bytes(b"video placeholder")
+            report = crawl(SiteReader(root=root, base_url="https://5sigmas.com", timeout=2, workers=2))
+            self.assertEqual(report["stats"]["linked_media"], 1)
+            self.assertEqual(report["stats"]["invalid_canonicals"], 0)
+            self.assertEqual(report["stats"]["broken_internal_links"], 1)
+            self.assertEqual(report["broken_links"][0]["target"], "https://5sigmas.com/missing.webp")
+
+
 if __name__ == "__main__":
     unittest.main()

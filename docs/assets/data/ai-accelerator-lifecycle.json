@@ -1,0 +1,2791 @@
+{
+  "asOf": "2026-11-23",
+  "stages": {
+    "mining": {
+      "name": {
+        "es": "Sacar el mineral",
+        "en": "Mine the raw materials"
+      },
+      "inputs": {
+        "es": "Yacimiento, permisos, maquinaria, agua y energía",
+        "en": "A deposit, permits, machinery, water, and power"
+      },
+      "output": {
+        "es": "Mineral extraído, concentrado o sílice clasificada",
+        "en": "Mined ore, concentrate, or graded silica"
+      },
+      "detail": {
+        "es": "El cuarzo del que sale el silicio, el cobre de las conexiones y la bauxita del aluminio vienen de explotaciones distintas. El estaño, el tantalio, el tungsteno y el oro también tienen rutas propias.",
+        "en": "The quartz that supplies silicon, the copper used in connections, and the bauxite that supplies aluminum come from different mines. Tin, tantalum, tungsten, and gold each have their own routes too."
+      },
+      "sources": [
+        "usgs",
+        "sibelco"
+      ]
+    },
+    "refining": {
+      "name": {
+        "es": "Separar y purificar",
+        "en": "Separate and purify"
+      },
+      "inputs": {
+        "es": "Metal o concentrado, productos químicos y medidas de impurezas",
+        "en": "Metal or concentrate, chemicals, and impurity measurements"
+      },
+      "output": {
+        "es": "Metal, producto químico, polisilicio o cuarzo de una pureza definida",
+        "en": "Metal, a process chemical, polysilicon, or quartz of a defined purity"
+      },
+      "detail": {
+        "es": "Una planta concentra el mineral. Otra puede refinarlo hasta la pureza que exige el comprador. Incluso dentro de la ruta del cuarzo, el silicio del chip y el recipiente donde se funde se preparan por separado.",
+        "en": "One plant concentrates the ore. Another can refine it until it meets the buyer's purity requirements. Even along the quartz route, the chip's silicon and the vessel that holds it while it melts are prepared separately."
+      },
+      "sources": [
+        "sumco",
+        "tokuyama",
+        "conflict"
+      ]
+    },
+    "wafering": {
+      "name": {
+        "es": "Cortar discos de silicio",
+        "en": "Slice silicon wafers"
+      },
+      "inputs": {
+        "es": "Silicio purificado, recipiente para fundirlo, gases y útiles de pulido",
+        "en": "Purified silicon, a vessel for melting it, gases, and polishing tools"
+      },
+      "output": {
+        "es": "Disco pulido y revisado, listo para una fábrica concreta",
+        "en": "A polished, inspected wafer ready for a particular factory"
+      },
+      "detail": {
+        "es": "El silicio se enfría de forma controlada para formar un cristal. Se corta en discos, se pulen y se revisa su superficie antes de enviarlos.",
+        "en": "Silicon cools under controlled conditions to form a crystal. The crystal is sliced into disks, which are polished and checked before shipping."
+      },
+      "sources": [
+        "sumco",
+        "cmp"
+      ]
+    },
+    "design": {
+      "name": {
+        "es": "Diseñar el chip",
+        "en": "Design the chip"
+      },
+      "inputs": {
+        "es": "Qué debe hacer el chip, circuitos reutilizables, programas y reglas de la fábrica",
+        "en": "The chip's job, reusable circuit designs, software, and the factory's rules"
+      },
+      "output": {
+        "es": "Planos comprobados y plantillas para reproducir los circuitos",
+        "en": "Checked layouts and templates for reproducing the circuits"
+      },
+      "detail": {
+        "es": "El equipo comprueba que los circuitos se pueden fabricar con el proceso elegido. El patrón que la máquina copiará a la oblea queda grabado en una plantilla física llamada máscara.",
+        "en": "The team checks that the factory can build the circuits with the chosen process. The pattern that the machine will copy onto the wafer is recorded on a physical template called a mask."
+      },
+      "sources": [
+        "tsmc-oip",
+        "asml-process"
+      ]
+    },
+    "fab-build": {
+      "name": {
+        "es": "Preparar la fábrica",
+        "en": "Set up the factory"
+      },
+      "inputs": {
+        "es": "Obra, personal, zonas sin polvo, energía, agua pura, gases y tratamiento de residuos",
+        "en": "Construction, staff, cleanrooms, power, pure water, gases, and waste treatment"
+      },
+      "output": {
+        "es": "Máquinas instaladas y servicios listos para fabricar",
+        "en": "Installed machines and factory services ready for production"
+      },
+      "detail": {
+        "es": "La fábrica tiene que demostrar que las máquinas funcionan con los suministros reales del edificio. Eso incluye que llegue agua suficientemente pura y que la planta pueda tratar los residuos del proceso.",
+        "en": "The factory must demonstrate that its machines work with the building's actual utilities. The water has to be pure enough, and the facility needs a way to treat process waste."
+      },
+      "sources": [
+        "oecd",
+        "doe",
+        "veolia"
+      ]
+    },
+    "logic": {
+      "name": {
+        "es": "Fabricar los chips que calculan",
+        "en": "Make the compute chips"
+      },
+      "inputs": {
+        "es": "Obleas, máscaras, materiales para las capas y máquinas para fabricar y medir",
+        "en": "Wafers, masks, layer materials, and equipment to build and measure"
+      },
+      "output": {
+        "es": "Chips individuales inspeccionados y probados",
+        "en": "Inspected and tested compute dies"
+      },
+      "detail": {
+        "es": "Las máquinas añaden material, dibujan el patrón y retiran lo que sobra. Repiten el trabajo capa tras capa y comprueban qué circuitos funcionan.",
+        "en": "Machines add material, transfer the pattern, and remove what is left over. They repeat this layer by layer and check which circuits work."
+      },
+      "sources": [
+        "asml-process",
+        "applied"
+      ]
+    },
+    "memory": {
+      "name": {
+        "es": "Apilar la memoria",
+        "en": "Stack the memory"
+      },
+      "inputs": {
+        "es": "Chips de memoria, piezas de base, conexiones verticales y resinas",
+        "en": "Memory dies, base dies, vertical connections, and resins"
+      },
+      "output": {
+        "es": "Pilas de memoria compatibles con el diseño y probadas",
+        "en": "Tested memory stacks that fit the design"
+      },
+      "detail": {
+        "es": "La memoria HBM se fabrica en su propia línea. Se conectan varios chips de memoria uno encima de otro y se prueba la pila antes de enviarla al ensamblaje.",
+        "en": "HBM memory has its own production line. Several memory dies are connected in a stack. The stack is tested before it goes to assembly."
+      },
+      "sources": [
+        "skhynix",
+        "micron-rubin",
+        "teradyne"
+      ]
+    },
+    "package": {
+      "name": {
+        "es": "Unir las piezas y probarlas",
+        "en": "Join and test the parts"
+      },
+      "inputs": {
+        "es": "Chips, memoria HBM, soportes con conexiones y equipos de prueba",
+        "en": "Chips, HBM stacks, connecting bases, and test equipment"
+      },
+      "output": {
+        "es": "Acelerador ensamblado, probado y clasificado",
+        "en": "An assembled, tested, and graded accelerator"
+      },
+      "detail": {
+        "es": "El fabricante monta el chip de cálculo y la memoria sobre un soporte que los conecta. Después comprueba cómo funciona el conjunto.",
+        "en": "The manufacturer mounts the compute chip and memory on a base that connects them. Then it checks how the assembled parts work together."
+      },
+      "sources": [
+        "cowos",
+        "amkor",
+        "abf"
+      ]
+    },
+    "logistics": {
+      "name": {
+        "es": "Mover y proteger la carga",
+        "en": "Move and protect the cargo"
+      },
+      "inputs": {
+        "es": "Embalaje, ruta, registro de la carga y permisos",
+        "en": "Packaging, a route, shipment records, and permits"
+      },
+      "output": {
+        "es": "Mercancía recibida y comprobada",
+        "en": "Cargo delivered and checked"
+      },
+      "detail": {
+        "es": "Se transportan materiales, máquinas y equipos en distintas etapas. Una oblea, una máquina de fábrica y un armario de servidores necesitan embalajes y controles diferentes.",
+        "en": "Materials, machines, and equipment travel between stages. A wafer, a chipmaking machine, and a cabinet full of servers need different packaging and handling checks."
+      },
+      "sources": [
+        "dhl",
+        "dsv",
+        "nx"
+      ]
+    },
+    "systems": {
+      "name": {
+        "es": "Montar placas, servidores y racks",
+        "en": "Build boards, servers, and racks"
+      },
+      "inputs": {
+        "es": "Módulos, placas, procesadores, equipos de red, cables y refrigeración",
+        "en": "Modules, boards, processors, network equipment, cables, and cooling"
+      },
+      "output": {
+        "es": "Servidor o rack montado y probado",
+        "en": "An assembled and tested server or rack"
+      },
+      "detail": {
+        "es": "El integrador conecta las piezas y las somete a pruebas de funcionamiento. Al reunir servidores en un rack, también tiene que resolver cómo alimentarlos, enfriarlos y conectarlos entre sí.",
+        "en": "The system builder connects the parts and tests them in operation. Putting servers into a rack also means working out how to power them, cool them, and connect them to each other."
+      },
+      "sources": [
+        "nvidia-system",
+        "ocp-rack",
+        "vertiv"
+      ]
+    },
+    "power": {
+      "name": {
+        "es": "Llevar corriente y sacar calor",
+        "en": "Bring in power and remove heat"
+      },
+      "inputs": {
+        "es": "Terreno, suministro eléctrico, conexión, transformadores, respaldo y refrigeración",
+        "en": "A site, a power supply, grid connection, transformers, backup, and cooling"
+      },
+      "output": {
+        "es": "Edificio capaz de alimentar y enfriar los equipos",
+        "en": "A facility that can power and cool the equipment"
+      },
+      "detail": {
+        "es": "Comprar electricidad, conectar el edificio a la red y llevar la corriente a cada rack son trabajos distintos. El edificio también necesita un sistema para llevar el calor de los equipos al exterior.",
+        "en": "Buying electricity, connecting the building to the grid, and getting power to every rack are separate jobs. The building also needs a way to move heat from the equipment to the outside."
+      },
+      "sources": [
+        "iea",
+        "hitachi",
+        "dominion"
+      ]
+    },
+    "operations": {
+      "name": {
+        "es": "Poner el equipo a trabajar",
+        "en": "Put the equipment to work"
+      },
+      "inputs": {
+        "es": "Red, refrigeración, software de control, tareas de prueba y repuestos",
+        "en": "Networking, cooling, control software, test jobs, and spares"
+      },
+      "output": {
+        "es": "Capacidad disponible para trabajos reales",
+        "en": "Capacity available for real jobs"
+      },
+      "detail": {
+        "es": "Antes de asignar trabajos, el operador hace pruebas con el equipo ya conectado. Durante el servicio, vigila el funcionamiento y cambia las piezas que fallan.",
+        "en": "Before assigning jobs, the operator tests the connected equipment. While it is in service, the operator monitors it and replaces parts that fail."
+      },
+      "sources": [
+        "nvidia-system",
+        "aws-spec",
+        "iea"
+      ]
+    },
+    "recovery": {
+      "name": {
+        "es": "Reparar, reutilizar o recuperar",
+        "en": "Repair, reuse, or recover"
+      },
+      "inputs": {
+        "es": "Equipos retirados, inspección, borrado si procede y especialistas",
+        "en": "Retired equipment, inspection, data wiping when needed, and specialists"
+      },
+      "output": {
+        "es": "Equipos y repuestos reutilizables o materiales recuperados",
+        "en": "Reusable equipment and spares or recovered materials"
+      },
+      "detail": {
+        "es": "Se revisa qué piezas siguen funcionando y cuáles se pueden reparar. Un gestor especializado puede separar y recuperar metales de las placas que se descartan.",
+        "en": "The team checks which parts still work and which can be repaired. A specialist can separate and recover metals from boards that are discarded."
+      },
+      "sources": [
+        "sims",
+        "umicore",
+        "basel"
+      ]
+    }
+  },
+  "companies": [
+    {
+      "id": "sibelco",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Sibelco",
+      "region": "US · NC",
+      "role": {
+        "es": "Produce cuarzo de alta pureza en Spruce Pine.",
+        "en": "Produces high-purity quartz in Spruce Pine."
+      },
+      "source": "sibelco"
+    },
+    {
+      "id": "quartz-corp",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "The Quartz Corp",
+      "region": "US · NO",
+      "role": {
+        "es": "Produce cuarzo industrial de alta pureza para semiconductores.",
+        "en": "Produces high-purity industrial quartz for semiconductors."
+      },
+      "source": "quartz-corp"
+    },
+    {
+      "id": "bhp",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "BHP",
+      "region": "CL · AU",
+      "role": {
+        "es": "Extrae cobre y produce concentrado (mineral enriquecido). Escondida es un ejemplo documentado.",
+        "en": "Mines copper and produces concentrate (enriched ore). Escondida is a documented example."
+      },
+      "source": "bhp"
+    },
+    {
+      "id": "codelco",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Codelco",
+      "region": "CL",
+      "role": {
+        "es": "Extrae y procesa cobre en Chuquicamata.",
+        "en": "Extracts and processes copper at Chuquicamata."
+      },
+      "source": "codelco"
+    },
+    {
+      "id": "freeport",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Freeport-McMoRan / PT Freeport Indonesia",
+      "region": "ID",
+      "role": {
+        "es": "Opera una explotación de cobre y oro en el distrito de Grasberg.",
+        "en": "Operates a copper and gold mine in the Grasberg district."
+      },
+      "source": "freeport"
+    },
+    {
+      "id": "glencore",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Glencore / Kamoto Copper Company",
+      "region": "CD",
+      "role": {
+        "es": "Produce cobre y cobalto, y publica su propio informe de cadena de suministro responsable.",
+        "en": "Produces copper and cobalt, and publishes its own responsible supply-chain report."
+      },
+      "source": "glencore"
+    },
+    {
+      "id": "rio",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Rio Tinto",
+      "region": "AU",
+      "role": {
+        "es": "Extrae bauxita en Weipa y abastece la cadena del aluminio.",
+        "en": "Mines bauxite at Weipa and supplies the aluminum supply chain."
+      },
+      "source": "rio"
+    },
+    {
+      "id": "alcoa",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Alcoa",
+      "region": "Global",
+      "role": {
+        "es": "Extrae bauxita y la entrega a las refinerías de alúmina.",
+        "en": "Mines bauxite and supplies it to alumina refineries."
+      },
+      "source": "alcoa"
+    },
+    {
+      "id": "minsur",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "Minsur",
+      "region": "PE",
+      "role": {
+        "es": "Gestiona una cadena de estaño y revisa el origen de sus materias primas (diligencia debida).",
+        "en": "Runs a tin supply chain and checks the origin of its raw materials (due diligence)."
+      },
+      "source": "minsur"
+    },
+    {
+      "id": "timah",
+      "stage": "mining",
+      "scope": "capability",
+      "name": "PT TIMAH",
+      "region": "ID",
+      "role": {
+        "es": "Opera minas de estaño.",
+        "en": "Operates tin mines."
+      },
+      "source": "timah"
+    },
+    {
+      "id": "taniobis",
+      "stage": "refining",
+      "scope": "capability",
+      "name": "TANiOBIS",
+      "region": "Global",
+      "role": {
+        "es": "Describe cómo revisa el origen de las materias primas para sus productos de tantalio y niobio.",
+        "en": "Describes how it checks the origin of the raw materials for its tantalum and niobium products."
+      },
+      "source": "taniobis"
+    },
+    {
+      "id": "tokuyama",
+      "stage": "refining",
+      "scope": "capability",
+      "name": "Tokuyama",
+      "region": "JP",
+      "role": {
+        "es": "Fabrica silicio de alta pureza que se puede fundir para hacer crecer los cristales de las obleas.",
+        "en": "Makes high-purity silicon that can be melted to grow crystals for wafers."
+      },
+      "source": "tokuyama"
+    },
+    {
+      "id": "wacker",
+      "stage": "refining",
+      "scope": "capability",
+      "name": "Wacker Chemie",
+      "region": "DE · US",
+      "role": {
+        "es": "Fabrica silicio purificado para producir obleas de semiconductores.",
+        "en": "Makes purified silicon used in semiconductor wafers."
+      },
+      "source": "wacker"
+    },
+    {
+      "id": "sumco",
+      "stage": "wafering",
+      "scope": "capability",
+      "name": "SUMCO",
+      "region": "JP",
+      "role": {
+        "es": "Hace crecer cristales de silicio y corta, pule e inspecciona obleas.",
+        "en": "Grows silicon crystals and slices, polishes and inspects wafers."
+      },
+      "source": "sumco"
+    },
+    {
+      "id": "shinetsu",
+      "stage": "wafering",
+      "scope": "capability",
+      "name": "Shin-Etsu / SEH",
+      "region": "JP",
+      "role": {
+        "es": "Fabrica obleas de silicio para dispositivos semiconductores.",
+        "en": "Makes silicon wafers for semiconductor devices."
+      },
+      "source": "shinetsu"
+    },
+    {
+      "id": "nvidia-des",
+      "stage": "design",
+      "scope": "product",
+      "name": "NVIDIA",
+      "region": "US",
+      "role": {
+        "es": "Diseña la arquitectura Rubin y publica su especificación.",
+        "en": "Designs the Rubin architecture and publishes its specification."
+      },
+      "source": "nvidia-tech"
+    },
+    {
+      "id": "amd-des",
+      "stage": "design",
+      "scope": "product",
+      "name": "AMD",
+      "region": "US",
+      "role": {
+        "es": "Diseña la GPU MI455X y la arquitectura CDNA 5.",
+        "en": "Designs the MI455X GPU and the CDNA 5 architecture."
+      },
+      "source": "amd-spec"
+    },
+    {
+      "id": "google-des",
+      "stage": "design",
+      "scope": "product",
+      "name": "Google Cloud",
+      "region": "US",
+      "role": {
+        "es": "Diseña la TPU (unidad de procesamiento tensorial) de octava generación y arquitecturas de sistema.",
+        "en": "Designs the eighth-generation TPU (tensor processing unit) and system architectures."
+      },
+      "source": "google-tpu"
+    },
+    {
+      "id": "aws-des",
+      "stage": "design",
+      "scope": "product",
+      "name": "AWS",
+      "region": "US",
+      "role": {
+        "es": "Diseña el ASIC (chip a medida) Trainium3 y el sistema Trn3.",
+        "en": "Designs the Trainium3 ASIC (custom chip) and the Trn3 system."
+      },
+      "source": "aws-spec"
+    },
+    {
+      "id": "cadence",
+      "stage": "design",
+      "scope": "capability",
+      "name": "Cadence",
+      "region": "US",
+      "role": {
+        "es": "Vende software de diseño electrónico (EDA) y de verificación final (sign-off). Figura en el ecosistema de diseño de TSMC.",
+        "en": "Sells electronic design automation (EDA) software and final design verification (sign-off) tools. It is identified in the TSMC design ecosystem."
+      },
+      "source": "tsmc-oip"
+    },
+    {
+      "id": "synopsys",
+      "stage": "design",
+      "scope": "capability",
+      "name": "Synopsys",
+      "region": "US",
+      "role": {
+        "es": "Ofrece software de diseño electrónico (EDA), bibliotecas de bloques de circuito e infraestructura de diseño.",
+        "en": "Provides electronic design automation (EDA) software, circuit-block libraries and design infrastructure."
+      },
+      "source": "tsmc-oip"
+    },
+    {
+      "id": "exyte",
+      "stage": "fab-build",
+      "scope": "capability",
+      "name": "Exyte",
+      "region": "DE · Global",
+      "role": {
+        "es": "Diseña, construye e instala fábricas de chips (fabs).",
+        "en": "Engineers, builds and installs chip factories (fabs)."
+      },
+      "source": "exyte"
+    },
+    {
+      "id": "jacobs",
+      "stage": "fab-build",
+      "scope": "capability",
+      "name": "Jacobs",
+      "region": "US · Global",
+      "role": {
+        "es": "Diseña y proyecta instalaciones de semiconductores.",
+        "en": "Designs and engineers semiconductor facilities."
+      },
+      "source": "jacobs"
+    },
+    {
+      "id": "veolia",
+      "stage": "fab-build",
+      "scope": "relationship",
+      "name": "Veolia Water Technologies",
+      "region": "SG",
+      "role": {
+        "es": "Diseña y construye el sistema de agua ultrapura para Soitec Pasir Ris.",
+        "en": "Designs and builds the ultrapure-water system for Soitec Pasir Ris."
+      },
+      "source": "veolia"
+    },
+    {
+      "id": "air-liquide",
+      "stage": "fab-build",
+      "scope": "capability",
+      "name": "Air Liquide",
+      "region": "Global",
+      "role": {
+        "es": "Suministra gases y compuestos que las fábricas usan para formar y tratar capas del chip.",
+        "en": "Supplies gases and chemicals that chip factories use to build and treat layers."
+      },
+      "source": "gas"
+    },
+    {
+      "id": "linde",
+      "stage": "fab-build",
+      "scope": "capability",
+      "name": "Linde",
+      "region": "Global",
+      "role": {
+        "es": "Suministra gases a granel y gases especiales de grado electrónico.",
+        "en": "Supplies bulk and specialty electronic-grade gases."
+      },
+      "source": "linde"
+    },
+    {
+      "id": "entegris",
+      "stage": "fab-build",
+      "scope": "capability",
+      "name": "Entegris",
+      "region": "Global",
+      "role": {
+        "es": "Suministra materiales de pulido y productos para mantener las partículas y otras impurezas fuera del proceso.",
+        "en": "Supplies polishing materials and products that keep particles and other contaminants out of the process."
+      },
+      "source": "cmp"
+    },
+    {
+      "id": "tsmc-logic",
+      "stage": "logic",
+      "scope": "relationship",
+      "name": "TSMC",
+      "region": "TW · US",
+      "role": {
+        "es": "Fabrica chips por encargo (fundición). NVIDIA identifica procesos de TSMC para la plataforma Vera Rubin.",
+        "en": "Manufactures chips on contract (a foundry). NVIDIA identifies TSMC processes for the Vera Rubin platform."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "samsung-foundry",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "Samsung Foundry",
+      "region": "KR · US",
+      "role": {
+        "es": "Fabrica chips por encargo y ofrece opciones de integración heterogénea (combinar varios chips en un mismo paquete).",
+        "en": "Manufactures chips on contract and offers heterogeneous integration options (combining several chips in one package)."
+      },
+      "source": "samsung-foundry"
+    },
+    {
+      "id": "asml",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "ASML",
+      "region": "NL · Global",
+      "role": {
+        "es": "Fabrica máquinas que dibujan patrones sobre la oblea con luz ultravioleta DUV o EUV. Su oferta incluye la fuente de luz.",
+        "en": "Makes machines that print patterns on wafers with DUV or EUV ultraviolet light. Its systems include the light source."
+      },
+      "source": "asml-euv"
+    },
+    {
+      "id": "zeiss",
+      "stage": "logic",
+      "scope": "relationship",
+      "name": "ZEISS SMT",
+      "region": "DE",
+      "role": {
+        "es": "Fabrica las ópticas de proyección del sistema EUV de ASML.",
+        "en": "Makes the projection optics for ASML EUV systems."
+      },
+      "source": "zeiss"
+    },
+    {
+      "id": "trumpf",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "TRUMPF",
+      "region": "DE",
+      "role": {
+        "es": "Aporta la amplificación del láser que se usa en la fuente de luz ultravioleta extrema.",
+        "en": "Provides laser amplification for the extreme ultraviolet light source."
+      },
+      "source": "trumpf"
+    },
+    {
+      "id": "applied",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "Applied Materials",
+      "region": "US · Global",
+      "role": {
+        "es": "Aplica ingeniería de materiales y ofrece equipos de depósito de capas y de metalización.",
+        "en": "Applies materials engineering and provides equipment for depositing layers and metallization."
+      },
+      "source": "company-applied"
+    },
+    {
+      "id": "lam",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "Lam Research",
+      "region": "US · Global",
+      "role": {
+        "es": "Fabrica máquinas que retiran material de unas zonas de la oblea y conservan otras según el patrón.",
+        "en": "Makes equipment that selectively removes material from the wafer according to the pattern."
+      },
+      "source": "lam"
+    },
+    {
+      "id": "tel",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "Tokyo Electron",
+      "region": "JP",
+      "role": {
+        "es": "Fabrica equipos que aplican una capa sensible a la luz sobre la oblea y revelan el patrón después de exponerla.",
+        "en": "Makes equipment that coats wafers with a light-sensitive film and develops the pattern after exposure."
+      },
+      "source": "tel"
+    },
+    {
+      "id": "asm",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "ASM",
+      "region": "NL · Global",
+      "role": {
+        "es": "Ofrece depósito de capas atómicas, que construye películas capa por capa.",
+        "en": "Provides atomic layer deposition, which builds films one layer at a time."
+      },
+      "source": "asm"
+    },
+    {
+      "id": "kla",
+      "stage": "logic",
+      "scope": "capability",
+      "name": "KLA",
+      "region": "US · Global",
+      "role": {
+        "es": "Ofrece inspección y metrología (medición) de proceso.",
+        "en": "Provides process inspection and metrology (measurement)."
+      },
+      "source": "kla"
+    },
+    {
+      "id": "sk",
+      "stage": "memory",
+      "scope": "capability",
+      "name": "SK hynix",
+      "region": "KR",
+      "role": {
+        "es": "Fabrica memoria HBM. Entre los ejemplos documentados figura una pila HBM3E de 12 capas.",
+        "en": "Makes HBM memory. The documented examples include a 12-layer HBM3E stack."
+      },
+      "source": "skhynix"
+    },
+    {
+      "id": "micron",
+      "stage": "memory",
+      "scope": "product",
+      "name": "Micron",
+      "region": "US · Global",
+      "role": {
+        "es": "Informa de que envía pilas HBM4 de 36 GB diseñadas para Vera Rubin.",
+        "en": "Reports shipping 36 GB HBM4 stacks designed for Vera Rubin."
+      },
+      "source": "micron-rubin"
+    },
+    {
+      "id": "samsung-memory",
+      "stage": "memory",
+      "scope": "relationship",
+      "name": "Samsung Electronics",
+      "region": "KR",
+      "role": {
+        "es": "AMD y Samsung anunciaron un memorando sobre el suministro principal de memoria HBM4 para la MI455X.",
+        "en": "AMD and Samsung announced a memorandum about primary HBM4 supply for the MI455X."
+      },
+      "source": "samsung-amd"
+    },
+    {
+      "id": "ajinomoto",
+      "stage": "package",
+      "scope": "capability",
+      "name": "Ajinomoto",
+      "region": "JP",
+      "role": {
+        "es": "Fabrica la película aislante ABF, que se usa para formar capas en la base que sostiene y conecta los chips.",
+        "en": "Makes ABF insulating film, used to build up layers in the substrate that supports and connects the chips."
+      },
+      "source": "abf"
+    },
+    {
+      "id": "ibiden",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Ibiden",
+      "region": "JP",
+      "role": {
+        "es": "Fabrica sustratos de alto rendimiento. NVIDIA describe un acuerdo de ampliación de capacidad.",
+        "en": "Makes high-performance substrates. NVIDIA describes a capacity expansion relationship."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "unimicron",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Unimicron",
+      "region": "TW",
+      "role": {
+        "es": "Fabrica sustratos. NVIDIA anunció una ampliación de capacidad.",
+        "en": "Makes substrates. NVIDIA announced a capacity expansion."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "kinsus",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Kinsus",
+      "region": "TW",
+      "role": {
+        "es": "Fabrica sustratos. NVIDIA comunicó un acuerdo de capacidad y fechas objetivo.",
+        "en": "Makes substrates. NVIDIA reported a capacity agreement and target dates."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "semco",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Samsung Electro-Mechanics",
+      "region": "KR",
+      "role": {
+        "es": "Tiene un acuerdo de sustratos para cómputo y red que NVIDIA describe.",
+        "en": "Has a substrate agreement for compute and networking that NVIDIA describes."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "ase",
+      "stage": "package",
+      "scope": "capability",
+      "name": "ASE",
+      "region": "TW",
+      "role": {
+        "es": "Integra varios chips en un mismo paquete mediante la familia VIPack.",
+        "en": "Integrates multiple chips into one package through the VIPack family."
+      },
+      "source": "ase"
+    },
+    {
+      "id": "amkor",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Amkor Technology",
+      "region": "US · KR",
+      "role": {
+        "es": "Ofrece encapsulado avanzado (empaquetar y conectar los chips). NVIDIA describe acuerdos de inversión y prepago.",
+        "en": "Provides advanced packaging (assembling and connecting the chips). NVIDIA describes investment and prepayment agreements."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "spil",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "Siliconware Precision Industries",
+      "region": "TW",
+      "role": {
+        "es": "NVIDIA ha contratado una ampliación de la capacidad de SPIL para ensamblar y conectar chips.",
+        "en": "NVIDIA contracted for an expansion of SPIL's capacity to assemble and connect chips."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "kyec",
+      "stage": "package",
+      "scope": "relationship",
+      "name": "King Yuan Electronics",
+      "region": "TW · US",
+      "role": {
+        "es": "Prueba chips. NVIDIA describe una colaboración y una expansión en Estados Unidos.",
+        "en": "Tests chips. NVIDIA describes a collaboration and a US expansion."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "teradyne",
+      "stage": "package",
+      "scope": "capability",
+      "name": "Teradyne",
+      "region": "US",
+      "role": {
+        "es": "Ofrece el sistema de prueba Magnum 7H para HBM.",
+        "en": "Provides the Magnum 7H test system for HBM."
+      },
+      "source": "teradyne"
+    },
+    {
+      "id": "dhl",
+      "stage": "logistics",
+      "scope": "capability",
+      "name": "DHL",
+      "region": "Global",
+      "role": {
+        "es": "Transporta y almacena maquinaria de fabricación de chips y la entrega en el lugar donde se va a instalar.",
+        "en": "Ships and stores chipmaking machinery and delivers it to the installation site."
+      },
+      "source": "dhl"
+    },
+    {
+      "id": "dsv",
+      "stage": "logistics",
+      "scope": "capability",
+      "name": "DSV",
+      "region": "Global",
+      "role": {
+        "es": "Organiza envíos de semiconductores y equipos que requieren una logística especializada.",
+        "en": "Arranges shipments of semiconductors and equipment that require specialized handling."
+      },
+      "source": "dsv"
+    },
+    {
+      "id": "kn",
+      "stage": "logistics",
+      "scope": "capability",
+      "name": "Kuehne+Nagel",
+      "region": "Global",
+      "role": {
+        "es": "Mueve maquinaria de fabricación de semiconductores manteniendo condiciones controladas durante el transporte.",
+        "en": "Ships semiconductor manufacturing equipment under controlled conditions."
+      },
+      "source": "kn"
+    },
+    {
+      "id": "nx",
+      "stage": "logistics",
+      "scope": "capability",
+      "name": "NX Group / Nippon Express",
+      "region": "JP · Global",
+      "role": {
+        "es": "Transporta y almacena carga especializada de la cadena de semiconductores.",
+        "en": "Transports and warehouses specialized cargo for the semiconductor supply chain."
+      },
+      "source": "nx"
+    },
+    {
+      "id": "maersk",
+      "stage": "logistics",
+      "scope": "capability",
+      "name": "Maersk",
+      "region": "Global",
+      "role": {
+        "es": "Transporta mercancías admisibles por mar y por ferrocarril intermodal.",
+        "en": "Transports eligible cargo by ocean and intermodal rail."
+      },
+      "source": "maersk"
+    },
+    {
+      "id": "foxconn",
+      "stage": "systems",
+      "scope": "relationship",
+      "name": "Hon Hai / Foxconn",
+      "region": "Global",
+      "role": {
+        "es": "Colabora en la producción de GPU y de red, según anunció NVIDIA.",
+        "en": "Collaborates on GPU and networking production, as announced by NVIDIA."
+      },
+      "source": "nvidia-supply"
+    },
+    {
+      "id": "dell",
+      "stage": "systems",
+      "scope": "product",
+      "name": "Dell Technologies",
+      "region": "US · Global",
+      "role": {
+        "es": "Integra el sistema PowerEdge con GB200.",
+        "en": "Integrates the PowerEdge system with GB200."
+      },
+      "source": "dell"
+    },
+    {
+      "id": "fabrinet",
+      "stage": "systems",
+      "scope": "relationship",
+      "name": "Fabrinet",
+      "region": "Global",
+      "role": {
+        "es": "NVIDIA lo nombra como contratista en su informe corporativo.",
+        "en": "NVIDIA names it as a contractor in its corporate filing."
+      },
+      "source": "fabrinet"
+    },
+    {
+      "id": "wistron",
+      "stage": "systems",
+      "scope": "relationship",
+      "name": "Wistron",
+      "region": "Global",
+      "role": {
+        "es": "NVIDIA lo nombra como contratista de manufactura.",
+        "en": "NVIDIA names it as a manufacturing contractor."
+      },
+      "source": "wistron"
+    },
+    {
+      "id": "hitachi",
+      "stage": "power",
+      "scope": "relationship",
+      "name": "Hitachi Energy",
+      "region": "SG · MY",
+      "role": {
+        "es": "Suministra equipos y soluciones de potencia para la expansión de AirTrunk.",
+        "en": "Supplies power equipment and solutions for the AirTrunk expansion."
+      },
+      "source": "hitachi"
+    },
+    {
+      "id": "dominion",
+      "stage": "power",
+      "scope": "capability",
+      "name": "Dominion Energy",
+      "region": "US · VA",
+      "role": {
+        "es": "Tramita solicitudes de carga, hace estudios y conecta la electricidad de centros de datos en Virginia.",
+        "en": "Handles data center load requests, runs studies and connects electricity for data centers in Virginia."
+      },
+      "source": "dominion"
+    },
+    {
+      "id": "schneider",
+      "stage": "power",
+      "scope": "relationship",
+      "name": "Schneider Electric",
+      "region": "Global",
+      "role": {
+        "es": "Desarrolla con NVIDIA diseños de referencia de potencia y refrigeración.",
+        "en": "Develops power and cooling reference designs with NVIDIA."
+      },
+      "source": "schneider"
+    },
+    {
+      "id": "constellation",
+      "stage": "power",
+      "scope": "relationship",
+      "name": "Constellation Energy / Microsoft",
+      "region": "US · PA",
+      "role": {
+        "es": "Anunció un contrato de compra de electricidad y el proyecto Crane. La capacidad descrita corresponde al proyecto futuro.",
+        "en": "Announced a power purchase agreement and the Crane project. The capacity described is for the future project."
+      },
+      "source": "constellation"
+    },
+    {
+      "id": "vertiv",
+      "stage": "power",
+      "scope": "relationship",
+      "name": "Vertiv",
+      "region": "Global",
+      "role": {
+        "es": "Desarrolla con NVIDIA un diseño de referencia de potencia y refrigeración para GB200.",
+        "en": "Develops a power and cooling reference design for GB200 with NVIDIA."
+      },
+      "source": "vertiv"
+    },
+    {
+      "id": "eaton",
+      "stage": "power",
+      "scope": "capability",
+      "name": "Eaton",
+      "region": "Global",
+      "role": {
+        "es": "Ofrece distribución y respaldo eléctrico para centros de datos.",
+        "en": "Provides power distribution and backup for data centers."
+      },
+      "source": "eaton"
+    },
+    {
+      "id": "aws-op",
+      "stage": "operations",
+      "scope": "product",
+      "name": "Amazon EC2",
+      "region": "AWS Regions",
+      "role": {
+        "es": "Ofrece el servicio Trn3 UltraServers y publica las especificaciones por chip.",
+        "en": "Offers the Trn3 UltraServers service and publishes per-chip specifications."
+      },
+      "source": "aws-launch"
+    },
+    {
+      "id": "google-op",
+      "stage": "operations",
+      "scope": "product",
+      "name": "Google Cloud",
+      "region": "Google Cloud Regions",
+      "role": {
+        "es": "Despliega TPU con infraestructura distribuida.",
+        "en": "Deploys TPUs on distributed infrastructure."
+      },
+      "source": "google-tpu"
+    },
+    {
+      "id": "sims",
+      "stage": "recovery",
+      "scope": "capability",
+      "name": "Sims Lifecycle Services",
+      "region": "Global",
+      "role": {
+        "es": "Desinstala, reutiliza en otro lugar y recicla equipos de centros de datos.",
+        "en": "Decommissions, redeploys and recycles data center equipment."
+      },
+      "source": "sims"
+    },
+    {
+      "id": "umicore",
+      "stage": "recovery",
+      "scope": "capability",
+      "name": "Umicore",
+      "region": "BE · Global",
+      "role": {
+        "es": "Procesa residuos electrónicos para recuperar metales.",
+        "en": "Processes electronic scrap to recover metals."
+      },
+      "source": "umicore"
+    }
+  ],
+  "smelters": [
+    {
+      "metal": "Tantalum",
+      "name": "AMG Brasil",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Changsha South Tantalum Niobium Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "D Block Metals, LLC",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "F&X Electro-Materials Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "FIR Metals & Resource Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Global Advanced Metals Aizu",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Global Advanced Metals Boyertown",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Guangdong Rising Rare Metals-EO Materials Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Hengyang King Xing Lifeng New Materials Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiangxi Dinghai Tantalum & Niobium Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiangxi Suns Nonferrous Materials Co. Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiangxi Tuohong New Raw Material",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiujiang Janny New Material Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "JiuJiang JinXin Nonferrous Metals Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiujiang Tanbre Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Jiujiang Zhongao Tantalum & Niobium Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "KEMET de Mexico",
+      "country": "MEXICO"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Materion Newton Inc.",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Metallurgical Products India Pvt., Ltd.",
+      "country": "INDIA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Mineracao Taboca S.A.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Mitsui Mining and Smelting Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Ningxia Orient Tantalum Industry Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "NPM Silmet AS",
+      "country": "ESTONIA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "PowerX Ltd.",
+      "country": "RWANDA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "QSIL Metals Hermsdorf GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "QuantumClean",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Resind Industria e Comercio Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "RFH Yancheng Jinye New Material Technology Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Taki Chemical Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "TANIOBIS Co., Ltd.",
+      "country": "THAILAND"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "TANIOBIS GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "TANIOBIS Japan Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "TANIOBIS Smelting GmbH & Co. KG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Telex Metals",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Ulba Metallurgical Plant JSC",
+      "country": "KAZAKHSTAN"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "XIMEI RESOURCES (GUANGDONG) LIMITED",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "XinXing HaoRong Electronic Material Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tantalum",
+      "name": "Yanling Jincheng Tantalum & Niobium Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Alpha Assembly Solutions Inc",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Aurubis Beerse",
+      "country": "BELGIUM"
+    },
+    {
+      "metal": "Tin",
+      "name": "Aurubis Berango",
+      "country": "SPAIN"
+    },
+    {
+      "metal": "Tin",
+      "name": "Chenzhou Yunxiang Mining and Metallurgy Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Chifeng Dajingzi Tin Industry Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "China Tin Group Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "CRM Fundicao De Metais E Comercio De Equipamentos Eletronicos Do Brasil Ltda",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "CRM Synergies",
+      "country": "SPAIN"
+    },
+    {
+      "metal": "Tin",
+      "name": "CV Ayi Jaya",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "CV Venus Inti Perkasa",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Dongguan Best Alloys Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Dowa",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tin",
+      "name": "DS Myanmar",
+      "country": "MYANMAR"
+    },
+    {
+      "metal": "Tin",
+      "name": "EM Vinto",
+      "country": "BOLIVIA (PLURINATIONAL STATE OF)"
+    },
+    {
+      "metal": "Tin",
+      "name": "Estanho de Rondonia S.A.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Fabrica Auricchio Industria e Comercio Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Feinhutte Halsbrucke GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tin",
+      "name": "Fenix Metals",
+      "country": "POLAND"
+    },
+    {
+      "metal": "Tin",
+      "name": "Gejiu Non-Ferrous Metal Processing Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Global Advanced Metals Greenbushes Pty Ltd.",
+      "country": "AUSTRALIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Guangdong Hanhe Non-Ferrous Metal Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "HuiChang Hill Tin Industry Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Jiangxi New Nanshan Technology Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Luna Smelter, Ltd.",
+      "country": "RWANDA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Magnu's Minerais Metais e Ligas Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Malaysia Smelting Corporation (MSC)",
+      "country": "MALAYSIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Malaysia Smelting Corporation Berhad (Port Klang)",
+      "country": "MALAYSIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Metallic Resources, Inc.",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Mineracao Taboca S.A.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Mining Minerals Resources SARL",
+      "country": "CONGO, DEMOCRATIC REPUBLIC OF THE"
+    },
+    {
+      "metal": "Tin",
+      "name": "Minsur",
+      "country": "PERU"
+    },
+    {
+      "metal": "Tin",
+      "name": "Mitsubishi Materials Corporation",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tin",
+      "name": "O.M. Manufacturing (Thailand) Co., Ltd.",
+      "country": "THAILAND"
+    },
+    {
+      "metal": "Tin",
+      "name": "O.M. Manufacturing Philippines, Inc.",
+      "country": "PHILIPPINES"
+    },
+    {
+      "metal": "Tin",
+      "name": "Operaciones Metalurgicas S.A.",
+      "country": "BOLIVIA (PLURINATIONAL STATE OF)"
+    },
+    {
+      "metal": "Tin",
+      "name": "P Kay Metal, Inc",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Precious Minerals and Smelting Limited",
+      "country": "INDIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Aries Kencana Sejahtera",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Arsed Indonesia",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Artha Cipta Langgeng",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT ATD Makmur Mandiri Jaya",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Bangka Prima Tin",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Bangka Serumpun",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Cipta Persada Mulia",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Masbro Alam Stania",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Menara Cipta Mulia",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Mitra Stania Prima",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Mitra Sukses Globalindo",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Premium Tin Indonesia",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Prima Timah Utama",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Putera Sarana Shakti (PT PSS)",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Rajawali Rimba Perkasa",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Rajehan Ariq",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Refined Bangka Tin",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Sariwiguna Binasentosa",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Sukses Inti Makmur (SIM)",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Timah Tbk Kundur",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Timah Tbk Mentok",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "PT Tinindo Inter Nusa",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Resind Industria e Comercio Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Rui Da Hung",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Soft Metais Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Super Ligas",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Takehara PVD Materials Plant / PVD Materials Division of MITSUI MINING & SMELTING CO., LTD.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tin",
+      "name": "Thaisarco",
+      "country": "THAILAND"
+    },
+    {
+      "metal": "Tin",
+      "name": "Tin Smelting Branch of Yunnan Tin Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Tin Technology & Refining",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tin",
+      "name": "TRATHO Metal Quimica",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "White Solder Metalurgia e Mineracao Ltda.",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tin",
+      "name": "Woodcross Smelting Company Limited",
+      "country": "UGANDA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Yunnan Chengfeng Non-ferrous Metals Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tin",
+      "name": "Yunnan Yunfan Non-ferrous Metals Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Abington Reldan Metals, LLC",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Advanced Chemical Company",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Agosi AG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Aida Chemical Industries Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Almalyk Mining and Metallurgical Complex (AMMC)",
+      "country": "UZBEKISTAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "AngloGold Ashanti Corrego do Sitio Mineracao",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Gold",
+      "name": "Argor-Heraeus S.A.",
+      "country": "SWITZERLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "ASAHI METALFINE, Inc.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Asahi Refining Canada Ltd.",
+      "country": "CANADA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Asahi Refining USA Inc.",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Asaka Riken Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Aurubis AG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Bangalore Refinery",
+      "country": "INDIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Bangko Sentral ng Pilipinas (Central Bank of the Philippines)",
+      "country": "PHILIPPINES"
+    },
+    {
+      "metal": "Gold",
+      "name": "Boliden Ronnskar",
+      "country": "SWEDEN"
+    },
+    {
+      "metal": "Gold",
+      "name": "C. Hafner GmbH + Co. KG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Chimet S.p.A.",
+      "country": "ITALY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Chugai Mining",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Coimpa Industrial LTDA",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Gold",
+      "name": "Daye Non-Ferrous Metals Mining Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Dowa",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "DSC (Do Sung Corporation)",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "Eco-System Recycling Co., Ltd. East Plant",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Eco-System Recycling Co., Ltd. North Plant",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Eco-System Recycling Co., Ltd. West Plant",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Elite Industech Co., Ltd.",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "GG Refinery Ltd.",
+      "country": "TANZANIA, UNITED REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "CCR Refinery - Glencore Canada Corporation",
+      "country": "CANADA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Gold by Gold Colombia",
+      "country": "COLOMBIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Western Australian Mint (T/a The Perth Mint)",
+      "country": "AUSTRALIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Great Wall Precious Metals Co., Ltd. of CBPM",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Heimerle + Meule GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Heraeus Germany GmbH Co. KG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Heraeus Metals Hong Kong Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Impala Platinum - Base Metal Refinery (BMR)",
+      "country": "SOUTH AFRICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Impala Platinum - Platinum Metals Refinery (PMR)",
+      "country": "SOUTH AFRICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Impala Platinum - Rustenburg Smelter",
+      "country": "SOUTH AFRICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Inner Mongolia Qiankun Gold and Silver Refinery Share Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Ishifuku Metal Industry Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Istanbul Gold Refinery",
+      "country": "TURKEY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Italpreziosi",
+      "country": "ITALY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Japan Mint",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Jiangxi Copper Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "JX Nippon Mining & Metals Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Kazzinc",
+      "country": "KAZAKHSTAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Kennecott Utah Copper LLC",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "KGHM Polska Miedz Spolka Akcyjna",
+      "country": "POLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "Kojima Chemicals Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Korea Zinc Co., Ltd.",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "L'Orfebre S.A.",
+      "country": "ANDORRA"
+    },
+    {
+      "metal": "Gold",
+      "name": "LS MnM Inc.",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "LT Metal Ltd.",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "Materion",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Matsuda Sangyo Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metal Concentrators SA (Pty) Ltd.",
+      "country": "SOUTH AFRICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalor Technologies (Hong Kong) Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalor Technologies (Singapore) Pte., Ltd.",
+      "country": "SINGAPORE"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalor Technologies (Suzhou) Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalor Technologies S.A.",
+      "country": "SWITZERLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalor USA Refining Corporation",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Metalurgica Met-Mex Penoles S.A. De C.V.",
+      "country": "MEXICO"
+    },
+    {
+      "metal": "Gold",
+      "name": "Mitsubishi Materials Corporation",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Mitsui Mining and Smelting Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "MKS PAMP SA",
+      "country": "SWITZERLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "MMTC-PAMP India Pvt., Ltd.",
+      "country": "INDIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Nadir Metal Rafineri San. Ve Tic. A.S.",
+      "country": "TURKEY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Navoi Mining and Metallurgical Combinat",
+      "country": "UZBEKISTAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "NH Recytech Company",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "Nihon Material Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Ogussa Osterreichische Gold- und Silber-Scheideanstalt GmbH",
+      "country": "AUSTRIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Ohura Precious Metal Industry Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Planta Recuperadora de Metales SpA",
+      "country": "CHILE"
+    },
+    {
+      "metal": "Gold",
+      "name": "PT Aneka Tambang (Persero) Tbk",
+      "country": "INDONESIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "PX Precinox S.A.",
+      "country": "SWITZERLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "Rand Refinery (Pty) Ltd.",
+      "country": "SOUTH AFRICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "REMONDIS PMR B.V.",
+      "country": "NETHERLANDS"
+    },
+    {
+      "metal": "Gold",
+      "name": "Royal Canadian Mint",
+      "country": "CANADA"
+    },
+    {
+      "metal": "Gold",
+      "name": "SAFINA A.S.",
+      "country": "CZECHIA"
+    },
+    {
+      "metal": "Gold",
+      "name": "SEMPSA Joyeria Plateria S.A.",
+      "country": "SPAIN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Shandong Gold Smelting Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Shandong Zhaojin Gold & Silver Refinery Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Sichuan Tianze Precious Metals Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Solar Applied Materials Technology Corp.",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Sumitomo Metal Mining Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "SungEel HiMetal Co., Ltd.",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "T.C.A S.p.A",
+      "country": "ITALY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Tanaka Kikinzoku Kogyo K.K.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Tokuriki Honten Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "TOO Tau-Ken-Altyn",
+      "country": "KAZAKHSTAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Torecom",
+      "country": "KOREA, REPUBLIC OF"
+    },
+    {
+      "metal": "Gold",
+      "name": "Umicore S.A. Business Unit Precious Metals Refining",
+      "country": "BELGIUM"
+    },
+    {
+      "metal": "Gold",
+      "name": "United Precious Metal Refining, Inc.",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Valcambi S.A.",
+      "country": "SWITZERLAND"
+    },
+    {
+      "metal": "Gold",
+      "name": "WEEEREFINING",
+      "country": "FRANCE"
+    },
+    {
+      "metal": "Gold",
+      "name": "WIELAND Edelmetalle GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Gold",
+      "name": "Yamakin Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Yokohama Metal Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Gold",
+      "name": "Zhongyuan Gold Smelter of Zhongjin Gold Corporation",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Gold",
+      "name": "Gold Refinery of Zijin Mining Group Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "A.L.M.T. Corp.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Asia Tungsten Products Vietnam Ltd.",
+      "country": "VIET NAM"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "China Molybdenum Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Chongyi Zhangyuan Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Cronimet Brasil Ltda",
+      "country": "BRAZIL"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Fujian Xinlu Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Ganzhou Jiangwu Ferrotungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Ganzhou Seadragon W & Mo Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Global Tungsten & Powders LLC",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Guangdong Xianglu Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "H.C. Starck Tungsten GmbH",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Hubei Green Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Hunan Chenzhou Mining Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Hunan Shizhuyuan Nonferrous Metals Co., Ltd. Chenzhou Tungsten Products Branch",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Japan New Metals Co., Ltd.",
+      "country": "JAPAN"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jiangwu H.C. Starck Tungsten Products Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jiangxi Gan Bei Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jiangxi Tonggu Non-ferrous Metallurgical & Chemical Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jiangxi Xinsheng Tungsten Industry Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jiangxi Yaosheng Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Jing Yuan Tungsten Technology Co., Ltd.",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "KENEE MINING VIETNAM COMPANY LIMITED",
+      "country": "VIET NAM"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Kennametal Fallon",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Kennametal Huntsville",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Lianyou Metals Co., Ltd.",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Lianyou Resources Co., Ltd.",
+      "country": "TAIWAN, PROVINCE OF CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Malipo Haiyu Tungsten Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Masan High-Tech Materials",
+      "country": "VIET NAM"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Niagara Refining LLC",
+      "country": "UNITED STATES OF AMERICA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Philippine Bonway Manufacturing Industrial Corporation",
+      "country": "PHILIPPINES"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Philippine Chuangxin Industrial Co., Inc.",
+      "country": "PHILIPPINES"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Shinwon Tungsten (Fujian Shanghang) Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "TANIOBIS Smelting GmbH & Co. KG",
+      "country": "GERMANY"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Tungsten Vietnam Joint Stock Company",
+      "country": "VIET NAM"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Wolfram Bergbau und Hutten AG",
+      "country": "AUSTRIA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Xiamen Tungsten (H.C.) Co., Ltd.",
+      "country": "CHINA"
+    },
+    {
+      "metal": "Tungsten",
+      "name": "Xiamen Tungsten Co., Ltd.",
+      "country": "CHINA"
+    }
+  ],
+  "smelterSource": "conflict",
+  "sources": {
+    "oecd": {
+      "title": "OECD · Mapping the semiconductor value chain",
+      "date": "2025",
+      "locator": "Segmentation, inputs and vulnerabilities",
+      "url": "https://www.oecd.org/en/publications/mapping-the-semiconductor-value-chain_4154cdbf-en.html"
+    },
+    "doe": {
+      "title": "U.S. DOE · Semiconductor Supply Chain Deep Dive",
+      "date": "2022",
+      "locator": "Materials and manufacturing equipment",
+      "url": "https://www.energy.gov/sites/default/files/2024-12/Semiconductor%2520Supply%2520Chain%2520Report%2520-%2520Final%5B1%5D.pdf"
+    },
+    "usgs": {
+      "title": "USGS · Mineral Commodity Summaries 2026",
+      "date": "2026",
+      "locator": "Individual mineral commodity chapters",
+      "url": "https://pubs.usgs.gov/publication/mcs2026"
+    },
+    "sumco": {
+      "title": "SUMCO · Wafer Production Processes",
+      "date": null,
+      "locator": "Ingot / Wafer manufacturing",
+      "url": "https://www.sumcosi.com/english/products/process/"
+    },
+    "sibelco": {
+      "title": "Sibelco · Spruce Pine",
+      "date": null,
+      "locator": "High purity quartz operation",
+      "url": "https://www.sibelco.com/en/locations/spruce-pine"
+    },
+    "tokuyama": {
+      "title": "Tokuyama · High-purity Polycrystalline Silicon",
+      "date": null,
+      "locator": "Product overview",
+      "url": "https://www.tokuyama.co.jp/eng/products/electronic_materials/polysilicon.html/"
+    },
+    "gas": {
+      "title": "Air Liquide · Electronics Specialty Materials",
+      "date": null,
+      "locator": "Deposition, etch and cleaning materials",
+      "url": "https://electronics.airliquide.com/offer-brands/our-offer/electronics-specialty-materials"
+    },
+    "linde": {
+      "title": "Linde · Electronics",
+      "date": null,
+      "locator": "Bulk and specialty gases",
+      "url": "https://assets.linde.com/-/media/celum-connect/2023/12/21/15/11/linde20electronics20brochure185963.pdf"
+    },
+    "cmp": {
+      "title": "Entegris · Chemical Mechanical Planarization",
+      "date": null,
+      "locator": "Slurries, pads and contamination control",
+      "url": "https://www.entegris.com/en/home/our-science/by-industry/microelectronics/semiconductor/cmp.html"
+    },
+    "tsmc-oip": {
+      "title": "TSMC · Open Innovation Platform",
+      "date": "2019",
+      "locator": "5 nm design infrastructure and partners",
+      "url": "https://pr.tsmc.com/english/news/1987"
+    },
+    "asml-process": {
+      "title": "ASML · How microchips are made",
+      "date": null,
+      "locator": "Deposition, lithography, etch, implantation and packaging",
+      "url": "https://www.asml.com/en/technology/all-about-microchips/how-microchips-are-made"
+    },
+    "asml-euv": {
+      "title": "ASML · Light and lasers",
+      "date": null,
+      "locator": "Creating EUV light / DUV sources",
+      "url": "https://www.asml.com/en/technology/lithography-principles/light-and-lasers"
+    },
+    "zeiss": {
+      "title": "ZEISS · EUV lithography",
+      "date": null,
+      "locator": "Projection optics and mirror technology",
+      "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/inspiring-technology/euv-lithography.html"
+    },
+    "applied": {
+      "title": "Applied Materials · Interconnect",
+      "date": null,
+      "locator": "Metals, liners, dielectrics and wiring",
+      "url": "https://www.appliedmaterials.com/sg/en/semiconductor/markets-and-inflections/advanced-logic/interconnect.html"
+    },
+    "skhynix": {
+      "title": "SK hynix · 12-layer HBM3E volume production",
+      "date": "2024-09-26",
+      "locator": "Stacking and MR-MUF",
+      "url": "https://news.skhynix.com/en/sk-hynix-begins-volume-production-of-the-world-first-12-layer-hbm3e/"
+    },
+    "cowos": {
+      "title": "TSMC · CoWoS",
+      "date": null,
+      "locator": "CoWoS-S, CoWoS-R and CoWoS-L",
+      "url": "https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/cowos.htm"
+    },
+    "abf": {
+      "title": "Ajinomoto · Ajinomoto Build-up Film",
+      "date": null,
+      "locator": "Dielectric film and substrate structure",
+      "url": "https://www.ajinomoto.com/innovation/our_innovation/buildupfilm"
+    },
+    "amkor": {
+      "title": "Amkor · Semiconductor Test Services",
+      "date": null,
+      "locator": "Wafer probe and final test",
+      "url": "https://amkor.com/test-services/"
+    },
+    "teradyne": {
+      "title": "Teradyne · Magnum 7H",
+      "date": null,
+      "locator": "HBM test platform",
+      "url": "https://www.teradyne.com/products/magnum-7h/"
+    },
+    "conflict": {
+      "title": "NVIDIA · Conflict Minerals Report",
+      "date": "2025 reporting period",
+      "locator": "Scope, due diligence, Exhibit A",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000043/a2026conflictmineralsrepor.htm"
+    },
+    "nvidia-system": {
+      "title": "NVIDIA · DGX GB Rack Scale Systems",
+      "date": null,
+      "locator": "Hardware and rack components",
+      "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html"
+    },
+    "ocp-rack": {
+      "title": "NVIDIA · GB200 designs contributed to OCP",
+      "date": "2024-10-15",
+      "locator": "Rack, busbar, copper cables and manifolds",
+      "url": "https://developer.nvidia.com/blog/nvidia-contributes-nvidia-gb200-nvl72-designs-to-open-compute-project/"
+    },
+    "iea": {
+      "title": "IEA · Key Questions on Energy and AI",
+      "date": "2026",
+      "locator": "Electricity, equipment and infrastructure constraints",
+      "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+    },
+    "vertiv": {
+      "title": "Vertiv · GB200 power and cooling blueprint",
+      "date": null,
+      "locator": "Reference design scope and infrastructure systems",
+      "url": "https://www.vertiv.com/en-emea/about/news-and-events/news-releases/vertiv-codevelops-with-nvidia-complete-power-and-cooling-blueprint-for--nvidia-gb200-nvl72-platform/"
+    },
+    "nvidia-tech": {
+      "title": "NVIDIA · Inside the Vera Rubin Platform",
+      "date": "2026",
+      "locator": "Rubin GPU / HBM and memory bandwidth",
+      "url": "https://developer.nvidia.com/blog/inside-the-NVIDIA-rubin-platform-six-new-chips-one-ai-supercomputer/"
+    },
+    "nvidia-supply": {
+      "title": "NVIDIA · Supply chain commitments",
+      "date": "2026-11-17",
+      "locator": "TSMC and Foxconn, substrates, advanced packaging and historical test commitments",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Expands-Commitments-With-Supply-Chain-Partners-to-Support-AI-Infrastructure-Buildout/default.aspx"
+    },
+    "amd-spec": {
+      "title": "AMD · Instinct MI455X specifications",
+      "date": null,
+      "locator": "GPU and memory specifications",
+      "url": "https://www.amd.com/en/products/accelerators/instinct/mi400/mi455x.html"
+    },
+    "google-tpu": {
+      "title": "Google Cloud · TPU 8t and TPU 8i technical deep dive",
+      "date": "2026-04-22",
+      "locator": "Figures 4–5 and per-chip spec table",
+      "url": "https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive"
+    },
+    "aws-spec": {
+      "title": "AWS · Amazon EC2 Trn3 UltraServers",
+      "date": null,
+      "locator": "Trainium3 chip and UltraServer specifications",
+      "url": "https://aws.amazon.com/ec2/instance-types/trn3/"
+    },
+    "aws-launch": {
+      "title": "AWS · Announcing EC2 Trn3 UltraServers",
+      "date": "2025-12-02",
+      "locator": "Availability and supported regions at launch",
+      "url": "https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/"
+    },
+    "basel": {
+      "title": "Basel Convention · E-waste amendments",
+      "date": null,
+      "locator": "Transboundary movement and effective date",
+      "url": "https://www.basel.int/Implementation/Ewaste/EwasteAmendments/EwasteAmendmentsFAQs/tabid/10107/Default.aspx"
+    },
+    "micron-rubin": {
+      "title": "Micron · High-volume HBM4 for Vera Rubin",
+      "date": "2026-03-16",
+      "locator": "HBM4 36 GB 12H volume shipment statement",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-in-High-Volume-Production-of-HBM4-Designed-for-NVIDIA-Vera-Rubin-PCIe-Gen6-SSD-and-SOCAMM2-03-16-2026/default.aspx"
+    },
+    "samsung-amd": {
+      "title": "AMD and Samsung · MI455X memory MoU",
+      "date": "2026-03-18",
+      "locator": "MoU on primary HBM4 supply for MI455X",
+      "url": "https://newsroom.amd.com/news/samsung-and-amd-expand-strategic-collaboratio.html"
+    },
+    "quartz-corp": {
+      "title": "The Quartz Corp",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.thequartzcorp.com/semiconductor"
+    },
+    "bhp": {
+      "title": "BHP",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.bhp.com/what-we-do/products/copper"
+    },
+    "codelco": {
+      "title": "Codelco",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.codelco.com/division-chuquicamata"
+    },
+    "freeport": {
+      "title": "Freeport-McMoRan / PT Freeport Indonesia",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.fcx.com/operations/indonesia"
+    },
+    "glencore": {
+      "title": "Glencore / Kamoto Copper Company",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.glencore.com/.rest/api/v1/documents/29997f6f64920c875b63d9ca546208ab/2023%2BKCC%2BResponsible%2BMineral%2BSupply%2BChain%2BReport%2Bfinal.pdf"
+    },
+    "rio": {
+      "title": "Rio Tinto",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.riotinto.com/en/operations/anz/weipa"
+    },
+    "alcoa": {
+      "title": "Alcoa",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.alcoa.com/global/en/what-we-do/bauxite/"
+    },
+    "minsur": {
+      "title": "Minsur",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.minsur.com/wp-content/uploads/2022/09/MINSUR_RMAP-DUE-DILIGENCE-2022_compressed-1.pdf"
+    },
+    "timah": {
+      "title": "PT TIMAH",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://timah.com/blog/our-business/tin-mining"
+    },
+    "taniobis": {
+      "title": "TANiOBIS",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://taniobis.com/sustainability/responsible-raw-material-procurment/"
+    },
+    "wacker": {
+      "title": "Wacker Chemie",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://reports.wacker.com/2025/annual-report/management-report/research-development.html"
+    },
+    "shinetsu": {
+      "title": "Shin-Etsu / SEH",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.shinetsu.co.jp/en/products/electronics-materials/silicon-wafers/"
+    },
+    "exyte": {
+      "title": "Exyte",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.exyte.net/en/Markets/Semiconductors"
+    },
+    "jacobs": {
+      "title": "Jacobs",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.jacobs.com/industries/semiconductors"
+    },
+    "veolia": {
+      "title": "Veolia Water Technologies",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.veoliawatertechnologies.com/en/case-studies/guaranteeing-water-quality-soitecs-new-wafer-fabrication-plant-pasir-ris-singapore"
+    },
+    "samsung-foundry": {
+      "title": "Samsung Foundry",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://semiconductor.samsung.com/news-events/tech-blog/samsung-foundry-showcases-advanced-technology-and-solutions/"
+    },
+    "trumpf": {
+      "title": "TRUMPF",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.trumpf.com/en_INT/solutions/applications/euv-lithography/"
+    },
+    "company-applied": {
+      "title": "Applied Materials",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.appliedmaterials.com/us/en/semiconductor/products.html"
+    },
+    "lam": {
+      "title": "Lam Research",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.lamresearch.com/product/selective-etch-product-family/"
+    },
+    "tel": {
+      "title": "Tokyo Electron",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.tel.com/product/lithius.html"
+    },
+    "asm": {
+      "title": "ASM",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.asm.com/our-technology-products/ald"
+    },
+    "kla": {
+      "title": "KLA",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://ir.kla.com/sec-filings/annual-reports/content/0000319201-26-000027/klac-20260630.htm"
+    },
+    "ase": {
+      "title": "ASE",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://ase.aseglobal.com/vipack/"
+    },
+    "dhl": {
+      "title": "DHL",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.dhl.com/global-en/campaign/semicon-solution/capital-equipment-solution.html"
+    },
+    "dsv": {
+      "title": "DSV",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.dsv.com/en/our-solutions/industry-solutions/tech-logistics/semicons"
+    },
+    "kn": {
+      "title": "Kuehne+Nagel",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://assets.kuehne-nagel.com/f/331466/x/0906335bc7/industry-solutions-semicon-semiconductor-manufacturing-equipment-capex-austin.pdf"
+    },
+    "nx": {
+      "title": "NX Group / Nippon Express",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.nipponexpress.com/service/industries/semiconductor.html"
+    },
+    "maersk": {
+      "title": "Maersk",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.maersk.com/transportation-services/inland-services"
+    },
+    "dell": {
+      "title": "Dell Technologies",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.dell.com/en-us/infohub/articles/poweredge-xe8712-with-nvidia-gb200-a-high-density-foundational-server-for-rack-scale-ai-2"
+    },
+    "fabrinet": {
+      "title": "Fabrinet",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm"
+    },
+    "wistron": {
+      "title": "Wistron",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm"
+    },
+    "hitachi": {
+      "title": "Hitachi Energy",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.hitachienergy.com/pl/pl/news-and-events/customer-stories/scaling-at-the-speed-of-ai-supporting-airtrunk-s-expansion-across-singapore-and-malaysia"
+    },
+    "dominion": {
+      "title": "Dominion Energy",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.dominionenergy.com/virginia/large-business-services/data-center-requests"
+    },
+    "schneider": {
+      "title": "Schneider Electric",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.se.com/ww/en/insights/ai-and-technology/artificial-intelligence/how-schneider-electric-and-nvidia-are-redefining-ai-data-center-design/"
+    },
+    "constellation": {
+      "title": "Constellation Energy / Microsoft",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.constellationenergy.com/news/2024/Constellation-to-Launch-Crane-Clean-Energy-Center-Restoring-Jobs-and-Carbon-Free-Power-to-The-Grid.html"
+    },
+    "eaton": {
+      "title": "Eaton",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.eaton.com/gb/en-gb/products/backup-power-ups-surge-it-power-distribution/backup-power-ups/ups-applications/ups-data-centers.html"
+    },
+    "sims": {
+      "title": "Sims Lifecycle Services",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.simslifecycle.com/data-center/data-center-itad/"
+    },
+    "umicore": {
+      "title": "Umicore",
+      "date": null,
+      "locator": "Company publication",
+      "url": "https://www.umicore.com/en/markets-products/recycling-solutions/precious-metals/e-scrap"
+    }
+  }
+}

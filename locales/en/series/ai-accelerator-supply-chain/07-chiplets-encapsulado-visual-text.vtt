@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00:00.350 --> 00:00:05.250
+The compute chip and memory arrive separately.
+
+00:00:05.250 --> 00:00:10.150
+An interposer is a base inside the package that holds and connects the two parts.
+
+00:00:10.150 --> 00:00:16.000
+A signal follows the trace between the two parts.
+
+00:00:16.350 --> 00:00:21.250
+A base can carry signals between several parts.
+
+00:00:21.250 --> 00:00:26.150
+A bridge connects nearby edges in a small area.
+
+00:00:26.150 --> 00:00:32.000
+Stacking the pieces lets connections run vertically.

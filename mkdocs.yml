@@ -175,6 +175,22 @@ nav:
           - "Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Evaluación online: shadow, canary, A/B, guardrails y regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
           - "Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
+      - De la mina al clúster:
+          - Presentación: series/ai-accelerator-supply-chain/00_presentacion_serie.md
+          - Qué hace una GPU: series/ai-accelerator-supply-chain/01-que-estamos-fabricando.md
+          - Del cuarzo a la oblea: series/ai-accelerator-supply-chain/02-mina-material-electronico.md
+          - Limpiar cada capa: series/ai-accelerator-supply-chain/03-consumos-fab.md
+          - Preparar el diseño: series/ai-accelerator-supply-chain/04-diseno-ip-mascaras.md
+          - Fabricar chips en una oblea: series/ai-accelerator-supply-chain/05-oblea-maquinas-fab.md
+          - Memoria apilada: series/ai-accelerator-supply-chain/06-cadena-memoria-hbm.md
+          - Conectar el chip y la memoria: series/ai-accelerator-supply-chain/07-chiplets-encapsulado.md
+          - Probar una GPU: series/ai-accelerator-supply-chain/08-sustratos-ensamblaje-pruebas.md
+          - Montaje y transporte: series/ai-accelerator-supply-chain/09-paquete-sistema.md
+          - Cómo viajan los datos: series/ai-accelerator-supply-chain/10-red-cluster.md
+          - Electricidad y refrigeración: series/ai-accelerator-supply-chain/11-electricidad-refrigeracion-obra.md
+          - Probar el clúster: series/ai-accelerator-supply-chain/12-instalado-utilizable.md
+          - Qué pieza limita el montaje: series/ai-accelerator-supply-chain/13-geografia-capacidad.md
+          - Reutilizar y reciclar: series/ai-accelerator-supply-chain/14-segunda-vida.md
   - Análisis de empresas:
       - analisis-de-empresas/index.md
       - Inditex: analisis-de-empresas/01_inditex.md
@@ -305,6 +321,7 @@ plugins:
         'series/multimodalidad-iag/index.md': 'series/multimodalidad-iag/00_presentacion_serie.md'
         'series/modelos-razonadores/index.md': 'series/modelos-razonadores/00_presentacion_serie.md'
         'series/ia-pib-bienestar-energia/index.md': 'series/ia-pib-bienestar-energia/00_presentacion_serie.md'
+        'series/ai-accelerator-supply-chain/index.md': 'series/ai-accelerator-supply-chain/00_presentacion_serie.md'
         'series/datacenters-espacio/index.md': 'series/datacenters-espacio/00_presentacion_serie.md'
         'series/seguridad-ia/index.md': 'series/seguridad-ia/00_presentacion_serie.md'
         'series/agentes-ia/index.md': 'series/agentes-ia/00_presentacion_serie.md'

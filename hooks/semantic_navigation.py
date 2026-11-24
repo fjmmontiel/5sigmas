@@ -92,6 +92,7 @@ _TOPIC_ALIASES = {
     "from-cave-to-agi": "history-ai",
     "multimodalidad-iag": "multimodality",
     "ia-pib-bienestar-energia": "energy",
+    "ai-accelerator-supply-chain": "infrastructure",
     "datacenters-espacio": "infrastructure",
 }
 

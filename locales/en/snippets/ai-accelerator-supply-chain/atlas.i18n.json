@@ -1,0 +1,7 @@
+{
+  "source": "snippets/ai-accelerator-supply-chain/atlas.html",
+  "source_blob_sha": "bc8b4bbe9023e545c6e1c5b9fb1457203985483e",
+  "replacements": {
+    "data-ac-atlas=\"{{ atlas_lang }}\"": "data-ac-atlas=\"en\""
+  }
+}

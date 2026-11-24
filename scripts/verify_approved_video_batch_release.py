@@ -95,7 +95,19 @@ def main():
  if a.base_ref:
   rel='locales/en/media.yml';old=yaml.safe_load(subprocess.check_output(['git','show',a.base_ref+':'+rel],cwd=ROOT));new=yaml.safe_load((ROOT/rel).read_text())
   allowed=tuple('series/'+c['series']+'/' for c in m['collections'])+('series/fundamentos-ia-iag/','series/ia-pib-bienestar-energia/')
-  assert old.keys()==new.keys();assert all(old[k]==new[k] for k in old if not k.startswith(allowed))
+  assert old.keys() <= new.keys(), ('removed_english_media', sorted(old.keys() - new.keys()))
+  assert all(old[k] == new[k] for k in old if not k.startswith(allowed))
+  added = new.keys() - old.keys()
+  if added:
+   series = Path('series/ai-accelerator-supply-chain')
+   expected = {
+    (series / path.name).as_posix()
+    for path in (ROOT / 'docs' / series).glob('*.md')
+    if yaml.safe_load(path.read_text().split('---', 2)[1]).get('video')
+   }
+   assert len(expected) == 15 and added == expected, ('unexpected_english_media', sorted(added))
+   routes = set(yaml.safe_load((ROOT / 'locales/en/manifest.yml').read_text())['published_routes'])
+   assert added <= routes, ('unpublished_english_media', sorted(added - routes))
  report=dict(scope='Exact approved APPROVED_BATCH integration, not a new visual approval',revision=a.revision,origin=a.origin,media_count=60,surface_count=120,clips=360,status='PASS',results=results)
  Path(a.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print('APPROVED_BATCH_INTEGRATION_PASS 60 media,120 article/watch surfaces,360 clips')
 if __name__=='__main__':main()
